@@ -2,14 +2,14 @@
   {
     "name": "determinant_product",
     "title": "determinant product",
-    "line": 5,
+    "line": 8,
     "file": "examples/determinants.clean",
     "contexts": [
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "fd32e17dd544-1",
-        "line": 1
+        "key": "e54b87ca2c59-4",
+        "line": 4
       }
     ],
     "attribution": {
@@ -27,7 +27,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.det_mul",
       "declaration": "Matrix.det_mul",
@@ -40,14 +40,14 @@
   {
     "name": "determinant_transpose",
     "title": "determinant transpose",
-    "line": 9,
+    "line": 12,
     "file": "examples/determinants.clean",
     "contexts": [
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "fd32e17dd544-1",
-        "line": 1
+        "key": "e54b87ca2c59-4",
+        "line": 4
       }
     ],
     "attribution": {
@@ -65,7 +65,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.det_transpose",
       "declaration": "Matrix.det_transpose",
@@ -78,14 +78,14 @@
   {
     "name": "determinant_product_swap",
     "title": "determinant product swap",
-    "line": 13,
+    "line": 16,
     "file": "examples/determinants.clean",
     "contexts": [
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "fd32e17dd544-1",
-        "line": 1
+        "key": "e54b87ca2c59-4",
+        "line": 4
       }
     ],
     "attribution": {
@@ -103,7 +103,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.det_mul_comm",
       "declaration": "Matrix.det_mul_comm",
@@ -116,14 +116,14 @@
   {
     "name": "determinant_left_swap",
     "title": "determinant left swap",
-    "line": 17,
+    "line": 20,
     "file": "examples/determinants.clean",
     "contexts": [
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "fd32e17dd544-1",
-        "line": 1
+        "key": "e54b87ca2c59-4",
+        "line": 4
       }
     ],
     "attribution": {
@@ -141,7 +141,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.det_mul_left_comm",
       "declaration": "Matrix.det_mul_left_comm",
@@ -154,14 +154,14 @@
   {
     "name": "determinant_right_swap",
     "title": "determinant right swap",
-    "line": 21,
+    "line": 24,
     "file": "examples/determinants.clean",
     "contexts": [
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "fd32e17dd544-1",
-        "line": 1
+        "key": "e54b87ca2c59-4",
+        "line": 4
       }
     ],
     "attribution": {
@@ -179,7 +179,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.det_mul_right_comm",
       "declaration": "Matrix.det_mul_right_comm",

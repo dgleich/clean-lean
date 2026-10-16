@@ -2,7 +2,7 @@
   {
     "name": "adjacency_symmetry",
     "title": "adjacency symmetry",
-    "line": 1,
+    "line": 4,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -20,7 +20,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.adj_symm",
       "declaration": "SimpleGraph.adj_symm",
@@ -33,7 +33,7 @@
   {
     "name": "adjacency_commutes",
     "title": "adjacency commutes",
-    "line": 9,
+    "line": 12,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -51,7 +51,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.adj_comm",
       "declaration": "SimpleGraph.adj_comm",
@@ -64,7 +64,7 @@
   {
     "name": "no_self_edges",
     "title": "no self edges",
-    "line": 16,
+    "line": 19,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -82,7 +82,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.irrefl",
       "declaration": "SimpleGraph.irrefl",
@@ -95,7 +95,7 @@
   {
     "name": "adjacent_vertices_distinct",
     "title": "adjacent vertices distinct",
-    "line": 23,
+    "line": 26,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -113,7 +113,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.ne_of_adj",
       "declaration": "SimpleGraph.ne_of_adj",
@@ -126,7 +126,7 @@
   {
     "name": "union_adjacency",
     "title": "union adjacency",
-    "line": 31,
+    "line": 34,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -144,7 +144,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.sup_adj",
       "declaration": "SimpleGraph.sup_adj",
@@ -157,7 +157,7 @@
   {
     "name": "intersection_adjacency",
     "title": "intersection adjacency",
-    "line": 38,
+    "line": 41,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -175,7 +175,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.inf_adj",
       "declaration": "SimpleGraph.inf_adj",
@@ -188,7 +188,7 @@
   {
     "name": "complement_adjacency",
     "title": "complement adjacency",
-    "line": 45,
+    "line": 48,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -206,7 +206,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.compl_adj",
       "declaration": "SimpleGraph.compl_adj",
@@ -219,7 +219,7 @@
   {
     "name": "support_monotonicity",
     "title": "support monotonicity",
-    "line": 52,
+    "line": 55,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -237,7 +237,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.support_mono",
       "declaration": "SimpleGraph.support_mono",
@@ -250,7 +250,7 @@
   {
     "name": "neighbors_in_support",
     "title": "neighbors in support",
-    "line": 59,
+    "line": 62,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -268,7 +268,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.neighborSet_subset_support",
       "declaration": "SimpleGraph.neighborSet_subset_support",
@@ -281,7 +281,7 @@
   {
     "name": "neighbor_membership",
     "title": "neighbor membership",
-    "line": 66,
+    "line": 69,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -299,7 +299,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.mem_neighborSet",
       "declaration": "SimpleGraph.mem_neighborSet",
@@ -312,7 +312,7 @@
   {
     "name": "not_own_neighbor",
     "title": "not own neighbor",
-    "line": 73,
+    "line": 76,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -330,7 +330,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.notMem_neighborSet_self",
       "declaration": "SimpleGraph.notMem_neighborSet_self",
@@ -343,7 +343,7 @@
   {
     "name": "common_neighbors_intersection",
     "title": "common neighbors intersection",
-    "line": 80,
+    "line": 83,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -361,7 +361,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.commonNeighbors_eq",
       "declaration": "SimpleGraph.commonNeighbors_eq",
@@ -374,7 +374,7 @@
   {
     "name": "common_neighbors_membership",
     "title": "common neighbors membership",
-    "line": 87,
+    "line": 90,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -392,7 +392,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.mem_commonNeighbors",
       "declaration": "SimpleGraph.mem_commonNeighbors",
@@ -405,7 +405,7 @@
   {
     "name": "common_neighbors_symmetry",
     "title": "common neighbors symmetry",
-    "line": 94,
+    "line": 97,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -423,7 +423,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.commonNeighbors_symm",
       "declaration": "SimpleGraph.commonNeighbors_symm",
@@ -436,7 +436,7 @@
   {
     "name": "common_neighbors_left",
     "title": "common neighbors left",
-    "line": 101,
+    "line": 104,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -454,7 +454,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.commonNeighbors_subset_neighborSet_left",
       "declaration": "SimpleGraph.commonNeighbors_subset_neighborSet_left",
@@ -467,7 +467,7 @@
   {
     "name": "common_neighbors_right",
     "title": "common neighbors right",
-    "line": 108,
+    "line": 111,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -485,7 +485,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.commonNeighbors_subset_neighborSet_right",
       "declaration": "SimpleGraph.commonNeighbors_subset_neighborSet_right",
@@ -498,7 +498,7 @@
   {
     "name": "reachability_reflexive",
     "title": "reachability reflexive",
-    "line": 115,
+    "line": 118,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -516,7 +516,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.Reachable.refl",
       "declaration": "SimpleGraph.Reachable.refl",
@@ -529,7 +529,7 @@
   {
     "name": "reachability_symmetric",
     "title": "reachability symmetric",
-    "line": 122,
+    "line": 125,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -547,7 +547,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.Reachable.symm",
       "declaration": "SimpleGraph.Reachable.symm",
@@ -560,7 +560,7 @@
   {
     "name": "reachability_transitive",
     "title": "reachability transitive",
-    "line": 130,
+    "line": 133,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -578,7 +578,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.Reachable.trans",
       "declaration": "SimpleGraph.Reachable.trans",
@@ -591,7 +591,7 @@
   {
     "name": "edge_implies_reachability",
     "title": "edge implies reachability",
-    "line": 139,
+    "line": 142,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
     "attribution": {
@@ -609,7 +609,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "SimpleGraph.Adj.reachable",
       "declaration": "SimpleGraph.Adj.reachable",

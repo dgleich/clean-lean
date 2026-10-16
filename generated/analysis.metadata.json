@@ -2,7 +2,7 @@
   {
     "name": "exponential_positive",
     "title": "exponential positive",
-    "line": 1,
+    "line": 4,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -20,7 +20,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.exp_pos",
       "declaration": "Real.exp_pos",
@@ -33,7 +33,7 @@
   {
     "name": "exponential_nonzero",
     "title": "exponential nonzero",
-    "line": 6,
+    "line": 9,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -51,7 +51,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.exp_ne_zero",
       "declaration": "Real.exp_ne_zero",
@@ -64,7 +64,7 @@
   {
     "name": "exponential_sum",
     "title": "exponential sum",
-    "line": 11,
+    "line": 14,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -82,7 +82,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.exp_add",
       "declaration": "Real.exp_add",
@@ -95,7 +95,7 @@
   {
     "name": "exponential_difference",
     "title": "exponential difference",
-    "line": 16,
+    "line": 19,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -113,7 +113,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.exp_sub",
       "declaration": "Real.exp_sub",
@@ -126,7 +126,7 @@
   {
     "name": "logarithm_exponential",
     "title": "logarithm exponential",
-    "line": 21,
+    "line": 24,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -144,7 +144,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.log_exp",
       "declaration": "Real.log_exp",
@@ -157,7 +157,7 @@
   {
     "name": "exponential_logarithm",
     "title": "exponential logarithm",
-    "line": 26,
+    "line": 29,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -175,7 +175,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.exp_log",
       "declaration": "Real.exp_log",
@@ -188,7 +188,7 @@
   {
     "name": "logarithm_product",
     "title": "logarithm product",
-    "line": 32,
+    "line": 35,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -206,7 +206,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.log_mul",
       "declaration": "Real.log_mul",
@@ -219,7 +219,7 @@
   {
     "name": "logarithm_quotient",
     "title": "logarithm quotient",
-    "line": 39,
+    "line": 42,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -237,7 +237,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.log_div",
       "declaration": "Real.log_div",
@@ -250,7 +250,7 @@
   {
     "name": "square_root_nonnegative",
     "title": "square root nonnegative",
-    "line": 46,
+    "line": 49,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -268,7 +268,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.sqrt_nonneg",
       "declaration": "Real.sqrt_nonneg",
@@ -281,7 +281,7 @@
   {
     "name": "square_of_square_root",
     "title": "square of square root",
-    "line": 51,
+    "line": 54,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -299,7 +299,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.sq_sqrt",
       "declaration": "Real.sq_sqrt",
@@ -312,7 +312,7 @@
   {
     "name": "square_root_of_square",
     "title": "square root of square",
-    "line": 57,
+    "line": 60,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -330,7 +330,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.sqrt_sq_eq_abs",
       "declaration": "Real.sqrt_sq_eq_abs",
@@ -343,7 +343,7 @@
   {
     "name": "square_root_product",
     "title": "square root product",
-    "line": 62,
+    "line": 65,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -361,7 +361,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.sqrt_mul",
       "declaration": "Real.sqrt_mul",
@@ -374,7 +374,7 @@
   {
     "name": "trigonometric_identity",
     "title": "trigonometric identity",
-    "line": 68,
+    "line": 71,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -392,7 +392,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.sin_sq_add_cos_sq",
       "declaration": "Real.sin_sq_add_cos_sq",
@@ -405,7 +405,7 @@
   {
     "name": "sine_addition",
     "title": "sine addition",
-    "line": 73,
+    "line": 76,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -423,7 +423,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.sin_add",
       "declaration": "Real.sin_add",
@@ -436,7 +436,7 @@
   {
     "name": "cosine_addition",
     "title": "cosine addition",
-    "line": 78,
+    "line": 81,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -454,7 +454,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.cos_add",
       "declaration": "Real.cos_add",
@@ -467,7 +467,7 @@
   {
     "name": "sine_odd",
     "title": "sine odd",
-    "line": 83,
+    "line": 86,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -485,7 +485,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.sin_neg",
       "declaration": "Real.sin_neg",
@@ -498,7 +498,7 @@
   {
     "name": "cosine_even",
     "title": "cosine even",
-    "line": 88,
+    "line": 91,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -516,7 +516,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Real.cos_neg",
       "declaration": "Real.cos_neg",
@@ -529,7 +529,7 @@
   {
     "name": "continuous_composition",
     "title": "continuous composition",
-    "line": 93,
+    "line": 96,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -547,7 +547,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Continuous.comp",
       "declaration": "Continuous.comp",
@@ -560,7 +560,7 @@
   {
     "name": "continuous_sum",
     "title": "continuous sum",
-    "line": 100,
+    "line": 103,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -578,7 +578,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Continuous.add",
       "declaration": "Continuous.add",
@@ -591,7 +591,7 @@
   {
     "name": "continuous_product",
     "title": "continuous product",
-    "line": 107,
+    "line": 110,
     "file": "corpus/analysis.clean",
     "contexts": [],
     "attribution": {
@@ -609,7 +609,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Continuous.mul",
       "declaration": "Continuous.mul",

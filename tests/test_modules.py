@@ -1,19 +1,21 @@
+from support import standard_environment
 import tempfile
 import unittest
 from pathlib import Path
-from cleanlang.core import Registry, CleanError, lean, latex
+from cleanlang.core import Environment, CleanError, lean, latex
 from cleanlang.modules import load_document
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULE = (ROOT/'examples/modules/sorting.clean').read_text()
-RESULT = (ROOT/'examples/notation.clean').read_text().split('\n', 1)[1]
+MODULE = (ROOT/'examples/modules/sorting.clean').read_text().replace('../../library/types.clean', str(ROOT/'library/types.clean'))
+RESULT = (ROOT/'examples/notation.clean').read_text()
+RESULT = RESULT[RESULT.index('Result '):]
 
 class ModuleTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        self.reg = Registry()
+        self.reg = standard_environment()
 
     def load(self, text, module=MODULE):
         (self.root/'sorting.clean').write_text(module)
@@ -21,14 +23,14 @@ class ModuleTests(unittest.TestCase):
         path.write_text(text)
         return load_document(path, self.reg)
 
-    def test_explicit_definition_without_legacy_mapping(self):
+    def test_explicit_definition_does_not_use_camelcase_name(self):
         del self.reg.data['functions']['insertionSort']
         results = self.load('Import "sorting.clean"\n'+RESULT)
         output = lean(results, self.reg, [])
         self.assertIn('import Mathlib.Data.List.Sort', output)
         self.assertIn('List.insertionSort (· ≤ ·) xs', output)
         self.assertIn('insertion sort of ', latex(results, self.reg))
-        self.assertEqual(results[0].line, 3)
+        self.assertEqual(results[0].line, 2)
 
     def test_import_required(self):
         with self.assertRaises(CleanError):
@@ -37,33 +39,33 @@ class ModuleTests(unittest.TestCase):
     def test_inline_and_imported_equivalent(self):
         imported = self.load('Import "sorting.clean"\n'+RESULT)
         expected = lean(imported, self.reg, [])
-        self.reg = Registry()
+        self.reg = standard_environment()
         inline = self.load(MODULE+'\n'+RESULT)
         self.assertEqual(expected, lean(inline, self.reg, []))
 
     def test_diamond_import(self):
         (self.root/'other.clean').write_text('Import "sorting.clean"\n')
         self.load('Import "other.clean"\nImport "sorting.clean"\n'+RESULT)
-        self.assertEqual(len(self.reg.notation_definitions), 1)
+        self.assertEqual(sum('List.insertionSort (· ≤ ·) xs' in body for body in self.reg.notation_definitions.values()), 1)
 
     def test_cycle(self):
         with self.assertRaisesRegex(CleanError, 'Cyclic'):
             self.load('Import "sorting.clean"\n'+RESULT, 'Import "result.clean"')
 
     def test_collision(self):
-        with self.assertRaisesRegex(CleanError, 'duplicate visible'):
+        with self.assertRaisesRegex(CleanError, 'Duplicate visible'):
             self.load(MODULE+'\n'+MODULE+'\n'+RESULT)
 
     def test_legacy_name_collision(self):
-        with self.assertRaisesRegex(CleanError, 'duplicate visible'):
+        with self.assertRaisesRegex(CleanError, 'Duplicate visible'):
             self.load(MODULE.replace('insertion sort(xs)', 'insertionSort(xs)')+'\n'+RESULT)
 
     def test_unknown_placeholder(self):
-        with self.assertRaisesRegex(CleanError, 'unknown Render'):
+        with self.assertRaisesRegex(CleanError, 'rendering parameter'):
             self.load('Import "sorting.clean"\n'+RESULT, MODULE.replace('{xs}', '{ys}'))
 
     def test_missing_signature(self):
-        with self.assertRaisesRegex(CleanError, 'declare parameters'):
+        with self.assertRaisesRegex(CleanError, 'Declare parameters'):
             self.load('Import "sorting.clean"\n'+RESULT, MODULE.replace('    Returns: List(Natural)\n', ''))
 
     def test_wrong_argument_type(self):
@@ -79,7 +81,7 @@ class ModuleTests(unittest.TestCase):
             self.load(MODULE+'\n'+RESULT+'\nImport "sorting.clean"')
 
     def test_imported_results_rejected(self):
-        with self.assertRaisesRegex(CleanError, 'only imports and notation'):
+        with self.assertRaisesRegex(CleanError, 'only declarations and imports'):
             self.load('Import "sorting.clean"\n'+RESULT, MODULE+'\n'+RESULT)
 
     def test_render_escaping(self):

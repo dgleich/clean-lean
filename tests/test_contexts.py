@@ -1,5 +1,7 @@
+from support import standard_environment, statement_text
+from cleanlang.modules import load_module, load_document
 import unittest
-from cleanlang.core import Registry,parse,lean,latex,CleanError
+from cleanlang.core import Environment,parse,lean,latex,CleanError
 
 SOURCE='''Context complex square matrices:
     Let n: Natural
@@ -14,7 +16,7 @@ SOURCE='''Context complex square matrices:
         Conclude: det(transpose(A)) = det(A)
 '''
 class ContextTests(unittest.TestCase):
-    def setUp(self): self.reg=Registry()
+    def setUp(self): self.reg=standard_environment()
     def test_only_required_parameters_are_generalized(self):
         a,b=parse(SOURCE,self.reg)
         self.assertEqual([n for c in a.clauses for n in c.names],['n','A','B'])

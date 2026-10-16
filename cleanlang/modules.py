@@ -44,7 +44,7 @@ def fields_map(fields):
 
 def add_definition(env, prefix, name, body):
     key = prefix+hashlib.sha256((name+body).encode()).hexdigest()[:20]
-    env.notation_definitions[key] = f'def {key} {body}\n'
+    env.notation_definitions[key] = f'noncomputable def {key} {body}\n'
     return key
 
 
@@ -80,7 +80,7 @@ def type_declaration(header, fields, env):
 def notation(header, fields, env):
     m = re.fullmatch(r'Notation\s+('+ID+r'(?: +'+ID+r')*)\((.*?)\):', header, re.I)
     if not m: raise CleanError('Invalid Notation header')
-    name, params = m[1], split(m[2])
+    name, params = re.sub(' +', ' ', m[1]), split(m[2])
     if len(set(params))!=len(params) or any(not re.fullmatch(ID,p) for p in params):
         raise CleanError('Invalid or duplicate parameters')
     if name in env.data['functions']: raise CleanError('Duplicate visible name: '+name)

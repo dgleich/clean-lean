@@ -10,6 +10,147 @@ import Mathlib.Analysis.Calculus.Deriv.Basic
 import Mathlib.Data.List.Sort
 import Mathlib.Data.Nat.GCD.Basic
 
+noncomputable def cleanType_469c53b6dafb7a218246  : Type :=
+  ℕ
+
+noncomputable def cleanType_107b6641a486642ad8e1  : Type :=
+  ℝ
+
+noncomputable def cleanType_2d7f06a08f8ab1e3f46d  : Type :=
+  ℂ
+
+noncomputable def cleanType_ae4a13d2f060407bce35  : Sort 1 :=
+  Prop
+
+noncomputable def cleanType_61d617e3f5143c327dd3 (p0 : Nat) (p1 : Nat) (p2 : Type) : Type :=
+  Matrix (Fin p0) (Fin p1) p2
+
+noncomputable def cleanType_b5a130b68abf7f0646e8 (p0 : Nat) (p1 : Type) : Type :=
+  Fin p0 → p1
+
+noncomputable def cleanType_460956e39f5b9ffca091 (p0 : Nat) : Type :=
+  Fin p0
+
+noncomputable def cleanType_7bde0ce024ce143f369b (p0 : Nat) : Type :=
+  SimpleGraph (Fin p0)
+
+noncomputable def cleanType_530f2b2df99696550311 (p0 : Type) : Type :=
+  List (p0)
+
+noncomputable def cleanType_6e300741358eee425e81 (p0 : Type) : Type :=
+  Set (p0)
+
+noncomputable def cleanType_9d746dbeb0e035328deb (p0 : Type) (p1 : Type) : Type :=
+  (p0) → (p1)
+
+noncomputable def cleanNotation_6aaed7bf698e562b4aa5  (x0 : List (ℕ)) : List (ℕ) :=
+  (List.insertionSort (· ≤ ·)) x0
+
+noncomputable def cleanNotation_51561cc64977417a701c  (x0 : List (ℕ)) : List (ℕ) :=
+  (fun l : List ℕ => l.mergeSort (· ≤ ·)) x0
+
+noncomputable def cleanNotation_bb5cb4068b5c2ce6d1ed  (x0 : List (ℕ)) : Prop :=
+  List.Sorted (· ≤ ·) x0
+
+noncomputable def cleanNotation_e74b2d2973b6778742ca {T : Type} (x0 : List (T)) (x1 : List (T)) : Prop :=
+  List.Perm x0 x1
+
+noncomputable def cleanNotation_6016b9cfd65d60648fc3 {T : Type} (x0 : List (T)) : ℕ :=
+  List.length x0
+
+noncomputable def cleanNotation_fc17db7c59c6361dc276  (x0 : ℕ) (x1 : List (ℕ)) : List (ℕ) :=
+  List.orderedInsert (· ≤ ·) x0 x1
+
+noncomputable def cleanNotation_8df3385d877a7d8324ae  (x0 : ℕ) (x1 : List (ℕ)) : List (ℕ) :=
+  x0 :: x1
+
+noncomputable def cleanNotation_ef3e1617947e64ecf0be {T : Type} (x0 : List (T)) (x1 : List (T)) : Prop :=
+  List.Sublist x0 x1
+
+noncomputable def cleanNotation_5c84f457aa0661a1ecbb  (x0 : ℕ) (x1 : List (ℕ)) : ℕ :=
+  List.count x0 x1
+
+noncomputable def cleanNotation_afbf80a28ac74f1f01c4  (x0 : List (ℕ)) (x1 : List (ℕ)) : List (ℕ) :=
+  List.merge x0 x1 (· ≤ ·)
+
+noncomputable def cleanNotation_4de83e007a08771e4a52  (x0 : ℕ) (x1 : ℕ) : Prop :=
+  Nat.Coprime x0 x1
+
+noncomputable def cleanNotation_c5d38a8d9fdadc4bcfb1  (x0 : ℕ) (x1 : ℕ) : ℕ :=
+  Nat.gcd x0 x1
+
+noncomputable def cleanNotation_6a337f2a1fee7d9b19ad  (x0 : ℕ) (x1 : ℕ) : ℕ :=
+  Nat.lcm x0 x1
+
+noncomputable def cleanNotation_7915ccfe7848eb4fc048  (x0 : ℝ) : ℝ :=
+  Real.exp x0
+
+noncomputable def cleanNotation_3a02e02cafc4602764f4  (x0 : ℝ) : ℝ :=
+  Real.log x0
+
+noncomputable def cleanNotation_bab2de5a3de5967c5bae  (x0 : ℝ) : ℝ :=
+  Real.sqrt x0
+
+noncomputable def cleanNotation_8679b27b6c150044959d  (x0 : ℝ) : ℝ :=
+  Real.sin x0
+
+noncomputable def cleanNotation_1efb67bf51334208e223  (x0 : ℝ) : ℝ :=
+  Real.cos x0
+
+noncomputable def cleanNotation_17502ff021fd42a8ce97  (x0 : ℝ) : ℝ :=
+  abs x0
+
+noncomputable def cleanNotation_723e95f1cf7739171880  (x0 : (ℝ) → (ℝ)) : Prop :=
+  Continuous x0
+
+noncomputable def cleanNotation_271d108540216294c77e  (x0 : (ℝ) → (ℝ)) : Prop :=
+  Differentiable ℝ x0
+
+noncomputable def cleanNotation_7439357a91f0e39bc193  (x0 : (ℝ) → (ℝ)) (x1 : (ℝ) → (ℝ)) : (ℝ) → (ℝ) :=
+  (x0) ∘ (x1)
+
+noncomputable def cleanNotation_7c95186c3948254b956e {n : ℕ} (x0 : SimpleGraph (Fin n)) (x1 : Fin n) (x2 : Fin n) : Prop :=
+  (x0).Adj x1 x2
+
+noncomputable def cleanNotation_954dec16190ec6a37dd0 {n : ℕ} (x0 : SimpleGraph (Fin n)) : SimpleGraph (Fin n) :=
+  (x0)ᶜ
+
+noncomputable def cleanNotation_0624f3ebbf6554a04047 {n : ℕ} (x0 : SimpleGraph (Fin n)) (x1 : SimpleGraph (Fin n)) : SimpleGraph (Fin n) :=
+  x0 ⊔ x1
+
+noncomputable def cleanNotation_5a5227c120f070958445 {n : ℕ} (x0 : SimpleGraph (Fin n)) (x1 : SimpleGraph (Fin n)) : SimpleGraph (Fin n) :=
+  x0 ⊓ x1
+
+noncomputable def cleanNotation_587d371eac8330440de6 {n : ℕ} (x0 : SimpleGraph (Fin n)) (x1 : Fin n) : Set (Fin n) :=
+  (x0).neighborSet x1
+
+noncomputable def cleanNotation_c53e656ac6b9efb817db {n : ℕ} (x0 : SimpleGraph (Fin n)) : Set (Fin n) :=
+  (x0).support
+
+noncomputable def cleanNotation_32b2b617f7e2adc8d649 {n : ℕ} (x0 : SimpleGraph (Fin n)) (x1 : SimpleGraph (Fin n)) : Prop :=
+  x0 ≤ x1
+
+noncomputable def cleanNotation_947639a9d52df05827e1 {n : ℕ} (x0 : SimpleGraph (Fin n)) (x1 : Fin n) (x2 : Fin n) : Prop :=
+  (x0).Reachable x1 x2
+
+noncomputable def cleanNotation_39ef10558c6b507db5c6 {n : ℕ} (x0 : SimpleGraph (Fin n)) : Prop :=
+  (x0).Connected
+
+noncomputable def cleanNotation_1738f48a6ba6cd3f819e {n : ℕ} (x0 : SimpleGraph (Fin n)) (x1 : Fin n) (x2 : Fin n) : Set (Fin n) :=
+  (x0).commonNeighbors x1 x2
+
+noncomputable def cleanNotation_7326e962c725ce45b521 {n : ℕ} (x0 : Matrix (Fin n) (Fin n) ℂ) : ℂ :=
+  Matrix.det x0
+
+noncomputable def cleanNotation_77213551dad9a763052a {n : ℕ} (x0 : Matrix (Fin n) (Fin n) ℂ) : ℂ :=
+  Matrix.trace x0
+
+noncomputable def cleanNotation_ec7d2405c8c143132e84 {m : ℕ} {n : ℕ} (x0 : Matrix (Fin m) (Fin n) ℂ) : Matrix (Fin n) (Fin m) ℂ :=
+  Matrix.transpose x0
+
+noncomputable def cleanNotation_60f5a255d86c84175527 {n : ℕ} (x0 : Matrix (Fin n) (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ :=
+  (x0)⁻¹
+
 
 open scoped Matrix
 
@@ -25,7 +166,7 @@ relationship: specialized
 -/
 def insertion_sort_sorted : Prop :=
   ∀ (xs : List (ℕ)),
-  (List.Sorted (· ≤ ·) ((List.insertionSort (· ≤ ·)) xs))
+  (cleanNotation_bb5cb4068b5c2ce6d1ed ((cleanNotation_6aaed7bf698e562b4aa5 (xs))))
 
 /--
 source: mathlib
@@ -34,7 +175,7 @@ relationship: specialized
 -/
 def insertion_sort_permutation : Prop :=
   ∀ (xs : List (ℕ)),
-  (List.Perm ((List.insertionSort (· ≤ ·)) xs) xs)
+  (cleanNotation_e74b2d2973b6778742ca ((cleanNotation_6aaed7bf698e562b4aa5 (xs))) (xs))
 
 /--
 source: mathlib
@@ -43,7 +184,7 @@ relationship: specialized
 -/
 def insertion_sort_length : Prop :=
   ∀ (xs : List (ℕ)),
-  ((List.length ((List.insertionSort (· ≤ ·)) xs)) = (List.length xs))
+  ((cleanNotation_6016b9cfd65d60648fc3 ((cleanNotation_6aaed7bf698e562b4aa5 (xs)))) = (cleanNotation_6016b9cfd65d60648fc3 (xs)))
 
 /--
 source: mathlib
@@ -53,7 +194,7 @@ relationship: specialized
 def insertion_sort_membership : Prop :=
   ∀ (xs : List (ℕ)),
   ∀ (a : ℕ),
-  ((a ∈ ((List.insertionSort (· ≤ ·)) xs)) ↔ (a ∈ xs))
+  ((a ∈ (cleanNotation_6aaed7bf698e562b4aa5 (xs))) ↔ (a ∈ xs))
 
 /--
 source: mathlib
@@ -62,8 +203,8 @@ relationship: specialized
 -/
 def sorted_input_unchanged : Prop :=
   ∀ (xs : List (ℕ)),
-  ∀ (ordered : (List.Sorted (· ≤ ·) xs)),
-  (((List.insertionSort (· ≤ ·)) xs) = xs)
+  ∀ (ordered : (cleanNotation_bb5cb4068b5c2ce6d1ed (xs))),
+  ((cleanNotation_6aaed7bf698e562b4aa5 (xs)) = xs)
 
 /--
 source: mathlib
@@ -73,7 +214,7 @@ relationship: specialized
 def ordered_insert_length : Prop :=
   ∀ (xs : List (ℕ)),
   ∀ (a : ℕ),
-  ((List.length (List.orderedInsert (· ≤ ·) a xs)) = ((List.length xs) + 1))
+  ((cleanNotation_6016b9cfd65d60648fc3 ((cleanNotation_fc17db7c59c6361dc276 (a) (xs)))) = ((cleanNotation_6016b9cfd65d60648fc3 (xs)) + 1))
 
 /--
 source: mathlib
@@ -83,7 +224,7 @@ relationship: specialized
 def ordered_insert_membership : Prop :=
   ∀ (xs : List (ℕ)),
   ∀ (a b : ℕ),
-  ((b ∈ (List.orderedInsert (· ≤ ·) a xs)) ↔ ((b = a) ∨ (b ∈ xs)))
+  ((b ∈ (cleanNotation_fc17db7c59c6361dc276 (a) (xs))) ↔ ((b = a) ∨ (b ∈ xs)))
 
 /--
 source: mathlib
@@ -93,7 +234,7 @@ relationship: specialized
 def ordered_insert_permutation : Prop :=
   ∀ (xs : List (ℕ)),
   ∀ (a : ℕ),
-  (List.Perm (List.orderedInsert (· ≤ ·) a xs) (a :: xs))
+  (cleanNotation_e74b2d2973b6778742ca ((cleanNotation_fc17db7c59c6361dc276 (a) (xs))) ((cleanNotation_8df3385d877a7d8324ae (a) (xs))))
 
 /--
 source: mathlib
@@ -103,8 +244,8 @@ relationship: specialized
 def ordered_insert_preserves_sortedness : Prop :=
   ∀ (xs : List (ℕ)),
   ∀ (a : ℕ),
-  ∀ (ordered : (List.Sorted (· ≤ ·) xs)),
-  (List.Sorted (· ≤ ·) (List.orderedInsert (· ≤ ·) a xs))
+  ∀ (ordered : (cleanNotation_bb5cb4068b5c2ce6d1ed (xs))),
+  (cleanNotation_bb5cb4068b5c2ce6d1ed ((cleanNotation_fc17db7c59c6361dc276 (a) (xs))))
 
 /--
 source: mathlib
@@ -113,7 +254,7 @@ relationship: specialized
 -/
 def merge_sort_sorted : Prop :=
   ∀ (xs : List (ℕ)),
-  (List.Sorted (· ≤ ·) ((fun l : List ℕ => l.mergeSort (· ≤ ·)) xs))
+  (cleanNotation_bb5cb4068b5c2ce6d1ed ((cleanNotation_51561cc64977417a701c (xs))))
 
 /--
 source: mathlib
@@ -122,8 +263,8 @@ relationship: specialized
 -/
 def merge_sort_sorted_input : Prop :=
   ∀ (xs : List (ℕ)),
-  ∀ (ordered : (List.Sorted (· ≤ ·) xs)),
-  (((fun l : List ℕ => l.mergeSort (· ≤ ·)) xs) = xs)
+  ∀ (ordered : (cleanNotation_bb5cb4068b5c2ce6d1ed (xs))),
+  ((cleanNotation_51561cc64977417a701c (xs)) = xs)
 
 /--
 source: mathlib
@@ -132,7 +273,7 @@ relationship: specialized
 -/
 def sorting_algorithms_agree : Prop :=
   ∀ (xs : List (ℕ)),
-  (((fun l : List ℕ => l.mergeSort (· ≤ ·)) xs) = ((List.insertionSort (· ≤ ·)) xs))
+  ((cleanNotation_51561cc64977417a701c (xs)) = (cleanNotation_6aaed7bf698e562b4aa5 (xs)))
 
 /--
 source: mathlib
@@ -141,9 +282,9 @@ relationship: specialized
 -/
 def merge_preserves_sortedness : Prop :=
   ∀ (xs ys : List (ℕ)),
-  ∀ (hx : (List.Sorted (· ≤ ·) xs)),
-  ∀ (hy : (List.Sorted (· ≤ ·) ys)),
-  (List.Sorted (· ≤ ·) (List.merge xs ys (· ≤ ·)))
+  ∀ (hx : (cleanNotation_bb5cb4068b5c2ce6d1ed (xs))),
+  ∀ (hy : (cleanNotation_bb5cb4068b5c2ce6d1ed (ys))),
+  (cleanNotation_bb5cb4068b5c2ce6d1ed ((cleanNotation_afbf80a28ac74f1f01c4 (xs) (ys))))
 
 /--
 source: mathlib
@@ -152,9 +293,9 @@ relationship: specialized
 -/
 def insertion_sort_subsequence : Prop :=
   ∀ (xs ys : List (ℕ)),
-  ∀ (ordered : (List.Sorted (· ≤ ·) ys)),
-  ∀ (subsequence : (List.Sublist ys xs)),
-  (List.Sublist ys ((List.insertionSort (· ≤ ·)) xs))
+  ∀ (ordered : (cleanNotation_bb5cb4068b5c2ce6d1ed (ys))),
+  ∀ (subsequence : (cleanNotation_ef3e1617947e64ecf0be (ys) (xs))),
+  (cleanNotation_ef3e1617947e64ecf0be (ys) ((cleanNotation_6aaed7bf698e562b4aa5 (xs))))
 
 /--
 source: mathlib
@@ -164,7 +305,7 @@ relationship: specialized
 def ordered_insert_contains_input : Prop :=
   ∀ (xs : List (ℕ)),
   ∀ (a : ℕ),
-  (List.Sublist xs (List.orderedInsert (· ≤ ·) a xs))
+  (cleanNotation_ef3e1617947e64ecf0be (xs) ((cleanNotation_fc17db7c59c6361dc276 (a) (xs))))
 
 /--
 source: mathlib
@@ -173,7 +314,7 @@ relationship: specialized
 -/
 def euclidean_coprime_reduction : Prop :=
   ∀ (a b k : ℕ),
-  ((Nat.Coprime a (b + (k * a))) ↔ (Nat.Coprime a b))
+  ((cleanNotation_4de83e007a08771e4a52 (a) ((b + (k * a)))) ↔ (cleanNotation_4de83e007a08771e4a52 (a) (b)))
 
 /--
 source: mathlib
@@ -183,7 +324,7 @@ relationship: specialized
 def euclidean_coprime_subtraction : Prop :=
   ∀ (a b : ℕ),
   ∀ (ordered : (a ≤ b)),
-  ((Nat.Coprime (b - a) a) ↔ (Nat.Coprime b a))
+  ((cleanNotation_4de83e007a08771e4a52 ((b - a)) (a)) ↔ (cleanNotation_4de83e007a08771e4a52 (b) (a)))
 
 /--
 source: mathlib
@@ -192,8 +333,8 @@ relationship: specialized
 -/
 def coprime_lcm_product : Prop :=
   ∀ (a b : ℕ),
-  ∀ (cop : (Nat.Coprime a b)),
-  ((Nat.lcm a b) = (a * b))
+  ∀ (cop : (cleanNotation_4de83e007a08771e4a52 (a) (b))),
+  ((cleanNotation_6a337f2a1fee7d9b19ad (a) (b)) = (a * b))
 
 /--
 source: mathlib
@@ -202,7 +343,7 @@ relationship: specialized
 -/
 def common_divisor_of_coprimes : Prop :=
   ∀ (a b k : ℕ),
-  ∀ (cop : (Nat.Coprime a b)),
+  ∀ (cop : (cleanNotation_4de83e007a08771e4a52 (a) (b))),
   ∀ (divides_a : (k ∣ a)),
   ∀ (divides_b : (k ∣ b)),
   (k = 1)
@@ -214,7 +355,7 @@ relationship: specialized
 -/
 def coprime_product_divisibility : Prop :=
   ∀ (a b k : ℕ),
-  ∀ (cop : (Nat.Coprime k b)),
+  ∀ (cop : (cleanNotation_4de83e007a08771e4a52 (k) (b))),
   ((k ∣ (a * b)) ↔ (k ∣ a))
 
 /--
@@ -224,7 +365,7 @@ relationship: specialized
 -/
 def exponential_positive : Prop :=
   ∀ (x : ℝ),
-  (0 < (Real.exp x))
+  (0 < (cleanNotation_7915ccfe7848eb4fc048 (x)))
 
 /--
 source: mathlib
@@ -233,7 +374,7 @@ relationship: specialized
 -/
 def exponential_nonzero : Prop :=
   ∀ (x : ℝ),
-  ((Real.exp x) ≠ 0)
+  ((cleanNotation_7915ccfe7848eb4fc048 (x)) ≠ 0)
 
 /--
 source: mathlib
@@ -242,7 +383,7 @@ relationship: specialized
 -/
 def exponential_sum : Prop :=
   ∀ (x y : ℝ),
-  ((Real.exp (x + y)) = ((Real.exp x) * (Real.exp y)))
+  ((cleanNotation_7915ccfe7848eb4fc048 ((x + y))) = ((cleanNotation_7915ccfe7848eb4fc048 (x)) * (cleanNotation_7915ccfe7848eb4fc048 (y))))
 
 /--
 source: mathlib
@@ -251,7 +392,7 @@ relationship: specialized
 -/
 def exponential_difference : Prop :=
   ∀ (x y : ℝ),
-  ((Real.exp (x - y)) = ((Real.exp x) / (Real.exp y)))
+  ((cleanNotation_7915ccfe7848eb4fc048 ((x - y))) = ((cleanNotation_7915ccfe7848eb4fc048 (x)) / (cleanNotation_7915ccfe7848eb4fc048 (y))))
 
 /--
 source: mathlib
@@ -260,7 +401,7 @@ relationship: specialized
 -/
 def logarithm_exponential : Prop :=
   ∀ (x : ℝ),
-  ((Real.log (Real.exp x)) = x)
+  ((cleanNotation_3a02e02cafc4602764f4 ((cleanNotation_7915ccfe7848eb4fc048 (x)))) = x)
 
 /--
 source: mathlib
@@ -270,7 +411,7 @@ relationship: specialized
 def exponential_logarithm : Prop :=
   ∀ (x : ℝ),
   ∀ (positive : (0 < x)),
-  ((Real.exp (Real.log x)) = x)
+  ((cleanNotation_7915ccfe7848eb4fc048 ((cleanNotation_3a02e02cafc4602764f4 (x)))) = x)
 
 /--
 source: mathlib
@@ -281,7 +422,7 @@ def logarithm_product : Prop :=
   ∀ (x y : ℝ),
   ∀ (nonzero_x : (x ≠ 0)),
   ∀ (nonzero_y : (y ≠ 0)),
-  ((Real.log (x * y)) = ((Real.log x) + (Real.log y)))
+  ((cleanNotation_3a02e02cafc4602764f4 ((x * y))) = ((cleanNotation_3a02e02cafc4602764f4 (x)) + (cleanNotation_3a02e02cafc4602764f4 (y))))
 
 /--
 source: mathlib
@@ -292,7 +433,7 @@ def logarithm_quotient : Prop :=
   ∀ (x y : ℝ),
   ∀ (nonzero_x : (x ≠ 0)),
   ∀ (nonzero_y : (y ≠ 0)),
-  ((Real.log (x / y)) = ((Real.log x) - (Real.log y)))
+  ((cleanNotation_3a02e02cafc4602764f4 ((x / y))) = ((cleanNotation_3a02e02cafc4602764f4 (x)) - (cleanNotation_3a02e02cafc4602764f4 (y))))
 
 /--
 source: mathlib
@@ -301,7 +442,7 @@ relationship: specialized
 -/
 def square_root_nonnegative : Prop :=
   ∀ (x : ℝ),
-  (0 ≤ (Real.sqrt x))
+  (0 ≤ (cleanNotation_bab2de5a3de5967c5bae (x)))
 
 /--
 source: mathlib
@@ -311,7 +452,7 @@ relationship: specialized
 def square_of_square_root : Prop :=
   ∀ (x : ℝ),
   ∀ (nonnegative : (0 ≤ x)),
-  (((Real.sqrt x) ^ 2) = x)
+  (((cleanNotation_bab2de5a3de5967c5bae (x)) ^ 2) = x)
 
 /--
 source: mathlib
@@ -320,7 +461,7 @@ relationship: specialized
 -/
 def square_root_of_square : Prop :=
   ∀ (x : ℝ),
-  ((Real.sqrt (x ^ 2)) = (abs x))
+  ((cleanNotation_bab2de5a3de5967c5bae ((x ^ 2))) = (cleanNotation_17502ff021fd42a8ce97 (x)))
 
 /--
 source: mathlib
@@ -330,7 +471,7 @@ relationship: specialized
 def square_root_product : Prop :=
   ∀ (x y : ℝ),
   ∀ (nonnegative : (0 ≤ x)),
-  ((Real.sqrt (x * y)) = ((Real.sqrt x) * (Real.sqrt y)))
+  ((cleanNotation_bab2de5a3de5967c5bae ((x * y))) = ((cleanNotation_bab2de5a3de5967c5bae (x)) * (cleanNotation_bab2de5a3de5967c5bae (y))))
 
 /--
 source: mathlib
@@ -339,7 +480,7 @@ relationship: specialized
 -/
 def trigonometric_identity : Prop :=
   ∀ (x : ℝ),
-  ((((Real.sin x) ^ 2) + ((Real.cos x) ^ 2)) = 1)
+  ((((cleanNotation_8679b27b6c150044959d (x)) ^ 2) + ((cleanNotation_1efb67bf51334208e223 (x)) ^ 2)) = 1)
 
 /--
 source: mathlib
@@ -348,7 +489,7 @@ relationship: specialized
 -/
 def sine_addition : Prop :=
   ∀ (x y : ℝ),
-  ((Real.sin (x + y)) = (((Real.sin x) * (Real.cos y)) + ((Real.cos x) * (Real.sin y))))
+  ((cleanNotation_8679b27b6c150044959d ((x + y))) = (((cleanNotation_8679b27b6c150044959d (x)) * (cleanNotation_1efb67bf51334208e223 (y))) + ((cleanNotation_1efb67bf51334208e223 (x)) * (cleanNotation_8679b27b6c150044959d (y)))))
 
 /--
 source: mathlib
@@ -357,7 +498,7 @@ relationship: specialized
 -/
 def cosine_addition : Prop :=
   ∀ (x y : ℝ),
-  ((Real.cos (x + y)) = (((Real.cos x) * (Real.cos y)) - ((Real.sin x) * (Real.sin y))))
+  ((cleanNotation_1efb67bf51334208e223 ((x + y))) = (((cleanNotation_1efb67bf51334208e223 (x)) * (cleanNotation_1efb67bf51334208e223 (y))) - ((cleanNotation_8679b27b6c150044959d (x)) * (cleanNotation_8679b27b6c150044959d (y)))))
 
 /--
 source: mathlib
@@ -366,7 +507,7 @@ relationship: specialized
 -/
 def sine_odd : Prop :=
   ∀ (x : ℝ),
-  ((Real.sin (-x)) = (-(Real.sin x)))
+  ((cleanNotation_8679b27b6c150044959d ((-x))) = (-(cleanNotation_8679b27b6c150044959d (x))))
 
 /--
 source: mathlib
@@ -375,7 +516,7 @@ relationship: specialized
 -/
 def cosine_even : Prop :=
   ∀ (x : ℝ),
-  ((Real.cos (-x)) = (Real.cos x))
+  ((cleanNotation_1efb67bf51334208e223 ((-x))) = (cleanNotation_1efb67bf51334208e223 (x)))
 
 /--
 source: mathlib
@@ -384,9 +525,9 @@ relationship: specialized
 -/
 def continuous_composition : Prop :=
   ∀ (f g : (ℝ) → (ℝ)),
-  ∀ (hf : (Continuous f)),
-  ∀ (hg : (Continuous g)),
-  (Continuous ((f) ∘ (g)))
+  ∀ (hf : (cleanNotation_723e95f1cf7739171880 (f))),
+  ∀ (hg : (cleanNotation_723e95f1cf7739171880 (g))),
+  (cleanNotation_723e95f1cf7739171880 ((cleanNotation_7439357a91f0e39bc193 (f) (g))))
 
 /--
 source: mathlib
@@ -395,9 +536,9 @@ relationship: specialized
 -/
 def continuous_sum : Prop :=
   ∀ (f g : (ℝ) → (ℝ)),
-  ∀ (hf : (Continuous f)),
-  ∀ (hg : (Continuous g)),
-  (Continuous (f + g))
+  ∀ (hf : (cleanNotation_723e95f1cf7739171880 (f))),
+  ∀ (hg : (cleanNotation_723e95f1cf7739171880 (g))),
+  (cleanNotation_723e95f1cf7739171880 ((f + g)))
 
 /--
 source: mathlib
@@ -406,9 +547,9 @@ relationship: specialized
 -/
 def continuous_product : Prop :=
   ∀ (f g : (ℝ) → (ℝ)),
-  ∀ (hf : (Continuous f)),
-  ∀ (hg : (Continuous g)),
-  (Continuous (f * g))
+  ∀ (hf : (cleanNotation_723e95f1cf7739171880 (f))),
+  ∀ (hg : (cleanNotation_723e95f1cf7739171880 (g))),
+  (cleanNotation_723e95f1cf7739171880 ((f * g)))
 
 /--
 source: mathlib
@@ -419,8 +560,8 @@ def adjacency_symmetry : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ∀ (edge : ((G).Adj u v)),
-  ((G).Adj v u)
+  ∀ (edge : (cleanNotation_7c95186c3948254b956e (G) (u) (v))),
+  (cleanNotation_7c95186c3948254b956e (G) (v) (u))
 
 /--
 source: mathlib
@@ -431,7 +572,7 @@ def adjacency_commutes : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  (((G).Adj u v) ↔ ((G).Adj v u))
+  ((cleanNotation_7c95186c3948254b956e (G) (u) (v)) ↔ (cleanNotation_7c95186c3948254b956e (G) (v) (u)))
 
 /--
 source: mathlib
@@ -442,7 +583,7 @@ def no_self_edges : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u : Fin n),
-  (¬((G).Adj u u))
+  (¬(cleanNotation_7c95186c3948254b956e (G) (u) (u)))
 
 /--
 source: mathlib
@@ -453,7 +594,7 @@ def adjacent_vertices_distinct : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ∀ (edge : ((G).Adj u v)),
+  ∀ (edge : (cleanNotation_7c95186c3948254b956e (G) (u) (v))),
   (u ≠ v)
 
 /--
@@ -465,7 +606,7 @@ def union_adjacency : Prop :=
   ∀ (n : ℕ),
   ∀ (G H : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((((G ⊔ H)).Adj u v) ↔ (((G).Adj u v) ∨ ((H).Adj u v)))
+  ((cleanNotation_7c95186c3948254b956e ((cleanNotation_0624f3ebbf6554a04047 (G) (H))) (u) (v)) ↔ ((cleanNotation_7c95186c3948254b956e (G) (u) (v)) ∨ (cleanNotation_7c95186c3948254b956e (H) (u) (v))))
 
 /--
 source: mathlib
@@ -476,7 +617,7 @@ def intersection_adjacency : Prop :=
   ∀ (n : ℕ),
   ∀ (G H : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((((G ⊓ H)).Adj u v) ↔ (((G).Adj u v) ∧ ((H).Adj u v)))
+  ((cleanNotation_7c95186c3948254b956e ((cleanNotation_5a5227c120f070958445 (G) (H))) (u) (v)) ↔ ((cleanNotation_7c95186c3948254b956e (G) (u) (v)) ∧ (cleanNotation_7c95186c3948254b956e (H) (u) (v))))
 
 /--
 source: mathlib
@@ -487,7 +628,7 @@ def complement_adjacency : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  (((((G)ᶜ)).Adj u v) ↔ ((u ≠ v) ∧ (¬((G).Adj u v))))
+  ((cleanNotation_7c95186c3948254b956e ((cleanNotation_954dec16190ec6a37dd0 (G))) (u) (v)) ↔ ((u ≠ v) ∧ (¬(cleanNotation_7c95186c3948254b956e (G) (u) (v)))))
 
 /--
 source: mathlib
@@ -497,8 +638,8 @@ relationship: specialized
 def support_monotonicity : Prop :=
   ∀ (n : ℕ),
   ∀ (G H : SimpleGraph (Fin n)),
-  ∀ (inclusion : (G ≤ H)),
-  (((G).support) ⊆ ((H).support))
+  ∀ (inclusion : (cleanNotation_32b2b617f7e2adc8d649 (G) (H))),
+  ((cleanNotation_c53e656ac6b9efb817db (G)) ⊆ (cleanNotation_c53e656ac6b9efb817db (H)))
 
 /--
 source: mathlib
@@ -509,7 +650,7 @@ def neighbors_in_support : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u : Fin n),
-  (((G).neighborSet u) ⊆ ((G).support))
+  ((cleanNotation_587d371eac8330440de6 (G) (u)) ⊆ (cleanNotation_c53e656ac6b9efb817db (G)))
 
 /--
 source: mathlib
@@ -520,7 +661,7 @@ def neighbor_membership : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((v ∈ ((G).neighborSet u)) ↔ ((G).Adj u v))
+  ((v ∈ (cleanNotation_587d371eac8330440de6 (G) (u))) ↔ (cleanNotation_7c95186c3948254b956e (G) (u) (v)))
 
 /--
 source: mathlib
@@ -531,7 +672,7 @@ def not_own_neighbor : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u : Fin n),
-  (¬(u ∈ ((G).neighborSet u)))
+  (¬(u ∈ (cleanNotation_587d371eac8330440de6 (G) (u))))
 
 /--
 source: mathlib
@@ -542,7 +683,7 @@ def common_neighbors_intersection : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  (((G).commonNeighbors u v) = (((G).neighborSet u) ∩ ((G).neighborSet v)))
+  ((cleanNotation_1738f48a6ba6cd3f819e (G) (u) (v)) = ((cleanNotation_587d371eac8330440de6 (G) (u)) ∩ (cleanNotation_587d371eac8330440de6 (G) (v))))
 
 /--
 source: mathlib
@@ -553,7 +694,7 @@ def common_neighbors_membership : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v w : Fin n),
-  ((w ∈ ((G).commonNeighbors u v)) ↔ (((G).Adj u w) ∧ ((G).Adj v w)))
+  ((w ∈ (cleanNotation_1738f48a6ba6cd3f819e (G) (u) (v))) ↔ ((cleanNotation_7c95186c3948254b956e (G) (u) (w)) ∧ (cleanNotation_7c95186c3948254b956e (G) (v) (w))))
 
 /--
 source: mathlib
@@ -564,7 +705,7 @@ def common_neighbors_symmetry : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  (((G).commonNeighbors u v) = ((G).commonNeighbors v u))
+  ((cleanNotation_1738f48a6ba6cd3f819e (G) (u) (v)) = (cleanNotation_1738f48a6ba6cd3f819e (G) (v) (u)))
 
 /--
 source: mathlib
@@ -575,7 +716,7 @@ def common_neighbors_left : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  (((G).commonNeighbors u v) ⊆ ((G).neighborSet u))
+  ((cleanNotation_1738f48a6ba6cd3f819e (G) (u) (v)) ⊆ (cleanNotation_587d371eac8330440de6 (G) (u)))
 
 /--
 source: mathlib
@@ -586,7 +727,7 @@ def common_neighbors_right : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  (((G).commonNeighbors u v) ⊆ ((G).neighborSet v))
+  ((cleanNotation_1738f48a6ba6cd3f819e (G) (u) (v)) ⊆ (cleanNotation_587d371eac8330440de6 (G) (v)))
 
 /--
 source: mathlib
@@ -597,7 +738,7 @@ def reachability_reflexive : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u : Fin n),
-  ((G).Reachable u u)
+  (cleanNotation_947639a9d52df05827e1 (G) (u) (u))
 
 /--
 source: mathlib
@@ -608,8 +749,8 @@ def reachability_symmetric : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ∀ (path : ((G).Reachable u v)),
-  ((G).Reachable v u)
+  ∀ (path : (cleanNotation_947639a9d52df05827e1 (G) (u) (v))),
+  (cleanNotation_947639a9d52df05827e1 (G) (v) (u))
 
 /--
 source: mathlib
@@ -620,9 +761,9 @@ def reachability_transitive : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v w : Fin n),
-  ∀ (first : ((G).Reachable u v)),
-  ∀ (second : ((G).Reachable v w)),
-  ((G).Reachable u w)
+  ∀ (first : (cleanNotation_947639a9d52df05827e1 (G) (u) (v))),
+  ∀ (second : (cleanNotation_947639a9d52df05827e1 (G) (v) (w))),
+  (cleanNotation_947639a9d52df05827e1 (G) (u) (w))
 
 /--
 source: mathlib
@@ -633,8 +774,8 @@ def edge_implies_reachability : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ∀ (edge : ((G).Adj u v)),
-  ((G).Reachable u v)
+  ∀ (edge : (cleanNotation_7c95186c3948254b956e (G) (u) (v))),
+  (cleanNotation_947639a9d52df05827e1 (G) (u) (v))
 
 /--
 source: mathlib
@@ -644,7 +785,7 @@ relationship: specialized
 def determinant_product : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((Matrix.det (A * B)) = ((Matrix.det A) * (Matrix.det B)))
+  ((cleanNotation_7326e962c725ce45b521 ((A * B))) = ((cleanNotation_7326e962c725ce45b521 (A)) * (cleanNotation_7326e962c725ce45b521 (B))))
 
 /--
 source: mathlib
@@ -654,7 +795,7 @@ relationship: specialized
 def determinant_transpose : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((Matrix.det (Matrix.transpose A)) = (Matrix.det A))
+  ((cleanNotation_7326e962c725ce45b521 ((cleanNotation_ec7d2405c8c143132e84 (A)))) = (cleanNotation_7326e962c725ce45b521 (A)))
 
 /--
 source: mathlib
@@ -664,7 +805,7 @@ relationship: specialized
 def determinant_product_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((Matrix.det (A * B)) = (Matrix.det (B * A)))
+  ((cleanNotation_7326e962c725ce45b521 ((A * B))) = (cleanNotation_7326e962c725ce45b521 ((B * A))))
 
 /--
 source: mathlib
@@ -674,7 +815,7 @@ relationship: specialized
 def determinant_left_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B C : Matrix (Fin n) (Fin n) ℂ),
-  ((Matrix.det (A * (B * C))) = (Matrix.det (B * (A * C))))
+  ((cleanNotation_7326e962c725ce45b521 ((A * (B * C)))) = (cleanNotation_7326e962c725ce45b521 ((B * (A * C)))))
 
 /--
 source: mathlib
@@ -684,7 +825,7 @@ relationship: specialized
 def determinant_right_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B C : Matrix (Fin n) (Fin n) ℂ),
-  ((Matrix.det ((A * B) * C)) = (Matrix.det ((A * C) * B)))
+  ((cleanNotation_7326e962c725ce45b521 (((A * B) * C))) = (cleanNotation_7326e962c725ce45b521 (((A * C) * B))))
 
 /--
 source: mathlib
@@ -695,7 +836,7 @@ def determinant_power : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
   ∀ (k : ℕ),
-  ((Matrix.det (A ^ k)) = ((Matrix.det A) ^ k))
+  ((cleanNotation_7326e962c725ce45b521 ((A ^ k))) = ((cleanNotation_7326e962c725ce45b521 (A)) ^ k))
 
 /--
 source: mathlib
@@ -705,7 +846,7 @@ relationship: specialized
 def trace_sum : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((Matrix.trace (A + B)) = ((Matrix.trace A) + (Matrix.trace B)))
+  ((cleanNotation_77213551dad9a763052a ((A + B))) = ((cleanNotation_77213551dad9a763052a (A)) + (cleanNotation_77213551dad9a763052a (B))))
 
 /--
 source: mathlib
@@ -715,7 +856,7 @@ relationship: specialized
 def trace_difference : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((Matrix.trace (A - B)) = ((Matrix.trace A) - (Matrix.trace B)))
+  ((cleanNotation_77213551dad9a763052a ((A - B))) = ((cleanNotation_77213551dad9a763052a (A)) - (cleanNotation_77213551dad9a763052a (B))))
 
 /--
 source: mathlib
@@ -725,7 +866,7 @@ relationship: specialized
 def trace_negative : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((Matrix.trace (-A)) = (-(Matrix.trace A)))
+  ((cleanNotation_77213551dad9a763052a ((-A))) = (-(cleanNotation_77213551dad9a763052a (A))))
 
 /--
 source: mathlib
@@ -735,7 +876,7 @@ relationship: specialized
 def trace_transpose : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((Matrix.trace (Matrix.transpose A)) = (Matrix.trace A))
+  ((cleanNotation_77213551dad9a763052a ((cleanNotation_ec7d2405c8c143132e84 (A)))) = (cleanNotation_77213551dad9a763052a (A)))
 
 /--
 source: mathlib
@@ -745,7 +886,7 @@ relationship: specialized
 def trace_product_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((Matrix.trace (A * B)) = (Matrix.trace (B * A)))
+  ((cleanNotation_77213551dad9a763052a ((A * B))) = (cleanNotation_77213551dad9a763052a ((B * A))))
 
 /--
 source: mathlib
@@ -755,7 +896,7 @@ relationship: specialized
 def trace_cycle : Prop :=
   ∀ (n : ℕ),
   ∀ (A B C : Matrix (Fin n) (Fin n) ℂ),
-  ((Matrix.trace ((A * B) * C)) = (Matrix.trace ((C * A) * B)))
+  ((cleanNotation_77213551dad9a763052a (((A * B) * C))) = (cleanNotation_77213551dad9a763052a (((C * A) * B))))
 
 /--
 source: mathlib
@@ -832,7 +973,7 @@ relationship: specialized
 def transpose_involution : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((Matrix.transpose (Matrix.transpose A)) = A)
+  ((cleanNotation_ec7d2405c8c143132e84 ((cleanNotation_ec7d2405c8c143132e84 (A)))) = A)
 
 /--
 source: mathlib
@@ -842,7 +983,7 @@ relationship: specialized
 def transpose_product : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((Matrix.transpose (A * B)) = ((Matrix.transpose B) * (Matrix.transpose A)))
+  ((cleanNotation_ec7d2405c8c143132e84 ((A * B))) = ((cleanNotation_ec7d2405c8c143132e84 (B)) * (cleanNotation_ec7d2405c8c143132e84 (A))))
 
 end CleanStatements
 

@@ -1,13 +1,15 @@
+from support import standard_environment, statement_text
+from cleanlang.modules import load_module, load_document
 import json
 import re
 from pathlib import Path
 import tempfile
 import unittest
-from cleanlang.core import CleanError,Registry,parse,lean,latex,Expressions,Expr,Type,PROP
+from cleanlang.core import CleanError,Environment,parse,lean,latex,Expressions,Expr,Type,PROP
 ROOT=Path(__file__).resolve().parents[1]
-SOURCE=(ROOT/'examples/similarity.clean').read_text()
+SOURCE=statement_text(ROOT/'examples/similarity.clean')
 class CleanTests(unittest.TestCase):
-    def setUp(self): self.reg=Registry()
+    def setUp(self): self.reg=standard_environment()
     def test_keywords_case_insensitive(self):
         variants=[SOURCE,SOURCE.replace('Let ','LET ').replace('Assume ','aSsUmE ').replace('Conclude:','CONCLUDE:')]
         self.assertEqual(*[lean(parse(s,self.reg),self.reg,[]) for s in variants])
@@ -37,8 +39,8 @@ class CleanTests(unittest.TestCase):
     def test_define_alias(self):
         self.assertEqual(lean(parse(SOURCE,self.reg),self.reg,[]),lean(parse(SOURCE.replace('Let y =','DEFINE y ='),self.reg),self.reg,[]))
     def test_extension_canonicalization(self):
-        self.reg.extend(ROOT/'examples/extensions.json')
-        r=parse((ROOT/'examples/extension.clean').read_text(),self.reg)
+        load_module(ROOT/'examples/modules/square-matrices.clean',self.reg)
+        r=parse(statement_text(ROOT/'examples/extension.clean'),self.reg)
         self.assertEqual(str(r[0].clauses[1].value),'Matrix(n,n,Complex)')
     def test_ambiguous_phrase(self):
         self.reg.data['phrases'].append({'pattern':'complex number','type':'Real'})
@@ -58,7 +60,7 @@ class CleanTests(unittest.TestCase):
     def test_corpus_counts_and_unique_sources(self):
         catalog=json.loads((ROOT/'corpus/catalog.json').read_text())
         for cat in ('linear_algebra','graph_theory','analysis','algorithms'):
-            rs=parse((ROOT/'corpus'/f'{cat}.clean').read_text(),self.reg)
+            rs=load_document(ROOT/'corpus'/f'{cat}.clean',Environment())
             self.assertGreaterEqual(len(rs),20)
             entries=[x for x in catalog if x['category']==cat]
             self.assertEqual(len(rs),len(entries))

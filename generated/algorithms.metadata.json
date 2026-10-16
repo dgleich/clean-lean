@@ -2,7 +2,7 @@
   {
     "name": "insertion_sort_sorted",
     "title": "insertion sort sorted",
-    "line": 1,
+    "line": 4,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -20,7 +20,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.sorted_insertionSort",
       "declaration": "List.sorted_insertionSort",
@@ -33,7 +33,7 @@
   {
     "name": "insertion_sort_permutation",
     "title": "insertion sort permutation",
-    "line": 6,
+    "line": 9,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -51,7 +51,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.perm_insertionSort",
       "declaration": "List.perm_insertionSort",
@@ -64,7 +64,7 @@
   {
     "name": "insertion_sort_length",
     "title": "insertion sort length",
-    "line": 11,
+    "line": 14,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -82,7 +82,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.length_insertionSort",
       "declaration": "List.length_insertionSort",
@@ -95,7 +95,7 @@
   {
     "name": "insertion_sort_membership",
     "title": "insertion sort membership",
-    "line": 16,
+    "line": 19,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -113,7 +113,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.mem_insertionSort",
       "declaration": "List.mem_insertionSort",
@@ -126,7 +126,7 @@
   {
     "name": "sorted_input_unchanged",
     "title": "sorted input unchanged",
-    "line": 22,
+    "line": 25,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -144,7 +144,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.Sorted.insertionSort_eq",
       "declaration": "List.Sorted.insertionSort_eq",
@@ -157,7 +157,7 @@
   {
     "name": "ordered_insert_length",
     "title": "ordered insert length",
-    "line": 28,
+    "line": 31,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -175,7 +175,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.orderedInsert_length",
       "declaration": "List.orderedInsert_length",
@@ -188,7 +188,7 @@
   {
     "name": "ordered_insert_membership",
     "title": "ordered insert membership",
-    "line": 34,
+    "line": 37,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -206,7 +206,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.mem_orderedInsert",
       "declaration": "List.mem_orderedInsert",
@@ -219,7 +219,7 @@
   {
     "name": "ordered_insert_permutation",
     "title": "ordered insert permutation",
-    "line": 40,
+    "line": 43,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -237,7 +237,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.perm_orderedInsert",
       "declaration": "List.perm_orderedInsert",
@@ -250,7 +250,7 @@
   {
     "name": "ordered_insert_preserves_sortedness",
     "title": "ordered insert preserves sortedness",
-    "line": 46,
+    "line": 49,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -268,7 +268,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.Sorted.orderedInsert",
       "declaration": "List.Sorted.orderedInsert",
@@ -281,7 +281,7 @@
   {
     "name": "merge_sort_sorted",
     "title": "merge sort sorted",
-    "line": 53,
+    "line": 56,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -299,7 +299,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.sorted_mergeSort'",
       "declaration": "List.sorted_mergeSort'",
@@ -312,7 +312,7 @@
   {
     "name": "merge_sort_sorted_input",
     "title": "merge sort sorted input",
-    "line": 58,
+    "line": 61,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -330,7 +330,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.mergeSort_eq_self",
       "declaration": "List.mergeSort_eq_self",
@@ -343,7 +343,7 @@
   {
     "name": "sorting_algorithms_agree",
     "title": "sorting algorithms agree",
-    "line": 64,
+    "line": 67,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -361,7 +361,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.mergeSort_eq_insertionSort",
       "declaration": "List.mergeSort_eq_insertionSort",
@@ -374,7 +374,7 @@
   {
     "name": "merge_preserves_sortedness",
     "title": "merge preserves sortedness",
-    "line": 69,
+    "line": 72,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -392,7 +392,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.Sorted.merge",
       "declaration": "List.Sorted.merge",
@@ -405,7 +405,7 @@
   {
     "name": "insertion_sort_subsequence",
     "title": "insertion sort subsequence",
-    "line": 76,
+    "line": 79,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -423,7 +423,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.sublist_insertionSort",
       "declaration": "List.sublist_insertionSort",
@@ -436,7 +436,7 @@
   {
     "name": "ordered_insert_contains_input",
     "title": "ordered insert contains input",
-    "line": 83,
+    "line": 86,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -454,7 +454,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.sublist_orderedInsert",
       "declaration": "List.sublist_orderedInsert",
@@ -467,7 +467,7 @@
   {
     "name": "euclidean_coprime_reduction",
     "title": "euclidean coprime reduction",
-    "line": 89,
+    "line": 92,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -485,7 +485,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Nat.coprime_add_mul_right_right",
       "declaration": "Nat.coprime_add_mul_right_right",
@@ -498,7 +498,7 @@
   {
     "name": "euclidean_coprime_subtraction",
     "title": "euclidean coprime subtraction",
-    "line": 94,
+    "line": 97,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -516,7 +516,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Nat.coprime_sub_self_left",
       "declaration": "Nat.coprime_sub_self_left",
@@ -529,7 +529,7 @@
   {
     "name": "coprime_lcm_product",
     "title": "coprime lcm product",
-    "line": 100,
+    "line": 103,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -547,7 +547,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Nat.Coprime.lcm_eq_mul",
       "declaration": "Nat.Coprime.lcm_eq_mul",
@@ -560,7 +560,7 @@
   {
     "name": "common_divisor_of_coprimes",
     "title": "common divisor of coprimes",
-    "line": 106,
+    "line": 109,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -578,7 +578,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Nat.eq_one_of_dvd_coprimes",
       "declaration": "Nat.eq_one_of_dvd_coprimes",
@@ -591,7 +591,7 @@
   {
     "name": "coprime_product_divisibility",
     "title": "coprime product divisibility",
-    "line": 114,
+    "line": 117,
     "file": "corpus/algorithms.clean",
     "contexts": [],
     "attribution": {
@@ -609,7 +609,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Nat.Coprime.dvd_mul_right",
       "declaration": "Nat.Coprime.dvd_mul_right",

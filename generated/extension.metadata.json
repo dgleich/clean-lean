@@ -2,7 +2,7 @@
   {
     "name": "square_matrix_transpose",
     "title": "square matrix transpose",
-    "line": 1,
+    "line": 4,
     "file": "examples/extension.clean",
     "contexts": [],
     "attribution": {
@@ -20,7 +20,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.det_transpose",
       "declaration": "Matrix.det_transpose",

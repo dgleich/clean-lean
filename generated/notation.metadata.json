@@ -2,7 +2,7 @@
   {
     "name": "insertion_sort_preserves_length",
     "title": "insertion sort preserves length",
-    "line": 3,
+    "line": 5,
     "file": "examples/notation.clean",
     "contexts": [],
     "attribution": {
@@ -20,7 +20,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "List.length_insertionSort",
       "declaration": "List.length_insertionSort",

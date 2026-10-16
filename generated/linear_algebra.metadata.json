@@ -2,14 +2,14 @@
   {
     "name": "determinant_product",
     "title": "determinant product",
-    "line": 5,
+    "line": 8,
     "file": "corpus/linear_algebra.clean",
     "contexts": [
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "3fab3d4f580c-1",
-        "line": 1
+        "key": "7d45137008f5-4",
+        "line": 4
       }
     ],
     "attribution": {
@@ -27,7 +27,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.det_mul",
       "declaration": "Matrix.det_mul",
@@ -40,14 +40,14 @@
   {
     "name": "determinant_transpose",
     "title": "determinant transpose",
-    "line": 9,
+    "line": 12,
     "file": "corpus/linear_algebra.clean",
     "contexts": [
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "3fab3d4f580c-1",
-        "line": 1
+        "key": "7d45137008f5-4",
+        "line": 4
       }
     ],
     "attribution": {
@@ -65,7 +65,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.det_transpose",
       "declaration": "Matrix.det_transpose",
@@ -78,14 +78,14 @@
   {
     "name": "determinant_product_swap",
     "title": "determinant product swap",
-    "line": 13,
+    "line": 16,
     "file": "corpus/linear_algebra.clean",
     "contexts": [
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "3fab3d4f580c-1",
-        "line": 1
+        "key": "7d45137008f5-4",
+        "line": 4
       }
     ],
     "attribution": {
@@ -103,7 +103,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.det_mul_comm",
       "declaration": "Matrix.det_mul_comm",
@@ -116,14 +116,14 @@
   {
     "name": "determinant_left_swap",
     "title": "determinant left swap",
-    "line": 17,
+    "line": 20,
     "file": "corpus/linear_algebra.clean",
     "contexts": [
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "3fab3d4f580c-1",
-        "line": 1
+        "key": "7d45137008f5-4",
+        "line": 4
       }
     ],
     "attribution": {
@@ -141,7 +141,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.det_mul_left_comm",
       "declaration": "Matrix.det_mul_left_comm",
@@ -154,14 +154,14 @@
   {
     "name": "determinant_right_swap",
     "title": "determinant right swap",
-    "line": 21,
+    "line": 24,
     "file": "corpus/linear_algebra.clean",
     "contexts": [
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "3fab3d4f580c-1",
-        "line": 1
+        "key": "7d45137008f5-4",
+        "line": 4
       }
     ],
     "attribution": {
@@ -179,7 +179,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.det_mul_right_comm",
       "declaration": "Matrix.det_mul_right_comm",
@@ -192,7 +192,7 @@
   {
     "name": "determinant_power",
     "title": "determinant power",
-    "line": 25,
+    "line": 28,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -210,7 +210,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.det_pow",
       "declaration": "Matrix.det_pow",
@@ -223,7 +223,7 @@
   {
     "name": "trace_sum",
     "title": "trace sum",
-    "line": 32,
+    "line": 35,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -241,7 +241,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.trace_add",
       "declaration": "Matrix.trace_add",
@@ -254,7 +254,7 @@
   {
     "name": "trace_difference",
     "title": "trace difference",
-    "line": 38,
+    "line": 41,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -272,7 +272,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.trace_sub",
       "declaration": "Matrix.trace_sub",
@@ -285,7 +285,7 @@
   {
     "name": "trace_negative",
     "title": "trace negative",
-    "line": 44,
+    "line": 47,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -303,7 +303,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.trace_neg",
       "declaration": "Matrix.trace_neg",
@@ -316,7 +316,7 @@
   {
     "name": "trace_transpose",
     "title": "trace transpose",
-    "line": 50,
+    "line": 53,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -334,7 +334,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.trace_transpose",
       "declaration": "Matrix.trace_transpose",
@@ -347,7 +347,7 @@
   {
     "name": "trace_product_swap",
     "title": "trace product swap",
-    "line": 56,
+    "line": 59,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -365,7 +365,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.trace_mul_comm",
       "declaration": "Matrix.trace_mul_comm",
@@ -378,7 +378,7 @@
   {
     "name": "trace_cycle",
     "title": "trace cycle",
-    "line": 62,
+    "line": 65,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -396,7 +396,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.trace_mul_cycle",
       "declaration": "Matrix.trace_mul_cycle",
@@ -409,7 +409,7 @@
   {
     "name": "matrix_vector_associativity",
     "title": "matrix vector associativity",
-    "line": 68,
+    "line": 71,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -427,7 +427,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.mulVec_mulVec",
       "declaration": "Matrix.mulVec_mulVec",
@@ -440,7 +440,7 @@
   {
     "name": "matrix_vector_addition",
     "title": "matrix vector addition",
-    "line": 75,
+    "line": 78,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -458,7 +458,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.mulVec_add",
       "declaration": "Matrix.mulVec_add",
@@ -471,7 +471,7 @@
   {
     "name": "matrix_addition_action",
     "title": "matrix addition action",
-    "line": 82,
+    "line": 85,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -489,7 +489,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.add_mulVec",
       "declaration": "Matrix.add_mulVec",
@@ -502,7 +502,7 @@
   {
     "name": "matrix_vector_subtraction",
     "title": "matrix vector subtraction",
-    "line": 89,
+    "line": 92,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -520,7 +520,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.mulVec_sub",
       "declaration": "Matrix.mulVec_sub",
@@ -533,7 +533,7 @@
   {
     "name": "matrix_subtraction_action",
     "title": "matrix subtraction action",
-    "line": 96,
+    "line": 99,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -551,7 +551,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.sub_mulVec",
       "declaration": "Matrix.sub_mulVec",
@@ -564,7 +564,7 @@
   {
     "name": "matrix_scalar_action",
     "title": "matrix scalar action",
-    "line": 103,
+    "line": 106,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -582,7 +582,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.mulVec_smul",
       "declaration": "Matrix.mulVec_smul",
@@ -595,7 +595,7 @@
   {
     "name": "transpose_involution",
     "title": "transpose involution",
-    "line": 111,
+    "line": 114,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -613,7 +613,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.transpose_transpose",
       "declaration": "Matrix.transpose_transpose",
@@ -626,7 +626,7 @@
   {
     "name": "transpose_product",
     "title": "transpose product",
-    "line": 117,
+    "line": 120,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
     "attribution": {
@@ -644,7 +644,7 @@
         "version": "4.24.0",
         "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
         "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
-        "references": "corpus/references.json"
+        "references": "../corpus/references.json"
       },
       "reference": "Matrix.transpose_mul",
       "declaration": "Matrix.transpose_mul",

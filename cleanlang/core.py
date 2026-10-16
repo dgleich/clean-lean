@@ -472,7 +472,7 @@ def latex(results,reg):
 
 
 def bibliography(results,reg):
-    # Include the project's source registry once, so partial builds cannot erase references.
+    # Include all explicitly imported sources, even if some are unused in these results.
     keys=list(reg.sources.entries)
     out=[r'\begin{description}']
     for key in keys:
