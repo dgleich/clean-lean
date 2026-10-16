@@ -212,3 +212,7 @@ Contexts may nest. Put their `Let`, `Define`, and `Assume` clauses before their 
 ## Definitions modules
 
 Explicit modules now supply all mathematical names and bibliographic sources. The JSON registry and associated loaders/CLI flags have been removed. Lean checks generated typed wrappers for the declared meanings. See [the module specification](notation-prototype.md) and `library/` for the complete migration and known limits. The core expression grammar still supplies standard operators; importing notation does not implement a new algorithm or prove its properties.
+
+## Semantic authority (agreed direction)
+
+All mathematical meanings should be declared in modules, including operator overloads and numeral interpretation. The compiler must not assign mathematical behavior based on names such as `Natural`, `Matrix`, or `Vector`. Generic parsing and binding machinery resolves imported declarations; Lean supplies semantic type checking. See the final section of [the module specification](notation-prototype.md) for the architectural boundary and outstanding migration. The current name-based checks and operator dispatch described above are prototype behavior, not the target architecture.

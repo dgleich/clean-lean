@@ -77,3 +77,18 @@ All 80 Python tests pass, including empty-environment and removed-option checks.
 Imported modules contain declarations only; result imports, qualified names, selective exports, overloading, richer dependent types, automatic printed definition sections, and source spans for generated Lean errors remain future work. `Means` and raw TeX are trusted author input. Dependencies use the existing Lean/Lake pins; there is no extra package manager.
 
 Historical Git commits retain the initial syntax sketch, compatibility implementation, failing proof check, and its repair. The subsequent removal commit intentionally records the migration before tests and generated outputs were updated.
+
+## Agreed next architecture: one semantic space
+
+Following the adversarial review, the user requires mathematical semantics to be module-declared wherever possible. Removing the registry files was necessary but insufficient: the current `binary`, `compatible`, literal handling, and function/type checks still attach mathematical roles to particular type names. These paths must be replaced; they are not permanent language primitives.
+
+The target architecture is:
+
+- Modules declare types, function and operator notation, overloads, numeral interpretation/defaults, aliases, and presentation. Operator spelling, precedence, and associativity are declaration data consumed by generic parsing machinery.
+- An infix operator such as `*` is another notation declaration. Imported overloads provide scalar, matrix, and matrix-vector multiplication meanings. Adding a mathematical domain must not require a Python branch matching its name.
+- Names resolve to bound declarations with stable identities. Renaming a readable type or notation does not change its mathematical role. Two declarations with the same display spelling must not silently become the same type.
+- Type applications and function applications remain structured, rather than expanding unchecked strings. Lean elaborates and checks their meaning; Python must not maintain a competing mathematical type system. The same resolved expression supplies Lean output and precedence-aware LaTeX.
+- A module resolves its own explicit imports. Its meaning must not depend on the order in which its importer happened to load unrelated modules. Re-export and overload-resolution syntax still need specification.
+- The compiler retains indentation/layout, declaration syntax, lexical binding, generic expression structure, diagnostics, and the bridge to Lean. Lean's foundational sorts and proof-versus-proposition distinction cannot themselves be eliminated; readable names for them are module declarations. There should be no second set of mathematical meanings hidden behind those names.
+
+This is an agreed architectural requirement, not a claim that the refactor is complete. No new operator or literal declaration spelling is settled yet. The five confirmed review bugs (nested type substitution, rendering grouping, fixed dimensions, Lean identifier escaping, and assumption-label/proposition confusion) also remain outstanding. Passing the existing corpus proofs does not resolve those counterexamples.
