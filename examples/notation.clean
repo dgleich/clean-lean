@@ -1,3 +1,5 @@
+Import "../library/sources.clean"
+Import "../library/algorithms.clean"
 Import "modules/sorting.clean"
 
 Result insertion sort preserves length:

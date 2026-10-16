@@ -1,0 +1,56 @@
+Import "types.clean"
+
+Notation exp(x0):
+    Let x0: Real
+    Returns: Real
+    Means: Real.exp x0
+    Render latex: \exp({x0})
+
+Notation log(x0):
+    Let x0: Real
+    Returns: Real
+    Means: Real.log x0
+    Render latex: \log({x0})
+
+Notation sqrt(x0):
+    Let x0: Real
+    Returns: Real
+    Means: Real.sqrt x0
+    Render latex: \sqrt{{{x0}}}
+
+Notation sin(x0):
+    Let x0: Real
+    Returns: Real
+    Means: Real.sin x0
+    Render latex: \sin({x0})
+
+Notation cos(x0):
+    Let x0: Real
+    Returns: Real
+    Means: Real.cos x0
+    Render latex: \cos({x0})
+
+Notation abs(x0):
+    Let x0: Real
+    Returns: Real
+    Means: abs x0
+    Render latex: \lvert {x0}\rvert
+
+Notation continuous(x0):
+    Let x0: Function(Real,Real)
+    Returns: Proposition
+    Means: Continuous x0
+    Render latex: {x0}\text{{ is continuous}}
+
+Notation differentiable(x0):
+    Let x0: Function(Real,Real)
+    Returns: Proposition
+    Means: Differentiable ℝ x0
+    Render latex: {x0}\text{{ is differentiable}}
+
+Notation compose(x0,x1):
+    Let x0: Function(Real,Real)
+    Let x1: Function(Real,Real)
+    Returns: Function(Real,Real)
+    Means: (x0) ∘ (x1)
+    Render latex: ({x0}\circ {x1})

@@ -1,4 +1,3 @@
-import json
 import hashlib
 import re
 from dataclasses import dataclass, field
@@ -59,17 +58,14 @@ def texid(s):
 def compatible(a,b):
     return a==b or (a==NUM and b.name in ('Natural','Real','Complex','_number','Matrix','Vector')) or (b==NUM and a.name in ('Natural','Real','Complex','Matrix','Vector'))
 
-class Registry:
-    def __init__(self,path=None,sources=None):
-        self.data=json.loads(Path(path or Path(__file__).with_name('registry.json')).read_text())
-        self.sources=Sources(sources or Path(__file__).resolve().parents[1]/'sources.json')
-    def extend(self,path):
-        data=json.loads(Path(path).read_text())
-        for group in ('types','functions'):
-            for key,value in data.get(group,{}).items():
-                if key in self.data[group]: raise CleanError('Duplicate registry entry: '+key)
-                self.data[group][key]=value
-        self.data['phrases']+=data.get('phrases',[])
+class Environment:
+    """Names introduced by explicit module declarations; initially empty."""
+    def __init__(self):
+        self.data={'types': {}, 'aliases': {}, 'phrases': [], 'functions': {}}
+        self.sources=Sources()
+        self.notation_definitions={}
+        self.lean_imports=[]
+        self.loaded_modules=set()
     def type(self,s,env=None,phrases=True,trail=()):
         s=re.sub(r'^(a|an)\s+','',s.strip(),flags=re.I)
         if phrases:
@@ -79,6 +75,7 @@ class Registry:
         m=re.fullmatch(r'('+ID+r')(?:\((.*)\))?',s)
         if not m: raise CleanError('Unknown type phrase: '+s)
         name=self.data.get('aliases',{}).get(m[1],m[1]); args=split(m[2] or '')
+        if env and name in env and env[name].type == Type('Type') and not args: return Type(name)
         if name not in self.data['types']: raise CleanError('Unknown type: '+name)
         kinds=self.data['types'][name].get('args',[])
         if len(args)!=len(kinds): raise CleanError(f'{name} expects {len(kinds)} parameters')
@@ -95,6 +92,7 @@ class Registry:
         return Type(name,tuple(out))
     def render_type(self,t,target):
         args=[self.render_type(a,target) if isinstance(a,Type) else (texid(a) if target=='latex' and not a.isdigit() else a) for a in t.args]
+        if t.name not in self.data['types']: return t.name
         return self.data['types'][t.name][target].format(*args)
     def describe_type(self,t,plural=False):
         spec=self.data['types'][t.name]
@@ -108,7 +106,7 @@ class Registry:
             if p in bind and bind[p]!=a: raise CleanError('Type or dimension mismatch: '+p)
             bind[p]=a; return
         m=re.fullmatch(r'(\w+)(?:\((.*)\))?',p)
-        if not m: raise CleanError('Invalid registry signature: '+p)
+        if not m: raise CleanError('Invalid notation signature: '+p)
         ps=split(m[2] or '')
         if a==NUM and m[1] in ('Natural','Real','Complex'): return
         if not isinstance(a,Type) or a.name!=m[1] or len(ps)!=len(a.args): raise CleanError(f'Expected {p}, got {a}')

@@ -55,17 +55,20 @@ def normalize(data):
 
 
 class Sources:
-    def __init__(self, path):
-        self.path = Path(path)
-        self.entries = json.loads(self.path.read_text()) if self.path.exists() else {}
+    def __init__(self):
+        self.entries = {}
         self.references = {}
-        for key, source in self.entries.items():
-            if source.get('kind') not in ('lean', 'book', 'other'):
-                raise ValueError('Source kind must be lean, book, or other: ' + key)
-            for required in ('title', 'label'):
-                if not source.get(required): raise ValueError('Source missing ' + required + ': ' + key)
-            if 'references' in source:
-                self.references[key] = json.loads((self.path.parent / source['references']).read_text())
+
+    def declare(self, key, source, directory):
+        if key in self.entries:
+            raise ValueError('Duplicate source: '+key)
+        if source.get('kind') not in ('lean', 'book', 'other'):
+            raise ValueError('Source kind must be lean, book, or other: '+key)
+        for required in ('title', 'label'):
+            if not source.get(required): raise ValueError('Source missing '+required+': '+key)
+        if 'references' in source:
+            self.references[key] = json.loads((directory / source['references']).read_text())
+        self.entries[key] = source
     def resolve(self, data):
         key, ref = data['source'], data['reference']
         if key not in self.entries: raise ValueError('Unknown attribution source: ' + key)

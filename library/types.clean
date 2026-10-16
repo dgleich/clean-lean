@@ -1,0 +1,93 @@
+Import Lean Mathlib.Data.Complex.Basic
+Import Lean Mathlib.LinearAlgebra.Matrix.NonsingularInverse
+Import Lean Mathlib.LinearAlgebra.Matrix.Trace
+Import Lean Mathlib.Combinatorics.SimpleGraph.Basic
+Import Lean Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
+Import Lean Mathlib.Analysis.SpecialFunctions.Log.Basic
+Import Lean Mathlib.Analysis.SpecialFunctions.Sqrt
+Import Lean Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+Import Lean Mathlib.Analysis.Calculus.Deriv.Basic
+Import Lean Mathlib.Data.List.Sort
+Import Lean Mathlib.Data.Nat.GCD.Basic
+
+Type Natural():
+    Means: ℕ
+    Render latex: \mathbb{{N}}
+    Describe: a natural number
+    Describe plural: natural numbers
+
+Type Real():
+    Means: ℝ
+    Render latex: \mathbb{{R}}
+    Describe: a real number
+    Describe plural: real numbers
+
+Type Complex():
+    Means: ℂ
+    Render latex: \mathbb{{C}}
+    Describe: a complex number
+    Describe plural: complex numbers
+
+Type Proposition():
+    Means: Prop
+    Render latex: \mathrm{{Prop}}
+    Describe: a proposition
+    Describe plural: propositions
+
+Type Matrix(p0: Natural, p1: Natural, p2: Type):
+    Means: Matrix (Fin p0) (Fin p1) p2
+    Render latex: {p2}^{{{p0}\times {p1}}}
+    Describe: a matrix of size ${p0}\times {p1}$ over ${p2}$
+    Describe plural: ${p0}\times {p1}$ matrices over ${p2}$
+
+Type Vector(p0: Natural, p1: Type):
+    Means: Fin p0 → p1
+    Render latex: {p1}^{{{p0}}}
+    Describe: a vector of length ${p0}$ over ${p1}$
+    Describe plural: ${p0}$-vectors over ${p1}$
+
+Type Vertex(p0: Natural):
+    Means: Fin p0
+    Render latex: \{{0,\ldots,{p0}-1\}}
+    Describe: a vertex in $\{{0,\ldots,{p0}-1\}}$
+    Describe plural: vertices in $\{{0,\ldots,{p0}-1\}}$
+
+Type Graph(p0: Natural):
+    Means: SimpleGraph (Fin p0)
+    Render latex: \operatorname{{SimpleGraph}}(\{{0,\ldots,{p0}-1\}})
+    Describe: a simple graph on $\{{0,\ldots,{p0}-1\}}$
+    Describe plural: simple graphs on $\{{0,\ldots,{p0}-1\}}$
+
+Type List(p0: Type):
+    Means: List (p0)
+    Render latex: \operatorname{{List}}({p0})
+    Describe: a list with entries in ${p0}$
+    Describe plural: lists with entries in ${p0}$
+
+Type Set(p0: Type):
+    Means: Set (p0)
+    Render latex: \mathcal{{P}}({p0})
+    Describe: a subset of ${p0}$
+    Describe plural: subsets of ${p0}$
+
+Type Function(p0: Type, p1: Type):
+    Means: (p0) → (p1)
+    Render latex: ({p0}\to {p1})
+    Describe: a function from ${p0}$ to ${p1}$
+    Describe plural: functions from ${p0}$ to ${p1}$
+
+Alias Matrices: Matrix
+Alias Vectors: Vector
+
+Phrase Natural(?: number)?s? => Natural
+Phrase Real(?: number)?s? => Real
+Phrase Complex(?: number)?s? => Complex
+Phrase Proposition(?: number)?s? => Proposition
+Phrase complex (?P<m>\w+)\s*[×x]\s*(?P<n>\w+) matrices => Matrix({m},{n},Complex)
+Phrase complex (?P<m>\w+)\s*[×x]\s*(?P<n>\w+) matrix => Matrix({m},{n},Complex)
+Phrase complex (?P<n>\w+)-vectors? => Vector({n},Complex)
+Phrase real (?P<m>\w+)\s*[×x]\s*(?P<n>\w+) matrices => Matrix({m},{n},Real)
+Phrase real (?P<m>\w+)\s*[×x]\s*(?P<n>\w+) matrix => Matrix({m},{n},Real)
+Phrase real (?P<n>\w+)-vectors? => Vector({n},Real)
+Phrase lists? of natural numbers => List(Natural)
+Phrase real functions => Function(Real,Real)

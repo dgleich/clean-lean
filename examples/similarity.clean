@@ -1,3 +1,6 @@
+Import "../library/linear_algebra.clean"
+Import "../library/sources.clean"
+
 Result similarity transforms eigenvector:
     Attribution: stewart2001; Theorem 1.10, page 9; adapted; scope: eigenvector part
     Let n be a natural number

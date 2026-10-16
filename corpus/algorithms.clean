@@ -1,3 +1,6 @@
+Import "../library/algorithms.clean"
+Import "../library/sources.clean"
+
 Result insertion sort sorted:
     Attribution: mathlib; List.sorted_insertionSort; specialized
     Let xs: List(Natural)

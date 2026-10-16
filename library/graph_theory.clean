@@ -1,0 +1,81 @@
+Import "types.clean"
+
+Notation adjacent(x0,x1,x2):
+    Let n: Natural
+    Let x0: Graph(n)
+    Let x1: Vertex(n)
+    Let x2: Vertex(n)
+    Returns: Proposition
+    Means: (x0).Adj x1 x2
+    Render latex: {x1}\text{{ is adjacent to }}{x2}\text{{ in }}{x0}
+
+Notation complement(x0):
+    Let n: Natural
+    Let x0: Graph(n)
+    Returns: Graph(n)
+    Means: (x0)ᶜ
+    Render latex: \overline{{{x0}}}
+
+Notation union(x0,x1):
+    Let n: Natural
+    Let x0: Graph(n)
+    Let x1: Graph(n)
+    Returns: Graph(n)
+    Means: x0 ⊔ x1
+    Render latex: ({x0} \cup {x1})
+
+Notation intersection(x0,x1):
+    Let n: Natural
+    Let x0: Graph(n)
+    Let x1: Graph(n)
+    Returns: Graph(n)
+    Means: x0 ⊓ x1
+    Render latex: ({x0} \cap {x1})
+
+Notation neighbors(x0,x1):
+    Let n: Natural
+    Let x0: Graph(n)
+    Let x1: Vertex(n)
+    Returns: Set(Vertex(n))
+    Means: (x0).neighborSet x1
+    Render latex: N_{{{x0}}}({x1})
+
+Notation support(x0):
+    Let n: Natural
+    Let x0: Graph(n)
+    Returns: Set(Vertex(n))
+    Means: (x0).support
+    Render latex: \operatorname{{supp}}({x0})
+
+Notation subgraph(x0,x1):
+    Let n: Natural
+    Let x0: Graph(n)
+    Let x1: Graph(n)
+    Returns: Proposition
+    Means: x0 ≤ x1
+    Render latex: {x0}\text{{ is a subgraph of }}{x1}
+
+Notation reachable(x0,x1,x2):
+    Let n: Natural
+    Let x0: Graph(n)
+    Let x1: Vertex(n)
+    Let x2: Vertex(n)
+    Returns: Proposition
+    Means: (x0).Reachable x1 x2
+    Render latex: {x2}\text{{ is reachable from }}{x1}\text{{ in }}{x0}
+
+Notation connected(x0):
+    Let n: Natural
+    Let x0: Graph(n)
+    Returns: Proposition
+    Means: (x0).Connected
+    Render latex: {x0}\text{{ is connected}}
+
+Notation commonNeighbors(x0,x1,x2):
+    Let n: Natural
+    Let x0: Graph(n)
+    Let x1: Vertex(n)
+    Let x2: Vertex(n)
+    Returns: Set(Vertex(n))
+    Means: (x0).commonNeighbors x1 x2
+    Render latex: N_{{{x0}}}({x1})\cap N_{{{x0}}}({x2})

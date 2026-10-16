@@ -1,0 +1,91 @@
+Import "types.clean"
+
+Notation insertionSort(x0):
+    Let x0: List(Natural)
+    Returns: List(Natural)
+    Means: (List.insertionSort (· ≤ ·)) x0
+    Render latex: \operatorname{{insertionSort}}({x0})
+
+Notation mergeSort(x0):
+    Let x0: List(Natural)
+    Returns: List(Natural)
+    Means: (fun l : List ℕ => l.mergeSort (· ≤ ·)) x0
+    Render latex: \operatorname{{mergeSort}}({x0})
+
+Notation sorted(x0):
+    Let x0: List(Natural)
+    Returns: Proposition
+    Means: List.Sorted (· ≤ ·) x0
+    Render latex: {x0}\text{{ is sorted}}
+
+Notation permutation(x0,x1):
+    Let T: Type
+    Let x0: List(T)
+    Let x1: List(T)
+    Returns: Proposition
+    Means: List.Perm x0 x1
+    Render latex: {x0}\text{{ is a permutation of }}{x1}
+
+Notation length(x0):
+    Let T: Type
+    Let x0: List(T)
+    Returns: Natural
+    Means: List.length x0
+    Render latex: \lvert {x0}\rvert
+
+Notation insert(x0,x1):
+    Let x0: Natural
+    Let x1: List(Natural)
+    Returns: List(Natural)
+    Means: List.orderedInsert (· ≤ ·) x0 x1
+    Render latex: \operatorname{{insert}}({x0},{x1})
+
+Notation cons(x0,x1):
+    Let x0: Natural
+    Let x1: List(Natural)
+    Returns: List(Natural)
+    Means: x0 :: x1
+    Render latex: ({x0}::{x1})
+
+Notation sublist(x0,x1):
+    Let T: Type
+    Let x0: List(T)
+    Let x1: List(T)
+    Returns: Proposition
+    Means: List.Sublist x0 x1
+    Render latex: {x0}\text{{ is a sublist of }}{x1}
+
+Notation count(x0,x1):
+    Let x0: Natural
+    Let x1: List(Natural)
+    Returns: Natural
+    Means: List.count x0 x1
+    Render latex: \operatorname{{count}}({x0},{x1})
+
+Notation merge(x0,x1):
+    Let x0: List(Natural)
+    Let x1: List(Natural)
+    Returns: List(Natural)
+    Means: List.merge x0 x1 (· ≤ ·)
+    Render latex: \operatorname{{merge}}({x0},{x1})
+
+Notation coprime(x0,x1):
+    Let x0: Natural
+    Let x1: Natural
+    Returns: Proposition
+    Means: Nat.Coprime x0 x1
+    Render latex: {x0}\text{{ and }}{x1}\text{{ are coprime}}
+
+Notation gcd(x0,x1):
+    Let x0: Natural
+    Let x1: Natural
+    Returns: Natural
+    Means: Nat.gcd x0 x1
+    Render latex: \gcd({x0},{x1})
+
+Notation lcm(x0,x1):
+    Let x0: Natural
+    Let x1: Natural
+    Returns: Natural
+    Means: Nat.lcm x0 x1
+    Render latex: \operatorname{{lcm}}({x0},{x1})

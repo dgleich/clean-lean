@@ -147,7 +147,7 @@ for it in items:
     it['mathlib_revision']=rev
 for cat in ['linear_algebra','graph_theory','analysis','algorithms']:
     selected=[i for i in items if i['category']==cat]; assert len(selected)>=20
-    out=[]
+    out=[f'Import "../library/{cat}.clean"','Import "../library/sources.clean"','']
     determinant_context={'determinant_product','determinant_transpose','determinant_product_swap','determinant_left_swap','determinant_right_swap'}
     if cat=='linear_algebra':
         out+=['Context complex square matrices:','    Let n: Natural','    Let A, B, C: Matrix(n,n,Complex)','']

@@ -1,3 +1,6 @@
+Import "../library/linear_algebra.clean"
+Import "../library/sources.clean"
+
 Context complex square matrices:
     Let n: Natural
     Let A, B, C: Matrix(n,n,Complex)

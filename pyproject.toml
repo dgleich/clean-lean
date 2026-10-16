@@ -11,5 +11,3 @@ requires-python = ">=3.10"
 [tool.setuptools]
 packages = ["cleanlang"]
 
-[tool.setuptools.package-data]
-cleanlang = ["registry.json"]

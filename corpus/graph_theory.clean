@@ -1,3 +1,6 @@
+Import "../library/graph_theory.clean"
+Import "../library/sources.clean"
+
 Result adjacency symmetry:
     Attribution: mathlib; SimpleGraph.adj_symm; specialized
     Let n: Natural

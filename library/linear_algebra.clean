@@ -1,0 +1,30 @@
+Import "types.clean"
+
+Notation det(x0):
+    Let n: Natural
+    Let x0: Matrix(n,n,Complex)
+    Returns: Complex
+    Means: Matrix.det x0
+    Render latex: \det({x0})
+
+Notation trace(x0):
+    Let n: Natural
+    Let x0: Matrix(n,n,Complex)
+    Returns: Complex
+    Means: Matrix.trace x0
+    Render latex: \operatorname{{tr}}({x0})
+
+Notation transpose(x0):
+    Let m: Natural
+    Let n: Natural
+    Let x0: Matrix(m,n,Complex)
+    Returns: Matrix(n,m,Complex)
+    Means: Matrix.transpose x0
+    Render latex: {{{x0}}}^{{\mathsf T}}
+
+Notation inverse(x0):
+    Let n: Natural
+    Let x0: Matrix(n,n,Complex)
+    Returns: Matrix(n,n,Complex)
+    Means: (x0)⁻¹
+    Render latex: {{{x0}}}^{{-1}}

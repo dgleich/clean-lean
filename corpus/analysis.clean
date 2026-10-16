@@ -1,3 +1,6 @@
+Import "../library/analysis.clean"
+Import "../library/sources.clean"
+
 Result exponential positive:
     Attribution: mathlib; Real.exp_pos; specialized
     Let x: Real

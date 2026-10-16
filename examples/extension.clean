@@ -1,3 +1,6 @@
+Import "modules/square-matrices.clean"
+Import "../library/sources.clean"
+
 Theorem square matrix transpose:
     Attribution: mathlib; Matrix.det_transpose; specialized
     Let n: Natural

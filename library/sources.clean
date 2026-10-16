@@ -1,0 +1,17 @@
+Source mathlib:
+    Kind: lean
+    Label: Mathlib
+    Title: The Lean Mathematical Library
+    Author: The Mathlib Community
+    Version: 4.24.0
+    Revision: f897ebcf72cd16f89ab4577d0c826cd14afaafc7
+    Url: https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7
+    References: ../corpus/references.json
+
+Source stewart2001:
+    Kind: book
+    Label: Stewart 2001
+    Author: G. W. Stewart
+    Title: Matrix Algorithms, Volume II: Eigensystems
+    Year: 2001
+    Publisher: SIAM

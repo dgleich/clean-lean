@@ -1,0 +1,6 @@
+Import "../../library/linear_algebra.clean"
+
+Type SquareMatrix(n: Natural, K: Type):
+    Equals: Matrix(n,n,K)
+
+Phrase square complex matrices of order (?P<n>\w+) => SquareMatrix({n},Complex)

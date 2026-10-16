@@ -1,3 +1,4 @@
+Import "../../library/types.clean"
 Import Lean Mathlib.Data.List.Sort
 
 Notation insertion sort(xs):
