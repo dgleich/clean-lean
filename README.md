@@ -1,17 +1,20 @@
 # Clean statement prototype
 
-A local prototype for readable mathematical declarations, mandatory attribution, LaTeX rendering, and statement translation to Lean. Start with the [specification](docs/spec.md), the [decision log](docs/decisions.md), and the [rendered specimen](generated/specimen.pdf).
+A local prototype for readable mathematical statements, mandatory attribution, LaTeX rendering, and translation to Lean. Start with the [specification](docs/spec.md), [decision log](docs/decisions.md), and [rendered specimen](generated/specimen.pdf).
 
-The corpus has **80 statements, 20 each** in linear algebra, graph theory, analysis, and CLR-aligned undergraduate algorithms. Each has an exact Mathlib source reference. Algorithms currently means sorting and number-theoretic supporting results, not a complete CLR formalization. No remote repository is configured.
-
-## Compact attribution
+All mathematical vocabulary comes from **explicit Clean imports**. There is no JSON registry, default vocabulary loader, or compatibility switch. A fresh translation environment is empty. Lean dependencies are pinned by `lean-toolchain` and `lake-manifest.json`.
 
 ```text
-Attribution: mathlib; Matrix.det_mul_left_comm
-Attribution: stewart2001; Theorem 1.10, page 9; adapted; scope: eigenvector part
+Import "../library/algorithms.clean"
+Import "../library/sources.clean"
+
+Result insertion sort length:
+    Attribution: mathlib; List.length_insertionSort; specialized
+    Let xs: List(Natural)
+    Conclude: length(insertionSort(xs)) = length(xs)
 ```
 
-Source keys resolve through `sources.json`; `--sources` selects another registry. Relationship and named fields are optional. The expanded block form remains available. LaTeX uses short citations and a shared reference list; exact provenance stays in JSON metadata.
+The [algorithm module](library/algorithms.clean) declares the meaning and rendering of every function used here. It imports [type declarations](library/types.clean). [Source declarations](library/sources.clean) supply bibliography details. The [multiword notation example](examples/notation.clean) uses `insertion sort(xs)` from a separate module; see its [PDF](generated/notation.pdf).
 
 ## Try it
 
@@ -19,68 +22,53 @@ Python 3.10+ is sufficient; the translator has no external Python dependencies. 
 
 ```sh
 python3 -m cleanlang check corpus/*.clean
-python3 -m cleanlang build corpus/*.clean examples/similarity.clean
-python3 -m cleanlang latex examples/similarity.clean
-python3 -m cleanlang lean examples/similarity.clean
-python3 -m cleanlang build --registry examples/extensions.json examples/extension.clean
+python3 -m cleanlang build corpus/*.clean examples/similarity.clean examples/extension.clean examples/notation.clean
+python3 -m cleanlang build examples/determinants.clean
+python3 -m cleanlang lean examples/notation.clean
 python3 -m unittest discover -s tests -v
 ```
 
-Build LaTeX with a standard installation containing amsmath, amssymb, hyperref, and geometry:
-
-```sh
-pdflatex -interaction=nonstopmode -halt-on-error -output-directory generated latex/specimen.tex
-pdflatex -interaction=nonstopmode -halt-on-error -output-directory generated latex/specimen.tex
-```
-
-The [clean.sty package](latex/clean.sty) accepts `\CleanInput{corpus/analysis.clean}` (or `\CleanInput{generated/analysis}`). It reads the generated TeX, not raw `.clean` files. No shell escape is needed.
+`check` validates supported Clean syntax and signatures. It does not run Lean. Generated wrappers allow Lean to check each declared `Means` expression, including parameter and return types.
 
 ## Lean checking
 
-The project pins Lean and Mathlib v4.24.0. With elan/Lake installed, set up dependencies using `lake update`. To download only the needed precompiled modules, pass the modules listed in `imports.json` to `lake exe cache get`.
+The project pins Lean and Mathlib v4.24.0. With elan/Lake installed, obtain the pinned dependencies using `lake build`; use `lake exe cache get` for Mathlib's precompiled modules when needed.
 
 ```sh
 python3 verify_corpus.py
+python3 verify_notation.py
 lake env lean generated/VerifiedCorpus.lean
+lake env lean generated/VerifiedNotation.lean
 lake env lean generated/similarity.lean
+lake env lean generated/extension.lean
 ```
 
-Normal translator output is a **definition of a proposition**, not a proof. The separate `VerifiedCorpus.lean` fixture checks the curated 80 statements against actual Mathlib proofs. The Stewart example's checked proof is maintained in the sibling `stewart-lean` project; its generated Clean output is only a statement.
+Normal translation defines propositions; it does not prove them. The corpus fixture proves all **80 statements, 20 each** in linear algebra, graph theory, analysis, and CLR-aligned undergraduate algorithms against their Mathlib sources. Algorithm coverage is sorting and arithmetic, not a complete CLR formalization. The Stewart proof lives in the sibling `stewart-lean` project; this project's generated Stewart output is a statement.
 
-This workspace initially shares the already-installed dependency directory with `../stewart-lean` via an ignored `.lake/packages` symlink. A fresh checkout can use `lake update` to obtain its own dependencies.
+This workspace shares dependencies with `../stewart-lean` through an ignored `.lake/packages` symlink. No remote repository is configured.
 
-## Files
+## LaTeX
 
-- `sources.json`: shared bibliography and source kinds.
-- `corpus/references.json`: declaration lookup with exact Mathlib URLs.
-- `corpus/*.clean`: the readable statements.
-- `corpus/catalog.json`: source revision, declaration, URL, source excerpt, topic, and validation proof term for each entry.
-- `generated/*.lean`, `*.tex`, `*.metadata.json`: backend output and attribution metadata.
-- `cleanlang/registry.json`: type constructors, prose phrases, and function signatures/renderings.
-- `examples/extensions.json`: deriving a square-matrix type alias without parser changes.
-- `build_corpus.py`: reproduces the curated corpus from a pinned local Mathlib checkout.
-- `build_registry.py`: reproduces the built-in registry.
+The [clean.sty package](latex/clean.sty) inputs generated fragments, not raw Clean syntax. No shell escape is required. Compile each specimen twice:
 
-To refresh source references, run `python3 build_corpus.py --mathlib /path/to/mathlib4` at the pinned revision. Changing the revision requires rechecking all statements and proofs. Mathlib source excerpts retain their provenance; see [THIRD_PARTY.md](THIRD_PARTY.md).
+```sh
+pdflatex -interaction=nonstopmode -halt-on-error -output-directory generated latex/specimen.tex
+pdflatex -interaction=nonstopmode -halt-on-error -output-directory generated latex/specimen.tex
+```
+
+The same commands apply to `latex/contexts.tex` and `latex/notation.tex`. Context rendering is selected explicitly with `\CleanInput[contexts=expanded]{examples/determinants.clean}` or `contexts=referenced`. Expanded is the default; referenced results always say which context they use. See the [comparison](generated/contexts.pdf).
+
+## Files and workflow
+
+- `library/*.clean`: authored types, notations, phrases, imports, and sources.
+- `examples/modules/square-matrices.clean`: a derived type alias and prose phrase.
+- `corpus/*.clean`: statements with explicit imports.
+- `corpus/catalog.json`, `corpus/references.json`: generated scholarly provenance, not mathematical definitions or function mappings.
+- `generated/`: Lean, TeX, metadata, and small reviewable PDFs.
+- `build_corpus.py`: recreates corpus statements and provenance at the pinned Mathlib revision.
+
+See [AGENTS.md](AGENTS.md) for Git rules: retain a linear local history of intermediate steps, including failing states. Checks document progress; they do not gate commits. Do not squash history or publish without explicit authorization.
 
 ## Limits
 
-This is a statement-language prototype, not a general Lean frontend. It has registered functions and type patterns, basic arithmetic and logic, and simple type/dimension checks. It does not yet parse explicit quantifiers, lambdas, summations, arbitrary dependent types, proof scripts, or unrestricted mathematical English. See the spec and decision log for exact rules and remaining choices.
-
-## Development
-
-See [AGENTS.md](AGENTS.md) for local Git workflow and validation rules. Keep a linear history of intermediate steps, including unfinished or failing states. Record validation status; passing checks are not a prerequisite for a commit. Do not squash away those steps or publish without explicit authorization.
-
-Shared contexts are implemented: compare the [source](examples/determinants.clean) and [two rendering modes](generated/contexts.pdf). Use `\CleanInput[contexts=expanded]{examples/determinants.clean}` or `contexts=referenced`; references to contexts are always explicit.
-
-The agreed next architectural step is explicit Clean definitions modules backed by Lean definitions. The first import/notation slice now works; JSON registries still supply existing types and legacy functions. See [prototype details](docs/notation-prototype.md).
-
-Try the explicit module example:
-
-```sh
-python3 -m cleanlang build examples/notation.clean
-python3 verify_notation.py
-lake env lean generated/VerifiedNotation.lean
-```
-
-The [sorting module](examples/modules/sorting.clean) supplies the meaning of the readable name used in [this result](examples/notation.clean). The [rendered example](generated/notation.pdf) shows its English rendering. `check` validates Clean syntax and supported types; running Lean separately checks `Means` and the generated signatures.
+See [module syntax and limitations](docs/notation-prototype.md). Clean remains a statement-language prototype: it has no proof language, unrestricted mathematical English, general dependent-type inference, or Lean typeclass declaration syntax. The initial matrix operation module uses complex scalars; composition uses real functions. Imported modules currently contain definitions, not results. See [THIRD_PARTY.md](THIRD_PARTY.md) for attribution and licensing.

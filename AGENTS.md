@@ -4,7 +4,7 @@
 
 - Keep this repository local. Do not create a remote, push, or publish without an explicit user request.
 - Read `docs/spec.md` and `docs/decisions.md` before changing language behavior. Record new decisions and unresolved choices there; distinguish implemented behavior from proposals.
-- The agreed architecture is explicit Clean definitions modules backed by Lean definitions. JSON registries are the current prototype mechanism, not the final language design. An initial explicit import/notation prototype is implemented; see `docs/notation-prototype.md` for its limits.
+- The agreed architecture is explicit Clean definitions modules backed by Lean definitions. All mathematical vocabulary must come from explicit Clean imports. Do not reintroduce registry files, implicit default modules, or compatibility loaders. See `docs/notation-prototype.md` for current syntax and limits.
 - Preserve mandatory attribution, readable English names, case-insensitive keywords, and explicit context references in LaTeX. Rendering must not change mathematical meaning.
 - Statement translation does not constitute a proof. Never use `sorry` or axioms to make validation pass. Keep the limitations of the CLR-aligned corpus explicit.
 
@@ -26,5 +26,5 @@ Checks document progress; they are not commit gates. Record known failures or ch
 - When Lean semantics or corpus entries change, regenerate `generated/VerifiedCorpus.lean` with `python3 verify_corpus.py` and run `lake env lean generated/VerifiedCorpus.lean`. Check changed standalone Lean examples too.
 - For LaTeX changes, compile the affected specimen twice and check for errors, unresolved references, and layout problems.
 - Keep the small generated Lean, TeX, metadata, and specimen PDFs tracked as reviewable examples. Regenerate them from source; do not hand-edit generated output. Generated files need not change for documentation-only work.
-- `build_registry.py` owns the built-in registry; `build_corpus.py` owns the curated corpus and source index. Change generators when changing their output.
+- `library/*.clean` are authored definition modules. `build_corpus.py` owns the curated corpus and source index. Change that generator when changing its output.
 - Do not update Lean/Mathlib versions incidentally. Dependency upgrades require explicit rationale and renewed corpus validation.

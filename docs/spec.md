@@ -27,7 +27,7 @@ Result similarity transforms eigenvector:
 
 One declaration occupies one physical line. Use four spaces inside a result and eight inside attribution or conclusion blocks. Tabs and arbitrary indentation are errors. Blank lines and full-line `#` comments are allowed. An indented conclusion may span several lines; those lines form one expression, so `and` must appear explicitly. Version 0.1 does not support implicit continuation of other clauses, semicolon-separated mathematical statements, or inline comments. Semicolons are permitted as field separators inside compact attribution clauses.
 
-The leading keyword is case-insensitive: `let`, `Let`, and `LET` are equivalent, as are `Define` and `define`. This rule also applies to `Result`, `Theorem`, `Assume`, `Conclude`, attribution field names, and logical `and`, `or`, `not`. Variable names and registry function names are case-sensitive. Type constructor spellings and aliases are registered explicitly; prose type patterns match without regard to case.
+The leading keyword is case-insensitive: `let`, `Let`, and `LET` are equivalent, as are `Define` and `define`. This rule also applies to `Result`, `Theorem`, `Assume`, `Conclude`, attribution field names, and logical `and`, `or`, `not`. Variable names and notation names are case-sensitive. Type constructor spellings and aliases are registered explicitly; prose type patterns match without regard to case.
 
 Result titles may be English words separated by spaces, for example `Result determinant left swap:`. The Lean identifier is generated as `determinant_left_swap`; the displayed LaTeX title is “determinant left swap.” Capitalization is preserved. Repeated spaces and underscores normalize to a single word separator, and collisions between generated identifiers are errors. Existing underscored titles remain accepted and display as words. Titles are word-based in this version; arbitrary punctuation is not supported. Generated metadata records both `name` (Lean identifier) and `title` (display text).
 
@@ -52,7 +52,7 @@ They introduce two arbitrary matrices. Similarly, `Let x be a complex n-vector` 
 Let x = Vector(n, Complex)   # invalid (shown here for explanation)
 ```
 
-Use `Let x: Vector(n, Complex)` or `Let x be a Vector(n, Complex)` instead. The language does not silently interpret that rejected form as naming a type. Type aliases belong in the extension registry.
+Use `Let x: Vector(n, Complex)` or `Let x be a Vector(n, Complex)` instead. The language does not silently interpret that rejected form as naming a type. Type aliases are introduced by explicit `Type ... Equals:` declarations in imported modules.
 
 Definitions are local to a result and ordered: later clauses may use earlier names. An unannotated numeric literal in a local definition defaults to Natural in this prototype. More sophisticated inference is deferred.
 
@@ -100,23 +100,23 @@ Attribution:
 
 `declaration:` and `location:` are accepted aliases for `reference:` in block syntax. Supplying more than one of these fields is an error. Source keys and references retain their case; attribution keywords and relationship tags are case-insensitive.
 
-Shared source metadata lives in `sources.json` (overridable with `--sources`). Each source has a `kind` (`lean`, `book`, or `other`), a short citation `label`, a `title`, and optional author, year, publisher, version, revision, and URL. A Lean source also names a reference index. The supplied `corpus/references.json` maps declaration names to exact file/line URLs and revisions. The validator rejects unknown source keys, unknown Lean declarations, and revision mismatches. Book references are free-text locators; this prototype does not check their bibliographic accuracy.
+Shared source metadata is introduced by `Source` declarations in explicitly imported Clean modules, such as `library/sources.clean`. Fields include kind, label, title, author, year, version, revision, and URL. A Lean source names a generated declaration-reference index relative to its module. The validator rejects unknown source keys, unknown indexed Lean declarations, and revision mismatches. Book references are free-text locators; bibliographic accuracy is not automatically checked.
 
-An original result can reference a registered local source of kind `other` and use an internal locator; do not invent a published source. Mathematical provenance and formalization authorship remain distinct. Extra metadata is retained, even when it is not printed.
+An original result can reference a declared local source of kind `other` and use an internal locator; do not invent a published source. Mathematical provenance and formalization authorship remain distinct. Extra metadata is retained, even when it is not printed.
 
-LaTeX shows a short citation beside each result title, such as `[Mathlib]` or `[Stewart 2001, Theorem 1.10, page 9]`. Mathlib citations link to the specific declaration. Full source information is listed once in `generated/references.tex`. This file lists the project's registered sources, including unused entries, so partial builds cannot accidentally remove another fragment's bibliography. Raw paths, revisions, and relationship labels are not repeated under each result. Explicit scope, changes, and notes remain visible as short qualifications; adaptations are marked as such.
+LaTeX shows a short citation beside each result title, such as `[Mathlib]` or `[Stewart 2001, Theorem 1.10, page 9]`. Mathlib citations link to the specific declaration. Full source information is listed once in `generated/references.tex`. This file lists the explicitly imported sources, including unused entries, so partial builds cannot accidentally remove another fragment's bibliography. Raw paths, revisions, and relationship labels are not repeated under each result. Explicit scope, changes, and notes remain visible as short qualifications; adaptations are marked as such.
 
 Structured output retains both the authored `attribution` and the `resolved_attribution`, including shared source details and the precise declaration URL. The corpus catalog also preserves source excerpts and topics. CLR alignment remains topical; no edition-specific theorem numbers or pages are claimed.
 
 ## Expressions
 
-The initial implementation supports names, natural numerals, parenthesized expressions, registered function calls, application of declared unary functions, unary minus, and logical negation. Binary operations include arithmetic, equality and comparisons, conjunction, disjunction, implication, equivalence, membership, subset, set union/intersection, and divisibility.
+The initial implementation supports names, natural numerals, parenthesized expressions, imported notation calls, application of declared unary functions, unary minus, and logical negation. Binary operations include arithmetic, equality and comparisons, conjunction, disjunction, implication, equivalence, membership, subset, set union/intersection, and divisibility.
 
 Precedence, from low to high: equivalence; implication; disjunction; conjunction; comparisons/membership; addition/subtraction/set operations; multiplication/division; powers. Powers and implication associate to the right. Use parentheses around chained or mixed comparisons; comparison chains are not supported. Powers bind more tightly than unary minus: `-x^2` means `-(x^2)`. Write `(-x)^2` for the other grouping.
 
-Operand types choose the meaning of `*`: scalar multiplication, matrix–matrix multiplication, or matrix–vector multiplication. Matrix dimensions and fields must agree. `Vector * Vector` is not guessed to mean an inner product; add an explicit registered function for such operations. Lean performs the final type check. The prototype's local checks are deliberately narrower than Lean elaboration and cannot validate every algebraic structure.
+Operand types choose the meaning of `*`: scalar multiplication, matrix–matrix multiplication, or matrix–vector multiplication. Matrix dimensions and fields must agree. `Vector * Vector` is not guessed to mean an inner product; add an explicit declared notation for such operations. Lean performs the final type check. The prototype's local checks are deliberately narrower than Lean elaboration and cannot validate every algebraic structure.
 
-Function names such as `det`, `inverse`, and `continuous` are registered, with signatures and separate Lean/LaTeX templates. The prototype does not parse unrestricted mathematical English, binders such as `for every`, explicit existential quantifiers, summation notation, lambdas, structures, or typeclass assumptions. These are natural next extensions suggested by a broader corpus.
+Function names such as `det`, `inverse`, and `continuous` are declared in explicit modules, with typed Lean meanings and LaTeX renderings. The prototype does not parse unrestricted mathematical English, binders such as `for every`, explicit existential quantifiers, summation notation, lambdas, structures, or typeclass assumptions. These are natural next extensions suggested by a broader corpus.
 
 ## What is equivalent in Lean
 
@@ -152,32 +152,24 @@ The local `let` remains inside the quantifiers, preserving dependency order. It 
 
 ## Extensible types and type phrases
 
-A JSON registry defines canonical constructors, their parameter kinds, and rendering templates. Constructor parameters are either `dimension` or `type`. Phrase entries map explicit regular-expression patterns to constructors. Unrecognized or ambiguous phrases are errors.
+All types, aliases, phrases, and function meanings come from explicit Clean imports. The translation environment starts empty. No JSON registry or compatibility loader exists.
 
-Libraries can derive an alias by expansion into a canonical type:
-
-```json
-{
-  "types": {
-    "SquareMatrix": {
-      "args": ["dimension", "type"],
-      "canonical": "Matrix({0},{0},{1})"
-    }
-  },
-  "phrases": [
-    {
-      "pattern": "square complex matrices of order (?P<n>\\w+)",
-      "type": "SquareMatrix({n},Complex)"
-    }
-  ]
-}
+```text
+Import "modules/square-matrices.clean"
 ```
 
-Pass this file with `--registry examples/extensions.json`. The alias normalizes to Matrix before expression checking, so existing operations such as determinant work without special cases. Cyclic aliases and duplicate registrations are rejected.
+That module can contain:
 
-A new canonical constructor instead supplies `args`, `lean`, and `latex` fields. That registration must refer to an existing Lean type or one provided by an imported library. The registry does not invent a mathematical construction merely by giving it a name. Refinement types and new inductive definitions remain future work.
+```text
+Import "../../library/linear_algebra.clean"
 
-Function signatures use placeholders such as `$n` and `$K` to relate dimensions and scalar types across arguments. Templates use `{0}`, `{1}`, etc. for arguments; literal LaTeX braces are doubled. Registry files are trusted library configuration, not a sandbox for untrusted templates.
+Type SquareMatrix(n: Natural, K: Type):
+    Equals: Matrix(n,n,K)
+
+Phrase square complex matrices of order (?P<n>\w+) => SquareMatrix({n},Complex)
+```
+
+Aliases normalize before expression checking, so existing operations apply without parser changes. Unknown types, cyclic aliases, and duplicate names fail. New types use `Means`, `Render latex`, and optional `Describe`/`Describe plural` fields. Notations use typed `Let` parameters, `Returns`, a Lean `Means` expression, and either English `Render` or `Render latex`. See [the module specification](notation-prototype.md) for syntax, generics, and limitations.
 
 ## LaTeX rendering
 
@@ -185,7 +177,7 @@ Both backends consume the same parsed structure. Each successive `Let` clause be
 
 The default rendering prefers English wherever it describes the mathematical argument. Logical connectives render as “and,” “or,” “if and only if,” “implies,” and “not,” rather than logical symbols. Membership, subset, and divisibility render as “belongs to,” “is a subset of,” and “divides.” Predicates use phrases such as “is continuous,” “is sorted,” and “is adjacent to.” Standard mathematical operations and relations such as multiplication, powers, equality, and inequalities retain their notation.
 
-Typed declarations render as prose, for example “Let n be a natural number” and “Let A and S be n×n matrices over ℂ.” The type registry supports `prose` and `prose_plural` templates alongside its mathematical `latex` template. Extension types without a prose template fall back to “an element of” or “elements of” followed by the type. Both singular and plural declarations are supported. These presentation rules do not change the Lean interpretation.
+Typed declarations render as prose, for example “Let n be a natural number” and “Let A and S be n×n matrices over ℂ.” Type declarations support `Describe` and `Describe plural` fields alongside `Render latex`. Extension types without a prose template fall back to “an element of” or “elements of” followed by the type. Both singular and plural declarations are supported. These presentation rules do not change the Lean interpretation.
 
 Build `.clean` files with the Python translator, then use:
 
@@ -217,8 +209,6 @@ Contexts may nest. Put their `Let`, `Define`, and `Assume` clauses before their 
 
 `\CleanInput[contexts=expanded]{examples/determinants.clean}` repeats required declarations and all inherited assumptions within each result. This is the default. `contexts=referenced` prints numbered contexts and explicitly states “Using Context (1)” in each affected result. Nested contexts cite their ancestors. Both modes have the same Lean meaning. See `latex/contexts.tex` and `generated/contexts.pdf`. Parameterized assumption-set templates are not implemented.
 
-## Definitions modules (initial prototype)
+## Definitions modules
 
-Clean will combine explicitly imported definitions modules with Lean-backed mathematical definitions. A module will associate readable names with Lean expressions and presentation rules; Lean will check meaning and types. Rendering rules cannot supply mathematical meaning. Imports must expose dependencies, conflicting names must require disambiguation, and project dependencies must be pinned.
-
-The existing JSON registries currently provide function meanings, types, type phrases, and renderings. For example, `insertionSort(xs)` maps to `List.insertionSort (· ≤ ·) xs` for natural-number lists. This dependency is essential, not cosmetic. An initial implementation supports relative Clean imports, Lean imports, and typed notation declarations; see [notation prototype](notation-prototype.md). Most mappings still reside in JSON; exact `Import` and `Notation` syntax is provisional. Naming Mathlib's implementation does not define or verify CLR pseudocode.
+Explicit modules now supply all mathematical names and bibliographic sources. The JSON registry and associated loaders/CLI flags have been removed. Lean checks generated typed wrappers for the declared meanings. See [the module specification](notation-prototype.md) and `library/` for the complete migration and known limits. The core expression grammar still supplies standard operators; importing notation does not implement a new algorithm or prove its properties.

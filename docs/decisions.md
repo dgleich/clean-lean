@@ -16,7 +16,7 @@ These decisions separate requested behavior from provisional implementation choi
 | D10 | Four-space indentation, newline clauses, no tabs | Provisional concrete interpretation of Python-style layout |
 | D11 | `Define` aliases value-defining `Let` only | Provisional convenience motivated by capitalization examples; can remove |
 | D12 | Declare dimensions explicitly | Avoid implicit free variables and unclear quantification |
-| D13 | JSON type/function registry plus canonical aliases | Current prototype mechanism; superseded as the architectural direction by D28 |
+| D13 | JSON type/function registry plus canonical aliases | Historical; removed by D33, not retained as compatibility |
 | D14 | Emit proposition definitions, without axioms or placeholders | Statement-only translation must not claim a proof |
 | D15 | TeX package inputs preprocessed fragments | Initial design avoids a second parser and shell escape |
 | D16 | Consecutive lets render as period-separated sentences | Concrete interpretation of requested punctuation |
@@ -28,7 +28,7 @@ These decisions separate requested behavior from provisional implementation choi
 | D22 | Retain standard mathematical operations and relations in formulas | Powers, multiplication, equality, and inequalities remain mathematical notation; conjunction is written “and” |
 | D23 | English result titles generate Lean identifiers automatically | User request: spaces in display titles become underscores only in Lean names; legacy underscored titles render as words |
 | D24 | Compact attribution uses source; reference; optional relationship; optional named fields | User agreement; omitted relationship and scope remain unspecified |
-| D25 | Shared source registry and short printed citations | Source details are stored once; full declaration provenance remains in metadata |
+| D25 | Shared source declarations and short printed citations | Source details are stored once in explicit modules; full declaration provenance remains in metadata |
 | D26 | Shared, nestable contexts introduce declarations and assumptions | Implemented; needed object dependencies and all inherited assumptions are retained in each result |
 | D27 | LaTeX contexts may be expanded or explicitly referenced | Implemented; expanded is default, referenced results say “Using Context (1)” rather than relying on implicit scope |
 | D28 | Combine reusable Clean modules with Lean-backed definitions | User agreement; an initial import/notation slice is implemented; see `notation-prototype.md`. Lean supplies mathematical meaning; Clean supplies readable names and presentation |
@@ -38,12 +38,16 @@ These decisions separate requested behavior from provisional implementation choi
 | D31 | Prototype notation signatures use ordered Let parameters and Returns | Provisional: Python uses these annotations, and generated Lean wrappers independently check Means. Multiword names require explicit calls; rendering is escaped English with placeholders |
 | D32 | Prototype imports are relative, definition-only, and isolated per input document | Cycles and name conflicts fail; repeated imports deduplicate. Selective exports, qualification, and type-phrase modules remain future work |
 
+| D33 | Entirely remove the registry, not retain a compatibility path | Explicit user correction: delete mathematical/source/import sidecars and old CLI flags; environment starts empty; migrate every corpus/example to explicit modules |
+| D34 | Type, Alias, Phrase, and Source declarations live in Clean modules | Implemented prototype syntax; phrases use explicit regex patterns; provenance index JSON remains data, never a provider of meanings |
+| D35 | Emit noncomputable notation wrappers and infer dimension/type parameters | Lean validates mathematical meanings; no executable-code promise. Initial matrix operations specialize to complex scalars; generic typeclasses remain future work |
+
 ## Questions to revisit after reading the specimens
 
 1. Should formalization contributors become a required field distinct from mathematical sources? Source keys are now implemented.
 2. Should labels with spaces be allowed, and if so, quoted or parsed up to the colon?
 3. Should `Define` stay as an alias, or should only `Let` introduce local values?
-4. Should the LaTeX renderer preserve the exact original type phrase rather than using the registry’s English description?
+4. Should the LaTeX renderer preserve the exact original type phrase rather than using the imported type’s English description?
 5. Which quantifier, summation, set-builder, and asymptotic syntax should come next?
 6. Which CLR edition and algorithm families should anchor the next collection expansion?
 7. Should generic algebraic structures and Lean typeclasses be expressible directly in Clean?
