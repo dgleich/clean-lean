@@ -6,6 +6,7 @@
 - Read `docs/spec.md` and `docs/decisions.md` before changing language behavior. Record new decisions and unresolved choices there; distinguish implemented behavior from proposals.
 - The agreed architecture is explicit Clean definitions modules backed by Lean definitions. All mathematical vocabulary must come from explicit Clean imports. Do not reintroduce registry files, implicit default modules, or compatibility loaders. See `docs/notation-prototype.md` for current syntax and limits.
 - Mathematical semantics must be module-declared, including operator overloads, literal interpretation, and type/function notation. Do not dispatch on display names such as Natural, Matrix, or Vector. Use a generic Lean-backed binding/elaboration mechanism; the current name-based paths are migration debt, not an approved architecture.
+- Treat handwritten Clean readability as a first-class acceptance criterion. Review `docs/aspirational-syntax.md` alongside the formal grammar; changes need readable source specimens as well as unambiguous semantics. Do not treat proposed gallery syntax as already implemented or approved.
 - Preserve mandatory attribution, readable English names, case-insensitive keywords, and explicit context references in LaTeX. Rendering must not change mathematical meaning.
 - Statement translation does not constitute a proof. Never use `sorry` or axioms to make validation pass. Keep the limitations of the CLR-aligned corpus explicit.
 

@@ -39,9 +39,12 @@ These decisions separate requested behavior from provisional implementation choi
 | D33 | Entirely remove the registry, not retain a compatibility path | Explicit user correction: delete mathematical/source/import sidecars and old CLI flags; environment starts empty; migrate every corpus/example to explicit modules |
 | D34 | Type, Alias, Phrase, and Source declarations live in Clean modules | Implemented prototype syntax; phrases use explicit regex patterns; provenance index JSON remains data, never a provider of meanings |
 | D35 | Emit noncomputable notation wrappers and infer dimension/type parameters | Lean validates mathematical meanings; no executable-code promise. Initial matrix operations specialize to complex scalars; generic typeclasses remain future work |
-
 | D36 | One module-declared mathematical semantic space | Explicit user direction after adversarial review: types, operators, overloads, literals, aliases, and rendering use explicit module declarations. No name-based semantic privileges for Natural, Matrix, Vector, Function, or Proposition. Architectural requirement; current compiler still needs migration |
 | D37 | Lean is the authority for type meaning and elaboration | Implementation direction supporting D36: preserve bound declarations and structured applications rather than duplicate mathematical type rules in Python. The compiler retains generic parsing, binding, scope, and the bridge to Lean's foundational sorts; exact declaration syntax remains provisional |
+
+| D38 | Specify syntax and semantics before the next compiler refactor | Explicit user direction; `language-reference.md` drafts grammar, binding, overload/elaboration, statement meaning, rendering, and conformance requirements. New concrete spellings and listed policy choices remain proposals |
+
+| D39 | Plain text authoring must be desirable, not merely parseable | Explicit user requirement: readability is a joint acceptance criterion with semantic precision. `aspirational-syntax.md` collects target specimens; written operator patterns, named syntax groups, and reusable Use contexts are proposals rather than settled syntax |
 
 ## Questions to revisit after reading the specimens
 

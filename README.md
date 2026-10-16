@@ -1,6 +1,6 @@
 # Clean statement prototype
 
-A local prototype for readable mathematical statements, mandatory attribution, LaTeX rendering, and translation to Lean. Start with the [specification](docs/spec.md), [decision log](docs/decisions.md), and [rendered specimen](generated/specimen.pdf).
+A local prototype for readable mathematical statements, mandatory attribution, LaTeX rendering, and translation to Lean. Start with the [aspirational syntax](docs/aspirational-syntax.md), the [syntax and semantics draft](docs/language-reference.md), the [current prototype specification](docs/spec.md), [decision log](docs/decisions.md), and [rendered specimen](generated/specimen.pdf).
 
 All mathematical vocabulary comes from **explicit Clean imports**. There is no JSON registry, default vocabulary loader, or compatibility switch. A fresh translation environment is empty. Lean dependencies are pinned by `lean-toolchain` and `lake-manifest.json`.
 

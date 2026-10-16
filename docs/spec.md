@@ -1,5 +1,7 @@
 # Clean theorem statements
 
+This document describes the current prototype. The proposed next language contract is [Clean syntax and semantics draft](language-reference.md); its new syntax is not implemented or yet fully agreed.
+
 Clean is a provisional name for an indentation-sensitive mathematical statement language. Version 0.1 prioritizes readable theorem declarations and LaTeX output. Lean output provides a precise interpretation of the statement. Proof authoring is outside this version.
 
 A `.clean` file contains named `Result` or `Theorem` blocks, optionally grouped inside `Context` blocks. Each block has mandatory attribution, introduces its objects and assumptions, and ends with a conclusion. Keywords accept any capitalization; names of mathematical objects remain case-sensitive.
