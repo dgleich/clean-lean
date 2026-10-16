@@ -1,0 +1,23 @@
+Context complex square matrices:
+    Let n: Natural
+    Let A, B, C: Matrix(n,n,Complex)
+
+    Result determinant product:
+        Attribution: mathlib; Matrix.det_mul; specialized
+        Conclude: det(A*B) = det(A)*det(B)
+
+    Result determinant transpose:
+        Attribution: mathlib; Matrix.det_transpose; specialized
+        Conclude: det(transpose(A)) = det(A)
+
+    Result determinant product swap:
+        Attribution: mathlib; Matrix.det_mul_comm; specialized
+        Conclude: det(A*B) = det(B*A)
+
+    Result determinant left swap:
+        Attribution: mathlib; Matrix.det_mul_left_comm; specialized
+        Conclude: det(A*(B*C)) = det(B*(A*C))
+
+    Result determinant right swap:
+        Attribution: mathlib; Matrix.det_mul_right_comm; specialized
+        Conclude: det(A*B*C) = det(A*C*B)

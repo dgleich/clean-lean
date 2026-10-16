@@ -1,0 +1,5 @@
+Theorem square matrix transpose:
+    Attribution: mathlib; Matrix.det_transpose; specialized
+    Let n: Natural
+    Let A be square complex matrices of order n
+    Conclude: det(transpose(A)) = det(A)

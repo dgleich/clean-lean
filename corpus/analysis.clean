@@ -1,0 +1,112 @@
+Result exponential positive:
+    Attribution: mathlib; Real.exp_pos; specialized
+    Let x: Real
+    Conclude: 0 < exp(x)
+
+Result exponential nonzero:
+    Attribution: mathlib; Real.exp_ne_zero; specialized
+    Let x: Real
+    Conclude: exp(x) ≠ 0
+
+Result exponential sum:
+    Attribution: mathlib; Real.exp_add; specialized
+    Let x, y: Real
+    Conclude: exp(x+y) = exp(x)*exp(y)
+
+Result exponential difference:
+    Attribution: mathlib; Real.exp_sub; specialized
+    Let x, y: Real
+    Conclude: exp(x-y) = exp(x)/exp(y)
+
+Result logarithm exponential:
+    Attribution: mathlib; Real.log_exp; specialized
+    Let x: Real
+    Conclude: log(exp(x)) = x
+
+Result exponential logarithm:
+    Attribution: mathlib; Real.exp_log; specialized
+    Let x: Real
+    Assume positive: 0 < x
+    Conclude: exp(log(x)) = x
+
+Result logarithm product:
+    Attribution: mathlib; Real.log_mul; specialized
+    Let x, y: Real
+    Assume nonzero_x: x ≠ 0
+    Assume nonzero_y: y ≠ 0
+    Conclude: log(x*y) = log(x)+log(y)
+
+Result logarithm quotient:
+    Attribution: mathlib; Real.log_div; specialized
+    Let x, y: Real
+    Assume nonzero_x: x ≠ 0
+    Assume nonzero_y: y ≠ 0
+    Conclude: log(x/y) = log(x)-log(y)
+
+Result square root nonnegative:
+    Attribution: mathlib; Real.sqrt_nonneg; specialized
+    Let x: Real
+    Conclude: 0 ≤ sqrt(x)
+
+Result square of square root:
+    Attribution: mathlib; Real.sq_sqrt; specialized
+    Let x: Real
+    Assume nonnegative: 0 ≤ x
+    Conclude: sqrt(x)^2 = x
+
+Result square root of square:
+    Attribution: mathlib; Real.sqrt_sq_eq_abs; specialized
+    Let x: Real
+    Conclude: sqrt(x^2) = abs(x)
+
+Result square root product:
+    Attribution: mathlib; Real.sqrt_mul; specialized
+    Let x, y: Real
+    Assume nonnegative: 0 ≤ x
+    Conclude: sqrt(x*y) = sqrt(x)*sqrt(y)
+
+Result trigonometric identity:
+    Attribution: mathlib; Real.sin_sq_add_cos_sq; specialized
+    Let x: Real
+    Conclude: sin(x)^2+cos(x)^2 = 1
+
+Result sine addition:
+    Attribution: mathlib; Real.sin_add; specialized
+    Let x, y: Real
+    Conclude: sin(x+y) = sin(x)*cos(y)+cos(x)*sin(y)
+
+Result cosine addition:
+    Attribution: mathlib; Real.cos_add; specialized
+    Let x, y: Real
+    Conclude: cos(x+y) = cos(x)*cos(y)-sin(x)*sin(y)
+
+Result sine odd:
+    Attribution: mathlib; Real.sin_neg; specialized
+    Let x: Real
+    Conclude: sin(-x) = -sin(x)
+
+Result cosine even:
+    Attribution: mathlib; Real.cos_neg; specialized
+    Let x: Real
+    Conclude: cos(-x) = cos(x)
+
+Result continuous composition:
+    Attribution: mathlib; Continuous.comp; specialized
+    Let f, g: Function(Real,Real)
+    Assume hf: continuous(f)
+    Assume hg: continuous(g)
+    Conclude: continuous(compose(f,g))
+
+Result continuous sum:
+    Attribution: mathlib; Continuous.add; specialized
+    Let f, g: Function(Real,Real)
+    Assume hf: continuous(f)
+    Assume hg: continuous(g)
+    Conclude: continuous(f+g)
+
+Result continuous product:
+    Attribution: mathlib; Continuous.mul; specialized
+    Let f, g: Function(Real,Real)
+    Assume hf: continuous(f)
+    Assume hg: continuous(g)
+    Conclude: continuous(f*g)

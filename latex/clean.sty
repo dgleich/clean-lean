@@ -1,0 +1,54 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{clean}[2026/10/16 Clean statement rendering v0.1]
+\RequirePackage{amsmath,amssymb}
+\RequirePackage{hyperref}
+\RequirePackage{keyval}
+\newif\ifcleanreferenced
+\cleanreferencedfalse
+\define@key{clean}{contexts}{%
+  \def\clean@chosen{#1}%
+  \def\clean@expanded{expanded}%
+  \def\clean@referenced{referenced}%
+  \ifx\clean@chosen\clean@expanded
+    \cleanreferencedfalse
+  \else\ifx\clean@chosen\clean@referenced
+    \cleanreferencedtrue
+  \else
+    \PackageError{clean}{Unknown contexts mode #1}{Use contexts=expanded or contexts=referenced.}%
+  \fi\fi
+}
+\newcounter{cleaninput}
+\newcounter{cleancontext}
+\newenvironment{cleancontext}[2]{%
+  \par\medskip\refstepcounter{cleancontext}%
+  \label{cleanctx:\thecleaninput:#2}%
+  \noindent\textbf{Context \thecleancontext\ (#1).}\par\nobreak\noindent\ignorespaces
+}{\par\medskip}
+\newcommand{\cleancontextref}[1]{\ref{cleanctx:\thecleaninput:#1}}
+\newcounter{cleanresult}
+\newenvironment{cleanresult}[1]{%
+  \par\medskip\refstepcounter{cleanresult}%
+  \noindent\textbf{Result \thecleanresult\ (#1).}\ignorespaces
+}{\par\medskip}
+\newcommand{\CleanGeneratedDirectory}{generated}
+% A .clean argument names the source; its preprocessed .tex is read from generated/.
+% Preprocess first with python -m cleanlang build. No shell escape or TeX parser.
+\newcommand{\CleanInput}[2][]{%
+  \begingroup
+  \cleanreferencedfalse
+  \setkeys{clean}{#1}%
+  \stepcounter{cleaninput}%
+  \filename@parse{#2}%
+  \def\clean@extension{clean}%
+  \ifx\filename@ext\clean@extension
+    \edef\clean@path{\CleanGeneratedDirectory/\filename@base.tex}%
+  \else
+    \edef\clean@path{#2.tex}%
+  \fi
+  \InputIfFileExists{\clean@path}{}{%
+    \PackageError{clean}{Missing generated statement fragment}{Run python -m cleanlang build on the .clean source first.}%
+  }%
+  \endgroup
+}
+
+\newcommand{\cleanattribution}[1]{\unskip\nobreakspace #1\par\nobreak\noindent\ignorespaces}

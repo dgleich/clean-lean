@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clean-statements-prototype"
+version = "0.1.0"
+description = "Local prototype for mathematical statement syntax and LaTeX rendering"
+requires-python = ">=3.10"
+
+[tool.setuptools]
+packages = ["cleanlang"]
+
+[tool.setuptools.package-data]
+cleanlang = ["registry.json"]

@@ -1,0 +1,121 @@
+Context complex square matrices:
+    Let n: Natural
+    Let A, B, C: Matrix(n,n,Complex)
+
+    Result determinant product:
+        Attribution: mathlib; Matrix.det_mul; specialized
+        Conclude: det(A*B) = det(A)*det(B)
+
+    Result determinant transpose:
+        Attribution: mathlib; Matrix.det_transpose; specialized
+        Conclude: det(transpose(A)) = det(A)
+
+    Result determinant product swap:
+        Attribution: mathlib; Matrix.det_mul_comm; specialized
+        Conclude: det(A*B) = det(B*A)
+
+    Result determinant left swap:
+        Attribution: mathlib; Matrix.det_mul_left_comm; specialized
+        Conclude: det(A*(B*C)) = det(B*(A*C))
+
+    Result determinant right swap:
+        Attribution: mathlib; Matrix.det_mul_right_comm; specialized
+        Conclude: det(A*B*C) = det(A*C*B)
+
+Result determinant power:
+    Attribution: mathlib; Matrix.det_pow; specialized
+    Let n: Natural
+    Let A: Matrix(n,n,Complex)
+    Let k: Natural
+    Conclude: det(A^k) = det(A)^k
+
+Result trace sum:
+    Attribution: mathlib; Matrix.trace_add; specialized
+    Let n: Natural
+    Let A, B: Matrix(n,n,Complex)
+    Conclude: trace(A+B) = trace(A)+trace(B)
+
+Result trace difference:
+    Attribution: mathlib; Matrix.trace_sub; specialized
+    Let n: Natural
+    Let A, B: Matrix(n,n,Complex)
+    Conclude: trace(A-B) = trace(A)-trace(B)
+
+Result trace negative:
+    Attribution: mathlib; Matrix.trace_neg; specialized
+    Let n: Natural
+    Let A: Matrix(n,n,Complex)
+    Conclude: trace(-A) = -trace(A)
+
+Result trace transpose:
+    Attribution: mathlib; Matrix.trace_transpose; specialized
+    Let n: Natural
+    Let A: Matrix(n,n,Complex)
+    Conclude: trace(transpose(A)) = trace(A)
+
+Result trace product swap:
+    Attribution: mathlib; Matrix.trace_mul_comm; specialized
+    Let n: Natural
+    Let A, B: Matrix(n,n,Complex)
+    Conclude: trace(A*B) = trace(B*A)
+
+Result trace cycle:
+    Attribution: mathlib; Matrix.trace_mul_cycle; specialized
+    Let n: Natural
+    Let A, B, C: Matrix(n,n,Complex)
+    Conclude: trace(A*B*C) = trace(C*A*B)
+
+Result matrix vector associativity:
+    Attribution: mathlib; Matrix.mulVec_mulVec; specialized
+    Let n: Natural
+    Let A, B: Matrix(n,n,Complex)
+    Let x: Vector(n,Complex)
+    Conclude: A*(B*x) = (A*B)*x
+
+Result matrix vector addition:
+    Attribution: mathlib; Matrix.mulVec_add; specialized
+    Let n: Natural
+    Let A: Matrix(n,n,Complex)
+    Let x, y: Vector(n,Complex)
+    Conclude: A*(x+y) = A*x+A*y
+
+Result matrix addition action:
+    Attribution: mathlib; Matrix.add_mulVec; specialized
+    Let n: Natural
+    Let A, B: Matrix(n,n,Complex)
+    Let x: Vector(n,Complex)
+    Conclude: (A+B)*x = A*x+B*x
+
+Result matrix vector subtraction:
+    Attribution: mathlib; Matrix.mulVec_sub; specialized
+    Let n: Natural
+    Let A: Matrix(n,n,Complex)
+    Let x, y: Vector(n,Complex)
+    Conclude: A*(x-y) = A*x-A*y
+
+Result matrix subtraction action:
+    Attribution: mathlib; Matrix.sub_mulVec; specialized
+    Let n: Natural
+    Let A, B: Matrix(n,n,Complex)
+    Let x: Vector(n,Complex)
+    Conclude: (A-B)*x = A*x-B*x
+
+Result matrix scalar action:
+    Attribution: mathlib; Matrix.mulVec_smul; specialized
+    Let n: Natural
+    Let A: Matrix(n,n,Complex)
+    Let x: Vector(n,Complex)
+    Let c: Complex
+    Conclude: A*(c*x) = c*(A*x)
+
+Result transpose involution:
+    Attribution: mathlib; Matrix.transpose_transpose; specialized
+    Let n: Natural
+    Let A: Matrix(n,n,Complex)
+    Conclude: transpose(transpose(A)) = A
+
+Result transpose product:
+    Attribution: mathlib; Matrix.transpose_mul; specialized
+    Let n: Natural
+    Let A, B: Matrix(n,n,Complex)
+    Conclude: transpose(A*B) = transpose(B)*transpose(A)

@@ -1,0 +1,145 @@
+Result adjacency symmetry:
+    Attribution: mathlib; SimpleGraph.adj_symm; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v: Vertex(n)
+    Assume edge: adjacent(G,u,v)
+    Conclude: adjacent(G,v,u)
+
+Result adjacency commutes:
+    Attribution: mathlib; SimpleGraph.adj_comm; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v: Vertex(n)
+    Conclude: adjacent(G,u,v) ↔ adjacent(G,v,u)
+
+Result no self edges:
+    Attribution: mathlib; SimpleGraph.irrefl; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u: Vertex(n)
+    Conclude: not adjacent(G,u,u)
+
+Result adjacent vertices distinct:
+    Attribution: mathlib; SimpleGraph.ne_of_adj; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v: Vertex(n)
+    Assume edge: adjacent(G,u,v)
+    Conclude: u ≠ v
+
+Result union adjacency:
+    Attribution: mathlib; SimpleGraph.sup_adj; specialized
+    Let n: Natural
+    Let G, H: Graph(n)
+    Let u, v: Vertex(n)
+    Conclude: adjacent(union(G,H),u,v) ↔ (adjacent(G,u,v) or adjacent(H,u,v))
+
+Result intersection adjacency:
+    Attribution: mathlib; SimpleGraph.inf_adj; specialized
+    Let n: Natural
+    Let G, H: Graph(n)
+    Let u, v: Vertex(n)
+    Conclude: adjacent(intersection(G,H),u,v) ↔ (adjacent(G,u,v) and adjacent(H,u,v))
+
+Result complement adjacency:
+    Attribution: mathlib; SimpleGraph.compl_adj; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v: Vertex(n)
+    Conclude: adjacent(complement(G),u,v) ↔ (u ≠ v and not adjacent(G,u,v))
+
+Result support monotonicity:
+    Attribution: mathlib; SimpleGraph.support_mono; specialized
+    Let n: Natural
+    Let G, H: Graph(n)
+    Assume inclusion: subgraph(G,H)
+    Conclude: support(G) ⊆ support(H)
+
+Result neighbors in support:
+    Attribution: mathlib; SimpleGraph.neighborSet_subset_support; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u: Vertex(n)
+    Conclude: neighbors(G,u) ⊆ support(G)
+
+Result neighbor membership:
+    Attribution: mathlib; SimpleGraph.mem_neighborSet; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v: Vertex(n)
+    Conclude: v ∈ neighbors(G,u) ↔ adjacent(G,u,v)
+
+Result not own neighbor:
+    Attribution: mathlib; SimpleGraph.notMem_neighborSet_self; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u: Vertex(n)
+    Conclude: not (u ∈ neighbors(G,u))
+
+Result common neighbors intersection:
+    Attribution: mathlib; SimpleGraph.commonNeighbors_eq; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v: Vertex(n)
+    Conclude: commonNeighbors(G,u,v) = neighbors(G,u) ∩ neighbors(G,v)
+
+Result common neighbors membership:
+    Attribution: mathlib; SimpleGraph.mem_commonNeighbors; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v, w: Vertex(n)
+    Conclude: w ∈ commonNeighbors(G,u,v) ↔ (adjacent(G,u,w) and adjacent(G,v,w))
+
+Result common neighbors symmetry:
+    Attribution: mathlib; SimpleGraph.commonNeighbors_symm; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v: Vertex(n)
+    Conclude: commonNeighbors(G,u,v) = commonNeighbors(G,v,u)
+
+Result common neighbors left:
+    Attribution: mathlib; SimpleGraph.commonNeighbors_subset_neighborSet_left; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v: Vertex(n)
+    Conclude: commonNeighbors(G,u,v) ⊆ neighbors(G,u)
+
+Result common neighbors right:
+    Attribution: mathlib; SimpleGraph.commonNeighbors_subset_neighborSet_right; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v: Vertex(n)
+    Conclude: commonNeighbors(G,u,v) ⊆ neighbors(G,v)
+
+Result reachability reflexive:
+    Attribution: mathlib; SimpleGraph.Reachable.refl; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u: Vertex(n)
+    Conclude: reachable(G,u,u)
+
+Result reachability symmetric:
+    Attribution: mathlib; SimpleGraph.Reachable.symm; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v: Vertex(n)
+    Assume path: reachable(G,u,v)
+    Conclude: reachable(G,v,u)
+
+Result reachability transitive:
+    Attribution: mathlib; SimpleGraph.Reachable.trans; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v, w: Vertex(n)
+    Assume first: reachable(G,u,v)
+    Assume second: reachable(G,v,w)
+    Conclude: reachable(G,u,w)
+
+Result edge implies reachability:
+    Attribution: mathlib; SimpleGraph.Adj.reachable; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v: Vertex(n)
+    Assume edge: adjacent(G,u,v)
+    Conclude: reachable(G,u,v)

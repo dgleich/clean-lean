@@ -1,0 +1,463 @@
+{
+  "types": {
+    "Natural": {
+      "args": [],
+      "lean": "ℕ",
+      "latex": "\\mathbb{{N}}",
+      "prose": "a natural number",
+      "prose_plural": "natural numbers"
+    },
+    "Real": {
+      "args": [],
+      "lean": "ℝ",
+      "latex": "\\mathbb{{R}}",
+      "prose": "a real number",
+      "prose_plural": "real numbers"
+    },
+    "Complex": {
+      "args": [],
+      "lean": "ℂ",
+      "latex": "\\mathbb{{C}}",
+      "prose": "a complex number",
+      "prose_plural": "complex numbers"
+    },
+    "Proposition": {
+      "args": [],
+      "lean": "Prop",
+      "latex": "\\mathrm{{Prop}}",
+      "prose": "a proposition",
+      "prose_plural": "propositions"
+    },
+    "Matrix": {
+      "args": [
+        "dimension",
+        "dimension",
+        "type"
+      ],
+      "lean": "Matrix (Fin {0}) (Fin {1}) {2}",
+      "latex": "{2}^{{{0}\\times {1}}}",
+      "prose": "a matrix of size ${0}\\times {1}$ over ${2}$",
+      "prose_plural": "${0}\\times {1}$ matrices over ${2}$"
+    },
+    "Vector": {
+      "args": [
+        "dimension",
+        "type"
+      ],
+      "lean": "Fin {0} → {1}",
+      "latex": "{1}^{{{0}}}",
+      "prose": "a vector of length ${0}$ over ${1}$",
+      "prose_plural": "${0}$-vectors over ${1}$"
+    },
+    "Vertex": {
+      "args": [
+        "dimension"
+      ],
+      "lean": "Fin {0}",
+      "latex": "\\{{0,\\ldots,{0}-1\\}}",
+      "prose": "a vertex in $\\{{0,\\ldots,{0}-1\\}}$",
+      "prose_plural": "vertices in $\\{{0,\\ldots,{0}-1\\}}$"
+    },
+    "Graph": {
+      "args": [
+        "dimension"
+      ],
+      "lean": "SimpleGraph (Fin {0})",
+      "latex": "\\operatorname{{SimpleGraph}}(\\{{0,\\ldots,{0}-1\\}})",
+      "prose": "a simple graph on $\\{{0,\\ldots,{0}-1\\}}$",
+      "prose_plural": "simple graphs on $\\{{0,\\ldots,{0}-1\\}}$"
+    },
+    "List": {
+      "args": [
+        "type"
+      ],
+      "lean": "List ({0})",
+      "latex": "\\operatorname{{List}}({0})",
+      "prose": "a list with entries in ${0}$",
+      "prose_plural": "lists with entries in ${0}$"
+    },
+    "Set": {
+      "args": [
+        "type"
+      ],
+      "lean": "Set ({0})",
+      "latex": "\\mathcal{{P}}({0})",
+      "prose": "a subset of ${0}$",
+      "prose_plural": "subsets of ${0}$"
+    },
+    "Function": {
+      "args": [
+        "type",
+        "type"
+      ],
+      "lean": "({0}) → ({1})",
+      "latex": "({0}\\to {1})",
+      "prose": "a function from ${0}$ to ${1}$",
+      "prose_plural": "functions from ${0}$ to ${1}$"
+    }
+  },
+  "aliases": {
+    "Matrices": "Matrix",
+    "Vectors": "Vector"
+  },
+  "phrases": [
+    {
+      "pattern": "Natural(?: number)?s?",
+      "type": "Natural"
+    },
+    {
+      "pattern": "Real(?: number)?s?",
+      "type": "Real"
+    },
+    {
+      "pattern": "Complex(?: number)?s?",
+      "type": "Complex"
+    },
+    {
+      "pattern": "Proposition(?: number)?s?",
+      "type": "Proposition"
+    },
+    {
+      "pattern": "complex (?P<m>\\w+)\\s*[×x]\\s*(?P<n>\\w+) matrices",
+      "type": "Matrix({m},{n},Complex)"
+    },
+    {
+      "pattern": "complex (?P<m>\\w+)\\s*[×x]\\s*(?P<n>\\w+) matrix",
+      "type": "Matrix({m},{n},Complex)"
+    },
+    {
+      "pattern": "complex (?P<n>\\w+)-vectors?",
+      "type": "Vector({n},Complex)"
+    },
+    {
+      "pattern": "real (?P<m>\\w+)\\s*[×x]\\s*(?P<n>\\w+) matrices",
+      "type": "Matrix({m},{n},Real)"
+    },
+    {
+      "pattern": "real (?P<m>\\w+)\\s*[×x]\\s*(?P<n>\\w+) matrix",
+      "type": "Matrix({m},{n},Real)"
+    },
+    {
+      "pattern": "real (?P<n>\\w+)-vectors?",
+      "type": "Vector({n},Real)"
+    },
+    {
+      "pattern": "lists? of natural numbers",
+      "type": "List(Natural)"
+    },
+    {
+      "pattern": "real functions",
+      "type": "Function(Real,Real)"
+    }
+  ],
+  "functions": {
+    "det": {
+      "params": [
+        "Matrix($n,$n,$K)"
+      ],
+      "returns": "$K",
+      "lean": "Matrix.det {0}",
+      "latex": "\\det({0})"
+    },
+    "trace": {
+      "params": [
+        "Matrix($n,$n,$K)"
+      ],
+      "returns": "$K",
+      "lean": "Matrix.trace {0}",
+      "latex": "\\operatorname{{tr}}({0})"
+    },
+    "transpose": {
+      "params": [
+        "Matrix($m,$n,$K)"
+      ],
+      "returns": "Matrix($n,$m,$K)",
+      "lean": "Matrix.transpose {0}",
+      "latex": "{{{0}}}^{{\\mathsf T}}"
+    },
+    "inverse": {
+      "params": [
+        "Matrix($n,$n,$K)"
+      ],
+      "returns": "Matrix($n,$n,$K)",
+      "lean": "({0})⁻¹",
+      "latex": "{{{0}}}^{{-1}}"
+    },
+    "exp": {
+      "params": [
+        "Real"
+      ],
+      "returns": "Real",
+      "lean": "Real.exp {0}",
+      "latex": "\\exp({0})"
+    },
+    "log": {
+      "params": [
+        "Real"
+      ],
+      "returns": "Real",
+      "lean": "Real.log {0}",
+      "latex": "\\log({0})"
+    },
+    "sqrt": {
+      "params": [
+        "Real"
+      ],
+      "returns": "Real",
+      "lean": "Real.sqrt {0}",
+      "latex": "\\sqrt{{{0}}}"
+    },
+    "sin": {
+      "params": [
+        "Real"
+      ],
+      "returns": "Real",
+      "lean": "Real.sin {0}",
+      "latex": "\\sin({0})"
+    },
+    "cos": {
+      "params": [
+        "Real"
+      ],
+      "returns": "Real",
+      "lean": "Real.cos {0}",
+      "latex": "\\cos({0})"
+    },
+    "abs": {
+      "params": [
+        "Real"
+      ],
+      "returns": "Real",
+      "lean": "abs {0}",
+      "latex": "\\lvert {0}\\rvert"
+    },
+    "continuous": {
+      "params": [
+        "Function(Real,Real)"
+      ],
+      "returns": "Proposition",
+      "lean": "Continuous {0}",
+      "latex": "{0}\\text{{ is continuous}}"
+    },
+    "differentiable": {
+      "params": [
+        "Function(Real,Real)"
+      ],
+      "returns": "Proposition",
+      "lean": "Differentiable ℝ {0}",
+      "latex": "{0}\\text{{ is differentiable}}"
+    },
+    "compose": {
+      "params": [
+        "Function($B,$C)",
+        "Function($A,$B)"
+      ],
+      "returns": "Function($A,$C)",
+      "lean": "({0}) ∘ ({1})",
+      "latex": "({0}\\circ {1})"
+    },
+    "adjacent": {
+      "params": [
+        "Graph($n)",
+        "Vertex($n)",
+        "Vertex($n)"
+      ],
+      "returns": "Proposition",
+      "lean": "({0}).Adj {1} {2}",
+      "latex": "{1}\\text{{ is adjacent to }}{2}\\text{{ in }}{0}"
+    },
+    "complement": {
+      "params": [
+        "Graph($n)"
+      ],
+      "returns": "Graph($n)",
+      "lean": "({0})ᶜ",
+      "latex": "\\overline{{{0}}}"
+    },
+    "union": {
+      "params": [
+        "Graph($n)",
+        "Graph($n)"
+      ],
+      "returns": "Graph($n)",
+      "lean": "{0} ⊔ {1}",
+      "latex": "({0} \\cup {1})"
+    },
+    "intersection": {
+      "params": [
+        "Graph($n)",
+        "Graph($n)"
+      ],
+      "returns": "Graph($n)",
+      "lean": "{0} ⊓ {1}",
+      "latex": "({0} \\cap {1})"
+    },
+    "neighbors": {
+      "params": [
+        "Graph($n)",
+        "Vertex($n)"
+      ],
+      "returns": "Set(Vertex($n))",
+      "lean": "({0}).neighborSet {1}",
+      "latex": "N_{{{0}}}({1})"
+    },
+    "support": {
+      "params": [
+        "Graph($n)"
+      ],
+      "returns": "Set(Vertex($n))",
+      "lean": "({0}).support",
+      "latex": "\\operatorname{{supp}}({0})"
+    },
+    "subgraph": {
+      "params": [
+        "Graph($n)",
+        "Graph($n)"
+      ],
+      "returns": "Proposition",
+      "lean": "{0} ≤ {1}",
+      "latex": "{0}\\text{{ is a subgraph of }}{1}"
+    },
+    "reachable": {
+      "params": [
+        "Graph($n)",
+        "Vertex($n)",
+        "Vertex($n)"
+      ],
+      "returns": "Proposition",
+      "lean": "({0}).Reachable {1} {2}",
+      "latex": "{2}\\text{{ is reachable from }}{1}\\text{{ in }}{0}"
+    },
+    "connected": {
+      "params": [
+        "Graph($n)"
+      ],
+      "returns": "Proposition",
+      "lean": "({0}).Connected",
+      "latex": "{0}\\text{{ is connected}}"
+    },
+    "insertionSort": {
+      "params": [
+        "List(Natural)"
+      ],
+      "returns": "List(Natural)",
+      "lean": "(List.insertionSort (· ≤ ·)) {0}",
+      "latex": "\\operatorname{{insertionSort}}({0})"
+    },
+    "mergeSort": {
+      "params": [
+        "List(Natural)"
+      ],
+      "returns": "List(Natural)",
+      "lean": "(fun l : List ℕ => l.mergeSort (· ≤ ·)) {0}",
+      "latex": "\\operatorname{{mergeSort}}({0})"
+    },
+    "sorted": {
+      "params": [
+        "List(Natural)"
+      ],
+      "returns": "Proposition",
+      "lean": "List.Sorted (· ≤ ·) {0}",
+      "latex": "{0}\\text{{ is sorted}}"
+    },
+    "permutation": {
+      "params": [
+        "List($T)",
+        "List($T)"
+      ],
+      "returns": "Proposition",
+      "lean": "List.Perm {0} {1}",
+      "latex": "{0}\\text{{ is a permutation of }}{1}"
+    },
+    "length": {
+      "params": [
+        "List($T)"
+      ],
+      "returns": "Natural",
+      "lean": "List.length {0}",
+      "latex": "\\lvert {0}\\rvert"
+    },
+    "insert": {
+      "params": [
+        "Natural",
+        "List(Natural)"
+      ],
+      "returns": "List(Natural)",
+      "lean": "List.orderedInsert (· ≤ ·) {0} {1}",
+      "latex": "\\operatorname{{insert}}({0},{1})"
+    },
+    "cons": {
+      "params": [
+        "Natural",
+        "List(Natural)"
+      ],
+      "returns": "List(Natural)",
+      "lean": "{0} :: {1}",
+      "latex": "({0}::{1})"
+    },
+    "sublist": {
+      "params": [
+        "List($T)",
+        "List($T)"
+      ],
+      "returns": "Proposition",
+      "lean": "List.Sublist {0} {1}",
+      "latex": "{0}\\text{{ is a sublist of }}{1}"
+    },
+    "count": {
+      "params": [
+        "Natural",
+        "List(Natural)"
+      ],
+      "returns": "Natural",
+      "lean": "List.count {0} {1}",
+      "latex": "\\operatorname{{count}}({0},{1})"
+    },
+    "merge": {
+      "params": [
+        "List(Natural)",
+        "List(Natural)"
+      ],
+      "returns": "List(Natural)",
+      "lean": "List.merge {0} {1} (· ≤ ·)",
+      "latex": "\\operatorname{{merge}}({0},{1})"
+    },
+    "coprime": {
+      "params": [
+        "Natural",
+        "Natural"
+      ],
+      "returns": "Proposition",
+      "lean": "Nat.Coprime {0} {1}",
+      "latex": "{0}\\text{{ and }}{1}\\text{{ are coprime}}"
+    },
+    "gcd": {
+      "params": [
+        "Natural",
+        "Natural"
+      ],
+      "returns": "Natural",
+      "lean": "Nat.gcd {0} {1}",
+      "latex": "\\gcd({0},{1})"
+    },
+    "lcm": {
+      "params": [
+        "Natural",
+        "Natural"
+      ],
+      "returns": "Natural",
+      "lean": "Nat.lcm {0} {1}",
+      "latex": "\\operatorname{{lcm}}({0},{1})"
+    },
+    "commonNeighbors": {
+      "params": [
+        "Graph($n)",
+        "Vertex($n)",
+        "Vertex($n)"
+      ],
+      "returns": "Set(Vertex($n))",
+      "lean": "({0}).commonNeighbors {1} {2}",
+      "latex": "N_{{{0}}}({1})\\cap N_{{{0}}}({2})"
+    }
+  }
+}

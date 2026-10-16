@@ -1,0 +1,118 @@
+Result insertion sort sorted:
+    Attribution: mathlib; List.sorted_insertionSort; specialized
+    Let xs: List(Natural)
+    Conclude: sorted(insertionSort(xs))
+
+Result insertion sort permutation:
+    Attribution: mathlib; List.perm_insertionSort; specialized
+    Let xs: List(Natural)
+    Conclude: permutation(insertionSort(xs),xs)
+
+Result insertion sort length:
+    Attribution: mathlib; List.length_insertionSort; specialized
+    Let xs: List(Natural)
+    Conclude: length(insertionSort(xs)) = length(xs)
+
+Result insertion sort membership:
+    Attribution: mathlib; List.mem_insertionSort; specialized
+    Let xs: List(Natural)
+    Let a: Natural
+    Conclude: a ∈ insertionSort(xs) ↔ a ∈ xs
+
+Result sorted input unchanged:
+    Attribution: mathlib; List.Sorted.insertionSort_eq; specialized
+    Let xs: List(Natural)
+    Assume ordered: sorted(xs)
+    Conclude: insertionSort(xs) = xs
+
+Result ordered insert length:
+    Attribution: mathlib; List.orderedInsert_length; specialized
+    Let xs: List(Natural)
+    Let a: Natural
+    Conclude: length(insert(a,xs)) = length(xs)+1
+
+Result ordered insert membership:
+    Attribution: mathlib; List.mem_orderedInsert; specialized
+    Let xs: List(Natural)
+    Let a, b: Natural
+    Conclude: b ∈ insert(a,xs) ↔ b = a or b ∈ xs
+
+Result ordered insert permutation:
+    Attribution: mathlib; List.perm_orderedInsert; specialized
+    Let xs: List(Natural)
+    Let a: Natural
+    Conclude: permutation(insert(a,xs),cons(a,xs))
+
+Result ordered insert preserves sortedness:
+    Attribution: mathlib; List.Sorted.orderedInsert; specialized
+    Let xs: List(Natural)
+    Let a: Natural
+    Assume ordered: sorted(xs)
+    Conclude: sorted(insert(a,xs))
+
+Result merge sort sorted:
+    Attribution: mathlib; List.sorted_mergeSort'; specialized
+    Let xs: List(Natural)
+    Conclude: sorted(mergeSort(xs))
+
+Result merge sort sorted input:
+    Attribution: mathlib; List.mergeSort_eq_self; specialized
+    Let xs: List(Natural)
+    Assume ordered: sorted(xs)
+    Conclude: mergeSort(xs) = xs
+
+Result sorting algorithms agree:
+    Attribution: mathlib; List.mergeSort_eq_insertionSort; specialized
+    Let xs: List(Natural)
+    Conclude: mergeSort(xs) = insertionSort(xs)
+
+Result merge preserves sortedness:
+    Attribution: mathlib; List.Sorted.merge; specialized
+    Let xs, ys: List(Natural)
+    Assume hx: sorted(xs)
+    Assume hy: sorted(ys)
+    Conclude: sorted(merge(xs,ys))
+
+Result insertion sort subsequence:
+    Attribution: mathlib; List.sublist_insertionSort; specialized
+    Let xs, ys: List(Natural)
+    Assume ordered: sorted(ys)
+    Assume subsequence: sublist(ys,xs)
+    Conclude: sublist(ys,insertionSort(xs))
+
+Result ordered insert contains input:
+    Attribution: mathlib; List.sublist_orderedInsert; specialized
+    Let xs: List(Natural)
+    Let a: Natural
+    Conclude: sublist(xs,insert(a,xs))
+
+Result euclidean coprime reduction:
+    Attribution: mathlib; Nat.coprime_add_mul_right_right; specialized
+    Let a, b, k: Natural
+    Conclude: coprime(a,b+k*a) ↔ coprime(a,b)
+
+Result euclidean coprime subtraction:
+    Attribution: mathlib; Nat.coprime_sub_self_left; specialized
+    Let a, b: Natural
+    Assume ordered: a ≤ b
+    Conclude: coprime(b-a,a) ↔ coprime(b,a)
+
+Result coprime lcm product:
+    Attribution: mathlib; Nat.Coprime.lcm_eq_mul; specialized
+    Let a, b: Natural
+    Assume cop: coprime(a,b)
+    Conclude: lcm(a,b) = a*b
+
+Result common divisor of coprimes:
+    Attribution: mathlib; Nat.eq_one_of_dvd_coprimes; specialized
+    Let a, b, k: Natural
+    Assume cop: coprime(a,b)
+    Assume divides_a: k ∣ a
+    Assume divides_b: k ∣ b
+    Conclude: k = 1
+
+Result coprime product divisibility:
+    Attribution: mathlib; Nat.Coprime.dvd_mul_right; specialized
+    Let a, b, k: Natural
+    Assume cop: coprime(k,b)
+    Conclude: k ∣ a*b ↔ k ∣ a

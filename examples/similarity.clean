@@ -1,0 +1,14 @@
+Result similarity transforms eigenvector:
+    Attribution: stewart2001; Theorem 1.10, page 9; adapted; scope: eigenvector part
+    Let n be a natural number
+    Let A, S be complex n×n matrices
+    let x be a complex n-vector
+    Let μ be a complex number
+    Assume invertibility: det(S) ≠ 0
+    Assume nonzero: x ≠ 0
+    Assume eigenpair: A*x = μ*x
+    Let y = inverse(S)*x
+    Conclude:
+        y ≠ 0
+        and
+        (inverse(S)*A*S)*y = μ*y

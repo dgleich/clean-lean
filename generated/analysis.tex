@@ -1,0 +1,113 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{exponential positive}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Exponential.lean\#L276}{[Mathlib]}}
+Let $x$ be a real number.
+Then \[0 < \exp(x).\]
+\end{cleanresult}
+
+\begin{cleanresult}{exponential nonzero}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Exponential.lean\#L229}{[Mathlib]}}
+Let $x$ be a real number.
+Then \[\exp(x) \ne 0.\]
+\end{cleanresult}
+
+\begin{cleanresult}{exponential sum}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Exponential.lean\#L203}{[Mathlib]}}
+Let $x$ and $y$ be real numbers.
+Then \[\exp(x + y) = \exp(x) \, \exp(y).\]
+\end{cleanresult}
+
+\begin{cleanresult}{exponential difference}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Exponential.lean\#L235}{[Mathlib]}}
+Let $x$ and $y$ be real numbers.
+Then \[\exp(x - y) = \frac{\exp(x)}{\exp(y)}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{logarithm exponential}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/SpecialFunctions/Log/Basic.lean\#L70}{[Mathlib]}}
+Let $x$ be a real number.
+Then \[\log(\exp(x)) = x.\]
+\end{cleanresult}
+
+\begin{cleanresult}{exponential logarithm}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/SpecialFunctions/Log/Basic.lean\#L54}{[Mathlib]}}
+Let $x$ be a real number.
+Assume $0 < x$ (\texttt{positive}).
+Then \[\exp(\log(x)) = x.\]
+\end{cleanresult}
+
+\begin{cleanresult}{logarithm product}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/SpecialFunctions/Log/Basic.lean\#L125}{[Mathlib]}}
+Let $x$ and $y$ be real numbers.
+Assume $x \ne 0$ (\texttt{nonzero\_x}).
+Assume $y \ne 0$ (\texttt{nonzero\_y}).
+Then \[\log(x \, y) = \log(x) + \log(y).\]
+\end{cleanresult}
+
+\begin{cleanresult}{logarithm quotient}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/SpecialFunctions/Log/Basic.lean\#L129}{[Mathlib]}}
+Let $x$ and $y$ be real numbers.
+Assume $x \ne 0$ (\texttt{nonzero\_x}).
+Assume $y \ne 0$ (\texttt{nonzero\_y}).
+Then \[\log(\frac{x}{y}) = \log(x) - \log(y).\]
+\end{cleanresult}
+
+\begin{cleanresult}{square root nonnegative}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean\#L125}{[Mathlib]}}
+Let $x$ be a real number.
+Then \[0 \le \sqrt{x}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{square of square root}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean\#L157}{[Mathlib]}}
+Let $x$ be a real number.
+Assume $0 \le x$ (\texttt{nonnegative}).
+Then \[{\sqrt{x}}^{2} = x.\]
+\end{cleanresult}
+
+\begin{cleanresult}{square root of square}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean\#L168}{[Mathlib]}}
+Let $x$ be a real number.
+Then \[\sqrt{{x}^{2}} = \lvert x\rvert.\]
+\end{cleanresult}
+
+\begin{cleanresult}{square root product}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean\#L328}{[Mathlib]}}
+Let $x$ and $y$ be real numbers.
+Assume $0 \le x$ (\texttt{nonnegative}).
+Then \[\sqrt{x \, y} = \sqrt{x} \, \sqrt{y}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{trigonometric identity}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean\#L603}{[Mathlib]}}
+Let $x$ be a real number.
+Then \[{\sin(x)}^{2} + {\cos(x)}^{2} = 1.\]
+\end{cleanresult}
+
+\begin{cleanresult}{sine addition}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean\#L540}{[Mathlib]}}
+Let $x$ and $y$ be real numbers.
+Then \[\sin(x + y) = \sin(x) \, \cos(y) + \cos(x) \, \sin(y).\]
+\end{cleanresult}
+
+\begin{cleanresult}{cosine addition}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean\#L553}{[Mathlib]}}
+Let $x$ and $y$ be real numbers.
+Then \[\cos(x + y) = \cos(x) \, \cos(y) - \sin(x) \, \sin(y).\]
+\end{cleanresult}
+
+\begin{cleanresult}{sine odd}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean\#L538}{[Mathlib]}}
+Let $x$ be a real number.
+Then \[\sin(-x) = -\sin(x).\]
+\end{cleanresult}
+
+\begin{cleanresult}{cosine even}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean\#L547}{[Mathlib]}}
+Let $x$ be a real number.
+Then \[\cos(-x) = \cos(x).\]
+\end{cleanresult}
+
+\begin{cleanresult}{continuous composition}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Topology/Continuous.lean\#L104}{[Mathlib]}}
+Let $f$ and $g$ be functions from $\mathbb{R}$ to $\mathbb{R}$.
+Assume $f\text{ is continuous}$ (\texttt{hf}).
+Assume $g\text{ is continuous}$ (\texttt{hg}).
+Then \[(f\circ g)\text{ is continuous}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{continuous sum}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Topology/Algebra/Monoid/Defs.lean\#L60}{[Mathlib]}}
+Let $f$ and $g$ be functions from $\mathbb{R}$ to $\mathbb{R}$.
+Assume $f\text{ is continuous}$ (\texttt{hf}).
+Assume $g\text{ is continuous}$ (\texttt{hg}).
+Then \[f + g\text{ is continuous}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{continuous product}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Topology/Algebra/Monoid/Defs.lean\#L60}{[Mathlib]}}
+Let $f$ and $g$ be functions from $\mathbb{R}$ to $\mathbb{R}$.
+Assume $f\text{ is continuous}$ (\texttt{hf}).
+Assume $g\text{ is continuous}$ (\texttt{hg}).
+Then \[f \, g\text{ is continuous}.\]
+\end{cleanresult}

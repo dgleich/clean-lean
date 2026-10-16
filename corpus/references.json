@@ -1,0 +1,482 @@
+{
+  "Matrix.det_mul": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean#L134",
+    "file": "Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean",
+    "line": 134,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.det_transpose": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean#L199",
+    "file": "Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean",
+    "line": 199,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.det_mul_comm": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean#L176",
+    "file": "Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean",
+    "line": 176,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.det_mul_left_comm": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean#L180",
+    "file": "Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean",
+    "line": 180,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.det_mul_right_comm": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean#L184",
+    "file": "Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean",
+    "line": 184,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.det_pow": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean#L300",
+    "file": "Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean",
+    "line": 300,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.trace_add": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Trace.lean#L60",
+    "file": "Mathlib/LinearAlgebra/Matrix/Trace.lean",
+    "line": 60,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.trace_sub": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Trace.lean#L128",
+    "file": "Mathlib/LinearAlgebra/Matrix/Trace.lean",
+    "line": 128,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.trace_neg": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Trace.lean#L132",
+    "file": "Mathlib/LinearAlgebra/Matrix/Trace.lean",
+    "line": 132,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.trace_transpose": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Trace.lean#L69",
+    "file": "Mathlib/LinearAlgebra/Matrix/Trace.lean",
+    "line": 69,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.trace_mul_comm": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Trace.lean#L154",
+    "file": "Mathlib/LinearAlgebra/Matrix/Trace.lean",
+    "line": 154,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.trace_mul_cycle": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Trace.lean#L157",
+    "file": "Mathlib/LinearAlgebra/Matrix/Trace.lean",
+    "line": 157,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.mulVec_mulVec": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Matrix/Mul.lean#L816",
+    "file": "Mathlib/Data/Matrix/Mul.lean",
+    "line": 816,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.mulVec_add": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Matrix/Mul.lean#L727",
+    "file": "Mathlib/Data/Matrix/Mul.lean",
+    "line": 727,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.add_mulVec": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Matrix/Mul.lean#L732",
+    "file": "Mathlib/Data/Matrix/Mul.lean",
+    "line": 732,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.mulVec_sub": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Matrix/Mul.lean#L976",
+    "file": "Mathlib/Data/Matrix/Mul.lean",
+    "line": 976,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.sub_mulVec": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Matrix/Mul.lean#L981",
+    "file": "Mathlib/Data/Matrix/Mul.lean",
+    "line": 981,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.mulVec_smul": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Matrix/Mul.lean#L747",
+    "file": "Mathlib/Data/Matrix/Mul.lean",
+    "line": 747,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.transpose_transpose": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Defs.lean#L344",
+    "file": "Mathlib/LinearAlgebra/Matrix/Defs.lean",
+    "line": 344,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Matrix.transpose_mul": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Matrix/Mul.lean#L1082",
+    "file": "Mathlib/Data/Matrix/Mul.lean",
+    "line": 1082,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.adj_symm": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L162",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 162,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.adj_comm": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L158",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 158,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.irrefl": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L155",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 155,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.ne_of_adj": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L168",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 168,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.sup_adj": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L215",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 215,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.inf_adj": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L225",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 225,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.compl_adj": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L238",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 238,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.support_mono": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L397",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 397,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.neighborSet_subset_support": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L407",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 407,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.mem_neighborSet": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L680",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 680,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.notMem_neighborSet_self": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L683",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 683,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.commonNeighbors_eq": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L735",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 735,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.mem_commonNeighbors": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L738",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 738,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.commonNeighbors_symm": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L741",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 741,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.commonNeighbors_subset_neighborSet_left": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L756",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 756,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.commonNeighbors_subset_neighborSet_right": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L760",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "line": 760,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.Reachable.refl": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Connectivity/Connected.lean#L72",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Connectivity/Connected.lean",
+    "line": 72,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.Reachable.symm": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Connectivity/Connected.lean#L77",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Connectivity/Connected.lean",
+    "line": 77,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.Reachable.trans": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Connectivity/Connected.lean#L84",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Connectivity/Connected.lean",
+    "line": 84,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "SimpleGraph.Adj.reachable": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Connectivity/Connected.lean#L68",
+    "file": "Mathlib/Combinatorics/SimpleGraph/Connectivity/Connected.lean",
+    "line": 68,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.exp_pos": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Exponential.lean#L276",
+    "file": "Mathlib/Analysis/Complex/Exponential.lean",
+    "line": 276,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.exp_ne_zero": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Exponential.lean#L229",
+    "file": "Mathlib/Analysis/Complex/Exponential.lean",
+    "line": 229,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.exp_add": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Exponential.lean#L203",
+    "file": "Mathlib/Analysis/Complex/Exponential.lean",
+    "line": 203,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.exp_sub": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Exponential.lean#L235",
+    "file": "Mathlib/Analysis/Complex/Exponential.lean",
+    "line": 235,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.log_exp": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/SpecialFunctions/Log/Basic.lean#L70",
+    "file": "Mathlib/Analysis/SpecialFunctions/Log/Basic.lean",
+    "line": 70,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.exp_log": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/SpecialFunctions/Log/Basic.lean#L54",
+    "file": "Mathlib/Analysis/SpecialFunctions/Log/Basic.lean",
+    "line": 54,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.log_mul": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/SpecialFunctions/Log/Basic.lean#L125",
+    "file": "Mathlib/Analysis/SpecialFunctions/Log/Basic.lean",
+    "line": 125,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.log_div": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/SpecialFunctions/Log/Basic.lean#L129",
+    "file": "Mathlib/Analysis/SpecialFunctions/Log/Basic.lean",
+    "line": 129,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.sqrt_nonneg": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean#L125",
+    "file": "Mathlib/Data/Real/Sqrt.lean",
+    "line": 125,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.sq_sqrt": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean#L157",
+    "file": "Mathlib/Data/Real/Sqrt.lean",
+    "line": 157,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.sqrt_sq_eq_abs": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean#L168",
+    "file": "Mathlib/Data/Real/Sqrt.lean",
+    "line": 168,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.sqrt_mul": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean#L328",
+    "file": "Mathlib/Data/Real/Sqrt.lean",
+    "line": 328,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.sin_sq_add_cos_sq": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean#L603",
+    "file": "Mathlib/Analysis/Complex/Trigonometric.lean",
+    "line": 603,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.sin_add": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean#L540",
+    "file": "Mathlib/Analysis/Complex/Trigonometric.lean",
+    "line": 540,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.cos_add": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean#L553",
+    "file": "Mathlib/Analysis/Complex/Trigonometric.lean",
+    "line": 553,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.sin_neg": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean#L538",
+    "file": "Mathlib/Analysis/Complex/Trigonometric.lean",
+    "line": 538,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Real.cos_neg": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean#L547",
+    "file": "Mathlib/Analysis/Complex/Trigonometric.lean",
+    "line": 547,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Continuous.comp": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Topology/Continuous.lean#L104",
+    "file": "Mathlib/Topology/Continuous.lean",
+    "line": 104,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Continuous.add": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Topology/Algebra/Monoid/Defs.lean#L60",
+    "file": "Mathlib/Topology/Algebra/Monoid/Defs.lean",
+    "line": 60,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Continuous.mul": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Topology/Algebra/Monoid/Defs.lean#L60",
+    "file": "Mathlib/Topology/Algebra/Monoid/Defs.lean",
+    "line": 60,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.sorted_insertionSort": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L605",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 605,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.perm_insertionSort": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L460",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 460,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.length_insertionSort": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L470",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 470,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.mem_insertionSort": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L466",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 466,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.Sorted.insertionSort_eq": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L499",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 499,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.orderedInsert_length": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L402",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 402,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.mem_orderedInsert": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L424",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 424,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.perm_orderedInsert": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L448",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 448,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.Sorted.orderedInsert": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L589",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 589,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.sorted_mergeSort'": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L697",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 697,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.mergeSort_eq_self": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L705",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 705,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.mergeSort_eq_insertionSort": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L708",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 708,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.Sorted.merge": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L687",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 687,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.sublist_insertionSort": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L614",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 614,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "List.sublist_orderedInsert": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L546",
+    "file": "Mathlib/Data/List/Sort.lean",
+    "line": 546,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Nat.coprime_add_mul_right_right": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean#L114",
+    "file": "Mathlib/Data/Nat/GCD/Basic.lean",
+    "line": 114,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Nat.coprime_sub_self_left": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean#L168",
+    "file": "Mathlib/Data/Nat/GCD/Basic.lean",
+    "line": 168,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Nat.Coprime.lcm_eq_mul": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean#L86",
+    "file": "Mathlib/Data/Nat/GCD/Basic.lean",
+    "line": 86,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Nat.eq_one_of_dvd_coprimes": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean#L221",
+    "file": "Mathlib/Data/Nat/GCD/Basic.lean",
+    "line": 221,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  "Nat.Coprime.dvd_mul_right": {
+    "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean#L91",
+    "file": "Mathlib/Data/Nat/GCD/Basic.lean",
+    "line": 91,
+    "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  }
+}

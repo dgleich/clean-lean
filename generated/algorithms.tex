@@ -1,0 +1,119 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{insertion sort sorted}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L605}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Then \[\operatorname{insertionSort}(\mathit{xs})\text{ is sorted}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{insertion sort permutation}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L460}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Then \[\operatorname{insertionSort}(\mathit{xs})\text{ is a permutation of }\mathit{xs}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{insertion sort length}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L470}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Then \[\lvert \operatorname{insertionSort}(\mathit{xs})\rvert = \lvert \mathit{xs}\rvert.\]
+\end{cleanresult}
+
+\begin{cleanresult}{insertion sort membership}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L466}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Let $a$ be a natural number.
+Then \[a \text{ belongs to } \operatorname{insertionSort}(\mathit{xs}) \text{ if and only if } a \text{ belongs to } \mathit{xs}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{sorted input unchanged}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L499}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Assume $\mathit{xs}\text{ is sorted}$ (\texttt{ordered}).
+Then \[\operatorname{insertionSort}(\mathit{xs}) = \mathit{xs}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{ordered insert length}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L402}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Let $a$ be a natural number.
+Then \[\lvert \operatorname{insert}(a,\mathit{xs})\rvert = \lvert \mathit{xs}\rvert + 1.\]
+\end{cleanresult}
+
+\begin{cleanresult}{ordered insert membership}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L424}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Let $a$ and $b$ be natural numbers.
+Then \[b \text{ belongs to } \operatorname{insert}(a,\mathit{xs}) \text{ if and only if } b = a \text{ or } b \text{ belongs to } \mathit{xs}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{ordered insert permutation}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L448}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Let $a$ be a natural number.
+Then \[\operatorname{insert}(a,\mathit{xs})\text{ is a permutation of }(a::\mathit{xs}).\]
+\end{cleanresult}
+
+\begin{cleanresult}{ordered insert preserves sortedness}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L589}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Let $a$ be a natural number.
+Assume $\mathit{xs}\text{ is sorted}$ (\texttt{ordered}).
+Then \[\operatorname{insert}(a,\mathit{xs})\text{ is sorted}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{merge sort sorted}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L697}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Then \[\operatorname{mergeSort}(\mathit{xs})\text{ is sorted}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{merge sort sorted input}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L705}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Assume $\mathit{xs}\text{ is sorted}$ (\texttt{ordered}).
+Then \[\operatorname{mergeSort}(\mathit{xs}) = \mathit{xs}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{sorting algorithms agree}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L708}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Then \[\operatorname{mergeSort}(\mathit{xs}) = \operatorname{insertionSort}(\mathit{xs}).\]
+\end{cleanresult}
+
+\begin{cleanresult}{merge preserves sortedness}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L687}{[Mathlib]}}
+Let $\mathit{xs}$ and $\mathit{ys}$ be lists with entries in $\mathbb{N}$.
+Assume $\mathit{xs}\text{ is sorted}$ (\texttt{hx}).
+Assume $\mathit{ys}\text{ is sorted}$ (\texttt{hy}).
+Then \[\operatorname{merge}(\mathit{xs},\mathit{ys})\text{ is sorted}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{insertion sort subsequence}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L614}{[Mathlib]}}
+Let $\mathit{xs}$ and $\mathit{ys}$ be lists with entries in $\mathbb{N}$.
+Assume $\mathit{ys}\text{ is sorted}$ (\texttt{ordered}).
+Assume $\mathit{ys}\text{ is a sublist of }\mathit{xs}$ (\texttt{subsequence}).
+Then \[\mathit{ys}\text{ is a sublist of }\operatorname{insertionSort}(\mathit{xs}).\]
+\end{cleanresult}
+
+\begin{cleanresult}{ordered insert contains input}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L546}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Let $a$ be a natural number.
+Then \[\mathit{xs}\text{ is a sublist of }\operatorname{insert}(a,\mathit{xs}).\]
+\end{cleanresult}
+
+\begin{cleanresult}{euclidean coprime reduction}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean\#L114}{[Mathlib]}}
+Let $a$, $b$ and $k$ be natural numbers.
+Then \[a\text{ and }b + k \, a\text{ are coprime} \text{ if and only if } a\text{ and }b\text{ are coprime}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{euclidean coprime subtraction}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean\#L168}{[Mathlib]}}
+Let $a$ and $b$ be natural numbers.
+Assume $a \le b$ (\texttt{ordered}).
+Then \[b - a\text{ and }a\text{ are coprime} \text{ if and only if } b\text{ and }a\text{ are coprime}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{coprime lcm product}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean\#L86}{[Mathlib]}}
+Let $a$ and $b$ be natural numbers.
+Assume $a\text{ and }b\text{ are coprime}$ (\texttt{cop}).
+Then \[\operatorname{lcm}(a,b) = a \, b.\]
+\end{cleanresult}
+
+\begin{cleanresult}{common divisor of coprimes}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean\#L221}{[Mathlib]}}
+Let $a$, $b$ and $k$ be natural numbers.
+Assume $a\text{ and }b\text{ are coprime}$ (\texttt{cop}).
+Assume $k \text{ divides } a$ (\texttt{divides\_a}).
+Assume $k \text{ divides } b$ (\texttt{divides\_b}).
+Then \[k = 1.\]
+\end{cleanresult}
+
+\begin{cleanresult}{coprime product divisibility}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean\#L91}{[Mathlib]}}
+Let $a$, $b$ and $k$ be natural numbers.
+Assume $k\text{ and }b\text{ are coprime}$ (\texttt{cop}).
+Then \[k \text{ divides } a \, b \text{ if and only if } k \text{ divides } a.\]
+\end{cleanresult}

@@ -1,0 +1,622 @@
+[
+  {
+    "name": "insertion_sort_sorted",
+    "title": "insertion sort sorted",
+    "line": 1,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.sorted_insertionSort",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.sorted_insertionSort",
+      "declaration": "List.sorted_insertionSort",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L605",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 605,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "insertion_sort_permutation",
+    "title": "insertion sort permutation",
+    "line": 6,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.perm_insertionSort",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.perm_insertionSort",
+      "declaration": "List.perm_insertionSort",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L460",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 460,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "insertion_sort_length",
+    "title": "insertion sort length",
+    "line": 11,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.length_insertionSort",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.length_insertionSort",
+      "declaration": "List.length_insertionSort",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L470",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 470,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "insertion_sort_membership",
+    "title": "insertion sort membership",
+    "line": 16,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.mem_insertionSort",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.mem_insertionSort",
+      "declaration": "List.mem_insertionSort",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L466",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 466,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "sorted_input_unchanged",
+    "title": "sorted input unchanged",
+    "line": 22,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.Sorted.insertionSort_eq",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.Sorted.insertionSort_eq",
+      "declaration": "List.Sorted.insertionSort_eq",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L499",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 499,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "ordered_insert_length",
+    "title": "ordered insert length",
+    "line": 28,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.orderedInsert_length",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.orderedInsert_length",
+      "declaration": "List.orderedInsert_length",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L402",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 402,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "ordered_insert_membership",
+    "title": "ordered insert membership",
+    "line": 34,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.mem_orderedInsert",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.mem_orderedInsert",
+      "declaration": "List.mem_orderedInsert",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L424",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 424,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "ordered_insert_permutation",
+    "title": "ordered insert permutation",
+    "line": 40,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.perm_orderedInsert",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.perm_orderedInsert",
+      "declaration": "List.perm_orderedInsert",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L448",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 448,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "ordered_insert_preserves_sortedness",
+    "title": "ordered insert preserves sortedness",
+    "line": 46,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.Sorted.orderedInsert",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.Sorted.orderedInsert",
+      "declaration": "List.Sorted.orderedInsert",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L589",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 589,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "merge_sort_sorted",
+    "title": "merge sort sorted",
+    "line": 53,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.sorted_mergeSort'",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.sorted_mergeSort'",
+      "declaration": "List.sorted_mergeSort'",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L697",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 697,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "merge_sort_sorted_input",
+    "title": "merge sort sorted input",
+    "line": 58,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.mergeSort_eq_self",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.mergeSort_eq_self",
+      "declaration": "List.mergeSort_eq_self",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L705",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 705,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "sorting_algorithms_agree",
+    "title": "sorting algorithms agree",
+    "line": 64,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.mergeSort_eq_insertionSort",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.mergeSort_eq_insertionSort",
+      "declaration": "List.mergeSort_eq_insertionSort",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L708",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 708,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "merge_preserves_sortedness",
+    "title": "merge preserves sortedness",
+    "line": 69,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.Sorted.merge",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.Sorted.merge",
+      "declaration": "List.Sorted.merge",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L687",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 687,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "insertion_sort_subsequence",
+    "title": "insertion sort subsequence",
+    "line": 76,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.sublist_insertionSort",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.sublist_insertionSort",
+      "declaration": "List.sublist_insertionSort",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L614",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 614,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "ordered_insert_contains_input",
+    "title": "ordered insert contains input",
+    "line": 83,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.sublist_orderedInsert",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.sublist_orderedInsert",
+      "declaration": "List.sublist_orderedInsert",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L546",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 546,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "euclidean_coprime_reduction",
+    "title": "euclidean coprime reduction",
+    "line": 89,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Nat.coprime_add_mul_right_right",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Nat.coprime_add_mul_right_right",
+      "declaration": "Nat.coprime_add_mul_right_right",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean#L114",
+      "file": "Mathlib/Data/Nat/GCD/Basic.lean",
+      "line": 114,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "euclidean_coprime_subtraction",
+    "title": "euclidean coprime subtraction",
+    "line": 94,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Nat.coprime_sub_self_left",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Nat.coprime_sub_self_left",
+      "declaration": "Nat.coprime_sub_self_left",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean#L168",
+      "file": "Mathlib/Data/Nat/GCD/Basic.lean",
+      "line": 168,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "coprime_lcm_product",
+    "title": "coprime lcm product",
+    "line": 100,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Nat.Coprime.lcm_eq_mul",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Nat.Coprime.lcm_eq_mul",
+      "declaration": "Nat.Coprime.lcm_eq_mul",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean#L86",
+      "file": "Mathlib/Data/Nat/GCD/Basic.lean",
+      "line": 86,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "common_divisor_of_coprimes",
+    "title": "common divisor of coprimes",
+    "line": 106,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Nat.eq_one_of_dvd_coprimes",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Nat.eq_one_of_dvd_coprimes",
+      "declaration": "Nat.eq_one_of_dvd_coprimes",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean#L221",
+      "file": "Mathlib/Data/Nat/GCD/Basic.lean",
+      "line": 221,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "coprime_product_divisibility",
+    "title": "coprime product divisibility",
+    "line": 114,
+    "file": "corpus/algorithms.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Nat.Coprime.dvd_mul_right",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Nat.Coprime.dvd_mul_right",
+      "declaration": "Nat.Coprime.dvd_mul_right",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean#L91",
+      "file": "Mathlib/Data/Nat/GCD/Basic.lean",
+      "line": 91,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  }
+]

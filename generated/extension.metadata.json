@@ -1,0 +1,33 @@
+[
+  {
+    "name": "square_matrix_transpose",
+    "title": "square matrix transpose",
+    "line": 1,
+    "file": "examples/extension.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Matrix.det_transpose",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Matrix.det_transpose",
+      "declaration": "Matrix.det_transpose",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean#L199",
+      "file": "Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean",
+      "line": 199,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  }
+]

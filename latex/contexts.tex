@@ -1,0 +1,18 @@
+\documentclass[11pt]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{latex/clean}
+\setlength{\emergencystretch}{3em}
+\title{Context rendering options}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+Both sections below come from the same Clean source and have the same Lean interpretation.
+\section{Expanded contexts}
+Every result repeats its required declarations and all inherited assumptions.
+\CleanInput[contexts=expanded]{examples/determinants.clean}
+\clearpage
+\section{Referenced contexts}
+The context is printed once, and each result explicitly cites it.
+\CleanInput[contexts=referenced]{examples/determinants.clean}
+\end{document}

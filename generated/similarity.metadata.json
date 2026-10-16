@@ -1,0 +1,27 @@
+[
+  {
+    "name": "similarity_transforms_eigenvector",
+    "title": "similarity transforms eigenvector",
+    "line": 1,
+    "file": "examples/similarity.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "stewart2001",
+      "reference": "Theorem 1.10, page 9",
+      "relationship": "adapted",
+      "scope": "eigenvector part"
+    },
+    "resolved_attribution": {
+      "source_key": "stewart2001",
+      "source": {
+        "kind": "book",
+        "label": "Stewart 2001",
+        "author": "G. W. Stewart",
+        "title": "Matrix Algorithms, Volume II: Eigensystems",
+        "year": 2001,
+        "publisher": "SIAM"
+      },
+      "reference": "Theorem 1.10, page 9"
+    }
+  }
+]

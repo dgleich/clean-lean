@@ -1,0 +1,26 @@
+\documentclass[11pt]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{latex/clean}
+\setlength{\emergencystretch}{3em}
+\title{Clean statement specimens}
+\author{}
+\date{Prototype 0.1}
+\begin{document}
+\maketitle
+These are statement renderings, not proof certificates. The collection specializes
+Mathlib results for syntax comparison. The algorithms section contains CLR-aligned
+sorting results and number-theoretic supporting lemmas, not a formalization of CLR.
+\tableofcontents
+\section{Stewart example}
+\CleanInput{examples/similarity.clean}
+\clearpage\section{Linear algebra}
+\CleanInput{corpus/linear_algebra.clean}
+\clearpage\section{Graph theory}
+\CleanInput{corpus/graph_theory.clean}
+\clearpage\section{Analysis}
+\CleanInput{corpus/analysis.clean}
+\clearpage\section{Undergraduate algorithms}
+\CleanInput{corpus/algorithms.clean}
+\clearpage\section{References}
+\input{generated/references.tex}
+\end{document}

@@ -1,0 +1,622 @@
+[
+  {
+    "name": "exponential_positive",
+    "title": "exponential positive",
+    "line": 1,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.exp_pos",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.exp_pos",
+      "declaration": "Real.exp_pos",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Exponential.lean#L276",
+      "file": "Mathlib/Analysis/Complex/Exponential.lean",
+      "line": 276,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "exponential_nonzero",
+    "title": "exponential nonzero",
+    "line": 6,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.exp_ne_zero",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.exp_ne_zero",
+      "declaration": "Real.exp_ne_zero",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Exponential.lean#L229",
+      "file": "Mathlib/Analysis/Complex/Exponential.lean",
+      "line": 229,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "exponential_sum",
+    "title": "exponential sum",
+    "line": 11,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.exp_add",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.exp_add",
+      "declaration": "Real.exp_add",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Exponential.lean#L203",
+      "file": "Mathlib/Analysis/Complex/Exponential.lean",
+      "line": 203,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "exponential_difference",
+    "title": "exponential difference",
+    "line": 16,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.exp_sub",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.exp_sub",
+      "declaration": "Real.exp_sub",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Exponential.lean#L235",
+      "file": "Mathlib/Analysis/Complex/Exponential.lean",
+      "line": 235,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "logarithm_exponential",
+    "title": "logarithm exponential",
+    "line": 21,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.log_exp",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.log_exp",
+      "declaration": "Real.log_exp",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/SpecialFunctions/Log/Basic.lean#L70",
+      "file": "Mathlib/Analysis/SpecialFunctions/Log/Basic.lean",
+      "line": 70,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "exponential_logarithm",
+    "title": "exponential logarithm",
+    "line": 26,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.exp_log",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.exp_log",
+      "declaration": "Real.exp_log",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/SpecialFunctions/Log/Basic.lean#L54",
+      "file": "Mathlib/Analysis/SpecialFunctions/Log/Basic.lean",
+      "line": 54,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "logarithm_product",
+    "title": "logarithm product",
+    "line": 32,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.log_mul",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.log_mul",
+      "declaration": "Real.log_mul",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/SpecialFunctions/Log/Basic.lean#L125",
+      "file": "Mathlib/Analysis/SpecialFunctions/Log/Basic.lean",
+      "line": 125,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "logarithm_quotient",
+    "title": "logarithm quotient",
+    "line": 39,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.log_div",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.log_div",
+      "declaration": "Real.log_div",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/SpecialFunctions/Log/Basic.lean#L129",
+      "file": "Mathlib/Analysis/SpecialFunctions/Log/Basic.lean",
+      "line": 129,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "square_root_nonnegative",
+    "title": "square root nonnegative",
+    "line": 46,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.sqrt_nonneg",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.sqrt_nonneg",
+      "declaration": "Real.sqrt_nonneg",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean#L125",
+      "file": "Mathlib/Data/Real/Sqrt.lean",
+      "line": 125,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "square_of_square_root",
+    "title": "square of square root",
+    "line": 51,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.sq_sqrt",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.sq_sqrt",
+      "declaration": "Real.sq_sqrt",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean#L157",
+      "file": "Mathlib/Data/Real/Sqrt.lean",
+      "line": 157,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "square_root_of_square",
+    "title": "square root of square",
+    "line": 57,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.sqrt_sq_eq_abs",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.sqrt_sq_eq_abs",
+      "declaration": "Real.sqrt_sq_eq_abs",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean#L168",
+      "file": "Mathlib/Data/Real/Sqrt.lean",
+      "line": 168,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "square_root_product",
+    "title": "square root product",
+    "line": 62,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.sqrt_mul",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.sqrt_mul",
+      "declaration": "Real.sqrt_mul",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean#L328",
+      "file": "Mathlib/Data/Real/Sqrt.lean",
+      "line": 328,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "trigonometric_identity",
+    "title": "trigonometric identity",
+    "line": 68,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.sin_sq_add_cos_sq",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.sin_sq_add_cos_sq",
+      "declaration": "Real.sin_sq_add_cos_sq",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean#L603",
+      "file": "Mathlib/Analysis/Complex/Trigonometric.lean",
+      "line": 603,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "sine_addition",
+    "title": "sine addition",
+    "line": 73,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.sin_add",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.sin_add",
+      "declaration": "Real.sin_add",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean#L540",
+      "file": "Mathlib/Analysis/Complex/Trigonometric.lean",
+      "line": 540,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "cosine_addition",
+    "title": "cosine addition",
+    "line": 78,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.cos_add",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.cos_add",
+      "declaration": "Real.cos_add",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean#L553",
+      "file": "Mathlib/Analysis/Complex/Trigonometric.lean",
+      "line": 553,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "sine_odd",
+    "title": "sine odd",
+    "line": 83,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.sin_neg",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.sin_neg",
+      "declaration": "Real.sin_neg",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean#L538",
+      "file": "Mathlib/Analysis/Complex/Trigonometric.lean",
+      "line": 538,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "cosine_even",
+    "title": "cosine even",
+    "line": 88,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.cos_neg",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Real.cos_neg",
+      "declaration": "Real.cos_neg",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean#L547",
+      "file": "Mathlib/Analysis/Complex/Trigonometric.lean",
+      "line": 547,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "continuous_composition",
+    "title": "continuous composition",
+    "line": 93,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Continuous.comp",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Continuous.comp",
+      "declaration": "Continuous.comp",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Topology/Continuous.lean#L104",
+      "file": "Mathlib/Topology/Continuous.lean",
+      "line": 104,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "continuous_sum",
+    "title": "continuous sum",
+    "line": 100,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Continuous.add",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Continuous.add",
+      "declaration": "Continuous.add",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Topology/Algebra/Monoid/Defs.lean#L60",
+      "file": "Mathlib/Topology/Algebra/Monoid/Defs.lean",
+      "line": 60,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "continuous_product",
+    "title": "continuous product",
+    "line": 107,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Continuous.mul",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "Continuous.mul",
+      "declaration": "Continuous.mul",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Topology/Algebra/Monoid/Defs.lean#L60",
+      "file": "Mathlib/Topology/Algebra/Monoid/Defs.lean",
+      "line": 60,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  }
+]

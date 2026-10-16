@@ -1,0 +1,9 @@
+.lake/
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+*.aux
+*.log
+*.out
+*.toc

@@ -1,0 +1,13 @@
+[
+  "Mathlib.Data.Complex.Basic",
+  "Mathlib.LinearAlgebra.Matrix.NonsingularInverse",
+  "Mathlib.LinearAlgebra.Matrix.Trace",
+  "Mathlib.Combinatorics.SimpleGraph.Basic",
+  "Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected",
+  "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+  "Mathlib.Analysis.SpecialFunctions.Sqrt",
+  "Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic",
+  "Mathlib.Analysis.Calculus.Deriv.Basic",
+  "Mathlib.Data.List.Sort",
+  "Mathlib.Data.Nat.GCD.Basic"
+]

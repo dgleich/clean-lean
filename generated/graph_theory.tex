@@ -1,0 +1,146 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{adjacency symmetry}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L162}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ and $v$ be vertices in $\{0,\ldots,n-1\}$.
+Assume $u\text{ is adjacent to }v\text{ in }G$ (\texttt{edge}).
+Then \[v\text{ is adjacent to }u\text{ in }G.\]
+\end{cleanresult}
+
+\begin{cleanresult}{adjacency commutes}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L158}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ and $v$ be vertices in $\{0,\ldots,n-1\}$.
+Then \[u\text{ is adjacent to }v\text{ in }G \text{ if and only if } v\text{ is adjacent to }u\text{ in }G.\]
+\end{cleanresult}
+
+\begin{cleanresult}{no self edges}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L155}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ be a vertex in $\{0,\ldots,n-1\}$.
+Then \[\text{not }(u\text{ is adjacent to }u\text{ in }G).\]
+\end{cleanresult}
+
+\begin{cleanresult}{adjacent vertices distinct}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L168}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ and $v$ be vertices in $\{0,\ldots,n-1\}$.
+Assume $u\text{ is adjacent to }v\text{ in }G$ (\texttt{edge}).
+Then \[u \ne v.\]
+\end{cleanresult}
+
+\begin{cleanresult}{union adjacency}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L215}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ and $H$ be simple graphs on $\{0,\ldots,n-1\}$.
+Let $u$ and $v$ be vertices in $\{0,\ldots,n-1\}$.
+Then \[u\text{ is adjacent to }v\text{ in }(G \cup H) \text{ if and only if } u\text{ is adjacent to }v\text{ in }G \text{ or } u\text{ is adjacent to }v\text{ in }H.\]
+\end{cleanresult}
+
+\begin{cleanresult}{intersection adjacency}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L225}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ and $H$ be simple graphs on $\{0,\ldots,n-1\}$.
+Let $u$ and $v$ be vertices in $\{0,\ldots,n-1\}$.
+Then \[u\text{ is adjacent to }v\text{ in }(G \cap H) \text{ if and only if } u\text{ is adjacent to }v\text{ in }G \text{ and } u\text{ is adjacent to }v\text{ in }H.\]
+\end{cleanresult}
+
+\begin{cleanresult}{complement adjacency}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L238}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ and $v$ be vertices in $\{0,\ldots,n-1\}$.
+Then \[u\text{ is adjacent to }v\text{ in }\overline{G} \text{ if and only if } u \ne v \text{ and } \text{not }(u\text{ is adjacent to }v\text{ in }G).\]
+\end{cleanresult}
+
+\begin{cleanresult}{support monotonicity}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L397}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ and $H$ be simple graphs on $\{0,\ldots,n-1\}$.
+Assume $G\text{ is a subgraph of }H$ (\texttt{inclusion}).
+Then \[\operatorname{supp}(G) \text{ is a subset of } \operatorname{supp}(H).\]
+\end{cleanresult}
+
+\begin{cleanresult}{neighbors in support}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L407}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ be a vertex in $\{0,\ldots,n-1\}$.
+Then \[N_{G}(u) \text{ is a subset of } \operatorname{supp}(G).\]
+\end{cleanresult}
+
+\begin{cleanresult}{neighbor membership}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L680}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ and $v$ be vertices in $\{0,\ldots,n-1\}$.
+Then \[v \text{ belongs to } N_{G}(u) \text{ if and only if } u\text{ is adjacent to }v\text{ in }G.\]
+\end{cleanresult}
+
+\begin{cleanresult}{not own neighbor}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L683}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ be a vertex in $\{0,\ldots,n-1\}$.
+Then \[\text{not }(u \text{ belongs to } N_{G}(u)).\]
+\end{cleanresult}
+
+\begin{cleanresult}{common neighbors intersection}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L735}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ and $v$ be vertices in $\{0,\ldots,n-1\}$.
+Then \[N_{G}(u)\cap N_{G}(v) = N_{G}(u) \cap N_{G}(v).\]
+\end{cleanresult}
+
+\begin{cleanresult}{common neighbors membership}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L738}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$, $v$ and $w$ be vertices in $\{0,\ldots,n-1\}$.
+Then \[w \text{ belongs to } N_{G}(u)\cap N_{G}(v) \text{ if and only if } u\text{ is adjacent to }w\text{ in }G \text{ and } v\text{ is adjacent to }w\text{ in }G.\]
+\end{cleanresult}
+
+\begin{cleanresult}{common neighbors symmetry}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L741}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ and $v$ be vertices in $\{0,\ldots,n-1\}$.
+Then \[N_{G}(u)\cap N_{G}(v) = N_{G}(v)\cap N_{G}(u).\]
+\end{cleanresult}
+
+\begin{cleanresult}{common neighbors left}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L756}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ and $v$ be vertices in $\{0,\ldots,n-1\}$.
+Then \[N_{G}(u)\cap N_{G}(v) \text{ is a subset of } N_{G}(u).\]
+\end{cleanresult}
+
+\begin{cleanresult}{common neighbors right}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean\#L760}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ and $v$ be vertices in $\{0,\ldots,n-1\}$.
+Then \[N_{G}(u)\cap N_{G}(v) \text{ is a subset of } N_{G}(v).\]
+\end{cleanresult}
+
+\begin{cleanresult}{reachability reflexive}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Connectivity/Connected.lean\#L72}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ be a vertex in $\{0,\ldots,n-1\}$.
+Then \[u\text{ is reachable from }u\text{ in }G.\]
+\end{cleanresult}
+
+\begin{cleanresult}{reachability symmetric}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Connectivity/Connected.lean\#L77}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ and $v$ be vertices in $\{0,\ldots,n-1\}$.
+Assume $v\text{ is reachable from }u\text{ in }G$ (\texttt{path}).
+Then \[u\text{ is reachable from }v\text{ in }G.\]
+\end{cleanresult}
+
+\begin{cleanresult}{reachability transitive}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Connectivity/Connected.lean\#L84}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$, $v$ and $w$ be vertices in $\{0,\ldots,n-1\}$.
+Assume $v\text{ is reachable from }u\text{ in }G$ (\texttt{first}).
+Assume $w\text{ is reachable from }v\text{ in }G$ (\texttt{second}).
+Then \[w\text{ is reachable from }u\text{ in }G.\]
+\end{cleanresult}
+
+\begin{cleanresult}{edge implies reachability}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Connectivity/Connected.lean\#L68}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $u$ and $v$ be vertices in $\{0,\ldots,n-1\}$.
+Assume $u\text{ is adjacent to }v\text{ in }G$ (\texttt{edge}).
+Then \[v\text{ is reachable from }u\text{ in }G.\]
+\end{cleanresult}
