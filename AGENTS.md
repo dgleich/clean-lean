@@ -4,7 +4,7 @@
 
 - Keep this repository local. Do not create a remote, push, or publish without an explicit user request.
 - Read `docs/spec.md` and `docs/decisions.md` before changing language behavior. Record new decisions and unresolved choices there; distinguish implemented behavior from proposals.
-- The agreed architecture is explicit Clean definitions modules backed by Lean definitions. JSON registries are the current prototype mechanism, not the final language design. Imports and notation declarations are not implemented yet.
+- The agreed architecture is explicit Clean definitions modules backed by Lean definitions. JSON registries are the current prototype mechanism, not the final language design. An initial explicit import/notation prototype is implemented; see `docs/notation-prototype.md` for its limits.
 - Preserve mandatory attribution, readable English names, case-insensitive keywords, and explicit context references in LaTeX. Rendering must not change mathematical meaning.
 - Statement translation does not constitute a proof. Never use `sorry` or axioms to make validation pass. Keep the limitations of the CLR-aligned corpus explicit.
 

@@ -14,3 +14,7 @@ The normal Lean backend emits proposition definitions without `sorry` or `axiom`
 Typechecking beyond the supported fragment, historical attribution accuracy, comprehensive CLR coverage, arbitrary TeX templates, and general parser completeness are not claimed. See the decision log and specification for explicit boundaries.
 
 After the English-rendering and readable-title changes, every generated Lean file was unchanged by SHA-256. The subsequent compact-attribution change modifies Lean docstrings; the 80 corpus proof fixtures were regenerated and checked again.
+
+## Notation module branch
+
+The explicit-notation prototype passes 69 Python tests. Both `generated/VerifiedNotation.lean` (one new proof using the imported definition) and the regenerated 80-proof corpus check successfully in Lean. `generated/notation.pdf` compiles twice without unresolved-reference or overfull-box diagnostics. These checks do not imply that arbitrary authored `Means` expressions are valid: run Lean on their output. Module limitations are recorded in `notation-prototype.md`.

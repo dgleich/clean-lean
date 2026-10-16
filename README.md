@@ -73,4 +73,14 @@ See [AGENTS.md](AGENTS.md) for local Git workflow and validation rules. Keep a l
 
 Shared contexts are implemented: compare the [source](examples/determinants.clean) and [two rendering modes](generated/contexts.pdf). Use `\CleanInput[contexts=expanded]{examples/determinants.clean}` or `contexts=referenced`; references to contexts are always explicit.
 
-The agreed next architectural step is explicit Clean definitions modules backed by Lean definitions. This is a design decision, not an implemented import system. The JSON registries remain necessary for the current prototype.
+The agreed next architectural step is explicit Clean definitions modules backed by Lean definitions. The first import/notation slice now works; JSON registries still supply existing types and legacy functions. See [prototype details](docs/notation-prototype.md).
+
+Try the explicit module example:
+
+```sh
+python3 -m cleanlang build examples/notation.clean
+python3 verify_notation.py
+lake env lean generated/VerifiedNotation.lean
+```
+
+The [sorting module](examples/modules/sorting.clean) supplies the meaning of the readable name used in [this result](examples/notation.clean). The [rendered example](generated/notation.pdf) shows its English rendering. `check` validates Clean syntax and supported types; running Lean separately checks `Means` and the generated signatures.

@@ -29,12 +29,14 @@ These decisions separate requested behavior from provisional implementation choi
 | D23 | English result titles generate Lean identifiers automatically | User request: spaces in display titles become underscores only in Lean names; legacy underscored titles render as words |
 | D24 | Compact attribution uses source; reference; optional relationship; optional named fields | User agreement; omitted relationship and scope remain unspecified |
 | D25 | Shared source registry and short printed citations | Source details are stored once; full declaration provenance remains in metadata |
-
 | D26 | Shared, nestable contexts introduce declarations and assumptions | Implemented; needed object dependencies and all inherited assumptions are retained in each result |
 | D27 | LaTeX contexts may be expanded or explicitly referenced | Implemented; expanded is default, referenced results say “Using Context (1)” rather than relying on implicit scope |
-| D28 | Combine reusable Clean modules with Lean-backed definitions | User agreement; imports and notation declarations are planned, not implemented. Lean supplies mathematical meaning; Clean supplies readable names and presentation |
+| D28 | Combine reusable Clean modules with Lean-backed definitions | User agreement; an initial import/notation slice is implemented; see `notation-prototype.md`. Lean supplies mathematical meaning; Clean supplies readable names and presentation |
 | D29 | Definitions must be inline or explicitly imported, with pinned project dependencies | Design direction; a hidden JSON sidecar must not be the permanent source of mathematical meaning. Exact module syntax remains provisional |
 | D30 | Maintain a linear local Git history including intermediate steps | Explicit user direction: commits need not compile or work. Preserve steps without squashing, amending, rebasing, or merge commits; record validation status. Workflow in `AGENTS.md`; no publication authorized |
+
+| D31 | Prototype notation signatures use ordered Let parameters and Returns | Provisional: Python uses these annotations, and generated Lean wrappers independently check Means. Multiword names require explicit calls; rendering is escaped English with placeholders |
+| D32 | Prototype imports are relative, definition-only, and isolated per input document | Cycles and name conflicts fail; repeated imports deduplicate. Selective exports, qualification, and type-phrase modules remain future work |
 
 ## Questions to revisit after reading the specimens
 

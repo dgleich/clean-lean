@@ -4,7 +4,6 @@ def cleanNotation_4d92afd12b2f2ee349d7 (xs : List (ℕ)) : List (ℕ) :=
   List.insertionSort (· ≤ ·) xs
 
 
-open scoped Matrix
 
 -- Named hypothesis binders document assumptions even when not dependent.
 set_option linter.unusedVariables false
@@ -24,4 +23,4 @@ end CleanStatements
 
 example : CleanStatements.insertion_sort_preserves_length := by
   intro xs
-  exact List.length_insertionSort (r := (· ≤ ·))
+  exact List.length_insertionSort (r := (· ≤ ·)) xs

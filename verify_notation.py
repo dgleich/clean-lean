@@ -11,6 +11,6 @@ output = lean(results, reg, ['Mathlib.Data.List.Sort'])
 output += '''
 example : CleanStatements.insertion_sort_preserves_length := by
   intro xs
-  exact List.length_insertionSort (r := (· ≤ ·))
+  exact List.length_insertionSort (r := (· ≤ ·)) xs
 '''
 Path('generated/VerifiedNotation.lean').write_text(output)

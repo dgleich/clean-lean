@@ -405,7 +405,7 @@ def parse(text,reg):
 
 def lean(results,reg,imports):
     imports=list(dict.fromkeys([*imports,*getattr(reg,'lean_imports',[])]))
-    out=[*(f'import {i}' for i in imports),'',*getattr(reg,'notation_definitions',{}).values(),'','open scoped Matrix','','-- Named hypothesis binders document assumptions even when not dependent.','set_option linter.unusedVariables false','','namespace CleanStatements','']
+    out=[*(f'import {i}' for i in imports),'',*getattr(reg,'notation_definitions',{}).values(),'',*(['open scoped Matrix'] if any(i == 'Mathlib' or 'Matrix' in i for i in imports) else []),'','-- Named hypothesis binders document assumptions even when not dependent.','set_option linter.unusedVariables false','','namespace CleanStatements','']
     for r in results:
         out+=['/--']+[k+': '+v.replace('/-','/ -').replace('-/','- /') for k,v in r.attribution.items()]+['-/',f'def {r.name} : Prop :=']
         for c in r.clauses:

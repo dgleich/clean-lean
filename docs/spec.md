@@ -217,8 +217,8 @@ Contexts may nest. Put their `Let`, `Define`, and `Assume` clauses before their 
 
 `\CleanInput[contexts=expanded]{examples/determinants.clean}` repeats required declarations and all inherited assumptions within each result. This is the default. `contexts=referenced` prints numbered contexts and explicitly states “Using Context (1)” in each affected result. Nested contexts cite their ancestors. Both modes have the same Lean meaning. See `latex/contexts.tex` and `generated/contexts.pdf`. Parameterized assumption-set templates are not implemented.
 
-## Definitions modules (agreed direction, not implemented)
+## Definitions modules (initial prototype)
 
 Clean will combine explicitly imported definitions modules with Lean-backed mathematical definitions. A module will associate readable names with Lean expressions and presentation rules; Lean will check meaning and types. Rendering rules cannot supply mathematical meaning. Imports must expose dependencies, conflicting names must require disambiguation, and project dependencies must be pinned.
 
-The existing JSON registries currently provide function meanings, types, type phrases, and renderings. For example, `insertionSort(xs)` maps to `List.insertionSort (· ≤ ·) xs` for natural-number lists. This dependency is essential, not cosmetic. Moving these mappings into inspectable Clean modules is planned; exact `Import` and `Notation` syntax is provisional. Naming Mathlib's implementation does not define or verify CLR pseudocode.
+The existing JSON registries currently provide function meanings, types, type phrases, and renderings. For example, `insertionSort(xs)` maps to `List.insertionSort (· ≤ ·) xs` for natural-number lists. This dependency is essential, not cosmetic. An initial implementation supports relative Clean imports, Lean imports, and typed notation declarations; see [notation prototype](notation-prototype.md). Most mappings still reside in JSON; exact `Import` and `Notation` syntax is provisional. Naming Mathlib's implementation does not define or verify CLR pseudocode.
