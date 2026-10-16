@@ -131,11 +131,14 @@ class Expressions:
     PREC={'↔':1,'→':2,'or':3,'∨':3,'and':4,'∧':4,'=':5,'≠':5,'!=':5,'<':5,'>':5,'≤':5,'≥':5,'<=':5,'>=':5,'∈':5,'⊆':5,'∣':5,'+':6,'-':6,'∪':6,'∩':6,'*':7,'/':7,'^':8}
     def __init__(self,reg,env): self.reg,self.env=reg,env
     def parse(self,s):
+        # Match multiword function names only when followed by a call parenthesis.
+        names=sorted((n for n in self.reg.data['functions'] if ' ' in n), key=len, reverse=True)
+        phrase_token=re.compile(r'\s*('+'|'.join(re.escape(n).replace(r'\ ', r' +') for n in names)+r')(?=\s*\()') if names else None
         s=s.strip(); self.tokens=[]; pos=0; self.i=0
         while pos<len(s):
-            m=TOKEN.match(s,pos)
+            m=(phrase_token.match(s,pos) if phrase_token else None) or TOKEN.match(s,pos)
             if not m: raise CleanError('Unsupported expression near '+repr(s[pos:pos+25]))
-            self.tokens.append(m[1]); pos=m.end()
+            self.tokens.append(re.sub(' +', ' ', m[1])); pos=m.end()
         if not self.tokens: raise CleanError('Empty expression')
         x=self.expr(0)
         if self.peek() is not None: raise CleanError('Unexpected token: '+self.peek())
@@ -401,7 +404,8 @@ def parse(text,reg):
 
 
 def lean(results,reg,imports):
-    out=[*(f'import {i}' for i in imports),'','open scoped Matrix','','-- Named hypothesis binders document assumptions even when not dependent.','set_option linter.unusedVariables false','','namespace CleanStatements','']
+    imports=list(dict.fromkeys([*imports,*getattr(reg,'lean_imports',[])]))
+    out=[*(f'import {i}' for i in imports),'',*getattr(reg,'notation_definitions',{}).values(),'','open scoped Matrix','','-- Named hypothesis binders document assumptions even when not dependent.','set_option linter.unusedVariables false','','namespace CleanStatements','']
     for r in results:
         out+=['/--']+[k+': '+v.replace('/-','/ -').replace('-/','- /') for k,v in r.attribution.items()]+['-/',f'def {r.name} : Prop :=']
         for c in r.clauses:

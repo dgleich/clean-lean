@@ -1,0 +1,33 @@
+[
+  {
+    "name": "insertion_sort_preserves_length",
+    "title": "insertion sort preserves length",
+    "line": 3,
+    "file": "examples/notation.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "List.length_insertionSort",
+      "relationship": "specialized"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "corpus/references.json"
+      },
+      "reference": "List.length_insertionSort",
+      "declaration": "List.length_insertionSort",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L470",
+      "file": "Mathlib/Data/List/Sort.lean",
+      "line": 470,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  }
+]
