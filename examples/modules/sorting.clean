@@ -1,0 +1,7 @@
+Import Lean Mathlib.Data.List.Sort
+
+Notation insertion sort(xs):
+    Let xs: List(Natural)
+    Returns: List(Natural)
+    Means: List.insertionSort (· ≤ ·) xs
+    Render: insertion sort of {xs}
