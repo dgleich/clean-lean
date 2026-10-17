@@ -1,0 +1,45 @@
+Import "../library/papers.clean"
+
+Result magnetic powers encode walk profiles:
+    Attribution: magnetic2025; Supplement S.II, Theorem 1; adapted; scope: forward transform
+    Let n: Natural
+    Assume positive: n > 0
+    Let A be a real n×n matrix
+    Let m: Natural
+    Let q be a real number
+    Let M = magnetic matrix(A,q)
+    Conclude: matrix power(M,m) = walk Fourier sum(A,m,q)
+
+Result size specific Cheeger inequality:
+    Attribution: cheeger2026; Theorem 3.1; adapted; scope: connected simple graphs and positive mu
+    Let n: Natural
+    Let G: Graph(n)
+    Let μ be a real number
+    Assume connectivity: connected(G)
+    Assume nontrivial: n ≥ 2
+    Assume range: 0 < μ and μ ≤ 1/2
+    Assume admissibility: admissible size(G,μ)
+    Let φ = conductance(G,μ)
+    Let ψ = ordinary conductance(G)
+    Let λ = spectral minimum(G,μ)
+    Let t = μ^2/(μ^2 + 1/2 - μ)
+    Conclude:
+        ((t*φ + (1-t)*ψ)^2)/4 ≤ λ
+        and
+        λ ≤ 2*φ
+
+Result trace bound gives a suboptimality certificate:
+    Attribution: sdplr2026; Corollary 2, equation (3); adapted; scope: symmetric coefficient representation of the measurement map
+    Let n, m: Natural
+    Assume dimensions: n > 0 and m > 0
+    Let C, X, Z be real n×n matrices
+    Let B: Measurements(n,m)
+    Let b, y be real m-vectors
+    Let α be a real number
+    Assume cost: symmetric(C)
+    Assume measurements: symmetric measurements(B)
+    Assume bound: α ≥ 0
+    Assume candidate: feasible(B,b,α,X)
+    Assume optimizer: minimizer(C,B,b,α,Z)
+    Let d = dual bound(C,B,b,y,α)
+    Conclude: matrix inner product(C,X) - matrix inner product(C,Z) ≤ matrix inner product(C,X) - d

@@ -1,0 +1,163 @@
+# Explicit mathematical definitions; no paper result is assumed.
+Import "types.clean"
+Import Lean CleanPapers.Definitions
+
+Source magnetic2025:
+    Kind: other
+    Label: Huang, Gleich, Li 2025
+    Title: Powers of Magnetic Graph Matrix
+    Author: Yinan Huang, David F. Gleich, Pan Li
+    Version: arXiv:2506.07343v1
+    Url: https://arxiv.org/html/2506.07343v1
+
+Source cheeger2026:
+    Kind: other
+    Label: Huang and Gleich 2026
+    Title: A Cheeger Inequality for Size-Specific Conductance
+    Author: Yufan Huang, David F. Gleich
+    Version: arXiv:2303.11452v3
+    Url: https://arxiv.org/html/2303.11452v3
+
+Source sdplr2026:
+    Kind: other
+    Label: Huang and Gleich 2026
+    Title: Suboptimality bounds for trace-bounded SDPs
+    Author: Yufan Huang, David F. Gleich
+    Version: arXiv:2406.10407v3
+    Url: https://arxiv.org/html/2406.10407v3
+
+Type Measurements(n: Natural, m: Natural):
+    Means: CleanPapers.Measurements n m
+    Render latex: \operatorname{{Measurements}}({n},{m})
+    Describe: a family of ${m}$ real ${n}\times {n}$ measurement matrices
+
+Notation walk profile(A, m, k):
+    Let n: Natural
+    Let A: Matrix(n,n,Real)
+    Let m: Natural
+    Let k: Natural
+    Returns: Matrix(n,n,Real)
+    Means: CleanPapers.walkProfile A m k
+    Render latex: \Phi_{{{A}}}({m},{k})
+
+Notation magnetic matrix(A, q):
+    Let n: Natural
+    Let A: Matrix(n,n,Real)
+    Let q: Real
+    Returns: Matrix(n,n,Complex)
+    Means: CleanPapers.magneticMatrix A q
+    Render latex: M({A},{q})
+
+Notation matrix power(M, m):
+    Let n: Natural
+    Let M: Matrix(n,n,Complex)
+    Let m: Natural
+    Returns: Matrix(n,n,Complex)
+    Means: M ^ m
+    Render latex: \left({M}\right)^{{{m}}}
+
+Notation walk Fourier sum(A, m, q):
+    Let n: Natural
+    Let A: Matrix(n,n,Real)
+    Let m: Natural
+    Let q: Real
+    Returns: Matrix(n,n,Complex)
+    Means: CleanPapers.walkFourierSum A m q
+    Render latex: \operatorname{{walkFourierSum}}({A},{m},{q})
+
+Notation connected(G):
+    Let n: Natural
+    Let G: Graph(n)
+    Returns: Proposition
+    Means: G.Connected
+    Render latex: {G}\text{{ is connected}}
+
+Notation admissible size(G, μ):
+    Let n: Natural
+    Let G: Graph(n)
+    Let μ: Real
+    Returns: Proposition
+    Means: ∃ S, CleanPapers.admissibleCut G μ S
+    Render latex: \text{{there is an admissible cut of }}{G}\text{{ at size }}{μ}
+
+Notation conductance(G, μ):
+    Let n: Natural
+    Let G: Graph(n)
+    Let μ: Real
+    Returns: Real
+    Means: CleanPapers.conductance G μ
+    Render latex: \phi({G},{μ})
+
+Notation ordinary conductance(G):
+    Let n: Natural
+    Let G: Graph(n)
+    Returns: Real
+    Means: CleanPapers.conductance G 0
+    Render latex: \phi_0({G})
+
+Notation spectral minimum(G, μ):
+    Let n: Natural
+    Let G: Graph(n)
+    Let μ: Real
+    Returns: Real
+    Means: CleanPapers.spectralMinimum G μ
+    Render latex: \lambda({G},{μ})
+
+Notation symmetric(C):
+    Let n: Natural
+    Let C: Matrix(n,n,Real)
+    Returns: Proposition
+    Means: C.IsSymm
+    Render latex: {C}\text{{ is symmetric}}
+
+Notation symmetric measurements(B):
+    Let n: Natural
+    Let m: Natural
+    Let B: Measurements(n,m)
+    Returns: Proposition
+    Means: CleanPapers.measurementsSymmetric B
+    Render latex: {B}\text{{ has symmetric coefficient matrices}}
+
+Notation feasible(B, b, α, X):
+    Let n: Natural
+    Let m: Natural
+    Let B: Measurements(n,m)
+    Let b: Vector(m,Real)
+    Let α: Real
+    Let X: Matrix(n,n,Real)
+    Returns: Proposition
+    Means: CleanPapers.feasible B b α X
+    Render latex: {X}\text{{ is feasible for }}({B},{b},{α})
+
+Notation minimizer(C, B, b, α, X):
+    Let n: Natural
+    Let m: Natural
+    Let C: Matrix(n,n,Real)
+    Let B: Measurements(n,m)
+    Let b: Vector(m,Real)
+    Let α: Real
+    Let X: Matrix(n,n,Real)
+    Returns: Proposition
+    Means: CleanPapers.minimizes C B b α X
+    Render latex: {X}\text{{ minimizes the objective for }}({C},{B},{b},{α})
+
+Notation matrix inner product(C, X):
+    Let n: Natural
+    Let C: Matrix(n,n,Real)
+    Let X: Matrix(n,n,Real)
+    Returns: Real
+    Means: CleanPapers.frobenius C X
+    Render latex: \left\langle {C},{X}\right\rangle
+
+Notation dual bound(C, B, b, y, α):
+    Let n: Natural
+    Let m: Natural
+    Let C: Matrix(n,n,Real)
+    Let B: Measurements(n,m)
+    Let b: Vector(m,Real)
+    Let y: Vector(m,Real)
+    Let α: Real
+    Returns: Real
+    Means: CleanPapers.dualBound C B b y α
+    Render latex: d({C},{B},{b},{y},{α})
+
