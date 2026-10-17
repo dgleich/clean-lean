@@ -156,3 +156,7 @@ A feature that passes elaboration tests but makes these specimens harder to read
 | Lean only at explicit library boundaries | Target authoring experience; precise bridge syntax remains revisitable |
 
 The formal grammar is a draft, not a reason to freeze its first spelling. We should settle representative source examples together with their binding and elaboration rules, then implement both.
+
+## Examples from recent papers
+
+The [recent-paper specimens](recent-paper-examples.md) apply this style to magnetic graph matrices, a size-specific Cheeger inequality, and a trace-bounded SDP certificate. They expose the need for readable summation, existential, set-comprehension, and optimization binders. These examples are aspirational, not compiler-supported or Lean-verified.

@@ -69,6 +69,8 @@ The same commands apply to `latex/contexts.tex` and `latex/notation.tex`. Contex
 
 See [AGENTS.md](AGENTS.md) for Git rules: retain a linear local history of intermediate steps, including failing states. Checks document progress; they do not gate commits. Do not squash history or publish without explicit authorization.
 
+See [recent-paper specimens](docs/recent-paper-examples.md) for source-based aspirational statements beyond the verified corpus.
+
 ## Limits
 
 See [module syntax and limitations](docs/notation-prototype.md). Clean remains a statement-language prototype: it has no proof language, unrestricted mathematical English, general dependent-type inference, or Lean typeclass declaration syntax. The initial matrix operation module uses complex scalars; composition uses real functions. Imported modules currently contain definitions, not results. See [THIRD_PARTY.md](THIRD_PARTY.md) for attribution and licensing.
