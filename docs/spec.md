@@ -218,3 +218,7 @@ Explicit modules now supply all mathematical names and bibliographic sources. Th
 ## Semantic authority (agreed direction)
 
 All mathematical meanings should be declared in modules, including operator overloads and numeral interpretation. The compiler must not assign mathematical behavior based on names such as `Natural`, `Matrix`, or `Vector`. Generic parsing and binding machinery resolves imported declarations; Lean supplies semantic type checking. See the final section of [the module specification](notation-prototype.md) for the architectural boundary and outstanding migration. The current name-based checks and operator dispatch described above are prototype behavior, not the target architecture.
+
+## Paper definition modules
+
+The [paper translation specimens](paper-translations.md) use the existing module syntax to expose fully defined Lean operations for walk profiles, graph conductance and its spectral optimization problem, and SDP certificates. Their working Clean source uses named operations where the proposed general binder syntax is not yet implemented. No new top-level `Define` grammar is implied. The three generated propositions and independent statement-shape checks compile; proofs of the three main results are separate work.

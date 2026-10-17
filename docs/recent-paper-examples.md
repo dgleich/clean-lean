@@ -1,6 +1,8 @@
 # Recent paper results in aspirational Clean
 
-These three specimens use David Gleich's papers to test the experience of writing Clean. They are source-based syntax proposals, **not parsed statements or Lean proofs**. Paper-specific mathematical modules and the proposed summation, quantifier, set, and optimization syntax are not implemented. No theorem is added to the verified Mathlib corpus.
+**Working translations are now available:** see [paper definitions and Lean translations](paper-translations.md). The code blocks below retain the aspirational syntax; the working version uses explicit Lean-backed notation modules.
+
+These three specimens use David Gleich's papers to test the experience of writing Clean. They are source-based syntax proposals, **not parsed statements or Lean proofs**. The proposed summation, quantifier, set, and optimization syntax is not implemented; the working translations supply those meanings through explicit modules. No theorem is added to the verified Mathlib corpus.
 
 The selection came from the [author's publication list](https://dgleich.com/publications). Bibliographic references below pin the versions actually consulted. This is a small varied sample, not a claim to cover every recent paper.
 
@@ -102,10 +104,10 @@ The statement shell survives all three examples: objects, named assumptions, use
 | `{Z: T | P}` | Set comprehension; `Z` local to predicate | Aspirational |
 | `a minimizer of ... over Z in F` | Bound objective variable plus an arbitrary minimizer and its hypotheses | Aspirational |
 | Function-valued local names | Imported operation returning a function; ordinary typed application thereafter | Beyond current unary-function support |
-| `⟨C,X⟩`, `⪰`, and paper-specific phrases | Explicit imported notation with typed meanings | Modules not implemented |
+| `⟨C,X⟩`, `⪰`, and paper-specific phrases | Explicit imported notation with typed meanings | Implemented via explicit Lean-backed modules; proposed symbolic syntax remains future work |
 | Mathematical subscripts/stars in names | Readable names with hygienic internal identifiers | Lexical policy needs extension |
 
-The imports for these specimens must eventually provide the types, operations, phrases, literal/coercion rules, and source declarations. We deliberately do not add pretend import paths to non-existent mathematical modules. The specimens remain in documentation until those modules and binding forms exist. Their source keys can be declared using the existing `Source` form, with these pinned URLs:
+The working [paper module](../library/papers.clean) now supplies types, typed operations, and source declarations backed by [Lean definitions](../CleanPapers/Definitions.lean). The gallery's proposed binder syntax remains unimplemented. Their source keys are declared using the existing `Source` form, with these pinned URLs:
 
 - `magnetic2025`: Yinan Huang, David F. Gleich, Pan Li; [arXiv:2506.07343v1](https://arxiv.org/abs/2506.07343v1).
 - `cheeger2026`: Yufan Huang, David F. Gleich; [arXiv:2303.11452v3](https://arxiv.org/abs/2303.11452v3).

@@ -1,0 +1,34 @@
+\documentclass[11pt]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{latex/clean}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\section*{Recent paper statements}
+These are adapted statements with explicit Lean definitions. Their translation has been checked; the three paper results have not been proved in Lean.
+
+For the magnetic identity, $M(A,q)=e^{2\pi i q}A+e^{-2\pi i q}A^{\mathsf T}$.
+The profile $\Phi_A(m,k)$ sums ordered products with $k$ forward factors $A$ and $m-k$ transposed factors. Its empty product is the identity. We define
+\[
+\operatorname{walkFourierSum}(A,m,q)=e^{-2\pi i qm}
+\sum_{k=0}^m e^{4\pi i qk}\Phi_A(m,k).
+\]
+For a graph, $\phi(G,\mu)$ minimizes cut conductance over sets whose volume lies between $\mu\operatorname{vol}(G)$ and $(1-\mu)\operatorname{vol}(G)$, with both sides positive; $\phi_0(G)=\phi(G,0)$.
+The value $\lambda(G,\mu)$ is the infimum of $x^{\mathsf T}Lx$ subject to
+\[
+x^{\mathsf T}d=0,\quad x^{\mathsf T}Dx=1,\quad
+\sqrt{\frac{\mu}{(1-\mu)\operatorname{vol}(G)}}\leq |x_i|
+\leq\sqrt{\frac{1-\mu}{\mu\operatorname{vol}(G)}}\quad\text{for every }i.
+\]
+For the SDP, $B$ supplies symmetric coefficient matrices,
+$\mathcal A_B(X)_k=\langle B_k,X\rangle$, and
+$\mathcal A_B^*(y)=\sum_k y_k B_k$.
+Feasibility means positive semidefiniteness, trace at most $\alpha$, and $\mathcal A_B(X)=b$.
+A minimizer is feasible and has objective no larger than every feasible matrix.
+The dual bound is
+\[
+d(C,B,b,y,\alpha)=\langle y,b\rangle+
+\alpha\min\{\lambda_{\min}(C-\mathcal A_B^*(y)),0\}.
+\]
+\newpage
+\CleanInput{examples/recent-papers.clean}
+\end{document}

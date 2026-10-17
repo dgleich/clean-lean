@@ -47,6 +47,10 @@ Normal translation defines propositions; it does not prove them. The corpus fixt
 
 This workspace shares dependencies with `../stewart-lean` through an ignored `.lake/packages` symlink. No remote repository is configured.
 
+## Recent paper statements
+
+Three [working Clean statements](examples/recent-papers.clean) now use complete [Lean mathematical definitions](CleanPapers/Definitions.lean): magnetic walk profiles, size-specific conductance, and an SDP certificate. See [definitions, domain choices, and reproduction commands](docs/paper-translations.md), [generated Lean](generated/RecentPapers.lean), and the [PDF](generated/recent-papers.pdf). These three statements are typechecked, not proved; independent Lean checks verify their translated shapes.
+
 ## LaTeX
 
 The [clean.sty package](latex/clean.sty) inputs generated fragments, not raw Clean syntax. No shell escape is required. Compile each specimen twice:

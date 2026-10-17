@@ -1,0 +1,44 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{magnetic powers encode walk profiles}\cleanattribution{\href{https://arxiv.org/html/2506.07343v1}{[Huang, Gleich, Li 2025, Supplement S.II, Theorem 1]}}
+Let $n$ be a natural number.
+Assume $n > 0$ (\texttt{positive}).
+Let $A$ be a matrix of size $n\times n$ over $\mathbb{R}$.
+Let $m$ be a natural number.
+Let $q$ be a real number.
+Let $M = M(A,q)$.
+Then \[\left(M\right)^{m} = \operatorname{walkFourierSum}(A,m,q).\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: forward transform.}
+\end{cleanresult}
+
+\begin{cleanresult}{size specific Cheeger inequality}\cleanattribution{\href{https://arxiv.org/html/2303.11452v3}{[Huang and Gleich 2026, Theorem 3.1]}}
+Let $n$ be a natural number.
+Let $G$ be a simple graph on $\{0,\ldots,n-1\}$.
+Let $\mu$ be a real number.
+Assume $G\text{ is connected}$ (\texttt{connectivity}).
+Assume $n \ge 2$ (\texttt{nontrivial}).
+Assume $0 < \mu \text{ and } \mu \le \frac{1}{2}$ (\texttt{range}).
+Assume $\text{there is an admissible cut of }G\text{ at size }\mu$ (\texttt{admissibility}).
+Let $\phi = \phi(G,\mu)$.
+Let $\psi = \phi_0(G)$.
+Let $\mathit{spectral} = \lambda(G,\mu)$.
+Let $t = \frac{{\mu}^{2}}{{\mu}^{2} + \frac{1}{2} - \mu}$.
+Then \[\frac{{(t \, \phi + (1 - t) \, \psi)}^{2}}{4} \le \mathit{spectral} \text{ and } \mathit{spectral} \le 2 \, \phi.\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: connected simple graphs and positive mu.}
+\end{cleanresult}
+
+\begin{cleanresult}{trace bound gives a suboptimality certificate}\cleanattribution{\href{https://arxiv.org/html/2406.10407v3}{[Huang and Gleich 2026, Corollary 2, equation (3)]}}
+Let $n$ and $m$ be natural numbers.
+Assume $n > 0 \text{ and } m > 0$ (\texttt{dimensions}).
+Let $C$, $X$ and $Z$ be $n\times n$ matrices over $\mathbb{R}$.
+Let $B$ be a family of $m$ real $n\times n$ measurement matrices.
+Let $b$ and $y$ be $m$-vectors over $\mathbb{R}$.
+Let $\alpha$ be a real number.
+Assume $C\text{ is symmetric}$ (\texttt{cost}).
+Assume $B\text{ has symmetric coefficient matrices}$ (\texttt{measurements}).
+Assume $\alpha \ge 0$ (\texttt{bound}).
+Assume $X\text{ is feasible for }(B,b,\alpha)$ (\texttt{candidate}).
+Assume $Z\text{ minimizes the objective for }(C,B,b,\alpha)$ (\texttt{optimizer}).
+Let $d = d(C,B,b,y,\alpha)$.
+Then \[\left\langle C,X\right\rangle - \left\langle C,Z\right\rangle \le \left\langle C,X\right\rangle - d.\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: symmetric coefficient representation of the measurement map.}
+\end{cleanresult}

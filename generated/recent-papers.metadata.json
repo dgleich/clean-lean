@@ -1,0 +1,71 @@
+[
+  {
+    "name": "magnetic_powers_encode_walk_profiles",
+    "title": "magnetic powers encode walk profiles",
+    "attribution": {
+      "source": "magnetic2025",
+      "reference": "Supplement S.II, Theorem 1",
+      "relationship": "adapted",
+      "scope": "forward transform"
+    },
+    "resolved_attribution": {
+      "source_key": "magnetic2025",
+      "source": {
+        "kind": "other",
+        "label": "Huang, Gleich, Li 2025",
+        "title": "Powers of Magnetic Graph Matrix: Fourier Spectrum, Walk Compression, and Applications",
+        "author": "Yinan Huang, David F. Gleich, Pan Li",
+        "version": "arXiv:2506.07343v1",
+        "url": "https://arxiv.org/html/2506.07343v1"
+      },
+      "reference": "Supplement S.II, Theorem 1",
+      "url": "https://arxiv.org/html/2506.07343v1"
+    }
+  },
+  {
+    "name": "size_specific_Cheeger_inequality",
+    "title": "size specific Cheeger inequality",
+    "attribution": {
+      "source": "cheeger2026",
+      "reference": "Theorem 3.1",
+      "relationship": "adapted",
+      "scope": "connected simple graphs and positive mu"
+    },
+    "resolved_attribution": {
+      "source_key": "cheeger2026",
+      "source": {
+        "kind": "other",
+        "label": "Huang and Gleich 2026",
+        "title": "A Cheeger Inequality for Size-Specific Conductance",
+        "author": "Yufan Huang, David F. Gleich",
+        "version": "arXiv:2303.11452v3",
+        "url": "https://arxiv.org/html/2303.11452v3"
+      },
+      "reference": "Theorem 3.1",
+      "url": "https://arxiv.org/html/2303.11452v3"
+    }
+  },
+  {
+    "name": "trace_bound_gives_a_suboptimality_certificate",
+    "title": "trace bound gives a suboptimality certificate",
+    "attribution": {
+      "source": "sdplr2026",
+      "reference": "Corollary 2, equation (3)",
+      "relationship": "adapted",
+      "scope": "symmetric coefficient representation of the measurement map"
+    },
+    "resolved_attribution": {
+      "source_key": "sdplr2026",
+      "source": {
+        "kind": "other",
+        "label": "Huang and Gleich 2026",
+        "title": "Suboptimality bounds for trace-bounded SDPs enable a faster and scalable low-rank SDP solver SDPLR+",
+        "author": "Yufan Huang, David F. Gleich",
+        "version": "arXiv:2406.10407v3",
+        "url": "https://arxiv.org/html/2406.10407v3"
+      },
+      "reference": "Corollary 2, equation (3)",
+      "url": "https://arxiv.org/html/2406.10407v3"
+    }
+  }
+]

@@ -46,6 +46,8 @@ These decisions separate requested behavior from provisional implementation choi
 
 | D39 | Plain text authoring must be desirable, not merely parseable | Explicit user requirement: readability is a joint acceptance criterion with semantic precision. `aspirational-syntax.md` collects target specimens; written operator patterns, named syntax groups, and reusable Use contexts are proposals rather than settled syntax |
 
+| D40 | Complete paper statement definitions through explicitly imported Lean modules | Implemented for the three recent-paper specimens: ordered walk sums, graph optimization domains, and SDP coefficient maps. Existing Clean Notation declarations expose them; general Clean binders and top-level Define remain unimplemented. Statements are propositions, not proofs. See `paper-translations.md` for adaptations and totalization choices |
+
 ## Questions to revisit after reading the specimens
 
 1. Should formalization contributors become a required field distinct from mathematical sources? Source keys are now implemented.
