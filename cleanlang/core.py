@@ -52,7 +52,7 @@ def textext(s):
     d={'\\':r'\textbackslash{}','{':r'\{','}':r'\}','$':r'\$','&':r'\&','#':r'\#','%':r'\%','_':r'\_','~':r'\textasciitilde{}','^':r'\textasciicircum{}'}
     return ''.join(d.get(c,c) for c in s)
 def texid(s):
-    g={'μ':r'\mu','λ':r'\lambda','ε':r'\varepsilon','δ':r'\delta','α':r'\alpha','β':r'\beta'}
+    g={'μ':r'\mu','λ':r'\lambda','ε':r'\varepsilon','δ':r'\delta','α':r'\alpha','β':r'\beta','φ':r'\phi','ψ':r'\psi'}
     return g.get(s, s if len(s)==1 and s.isascii() else r'\mathit{'+textext(s)+'}')
 
 def compatible(a,b):

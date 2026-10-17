@@ -92,6 +92,51 @@ noncomputable def cleanNotation_6c3d3df751586b8dd7e6 {n : ℕ} (C : Matrix (Fin 
 noncomputable def cleanNotation_c8ce030c21b0ee9d6ab8 {n : ℕ} {m : ℕ} (C : Matrix (Fin n) (Fin n) ℝ) (B : CleanPapers.Measurements n m) (b : Fin m → ℝ) (y : Fin m → ℝ) (α : ℝ) : ℝ :=
   CleanPapers.dualBound C B b y α
 
+noncomputable def cleanType_cbde7af2cf83b890004b (n : Nat) : Type :=
+  Finset (Fin n)
+
+noncomputable def cleanNotation_5e3fda7454a1d47cb4bb {n : ℕ} (G : SimpleGraph (Fin n)) (v : Fin n) : ℝ :=
+  CleanPapers.degree G v
+
+noncomputable def cleanNotation_48d0160964e13629208b {n : ℕ} (G : SimpleGraph (Fin n)) (S : Finset (Fin n)) : ℝ :=
+  CleanPapers.volume G S
+
+noncomputable def cleanNotation_f92878923c7cb8b54af8 {n : ℕ} (G : SimpleGraph (Fin n)) : ℝ :=
+  CleanPapers.totalVolume G
+
+noncomputable def cleanNotation_8630c6d2f7ad31522df7 {n : ℕ} (G : SimpleGraph (Fin n)) (S : Finset (Fin n)) : ℝ :=
+  CleanPapers.cut G S
+
+noncomputable def cleanNotation_57c4f84df479a4696e87 {n : ℕ} (G : SimpleGraph (Fin n)) (S : Finset (Fin n)) : ℝ :=
+  CleanPapers.cutConductance G S
+
+noncomputable def cleanNotation_c34153928f35abe64067 {n : ℕ} (G : SimpleGraph (Fin n)) (μ : ℝ) (S : Finset (Fin n)) : Prop :=
+  CleanPapers.admissibleCut G μ S
+
+noncomputable def cleanNotation_142ff6f75eaf704d61c8 {n : ℕ} (G : SimpleGraph (Fin n)) : Matrix (Fin n) (Fin n) ℝ :=
+  CleanPapers.laplacian G
+
+noncomputable def cleanNotation_71b71b3cf1cbde6ddaa3 {n : ℕ} (M : Matrix (Fin n) (Fin n) ℝ) (x : Fin n → ℝ) : ℝ :=
+  CleanPapers.quadratic M x
+
+noncomputable def cleanNotation_f8fdfddcc2a008a8a97d {n : ℕ} (G : SimpleGraph (Fin n)) (μ : ℝ) (x : Fin n → ℝ) : Prop :=
+  CleanPapers.spectralFeasible G μ x
+
+noncomputable def cleanNotation_9fa08f2478738c1dfc54 {n : ℕ} (M : Matrix (Fin n) (Fin n) ℝ) : Prop :=
+  M.PosSemidef
+
+noncomputable def cleanNotation_75a61c73333cfc928fce {n : ℕ} (M : Matrix (Fin n) (Fin n) ℝ) : ℝ :=
+  M.trace
+
+noncomputable def cleanNotation_bd1c058dfcbd5a664464 {n : ℕ} {m : ℕ} (B : CleanPapers.Measurements n m) (X : Matrix (Fin n) (Fin n) ℝ) : Fin m → ℝ :=
+  CleanPapers.measurement B X
+
+noncomputable def cleanNotation_d220b562b0cd59d9ccbe {n : ℕ} {m : ℕ} (B : CleanPapers.Measurements n m) (y : Fin m → ℝ) : Matrix (Fin n) (Fin n) ℝ :=
+  CleanPapers.measurementAdjoint B y
+
+noncomputable def cleanNotation_232239c936eb834a3d94 {n : ℕ} (M : Matrix (Fin n) (Fin n) ℝ) : ℝ :=
+  CleanPapers.smallestEigenvalue M
+
 
 open scoped Matrix
 
@@ -131,9 +176,9 @@ def size_specific_Cheeger_inequality : Prop :=
   ∀ (admissibility : (cleanNotation_832d57ecf03758266826 (G) (μ))),
   let φ : ℝ := (cleanNotation_b14cb25b6df298f1eaff (G) (μ));
   let ψ : ℝ := (cleanNotation_bb3d42e457aba48f4082 (G));
-  let λ : ℝ := (cleanNotation_141734dfa77b823d61c7 (G) (μ));
+  let spectral : ℝ := (cleanNotation_141734dfa77b823d61c7 (G) (μ));
   let t : ℝ := ((μ ^ 2) / (((μ ^ 2) + (1 / 2)) - μ));
-  ((((((t * φ) + ((1 - t) * ψ)) ^ 2) / 4) ≤ λ) ∧ (λ ≤ (2 * φ)))
+  ((((((t * φ) + ((1 - t) * ψ)) ^ 2) / 4) ≤ spectral) ∧ (spectral ≤ (2 * φ)))
 
 /--
 source: sdplr2026

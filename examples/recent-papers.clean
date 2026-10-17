@@ -21,12 +21,12 @@ Result size specific Cheeger inequality:
     Assume admissibility: admissible size(G,μ)
     Let φ = conductance(G,μ)
     Let ψ = ordinary conductance(G)
-    Let λ = spectral minimum(G,μ)
+    Let spectral = spectral minimum(G,μ)
     Let t = μ^2/(μ^2 + 1/2 - μ)
     Conclude:
-        ((t*φ + (1-t)*ψ)^2)/4 ≤ λ
+        ((t*φ + (1-t)*ψ)^2)/4 ≤ spectral
         and
-        λ ≤ 2*φ
+        spectral ≤ 2*φ
 
 Result trace bound gives a suboptimality certificate:
     Attribution: sdplr2026; Corollary 2, equation (3); adapted; scope: symmetric coefficient representation of the measurement map

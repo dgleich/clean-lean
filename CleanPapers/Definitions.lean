@@ -1,7 +1,7 @@
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
-import Mathlib.Analysis.SpecialFunctions.Complex.Exponential
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 
 /-! Explicit mathematical dependencies for the three adapted paper statements.

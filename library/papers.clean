@@ -5,7 +5,7 @@ Import Lean CleanPapers.Definitions
 Source magnetic2025:
     Kind: other
     Label: Huang, Gleich, Li 2025
-    Title: Powers of Magnetic Graph Matrix
+    Title: Powers of Magnetic Graph Matrix: Fourier Spectrum, Walk Compression, and Applications
     Author: Yinan Huang, David F. Gleich, Pan Li
     Version: arXiv:2506.07343v1
     Url: https://arxiv.org/html/2506.07343v1
@@ -21,7 +21,7 @@ Source cheeger2026:
 Source sdplr2026:
     Kind: other
     Label: Huang and Gleich 2026
-    Title: Suboptimality bounds for trace-bounded SDPs
+    Title: Suboptimality bounds for trace-bounded SDPs enable a faster and scalable low-rank SDP solver SDPLR+
     Author: Yufan Huang, David F. Gleich
     Version: arXiv:2406.10407v3
     Url: https://arxiv.org/html/2406.10407v3
@@ -161,3 +161,119 @@ Notation dual bound(C, B, b, y, α):
     Means: CleanPapers.dualBound C B b y α
     Render latex: d({C},{B},{b},{y},{α})
 
+# Building blocks are also available to other Clean statements.
+Type VertexSet(n: Natural):
+    Means: Finset (Fin n)
+    Render latex: \mathcal{{P}}(\operatorname{{Fin}}({n}))
+    Describe: a set of vertices of $\operatorname{{Fin}}({n})$
+
+Notation degree(G, v):
+    Let n: Natural
+    Let G: Graph(n)
+    Let v: Vertex(n)
+    Returns: Real
+    Means: CleanPapers.degree G v
+    Render latex: \deg_{{{G}}}({v})
+
+Notation volume(G, S):
+    Let n: Natural
+    Let G: Graph(n)
+    Let S: VertexSet(n)
+    Returns: Real
+    Means: CleanPapers.volume G S
+    Render latex: \operatorname{{vol}}_{{{G}}}({S})
+
+Notation total volume(G):
+    Let n: Natural
+    Let G: Graph(n)
+    Returns: Real
+    Means: CleanPapers.totalVolume G
+    Render latex: \operatorname{{vol}}({G})
+
+Notation cut weight(G, S):
+    Let n: Natural
+    Let G: Graph(n)
+    Let S: VertexSet(n)
+    Returns: Real
+    Means: CleanPapers.cut G S
+    Render latex: \operatorname{{cut}}_{{{G}}}({S})
+
+Notation cut conductance(G, S):
+    Let n: Natural
+    Let G: Graph(n)
+    Let S: VertexSet(n)
+    Returns: Real
+    Means: CleanPapers.cutConductance G S
+    Render latex: \operatorname{{cutConductance}}({G},{S})
+
+Notation admissible cut(G, μ, S):
+    Let n: Natural
+    Let G: Graph(n)
+    Let μ: Real
+    Let S: VertexSet(n)
+    Returns: Proposition
+    Means: CleanPapers.admissibleCut G μ S
+    Render latex: {S}\text{{ is admissible for }}({G},{μ})
+
+Notation laplacian(G):
+    Let n: Natural
+    Let G: Graph(n)
+    Returns: Matrix(n,n,Real)
+    Means: CleanPapers.laplacian G
+    Render latex: L({G})
+
+Notation quadratic form(M, x):
+    Let n: Natural
+    Let M: Matrix(n,n,Real)
+    Let x: Vector(n,Real)
+    Returns: Real
+    Means: CleanPapers.quadratic M x
+    Render latex: \left({x}\right)^{{\mathsf T}}\left({M}\right)\left({x}\right)
+
+Notation spectral feasible(G, μ, x):
+    Let n: Natural
+    Let G: Graph(n)
+    Let μ: Real
+    Let x: Vector(n,Real)
+    Returns: Proposition
+    Means: CleanPapers.spectralFeasible G μ x
+    Render latex: {x}\text{{ is spectrally feasible for }}({G},{μ})
+
+Notation positive semidefinite(M):
+    Let n: Natural
+    Let M: Matrix(n,n,Real)
+    Returns: Proposition
+    Means: M.PosSemidef
+    Render latex: {M}\text{{ is positive semidefinite}}
+
+Notation matrix trace(M):
+    Let n: Natural
+    Let M: Matrix(n,n,Real)
+    Returns: Real
+    Means: M.trace
+    Render latex: \operatorname{{tr}}\left({M}\right)
+
+Notation measure(B, X):
+    Let n: Natural
+    Let m: Natural
+    Let B: Measurements(n,m)
+    Let X: Matrix(n,n,Real)
+    Returns: Vector(m,Real)
+    Means: CleanPapers.measurement B X
+    Render latex: \mathcal{{A}}_{{{B}}}({X})
+
+Notation measurement adjoint(B, y):
+    Let n: Natural
+    Let m: Natural
+    Let B: Measurements(n,m)
+    Let y: Vector(m,Real)
+    Returns: Matrix(n,n,Real)
+    Means: CleanPapers.measurementAdjoint B y
+    Render latex: \mathcal{{A}}_{{{B}}}^*({y})
+
+Notation smallest eigenvalue(M):
+    Let n: Natural
+    Let M: Matrix(n,n,Real)
+    Returns: Real
+    Means: CleanPapers.smallestEigenvalue M
+    Render latex: \lambda_{{\min}}\left({M}\right)
