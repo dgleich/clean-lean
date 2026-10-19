@@ -3,7 +3,7 @@ import hashlib
 import re
 import string
 from pathlib import Path
-from .core import CleanError, ID, Expr, Type, NAT, parse, split, textext
+from .core import CleanError, ID, Expr, Type, NAT, parse, split, textext, normalize_layout
 
 
 def template(text, names, plain=False):
@@ -128,7 +128,11 @@ def load_module(path, env, *, document=False):
         if file in active: raise CleanError('Cyclic Clean import: '+' -> '.join(map(str,active+[file])))
         if file in env.loaded_modules: return ''
         active.append(file)
-        lines=file.read_text().splitlines(); output=['']*len(lines); i=0; started=False
+        try:
+            lines=normalize_layout(file.read_text()).splitlines()
+        except CleanError as e:
+            raise CleanError(f'{file}: {e}') from e
+        output=['']*len(lines); i=0; started=False
         while i<len(lines):
             line=lines[i]
             if not line.strip() or line.lstrip().startswith('#'): i+=1; continue
@@ -157,7 +161,7 @@ def load_module(path, env, *, document=False):
                         while j<len(lines) and (not lines[j].strip() or lines[j][0].isspace() or lines[j].lstrip().startswith('#')):
                             f=lines[j]
                             if f.strip() and not f.lstrip().startswith('#'):
-                                if '\t' in f or not f.startswith('    ') or f.startswith('     '): raise CleanError('Declaration fields require four spaces')
+                                if not f.startswith('    ') or f.startswith('     '): raise CleanError('Declaration fields must align at one indentation level')
                                 fields.append(f.strip())
                             j+=1
                         kind=block[1].lower()

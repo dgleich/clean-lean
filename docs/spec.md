@@ -27,7 +27,7 @@ Result similarity transforms eigenvector:
 
 ## Layout and names
 
-One declaration occupies one physical line. Use four spaces inside a result and eight inside attribution or conclusion blocks. Tabs and arbitrary indentation are errors. Blank lines and full-line `#` comments are allowed. An indented conclusion may span several lines; those lines form one expression, so `and` must appear explicitly. Version 0.1 does not support implicit continuation of other clauses, semicolon-separated mathematical statements, or inline comments. Semicolons are permitted as field separators inside compact attribution clauses.
+One declaration occupies one physical line. Tabs are forbidden everywhere. Each block increases indentation by at least two spaces relative to its parent. Sibling clauses align at the same column, and a dedent must return to an established enclosing column. Widths may differ between blocks; two, three, four, or more spaces are valid. Blank lines and full-line `#` comments are allowed. An indented conclusion may span several lines; those lines form one expression, so `and` must appear explicitly. Clean expressions continue automatically inside open parentheses or after a trailing operator. Outside parentheses, a continuation is indented at least two spaces beyond its first physical line; inside a `Conclude:` expression block, aligned expression lines are also allowed. Continuation indentation does not create scope. A complete expression ends at the newline: an operator on the next line alone does not request continuation. No backslash is needed. Blank lines and full-line comments may occur during continuation. Lean `Means` bodies, rendering fields, and metadata remain single-line opaque fields. Semicolon-separated mathematical statements and inline comments remain unsupported. Semicolons are permitted as field separators inside compact attribution clauses.
 
 The leading keyword is case-insensitive: `let`, `Let`, and `LET` are equivalent, as are `Define` and `define`. This rule also applies to `Result`, `Theorem`, `Assume`, `Conclude`, attribution field names, and logical `and`, `or`, `not`. Variable names and notation names are case-sensitive. Type constructor spellings and aliases are registered explicitly; prose type patterns match without regard to case.
 
@@ -207,7 +207,7 @@ Context complex square matrices:
         Conclude: det(A*B) = det(A)*det(B)
 ```
 
-Contexts may nest. Put their `Let`, `Define`, and `Assume` clauses before their child results or contexts. Each nesting level adds four spaces. Inner declarations cannot shadow inherited names. Only needed inherited object declarations and local definitions are retained, including their dependencies; all inherited assumptions are retained. Thus the example's result quantifies over n, A, B, without an unused C.
+Contexts may nest. Put their `Let`, `Define`, and `Assume` clauses before their child results or contexts. Each nesting level adds at least two spaces, with aligned siblings. Inner declarations cannot shadow inherited names. Only needed inherited object declarations and local definitions are retained, including their dependencies; all inherited assumptions are retained. Thus the example's result quantifies over n, A, B, without an unused C.
 
 `\CleanInput[contexts=expanded]{examples/determinants.clean}` repeats required declarations and all inherited assumptions within each result. This is the default. `contexts=referenced` prints numbered contexts and explicitly states “Using Context (1)” in each affected result. Nested contexts cite their ancestors. Both modes have the same Lean meaning. See `latex/contexts.tex` and `generated/contexts.pdf`. Parameterized assumption-set templates are not implemented.
 
@@ -222,3 +222,22 @@ All mathematical meanings should be declared in modules, including operator over
 ## Paper definition modules
 
 The [paper translation specimens](paper-translations.md) use the existing module syntax to expose fully defined Lean operations for walk profiles, graph conductance and its spectral optimization problem, and SDP certificates. Their working Clean source uses named operations where the proposed general binder syntax is not yet implemented. No new top-level `Define` grammar is implied. The three generated propositions and independent statement-shape checks compile; proofs of the three main results are separate work.
+
+### Long expression example
+
+```text
+Import "../library/linear_algebra.clean"
+Import "../library/sources.clean"
+
+Result determinant transpose:
+  Attribution: mathlib; Matrix.det_transpose
+  Let n: Natural
+  Let A: Matrix(n,n,Complex)
+  Let B = transpose(
+      A
+  )
+  Conclude: det(B) =
+    det(A)
+```
+
+New clauses cannot supply missing operands for an unfinished expression. Errors identify physical source lines; a continued expression is attached to its first line.

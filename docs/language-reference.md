@@ -24,8 +24,8 @@ The compiler owns layout, lexical binding, declaration structure, module loading
 
 ## 2 Lexical and layout rules
 
-- UTF-8 input; four spaces per indentation level; tabs are errors. Blank lines and full-line `#` comments do not affect indentation.
-- Each clause occupies a physical line, except a conclusion block. Its indented lines form one token sequence; a newline does not imply conjunction.
+- UTF-8 input; each indentation increase is at least two spaces; tabs are errors everywhere, including blank lines, comments, and continuations. Siblings align; dedents return to an enclosing column. Block widths need not match across the file. Blank lines and full-line `#` comments do not affect indentation.
+- Each clause occupies a logical line, except a conclusion block. A Clean expression continues across physical newlines while parentheses remain open or after a trailing operator. Outside parentheses, continuation lines are at least two columns beyond the expression’s first physical line, except that existing conclusion-block lines may align. Parenthesized continuation indentation is visual and does not introduce scope. A complete expression terminates at a physical newline; a leading operator on the following line does not reopen it. A conclusion block’s lines form one token sequence; a newline does not imply conjunction. Lean bodies and metadata retain their separate single-line rules.
 - Declaration keywords and field labels are case-insensitive. Mathematical names are case-sensitive. Word-operator spellings may have module-declared case-insensitive aliases; the compiler does not hard-code English logical words.
 - Object identifiers are a Unicode letter followed by Unicode letters, decimal digits, or underscores. An English name is one or more identifiers separated by spaces. Spaces within an English name normalize to one space. This grammar is a draft restriction, not a promise to support all Lean identifiers.
 - String literals use double quotes, with `\"` and `\\` escapes. Keywords are recognized by grammatical position, not prohibited everywhere as object names.
@@ -34,6 +34,10 @@ The compiler owns layout, lexical binding, declaration structure, module loading
 - Symbolic operators are declared quoted spellings. Lexing uses the longest visible spelling at a position; operators cannot contain layout whitespace or reserved delimiters. Overlapping word names are resolved as complete names before `(` or an explicit delimiter, not by substring replacement.
 
 The raw body of `Means` is a Lean term, not Clean syntax. Its identifiers use the notation's bound parameters and explicitly imported Lean scope. The initial draft keeps this body on one physical line. An attributed source locator and an English rendering field are likewise not parsed as mathematical expressions.
+
+The layout lexer keeps a stack of indentation columns, initially `[0]`. Ignoring blank/comment lines and joined expression-continuation lines, an increase of at least two columns pushes one level and emits `INDENT`. Equal indentation emits no layout transition. A decrease must match a column already on the stack and emits one `DEDENT` per popped level. At end of file all remaining levels close. An increase of one space or a dedent to an unknown column is an error. The grammar determines which constructs admit an indented body; layout alone does not authorize nesting.
+
+`NEWLINE` below denotes a logical newline after joining incomplete expressions. Operator-driven continuation uses the visible expression syntax; the current prototype uses its existing operator set. This does not assign meanings to operators. Open delimiters and unfinished operators at end of file are errors.
 
 ## 3 Declaration grammar
 

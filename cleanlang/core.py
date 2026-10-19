@@ -7,6 +7,87 @@ from .attribution import Sources, compact, normalize
 class CleanError(ValueError): pass
 ID = r'[^\W\d]\w*'
 
+def _expression_lines(text):
+    """Join incomplete Clean expressions, keeping their first source line.
+
+    Consumed physical lines remain blank, so diagnostics retain line numbers.
+    Lean bodies, metadata, and rendering templates are deliberately opaque.
+    """
+    lines = text.splitlines()
+    for number, raw in enumerate(lines, 1):
+        if '\t' in raw:
+            raise CleanError(f'line {number}: tabs are not allowed')
+    output = list(lines)
+    start = None
+    depth = 0
+    continuation_column = 0
+    conclusion_column = None
+    def unfinished(line):
+        last = re.search(r'('+ID+r'|[^\w\s])$', line)
+        return bool(last and (last[0].lower() in Expressions.PREC or
+                              last[0].lower() in ('not', '¬')))
+    for i, raw in enumerate(lines):
+        stripped = raw.strip()
+        if not stripped or stripped.startswith('#'):
+            continue
+        column = len(raw) - len(raw.lstrip(' '))
+        if start is None:
+            if conclusion_column is not None and column <= conclusion_column:
+                conclusion_column = None
+            if re.fullmatch(r'Conclude\s*:', stripped, re.I):
+                conclusion_column = column
+                continue
+            expression = conclusion_column is not None or re.match(
+                r'(Let|Define|Assume|Conclude|Returns|Equals)\b', stripped, re.I)
+            if not expression:
+                continue
+            depth = stripped.count('(') - stripped.count(')')
+            if depth > 0 or unfinished(stripped):
+                start = i
+                continuation_column = column if conclusion_column is not None else column + 2
+        else:
+            if depth <= 0 and column < continuation_column:
+                raise CleanError(f'line {i + 1}: continued expression must be indented at least two spaces beyond its first line')
+            if re.match(r'(Let|Define|Assume|Conclude|Result|Theorem|Context|Import|Attribution|Returns|Means|Render)\b', stripped, re.I):
+                raise CleanError(f'line {i + 1}: expected a continued expression, not a new clause')
+            output[start] += ' ' + stripped
+            output[i] = ''
+            depth += stripped.count('(') - stripped.count(')')
+            if depth <= 0 and not unfinished(stripped):
+                start = None
+    if start is not None:
+        reason = 'unclosed parentheses' if depth > 0 else 'unfinished expression after operator'
+        raise CleanError(f'line {start + 1}: {reason} in continued expression')
+    return output
+
+
+def normalize_layout(text):
+    """Validate source columns and map nesting to the parser's four-space units.
+
+    Widths belong to blocks, not the file. Preserve physical line numbers;
+    blank/comment lines neither open nor close a block. Tabs are always errors.
+    """
+    columns = [0]
+    output = []
+    for number, raw in enumerate(_expression_lines(text), 1):
+        if '\t' in raw:
+            raise CleanError(f'line {number}: tabs are not allowed')
+        if not raw.strip() or raw.lstrip().startswith('#'):
+            output.append(raw)
+            continue
+        column = len(raw) - len(raw.lstrip(' '))
+        if column > columns[-1]:
+            if column - columns[-1] < 2:
+                raise CleanError(f'line {number}: indentation must increase by at least two spaces')
+            columns.append(column)
+        elif column < columns[-1]:
+            if column not in columns:
+                raise CleanError(f'line {number}: dedent must match an established indentation level')
+            while columns[-1] > column:
+                columns.pop()
+        output.append(' ' * (4 * (len(columns) - 1)) + raw[column:])
+    return '\n'.join(output)
+
 @dataclass(frozen=True)
 class Type:
     name: str
@@ -250,7 +331,7 @@ def _parse_flat(text,reg):
                 if k in r.attribution: raise CleanError('Duplicate attribution field')
                 r.attribution[k]=v; continue
             if indent==8 and mode=='conclude': conclusion.append(s); continue
-            if indent!=4: raise CleanError('Use 4 spaces for clauses and 8 for nested blocks')
+            if indent!=4: raise CleanError('Unexpected nesting: align sibling clauses within their block')
             if mode=='conclude': raise CleanError('Conclude must be last')
             mode=None
             if re.match(r'attribution\s*:',s,re.I):
@@ -338,11 +419,10 @@ def _select_context_parameters(result,inherited):
 def parse(text,reg):
     # Parse indentation scopes, then reuse the statement parser on explicit expansions.
     lines=[]
-    for number,raw in enumerate(text.splitlines(),1):
+    for number,raw in enumerate(normalize_layout(text).splitlines(),1):
         if '\t' in raw: raise CleanError(f'line {number}: tabs are not allowed')
         if not raw.strip() or raw.lstrip().startswith('#'): continue
         indent=len(raw)-len(raw.lstrip())
-        if indent%4: raise CleanError(f'line {number}: Use 4 spaces for each indentation level')
         lines.append((number,indent,raw.strip()))
     results=[]; names=set(); context_names=set(); cache={}
     file_key=hashlib.sha256(text.encode()).hexdigest()[:12]

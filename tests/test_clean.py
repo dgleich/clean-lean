@@ -30,7 +30,7 @@ class CleanTests(unittest.TestCase):
     def test_undeclared_dimension(self): self.reject(SOURCE.replace('    Let n be a natural number\n',''),'Declare dimension n')
     def test_undeclared_name(self): self.reject(SOURCE.replace('det(S) ≠ 0','det(Q) ≠ 0'),'Unknown name: Q')
     def test_tabs(self): self.reject(SOURCE.replace('    Let n','\tLet n'),'tabs')
-    def test_bad_indentation(self): self.reject(SOURCE.replace('    Let n','  Let n'),'4 spaces')
+    def test_bad_indentation(self): self.reject(SOURCE.replace('    Let n','  Let n'),'dedent')
     def test_duplicate_names(self): self.reject(SOURCE.replace('Let y = inverse(S)*x','Let x = inverse(S)*x'),'Duplicate name')
     def test_dimensions_checked(self):
         self.reject(SOURCE.replace('complex n-vector','complex 2-vector'),'dimension')

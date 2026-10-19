@@ -13,7 +13,7 @@ These decisions separate requested behavior from provisional implementation choi
 | D07 | Accept both prose and colon type declarations | Explicit user preference |
 | D08 | Reject `let x = Type`; permit `let y = value` | Latest agreed resolution |
 | D09 | Normalize keyword capitalization only | User requested flexible capitalization; preserve mathematical names |
-| D10 | Four-space indentation, newline clauses, no tabs | Provisional concrete interpretation of Python-style layout |
+| D10 | Indentation of at least two spaces, aligned siblings, no tabs | User correction: replaces the original four-space rule. Dedents match enclosing columns; widths may differ between blocks. Implemented |
 | D11 | `Define` aliases value-defining `Let` only | Provisional convenience motivated by capitalization examples; can remove |
 | D12 | Declare dimensions explicitly | Avoid implicit free variables and unclear quantification |
 | D13 | JSON type/function registry plus canonical aliases | Historical; removed by D33, not retained as compatibility |
@@ -47,6 +47,8 @@ These decisions separate requested behavior from provisional implementation choi
 | D39 | Plain text authoring must be desirable, not merely parseable | Explicit user requirement: readability is a joint acceptance criterion with semantic precision. `aspirational-syntax.md` collects target specimens; written operator patterns, named syntax groups, and reusable Use contexts are proposals rather than settled syntax |
 
 | D40 | Complete paper statement definitions through explicitly imported Lean modules | Implemented for the three recent-paper specimens: ordered walk sums, graph optimization domains, and SDP coefficient maps. Existing Clean Notation declarations expose them; general Clean binders and top-level Define remain unimplemented. Statements are propositions, not proofs. See `paper-translations.md` for adaptations and totalization choices |
+
+| D41 | Infer Clean expression continuation from open parentheses or a trailing operator | User request. Implemented without backslashes; complete expressions end at newlines. Continuation alignment is not a new scope. Opaque Lean/rendering/metadata fields keep their existing rules |
 
 ## Questions to revisit after reading the specimens
 
