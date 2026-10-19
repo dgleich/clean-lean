@@ -59,6 +59,8 @@ These decisions separate requested behavior from provisional implementation choi
 
 | D47 | Unique parse and unique Clean-to-Lean translation are hard acceptance requirements | Explicit user requirement. Parsing may be expensive. Every accepted source has one specified tree and one canonical fully elaborated Lean target under a fixed explicit environment; ambiguity rejects, resource exhaustion remains incomplete. Contract in `language-change-acceptance.md`, mandatory workflow in AGENTS.md, initial pending oracles in `tests/acceptance/language-contract.json`. Current prototype is not certified |
 
+| D48 | Maintain a local Clean-to-Lean HTML reference for Lean users | Explicit user request. `clean-to-lean.html` maps syntax, binding, and elaboration with implemented/accepted/proposed status. AGENTS.md requires updates with language changes. Explanatory Lean snippets do not replace canonical-target acceptance tests |
+
 ## Questions to revisit after reading the specimens
 
 1. Should formalization contributors become a required field distinct from mathematical sources? Source keys are now implemented.

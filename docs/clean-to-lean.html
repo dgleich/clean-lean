@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A maintained Clean-to-Lean syntax reference for Lean users, with implementation status and binding semantics.">
+<title>Clean to Lean — syntax reference</title>
+<style>
+:root{color-scheme:light dark;--bg:#f7f8fa;--panel:#fff;--ink:#192432;--muted:#526171;--line:#d7dfe8;--accent:#155cb0;--code:#f1f4f8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}a{color:var(--accent)}a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #bf7600;outline-offset:3px}
+main{max-width:1200px;margin:auto;padding:40px 28px 70px}h1{font-size:clamp(2rem,5vw,3rem);line-height:1.15;margin:0 0 18px}h2{font-size:1.25rem;line-height:1.4;margin:0}h2 a{color:inherit;text-decoration:none}h2 a:hover{text-decoration:underline}h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0;padding:12px 16px 0}p{margin:12px 0}.intro{max-width:850px}.eyebrow{color:var(--muted);font-size:.85rem;margin-bottom:12px}nav{display:flex;flex-wrap:wrap;gap:10px 22px;margin:20px 0}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}.legend span{font-size:.9rem}.badge{display:inline-block;border:1px solid currentColor;border-radius:20px;padding:2px 10px;font-size:.75rem;white-space:nowrap}.implemented{color:#17633c}.accepted{color:#2258a2}.proposed{color:#805514}.controls{display:flex;flex-wrap:wrap;gap:16px;align-items:end;margin:26px 0}.controls label{display:grid;gap:4px;font-size:.85rem}.controls label:first-child{flex:1;min-width:220px}input,select{font:inherit;padding:10px 12px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px}#count{font-size:.85rem;color:var(--muted)}
+.mapping{scroll-margin-top:20px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px;margin:20px 0}.mapping>header{display:flex;gap:12px;align-items:start;justify-content:space-between}.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin:18px 0}.pair section{min-width:0;background:var(--code);border-radius:6px}pre{font-size:13px;line-height:1.65;margin:0;padding:14px 16px 18px;overflow-x:auto;tab-size:2}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}p code,li code{font-size:.9em;background:var(--code);padding:1px 4px;border-radius:3px}.notes{font-size:.93rem;color:var(--muted)}.contract{border-left:4px solid var(--accent);padding:8px 22px;margin:36px 0;background:var(--panel)}footer{color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);padding-top:18px} [hidden]{display:none!important}
+@media(max-width:720px){main{padding:26px 16px}.pair{grid-template-columns:1fr}.mapping{padding:16px}.mapping>header{flex-wrap:wrap}}
+@media(prefers-color-scheme:dark){:root{--bg:#101820;--panel:#18222e;--ink:#e4ebf3;--muted:#acb9c9;--line:#384859;--accent:#8abaff;--code:#101923}.implemented{color:#83d7a3}.accepted{color:#a2c5ff}.proposed{color:#e3bf73}}
+@media print{body{background:#fff;color:#000}main{max-width:none;padding:0}.controls,nav,.legend,#count{display:none!important}.mapping{break-inside:avoid;border-color:#bbb}.mapping[hidden]{display:block!important}.pair{grid-template-columns:1fr 1fr}pre{white-space:pre-wrap;overflow:visible;font-size:9px}a{color:inherit;text-decoration:none}.notes{color:#333}}
+</style>
+</head>
+<body>
+<main>
+<div class="eyebrow">Local language reference · For Lean users · Updated 19 October 2026</div>
+<h1>Clean to Lean</h1>
+<div class="intro"><p>Read Clean syntax in terms of Lean binders, terms, declarations, and elaboration. Each mapping records its status so that proposed syntax cannot be mistaken for a compiler feature.</p>
+<p>The Lean panels are <strong>readable equivalents or explicitly labelled sketches</strong>, not canonical kernel-expression dumps. Snippets marked as fragments assume the surrounding parameters and explicitly imported mathematical vocabulary. The compiler’s exact unique-target obligation is stronger than these explanatory displays.</p></div>
+<nav aria-label="Jump to topic"><a href="#result">Statements</a><a href="#notation">Definitions</a><a href="#sum">Binding forms</a><a href="#imports">Imports</a><a href="#contract">Acceptance contract</a></nav>
+<div class="legend" aria-label="Status legend"><span><b class="badge implemented">Implemented</b> Current restricted prototype</span><span><b class="badge accepted">Accepted design</b> Not fully implemented</span><span><b class="badge proposed">Proposed</b> Grammar or semantics still open</span></div>
+<div class="controls" hidden id="controls"><label>Find a mapping<input id="search" type="search" placeholder="Try lambda, context, coercion, or sum"></label><label>Status<select id="status"><option value="all">All statuses</option><option value="implemented">Implemented</option><option value="accepted">Accepted design</option><option value="proposed">Proposed</option></select></label></div>
+<p id="count" role="status" aria-live="polite"></p>
+<div id="mappings">
+<article id="result" data-status="implemented" class="mapping">
+  <header><h2><a href="#result">Results are proposition definitions</a></h2><span class="badge implemented">Implemented</span></header>
+  <p>A Clean result declares its statement. It does not introduce a proof, axiom, or Lean <code>theorem</code>.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Import &quot;../library/linear_algebra.clean&quot;
+Import &quot;../library/sources.clean&quot;
+
+Result determinant transpose:
+  Attribution: mathlib; Matrix.det_transpose
+  Let n: Natural
+  Let A: Matrix(n,n,Complex)
+  Conclude: det(transpose(A)) = det(A)</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>def determinant_transpose : Prop :=
+  ∀ (n : ℕ) (A : Matrix (Fin n) (Fin n) ℂ),
+    A.transpose.det = A.det</code></pre></section></div>
+  <div class="notes"><p>The source imports are concrete repository modules. English result titles generate Lean identifiers with underscores. The current backend places results in <code>CleanStatements</code> and calls generated notation wrappers; the right panel expands those wrappers for readability. A separate Lean proof must inhabit the resulting proposition.</p></div>
+</article>
+<article id="parameters" data-status="implemented" class="mapping">
+  <header><h2><a href="#parameters">Typed Let introduces parameters</a></h2><span class="badge implemented">Implemented</span></header>
+  <p>Inside a result, typed <code>Let</code> becomes universal quantification. Inside a definition signature, it supplies function parameters.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Let n: Natural
+Let x be a complex n-vector
+Let A, S: Matrix(n,n,Complex)</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>∀ (n : ℕ)
+  (x : Fin n → ℂ)
+  (A S : Matrix (Fin n) (Fin n) ℂ),
+  ...</code></pre></section></div>
+  <div class="notes"><p><code>Let x: Vector(n,Complex)</code> and the prose form have the same binding role. These are fragments of an enclosing statement. Type names and prose phrases come from explicit modules, not a universal built-in mathematical vocabulary.</p></div>
+</article>
+<article id="local-values" data-status="implemented" class="mapping">
+  <header><h2><a href="#local-values">Value Let introduces a local definition</a></h2><span class="badge implemented">Implemented</span></header>
+  <p>A value-defining <code>Let</code> is a Lean <code>let</code>, not a new arbitrary parameter.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Let y = inverse(S)*x
+Conclude: y ≠ 0</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>let y : Fin n → ℂ := S⁻¹ *ᵥ x
+y ≠ 0</code></pre></section></div>
+  <div class="notes"><p>Assume <code>n, S, x</code> were already bound. Later clauses can depend on <code>y</code>. The prototype also accepts local <code>Define y = ...</code>. <code>Let x = Vector(n,Complex)</code> is rejected; type naming is a separate declaration.</p></div>
+</article>
+<article id="assumptions" data-status="implemented" class="mapping">
+  <header><h2><a href="#assumptions">Assume introduces a proof parameter</a></h2><span class="badge implemented">Implemented</span></header>
+  <p>An assumption contributes an implication or dependent proof binder to the generated proposition.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Assume nonzero: x ≠ 0
+Assume eigenpair: A*x = μ*x
+Conclude: x ≠ 0 and A*x = μ*x</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>∀ (nonzero : x ≠ 0)
+  (eigenpair : A *ᵥ x = μ • x),
+  x ≠ 0 ∧ A *ᵥ x = μ • x</code></pre></section></div>
+  <div class="notes"><p>These are statement fragments under previously introduced parameters. The next-language draft gives assumption labels a separate namespace; they are not proposition-valued variables. The prototype has known debt in that distinction. English labels with spaces are a draft feature, not generally implemented.</p></div>
+</article>
+<article id="operators" data-status="implemented" class="mapping">
+  <header><h2><a href="#operators">Mathematical operators resolve to typed operations</a></h2><span class="badge implemented">Implemented</span></header>
+  <p>The same printed mathematical operator can select different typed Lean operations. The current prototype supports a restricted set.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>A*B
+A*x
+μ*x
+inverse(S)
+P and Q</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>A * B        -- matrix multiplication
+A *ᵥ x       -- matrix-vector multiplication
+μ • x        -- scalar action
+S⁻¹          -- matrix inverse
+P ∧ Q</code></pre></section></div>
+  <div class="notes"><p>Assume compatible complex matrix, vector, and scalar types. These lines illustrate separate expressions. The target architecture requires module-declared operator meanings and unique elaboration; the prototype still has name-based dispatch. It is not yet a conforming general overload system.</p></div>
+</article>
+<article id="contexts" data-status="implemented" class="mapping">
+  <header><h2><a href="#contexts">Contexts project into explicit binders</a></h2><span class="badge implemented">Implemented</span></header>
+  <p>Contexts share source declarations; exported result propositions still carry their required parameters and every inherited assumption.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Context matrices:
+  Let n: Natural
+  Let A, B: Matrix(n,n,Complex)
+  Result determinant transpose:
+    Attribution: mathlib; Matrix.det_transpose
+    Conclude: det(transpose(A)) = det(A)</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>def determinant_transpose : Prop :=
+  ∀ (n : ℕ) (A : Matrix (Fin n) (Fin n) ℂ),
+    A.transpose.det = A.det</code></pre></section></div>
+  <div class="notes"><p>The unused <code>B</code> is omitted by the specified dependency projection. This resembles section generalization but is not implemented as an unqualified translation to Lean <code>section</code>. LaTeX either expands the context or explicitly cites it.</p></div>
+</article>
+<article id="types" data-status="implemented" class="mapping">
+  <header><h2><a href="#types">Type declarations name Lean types</a></h2><span class="badge implemented">Implemented</span></header>
+  <p>Type constructors, aliases, and prose phrases are declared in Clean modules.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Type VertexSet(n: Natural):
+  Means: Finset (Fin n)
+  Render latex: \mathcal{{P}}(\operatorname{{Fin}}({n}))
+
+Let S: VertexSet(n)</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>-- Declared type meaning:
+Finset (Fin n)
+
+-- In an enclosing result:
+∀ (S : Finset (Fin n)), ...</code></pre></section></div>
+  <div class="notes"><p><code>Means</code> is a Lean expression; the rendering template is not. The current backend checks generated type wrappers but still substitutes some types textually. Structural dependent-type applications are required by the target spec; the nested matrix-of-functions case remains an acceptance obligation.</p></div>
+</article>
+<article id="notation" data-status="implemented" class="mapping">
+  <header><h2><a href="#notation">Current Notation is a typed Lean adapter</a></h2><span class="badge implemented">Implemented</span></header>
+  <p>The existing notation declaration supplies a callable Clean name, a checked Lean body, and presentation metadata.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Notation det(A):
+  Let n: Natural
+  Let A: Matrix(n,n,Complex)
+  Returns: Complex
+  Means: Matrix.det A
+  Render latex: \det({A})</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>noncomputable def cleanDet {n : ℕ}
+    (A : Matrix (Fin n) (Fin n) ℂ) : ℂ :=
+  Matrix.det A</code></pre></section></div>
+  <div class="notes"><p><code>cleanDet</code> is an explanatory wrapper name; the prototype generates a hashed identifier. The omitted header parameter <code>n</code> is inferred from <code>A</code>. This is not automatically a Lean <code>notation</code> declaration, and current Clean notation cannot bind a summation variable.</p></div>
+</article>
+<article id="define-clean" data-status="accepted" class="mapping">
+  <header><h2><a href="#define-clean">Define with Equals authors a definition in Clean</a></h2><span class="badge accepted">Accepted design</span></header>
+  <p>The common definition form has exactly one implementation field. <code>Equals</code> contains a Clean expression.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Define doubled(x):
+  Returns: Real
+  Let x: Real
+  Equals:
+    x + x</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>def doubled (x : ℝ) : ℝ :=
+  x + x</code></pre></section></div>
+  <div class="notes"><p>Top-level <code>Define</code> is accepted design, not implemented. Nonparameter fields may be reordered; parameter declarations keep their relative order. The return type and implementation see the complete parameter scope. Explicit imports must supply <code>Real</code> and addition. The right panel is the intended readable target, not an existing compiler output.</p></div>
+</article>
+<article id="define-lean" data-status="accepted" class="mapping">
+  <header><h2><a href="#define-lean">Define with From Lean imports an implementation</a></h2><span class="badge accepted">Accepted design</span></header>
+  <p><code>From Lean</code> elaborates a Lean expression against the same signature used by an authored Clean definition.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Import Lean CleanPapers.Definitions
+
+Define magnetic matrix(A, q):
+  Let n: Natural
+  Let A: Matrix(n,n,Real)
+  Let q: Real
+  From Lean:
+    CleanPapers.magneticMatrix A q
+  Returns: Matrix(n,n,Complex)</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>noncomputable def magnetic_matrix {n : ℕ}
+    (A : Matrix (Fin n) (Fin n) ℝ)
+    (q : ℝ) : Matrix (Fin n) (Fin n) ℂ :=
+  CleanPapers.magneticMatrix A q</code></pre></section></div>
+  <div class="notes"><p>The Clean type names require separate explicit Clean imports. A checked adapter can fix parameters or wrap representations; it is not restricted to an alias. <code>Equals</code> and <code>From Lean</code> are mutually exclusive. Generated naming and inference must satisfy the unique-target contract.</p></div>
+</article>
+<article id="sum" data-status="proposed" class="mapping">
+  <header><h2><a href="#sum">Binding notation constructs a lambda</a></h2><span class="badge proposed">Proposed</span></header>
+  <p>A proposed summation form introduces a local variable and supplies a scoped body to a finite sum.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>sum(v in S; degree(G,v))</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>Finset.sum S (fun v =&gt; degree G v)
+
+-- Familiar Lean notation:
+∑ v ∈ S, degree G v</code></pre></section></div>
+  <div class="notes"><p>The intended correspondence is domain plus lambda. The semicolon spelling and binding-aware <code>Notation</code> declaration language are proposals, not accepted grammar or implemented features. The declaration must specify the domain, element type, body type, binder scope, and exact Lean construction. Hygiene is required; textual substitution is not a translation rule.</p></div>
+</article>
+<article id="double-sum" data-status="proposed" class="mapping">
+  <header><h2><a href="#double-sum">Multiple binders expand in source order</a></h2><span class="badge proposed">Proposed</span></header>
+  <p>The proposed multi-binder sum expands to nested sums. An earlier binder is visible in later domains and the final body.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>sum(u in S, v in complement(G,S);
+  adjacency(G,u,v))</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>Finset.sum S (fun u =&gt;
+  Finset.sum Sᶜ (fun v =&gt; adjacency G u v))</code></pre></section></div>
+  <div class="notes"><p>For the displayed graph example, both variables range over <code>Fin n</code>; complement is relative to that finite vertex universe. A binder is not visible in its own domain or outside the expression. These are proposed binding rules that still need the full grammar and acceptance fixtures.</p></div>
+</article>
+<article id="minimum" data-status="proposed" class="mapping">
+  <header><h2><a href="#minimum">Constrained minimum has two scoped bodies</a></h2><span class="badge proposed">Proposed</span></header>
+  <p>A predicate and an objective each use the bound variable. Empty-domain behavior is part of the mathematical definition, not an inference heuristic.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>minimum(S in vertex subsets(G);
+  satisfying:
+    admissible(G,S)
+  of:
+    cut conductance(G,S))</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>-- Schematic signature, NOT an existing Lean constant:
+minimumOperation domain
+  (fun S =&gt; admissible G S)
+  (fun S =&gt; cutConductance G S)</code></pre></section></div>
+  <div class="notes"><p>No unique translation has been accepted yet: specify the finite minimum construction, any nonemptiness evidence or optional result, and the empty-domain policy first. Ordinary <code>conductance(G)</code> and <code>mu conductance(G,μ)</code> are distinct definitions. The current paper module’s parameterized <code>CleanPapers.conductance</code> implements the size-constrained quantity; it is not the final naming model.</p></div>
+</article>
+<article id="imports" data-status="accepted" class="mapping">
+  <header><h2><a href="#imports">Imports have distinct semantic roles</a></h2><span class="badge accepted">Accepted design</span></header>
+  <p>Import forms exist in the prototype. Their accepted interleaved, sequential placement is not yet implemented.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Import &quot;graphs.clean&quot;
+Import Lean Mathlib.Data.Finset.Basic
+Import BibTeX &quot;references.bib&quot;
+
+# Further imports may follow earlier
+# top-level definitions in the target design.</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>-- Clean module: extend the Clean environment.
+-- Lean module: make imported Lean declarations available.
+-- BibTeX: load attribution metadata only.
+
+-- The Lean backend arranges required Lean imports
+-- in its output prelude.</code></pre></section></div>
+  <div class="notes"><p>An import affects only subsequent Clean module items. Hoisting required imports in emitted Lean must not retroactively alter earlier Clean resolution: earlier references retain resolved identities. No one-for-one translation of interleaved source imports to Lean imports is implied. Current Clean modules still impose a pre-result prelude and have scope migration debt.</p></div>
+</article>
+<article id="attribution" data-status="implemented" class="mapping">
+  <header><h2><a href="#attribution">Attribution and rendering are metadata</a></h2><span class="badge implemented">Implemented</span></header>
+  <p>Provenance and presentation accompany a declaration without becoming logical assumptions.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Import BibTeX &quot;references.bib&quot;
+
+Attribution: stewart2001; Theorem 1.10; adapted
+
+Render latex: M({A},{q})</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>-- Attribution is emitted in documentation / metadata.
+-- Rendering is used by the LaTeX backend.
+-- Neither changes the Lean proposition or term.</code></pre></section></div>
+  <div class="notes"><p>The last two lines illustrate fields in their respective containing declarations, not one complete block. Bibliographic citation keys become source keys. BibTeX parsing is optional (<code>.[bibtex]</code>); crossref/xdata inheritance is currently rejected. Imports and source declarations do not establish a theorem’s truth.</p></div>
+</article>
+<article id="layout" data-status="accepted" class="mapping">
+  <header><h2><a href="#layout">Layout determines scope before mathematical meaning</a></h2><span class="badge accepted">Accepted design</span></header>
+  <p>At least two spaces open a block; siblings align; tabs are forbidden. Inline expression continuation depends on whether the expression is incomplete.</p>
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Let count = n!
+Let total = count +
+  extra
+
+Equals:
+  f(x) + g(x)</code></pre></section>
+  <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>-- Intended structure, assuming the displayed operations:
+let count := Nat.factorial n
+let total := count + extra
+...
+
+-- Equals owns one Clean expression body.
+-- From Lean would own a Lean expression body instead.</code></pre></section></div>
+  <div class="notes"><p>Flexible indentation and a heuristic continuation implementation exist. Full parser-state continuation, postfix notation, and lexical-mode isolation are target requirements; known prototype deviations remain. The snippets are separate fragments. A postfix application can be complete, whereas an infix operator still requires a right operand.</p></div>
+</article>
+</div>
+<p id="empty" hidden>No mappings match. Clear the search or choose another status.</p>
+<section id="contract" class="contract">
+<h2>The acceptance contract</h2>
+<p>For a fixed source and explicit, pinned environment, accepted input must have <strong>one parse and one fully elaborated Lean target and type</strong>. Inferred coercions, instance arguments, universe instantiations, and proof arguments count. A term that merely compiles is insufficient.</p>
+<p>Distinct parses are syntax ambiguity; distinct permitted targets are semantic ambiguity. Resource exhaustion is incomplete analysis, not a successful choice. See the <a href="language-change-acceptance.md">normative acceptance requirements</a> and <a href="../tests/acceptance/language-contract.json">pending acceptance cases</a>. The prototype is not certified as conforming.</p>
+</section>
+<footer><p>This HTML is the maintained explanatory map, not a competing grammar. Authority: <a href="language-reference.md">target syntax and semantics</a> · <a href="spec.md">current prototype</a> · <a href="decisions.md">decisions</a> · <a href="paper-translations.md">paper definitions and translations</a>.</p>
+<p>Maintenance: every syntax or translation change updates its mapping, status, scope notes, and Lean target here. New binding forms remain proposed until their parse and translation contracts are complete. No network requests, external assets, or build step are required to read this file.</p></footer>
+</main>
+<script>
+(() => {
+  const cards = Array.from(document.querySelectorAll('.mapping'));
+  const search = document.getElementById('search');
+  const status = document.getElementById('status');
+  function update() {
+    const query = search.value.trim().toLocaleLowerCase();
+    let visible = 0;
+    for (const card of cards) {
+      card.hidden = (status.value !== 'all' && card.dataset.status !== status.value)
+        || !card.textContent.toLocaleLowerCase().includes(query);
+      if (!card.hidden) visible++;
+    }
+    document.getElementById('count').textContent = `${visible} of ${cards.length} mappings`;
+    document.getElementById('empty').hidden = visible !== 0;
+  }
+  function revealAnchor() {
+    const target = document.getElementById(location.hash.slice(1));
+    if (target && target.classList.contains('mapping')) {
+      search.value = ''; status.value = 'all'; update(); target.scrollIntoView();
+    }
+  }
+  document.getElementById('controls').hidden = false;
+  search.addEventListener('input', update);
+  status.addEventListener('change', update);
+  window.addEventListener('hashchange', revealAnchor);
+  update(); revealAnchor();
+})();
+</script>
+</body>
+</html>

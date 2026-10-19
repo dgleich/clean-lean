@@ -10,6 +10,12 @@
 - Preserve mandatory attribution, readable English names, case-insensitive keywords, and explicit context references in LaTeX. Rendering must not change mathematical meaning.
 - Statement translation does not constitute a proof. Never use `sorry` or axioms to make validation pass. Keep the limitations of the CLR-aligned corpus explicit.
 
+## Maintained Clean to Lean reference
+
+- Maintain [docs/clean-to-lean.html](docs/clean-to-lean.html) as the local reference for readers who already know Lean. Every syntax, binding, elaboration, or translation change must update the relevant mapping in the same work, including readable Clean/Lean examples, scope/inference notes, and its implemented, accepted-design, or proposed status.
+- Keep the HTML self-contained, accessible, and readable without JavaScript or a network connection. Preserve stable section anchors. Check local links, code escaping, and search/filter behavior when changed; inspect desktop/mobile rendering for layout changes when tooling is available.
+- Treat this as an explanatory companion to the normative spec and acceptance contract, not a second authority. Mark Lean fragments, schematic placeholders, and expanded wrapper equivalents explicitly. Do not present readable Lean snippets as canonical-target acceptance evidence or label proposed binding notation as implemented.
+
 ## Hard language acceptance requirements
 
 - Every proposed language change must satisfy [the language change acceptance contract](docs/language-change-acceptance.md): one specified syntax tree and one specified, fully elaborated Lean target for every accepted input under a fixed explicit environment. These are hard requirements, not aspirations or performance preferences.

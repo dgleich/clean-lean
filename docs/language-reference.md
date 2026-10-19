@@ -8,6 +8,8 @@ Readable source is a first-class requirement. The [aspirational syntax gallery](
 
 The formal core covers first-order surface notation with dependent argument types, typed declarations, applications, operators, and theorem statements. Proof scripts, arbitrary binding notation, general English parsing, and executable algorithm syntax are outside this draft. There is no Clean evaluator: the meaning of a completed statement is its elaborated Lean proposition.
 
+For readers familiar with Lean, the maintained [Clean to Lean HTML reference](clean-to-lean.html) presents readable mappings and feature status. The rules here and the acceptance contract remain authoritative.
+
 ## Hard acceptance contract
 
 For fixed source and an explicit, pinned environment, every accepted input has exactly one specified syntax tree and exactly one fully elaborated Lean target and type. These are hard requirements for every language change. Parsing may be expensive; neither parsing nor elaboration may choose meaning through incidental search order. A syntactically valid tree that has no unique permitted Lean translation is rejected at binding/elaboration, not assigned a guessed meaning.
