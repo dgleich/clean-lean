@@ -10,6 +10,16 @@
 - Preserve mandatory attribution, readable English names, case-insensitive keywords, and explicit context references in LaTeX. Rendering must not change mathematical meaning.
 - Statement translation does not constitute a proof. Never use `sorry` or axioms to make validation pass. Keep the limitations of the CLR-aligned corpus explicit.
 
+## Hard language acceptance requirements
+
+- Every proposed language change must satisfy [the language change acceptance contract](docs/language-change-acceptance.md): one specified syntax tree and one specified, fully elaborated Lean target for every accepted input under a fixed explicit environment. These are hard requirements, not aspirations or performance preferences.
+- Add or update the grammar, lexical/layout rules, scope rules, and a constructive Clean-to-Lean rule for every affected syntax constructor. State why the parse and translation are unique; examples and passing tests alone are insufficient. Open policy choices affecting the feature block a claim that it is fully specified.
+- Parsing may be expensive and may explore alternatives. Reject distinct valid parses as syntax ambiguity; never use type-checking success to choose a syntax tree. Reject distinct permitted Lean targets as semantic ambiguity unless an explicit normative rule selects one. Do not use incidental import order, iteration order, scheduling, cache state, or first-success heuristics to choose meaning.
+- Uniqueness includes implicit arguments, coercions, instances, universes, literal/default interpretation, proof arguments, and From Lean adapters. A unique notation name or Lean code that merely compiles does not meet this requirement.
+- Add independently authored expected trees and Lean-target/type oracles, negative/ambiguity cases, and interaction cases using [the acceptance catalog](tests/acceptance/language-contract.json) and its documented procedure. Compare canonical elaborated structures, not only pretty-printed output or definitional equality. Mark unimplemented checks pending; never describe them as passing.
+- Resource exhaustion or an unresolved competing candidate means incomplete analysis, not success or a proven error. Report it separately. Document the fixed build environment and all intended inference policies.
+- Before declaring an implementation conforming, run the applicable acceptance checks and Lean kernel validation, and record remaining gaps. Intermediate/failing commits are still permitted; this requirement gates conformance claims, not recording work in Git.
+
 ## Git workflow
 
 - Inspect `git status` and the relevant diff before editing and before committing. Preserve unrelated user changes; never reset, discard, or overwrite them.

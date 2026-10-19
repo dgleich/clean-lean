@@ -16,6 +16,8 @@ Result insertion sort length:
 
 The [algorithm module](library/algorithms.clean) declares the meaning and rendering of every function used here. It imports [type declarations](library/types.clean). [Source declarations](library/sources.clean) supply bibliography details. The [multiword notation example](examples/notation.clean) uses `insertion sort(xs)` from a separate module; see its [PDF](generated/notation.pdf).
 
+Every language change must satisfy the [hard acceptance requirements](docs/language-change-acceptance.md): a unique parse and a precise, unique fully elaborated Lean target. [AGENTS.md](AGENTS.md) requires grammar and translation rules, a uniqueness argument, and independent test oracles. The [initial acceptance cases](tests/acceptance/language-contract.json) are pending; existing regression tests do not certify the prototype.
+
 ## Try it
 
 Python 3.10+ is sufficient for the core translator. BibTeX imports use an optional dependency: install with `python3 -m pip install -e ".[bibtex]"`. Run from this directory:

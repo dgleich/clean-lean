@@ -8,6 +8,12 @@ Readable source is a first-class requirement. The [aspirational syntax gallery](
 
 The formal core covers first-order surface notation with dependent argument types, typed declarations, applications, operators, and theorem statements. Proof scripts, arbitrary binding notation, general English parsing, and executable algorithm syntax are outside this draft. There is no Clean evaluator: the meaning of a completed statement is its elaborated Lean proposition.
 
+## Hard acceptance contract
+
+For fixed source and an explicit, pinned environment, every accepted input has exactly one specified syntax tree and exactly one fully elaborated Lean target and type. These are hard requirements for every language change. Parsing may be expensive; neither parsing nor elaboration may choose meaning through incidental search order. A syntactically valid tree that has no unique permitted Lean translation is rejected at binding/elaboration, not assigned a guessed meaning.
+
+The normative [language change acceptance requirements](language-change-acceptance.md) define syntax/semantic ambiguity, canonical target equality, explicit environment inputs, resource handling, proposal obligations, and required acceptance evidence. “Unique Lean expression” includes inferred arguments, coercions, instances, universes, and proof arguments. It is stronger than deterministic pretty-printing, successful Lean typechecking, or equality of two propositions in Lean. Existing implementations and earlier accepted design choices remain subject to these obligations; this document does not certify their conformance.
+
 ## 1 Language layers
 
 A translation has five stages:
@@ -198,12 +204,14 @@ For a local object binding `x : T` in `Γ`, a reference to its binder identity e
 For a notation node with finite visible candidate set `C`, elaboration attempts each candidate's typed application in the same context, including the expected result type when available. Constraints from enclosing expressions may be propagated; candidates must not be committed greedily before relevant expected-type information is available.
 
 ```text
-viable(C, arguments, expectedType) = checked candidate applications
+viable(C, arguments, expectedType) = fully resolved candidate applications admitted by the specified rules
 
 |viable| = 0    => type/overload error
 |viable| = 1    => selected application
 |viable| > 1    => ambiguity error
 ```
+
+The candidate count alone is not sufficient: every accepted application must itself have exactly one canonical target under the full elaboration policy. Distinct permitted coercions, instance evidence, implicit arguments, or universe instantiations are part of that obligation. The rules must specify their resolution or require an explicit disambiguation; they cannot silently inherit a heuristic not included in the language contract.
 
 Aliases to the same declaration identity do not create extra candidates. Distinct declarations remain ambiguous even when their bodies happen to be definitionally equal. Resource exhaustion or unresolved metavariables are reported as incomplete elaboration, not silently treated as evidence that one other candidate is uniquely valid. No specificity ranking or import-order priority is implied by this draft.
 
@@ -255,7 +263,7 @@ The concrete structural rendering syntax is still open. Existing raw `Render lat
 
 ## 10 Conformance requirements
 
-A conforming implementation of this draft must demonstrate:
+The [acceptance contract](language-change-acceptance.md) applies to every proposed change. Its initial [case catalog](../tests/acceptance/language-contract.json) is explicitly pending, not a claim of executable conformance coverage. The requirements below are additional concrete cases. A conforming implementation of this draft must demonstrate:
 
 | Property | Required counterexample or check |
 | --- | --- |
@@ -275,7 +283,7 @@ A conforming implementation of this draft must demonstrate:
 | Presentation grouping | Inverse and transpose of products visibly preserve grouping |
 | Extensibility | A new type and operation work through modules without changing compiler branches |
 
-Lean acceptance alone is not a preservation test. Test fixtures must also check the expected proposition/type and selected declaration identities. The 80 existing corpus proofs are regression coverage, not evidence that these general properties hold. A mechanically verified compiler or formal soundness proof is not claimed.
+Lean acceptance alone is not a preservation test. Test fixtures must also check independently specified syntax trees, canonical fully elaborated target structures and types, and selected declaration identities. Definitional equality checks of expected propositions are useful but insufficient for the unique-target requirement. The 80 existing corpus proofs are regression coverage, not evidence that these general properties hold. A mechanically verified compiler or formal soundness proof is not claimed.
 
 ## 11 Authoring conformance
 

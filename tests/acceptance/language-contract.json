@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "purpose": "Specification oracles; not an executable conformance report",
+  "comparison_contract": "docs/language-change-acceptance.md",
+  "cases": [
+    {
+      "id": "identity_proposition",
+      "status": "pending",
+      "environment": "Explicit Real -> Lean Real binding, Proposition -> Lean Prop binding, and equality -> Lean Eq; synthetic source local with reference identity; no other candidates",
+      "source": "Result identity:\n  Attribution: local; identity; original\n  Let x: Real\n  Conclude: x = x\n",
+      "expected_tree": ["Result", "identity", ["Attribution", "local", "identity", "original"], ["Let", "x", ["Ref", "Real"]], ["Conclude", ["Operator", "=", ["Local", "x"], ["Local", "x"]]]],
+      "expected_lean": "∀ (x : Real), @Eq.{1} Real x x",
+      "expected_lean_type": "Prop",
+      "obligation": "Supply executable environment and canonical elaborated-target comparison; compare local-renaming and legal layout variants"
+    },
+    {
+      "id": "postfix_completes_inline_expression",
+      "status": "pending",
+      "environment": "n is Nat; ! is uniquely postfix at precedence 80 and maps to Nat.factorial",
+      "source_fragment": "Let count = n!\nLet next = count\n",
+      "expected_tree": [["LocalDefinition", "count", ["Postfix", "!", ["Local", "n"]]], ["LocalDefinition", "next", ["Local", "count"]]],
+      "expected_lean_fragment": "let count : Nat := Nat.factorial n; let next : Nat := count; ...",
+      "obligation": "Embed the fragment in a complete result with an independently specified target; verify newline does not consume the next clause"
+    },
+    {
+      "id": "conflicting_fixity",
+      "status": "pending",
+      "environment": "One visible module declares ! postfix; a later imported module declares ! infix",
+      "source_fragment": "Import \"postfix.clean\"\nImport \"infix.clean\"\n",
+      "expected_error": {"stage": "environment", "category": "syntax_declaration_conflict"},
+      "obligation": "Reject at the second import, without needing an expression or trying operand types"
+    },
+    {
+      "id": "unique_parse_competing_meanings",
+      "status": "pending",
+      "environment": "x and y are Nat; infix ⊙ has one parse record but two distinct declared meanings Nat.add and Nat.mul with identical parameter and result types",
+      "source_fragment": "x ⊙ y",
+      "expected_tree": ["Operator", "⊙", ["Local", "x"], ["Local", "y"]],
+      "expected_error": {"stage": "elaboration", "category": "semantic_ambiguity"},
+      "obligation": "Reverse candidate enumeration; neither ordering may select a meaning"
+    },
+    {
+      "id": "one_success_one_unfinished_candidate",
+      "status": "pending",
+      "environment": "A test elaborator has one successful permitted candidate and one candidate whose analysis exhausts its budget",
+      "source_fragment": "f(x)",
+      "expected_error": {"stage": "elaboration", "category": "incomplete"},
+      "obligation": "A successful candidate cannot be accepted while another candidate remains unresolved"
+    },
+    {
+      "id": "nested_matrix_element_type",
+      "status": "pending",
+      "environment": "Explicit Matrix, Function, and Real type bindings with the standard indicated Lean meanings",
+      "source_fragment": "Matrix(2,2,Function(Real,Real))",
+      "expected_tree": ["Apply", "Matrix", ["Decimal", "2"], ["Decimal", "2"], ["Apply", "Function", ["Ref", "Real"], ["Ref", "Real"]]],
+      "expected_lean": "Matrix (Fin 2) (Fin 2) (Real → Real)",
+      "rejected_target": "Matrix (Fin 2) (Fin 2) Real → Real",
+      "obligation": "Both target shapes may typecheck; only the specified shape is conforming"
+    }
+  ]
+}

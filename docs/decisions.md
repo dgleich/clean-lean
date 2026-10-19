@@ -57,6 +57,8 @@ These decisions separate requested behavior from provisional implementation choi
 | D45 | Allow imports between top-level declarations and results | User selected 3C. Sequential visibility (subsequent items only) is the recorded interpretation; no retroactive parsing or name resolution. Nested imports remain outside this slice. Not implemented |
 | D46 | Definition fields may be reordered while parameters retain their relative order | User selected 4B. Require Returns and exactly one of Equals or From Lean; both allow explicit block bodies. Both implementations enter one semantic space. Optional attribution/presentation on definitions and a named-call rendering fallback are provisional refinements; result attribution remains mandatory. Not implemented |
 
+| D47 | Unique parse and unique Clean-to-Lean translation are hard acceptance requirements | Explicit user requirement. Parsing may be expensive. Every accepted source has one specified tree and one canonical fully elaborated Lean target under a fixed explicit environment; ambiguity rejects, resource exhaustion remains incomplete. Contract in `language-change-acceptance.md`, mandatory workflow in AGENTS.md, initial pending oracles in `tests/acceptance/language-contract.json`. Current prototype is not certified |
+
 ## Questions to revisit after reading the specimens
 
 1. Should formalization contributors become a required field distinct from mathematical sources? Source keys are now implemented.
