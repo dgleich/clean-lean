@@ -46,7 +46,8 @@ This EBNF describes the proposed operator/type/statement slice. `NEWLINE`, `INDE
 ```ebnf
 module           = { import }, { declaration | result | context } ;
 import           = "Import", string, ["as", identifier], NEWLINE
-                 | "Import", "Lean", leanModule, NEWLINE ;
+                 | "Import", "Lean", leanModule, NEWLINE
+                 | "Import", "BibTeX", string, NEWLINE ;
 declaration      = notation | typeDeclaration | sourceDeclaration
                  | phraseDeclaration | aliasDeclaration ;
 notation         = "Notation", englishName, "(", [nameList], ")", ":",
@@ -79,6 +80,8 @@ context          = "Context", englishName, ":", NEWLINE, INDENT,
                    { clause }, (result | context), {result | context}, DEDENT ;
 nameList         = identifier, { ",", identifier } ;
 ```
+
+`Import BibTeX` introduces only bibliographic source metadata, using the citation keys and import rules specified in [the prototype specification](spec.md#bibtex-sources). It neither introduces expression names nor changes mathematical overload resolution.
 
 The file has a declaration prelude before its first result/context. Imports are in the initial import block. Definitions are ordered: signatures can refer to preceding declarations and imports. All fields must be unique except repeated typed `Let` clauses. A notation requires exactly one `Returns`, `Means`, and `Render`. With no `Syntax` field it is callable by its English name. An operator declaration also remains callable by that name.
 

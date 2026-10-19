@@ -1,0 +1,43 @@
+[
+  {
+    "name": "similarity_preserves_eigenvectors",
+    "title": "similarity preserves eigenvectors",
+    "line": 4,
+    "file": "examples/bibtex.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "stewart2001",
+      "reference": "Theorem 1.10, page 9",
+      "relationship": "adapted",
+      "scope": "eigenvector part"
+    },
+    "resolved_attribution": {
+      "source_key": "stewart2001",
+      "source": {
+        "title": "Matrix Algorithms, Volume II: Eigensystems",
+        "year": "2001",
+        "publisher": "SIAM",
+        "author": "Stewart, G. W.",
+        "kind": "book",
+        "label": "stewart2001",
+        "bibtex": {
+          "key": "stewart2001",
+          "entry_type": "book",
+          "fields": {
+            "title": "Matrix Algorithms, Volume {II}: Eigensystems",
+            "year": "2001",
+            "publisher": "SIAM"
+          },
+          "persons": {
+            "author": [
+              "Stewart, G. W."
+            ]
+          },
+          "file": "references.bib",
+          "sha256": "4ef87b26713fe2e007568e4357f54f4b621a7134bfa2e15caf2e5a7b29366409"
+        }
+      },
+      "reference": "Theorem 1.10, page 9"
+    }
+  }
+]

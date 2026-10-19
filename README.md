@@ -18,7 +18,7 @@ The [algorithm module](library/algorithms.clean) declares the meaning and render
 
 ## Try it
 
-Python 3.10+ is sufficient; the translator has no external Python dependencies. Run from this directory:
+Python 3.10+ is sufficient for the core translator. BibTeX imports use an optional dependency: install with `python3 -m pip install -e ".[bibtex]"`. Run from this directory:
 
 ```sh
 python3 -m cleanlang check corpus/*.clean
@@ -29,6 +29,8 @@ python3 -m unittest discover -s tests -v
 ```
 
 `check` validates supported Clean syntax and signatures. It does not run Lean. Generated wrappers allow Lean to check each declared `Means` expression, including parameter and return types.
+
+For [BibTeX attribution](docs/spec.md#bibtex-sources), use `Import BibTeX "references.bib"`; see [the specimen](examples/bibtex.clean). Citation keys become source keys. This imports bibliography data, not mathematical definitions.
 
 ## Lean checking
 

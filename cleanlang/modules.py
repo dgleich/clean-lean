@@ -140,14 +140,16 @@ def load_module(path, env, *, document=False):
             try:
                 if '\t' in line: raise CleanError('Tabs are not allowed')
                 li=re.fullmatch(r'Import Lean\s+([A-Za-z_][\w.]*)',line,re.I)
+                bi=re.fullmatch(r'Import BibTeX\s+"([^"\n]+)"',line,re.I)
                 ci=re.fullmatch(r'Import\s+"([^"\n]+)"',line,re.I)
                 block=re.match(r'(Notation|Type|Source)\s',line,re.I)
                 alias=re.fullmatch(r'Alias\s+('+ID+r'):\s*('+ID+r')',line,re.I)
                 phrase=re.fullmatch(r'Phrase\s+(.+?)\s+=>\s+(.+)',line,re.I)
-                if any((li,ci,block,alias,phrase)):
+                if any((li,bi,ci,block,alias,phrase)):
                     if started: raise CleanError('Imports and declarations must precede results')
                     if li:
                         if li[1] not in env.lean_imports: env.lean_imports.append(li[1])
+                    elif bi: env.sources.import_bibtex(file.parent/bi[1])
                     elif ci: visit(file.parent/ci[1])
                     elif alias:
                         if alias[1] in env.data['types'] or alias[1] in env.data['aliases']: raise CleanError('Duplicate type alias')

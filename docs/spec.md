@@ -110,6 +110,26 @@ LaTeX shows a short citation beside each result title, such as `[Mathlib]` or `[
 
 Structured output retains both the authored `attribution` and the `resolved_attribution`, including shared source details and the precise declaration URL. The corpus catalog also preserves source excerpts and topics. CLR alignment remains topical; no edition-specific theorem numbers or pages are claimed.
 
+## BibTeX sources
+
+```text
+Import BibTeX "references.bib"
+
+Result similarity preserves eigenvectors:
+  Attribution: stewart2001; Theorem 1.10, page 9; adapted
+  ...
+```
+
+`Import BibTeX` imports bibliography metadata only. Paths resolve relative to the containing Clean file; imports precede results and may also appear in imported definition modules. Keywords are case-insensitive. Each BibTeX citation key becomes an attribution source key with its original spelling, including punctuation such as `Stewart:2001`. Clean attribution lookup remains case-sensitive. Existing `Source` declarations remain available.
+
+Install the optional parser with `python3 -m pip install -e '.[bibtex]'`. The importer uses [Pybtex](https://docs.pybtex.org/api/parsing.html) rather than approximating BibTeX with regular expressions. Braced and quoted values, string macros, concatenation, numeric years, author lists, and common LaTeX accents are supported. Source labels default to the citation key. Titles and people become plain text for Clean’s escaped LaTeX output; original fields, entry type, people, filename, and a content digest remain in structured metadata. Unknown TeX commands remain text; preambles are not executed or injected into LaTeX output.
+
+Every imported entry currently requires a title. Book entries map to source kind `book`; other entries map to `other`, retaining their original entry type. URL and DOI fields are preserved. A citation locator such as “Theorem 1.10” is still authored on the result: importing a bibliography does not verify that locator or prove the theorem.
+
+Repeated imports of the same canonical path are idempotent. A duplicate source key from another file or an explicit `Source` declaration is an error, even if the metadata matches. Parsing errors and collisions reject the whole bibliography import. Pybtex also rejects duplicate BibTeX entries and duplicate fields; its duplicate-entry detection is case-insensitive within a bibliography. `crossref` and BibLaTeX `xdata` inheritance are explicitly rejected in this first implementation. Those policies, richer labels, and selective imports can be revisited.
+
+See [the working specimen](../examples/bibtex.clean) and its [bibliography](../examples/bibliography/references.bib).
+
 ## Expressions
 
 The initial implementation supports names, natural numerals, parenthesized expressions, imported notation calls, application of declared unary functions, unary minus, and logical negation. Binary operations include arithmetic, equality and comparisons, conjunction, disjunction, implication, equivalence, membership, subset, set union/intersection, and divisibility.

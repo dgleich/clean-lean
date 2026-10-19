@@ -8,5 +8,8 @@ version = "0.1.0"
 description = "Local prototype for mathematical statement syntax and LaTeX rendering"
 requires-python = ">=3.10"
 
+[project.optional-dependencies]
+bibtex = ["pybtex==0.26.1"]
+
 [tool.setuptools]
 packages = ["cleanlang"]

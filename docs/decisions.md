@@ -50,6 +50,8 @@ These decisions separate requested behavior from provisional implementation choi
 
 | D41 | Infer Clean expression continuation from open parentheses or a trailing operator | User request. Implemented without backslashes; complete expressions end at newlines. Continuation alignment is not a new scope. Opaque Lean/rendering/metadata fields keep their existing rules |
 
+| D42 | Import bibliography metadata with `Import BibTeX "path.bib"` | User requested BibTeX sources; format-qualified spelling chosen instead of a separate bibimport keyword. Implemented via the optional pinned Pybtex parser. Citation keys become source keys; collisions fail and repeated paths deduplicate. Crossref/xdata inheritance is explicitly deferred; see spec for metadata and rendering choices |
+
 ## Questions to revisit after reading the specimens
 
 1. Should formalization contributors become a required field distinct from mathematical sources? Source keys are now implemented.

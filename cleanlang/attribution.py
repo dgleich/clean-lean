@@ -58,6 +58,53 @@ class Sources:
     def __init__(self):
         self.entries = {}
         self.references = {}
+        self.loaded_bibtex = set()
+
+    def import_bibtex(self, path):
+        """Read bibliography data only; never load mathematical declarations."""
+        path = Path(path).resolve()
+        if path in self.loaded_bibtex:
+            return
+        try:
+            from pybtex.database import parse_string
+            from pybtex.exceptions import PybtexError
+            from pybtex.richtext import Text
+        except ImportError as e:
+            raise ValueError('BibTeX imports require the bibtex extra: pip install -e ".[bibtex]"') from e
+        import hashlib
+        raw = path.read_text(encoding='utf-8')
+        try:
+            data = parse_string(raw, 'bibtex')
+            pending = {}
+            for key, entry in data.entries.items():
+                if key in self.entries:
+                    raise ValueError('Duplicate source: '+key)
+                fields = dict(entry.fields)
+                # Cross-reference inheritance needs a separate, explicit policy.
+                if 'crossref' in fields or 'xdata' in fields:
+                    raise ValueError('BibTeX crossref/xdata inheritance is not yet supported: '+key)
+                if not fields.get('title', '').strip():
+                    raise ValueError('BibTeX source missing title: '+key)
+                plain = lambda value: Text.from_latex(value).render_as('text')
+                source = {name: plain(value) for name, value in fields.items()}
+                for role, people in entry.persons.items():
+                    source[role] = ' and '.join(plain(str(person)) for person in people)
+                # Keep links byte-for-byte rather than treating them as prose TeX.
+                for name in ('url', 'doi'):
+                    if name in fields:
+                        source[name] = fields[name]
+                source.update(kind='book' if entry.type == 'book' else 'other', label=key)
+                source['bibtex'] = {
+                    'key': key, 'entry_type': entry.type, 'fields': fields,
+                    'persons': {role: [str(p) for p in people] for role, people in entry.persons.items()},
+                    'file': path.name, 'sha256': hashlib.sha256(raw.encode('utf-8')).hexdigest(),
+                }
+                pending[key] = source
+        except PybtexError as e:
+            raise ValueError(f'{path}: invalid BibTeX: {e}') from e
+        # A failed import must not register a partial bibliography.
+        self.entries.update(pending)
+        self.loaded_bibtex.add(path)
 
     def declare(self, key, source, directory):
         if key in self.entries:
