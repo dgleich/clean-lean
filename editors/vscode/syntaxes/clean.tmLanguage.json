@@ -14,6 +14,23 @@
       "match": "^ *#.*$"
     },
     {
+      "match": "^ *(?i:(Notation|Define))\\s+([^\\(]+)(\\(.*)(:)\\s*$",
+      "captures": {
+        "1": {
+          "name": "keyword.declaration.clean"
+        },
+        "2": {
+          "name": "entity.name.function.clean"
+        },
+        "3": {
+          "name": "meta.signature.clean"
+        },
+        "4": {
+          "name": "punctuation.section.block.clean"
+        }
+      }
+    },
+    {
       "match": "^ *(?i:(Result|Theorem|Context|Define|Notation|Type|Source))\\b(.*?)(:)\\s*$",
       "captures": {
         "1": {

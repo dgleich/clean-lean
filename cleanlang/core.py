@@ -38,7 +38,7 @@ def _expression_lines(text):
                 conclusion_column = column
                 continue
             expression = conclusion_column is not None or re.match(
-                r'(Let|Define|Assume|Conclude|Returns|Equals)\b', stripped, re.I)
+                r'(Let|Define|Notation|Assume|Conclude|Returns|Equals)\b', stripped, re.I)
             if not expression:
                 continue
             depth = stripped.count('(') - stripped.count(')')

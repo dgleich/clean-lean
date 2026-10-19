@@ -66,6 +66,8 @@ These decisions separate requested behavior from provisional implementation choi
 
 | D51 | Include the authored name in generated Lean wrapper identifiers | User request. Implemented `cleanType_<stem>_<id>`, `cleanNotation_<stem>_<id>`, and `cleanDefine_<stem>_<id>` with readable space-separated names joined by underscores, safe Unicode encoding, and the existing deterministic 20-hex fingerprint. No Clean grammar or mathematical-body change |
 
+| D52 | Support compact typed headers alongside expanded Notation/Define signatures | User accepted the proposed single-colon form: `Notation cos(x: Real): Real:`. Implemented as normalization to the existing signature, with no mixed header/body type declarations. Expanded forms retain implicit parameters; `::` is not introduced |
+
 ## Questions to revisit after reading the specimens
 
 1. Should formalization contributors become a required field distinct from mathematical sources? Source keys are now implemented.

@@ -21,7 +21,7 @@ def style(scope):
     if scope.startswith('invalid'): return 'invalid'
     if scope.startswith('comment'): return 'comment'
     if scope.startswith('keyword'): return 'keyword'
-    if scope.startswith('entity.name.type'): return 'type'
+    if scope.startswith(('entity.name.type','meta.signature')): return 'type'
     if scope.startswith('entity'): return 'name'
     if scope.startswith('constant'): return 'number'
     if scope.startswith('string'): return 'string'

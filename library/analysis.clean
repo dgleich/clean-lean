@@ -24,9 +24,7 @@ Notation sin(x0):
     Means: Real.sin x0
     Render latex: \sin({x0})
 
-Notation cos(x0):
-    Let x0: Real
-    Returns: Real
+Notation cos(x0: Real): Real:
     Means: Real.cos x0
     Render latex: \cos({x0})
 
@@ -55,15 +53,11 @@ Notation compose(x0,x1):
     Means: (x0) ∘ (x1)
     Render latex: ({x0}\circ {x1})
 
-Define square(x):
-  Let x be a Real
-  Returns: Real
+Define square(x: Real): Real:
   Equals: x^2
   Render latex: ({x})^{{2}}
 
-Define squared distance(x, y):
-  Returns: Real
-  Let x, y: Real
+Define squared distance(x: Real, y: Real): Real:
   Equals:
     square(x-y)
 

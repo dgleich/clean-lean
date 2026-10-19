@@ -307,7 +307,7 @@ translation, **not yet a proof of global canonical-target uniqueness**: the
 existing inference/overload and module-scope gaps still apply.
 
 `verify_definitions.py` checks independent expression trees for square, matrix
-square, and commutator and generates exact elaborated Lean body/type comparisons.
+square, and commutator plus the compact cosine signature, and generates exact elaborated Lean body/type comparisons.
 These preserve binder explicitness, universe and instance arguments, and proof
 terms; only metadata and binder display names are erased. Comparator guards
 reject an implicit/explicit binder change and a beta-reducible alternative.
@@ -337,3 +337,27 @@ result names such as `determinant_product` are unchanged. Fingerprints are build
 identifiers, not permanent public API names; changing a body or a referenced
 wrapper identity can change the suffix. The structural target checks still apply
 and do not treat arbitrary unfolding as an acceptable renaming.
+
+### Compact signatures
+
+Both `Notation` and `Define` accept typed headers as an alternative:
+
+```text
+Notation cos(x0: Real): Real:
+  Means: Real.cos x0
+  Render latex: \cos({x0})
+
+Define squared distance(x: Real, y: Real): Real:
+  Equals: square(x-y)
+```
+
+These normalize to the existing name-only header plus typed `Let` clauses and
+`Returns`. No body `Let` or `Returns` is allowed in the compact form. All header
+parameters must be individually typed; grouped names, partial annotations, and
+`::` are rejected. The last colon opens the block. Nested type constructors and
+parenthesized continuation are supported. Use the expanded form for implicit
+parameters. See the [formal rule](language-reference.md#compact-declaration-signatures-implemented).
+The analysis module now provides compact `cos`, `square`, and `squared distance`
+examples. Equivalent forms produce identical wrapper names and Lean text;
+independent normalized signature/body-tree checks and four canonical Lean-target
+checks cover the bounded fixtures. General language conformance remains pending.

@@ -57,5 +57,10 @@ for name, expected_tree, expected_lean in cases:
     actual = env.definitions[name]
     assert actual['tree'] == expected_tree, (name, actual['tree'], expected_tree)
     out.extend([expected_lean, f'assert_same_target {actual["key"]} expected_{name.replace(" ", "_")}'])
+# The compact cosine signature has an independent normalized signature and Lean target.
+cosine = env.data['functions']['cos']
+assert cosine['signature_tree'] == ['Signature','cos', [['Parameter','x0','Real','explicit']], 'Real']
+out.extend(['noncomputable def expected_cos (a : ℝ) : ℝ := Real.cos a',
+            f"assert_same_target {cosine['lean'].split()[0]} expected_cos"])
 (ROOT/'generated/VerifiedDefinitions.lean').write_text('\n'.join(out)+'\n')
-print('Checked 3 expression trees; wrote 3 canonical Lean target checks and 2 comparator guards')
+print('Checked 3 expression trees; wrote 4 canonical Lean target checks and 2 comparator guards')

@@ -20,5 +20,7 @@ const tm=require('vscode-textmate'),onig=require('vscode-oniguruma');
  has('  # Let x = 1','Let','comment.line.number-sign.clean');
  assert(!scopeAt('  Let x = 1 # not a comment','#').includes('comment.line.number-sign.clean'));
  has('\tLet x: Real','\t','invalid.illegal.tab.clean');
- console.log('12 TextMate/Oniguruma scope checks passed');
+ has('Notation cos(x: Real): Real:','cos','entity.name.function.clean');
+ has('Notation cos(x: Real): Real:','x: Real','meta.signature.clean');
+ console.log('14 TextMate/Oniguruma scope checks passed');
 })().catch(e=>{console.error(e);process.exitCode=1;});

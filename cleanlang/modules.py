@@ -82,10 +82,44 @@ def type_declaration(header, fields, env):
     add_definition(env, 'cleanType_', name, f'{signature} : {sort} :=\n  {values["means"]}')
 
 
+def signature_fields(header, fields):
+    """Normalize compact syntax before any type/name resolution.
+
+    The first balanced closing parenthesis ends the parameter list. Only the
+    suffix decides between the expanded ':' and compact ': ReturnType:' forms.
+    """
+    match = re.match(r'(?:Notation|Define)\s+('+ID+r'(?: +'+ID+r')*)\(', header, re.I)
+    if not match: raise CleanError('Invalid Notation or Define header')
+    name = re.sub(' +', ' ', match[1])
+    rest = header[match.end():]
+    depth = 1
+    for end, char in enumerate(rest):
+        if char == '(': depth += 1
+        elif char == ')': depth -= 1
+        if depth == 0: break
+    else: raise CleanError('Unclosed parameter list')
+    parameters, suffix = rest[:end], rest[end+1:].strip()
+    if suffix == ':':
+        return name, split(parameters), list(fields)
+    compact = re.fullmatch(r':\s*(.+?)\s*:', suffix)
+    if not compact: raise CleanError('Expected : or : ReturnType: after parameters')
+    if any(re.match(r'(?:Let\b|Returns\s*:)', field, re.I) for field in fields):
+        raise CleanError('Compact signatures cannot also contain Let or Returns fields')
+    parts = split(parameters)
+    if parameters.rstrip().endswith(','):
+        raise CleanError('Trailing comma in compact parameter list')
+    names, declarations = [], []
+    for part in parts:
+        parameter = re.fullmatch(r'('+ID+r')\s*:\s*(.+)', part)
+        if not parameter:
+            raise CleanError('Every compact parameter requires name: Type')
+        names.append(parameter[1])
+        declarations.append('Let '+parameter[1]+': '+parameter[2])
+    return name, names, declarations + ['Returns: '+compact[1]] + list(fields)
+
+
 def notation(header, fields, env, *, authored=False):
-    m = re.fullmatch(r'(?:Notation|Define)\s+('+ID+r'(?: +'+ID+r')*)\((.*?)\):', header, re.I)
-    if not m: raise CleanError('Invalid Notation header')
-    name, params = re.sub(' +', ' ', m[1]), split(m[2])
+    name, params, fields = signature_fields(header, fields)
     if len(set(params))!=len(params) or any(not re.fullmatch(ID,p) for p in params):
         raise CleanError('Invalid or duplicate parameters')
     if name in env.data['functions']: raise CleanError('Duplicate visible name: '+name)
@@ -146,7 +180,10 @@ def notation(header, fields, env, *, authored=False):
             raise CleanError('Implicit parameter is absent from argument types: '+n)
     key=add_definition(env,'cleanDefine_' if authored else 'cleanNotation_',name,body)
     env.data['functions'][name]={'params':[pattern(types[p]) for p in params], 'returns':pattern(result),
-        'lean':key+''.join(' ({'+str(i)+'})' for i in range(len(params))), 'latex':latex}
+        'lean':key+''.join(' ({'+str(i)+'})' for i in range(len(params))), 'latex':latex,
+        'signature_tree':['Signature', name,
+            [['Parameter', n, str(v.type), 'implicit' if n in implicit else 'explicit'] for n,v in local.items()],
+            str(result)]}
     if authored:
         env.definitions[name] = {'key': key, 'parameters': list(local), 'implementation': implementation,
             'tree': expression.tree if expression else None,

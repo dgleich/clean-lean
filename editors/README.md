@@ -91,3 +91,7 @@ passed. Emacs is not installed in the development container, so its supplied ERT
 check has **not run**. Neovim was not separately exercised. VS Code's tokenizer
 was exercised through TextMate/Oniguruma; the full VS Code application was not
 available. No language grammar or compiler behavior changed in this work.
+
+Compact signatures such as `Notation cos(x: Real): Real:` are highlighted as a
+declaration name followed by a signature region. This coarse lexical region does
+not parse dependent types; compiler checks decide whether the signature is valid.

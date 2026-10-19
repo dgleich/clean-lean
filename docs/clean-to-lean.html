@@ -132,18 +132,21 @@ Finset (Fin n)
     (A : Matrix (Fin n) (Fin n) ℂ) : ℂ :=
   Matrix.det A</code></pre></section></div>
   <div class="notes"><p><code>cleanDet</code> is an explanatory wrapper name; the prototype now generates a readable name plus a deterministic suffix, such as <code>cleanNotation_det_&lt;id&gt;</code>. Type wrappers similarly use <code>cleanType_Real_&lt;id&gt;</code>. The omitted header parameter <code>n</code> is inferred from <code>A</code>. This is not automatically a Lean <code>notation</code> declaration, and current Clean notation cannot bind a summation variable.</p></div>
+  <p>Equivalent compact signature (implemented):</p>
+  <pre><code>Notation cos(x0: Real): Real:
+  Means: Real.cos x0
+  Render latex: \cos({x0})</code></pre>
+  <p>This replaces <code>Notation cos(x0):</code>, <code>Let x0: Real</code>, and <code>Returns: Real</code>. Both spellings emit the same Lean wrapper and target. The final colon opens the block. Every header argument must be typed; body <code>Let</code>/<code>Returns</code> fields are rejected in the compact form. Keep the expanded signature for implicit parameters.</p>
 </article>
 <article id="define-clean" data-status="implemented" class="mapping">
   <header><h2><a href="#define-clean">Define with Equals authors a definition in Clean</a></h2><span class="badge implemented">Implemented slice</span></header>
   <p>The common definition form has exactly one implementation field. <code>Equals</code> contains a Clean expression.</p>
-  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Define doubled(x):
-  Returns: Real
-  Let x: Real
+  <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Define doubled(x: Real): Real:
   Equals:
     x + x</code></pre></section>
   <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>def doubled (x : ℝ) : ℝ :=
   x + x</code></pre></section></div>
-  <div class="notes"><p>Top-level <code>Define</code> now works in modules and document preludes, with inline or block <code>Equals</code>. Nonparameter fields may be reordered; parameter declarations keep their relative order. The return type and implementation see the complete parameter scope. Explicit imports must supply <code>Real</code> and addition. The right panel uses a readable name; emitted definitions use names such as <code>cleanDefine_doubled_&lt;id&gt;</code> and <code>noncomputable def</code>. Missing rendering defaults to a named call. Recursion and forward references are rejected. Full canonical-target conformance remains pending; <code>verify_definitions.py</code> supplies three bounded structural checks.</p></div>
+  <div class="notes"><p>Top-level <code>Define</code> now works in modules and document preludes, with inline or block <code>Equals</code>. The compact header is equivalent to <code>Define doubled(x):</code> with <code>Let x: Real</code> and <code>Returns: Real</code> in its body. In the expanded form, nonparameter fields may be reordered; parameter declarations keep their relative order. The return type and implementation see the complete parameter scope. Explicit imports must supply <code>Real</code> and addition. The right panel uses a readable name; emitted definitions use names such as <code>cleanDefine_doubled_&lt;id&gt;</code> and <code>noncomputable def</code>. Missing rendering defaults to a named call. Recursion and forward references are rejected. Full canonical-target conformance remains pending; <code>verify_definitions.py</code> supplies three bounded structural checks.</p></div>
 </article>
 <article id="define-lean" data-status="implemented" class="mapping">
   <header><h2><a href="#define-lean">Define with From Lean imports an implementation</a></h2><span class="badge implemented">Implemented slice</span></header>

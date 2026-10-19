@@ -16,4 +16,12 @@
     (should (eq (get-text-property (1- (point)) 'face) 'font-lock-preprocessor-face))
     (search-forward "Let z")
     (should (eq (get-text-property (1- (point)) 'face) 'font-lock-comment-face))))
+(ert-deftest clean-math-compact-signature ()
+  (with-temp-buffer
+    (insert "Notation cos(x: Real): Real:")
+    (clean-math-mode)
+    (font-lock-ensure)
+    (goto-char (point-min))
+    (search-forward "Real")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-type-face))))
 (ert-run-tests-batch-and-exit)

@@ -85,8 +85,13 @@ import           = "Import", string, ["as", identifier], NEWLINE
                  | "Import", "BibTeX", string, NEWLINE ;
 declaration      = definition | notation | typeDeclaration | sourceDeclaration
                  | phraseDeclaration | aliasDeclaration ;
-definition       = "Define", englishName, "(", [nameList], ")", ":",
+definition       = "Define", englishName, declarationSignature,
                    NEWLINE, INDENT, { definitionField }, DEDENT ;
+declarationSignature = "(", [nameList], ")", ":"
+                     | "(", [typedParameterList], ")", ":", typeExpression, ":" ;
+typedParameterList = typedParameter, { ",", typedParameter } ;
+typedParameter   = identifier, ":", typeExpression ;
+(* typeExpression uses the existing constructor/alias/prose type grammar. *)
 definitionField  = typedLet | attribution | presentationField
                  | "Returns", ":", expressionValue
                  | "Equals", ":", expressionValue
@@ -96,7 +101,7 @@ expressionValue  = expression, NEWLINE
 leanValue        = leanLine, NEWLINE
                  | NEWLINE, INDENT, leanLines, DEDENT ;
 presentationField = "Render", ["latex"], ":", rendering, NEWLINE ;
-notation         = "Notation", englishName, "(", [nameList], ")", ":",
+notation         = "Notation", englishName, declarationSignature,
                    NEWLINE, INDENT, { notationField }, DEDENT ;
 notationField    = typedLet
                  | "Returns", ":", expression, NEWLINE
@@ -127,13 +132,13 @@ nameList         = identifier, { ",", identifier } ;
 
 `Import BibTeX` introduces only bibliographic source metadata, using the citation-key and collision rules specified in [the prototype specification](spec.md#bibtex-sources). Its position follows this draft’s interleaved, sequential import rule, superseding the prototype’s prelude restriction. It neither introduces expression names nor changes mathematical overload resolution.
 
-Imports, definitions, results, and contexts may interleave at module level. An import takes effect immediately after its own item and only for subsequent items. Signatures and bodies may refer to preceding declarations and imports, never later ones. Imports inside a result, definition body, or context are not part of this slice. All fields must be unique except repeated typed `Let` clauses. A notation requires exactly one `Returns`, `Means`, and `Render`. With no `Syntax` field it is callable by its English name. An operator declaration also remains callable by that name.
+Imports, definitions, results, and contexts may interleave at module level. An import takes effect immediately after its own item and only for subsequent items. Signatures and bodies may refer to preceding declarations and imports, never later ones. Imports inside a result, definition body, or context are not part of this slice. All fields must be unique except repeated typed `Let` clauses. An expanded notation requires exactly one `Returns`, `Means`, and `Render`; a compact notation supplies the return type in its header instead of a `Returns` field. With no `Syntax` field it is callable by its English name. An operator declaration also remains callable by that name.
 
-A `Define` requires exactly one `Returns` field and exactly one implementation field: either `Equals` or `From Lean`, never both. Other fields may appear anywhere among its typed `Let` clauses. First collect the fields, then check the `Let` clauses in their relative source order. A parameter type can use earlier parameters only. The return type and implementation are resolved in the complete parameter scope, regardless of where their fields appear. The definition’s own name becomes available only after the definition has been checked; recursion is outside this slice. Empty and duplicate fields are errors. `Render` and `Render latex` are alternatives for one presentation field, not separately repeatable fields.
+An expanded `Define` requires exactly one `Returns` field (a compact `Define` supplies the return type in its header) and exactly one implementation field: either `Equals` or `From Lean`, never both. Other fields may appear anywhere among its typed `Let` clauses. First collect the fields, then check the `Let` clauses in their relative source order. A parameter type can use earlier parameters only. The return type and implementation are resolved in the complete parameter scope, regardless of where their fields appear. The definition’s own name becomes available only after the definition has been checked; recursion is outside this slice. Empty and duplicate fields are errors. `Render` and `Render latex` are alternatives for one presentation field, not separately repeatable fields.
 
 Definitions may carry one attribution and one presentation field; neither is required by this slice. This is a recorded provisional policy: the established mandatory-attribution requirement continues to apply to results. With no presentation field, a definition renders as a named application with its arguments. The optional-definition-attribution policy and presentation default can be revisited independently of parsing. `Returns` inference is deferred.
 
-For both `Define` and the existing `Notation` bridge, every header parameter must be declared exactly once in the `Let` clauses and in header order. Additional `Let` binders before the header parameters are implicit parameters inferred from the typed application. Both colon and `be` forms, and grouped typed lets, have identical binding semantics here and in results. An unused implicit parameter cannot be inferred and must cause an unresolved-parameter error; there is no guessed dimension/type value.
+After compact-signature normalization, for both `Define` and the existing `Notation` bridge, every header parameter must be declared exactly once in the `Let` clauses and in header order. Additional `Let` binders before the header parameters are implicit parameters inferred from the typed application. Both colon and `be` forms, and grouped typed lets, have identical binding semantics here and in results. An unused implicit parameter cannot be inferred and must cause an unresolved-parameter error; there is no guessed dimension/type value.
 
 Infix notation requires two header parameters and all three syntax fields. Prefix/postfix notation requires one header parameter, `Syntax`, and `Precedence`, and forbids `Associativity`. Call-only notation forbids precedence/associativity fields. Proposed precedence values are integers from 0 through 100, with larger values binding more tightly; calls bind tighter than all operators.
 
@@ -313,3 +318,34 @@ uniqueness procedure remain pending. The new structural checks cover three
 monomorphic expression-body targets, not all legal definitions.
 
 The prototype wrapper naming rule is specified in [readable generated identifiers](spec.md#readable-generated-lean-identifiers). This is a deterministic target-identity spelling change; it adds no Clean parse alternative or scope rule.
+
+## Compact declaration signatures (implemented)
+
+`Notation cos(x: Real): Real:` and `Define square(x: Real): Real:` are
+alternatives to the expanded signature. The final colon opens the declaration
+block; earlier colons annotate parameter and return types. The first balanced
+closing parenthesis ends the header parameter list. A suffix consisting only of
+`:` selects the expanded form; `: typeExpression :` selects the compact form.
+This lexical distinction precedes any type checking and also works for zero
+parameters. Commas split parameters only at depth zero within the outer list.
+Empty entries, trailing commas, and grouped parameter names are not allowed in
+compact headers. Parenthesized type constructors may nest. Keyword capitalization
+and existing parenthesis-continuation/layout rules apply.
+
+Every compact parameter must be typed, and its return type must appear in the
+header. Compact declarations reject all body `Let` and `Returns` fields, even
+if they repeat the same type. The expanded form retains its required body
+signature; it cannot contain typed header parameters. `::` is not a new spelling.
+For implicit type/dimension parameters use the expanded form; no implicit
+parameter syntax is introduced by this alternative.
+
+Normalize a compact header to its name-only header, one typed `Let` for each
+parameter in source order, and one `Returns` field. Preserve the other body
+fields. Then apply the existing declaration rules without branching on original
+spelling. Parameter types see preceding parameters; the result and implementation
+see the complete parameter scope. Names, declaration kind, resolved parameter
+order/types/implicitness, return type, implementation, and rendering determine the
+same normalized declaration regardless of compact or expanded spelling. There
+are no new candidate meanings or type-directed parse choices. The emitted Lean
+signature/body, generated identifier, and target are identical under identical
+explicit environments. The existing general elaboration-conformance gaps remain.

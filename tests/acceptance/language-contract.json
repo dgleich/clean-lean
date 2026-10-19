@@ -189,6 +189,35 @@
         "lake env lean generated/VerifiedDefinitions.lean"
       ],
       "obligation": "Naming rule, stability, safe stems and forced collision rejection covered by test_generated_names.py; existing three independent expression-tree and structural Lean-target checks remain applicable. General declaration AST, polymorphic-target and ambiguity obligations remain pending."
+    },
+    {
+      "id": "compact_notation_signature",
+      "status": "partial",
+      "environment": "Explicit library/types.clean imports; Lean/Mathlib v4.24.0",
+      "source": "Notation cos(x0: Real): Real:\n  Means: Real.cos x0\n  Render latex: \\cos({x0})\n",
+      "equivalent_source": "Notation cos(x0):\n  Let x0: Real\n  Returns: Real\n  Means: Real.cos x0\n  Render latex: \\cos({x0})\n",
+      "expected_signature_tree": [
+        "Signature",
+        "cos",
+        [
+          [
+            "Parameter",
+            "x0",
+            "Real",
+            "explicit"
+          ]
+        ],
+        "Real"
+      ],
+      "expected_lean": "fun (x0 : Real) => Real.cos x0",
+      "expected_lean_type": "Real → Real",
+      "checks": [
+        "python3 -m unittest discover -s tests -v",
+        "python3 verify_definitions.py",
+        "lake env lean generated/VerifiedDefinitions.lean"
+      ],
+      "observed": "Independent signature oracle, pre-resolution normalization oracle, identical expanded/compact emitted targets, and structural cosine target comparison implemented. Negative tests cover mixed/partial signatures, missing final colon, duplicates, trailing commas, unknown dimensions and return mismatch; interaction tests cover nested/prose types, case, multiline headers, zero arguments, and From Lean.",
+      "obligation": "Full module/declaration ASTs and general ambiguity/incomplete-elaboration checks remain pending. Compact syntax reuses the existing elaborator and cannot certify its wider inference policies."
     }
   ]
 }

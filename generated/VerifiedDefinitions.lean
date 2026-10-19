@@ -146,3 +146,5 @@ noncomputable def expected_commutator {k : ℕ} (X Y : Matrix (Fin k) (Fin k) �
 assert_same_target cleanDefine_commutator_dec87a8766301eb4176d expected_commutator
 noncomputable def expected_matrix_square {k : ℕ} (X : Matrix (Fin k) (Fin k) ℂ) : Matrix (Fin k) (Fin k) ℂ := X * X
 assert_same_target cleanDefine_matrix_square_59c5fc3d3e7ab2ab3d9b expected_matrix_square
+noncomputable def expected_cos (a : ℝ) : ℝ := Real.cos a
+assert_same_target cleanNotation_cos_1efb67bf51334208e223 expected_cos

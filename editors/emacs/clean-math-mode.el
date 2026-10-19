@@ -11,6 +11,8 @@
     (,(concat "^ *" clean-math--keyword) . font-lock-keyword-face)
     ("^ *\\(Result\\|Theorem\\|Context\\|Define\\|Notation\\|Type\\|Source\\) +\\(.+\\): *$"
      (1 font-lock-keyword-face t) (2 font-lock-function-name-face t))
+    ("^ *\\(Notation\\|Define\\) +\\([^(]+\\)\\((.*\\): *$"
+     (1 font-lock-keyword-face t) (2 font-lock-function-name-face t) (3 font-lock-type-face t))
     ("^ *\\(Let\\) +\\(.+?\\)\\(?: *:\\| +be +\\)\\(.+\\)$"
      (1 font-lock-keyword-face t) (2 font-lock-variable-name-face t) (3 font-lock-type-face t))
     (,(concat "^ *" clean-math--metadata " *:.*$") (0 font-lock-string-face t) (1 font-lock-keyword-face t))
