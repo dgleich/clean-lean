@@ -64,7 +64,8 @@ class CleanTests(unittest.TestCase):
             self.assertGreaterEqual(len(rs),20)
             entries=[x for x in catalog if x['category']==cat]
             self.assertEqual(len(rs),len(entries))
-            self.assertEqual(len(entries),len(set(x['source_declaration'] for x in entries)))
+            self.assertGreaterEqual(len(set(x['source_declaration'] for x in entries)),20)
+            self.assertEqual(len(entries),len(set(x['name'] for x in entries)))
     def test_conclude_is_last(self): self.reject(SOURCE+'    Let z: Real\n','Conclude must be last')
     def test_logical_precedence(self):
         env={x:Expr(x,x,PROP) for x in ['p','q','r']}

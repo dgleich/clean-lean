@@ -61,6 +61,9 @@ These decisions separate requested behavior from provisional implementation choi
 
 | D48 | Maintain a local Clean-to-Lean HTML reference for Lean users | Explicit user request. `clean-to-lean.html` maps syntax, binding, and elaboration with implemented/accepted/proposed status. AGENTS.md requires updates with language changes. Explanatory Lean snippets do not replace canonical-target acceptance tests |
 
+| D49 | Prefer definitions authored in Clean; track Lean-body fallbacks as language gaps | Explicit user direction. Implemented first `Define Equals` slice and 12 additional result ports; foundational primitives remain imported. Scope, unresolved gaps, and acceptance limits are recorded in `porting-findings.md` |
+| D50 | Prototype `Define` supports inline From Lean, but rejects its block form | Temporary implementation boundary, not a change to the accepted grammar. Equals supports inline/block bodies; ordered/grouped/prose parameters, reordered fields, compact optional attribution and default rendering are implemented. Full canonical conformance remains pending |
+
 ## Questions to revisit after reading the specimens
 
 1. Should formalization contributors become a required field distinct from mathematical sources? Source keys are now implemented.

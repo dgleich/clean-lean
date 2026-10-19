@@ -73,14 +73,17 @@ noncomputable def cleanNotation_5c84f457aa0661a1ecbb  (x0 : ℕ) (x1 : List (ℕ
 noncomputable def cleanNotation_afbf80a28ac74f1f01c4  (x0 : List (ℕ)) (x1 : List (ℕ)) : List (ℕ) :=
   List.merge x0 x1 (· ≤ ·)
 
-noncomputable def cleanNotation_4de83e007a08771e4a52  (x0 : ℕ) (x1 : ℕ) : Prop :=
-  Nat.Coprime x0 x1
-
 noncomputable def cleanNotation_c5d38a8d9fdadc4bcfb1  (x0 : ℕ) (x1 : ℕ) : ℕ :=
   Nat.gcd x0 x1
 
 noncomputable def cleanNotation_6a337f2a1fee7d9b19ad  (x0 : ℕ) (x1 : ℕ) : ℕ :=
   Nat.lcm x0 x1
+
+noncomputable def cleanDefine_d8366f033b725ff2b457  (x0 : ℕ) (x1 : ℕ) : Prop :=
+  ((cleanNotation_c5d38a8d9fdadc4bcfb1 (x0) (x1)) = 1)
+
+noncomputable def cleanDefine_1e861681a31bda4226df  (xs : List (ℕ)) (ys : List (ℕ)) : Prop :=
+  ((cleanNotation_bb5cb4068b5c2ce6d1ed (ys)) ∧ (cleanNotation_e74b2d2973b6778742ca (ys) (xs)))
 
 
 open scoped Matrix
@@ -245,7 +248,7 @@ relationship: specialized
 -/
 def euclidean_coprime_reduction : Prop :=
   ∀ (a b k : ℕ),
-  ((cleanNotation_4de83e007a08771e4a52 (a) ((b + (k * a)))) ↔ (cleanNotation_4de83e007a08771e4a52 (a) (b)))
+  ((cleanDefine_d8366f033b725ff2b457 (a) ((b + (k * a)))) ↔ (cleanDefine_d8366f033b725ff2b457 (a) (b)))
 
 /--
 source: mathlib
@@ -255,7 +258,7 @@ relationship: specialized
 def euclidean_coprime_subtraction : Prop :=
   ∀ (a b : ℕ),
   ∀ (ordered : (a ≤ b)),
-  ((cleanNotation_4de83e007a08771e4a52 ((b - a)) (a)) ↔ (cleanNotation_4de83e007a08771e4a52 (b) (a)))
+  ((cleanDefine_d8366f033b725ff2b457 ((b - a)) (a)) ↔ (cleanDefine_d8366f033b725ff2b457 (b) (a)))
 
 /--
 source: mathlib
@@ -264,7 +267,7 @@ relationship: specialized
 -/
 def coprime_lcm_product : Prop :=
   ∀ (a b : ℕ),
-  ∀ (cop : (cleanNotation_4de83e007a08771e4a52 (a) (b))),
+  ∀ (cop : (cleanDefine_d8366f033b725ff2b457 (a) (b))),
   ((cleanNotation_6a337f2a1fee7d9b19ad (a) (b)) = (a * b))
 
 /--
@@ -274,7 +277,7 @@ relationship: specialized
 -/
 def common_divisor_of_coprimes : Prop :=
   ∀ (a b k : ℕ),
-  ∀ (cop : (cleanNotation_4de83e007a08771e4a52 (a) (b))),
+  ∀ (cop : (cleanDefine_d8366f033b725ff2b457 (a) (b))),
   ∀ (divides_a : (k ∣ a)),
   ∀ (divides_b : (k ∣ b)),
   (k = 1)
@@ -286,7 +289,35 @@ relationship: specialized
 -/
 def coprime_product_divisibility : Prop :=
   ∀ (a b k : ℕ),
-  ∀ (cop : (cleanNotation_4de83e007a08771e4a52 (k) (b))),
+  ∀ (cop : (cleanDefine_d8366f033b725ff2b457 (k) (b))),
   ((k ∣ (a * b)) ↔ (k ∣ a))
+
+/--
+source: mathlib
+reference: List.perm_insertionSort
+relationship: adapted
+-/
+def insertion_sort_certificate : Prop :=
+  ∀ (xs : List (ℕ)),
+  (cleanDefine_1e861681a31bda4226df (xs) ((cleanNotation_6aaed7bf698e562b4aa5 (xs))))
+
+/--
+source: mathlib
+reference: List.mergeSort_eq_insertionSort
+relationship: adapted
+-/
+def merge_sort_certificate : Prop :=
+  ∀ (xs : List (ℕ)),
+  (cleanDefine_1e861681a31bda4226df (xs) ((cleanNotation_51561cc64977417a701c (xs))))
+
+/--
+source: mathlib
+reference: List.Sorted.insertionSort_eq
+relationship: adapted
+-/
+def certified_sort_unchanged : Prop :=
+  ∀ (xs ys : List (ℕ)),
+  ∀ (certificate : (cleanDefine_1e861681a31bda4226df (xs) (ys))),
+  ((cleanNotation_6aaed7bf698e562b4aa5 (ys)) = ys)
 
 end CleanStatements

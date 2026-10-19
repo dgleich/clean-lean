@@ -71,11 +71,19 @@ Notation connected(x0):
     Means: (x0).Connected
     Render latex: {x0}\text{{ is connected}}
 
-Notation commonNeighbors(x0,x1,x2):
+Define commonNeighbors(x0,x1,x2):
     Let n: Natural
     Let x0: Graph(n)
     Let x1: Vertex(n)
     Let x2: Vertex(n)
     Returns: Set(Vertex(n))
-    Means: (x0).commonNeighbors x1 x2
+    Equals: neighbors(x0,x1) ∩ neighbors(x0,x2)
     Render latex: N_{{{x0}}}({x1})\cap N_{{{x0}}}({x2})
+
+Define nonadjacent(G, u, v):
+  Let n: Natural
+  Let G: Graph(n)
+  Let u, v: Vertex(n)
+  Returns: Proposition
+  Equals: not adjacent(G,u,v)
+  Render: {u} and {v} are nonadjacent in {G}

@@ -117,3 +117,22 @@ Let $a$, $b$ and $k$ be natural numbers.
 Assume $k\text{ and }b\text{ are coprime}$ (\texttt{cop}).
 Then \[k \text{ divides } a \, b \text{ if and only if } k \text{ divides } a.\]
 \end{cleanresult}
+
+\begin{cleanresult}{insertion sort certificate}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L460}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Then \[\operatorname{sorting\ certificate}(\mathit{xs}, \operatorname{insertionSort}(\mathit{xs})).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{merge sort certificate}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L708}{[Mathlib]}}
+Let $\mathit{xs}$ be a list with entries in $\mathbb{N}$.
+Then \[\operatorname{sorting\ certificate}(\mathit{xs}, \operatorname{mergeSort}(\mathit{xs})).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{certified sort unchanged}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean\#L499}{[Mathlib]}}
+Let $\mathit{xs}$ and $\mathit{ys}$ be lists with entries in $\mathbb{N}$.
+Assume $\operatorname{sorting\ certificate}(\mathit{xs}, \mathit{ys})$ (\texttt{certificate}).
+Then \[\operatorname{insertionSort}(\mathit{ys}) = \mathit{ys}.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}

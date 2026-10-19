@@ -243,7 +243,7 @@ All mathematical meanings should be declared in modules, including operator over
 
 ## Paper definition modules
 
-The [paper translation specimens](paper-translations.md) use the existing module syntax to expose fully defined Lean operations for walk profiles, graph conductance and its spectral optimization problem, and SDP certificates. Their working Clean source uses named operations where the proposed general binder syntax is not yet implemented. No new top-level `Define` grammar is implied. The three generated propositions and independent statement-shape checks compile; proofs of the three main results are separate work.
+The [paper translation specimens](paper-translations.md) use the existing module syntax to expose fully defined Lean operations for walk profiles, graph conductance and its spectral optimization problem, and SDP certificates. Their working Clean source uses named operations where the proposed general binder syntax is not yet implemented. Top-level `Define` is now implemented for the bounded slice below; the paper optimization definitions still need binders. The three generated propositions and independent statement-shape checks compile; proofs of the three main results are separate work.
 
 ### Long expression example
 
@@ -263,3 +263,53 @@ Result determinant transpose:
 ```
 
 New clauses cannot supply missing operands for an unfinished expression. Errors identify physical source lines; a continued expression is attached to its first line.
+
+## Authored definitions: current implementation slice
+
+`Define` is available in definition modules and in a document prelude. It shares
+call resolution with `Notation`, and does not require a new registry or a Lean
+implementation body:
+
+```text
+Define squared distance(x, y):
+  Returns: Real
+  Let x, y be Real
+  Equals:
+    square(x-y)
+```
+
+Imports must first supply `Real` and `square`. Parameters retain their source
+order; all nonparameter fields may move. `Returns` and exactly one of `Equals`
+or `From Lean` are required. Grouped parameters and `be` work in both `Define`
+and `Notation`. Definitions can return propositions as well as values.
+`Equals` accepts an inline expression or an aligned explicit expression block;
+`From Lean` currently accepts an inline Lean term only. Its specified block form
+is still unimplemented and rejected. Definition attribution is optional, compact,
+and resolved against explicit sources. Expanded attribution is not implemented
+here. Rendering is optional and defaults to the English name applied to arguments.
+There is no standalone LaTeX rendering of definition declarations yet.
+
+The compiler collects fields, resolves parameter types in order, resolves the
+return type in the complete parameter scope, and translates the body in that same
+scope. It installs the callable name only afterward. Forward references and
+recursion are rejected. Existing implicit dimension/type inference restrictions
+from `Notation` still apply. Mathematical operator dispatch and literal inference
+remain prototype debt; this feature does not add new name-based dispatch.
+
+A fixed declaration header and field labels determine one declaration structure.
+Exactly one implementation field selects the lexical mode; field order never
+selects meaning. An `Equals` block is delimited by its indentation and contains
+one expression under the existing precedence grammar. Its tree translates
+constructively by the existing expression rules into a typed, noncomputable Lean
+`def`; calls refer to earlier generated declaration identities. Lean elaborates
+the entire telescope, result, and body. This gives a deterministic prototype
+translation, **not yet a proof of global canonical-target uniqueness**: the
+existing inference/overload and module-scope gaps still apply.
+
+`verify_definitions.py` checks independent expression trees for square, matrix
+square, and commutator and generates exact elaborated Lean body/type comparisons.
+These preserve binder explicitness, universe and instance arguments, and proof
+terms; only metadata and binder display names are erased. Comparator guards
+reject an implicit/explicit binder change and a beta-reducible alternative.
+Full declaration AST checks and ambiguous/incomplete-elaboration checks remain
+pending in the acceptance catalog. See [porting findings](porting-findings.md).

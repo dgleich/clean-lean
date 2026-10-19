@@ -54,3 +54,21 @@ Notation compose(x0,x1):
     Returns: Function(Real,Real)
     Means: (x0) ∘ (x1)
     Render latex: ({x0}\circ {x1})
+
+Define square(x):
+  Let x be a Real
+  Returns: Real
+  Equals: x^2
+  Render latex: ({x})^{{2}}
+
+Define squared distance(x, y):
+  Returns: Real
+  Let x, y: Real
+  Equals:
+    square(x-y)
+
+Define trigonometric energy(x):
+  Let x: Real
+  Returns: Real
+  Equals:
+    square(sin(x)) + square(cos(x))

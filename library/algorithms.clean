@@ -69,12 +69,6 @@ Notation merge(x0,x1):
     Means: List.merge x0 x1 (· ≤ ·)
     Render latex: \operatorname{{merge}}({x0},{x1})
 
-Notation coprime(x0,x1):
-    Let x0: Natural
-    Let x1: Natural
-    Returns: Proposition
-    Means: Nat.Coprime x0 x1
-    Render latex: {x0}\text{{ and }}{x1}\text{{ are coprime}}
 
 Notation gcd(x0,x1):
     Let x0: Natural
@@ -89,3 +83,16 @@ Notation lcm(x0,x1):
     Returns: Natural
     Means: Nat.lcm x0 x1
     Render latex: \operatorname{{lcm}}({x0},{x1})
+
+Define coprime(x0,x1):
+    Let x0: Natural
+    Let x1: Natural
+    Returns: Proposition
+    Equals: gcd(x0,x1) = 1
+    Render latex: {x0}\text{{ and }}{x1}\text{{ are coprime}}
+
+Define sorting certificate(xs, ys):
+  Let xs, ys: List(Natural)
+  Returns: Proposition
+  Equals:
+    sorted(ys) and permutation(ys,xs)

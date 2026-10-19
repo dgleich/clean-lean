@@ -34,7 +34,7 @@ def _expression_lines(text):
         if start is None:
             if conclusion_column is not None and column <= conclusion_column:
                 conclusion_column = None
-            if re.fullmatch(r'Conclude\s*:', stripped, re.I):
+            if re.fullmatch(r'(?:Conclude|Equals)\s*:', stripped, re.I):
                 conclusion_column = column
                 continue
             expression = conclusion_column is not None or re.match(
@@ -99,6 +99,7 @@ class Expr:
     tex: str
     type: Type
     precedence: int = 99
+    tree: object = None
 @dataclass
 class Clause:
     kind: str
@@ -145,6 +146,7 @@ class Environment:
         self.data={'types': {}, 'aliases': {}, 'phrases': [], 'functions': {}}
         self.sources=Sources()
         self.notation_definitions={}
+        self.definitions={}
         self.lean_imports=[]
         self.loaded_modules=set()
     def type(self,s,env=None,phrases=True,trail=()):
@@ -203,7 +205,7 @@ class Environment:
         s=self.data['functions'][name]; bind={}
         if len(args)!=len(s['params']): raise CleanError('Wrong number of arguments for '+name)
         for p,a in zip(s['params'],args): self.match(p,a.type,bind)
-        return Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind))
+        return Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]])
 
 TOKEN=re.compile(r'\s*(\d+|'+ID+r'|↔|→|≤|≥|≠|∧|∨|¬|∈|⊆|∪|∩|∣|<=|>=|!=|[(),+*/^=<>-])')
 class Expressions:
@@ -237,8 +239,8 @@ class Expressions:
             if tok!='-' and a.type!=PROP: raise CleanError('Not requires a proposition')
             inner=('('+a.tex+')') if a.precedence < 8 else a.tex
             tx=('-'+inner) if tok=='-' else (r'\text{not }('+a.tex+')')
-            x=Expr('('+('-' if tok=='-' else '¬')+a.lean+')',tx,a.type,7 if tok=='-' else 5)
-        elif tok.isdigit(): x=Expr(tok,tok,NUM)
+            x=Expr('('+('-' if tok=='-' else '¬')+a.lean+')',tx,a.type,7 if tok=='-' else 5,['Unary', '-' if tok=='-' else 'not', a.tree])
+        elif tok.isdigit(): x=Expr(tok,tok,NUM,tree=['Decimal',tok])
         elif self.peek()=='(':
             self.take(); args=[]
             if self.peek()!=')':
@@ -250,9 +252,11 @@ class Expressions:
             if tok in self.env and self.env[tok].type.name=='Function':
                 t=self.env[tok].type
                 if len(args)!=1 or not compatible(args[0].type,t.args[0]): raise CleanError('Function argument mismatch')
-                x=Expr('('+tok+' '+args[0].lean+')',texid(tok)+'('+args[0].tex+')',t.args[1])
+                x=Expr('('+tok+' '+args[0].lean+')',texid(tok)+'('+args[0].tex+')',t.args[1],tree=['Call',tok,[a.tree for a in args]])
             else: x=self.reg.call(tok,args)
-        elif tok in self.env: x=self.env[tok]
+        elif tok in self.env:
+            value=self.env[tok]
+            x=Expr(value.lean,value.tex,value.type,value.precedence,['Local',tok])
         else: raise CleanError('Unknown name: '+tok)
         while self.peek() is not None:
             op=self.peek().lower(); prec=self.PREC.get(op,-1)
@@ -299,7 +303,7 @@ def binary(op,a,b):
     tex=left+' '+top+' '+right
     if op=='^': tex='{'+left+'}^{'+b.tex+'}'
     if op=='/': tex=r'\frac{'+a.tex+'}{'+b.tex+'}'
-    return Expr('('+a.lean+' '+lop+' '+b.lean+')',tex,t,prec)
+    return Expr('('+a.lean+' '+lop+' '+b.lean+')',tex,t,prec,['Operator',op,a.tree,b.tree])
 
 def _parse_flat(text,reg):
     results=[]; r=None; env={}; mode=None; conclusion=[]

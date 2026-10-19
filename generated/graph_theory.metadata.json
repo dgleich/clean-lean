@@ -618,5 +618,98 @@
       "line": 68,
       "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
     }
+  },
+  {
+    "name": "nonadjacency_symmetry",
+    "title": "nonadjacency symmetry",
+    "line": 150,
+    "file": "corpus/graph_theory.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "SimpleGraph.adj_comm",
+      "relationship": "adapted"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "../corpus/references.json"
+      },
+      "reference": "SimpleGraph.adj_comm",
+      "declaration": "SimpleGraph.adj_comm",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L158",
+      "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+      "line": 158,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "nonadjacency_reflexive",
+    "title": "nonadjacency reflexive",
+    "line": 157,
+    "file": "corpus/graph_theory.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "SimpleGraph.irrefl",
+      "relationship": "adapted"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "../corpus/references.json"
+      },
+      "reference": "SimpleGraph.irrefl",
+      "declaration": "SimpleGraph.irrefl",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L155",
+      "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+      "line": 155,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "complement_from_nonadjacency",
+    "title": "complement from nonadjacency",
+    "line": 164,
+    "file": "corpus/graph_theory.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "SimpleGraph.compl_adj",
+      "relationship": "adapted"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "../corpus/references.json"
+      },
+      "reference": "SimpleGraph.compl_adj",
+      "declaration": "SimpleGraph.compl_adj",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L238",
+      "file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+      "line": 238,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
   }
 ]

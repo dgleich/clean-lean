@@ -28,3 +28,17 @@ Notation inverse(x0):
     Returns: Matrix(n,n,Complex)
     Means: (x0)⁻¹
     Render latex: {{{x0}}}^{{-1}}
+
+Define commutator(A, B):
+  Let n: Natural
+  Let A, B: Matrix(n,n,Complex)
+  Returns: Matrix(n,n,Complex)
+  Equals: A*B - B*A
+  Render latex: [{A},{B}]
+
+Define matrix square(A):
+  Let n: Natural
+  Let A: Matrix(n,n,Complex)
+  Returns: Matrix(n,n,Complex)
+  Equals: A*A
+  Render latex: ({A})^{{2}}

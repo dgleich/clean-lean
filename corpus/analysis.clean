@@ -113,3 +113,18 @@ Result continuous product:
     Assume hf: continuous(f)
     Assume hg: continuous(g)
     Conclude: continuous(f*g)
+
+Result authored square root:
+    Attribution: mathlib; Real.sqrt_sq_eq_abs; adapted
+    Let x: Real
+    Conclude: sqrt(square(x)) = abs(x)
+
+Result authored trigonometric energy:
+    Attribution: mathlib; Real.sin_sq_add_cos_sq; adapted
+    Let x: Real
+    Conclude: trigonometric energy(x) = 1
+
+Result distance square root:
+    Attribution: mathlib; Real.sqrt_sq_eq_abs; adapted
+    Let x, y: Real
+    Conclude: sqrt(squared distance(x,y)) = abs(x-y)

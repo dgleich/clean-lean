@@ -107,9 +107,29 @@ alg('ordered_insert_contains_input','List.sublist_orderedInsert','sublist(xs,ins
 NL=['a, b, k: Natural']
 alg('euclidean_coprime_reduction','Nat.coprime_add_mul_right_right','coprime(a,b+k*a) ↔ coprime(a,b)','Nat.coprime_add_mul_right_right a b k',topic='CLR number theoretic algorithms: Euclidean invariants',lets=NL,file=GCD)
 alg('euclidean_coprime_subtraction','Nat.coprime_sub_self_left','coprime(b-a,a) ↔ coprime(b,a)','Nat.coprime_sub_self_left ordered',[('ordered','a ≤ b')],topic='CLR number theoretic algorithms: Euclidean invariants',lets=NL,file=GCD)
-alg('coprime_lcm_product','Nat.Coprime.lcm_eq_mul','lcm(a,b) = a*b','cop.lcm_eq_mul',[('cop','coprime(a,b)')],topic='CLR number theoretic algorithms: arithmetic supporting lemma',lets=NL,file=GCD)
+alg('coprime_lcm_product','Nat.Coprime.lcm_eq_mul','lcm(a,b) = a*b','Nat.Coprime.lcm_eq_mul cop',[('cop','coprime(a,b)')],topic='CLR number theoretic algorithms: arithmetic supporting lemma',lets=NL,file=GCD)
 alg('common_divisor_of_coprimes','Nat.eq_one_of_dvd_coprimes','k = 1','Nat.eq_one_of_dvd_coprimes cop divides_a divides_b',[('cop','coprime(a,b)'),('divides_a','k ∣ a'),('divides_b','k ∣ b')],topic='CLR number theoretic algorithms: arithmetic supporting lemma',lets=NL,file=GCD)
-alg('coprime_product_divisibility','Nat.Coprime.dvd_mul_right','k ∣ a*b ↔ k ∣ a','cop.dvd_mul_right',[('cop','coprime(k,b)')],topic='CLR number theoretic algorithms: arithmetic supporting lemma',lets=NL,file=GCD)
+alg('coprime_product_divisibility','Nat.Coprime.dvd_mul_right','k ∣ a*b ↔ k ∣ a','Nat.Coprime.dvd_mul_right cop',[('cop','coprime(k,b)')],topic='CLR number theoretic algorithms: arithmetic supporting lemma',lets=NL,file=GCD)
+# Ports exercising authored Clean definitions, including definitions composed from definitions.
+la('trace_commutator',T,'Matrix.trace_mul_comm','trace(commutator(A,B)) = 0',
+   'by change Matrix.trace (A*B-B*A) = 0; rw [Matrix.trace_sub, Matrix.trace_mul_comm A B, sub_self]')
+la('trace_matrix_square',T,'Matrix.trace_mul_comm','trace(matrix square(A)) = trace(A*A)','rfl')
+la('determinant_matrix_square',D,'Matrix.det_mul','det(matrix square(A)) = det(A)*det(A)','Matrix.det_mul A A')
+an('authored_square_root',SQ,'Real.sqrt_sq_eq_abs','sqrt(square(x)) = abs(x)','Real.sqrt_sq_eq_abs x')
+an('authored_trigonometric_energy',TR,'Real.sin_sq_add_cos_sq','trigonometric energy(x) = 1','Real.sin_sq_add_cos_sq x')
+an('distance_square_root',SQ,'Real.sqrt_sq_eq_abs','sqrt(squared distance(x,y)) = abs(x-y)','Real.sqrt_sq_eq_abs (x-y)')
+gr('nonadjacency_symmetry','adj_comm','nonadjacent(G,u,v) ↔ nonadjacent(G,v,u)','not_congr (G.adj_comm u v)')
+gr('nonadjacency_reflexive','irrefl','nonadjacent(G,u,u)','G.irrefl')
+gr('complement_from_nonadjacency','compl_adj','adjacent(complement(G),u,v) ↔ (u ≠ v and nonadjacent(G,u,v))','SimpleGraph.compl_adj G u v')
+alg('insertion_sort_certificate','List.perm_insertionSort','sorting certificate(xs,insertionSort(xs))',
+    'And.intro (List.sorted_insertionSort (· ≤ ·) xs) (List.perm_insertionSort (· ≤ ·) xs)')
+alg('merge_sort_certificate','List.mergeSort_eq_insertionSort','sorting certificate(xs,mergeSort(xs))',
+    "by change List.Sorted (· ≤ ·) (xs.mergeSort (· ≤ ·)) ∧ List.Perm (xs.mergeSort (· ≤ ·)) xs; rw [List.mergeSort_eq_insertionSort]; exact And.intro (List.sorted_insertionSort (· ≤ ·) xs) (List.perm_insertionSort (· ≤ ·) xs)")
+alg('certified_sort_unchanged','List.Sorted.insertionSort_eq','insertionSort(ys) = ys',
+    'certificate.1.insertionSort_eq',[('certificate','sorting certificate(xs,ys)')])
+for item in items[-12:]:
+    item['relationship'] = 'adapted'
+
 # Remove unused parameters while retaining dimensions used by remaining types.
 for item in items:
     used=set(re.findall(r"[^\W\d]\w*",item['claim']+' '+' '.join(p for _,p in item['assumptions'])))
@@ -154,7 +174,7 @@ for cat in ['linear_algebra','graph_theory','analysis','algorithms']:
     for it in selected:
         shared=cat=='linear_algebra' and it['name'] in determinant_context
         prefix='    ' if shared else ''
-        out += [prefix+f'Result {it["title"]}:',prefix+f'    Attribution: mathlib; {it["source_declaration"]}; specialized']
+        out += [prefix+f'Result {it["title"]}:',prefix+f'    Attribution: mathlib; {it["source_declaration"]}; {it.get("relationship", "specialized")}']
         if not shared: out += [prefix+'    Let '+l for l in it['lets']]
         out += [prefix+f'    Assume {n}: {p}' for n,p in it['assumptions']]
         out += [prefix+'    Conclude: '+it['claim'],'']

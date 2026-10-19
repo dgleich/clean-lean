@@ -55,6 +55,12 @@ noncomputable def cleanNotation_ec7d2405c8c143132e84 {m : ℕ} {n : ℕ} (x0 : M
 noncomputable def cleanNotation_60f5a255d86c84175527 {n : ℕ} (x0 : Matrix (Fin n) (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ :=
   (x0)⁻¹
 
+noncomputable def cleanDefine_dec87a8766301eb4176d {n : ℕ} (A : Matrix (Fin n) (Fin n) ℂ) (B : Matrix (Fin n) (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ :=
+  ((A * B) - (B * A))
+
+noncomputable def cleanDefine_59c5fc3d3e7ab2ab3d9b {n : ℕ} (A : Matrix (Fin n) (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ :=
+  (A * A)
+
 
 open scoped Matrix
 
@@ -270,5 +276,35 @@ def transpose_product : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
   ((cleanNotation_ec7d2405c8c143132e84 ((A * B))) = ((cleanNotation_ec7d2405c8c143132e84 (B)) * (cleanNotation_ec7d2405c8c143132e84 (A))))
+
+/--
+source: mathlib
+reference: Matrix.trace_mul_comm
+relationship: adapted
+-/
+def trace_commutator : Prop :=
+  ∀ (n : ℕ),
+  ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
+  ((cleanNotation_77213551dad9a763052a ((cleanDefine_dec87a8766301eb4176d (A) (B)))) = 0)
+
+/--
+source: mathlib
+reference: Matrix.trace_mul_comm
+relationship: adapted
+-/
+def trace_matrix_square : Prop :=
+  ∀ (n : ℕ),
+  ∀ (A : Matrix (Fin n) (Fin n) ℂ),
+  ((cleanNotation_77213551dad9a763052a ((cleanDefine_59c5fc3d3e7ab2ab3d9b (A)))) = (cleanNotation_77213551dad9a763052a ((A * A))))
+
+/--
+source: mathlib
+reference: Matrix.det_mul
+relationship: adapted
+-/
+def determinant_matrix_square : Prop :=
+  ∀ (n : ℕ),
+  ∀ (A : Matrix (Fin n) (Fin n) ℂ),
+  ((cleanNotation_7326e962c725ce45b521 ((cleanDefine_59c5fc3d3e7ab2ab3d9b (A)))) = ((cleanNotation_7326e962c725ce45b521 (A)) * (cleanNotation_7326e962c725ce45b521 (A))))
 
 end CleanStatements

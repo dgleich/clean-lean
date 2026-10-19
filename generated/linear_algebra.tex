@@ -1,11 +1,11 @@
 % Generated statements, not proof certificates.
 \ifcleanreferenced
-\begin{cleancontext}{complex square matrices}{7d45137008f5-4}
+\begin{cleancontext}{complex square matrices}{4d15f41ed243-4}
 Let $n$ be a natural number.
 Let $A$, $B$ and $C$ be $n\times n$ matrices over $\mathbb{C}$.
 \end{cleancontext}
 \begin{cleanresult}{determinant product}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean\#L134}{[Mathlib]}}
-Using Context (\cleancontextref{7d45137008f5-4}).
+Using Context (\cleancontextref{4d15f41ed243-4}).
 Then \[\det(A \, B) = \det(A) \, \det(B).\]
 \end{cleanresult}
 
@@ -19,7 +19,7 @@ Then \[\det(A \, B) = \det(A) \, \det(B).\]
 \fi
 \ifcleanreferenced
 \begin{cleanresult}{determinant transpose}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean\#L199}{[Mathlib]}}
-Using Context (\cleancontextref{7d45137008f5-4}).
+Using Context (\cleancontextref{4d15f41ed243-4}).
 Then \[\det({A}^{\mathsf T}) = \det(A).\]
 \end{cleanresult}
 
@@ -33,7 +33,7 @@ Then \[\det({A}^{\mathsf T}) = \det(A).\]
 \fi
 \ifcleanreferenced
 \begin{cleanresult}{determinant product swap}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean\#L176}{[Mathlib]}}
-Using Context (\cleancontextref{7d45137008f5-4}).
+Using Context (\cleancontextref{4d15f41ed243-4}).
 Then \[\det(A \, B) = \det(B \, A).\]
 \end{cleanresult}
 
@@ -47,7 +47,7 @@ Then \[\det(A \, B) = \det(B \, A).\]
 \fi
 \ifcleanreferenced
 \begin{cleanresult}{determinant left swap}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean\#L180}{[Mathlib]}}
-Using Context (\cleancontextref{7d45137008f5-4}).
+Using Context (\cleancontextref{4d15f41ed243-4}).
 Then \[\det(A \, (B \, C)) = \det(B \, (A \, C)).\]
 \end{cleanresult}
 
@@ -61,7 +61,7 @@ Then \[\det(A \, (B \, C)) = \det(B \, (A \, C)).\]
 \fi
 \ifcleanreferenced
 \begin{cleanresult}{determinant right swap}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean\#L184}{[Mathlib]}}
-Using Context (\cleancontextref{7d45137008f5-4}).
+Using Context (\cleancontextref{4d15f41ed243-4}).
 Then \[\det(A \, B \, C) = \det(A \, C \, B).\]
 \end{cleanresult}
 
@@ -169,4 +169,25 @@ Then \[{{A}^{\mathsf T}}^{\mathsf T} = A.\]
 Let $n$ be a natural number.
 Let $A$ and $B$ be $n\times n$ matrices over $\mathbb{C}$.
 Then \[{A \, B}^{\mathsf T} = {B}^{\mathsf T} \, {A}^{\mathsf T}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{trace commutator}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Trace.lean\#L154}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $A$ and $B$ be $n\times n$ matrices over $\mathbb{C}$.
+Then \[\operatorname{tr}([A,B]) = 0.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{trace matrix square}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Trace.lean\#L154}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $A$ be a matrix of size $n\times n$ over $\mathbb{C}$.
+Then \[\operatorname{tr}((A)^{2}) = \operatorname{tr}(A \, A).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{determinant matrix square}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean\#L134}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $A$ be a matrix of size $n\times n$ over $\mathbb{C}$.
+Then \[\det((A)^{2}) = \det(A) \, \det(A).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}

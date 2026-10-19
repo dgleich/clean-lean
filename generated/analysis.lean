@@ -70,6 +70,15 @@ noncomputable def cleanNotation_271d108540216294c77e  (x0 : (ℝ) → (ℝ)) : P
 noncomputable def cleanNotation_7439357a91f0e39bc193  (x0 : (ℝ) → (ℝ)) (x1 : (ℝ) → (ℝ)) : (ℝ) → (ℝ) :=
   (x0) ∘ (x1)
 
+noncomputable def cleanDefine_7aae69f1485be0941444  (x : ℝ) : ℝ :=
+  (x ^ 2)
+
+noncomputable def cleanDefine_cfbca9823d9cf5d249c0  (x : ℝ) (y : ℝ) : ℝ :=
+  (cleanDefine_7aae69f1485be0941444 ((x - y)))
+
+noncomputable def cleanDefine_ce4b7f714db66ceb296a  (x : ℝ) : ℝ :=
+  ((cleanDefine_7aae69f1485be0941444 ((cleanNotation_8679b27b6c150044959d (x)))) + (cleanDefine_7aae69f1485be0941444 ((cleanNotation_1efb67bf51334208e223 (x)))))
+
 
 open scoped Matrix
 
@@ -270,5 +279,32 @@ def continuous_product : Prop :=
   ∀ (hf : (cleanNotation_723e95f1cf7739171880 (f))),
   ∀ (hg : (cleanNotation_723e95f1cf7739171880 (g))),
   (cleanNotation_723e95f1cf7739171880 ((f * g)))
+
+/--
+source: mathlib
+reference: Real.sqrt_sq_eq_abs
+relationship: adapted
+-/
+def authored_square_root : Prop :=
+  ∀ (x : ℝ),
+  ((cleanNotation_bab2de5a3de5967c5bae ((cleanDefine_7aae69f1485be0941444 (x)))) = (cleanNotation_17502ff021fd42a8ce97 (x)))
+
+/--
+source: mathlib
+reference: Real.sin_sq_add_cos_sq
+relationship: adapted
+-/
+def authored_trigonometric_energy : Prop :=
+  ∀ (x : ℝ),
+  ((cleanDefine_ce4b7f714db66ceb296a (x)) = 1)
+
+/--
+source: mathlib
+reference: Real.sqrt_sq_eq_abs
+relationship: adapted
+-/
+def distance_square_root : Prop :=
+  ∀ (x y : ℝ),
+  ((cleanNotation_bab2de5a3de5967c5bae ((cleanDefine_cfbca9823d9cf5d249c0 (x) (y)))) = (cleanNotation_17502ff021fd42a8ce97 ((x - y))))
 
 end CleanStatements

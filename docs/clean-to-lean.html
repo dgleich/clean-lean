@@ -133,8 +133,8 @@ Finset (Fin n)
   Matrix.det A</code></pre></section></div>
   <div class="notes"><p><code>cleanDet</code> is an explanatory wrapper name; the prototype generates a hashed identifier. The omitted header parameter <code>n</code> is inferred from <code>A</code>. This is not automatically a Lean <code>notation</code> declaration, and current Clean notation cannot bind a summation variable.</p></div>
 </article>
-<article id="define-clean" data-status="accepted" class="mapping">
-  <header><h2><a href="#define-clean">Define with Equals authors a definition in Clean</a></h2><span class="badge accepted">Accepted design</span></header>
+<article id="define-clean" data-status="implemented" class="mapping">
+  <header><h2><a href="#define-clean">Define with Equals authors a definition in Clean</a></h2><span class="badge implemented">Implemented slice</span></header>
   <p>The common definition form has exactly one implementation field. <code>Equals</code> contains a Clean expression.</p>
   <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Define doubled(x):
   Returns: Real
@@ -143,10 +143,10 @@ Finset (Fin n)
     x + x</code></pre></section>
   <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>def doubled (x : ℝ) : ℝ :=
   x + x</code></pre></section></div>
-  <div class="notes"><p>Top-level <code>Define</code> is accepted design, not implemented. Nonparameter fields may be reordered; parameter declarations keep their relative order. The return type and implementation see the complete parameter scope. Explicit imports must supply <code>Real</code> and addition. The right panel is the intended readable target, not an existing compiler output.</p></div>
+  <div class="notes"><p>Top-level <code>Define</code> now works in modules and document preludes, with inline or block <code>Equals</code>. Nonparameter fields may be reordered; parameter declarations keep their relative order. The return type and implementation see the complete parameter scope. Explicit imports must supply <code>Real</code> and addition. The right panel uses a readable name; emitted definitions use hashed names and <code>noncomputable def</code>. Missing rendering defaults to a named call. Recursion and forward references are rejected. Full canonical-target conformance remains pending; <code>verify_definitions.py</code> supplies three bounded structural checks.</p></div>
 </article>
-<article id="define-lean" data-status="accepted" class="mapping">
-  <header><h2><a href="#define-lean">Define with From Lean imports an implementation</a></h2><span class="badge accepted">Accepted design</span></header>
+<article id="define-lean" data-status="implemented" class="mapping">
+  <header><h2><a href="#define-lean">Define with From Lean imports an implementation</a></h2><span class="badge implemented">Implemented slice</span></header>
   <p><code>From Lean</code> elaborates a Lean expression against the same signature used by an authored Clean definition.</p>
   <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Import Lean CleanPapers.Definitions
 
@@ -154,14 +154,13 @@ Define magnetic matrix(A, q):
   Let n: Natural
   Let A: Matrix(n,n,Real)
   Let q: Real
-  From Lean:
-    CleanPapers.magneticMatrix A q
+  From Lean: CleanPapers.magneticMatrix A q
   Returns: Matrix(n,n,Complex)</code></pre></section>
   <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>noncomputable def magnetic_matrix {n : ℕ}
     (A : Matrix (Fin n) (Fin n) ℝ)
     (q : ℝ) : Matrix (Fin n) (Fin n) ℂ :=
   CleanPapers.magneticMatrix A q</code></pre></section></div>
-  <div class="notes"><p>The Clean type names require separate explicit Clean imports. A checked adapter can fix parameters or wrap representations; it is not restricted to an alias. <code>Equals</code> and <code>From Lean</code> are mutually exclusive. Generated naming and inference must satisfy the unique-target contract.</p></div>
+  <div class="notes"><p>The Clean type names require separate explicit Clean imports. Only inline <code>From Lean</code> is implemented; the accepted indented Lean-body form remains pending. A checked adapter can fix parameters or wrap representations; it is not restricted to an alias. <code>Equals</code> and <code>From Lean</code> are mutually exclusive. Generated naming and inference must satisfy the unique-target contract.</p></div>
 </article>
 <article id="sum" data-status="proposed" class="mapping">
   <header><h2><a href="#sum">Binding notation constructs a lambda</a></h2><span class="badge proposed">Proposed</span></header>

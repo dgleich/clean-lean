@@ -119,3 +119,19 @@ Result coprime product divisibility:
     Let a, b, k: Natural
     Assume cop: coprime(k,b)
     Conclude: k ∣ a*b ↔ k ∣ a
+
+Result insertion sort certificate:
+    Attribution: mathlib; List.perm_insertionSort; adapted
+    Let xs: List(Natural)
+    Conclude: sorting certificate(xs,insertionSort(xs))
+
+Result merge sort certificate:
+    Attribution: mathlib; List.mergeSort_eq_insertionSort; adapted
+    Let xs: List(Natural)
+    Conclude: sorting certificate(xs,mergeSort(xs))
+
+Result certified sort unchanged:
+    Attribution: mathlib; List.Sorted.insertionSort_eq; adapted
+    Let xs, ys: List(Natural)
+    Assume certificate: sorting certificate(xs,ys)
+    Conclude: insertionSort(ys) = ys

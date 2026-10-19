@@ -72,7 +72,7 @@ Lean sources can name a `References` file relative to their module. The corpus r
 
 ## Verification and remaining work
 
-All 80 Python tests pass, including empty-environment and removed-option checks. The 80 corpus proof fixtures and the explicit notation proof are checked against generated wrappers. The generators are `verify_corpus.py` and `verify_notation.py`.
+The current suite has 115 Python tests, including empty-environment and removed-option checks. The 92 corpus proof fixtures and the explicit notation proof are checked against generated wrappers. The generators are `verify_corpus.py` and `verify_notation.py`.
 
 Imported modules contain declarations only; result imports, qualified names, selective exports, overloading, richer dependent types, automatic printed definition sections, and source spans for generated Lean errors remain future work. `Means` and raw TeX are trusted author input. Dependencies use the existing Lean/Lake pins; there is no extra package manager.
 
@@ -92,3 +92,5 @@ The target architecture is:
 - The compiler retains indentation/layout, declaration syntax, lexical binding, generic expression structure, diagnostics, and the bridge to Lean. Lean's foundational sorts and proof-versus-proposition distinction cannot themselves be eliminated; readable names for them are module declarations. There should be no second set of mathematical meanings hidden behind those names.
 
 This is an agreed architectural requirement, not a claim that the refactor is complete. No new operator or literal declaration spelling is settled yet. The five confirmed review bugs (nested type substitution, rendering grouping, fixed dimensions, Lean identifier escaping, and assumption-label/proposition confusion) also remain outstanding. Passing the existing corpus proofs does not resolve those counterexamples.
+
+For authored `Define … Equals:` and inline `From Lean`, see the [current definition slice](spec.md#authored-definitions-current-implementation-slice). `Notation` remains available for foundational imports.

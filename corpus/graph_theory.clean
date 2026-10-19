@@ -146,3 +146,24 @@ Result edge implies reachability:
     Let u, v: Vertex(n)
     Assume edge: adjacent(G,u,v)
     Conclude: reachable(G,u,v)
+
+Result nonadjacency symmetry:
+    Attribution: mathlib; SimpleGraph.adj_comm; adapted
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v: Vertex(n)
+    Conclude: nonadjacent(G,u,v) ↔ nonadjacent(G,v,u)
+
+Result nonadjacency reflexive:
+    Attribution: mathlib; SimpleGraph.irrefl; adapted
+    Let n: Natural
+    Let G: Graph(n)
+    Let u: Vertex(n)
+    Conclude: nonadjacent(G,u,u)
+
+Result complement from nonadjacency:
+    Attribution: mathlib; SimpleGraph.compl_adj; adapted
+    Let n: Natural
+    Let G: Graph(n)
+    Let u, v: Vertex(n)
+    Conclude: adjacent(complement(G),u,v) ↔ (u ≠ v and nonadjacent(G,u,v))

@@ -8,7 +8,7 @@
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "7d45137008f5-4",
+        "key": "4d15f41ed243-4",
         "line": 4
       }
     ],
@@ -46,7 +46,7 @@
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "7d45137008f5-4",
+        "key": "4d15f41ed243-4",
         "line": 4
       }
     ],
@@ -84,7 +84,7 @@
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "7d45137008f5-4",
+        "key": "4d15f41ed243-4",
         "line": 4
       }
     ],
@@ -122,7 +122,7 @@
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "7d45137008f5-4",
+        "key": "4d15f41ed243-4",
         "line": 4
       }
     ],
@@ -160,7 +160,7 @@
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "7d45137008f5-4",
+        "key": "4d15f41ed243-4",
         "line": 4
       }
     ],
@@ -651,6 +651,99 @@
       "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Matrix/Mul.lean#L1082",
       "file": "Mathlib/Data/Matrix/Mul.lean",
       "line": 1082,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "trace_commutator",
+    "title": "trace commutator",
+    "line": 126,
+    "file": "corpus/linear_algebra.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Matrix.trace_mul_comm",
+      "relationship": "adapted"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "../corpus/references.json"
+      },
+      "reference": "Matrix.trace_mul_comm",
+      "declaration": "Matrix.trace_mul_comm",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Trace.lean#L154",
+      "file": "Mathlib/LinearAlgebra/Matrix/Trace.lean",
+      "line": 154,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "trace_matrix_square",
+    "title": "trace matrix square",
+    "line": 132,
+    "file": "corpus/linear_algebra.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Matrix.trace_mul_comm",
+      "relationship": "adapted"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "../corpus/references.json"
+      },
+      "reference": "Matrix.trace_mul_comm",
+      "declaration": "Matrix.trace_mul_comm",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Trace.lean#L154",
+      "file": "Mathlib/LinearAlgebra/Matrix/Trace.lean",
+      "line": 154,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "determinant_matrix_square",
+    "title": "determinant matrix square",
+    "line": 138,
+    "file": "corpus/linear_algebra.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Matrix.det_mul",
+      "relationship": "adapted"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "../corpus/references.json"
+      },
+      "reference": "Matrix.det_mul",
+      "declaration": "Matrix.det_mul",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean#L134",
+      "file": "Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean",
+      "line": 134,
       "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
     }
   }

@@ -618,5 +618,98 @@
       "line": 60,
       "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
     }
+  },
+  {
+    "name": "authored_square_root",
+    "title": "authored square root",
+    "line": 117,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.sqrt_sq_eq_abs",
+      "relationship": "adapted"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "../corpus/references.json"
+      },
+      "reference": "Real.sqrt_sq_eq_abs",
+      "declaration": "Real.sqrt_sq_eq_abs",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean#L168",
+      "file": "Mathlib/Data/Real/Sqrt.lean",
+      "line": 168,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "authored_trigonometric_energy",
+    "title": "authored trigonometric energy",
+    "line": 122,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.sin_sq_add_cos_sq",
+      "relationship": "adapted"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "../corpus/references.json"
+      },
+      "reference": "Real.sin_sq_add_cos_sq",
+      "declaration": "Real.sin_sq_add_cos_sq",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean#L603",
+      "file": "Mathlib/Analysis/Complex/Trigonometric.lean",
+      "line": 603,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
+  },
+  {
+    "name": "distance_square_root",
+    "title": "distance square root",
+    "line": 127,
+    "file": "corpus/analysis.clean",
+    "contexts": [],
+    "attribution": {
+      "source": "mathlib",
+      "reference": "Real.sqrt_sq_eq_abs",
+      "relationship": "adapted"
+    },
+    "resolved_attribution": {
+      "source_key": "mathlib",
+      "source": {
+        "kind": "lean",
+        "label": "Mathlib",
+        "title": "The Lean Mathematical Library",
+        "author": "The Mathlib Community",
+        "version": "4.24.0",
+        "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "url": "https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "references": "../corpus/references.json"
+      },
+      "reference": "Real.sqrt_sq_eq_abs",
+      "declaration": "Real.sqrt_sq_eq_abs",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean#L168",
+      "file": "Mathlib/Data/Real/Sqrt.lean",
+      "line": 168,
+      "revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+    }
   }
 ]

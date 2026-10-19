@@ -70,8 +70,11 @@ noncomputable def cleanNotation_947639a9d52df05827e1 {n : ℕ} (x0 : SimpleGraph
 noncomputable def cleanNotation_39ef10558c6b507db5c6 {n : ℕ} (x0 : SimpleGraph (Fin n)) : Prop :=
   (x0).Connected
 
-noncomputable def cleanNotation_1738f48a6ba6cd3f819e {n : ℕ} (x0 : SimpleGraph (Fin n)) (x1 : Fin n) (x2 : Fin n) : Set (Fin n) :=
-  (x0).commonNeighbors x1 x2
+noncomputable def cleanDefine_0253f99c1ce46363e2b4 {n : ℕ} (x0 : SimpleGraph (Fin n)) (x1 : Fin n) (x2 : Fin n) : Set (Fin n) :=
+  ((cleanNotation_587d371eac8330440de6 (x0) (x1)) ∩ (cleanNotation_587d371eac8330440de6 (x0) (x2)))
+
+noncomputable def cleanDefine_edd7f35c97587928e66d {n : ℕ} (G : SimpleGraph (Fin n)) (u : Fin n) (v : Fin n) : Prop :=
+  (¬(cleanNotation_7c95186c3948254b956e (G) (u) (v)))
 
 
 open scoped Matrix
@@ -213,7 +216,7 @@ def common_neighbors_intersection : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((cleanNotation_1738f48a6ba6cd3f819e (G) (u) (v)) = ((cleanNotation_587d371eac8330440de6 (G) (u)) ∩ (cleanNotation_587d371eac8330440de6 (G) (v))))
+  ((cleanDefine_0253f99c1ce46363e2b4 (G) (u) (v)) = ((cleanNotation_587d371eac8330440de6 (G) (u)) ∩ (cleanNotation_587d371eac8330440de6 (G) (v))))
 
 /--
 source: mathlib
@@ -224,7 +227,7 @@ def common_neighbors_membership : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v w : Fin n),
-  ((w ∈ (cleanNotation_1738f48a6ba6cd3f819e (G) (u) (v))) ↔ ((cleanNotation_7c95186c3948254b956e (G) (u) (w)) ∧ (cleanNotation_7c95186c3948254b956e (G) (v) (w))))
+  ((w ∈ (cleanDefine_0253f99c1ce46363e2b4 (G) (u) (v))) ↔ ((cleanNotation_7c95186c3948254b956e (G) (u) (w)) ∧ (cleanNotation_7c95186c3948254b956e (G) (v) (w))))
 
 /--
 source: mathlib
@@ -235,7 +238,7 @@ def common_neighbors_symmetry : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((cleanNotation_1738f48a6ba6cd3f819e (G) (u) (v)) = (cleanNotation_1738f48a6ba6cd3f819e (G) (v) (u)))
+  ((cleanDefine_0253f99c1ce46363e2b4 (G) (u) (v)) = (cleanDefine_0253f99c1ce46363e2b4 (G) (v) (u)))
 
 /--
 source: mathlib
@@ -246,7 +249,7 @@ def common_neighbors_left : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((cleanNotation_1738f48a6ba6cd3f819e (G) (u) (v)) ⊆ (cleanNotation_587d371eac8330440de6 (G) (u)))
+  ((cleanDefine_0253f99c1ce46363e2b4 (G) (u) (v)) ⊆ (cleanNotation_587d371eac8330440de6 (G) (u)))
 
 /--
 source: mathlib
@@ -257,7 +260,7 @@ def common_neighbors_right : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((cleanNotation_1738f48a6ba6cd3f819e (G) (u) (v)) ⊆ (cleanNotation_587d371eac8330440de6 (G) (v)))
+  ((cleanDefine_0253f99c1ce46363e2b4 (G) (u) (v)) ⊆ (cleanNotation_587d371eac8330440de6 (G) (v)))
 
 /--
 source: mathlib
@@ -306,5 +309,38 @@ def edge_implies_reachability : Prop :=
   ∀ (u v : Fin n),
   ∀ (edge : (cleanNotation_7c95186c3948254b956e (G) (u) (v))),
   (cleanNotation_947639a9d52df05827e1 (G) (u) (v))
+
+/--
+source: mathlib
+reference: SimpleGraph.adj_comm
+relationship: adapted
+-/
+def nonadjacency_symmetry : Prop :=
+  ∀ (n : ℕ),
+  ∀ (G : SimpleGraph (Fin n)),
+  ∀ (u v : Fin n),
+  ((cleanDefine_edd7f35c97587928e66d (G) (u) (v)) ↔ (cleanDefine_edd7f35c97587928e66d (G) (v) (u)))
+
+/--
+source: mathlib
+reference: SimpleGraph.irrefl
+relationship: adapted
+-/
+def nonadjacency_reflexive : Prop :=
+  ∀ (n : ℕ),
+  ∀ (G : SimpleGraph (Fin n)),
+  ∀ (u : Fin n),
+  (cleanDefine_edd7f35c97587928e66d (G) (u) (u))
+
+/--
+source: mathlib
+reference: SimpleGraph.compl_adj
+relationship: adapted
+-/
+def complement_from_nonadjacency : Prop :=
+  ∀ (n : ℕ),
+  ∀ (G : SimpleGraph (Fin n)),
+  ∀ (u v : Fin n),
+  ((cleanNotation_7c95186c3948254b956e ((cleanNotation_954dec16190ec6a37dd0 (G))) (u) (v)) ↔ ((u ≠ v) ∧ (cleanDefine_edd7f35c97587928e66d (G) (u) (v))))
 
 end CleanStatements

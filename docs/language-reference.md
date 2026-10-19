@@ -302,3 +302,12 @@ The [aspirational syntax specimens](aspirational-syntax.md) are part of design r
 5. Confirm label-only assumptions for this statement language, rather than giving labels a special proposition-reference meaning.
 
 The next implementation slice should exercise declared scalar/matrix/matrix-vector multiplication and nested type applications against this contract. The five confirmed review failures remain outstanding until corresponding tests pass under the new representation.
+
+## Implementation checkpoint: authored definitions
+
+The current prototype implements the subset described in
+[the current spec](spec.md#authored-definitions-current-implementation-slice).
+This does not narrow the normative grammar above: positional imports, explicit
+Lean body blocks, expanded definition attribution, and the complete elaboration
+uniqueness procedure remain pending. The new structural checks cover three
+monomorphic expression-body targets, not all legal definitions.

@@ -3,7 +3,7 @@ import hashlib
 import re
 import string
 from pathlib import Path
-from .core import CleanError, ID, Expr, Type, NAT, parse, split, textext, normalize_layout
+from .core import CleanError, ID, Expr, Type, NAT, parse, split, textext, normalize_layout, Expressions, compatible
 
 
 def template(text, names, plain=False):
@@ -77,8 +77,8 @@ def type_declaration(header, fields, env):
     add_definition(env, 'cleanType_', name, f'{signature} : {sort} :=\n  {values["means"]}')
 
 
-def notation(header, fields, env):
-    m = re.fullmatch(r'Notation\s+('+ID+r'(?: +'+ID+r')*)\((.*?)\):', header, re.I)
+def notation(header, fields, env, *, authored=False):
+    m = re.fullmatch(r'(?:Notation|Define)\s+('+ID+r'(?: +'+ID+r')*)\((.*?)\):', header, re.I)
     if not m: raise CleanError('Invalid Notation header')
     name, params = re.sub(' +', ' ', m[1]), split(m[2])
     if len(set(params))!=len(params) or any(not re.fullmatch(ID,p) for p in params):
@@ -86,38 +86,66 @@ def notation(header, fields, env):
     if name in env.data['functions']: raise CleanError('Duplicate visible name: '+name)
     local, implicit, types, other = {}, {}, {}, []
     for field in fields:
-        decl = re.fullmatch(r'Let\s+('+ID+r'):\s*(.+)', field, re.I)
+        decl = re.fullmatch(r'Let\s+('+ID+r'(?:\s*,\s*'+ID+r')*)\s*(?::|\bbe\b)\s*(.+)', field, re.I)
         if not decl:
             other.append(field); continue
-        n, text = decl[1], decl[2]
-        if n in local: raise CleanError('Duplicate parameter: '+n)
+        text = decl[2]
+        # The group type is resolved before introducing any member of the group.
         t = Type('Type') if text=='Type' else env.type(text,local)
-        if n not in params:
-            if types or t not in (NAT,Type('Type')): raise CleanError('Implicit dimensions/types must precede arguments')
-            implicit[n] = t
-        else: types[n] = t
-        local[n] = Expr(n,n,t)
+        for n in split(decl[1]):
+            if n in local: raise CleanError('Duplicate parameter: '+n)
+            if n not in params:
+                if types or t not in (NAT,Type('Type')): raise CleanError('Implicit dimensions/types must precede arguments')
+                implicit[n] = t
+            else: types[n] = t
+            local[n] = Expr(n,n,t)
     values = fields_map(other)
-    if list(types)!=params or not {'returns','means'} <= values.keys():
-        raise CleanError('Declare parameters in header order and provide Returns, Means, Render')
+    if list(types)!=params or 'returns' not in values:
+        raise CleanError('Declare parameters in header order and provide Returns')
+    implementations = set(values) & ({'equals', 'from lean'} if authored else {'means'})
+    allowed = {'returns', 'render', 'render latex'} | ({'equals', 'from lean', 'attribution'} if authored else {'means'})
+    if len(implementations) != 1 or values.keys() - allowed:
+        raise CleanError('Provide exactly one Equals or From Lean' if authored else 'Provide Means')
     renders = set(values)&{'render','render latex'}
-    if len(renders)!=1 or values.keys()-{'returns','means','render','render latex'}:
+    if len(renders)>1 or (not authored and not renders):
         raise CleanError('Provide exactly one Render or Render latex field')
     result = env.type(values['returns'],local)
-    render = next(iter(renders))
-    latex = template(values[render],params,plain=render=='render')
+    implementation = next(iter(implementations))
+    expression = None
+    if implementation == 'equals':
+        expression = Expressions(env, local).parse(values[implementation])
+        if not compatible(expression.type, result):
+            raise CleanError(f'Definition body has type {expression.type}; expected {result}')
+        meaning = expression.lean
+    else:
+        meaning = values[implementation]
+    attribution = None
+    if 'attribution' in values:
+        from .attribution import compact
+        attribution = compact(values['attribution'])
+        env.sources.resolve(attribution)
+    if renders:
+        render = next(iter(renders))
+        latex = template(values[render],params,plain=render=='render')
+    else:
+        latex = r'\operatorname{{' + textext(name).replace(' ', r'\ ').replace('{','{{').replace('}','}}') + '}}(' + ', '.join('{'+str(i)+'}' for i in range(len(params))) + ')'
     signature=' '.join('{'+n+' : '+('Type' if t==Type('Type') else env.render_type(t,'lean'))+'}' for n,t in implicit.items())
     signature+=' '+ ' '.join(f'({p} : {env.render_type(types[p],"lean")})' for p in params)
-    body=f'{signature} : {env.render_type(result,"lean")} :=\n  {values["means"]}'
-    key=add_definition(env,'cleanNotation_',name,body)
+    body=f'{signature} : {env.render_type(result,"lean")} :=\n  {meaning}'
+    # Install the name only after its body is resolved: no recursion/forward references.
     def pattern(t):
         return re.sub(ID, lambda m: '$'+m[0] if m[0] in implicit else m[0], str(t))
     # Every implicit parameter must be inferable from argument types.
     for n in implicit:
         if not any(re.search(r'\b'+re.escape(n)+r'\b',str(t)) for t in types.values()):
             raise CleanError('Implicit parameter is absent from argument types: '+n)
+    key=add_definition(env,'cleanDefine_' if authored else 'cleanNotation_',name,body)
     env.data['functions'][name]={'params':[pattern(types[p]) for p in params], 'returns':pattern(result),
         'lean':key+''.join(' ({'+str(i)+'})' for i in range(len(params))), 'latex':latex}
+    if authored:
+        env.definitions[name] = {'key': key, 'parameters': list(local), 'implementation': implementation,
+            'tree': expression.tree if expression else None,
+            'body': values[implementation], 'returns': str(result), 'attribution': attribution}
 
 
 def load_module(path, env, *, document=False):
@@ -142,7 +170,7 @@ def load_module(path, env, *, document=False):
                 li=re.fullmatch(r'Import Lean\s+([A-Za-z_][\w.]*)',line,re.I)
                 bi=re.fullmatch(r'Import BibTeX\s+"([^"\n]+)"',line,re.I)
                 ci=re.fullmatch(r'Import\s+"([^"\n]+)"',line,re.I)
-                block=re.match(r'(Notation|Type|Source)\s',line,re.I)
+                block=re.match(r'(Notation|Define|Type|Source)\s',line,re.I)
                 alias=re.fullmatch(r'Alias\s+('+ID+r'):\s*('+ID+r')',line,re.I)
                 phrase=re.fullmatch(r'Phrase\s+(.+?)\s+=>\s+(.+)',line,re.I)
                 if any((li,bi,ci,block,alias,phrase)):
@@ -159,15 +187,23 @@ def load_module(path, env, *, document=False):
                         re.compile(phrase[1])
                         env.data['phrases'].append({'pattern':phrase[1],'type':phrase[2]})
                     else:
-                        fields=[];j=i+1
+                        fields=[];j=i+1; expression_block=False
                         while j<len(lines) and (not lines[j].strip() or lines[j][0].isspace() or lines[j].lstrip().startswith('#')):
                             f=lines[j]
                             if f.strip() and not f.lstrip().startswith('#'):
-                                if not f.startswith('    ') or f.startswith('     '): raise CleanError('Declaration fields must align at one indentation level')
-                                fields.append(f.strip())
+                                if f.startswith('        ') and block[1].lower() == 'define':
+                                    if not expression_block:
+                                        raise CleanError('Only Equals expression blocks are implemented; From Lean must be inline')
+                                    if f.startswith('         '):
+                                        raise CleanError('Expression block lines must align')
+                                    fields[-1] += ' ' + f.strip()
+                                else:
+                                    if not f.startswith('    ') or f.startswith('     '): raise CleanError('Declaration fields must align at one indentation level')
+                                    fields.append(f.strip())
+                                    expression_block = bool(re.fullmatch(r'Equals\s*:', f.strip(), re.I))
                             j+=1
                         kind=block[1].lower()
-                        if kind=='notation': notation(line,fields,env)
+                        if kind in ('notation', 'define'): notation(line,fields,env,authored=kind=='define')
                         elif kind=='type': type_declaration(line,fields,env)
                         else:
                             m=re.fullmatch(r'Source\s+('+ID+r'):',line,re.I)

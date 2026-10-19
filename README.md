@@ -47,7 +47,7 @@ lake env lean generated/similarity.lean
 lake env lean generated/extension.lean
 ```
 
-Normal translation defines propositions; it does not prove them. The corpus fixture proves all **80 statements, 20 each** in linear algebra, graph theory, analysis, and CLR-aligned undergraduate algorithms against their Mathlib sources. Algorithm coverage is sorting and arithmetic, not a complete CLR formalization. The Stewart proof lives in the sibling `stewart-lean` project; this project's generated Stewart output is a statement.
+Normal translation defines propositions; it does not prove them. The corpus fixture proves all **92 statements, 23 each** in linear algebra, graph theory, analysis, and CLR-aligned undergraduate algorithms against their Mathlib sources. Algorithm coverage is sorting and arithmetic, not a complete CLR formalization. The Stewart proof lives in the sibling `stewart-lean` project; this project's generated Stewart output is a statement.
 
 This workspace shares dependencies with `../stewart-lean` through an ignored `.lake/packages` symlink. No remote repository is configured.
 
@@ -82,3 +82,10 @@ See [recent-paper specimens](docs/recent-paper-examples.md) for source-based asp
 ## Limits
 
 See [module syntax and limitations](docs/notation-prototype.md). Clean remains a statement-language prototype: it has no proof language, unrestricted mathematical English, general dependent-type inference, or Lean typeclass declaration syntax. The initial matrix operation module uses complex scalars; composition uses real functions. Imported modules currently contain definitions, not results. See [THIRD_PARTY.md](THIRD_PARTY.md) for attribution and licensing.
+
+Authored `Define … Equals:` now supports reusable Clean expressions and predicates.
+The corpus has 92 statements (23 per subject; 80 distinct Mathlib source lemmas).
+See [porting findings and next gaps](docs/porting-findings.md). Run
+`python3 verify_definitions.py` followed by
+`lake env lean generated/VerifiedDefinitions.lean` for the bounded structural
+translation checks, in addition to the existing corpus checks.

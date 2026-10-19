@@ -1683,7 +1683,7 @@
       ]
     ],
     "claim": "lcm(a,b) = a*b",
-    "proof": "cop.lcm_eq_mul",
+    "proof": "Nat.Coprime.lcm_eq_mul cop",
     "topic": "CLR number theoretic algorithms: arithmetic supporting lemma",
     "source_header": "/-\nCopyright (c) 2014 Jeremy Avigad. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Jeremy Avigad, Leonardo de Moura\n-/",
     "source_line": 86,
@@ -1739,12 +1739,266 @@
       ]
     ],
     "claim": "k ∣ a*b ↔ k ∣ a",
-    "proof": "cop.dvd_mul_right",
+    "proof": "Nat.Coprime.dvd_mul_right cop",
     "topic": "CLR number theoretic algorithms: arithmetic supporting lemma",
     "source_header": "/-\nCopyright (c) 2014 Jeremy Avigad. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Jeremy Avigad, Leonardo de Moura\n-/",
     "source_line": 91,
     "source_excerpt": "theorem Coprime.dvd_mul_right {m n k : ℕ} (H : Coprime k n) : k ∣ m * n ↔ k ∣ m :=",
     "source_url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Nat/GCD/Basic.lean#L91",
+    "mathlib_revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  {
+    "category": "linear_algebra",
+    "name": "trace_commutator",
+    "title": "trace commutator",
+    "source_file": "Mathlib/LinearAlgebra/Matrix/Trace.lean",
+    "source_declaration": "Matrix.trace_mul_comm",
+    "lets": [
+      "n: Natural",
+      "A, B: Matrix(n,n,Complex)"
+    ],
+    "assumptions": [],
+    "claim": "trace(commutator(A,B)) = 0",
+    "proof": "by change Matrix.trace (A*B-B*A) = 0; rw [Matrix.trace_sub, Matrix.trace_mul_comm A B, sub_self]",
+    "topic": "Finite dimensional matrix algebra",
+    "relationship": "adapted",
+    "source_header": "/-\nCopyright (c) 2019 Johannes Hölzl. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Johannes Hölzl, Patrick Massot, Casper Putz, Anne Baanen\n-/",
+    "source_line": 154,
+    "source_excerpt": "theorem trace_mul_comm [AddCommMonoid R] [CommMagma R] (A : Matrix m n R) (B : Matrix n m R) :\n    trace (A * B) = trace (B * A) := by rw [← trace_transpose, ← trace_transpose_mul, transpose_mul]",
+    "source_url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Trace.lean#L154",
+    "mathlib_revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  {
+    "category": "linear_algebra",
+    "name": "trace_matrix_square",
+    "title": "trace matrix square",
+    "source_file": "Mathlib/LinearAlgebra/Matrix/Trace.lean",
+    "source_declaration": "Matrix.trace_mul_comm",
+    "lets": [
+      "n: Natural",
+      "A: Matrix(n,n,Complex)"
+    ],
+    "assumptions": [],
+    "claim": "trace(matrix square(A)) = trace(A*A)",
+    "proof": "rfl",
+    "topic": "Finite dimensional matrix algebra",
+    "relationship": "adapted",
+    "source_header": "/-\nCopyright (c) 2019 Johannes Hölzl. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Johannes Hölzl, Patrick Massot, Casper Putz, Anne Baanen\n-/",
+    "source_line": 154,
+    "source_excerpt": "theorem trace_mul_comm [AddCommMonoid R] [CommMagma R] (A : Matrix m n R) (B : Matrix n m R) :\n    trace (A * B) = trace (B * A) := by rw [← trace_transpose, ← trace_transpose_mul, transpose_mul]",
+    "source_url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Trace.lean#L154",
+    "mathlib_revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  {
+    "category": "linear_algebra",
+    "name": "determinant_matrix_square",
+    "title": "determinant matrix square",
+    "source_file": "Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean",
+    "source_declaration": "Matrix.det_mul",
+    "lets": [
+      "n: Natural",
+      "A: Matrix(n,n,Complex)"
+    ],
+    "assumptions": [],
+    "claim": "det(matrix square(A)) = det(A)*det(A)",
+    "proof": "Matrix.det_mul A A",
+    "topic": "Finite dimensional matrix algebra",
+    "relationship": "adapted",
+    "source_header": "/-\nCopyright (c) 2018 Kenny Lau. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Kenny Lau, Chris Hughes, Anne Baanen\n-/",
+    "source_line": 134,
+    "source_excerpt": "theorem det_mul (M N : Matrix n n R) : det (M * N) = det M * det N :=",
+    "source_url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean#L134",
+    "mathlib_revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  {
+    "category": "analysis",
+    "name": "authored_square_root",
+    "title": "authored square root",
+    "source_file": "Mathlib/Data/Real/Sqrt.lean",
+    "source_declaration": "Real.sqrt_sq_eq_abs",
+    "lets": [
+      "x: Real"
+    ],
+    "assumptions": [],
+    "claim": "sqrt(square(x)) = abs(x)",
+    "proof": "Real.sqrt_sq_eq_abs x",
+    "topic": "Real elementary analysis and continuity",
+    "relationship": "adapted",
+    "source_header": "/-\nCopyright (c) 2020 Mario Carneiro. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Mario Carneiro, Floris van Doorn, Yury Kudryashov\n-/",
+    "source_line": 168,
+    "source_excerpt": "theorem sqrt_sq_eq_abs (x : ℝ) : √(x ^ 2) = |x| := by rw [sq, sqrt_mul_self_eq_abs]",
+    "source_url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean#L168",
+    "mathlib_revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  {
+    "category": "analysis",
+    "name": "authored_trigonometric_energy",
+    "title": "authored trigonometric energy",
+    "source_file": "Mathlib/Analysis/Complex/Trigonometric.lean",
+    "source_declaration": "Real.sin_sq_add_cos_sq",
+    "lets": [
+      "x: Real"
+    ],
+    "assumptions": [],
+    "claim": "trigonometric energy(x) = 1",
+    "proof": "Real.sin_sq_add_cos_sq x",
+    "topic": "Real elementary analysis and continuity",
+    "relationship": "adapted",
+    "source_header": "/-\nCopyright (c) 2018 Chris Hughes. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Chris Hughes, Abhimanyu Pallavi Sudhir\n-/",
+    "source_line": 603,
+    "source_excerpt": "nonrec theorem sin_sq_add_cos_sq : sin x ^ 2 + cos x ^ 2 = 1 :=",
+    "source_url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Analysis/Complex/Trigonometric.lean#L603",
+    "mathlib_revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  {
+    "category": "analysis",
+    "name": "distance_square_root",
+    "title": "distance square root",
+    "source_file": "Mathlib/Data/Real/Sqrt.lean",
+    "source_declaration": "Real.sqrt_sq_eq_abs",
+    "lets": [
+      "x, y: Real"
+    ],
+    "assumptions": [],
+    "claim": "sqrt(squared distance(x,y)) = abs(x-y)",
+    "proof": "Real.sqrt_sq_eq_abs (x-y)",
+    "topic": "Real elementary analysis and continuity",
+    "relationship": "adapted",
+    "source_header": "/-\nCopyright (c) 2020 Mario Carneiro. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Mario Carneiro, Floris van Doorn, Yury Kudryashov\n-/",
+    "source_line": 168,
+    "source_excerpt": "theorem sqrt_sq_eq_abs (x : ℝ) : √(x ^ 2) = |x| := by rw [sq, sqrt_mul_self_eq_abs]",
+    "source_url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/Real/Sqrt.lean#L168",
+    "mathlib_revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  {
+    "category": "graph_theory",
+    "name": "nonadjacency_symmetry",
+    "title": "nonadjacency symmetry",
+    "source_file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "source_declaration": "SimpleGraph.adj_comm",
+    "lets": [
+      "n: Natural",
+      "G: Graph(n)",
+      "u, v: Vertex(n)"
+    ],
+    "assumptions": [],
+    "claim": "nonadjacent(G,u,v) ↔ nonadjacent(G,v,u)",
+    "proof": "not_congr (G.adj_comm u v)",
+    "topic": "Simple undirected graphs on finite labelled vertices",
+    "relationship": "adapted",
+    "source_header": "/-\nCopyright (c) 2020 Aaron Anderson, Jalex Stark, Kyle Miller. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Aaron Anderson, Jalex Stark, Kyle Miller, Alena Gusakov, Hunter Monroe\n-/",
+    "source_line": 158,
+    "source_excerpt": "theorem adj_comm (u v : V) : G.Adj u v ↔ G.Adj v u :=",
+    "source_url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L158",
+    "mathlib_revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  {
+    "category": "graph_theory",
+    "name": "nonadjacency_reflexive",
+    "title": "nonadjacency reflexive",
+    "source_file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "source_declaration": "SimpleGraph.irrefl",
+    "lets": [
+      "n: Natural",
+      "G: Graph(n)",
+      "u: Vertex(n)"
+    ],
+    "assumptions": [],
+    "claim": "nonadjacent(G,u,u)",
+    "proof": "G.irrefl",
+    "topic": "Simple undirected graphs on finite labelled vertices",
+    "relationship": "adapted",
+    "source_header": "/-\nCopyright (c) 2020 Aaron Anderson, Jalex Stark, Kyle Miller. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Aaron Anderson, Jalex Stark, Kyle Miller, Alena Gusakov, Hunter Monroe\n-/",
+    "source_line": 155,
+    "source_excerpt": "protected theorem irrefl {v : V} : ¬G.Adj v v :=",
+    "source_url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L155",
+    "mathlib_revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  {
+    "category": "graph_theory",
+    "name": "complement_from_nonadjacency",
+    "title": "complement from nonadjacency",
+    "source_file": "Mathlib/Combinatorics/SimpleGraph/Basic.lean",
+    "source_declaration": "SimpleGraph.compl_adj",
+    "lets": [
+      "n: Natural",
+      "G: Graph(n)",
+      "u, v: Vertex(n)"
+    ],
+    "assumptions": [],
+    "claim": "adjacent(complement(G),u,v) ↔ (u ≠ v and nonadjacent(G,u,v))",
+    "proof": "SimpleGraph.compl_adj G u v",
+    "topic": "Simple undirected graphs on finite labelled vertices",
+    "relationship": "adapted",
+    "source_header": "/-\nCopyright (c) 2020 Aaron Anderson, Jalex Stark, Kyle Miller. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Aaron Anderson, Jalex Stark, Kyle Miller, Alena Gusakov, Hunter Monroe\n-/",
+    "source_line": 238,
+    "source_excerpt": "theorem compl_adj (G : SimpleGraph V) (v w : V) : Gᶜ.Adj v w ↔ v ≠ w ∧ ¬G.Adj v w :=",
+    "source_url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Combinatorics/SimpleGraph/Basic.lean#L238",
+    "mathlib_revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  {
+    "category": "algorithms",
+    "name": "insertion_sort_certificate",
+    "title": "insertion sort certificate",
+    "source_file": "Mathlib/Data/List/Sort.lean",
+    "source_declaration": "List.perm_insertionSort",
+    "lets": [
+      "xs: List(Natural)"
+    ],
+    "assumptions": [],
+    "claim": "sorting certificate(xs,insertionSort(xs))",
+    "proof": "And.intro (List.sorted_insertionSort (· ≤ ·) xs) (List.perm_insertionSort (· ≤ ·) xs)",
+    "topic": "CLR comparison sorting",
+    "relationship": "adapted",
+    "source_header": "/-\nCopyright (c) 2016 Jeremy Avigad. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Jeremy Avigad\n-/",
+    "source_line": 460,
+    "source_excerpt": "theorem perm_insertionSort : ∀ l : List α, insertionSort r l ~ l\n  | [] => Perm.nil\n  | b :: l => by\n    simpa [insertionSort] using (perm_orderedInsert _ _ _).trans ((perm_insertionSort l).cons b)\n\n@[simp]\ntheorem mem_insertionSort {l : List α} {x : α} : x ∈ l.insertionSort r ↔ x ∈ l :=",
+    "source_url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L460",
+    "mathlib_revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  {
+    "category": "algorithms",
+    "name": "merge_sort_certificate",
+    "title": "merge sort certificate",
+    "source_file": "Mathlib/Data/List/Sort.lean",
+    "source_declaration": "List.mergeSort_eq_insertionSort",
+    "lets": [
+      "xs: List(Natural)"
+    ],
+    "assumptions": [],
+    "claim": "sorting certificate(xs,mergeSort(xs))",
+    "proof": "by change List.Sorted (· ≤ ·) (xs.mergeSort (· ≤ ·)) ∧ List.Perm (xs.mergeSort (· ≤ ·)) xs; rw [List.mergeSort_eq_insertionSort]; exact And.intro (List.sorted_insertionSort (· ≤ ·) xs) (List.perm_insertionSort (· ≤ ·) xs)",
+    "topic": "CLR comparison sorting",
+    "relationship": "adapted",
+    "source_header": "/-\nCopyright (c) 2016 Jeremy Avigad. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Jeremy Avigad\n-/",
+    "source_line": 708,
+    "source_excerpt": "theorem mergeSort_eq_insertionSort (l : List α) :\n    mergeSort l (r · ·) = insertionSort r l :=",
+    "source_url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L708",
+    "mathlib_revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
+  },
+  {
+    "category": "algorithms",
+    "name": "certified_sort_unchanged",
+    "title": "certified sort unchanged",
+    "source_file": "Mathlib/Data/List/Sort.lean",
+    "source_declaration": "List.Sorted.insertionSort_eq",
+    "lets": [
+      "xs, ys: List(Natural)"
+    ],
+    "assumptions": [
+      [
+        "certificate",
+        "sorting certificate(xs,ys)"
+      ]
+    ],
+    "claim": "insertionSort(ys) = ys",
+    "proof": "certificate.1.insertionSort_eq",
+    "topic": "CLR comparison sorting",
+    "relationship": "adapted",
+    "source_header": "/-\nCopyright (c) 2016 Jeremy Avigad. All rights reserved.\nReleased under Apache 2.0 license as described in the file LICENSE.\nAuthors: Jeremy Avigad\n-/",
+    "source_line": 499,
+    "source_excerpt": "theorem Sorted.insertionSort_eq : ∀ {l : List α}, Sorted r l → insertionSort r l = l\n  | [], _ => rfl\n  | [_], _ => rfl\n  | a :: b :: l, h => by\n    rw [insertionSort, Sorted.insertionSort_eq, orderedInsert, if_pos]\n    exacts [rel_of_sorted_cons h _ mem_cons_self, h.tail]\n\n/-- For a reflexive relation, insert then erasing is the identity. -/\ntheorem erase_orderedInsert [DecidableEq α] [IsRefl α r] (x : α) (xs : List α) :\n    (xs.orderedInsert r x).erase x = xs := by",
+    "source_url": "https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/Data/List/Sort.lean#L499",
     "mathlib_revision": "f897ebcf72cd16f89ab4577d0c826cd14afaafc7"
   }
 ]
