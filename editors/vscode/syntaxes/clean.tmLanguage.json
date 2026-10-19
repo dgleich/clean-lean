@@ -1,0 +1,124 @@
+{
+  "name": "Clean Mathematics",
+  "scopeName": "source.clean",
+  "fileTypes": [
+    "clean"
+  ],
+  "patterns": [
+    {
+      "name": "invalid.illegal.tab.clean",
+      "match": "\\t+"
+    },
+    {
+      "name": "comment.line.number-sign.clean",
+      "match": "^ *#.*$"
+    },
+    {
+      "match": "^ *(?i:(Result|Theorem|Context|Define|Notation|Type|Source))\\b(.*?)(:)\\s*$",
+      "captures": {
+        "1": {
+          "name": "keyword.declaration.clean"
+        },
+        "2": {
+          "name": "entity.name.function.clean"
+        },
+        "3": {
+          "name": "punctuation.section.block.clean"
+        }
+      }
+    },
+    {
+      "match": "^ *(?i:(Means|From Lean))\\s*(:)(.*)$",
+      "captures": {
+        "1": {
+          "name": "keyword.control.clean"
+        },
+        "2": {
+          "name": "punctuation.separator.clean"
+        },
+        "3": {
+          "name": "meta.embedded.line.lean.clean"
+        }
+      }
+    },
+    {
+      "match": "^ *(?i:(Render(?: latex)?|Describe(?: plural)?|Attribution|Kind|Label|Title|Author|Year|Version|Revision|URL|References|source|reference|relationship|scope|changes|note))\\s*(:)(.*)$",
+      "captures": {
+        "1": {
+          "name": "keyword.other.metadata.clean"
+        },
+        "2": {
+          "name": "punctuation.separator.clean"
+        },
+        "3": {
+          "name": "string.unquoted.metadata.clean"
+        }
+      }
+    },
+    {
+      "match": "^ *(?i:(Import(?: Lean| BibTeX)?))\\b(.*)$",
+      "captures": {
+        "1": {
+          "name": "keyword.control.import.clean"
+        },
+        "2": {
+          "name": "string.unquoted.import.clean"
+        }
+      }
+    },
+    {
+      "match": "^ *(?i:(Let))\\s+([^:=]+?)\\s*(?:(:)|(?i:(be))\\b)\\s*(.*)$",
+      "captures": {
+        "1": {
+          "name": "keyword.declaration.clean"
+        },
+        "2": {
+          "name": "variable.parameter.clean"
+        },
+        "3": {
+          "name": "punctuation.separator.clean"
+        },
+        "4": {
+          "name": "keyword.declaration.clean"
+        },
+        "5": {
+          "name": "entity.name.type.clean"
+        }
+      }
+    },
+    {
+      "match": "^ *(?i:(Assume))\\s+([^:]+)(:)",
+      "captures": {
+        "1": {
+          "name": "keyword.control.clean"
+        },
+        "2": {
+          "name": "entity.name.label.clean"
+        },
+        "3": {
+          "name": "punctuation.separator.clean"
+        }
+      }
+    },
+    {
+      "name": "keyword.control.clean",
+      "match": "^ *(?i:Let|Define|Conclude|Returns|Equals|Alias|Phrase)\\b"
+    },
+    {
+      "name": "keyword.operator.word.clean",
+      "match": "\\b(?i:and|or|not)\\b"
+    },
+    {
+      "name": "constant.numeric.clean",
+      "match": "\\b[0-9]+\\b"
+    },
+    {
+      "name": "keyword.operator.clean",
+      "match": "↔|→|≤|≥|≠|∧|∨|¬|∈|⊆|∪|∩|∣|<=|>=|!=|[+*/^=<>-]"
+    },
+    {
+      "name": "punctuation.separator.clean",
+      "match": "[(),:;]"
+    }
+  ]
+}

@@ -47,3 +47,13 @@ Checks document progress; they are not commit gates. Record known failures or ch
 - Keep the small generated Lean, TeX, metadata, and specimen PDFs tracked as reviewable examples. Regenerate them from source; do not hand-edit generated output. Generated files need not change for documentation-only work.
 - `library/*.clean` are authored definition modules. `build_corpus.py` owns the curated corpus and source index. Change that generator when changing its output.
 - Do not update Lean/Mathlib versions incidentally. Dependency upgrades require explicit rationale and renewed corpus validation.
+
+## Editor and review tooling
+
+- Keep highlighting lexical and separate from semantic validation. Update editor
+  rules and representative scope tests when language spellings change. The
+  browser reuses the TextMate grammar's portable match/capture subset; native Vim
+  and Emacs highlighting must be updated alongside it.
+- Build `docs/review.html` with `tools/build_review.py`; edit the template under
+  `tools/review/`, not the generated snapshot. Show translation failures and do
+  not label unverified targets as proved. Keep this tooling offline and local.

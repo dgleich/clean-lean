@@ -89,3 +89,11 @@ See [porting findings and next gaps](docs/porting-findings.md). Run
 `python3 verify_definitions.py` followed by
 `lake env lean generated/VerifiedDefinitions.lean` for the bounded structural
 translation checks, in addition to the existing corpus checks.
+
+## Review and editor support
+
+Open the [local review workspace](docs/review.html) to browse highlighted Clean
+files beside their generated Lean, follow imports, and export review notes.
+See the [review walkthrough](docs/review-workflow.md) and
+[VS Code / Emacs / Vim setup](editors/README.md). Rebuild the offline snapshot with
+`python3 tools/build_review.py`; highlighting does not certify parsing or proofs.

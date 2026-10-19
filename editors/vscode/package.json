@@ -1,0 +1,41 @@
+{
+  "name": "clean-mathematics",
+  "displayName": "Clean Mathematics (local prototype)",
+  "version": "0.1.0",
+  "publisher": "clean-local",
+  "description": "Lexical highlighting for Clean mathematical statements and definitions.",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "clean-math",
+        "aliases": [
+          "Clean Mathematics"
+        ],
+        "extensions": [
+          ".clean"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "clean-math",
+        "scopeName": "source.clean",
+        "path": "./syntaxes/clean.tmLanguage.json"
+      }
+    ],
+    "configurationDefaults": {
+      "[clean-math]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.detectIndentation": false
+      }
+    }
+  }
+}

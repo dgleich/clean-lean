@@ -1,0 +1,23 @@
+{
+  "brackets": [
+    [
+      "(",
+      ")"
+    ]
+  ],
+  "autoClosingPairs": [
+    {
+      "open": "(",
+      "close": ")"
+    }
+  ],
+  "surroundingPairs": [
+    [
+      "(",
+      ")"
+    ]
+  ],
+  "indentationRules": {
+    "increaseIndentPattern": "^\\s*(?:(?:[Rr][Ee][Ss][Uu][Ll][Tt]|[Tt][Hh][Ee][Oo][Rr][Ee][Mm]|[Cc][Oo][Nn][Tt][Ee][Xx][Tt]|[Dd][Ee][Ff][Ii][Nn][Ee]|[Nn][Oo][Tt][Aa][Tt][Ii][Oo][Nn]|[Tt][Yy][Pp][Ee]|[Ss][Oo][Uu][Rr][Cc][Ee])\\b.*|(?:[Cc][Oo][Nn][Cc][Ll][Uu][Dd][Ee]|[Ee][Qq][Uu][Aa][Ll][Ss]|[Aa][Tt][Tt][Rr][Ii][Bb][Uu][Tt][Ii][Oo][Nn])):\\s*$"
+  }
+}
