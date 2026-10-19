@@ -52,6 +52,11 @@ These decisions separate requested behavior from provisional implementation choi
 
 | D42 | Import bibliography metadata with `Import BibTeX "path.bib"` | User requested BibTeX sources; format-qualified spelling chosen instead of a separate bibimport keyword. Implemented via the optional pinned Pybtex parser. Citation keys become source keys; collisions fail and repeated paths deduplicate. Crossref/xdata inheritance is explicitly deferred; see spec for metadata and rendering choices |
 
+| D43 | Continue expressions when incomplete, not merely after an operator token | User selected 1A. The next-language rule uses parser state; postfix applications can be complete. Refines D41; current heuristic implementation is not full conformance |
+| D44 | Reject visible infix/postfix reuse of the same spelling | User selected 2A. Prefix/infix reuse remains legal. Conflicts are declaration/import errors before type checking; postfix parsing rules are specified in the reference |
+| D45 | Allow imports between top-level declarations and results | User selected 3C. Sequential visibility (subsequent items only) is the recorded interpretation; no retroactive parsing or name resolution. Nested imports remain outside this slice. Not implemented |
+| D46 | Definition fields may be reordered while parameters retain their relative order | User selected 4B. Require Returns and exactly one of Equals or From Lean; both allow explicit block bodies. Both implementations enter one semantic space. Optional attribution/presentation on definitions and a named-call rendering fallback are provisional refinements; result attribution remains mandatory. Not implemented |
+
 ## Questions to revisit after reading the specimens
 
 1. Should formalization contributors become a required field distinct from mathematical sources? Source keys are now implemented.

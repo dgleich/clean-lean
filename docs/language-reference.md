@@ -2,7 +2,7 @@
 
 This draft specifies the next language design: a mathematical statement language elaborated into Lean, with module-declared vocabulary and a shared representation for Lean and LaTeX. It is a contract for the refactor, not a description of features already implemented. The current implementation is described in [spec.md](spec.md).
 
-**Agreed requirements:** explicit imports; one mathematical semantic space; readable `Let`, `Assume`, and `Conclude`; mandatory attribution; explicit context references; Lean as the authority for mathematical types. **Draft choices:** the concrete operator fields below, qualification, overload rules, and the restrictions in this document. These need review before being treated as settled syntax.
+**Agreed requirements:** explicit imports; one mathematical semantic space; readable `Let`, `Assume`, and `Conclude`; mandatory result attribution; explicit context references; Lean as the authority for mathematical types. **Agreed parsing choices (2026-10-19):** infer continuation from incomplete expressions; reject overlapping infix/postfix spellings; allow imports between top-level declarations; allow definition fields in any order while retaining parameter order. These rules are normative for the next language, not claims about the current prototype. **Draft choices:** the concrete operator fields below, qualification, overload rules, and the restrictions in this document. These need review before being treated as settled syntax.
 
 Readable source is a first-class requirement. The [aspirational syntax gallery](aspirational-syntax.md) supplies authoring specimens against which this grammar must be judged. Its `Write`, named syntax-group, and reusable-context forms are alternatives to investigate, not constructs silently added to this grammar.
 
@@ -12,20 +12,20 @@ The formal core covers first-order surface notation with dependent argument type
 
 A translation has five stages:
 
-1. Read layout and declaration headers, resolve explicit imports, and collect visible syntax declarations.
+1. Read module items in source order. At each item, resolve its imports or parse its header using the syntax environment established by preceding items.
 2. Parse expressions into syntax trees using that declared syntax.
 3. Resolve names to declarations and bind local variables.
 4. Elaborate the bound trees against Lean, producing typed terms and selected notation identities.
 5. Generate Lean declarations and LaTeX from the resolved representation.
 
-A stage may report an error; it must not guess a missing mathematical meaning. The mathematical library, Lean version, dependency versions, and elaboration options are part of the build input. Import order must not secretly choose notation meanings or defaults.
+Stages 1–4 proceed item by item; there is no whole-file hoisting of later imports or declarations. An item retains the environment at its source position. A stage may report an error; it must not guess a missing mathematical meaning. The mathematical library, Lean version, dependency versions, and elaboration options are part of the build input. Import order must not secretly choose notation meanings or defaults.
 
 The compiler owns layout, lexical binding, declaration structure, module loading, and generic parsing/elaboration machinery. Modules own mathematical type names, notation meanings, operator syntax, overloads, literals, type phrases, and presentation. The bridge necessarily understands Lean's foundational notions of terms, sorts, binding, and checking against `Prop`; it does not recognize a display name such as `Natural` or `Proposition` as a semantic instruction.
 
 ## 2 Lexical and layout rules
 
 - UTF-8 input; each indentation increase is at least two spaces; tabs are errors everywhere, including blank lines, comments, and continuations. Siblings align; dedents return to an enclosing column. Block widths need not match across the file. Blank lines and full-line `#` comments do not affect indentation.
-- Each clause occupies a logical line, except a conclusion block. A Clean expression continues across physical newlines while parentheses remain open or after a trailing operator. Outside parentheses, continuation lines are at least two columns beyond the expression’s first physical line, except that existing conclusion-block lines may align. Parenthesized continuation indentation is visual and does not introduce scope. A complete expression terminates at a physical newline; a leading operator on the following line does not reopen it. A conclusion block’s lines form one token sequence; a newline does not imply conjunction. Lean bodies and metadata retain their separate single-line rules.
+- Inline Clean expressions continue across physical newlines while parentheses remain open or the expression parser requires a further operand. A complete postfix application does not require an operand. Outside parentheses, a continued line begins at least two columns beyond the first physical line of the clause; parenthesized continuation indentation is visual and does not introduce scope. A complete inline expression ends at the physical newline; a leading operator on the next line cannot reopen it. Explicit expression blocks have separate boundaries, specified below.
 - Declaration keywords and field labels are case-insensitive. Mathematical names are case-sensitive. Word-operator spellings may have module-declared case-insensitive aliases; the compiler does not hard-code English logical words.
 - Object identifiers are a Unicode letter followed by Unicode letters, decimal digits, or underscores. An English name is one or more identifiers separated by spaces. Spaces within an English name normalize to one space. This grammar is a draft restriction, not a promise to support all Lean identifiers.
 - String literals use double quotes, with `\"` and `\\` escapes. Keywords are recognized by grammatical position, not prohibited everywhere as object names.
@@ -33,23 +33,61 @@ The compiler owns layout, lexical binding, declaration structure, module loading
 - Parentheses, commas, colons, quotation marks, and layout delimit the language. A call has no whitespace application: write `f(x)`, not `f x`.
 - Symbolic operators are declared quoted spellings. Lexing uses the longest visible spelling at a position; operators cannot contain layout whitespace or reserved delimiters. Overlapping word names are resolved as complete names before `(` or an explicit delimiter, not by substring replacement.
 
-The raw body of `Means` is a Lean term, not Clean syntax. Its identifiers use the notation's bound parameters and explicitly imported Lean scope. The initial draft keeps this body on one physical line. An attributed source locator and an English rendering field are likewise not parsed as mathematical expressions.
+### Lexical modes and block ownership
 
-The layout lexer keeps a stack of indentation columns, initially `[0]`. Ignoring blank/comment lines and joined expression-continuation lines, an increase of at least two columns pushes one level and emits `INDENT`. Equal indentation emits no layout transition. A decrease must match a column already on the stack and emits one `DEDENT` per popped level. At end of file all remaining levels close. An increase of one space or a dedent to an unknown column is an error. The grammar determines which constructs admit an indented body; layout alone does not authorize nesting.
+The containing production selects the lexical mode before its contents are scanned:
 
-`NEWLINE` below denotes a logical newline after joining incomplete expressions. Operator-driven continuation uses the visible expression syntax; the current prototype uses its existing operator set. This does not assign meanings to operators. Open delimiters and unfinished operators at end of file are errors.
+- **Clean expression:** typed declarations, assumptions, `Returns`, `Equals`, and `Conclude`. Only these contents use Clean operator parsing and inferred continuation.
+- **Lean expression:** `From Lean` and the older notation/type `Means` bridge. Clean does not interpret their operators, comments, or keywords. `Means` remains single-line in this slice; `From Lean` has explicit inline and block forms.
+- **Metadata or rendering:** attribution, bibliographic fields, and rendering fields use their own schemas. Punctuation in their values never starts Clean expression continuation. For example, an attribution field named `returns` remains metadata, even if its text ends with `+` or `(`.
+
+At a clause/field boundary, the enclosing grammar recognizes a keyword and its required header shape. Inside an expression, the same spelling is an identifier where the expression grammar permits one. Thus the following is valid syntax if `Returns` is a declared object:
+
+```text
+Conclude: Returns =
+  Returns
+```
+
+A keyword-shaped identifier alone must not be mistaken for a new clause. Conversely, `Let z: Real` cannot supply a missing operand: that token sequence is not a valid expression. Inferred continuation never authorizes swallowing a separate clause.
+
+### Layout and continuation
+
+The layout scanner keeps a stack of indentation columns, initially `[0]`. Outside continued expressions and opaque bodies, an increase of at least two columns pushes one level and emits `INDENT`. Equal indentation emits no layout transition. A decrease must match a column already on the stack and emits one `DEDENT` per popped level. At end of file all remaining levels close. An increase of one space or a dedent to an unknown column is an error. The grammar determines which constructs admit an indented body; layout alone does not authorize nesting. Blank lines and full-line Clean comments do not change this stack.
+
+For an **inline Clean expression**, the parser can be in a completed state, a state requiring an operand, or a state with open parentheses. At a physical newline:
+
+1. A completed expression with no open parentheses emits `NEWLINE`.
+2. Open parentheses or a required operand suppress `NEWLINE` and request continuation under the indentation rule above. This includes an operand after a prefix or infix operator, an argument after a comma inside a call, and the right-hand side after the local-definition delimiter `=`.
+3. An otherwise invalid token sequence is an error, not a reason to continue until it becomes plausible. An empty field value after `:` does not infer continuation; only fields with an explicit block alternative may begin a value on the next line. A local-definition delimiter `=` is different: it explicitly starts an expression requiring an operand.
+
+An **explicit Clean expression block** starts after a field's empty `:` line. Its first content line establishes a body column at least two greater than the field column. All content lines up to the first dedent below that body column belong to one expression; physical newlines within that region separate tokens, never imply conjunction or introduce additional clauses. Extra indentation within the region is visual. A dedent closes the block even if its expression is incomplete, in which case parsing fails. Sibling fields must align with the field header. Blank/comment lines do not choose or end the body column.
+
+An **explicit Lean expression block** has the same indentation boundary, but its contents are captured as Lean source with newlines and relative indentation preserved after removing the body column. Only blank lines are ignored when locating its boundary; Lean comments are part of its source. `#` within it is not a Clean comment. Nested Lean indentation does not create Clean scopes. An inline Lean body extends to the physical newline and does not use Clean continuation inference.
+
+Metadata and rendering remain single-line values, except where their own schema explicitly defines a block (such as expanded attribution). Tabs remain forbidden in every mode. An unclosed delimiter, a missing operand, or an empty required body at end of input is an error. `NEWLINE` in the grammar denotes a logical newline, except in the opaque Lean productions where it denotes a physical newline. The scanner and expression parser cooperate using the current syntax environment; a blind preprocessing pass based on the final character of a line is not conforming.
 
 ## 3 Declaration grammar
 
 This EBNF describes the proposed operator/type/statement slice. `NEWLINE`, `INDENT`, and `DEDENT` are produced by the layout lexer. `expression` is parameterized by the visible syntax environment; section 4 defines it. Metadata and phrase declaration bodies retain their separate schemas in the prototype documentation; this is not yet a complete grammar for those facilities.
 
 ```ebnf
-module           = { import }, { declaration | result | context } ;
+module           = { import | declaration | result | context } ;
 import           = "Import", string, ["as", identifier], NEWLINE
                  | "Import", "Lean", leanModule, NEWLINE
                  | "Import", "BibTeX", string, NEWLINE ;
-declaration      = notation | typeDeclaration | sourceDeclaration
+declaration      = definition | notation | typeDeclaration | sourceDeclaration
                  | phraseDeclaration | aliasDeclaration ;
+definition       = "Define", englishName, "(", [nameList], ")", ":",
+                   NEWLINE, INDENT, { definitionField }, DEDENT ;
+definitionField  = typedLet | attribution | presentationField
+                 | "Returns", ":", expressionValue
+                 | "Equals", ":", expressionValue
+                 | "From", "Lean", ":", leanValue ;
+expressionValue  = expression, NEWLINE
+                 | NEWLINE, INDENT, expressionLines, DEDENT ;
+leanValue        = leanLine, NEWLINE
+                 | NEWLINE, INDENT, leanLines, DEDENT ;
+presentationField = "Render", ["latex"], ":", rendering, NEWLINE ;
 notation         = "Notation", englishName, "(", [nameList], ")", ":",
                    NEWLINE, INDENT, { notationField }, DEDENT ;
 notationField    = typedLet
@@ -58,7 +96,7 @@ notationField    = typedLet
                  | "Syntax", ":", fixity, string, NEWLINE
                  | "Precedence", ":", integer, NEWLINE
                  | "Associativity", ":", associativity, NEWLINE
-                 | "Render", ":", rendering, NEWLINE ;
+                 | presentationField ;
 fixity           = "prefix" | "infix" | "postfix" ;
 associativity    = "left" | "right" | "none" ;
 typeDeclaration  = "Type", englishName, "(", [typedParameters], ")", ":",
@@ -73,19 +111,21 @@ clause           = typedLet | localDefinition | assumption ;
 typedLet         = "Let", nameList, (":" | "be"), expression, NEWLINE ;
 localDefinition  = ("Let" | "Define"), identifier, "=", expression, NEWLINE ;
 assumption       = "Assume", englishName, ":", expression, NEWLINE ;
-conclusion       = "Conclude", ":", expression, NEWLINE
-                 | "Conclude", ":", NEWLINE, INDENT,
-                   expressionLines, DEDENT ;
+conclusion       = "Conclude", ":", expressionValue ;
 context          = "Context", englishName, ":", NEWLINE, INDENT,
                    { clause }, (result | context), {result | context}, DEDENT ;
 nameList         = identifier, { ",", identifier } ;
 ```
 
-`Import BibTeX` introduces only bibliographic source metadata, using the citation keys and import rules specified in [the prototype specification](spec.md#bibtex-sources). It neither introduces expression names nor changes mathematical overload resolution.
+`Import BibTeX` introduces only bibliographic source metadata, using the citation-key and collision rules specified in [the prototype specification](spec.md#bibtex-sources). Its position follows this draft’s interleaved, sequential import rule, superseding the prototype’s prelude restriction. It neither introduces expression names nor changes mathematical overload resolution.
 
-The file has a declaration prelude before its first result/context. Imports are in the initial import block. Definitions are ordered: signatures can refer to preceding declarations and imports. All fields must be unique except repeated typed `Let` clauses. A notation requires exactly one `Returns`, `Means`, and `Render`. With no `Syntax` field it is callable by its English name. An operator declaration also remains callable by that name.
+Imports, definitions, results, and contexts may interleave at module level. An import takes effect immediately after its own item and only for subsequent items. Signatures and bodies may refer to preceding declarations and imports, never later ones. Imports inside a result, definition body, or context are not part of this slice. All fields must be unique except repeated typed `Let` clauses. A notation requires exactly one `Returns`, `Means`, and `Render`. With no `Syntax` field it is callable by its English name. An operator declaration also remains callable by that name.
 
-Every header parameter must be declared exactly once in the `Let` clauses and in header order. Additional `Let` binders before the header parameters are implicit parameters inferred from the typed application. Both colon and `be` forms, and grouped typed lets, have identical binding semantics here and in results. An unused implicit parameter cannot be inferred and must cause an unresolved-parameter error; there is no guessed dimension/type value.
+A `Define` requires exactly one `Returns` field and exactly one implementation field: either `Equals` or `From Lean`, never both. Other fields may appear anywhere among its typed `Let` clauses. First collect the fields, then check the `Let` clauses in their relative source order. A parameter type can use earlier parameters only. The return type and implementation are resolved in the complete parameter scope, regardless of where their fields appear. The definition’s own name becomes available only after the definition has been checked; recursion is outside this slice. Empty and duplicate fields are errors. `Render` and `Render latex` are alternatives for one presentation field, not separately repeatable fields.
+
+Definitions may carry one attribution and one presentation field; neither is required by this slice. This is a recorded provisional policy: the established mandatory-attribution requirement continues to apply to results. With no presentation field, a definition renders as a named application with its arguments. The optional-definition-attribution policy and presentation default can be revisited independently of parsing. `Returns` inference is deferred.
+
+For both `Define` and the existing `Notation` bridge, every header parameter must be declared exactly once in the `Let` clauses and in header order. Additional `Let` binders before the header parameters are implicit parameters inferred from the typed application. Both colon and `be` forms, and grouped typed lets, have identical binding semantics here and in results. An unused implicit parameter cannot be inferred and must cause an unresolved-parameter error; there is no guessed dimension/type value.
 
 Infix notation requires two header parameters and all three syntax fields. Prefix/postfix notation requires one header parameter, `Syntax`, and `Precedence`, and forbids `Associativity`. Call-only notation forbids precedence/associativity fields. Proposed precedence values are integers from 0 through 100, with larger values binding more tightly; calls bind tighter than all operators.
 
@@ -101,11 +141,15 @@ Let `S` be the visible syntax environment. A notation syntax record is:
 SyntaxRecord(spelling, fixity, precedence, associativity, candidateIDs)
 ```
 
-All imported overloads sharing a spelling and fixity must agree on precedence and associativity. Otherwise importing the combination is an error before mathematical type checking. Syntax trees cannot depend on which overload eventually fits. A symbol used both as prefix and infix has separate syntax records, selected by syntactic position.
+All imported overloads sharing a spelling and fixity must agree on precedence and associativity. Otherwise importing the combination is an error before mathematical type checking. Syntax trees cannot depend on which overload eventually fits. A symbol used both as prefix and infix has separate syntax records, selected by syntactic position. A spelling may not be visible as both infix and postfix: the declaration or import introducing that combination is rejected, even if no expression uses it. Prefix/postfix reuse is permitted because the parser’s operand position distinguishes it. Type-directed overload selection cannot repair a grammatical conflict.
 
 An expression is a name reference, a decimal token, a parenthesized expression, a call with comma-separated expressions, or an application of a prefix/infix/postfix syntax record. The parser records the record's candidate identities without yet choosing a mathematical operation.
 
-For a precedence-climbing parser, an infix operator of precedence `p` parses its right operand with minimum precedence `p+1` when left-associative and `p` when right-associative. Nonassociative operators reject an unparenthesized continuation at that same precedence on either side. Prefix operators parse their operand at their declared binding power. Parentheses override all binding powers. At a shared precedence, incompatible associativity requires explicit parentheses rather than a source-order tie-break.
+For a precedence-climbing parser, an infix operator of precedence `p` parses its right operand with minimum precedence `p+1` when left-associative and `p` when right-associative. Nonassociative operators reject an unparenthesized continuation at that same precedence on either side. Prefix operators parse their operand at their declared binding power. Parentheses override all binding powers. Infix operators at a shared precedence with incompatible associativity require explicit parentheses rather than a source-order tie-break.
+
+A postfix operator of precedence `p` is consumed in a precedence-climbing call with minimum precedence `m` exactly when an operand has been parsed and `p ≥ m`. It wraps the current left tree and consumes no right operand. The parser then resumes its operator loop at minimum `m`. Consecutive postfix operators apply in source order: `x!!` means `(x!)!` when tokenization yields two `!` tokens. Postfix and infix operators at equal precedence group in their source order where the infix right-binding rule permits: a left-associative infix of precedence `p` makes `x + y!` parse as `(x + y)!` when `!` also has precedence `p`. Give `!` higher precedence to obtain `x + (y!)`. Operator lexing remains longest-match, so a separately declared `!!` token is different from two `!` tokens.
+
+A completed postfix expression is a completed expression for the newline rule. For example, `Let count = n!` ends at its newline; `Let count = -` requires continuation when `-` is prefix; and `Let count = n +` requires continuation when `+` is infix.
 
 For example, a standard arithmetic module can assign prefix minus precedence 70 and exponentiation precedence 80, making `-x^2` mean `-(x^2)`. These values and spellings are module declarations, not compiler constants. Chained comparisons require explicit logical conjunction or future declared chain syntax; the parser does not silently convert `a < b < c` into a conjunction.
 
@@ -113,7 +157,7 @@ For example, a standard arithmetic module can assign prefix minus precedence 70 
 
 A declaration has a qualified identity `d`, separate from its display name and generated Lean identifier. A reference stores `d`; it never relies on comparing a rendered name to strings such as `Matrix`, `Function`, or `Natural`. Local binders likewise have unique identities.
 
-A module is checked in an environment made from its own direct imports, their explicit exports, and its preceding declarations. It does not receive the importing document's local environment. Cycles are rejected in this first version. Importing the same canonical file more than once does not duplicate declarations.
+Each module item is checked in an environment made from that module’s preceding imports, their explicit exports, and preceding declarations. An import later in the module cannot repair an earlier unknown name or add candidates to an earlier overload set. Moving an import across a use is therefore not semantics-preserving; permuting independent imports before all affected uses is. It does not receive the importing document's local environment. Cycles are rejected in this first version. Importing the same canonical file more than once does not duplicate declarations.
 
 Draft export rule: a module exports its own declarations, not imported names automatically. A public signature retains qualified references to all its dependencies, even when their display names are not exported. Thus an importing module can use a declaration without acquiring unrelated spellings. A future explicit re-export form is required for convenience modules such as `standard.clean`; its spelling is not settled here. This differs from the current prototype's flattened environment.
 
@@ -167,6 +211,9 @@ A decimal token is handled by imported literal interpretation declarations in th
 
 ## 8 Declaration and statement meaning
 
+A `Define` collects and checks its ordered parameter telescope and explicit return type. An `Equals` expression is parsed in the Clean mode and elaborated against that return type. A `From Lean` body is elaborated as a Lean term against the same return type, in the complete parameter scope and the Lean environment available at this declaration. Both produce the same kind of callable declaration identity. Lean adapters may fix arguments, choose instances, or wrap representations, but must satisfy the declared signature; they cannot leave unresolved names or metavariables. Attribution and rendering do not change that meaning.
+
+
 A notation declaration checks its parameter telescope, return type, and Lean `Means` term together. Free Lean identifiers in `Means` must resolve in its declared Lean imports and parameter scope. It produces a Lean-backed declaration with no proof of a surrounding result. Mathematical definitions may be noncomputable; that does not make a proposition proved.
 
 A type declaration checks its telescope and `Means` as a type/sort expression. The display names of its parameters have no semantic category: a dimension is an ordinary parameter whose imported type determines its meaning.
@@ -215,7 +262,12 @@ A conforming implementation of this draft must demonstrate:
 | Structured type preservation | The matrix-of-functions statement has the intended nested type, not the Lean-accepted matrix-to-scalar type |
 | Binding hygiene | Renaming a type/operator preserves behavior; a Lean keyword used as a Clean object/result name still translates |
 | Module independence | A missing module dependency cannot be repaired by an unrelated import in the caller |
-| Determinism | Permuting independent imports preserves resolved identities and mathematical meaning |
+| Determinism | Permuting independent imports before all affected uses preserves resolved identities and mathematical meaning |
+| Sequential imports | A later import cannot fix an earlier reference or change its parse; the same reference after the import can resolve |
+| Continuation | A postfix application ends at newline; prefix/infix operators requiring an operand continue; keyword-shaped identifiers remain valid expression tokens |
+| Field ownership | `returns: text +` inside attribution stays metadata; `From Lean` block contents are never tokenized as Clean |
+| Operator conflicts | Importing one spelling as infix and postfix fails before any use or type checking |
+| Definition fields | Reordering Returns/implementation/presentation around an unchanged parameter sequence preserves meaning; reversing dependent parameters fails |
 | Overload discipline | Zero and multiple viable overloads are errors; no first-match fallback |
 | Literal discipline | An unconstrained numeral with no declared default is rejected |
 | Uniform parameters | Fixed dimensions and inferred dimensions produce compatible Lean applications; neither has an ad hoc internal kind |

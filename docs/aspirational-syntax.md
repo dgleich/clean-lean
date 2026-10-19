@@ -160,3 +160,60 @@ The formal grammar is a draft, not a reason to freeze its first spelling. We sho
 ## Examples from recent papers
 
 The [recent-paper specimens](recent-paper-examples.md) apply this style to magnetic graph matrices, a size-specific Cheeger inequality, and a trace-bounded SDP certificate. They expose the need for readable summation, existential, set-comprehension, and optimization binders. These examples are aspirational, not compiler-supported or Lean-verified.
+
+## Agreed definition and import forms
+
+These forms record the parsing choices accepted on 2026-10-19; top-level `Define` is not yet implemented. Imported names in this specimen stand for explicitly supplied mathematical modules.
+
+```text
+Import "real matrices.clean"
+
+Define volume(G, S):
+  Returns: Real
+  Let n: Natural
+  Let G: Graph(n)
+  Let S: VertexSet(n)
+  From Lean: GraphDefinitions.volume G S
+
+Import "complex matrices.clean"
+Import BibTeX "references.bib"
+
+Define magnetic matrix(A, q):
+  Render latex: M({A},{q})
+  Let n: Natural
+  Let A: Matrix(n,n,Real)
+  Let q: Real
+  Returns: Matrix(n,n,Complex)
+  Equals:
+    exp(2*π*i*q)*A +
+      exp(-2*π*i*q)*transpose(A)
+```
+
+The first imported module must explicitly supply the referenced Lean definition and types. The second import adds vocabulary only for following declarations; it cannot affect the earlier `volume` definition. Parameter types depend on earlier parameters. `Returns` and `Render latex` need not follow parameter declarations, because these fields are collected before semantic checking.
+
+Alternatively, the magnetic definition can be imported through a checked adapter in a module with the required Lean import:
+
+```text
+Import Lean CleanPapers.Definitions
+
+Define magnetic matrix(A, q):
+  Let n: Natural
+  Let A: Matrix(n,n,Real)
+  Let q: Real
+  From Lean:
+    CleanPapers.magneticMatrix A q
+  Returns: Matrix(n,n,Complex)
+  Render latex: M({A},{q})
+```
+
+These magnetic declarations are alternatives, not two declarations of the same name in one scope. Both have the same signature and are used as `magnetic matrix(A,q)`. The adapter snippet also requires explicit Clean imports for its types. A definition has exactly one implementation field. Attribution on definitions is currently an optional policy; attribution on results remains required.
+
+With declared factorial and addition notation, newline behavior is:
+
+```text
+Let count = n!
+Let total = count +
+  extra
+```
+
+Factorial completes its operand and therefore ends the first definition at the newline. Addition still requires an operand and continues. A spelling cannot be imported as both infix and postfix; the conflict is diagnosed at the import, not guessed from operand types later.
