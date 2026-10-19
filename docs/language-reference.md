@@ -311,3 +311,5 @@ This does not narrow the normative grammar above: positional imports, explicit
 Lean body blocks, expanded definition attribution, and the complete elaboration
 uniqueness procedure remain pending. The new structural checks cover three
 monomorphic expression-body targets, not all legal definitions.
+
+The prototype wrapper naming rule is specified in [readable generated identifiers](spec.md#readable-generated-lean-identifiers). This is a deterministic target-identity spelling change; it adds no Clean parse alternative or scope rule.

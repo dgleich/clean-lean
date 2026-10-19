@@ -131,7 +131,7 @@ Finset (Fin n)
   <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>noncomputable def cleanDet {n : ℕ}
     (A : Matrix (Fin n) (Fin n) ℂ) : ℂ :=
   Matrix.det A</code></pre></section></div>
-  <div class="notes"><p><code>cleanDet</code> is an explanatory wrapper name; the prototype generates a hashed identifier. The omitted header parameter <code>n</code> is inferred from <code>A</code>. This is not automatically a Lean <code>notation</code> declaration, and current Clean notation cannot bind a summation variable.</p></div>
+  <div class="notes"><p><code>cleanDet</code> is an explanatory wrapper name; the prototype now generates a readable name plus a deterministic suffix, such as <code>cleanNotation_det_&lt;id&gt;</code>. Type wrappers similarly use <code>cleanType_Real_&lt;id&gt;</code>. The omitted header parameter <code>n</code> is inferred from <code>A</code>. This is not automatically a Lean <code>notation</code> declaration, and current Clean notation cannot bind a summation variable.</p></div>
 </article>
 <article id="define-clean" data-status="implemented" class="mapping">
   <header><h2><a href="#define-clean">Define with Equals authors a definition in Clean</a></h2><span class="badge implemented">Implemented slice</span></header>
@@ -143,7 +143,7 @@ Finset (Fin n)
     x + x</code></pre></section>
   <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>def doubled (x : ℝ) : ℝ :=
   x + x</code></pre></section></div>
-  <div class="notes"><p>Top-level <code>Define</code> now works in modules and document preludes, with inline or block <code>Equals</code>. Nonparameter fields may be reordered; parameter declarations keep their relative order. The return type and implementation see the complete parameter scope. Explicit imports must supply <code>Real</code> and addition. The right panel uses a readable name; emitted definitions use hashed names and <code>noncomputable def</code>. Missing rendering defaults to a named call. Recursion and forward references are rejected. Full canonical-target conformance remains pending; <code>verify_definitions.py</code> supplies three bounded structural checks.</p></div>
+  <div class="notes"><p>Top-level <code>Define</code> now works in modules and document preludes, with inline or block <code>Equals</code>. Nonparameter fields may be reordered; parameter declarations keep their relative order. The return type and implementation see the complete parameter scope. Explicit imports must supply <code>Real</code> and addition. The right panel uses a readable name; emitted definitions use names such as <code>cleanDefine_doubled_&lt;id&gt;</code> and <code>noncomputable def</code>. Missing rendering defaults to a named call. Recursion and forward references are rejected. Full canonical-target conformance remains pending; <code>verify_definitions.py</code> supplies three bounded structural checks.</p></div>
 </article>
 <article id="define-lean" data-status="implemented" class="mapping">
   <header><h2><a href="#define-lean">Define with From Lean imports an implementation</a></h2><span class="badge implemented">Implemented slice</span></header>

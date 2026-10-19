@@ -43,7 +43,12 @@ def fields_map(fields):
 
 
 def add_definition(env, prefix, name, body):
-    key = prefix+hashlib.sha256((name+body).encode()).hexdigest()[:20]
+    # Retain readable words; encode non-ASCII characters into a safe Lean identifier.
+    stem = ''.join('_' if c == ' ' else c if c.isascii() and (c.isalnum() or c == '_')
+                   else f'_u{ord(c):x}_' for c in name)
+    key = prefix + stem + '_' + hashlib.sha256((name+body).encode()).hexdigest()[:20]
+    if key in env.notation_definitions:
+        raise CleanError('Generated Lean identifier collision: ' + key)
     env.notation_definitions[key] = f'noncomputable def {key} {body}\n'
     return key
 

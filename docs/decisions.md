@@ -64,6 +64,8 @@ These decisions separate requested behavior from provisional implementation choi
 | D49 | Prefer definitions authored in Clean; track Lean-body fallbacks as language gaps | Explicit user direction. Implemented first `Define Equals` slice and 12 additional result ports; foundational primitives remain imported. Scope, unresolved gaps, and acceptance limits are recorded in `porting-findings.md` |
 | D50 | Prototype `Define` supports inline From Lean, but rejects its block form | Temporary implementation boundary, not a change to the accepted grammar. Equals supports inline/block bodies; ordered/grouped/prose parameters, reordered fields, compact optional attribution and default rendering are implemented. Full canonical conformance remains pending |
 
+| D51 | Include the authored name in generated Lean wrapper identifiers | User request. Implemented `cleanType_<stem>_<id>`, `cleanNotation_<stem>_<id>`, and `cleanDefine_<stem>_<id>` with readable space-separated names joined by underscores, safe Unicode encoding, and the existing deterministic 20-hex fingerprint. No Clean grammar or mathematical-body change |
+
 ## Questions to revisit after reading the specimens
 
 1. Should formalization contributors become a required field distinct from mathematical sources? Source keys are now implemented.

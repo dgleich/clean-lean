@@ -171,6 +171,24 @@
       "comparison": "Expr.equal after removing only metadata and binder display names; compare elaborated definition type and value; preserve binderInfo and all application arguments; no reduction/unfolding",
       "observed": "Three expression trees and three canonical targets pass; implicit binder and beta-reducible body comparator guards pass",
       "obligation": "Full declaration ASTs and canonical comparisons for composed/polymorphic/adapted definitions remain pending; ambiguity and resource exhaustion still need general elaborator support"
+    },
+    {
+      "id": "readable_generated_identifiers",
+      "status": "partial",
+      "environment": "Pinned Lean/Mathlib v4.24.0; existing explicit module environments; no grammar/scope change",
+      "expected_naming": "prefix + ASCII-safe authored stem + underscore + first 20 lowercase hex SHA-256 digits of UTF-8(name + emitted signature/body)",
+      "expected_oracle": {
+        "prefix": "cleanType_",
+        "name": "Real",
+        "body": " : Type := Real",
+        "identifier": "cleanType_Real_3b3714aba90b969f7c2b"
+      },
+      "checks": [
+        "python3 -m unittest discover -s tests -v",
+        "python3 verify_definitions.py",
+        "lake env lean generated/VerifiedDefinitions.lean"
+      ],
+      "obligation": "Naming rule, stability, safe stems and forced collision rejection covered by test_generated_names.py; existing three independent expression-tree and structural Lean-target checks remain applicable. General declaration AST, polymorphic-target and ambiguity obligations remain pending."
     }
   ]
 }

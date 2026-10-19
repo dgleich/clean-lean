@@ -313,3 +313,27 @@ terms; only metadata and binder display names are erased. Comparator guards
 reject an implicit/explicit binder change and a beta-reducible alternative.
 Full declaration AST checks and ambiguous/incomplete-elaboration checks remain
 pending in the acceptance catalog. See [porting findings](porting-findings.md).
+
+### Readable generated Lean identifiers
+
+Type, notation, and authored-definition wrappers use
+`cleanType_<stem>_<id>`, `cleanNotation_<stem>_<id>`, and
+`cleanDefine_<stem>_<id>`. The stem preserves ASCII letters, digits, underscores,
+and case; each space becomes `_`. Every other character becomes `_u<hex>_`, with
+its lowercase Unicode code point and no leading zero padding, so the resulting
+identifier is safe ASCII (for example `μ` becomes `_u3bc_`).
+The identifier suffix retains the existing first 20 lowercase hexadecimal digits
+of SHA-256 over UTF-8 `name + body`, using the resolved authored name and emitted
+Lean signature/body passed to wrapper generation. This is deterministic, with no
+randomness or import-order counters. Spaces and underscores can share a stem but
+the original name participates in the fingerprint. A generated identifier already
+present in the same environment is rejected rather than overwritten.
+
+For example, `Define squared distance(x, y)` emits a wrapper beginning
+`cleanDefine_squared_distance_`; `Type Real()` emits `cleanType_Real_` followed by
+its fingerprint. Calls use the complete generated identifier. This changes target
+constant names only, not Clean grammar, scope, or mathematical bodies. Existing
+result names such as `determinant_product` are unchanged. Fingerprints are build
+identifiers, not permanent public API names; changing a body or a referenced
+wrapper identity can change the suffix. The structural target checks still apply
+and do not treat arbitrary unfolding as an acceptable renaming.
