@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Clean as mathematics you want to write
 
 Clean should be a pleasant place to write mathematics in a plain text editor. The source should communicate the statement before anyone compiles it, generates a PDF, or knows Lean. Its formal rules should make that experience dependable.

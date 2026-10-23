@@ -1,8 +1,10 @@
+:::llm 2026-10-23 role=assisted
+
 # Working on Clean
 
 ## Scope and design
 
-- Keep this repository local. Do not create a remote, push, or publish without an explicit user request.
+- The user authorized publishing to `dgleich/clean-lean`. Preserve linear history; no force pushes. Do not publish elsewhere without an explicit request.
 - Read `docs/spec.md` and `docs/decisions.md` before changing language behavior. Record new decisions and unresolved choices there; distinguish implemented behavior from proposals.
 - The agreed architecture is explicit Clean definitions modules backed by Lean definitions. All mathematical vocabulary must come from explicit Clean imports. Do not reintroduce registry files, implicit default modules, or compatibility loaders. See `docs/notation-prototype.md` for current syntax and limits.
 - Prefer mathematical definitions authored in Clean with `Define … Equals:`. Treat a new mathematical Lean body as a language gap to record, rather than completing the port with an unexplained adapter. Foundational imports remain explicit; track binder, recursion, and elaboration gaps in `docs/porting-findings.md`.
@@ -57,3 +59,7 @@ Checks document progress; they are not commit gates. Record known failures or ch
 - Build `docs/review.html` with `tools/build_review.py`; edit the template under
   `tools/review/`, not the generated snapshot. Show translation failures and do
   not label unverified targets as proved. Keep this tooling offline and local.
+
+## Publication provenance
+
+Follow [PROVENANCE.md](PROVENANCE.md) and the linked LLM tagging skill for all authored documents and code. Preserve upstream and human origin boundaries. Classify new files in `provenance.json`; after regeneration run `python3 tools/provenance.py --apply` and then its check mode. Keep credentials ignored. Tags are required for shared artifacts, not conversational replies.

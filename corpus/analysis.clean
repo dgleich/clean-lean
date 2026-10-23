@@ -128,3 +128,5 @@ Result distance square root:
     Attribution: mathlib; Real.sqrt_sq_eq_abs; adapted
     Let x, y: Real
     Conclude: sqrt(squared distance(x,y)) = abs(x-y)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

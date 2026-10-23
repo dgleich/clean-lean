@@ -129,3 +129,5 @@ Result heap sort n log n comparison bound:
 
 # The reference additionally proves CleanSorting.heapSort_isBigO using Mathlib's
 # =O[atTop], uniformly for every input family whose nth array has length n.
+
+# generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

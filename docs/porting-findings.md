@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Porting with authored Clean definitions
 
 The October 19 checkpoint has 92 proved validation fixtures: 23 statements in each

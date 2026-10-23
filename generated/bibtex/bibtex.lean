@@ -87,3 +87,5 @@ def similarity_preserves_eigenvectors : Prop :=
   ((y ≠ 0) ∧ (((((cleanNotation_inverse_60f5a255d86c84175527 (S)) * A) * S) *ᵥ y) = (μ • y)))
 
 end CleanStatements
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -21,3 +21,5 @@ Path('generated/recent-papers.metadata.json').write_text(json.dumps([
      'resolved_attribution': env.sources.resolve(r.attribution)} for r in results
 ], ensure_ascii=False, indent=2) + '\n')
 print(f'Generated {len(results)} paper statements and independent shape checks')
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

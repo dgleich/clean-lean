@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Reviewing Clean
 
 Open [the local review workspace](review.html). It contains a searchable snapshot

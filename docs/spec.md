@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Clean theorem statements
 
 This document describes the current prototype. The accepted next-language rules allow interleaved top-level imports, parser-state continuation, and reordered fields in top-level `Define` declarations; these are specified in [the language reference](language-reference.md) and are not yet fully implemented. The proposed next language contract is [Clean syntax and semantics draft](language-reference.md); its new syntax is not implemented or yet fully agreed.

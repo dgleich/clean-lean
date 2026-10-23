@@ -277,3 +277,5 @@ Notation smallest eigenvalue(M):
     Returns: Real
     Means: CleanPapers.smallestEigenvalue M
     Render latex: \lambda_{{\min}}\left({M}\right)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

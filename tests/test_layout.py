@@ -140,3 +140,5 @@ Result identity:
             (root / 'vocabulary.clean').write_text('#\ttab\n')
             with self.assertRaisesRegex(CleanError, 'vocabulary.clean: line 1: tabs'):
                 load_document(root / 'main.clean', Environment())
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -4,3 +4,5 @@ Type SquareMatrix(n: Natural, K: Type):
     Equals: Matrix(n,n,K)
 
 Phrase square complex matrices of order (?P<n>\w+) => SquareMatrix({n},Complex)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -1,0 +1,957 @@
+{
+  "_provenance": {
+    "origin": "llm",
+    "model": "gpt-6",
+    "date": "2026-10-23",
+    "role": "assisted"
+  },
+  "files": {
+    ".gitignore": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "AGENTS.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "CleanPapers.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "CleanPapers/Checks.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "CleanPapers/Definitions.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "PROVENANCE.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown",
+      "model": "gpt-6"
+    },
+    "README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "THIRD_PARTY.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "build_corpus.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "cleanlang/__init__.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "cleanlang/__main__.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "cleanlang/attribution.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "cleanlang/core.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "cleanlang/modules.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "corpus/algorithms.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "corpus/analysis.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "corpus/catalog.json": {
+      "origin": "llm-assisted",
+      "mode": "sidecar",
+      "exceptions": "source_excerpt, source_declaration, source_file, source_line, source_url, mathlib_revision are upstream data; remaining entries are assistant curation/adaptations"
+    },
+    "corpus/graph_theory.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "corpus/linear_algebra.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "corpus/references.json": {
+      "origin": "upstream-or-bibliographic-data",
+      "mode": "sidecar"
+    },
+    "docs/aspirational-syntax.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "docs/clean-to-lean.html": {
+      "origin": "llm-assisted",
+      "mode": "html"
+    },
+    "docs/corpus-guide.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "docs/decisions.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "docs/language-change-acceptance.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "docs/language-reference.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "docs/notation-prototype.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "docs/paper-translations.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "docs/porting-findings.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "docs/recent-paper-examples.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "docs/review-workflow.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "docs/review.html": {
+      "origin": "llm-assisted",
+      "mode": "html"
+    },
+    "docs/sorting-examples.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown",
+      "model": "gpt-6"
+    },
+    "docs/source-index.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "docs/spec.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "docs/validation.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "editors/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "editors/emacs/clean-math-mode.el": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        ";; ",
+        ""
+      ]
+    },
+    "editors/vim/ftdetect/cleanmath.vim": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "\" ",
+        ""
+      ]
+    },
+    "editors/vim/ftplugin/cleanmath.vim": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "\" ",
+        ""
+      ]
+    },
+    "editors/vim/syntax/cleanmath.vim": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "\" ",
+        ""
+      ]
+    },
+    "editors/vscode/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "editors/vscode/language-configuration.json": {
+      "origin": "llm-assisted",
+      "mode": "sidecar"
+    },
+    "editors/vscode/package.json": {
+      "origin": "llm-assisted",
+      "mode": "sidecar"
+    },
+    "editors/vscode/syntaxes/clean.tmLanguage.json": {
+      "origin": "llm-assisted",
+      "mode": "sidecar"
+    },
+    "examples/bibliography/references.bib": {
+      "origin": "upstream-or-bibliographic-data",
+      "mode": "sidecar"
+    },
+    "examples/bibtex.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "examples/determinants.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "examples/extension.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "examples/lean/HeapSortRuntime.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "examples/modules/sorting.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "examples/modules/square-matrices.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "examples/notation.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "examples/proposed/heap-sort.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "examples/proposed/insertion-sort.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "examples/recent-papers.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "examples/similarity.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "generated/CheckedPaperStatements.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/RecentPapers.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/VerifiedCorpus.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/VerifiedDefinitions.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/VerifiedNotation.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/algorithms.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/algorithms.metadata.json": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/algorithms.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "generated/analysis.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/analysis.metadata.json": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/analysis.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "generated/bibtex/bibtex.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/bibtex/bibtex.metadata.json": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/bibtex/bibtex.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/bibtex/bibtex.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "generated/bibtex/references.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/contexts.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/determinants.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/determinants.metadata.json": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/determinants.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "generated/extension.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/extension.metadata.json": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/extension.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "generated/graph_theory.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/graph_theory.metadata.json": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/graph_theory.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "generated/linear_algebra.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/linear_algebra.metadata.json": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/linear_algebra.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "generated/notation.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/notation.metadata.json": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/notation.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/notation.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "generated/paper-references.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/recent-papers.metadata.json": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/recent-papers.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/recent-papers.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "generated/references.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/similarity.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/similarity.metadata.json": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "generated/similarity.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "generated/specimen.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "lake-manifest.json": {
+      "origin": "upstream-or-bibliographic-data",
+      "mode": "sidecar"
+    },
+    "lakefile.toml": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "latex/bibtex.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "latex/clean.sty": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "latex/contexts.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "latex/notation.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "latex/recent-papers.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "latex/specimen.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "lean-toolchain": {
+      "origin": "upstream-or-bibliographic-data",
+      "mode": "sidecar"
+    },
+    "library/algorithms.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "library/analysis.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "library/graph_theory.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "library/linear_algebra.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "library/papers.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "library/sources.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "library/standard.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "library/types.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "licenses/mathlib-LICENSE": {
+      "origin": "upstream-or-bibliographic-data",
+      "mode": "sidecar"
+    },
+    "pyproject.toml": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/acceptance/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "tests/acceptance/language-contract.json": {
+      "origin": "llm-assisted",
+      "mode": "sidecar"
+    },
+    "tests/lean/paper_statement_checks.lean.inc": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "tests/support.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_bibtex.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_clean.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_compact_signatures.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_contexts.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_definitions.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_explicit_environment.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_generated_names.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_layout.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_modules.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_review.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/build_review.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/check_emacs.el": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        ";; ",
+        ""
+      ]
+    },
+    "tools/check_review.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/check_textmate.cjs": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "// ",
+        ""
+      ]
+    },
+    "tools/check_vim.vim": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "\" ",
+        ""
+      ]
+    },
+    "tools/provenance.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "tools/review/index.html": {
+      "origin": "llm-assisted",
+      "mode": "html"
+    },
+    "uv.lock": {
+      "origin": "upstream-or-bibliographic-data",
+      "mode": "sidecar"
+    },
+    "verify_corpus.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "verify_definitions.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "verify_notation.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "verify_papers.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    }
+  }
+}

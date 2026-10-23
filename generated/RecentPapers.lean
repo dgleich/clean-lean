@@ -202,3 +202,5 @@ def trace_bound_gives_a_suboptimality_certificate : Prop :=
   (((cleanNotation_matrix_inner_product_6c3d3df751586b8dd7e6 (C) (X)) - (cleanNotation_matrix_inner_product_6c3d3df751586b8dd7e6 (C) (Z))) ≤ ((cleanNotation_matrix_inner_product_6c3d3df751586b8dd7e6 (C) (X)) - d))
 
 end CleanStatements
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -52,3 +52,5 @@ with sync_playwright() as p:
     assert not errors,errors
     browser.close()
 print('Review browser: search, declarations, target navigation, imports, notes/export, reload, responsive layout and no-JS fallback passed')
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

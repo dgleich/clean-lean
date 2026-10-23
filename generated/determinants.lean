@@ -120,3 +120,5 @@ def determinant_right_swap : Prop :=
   ((cleanNotation_det_7326e962c725ce45b521 (((A * B) * C))) = (cleanNotation_det_7326e962c725ce45b521 (((A * C) * B))))
 
 end CleanStatements
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

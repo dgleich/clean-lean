@@ -569,3 +569,5 @@ def bibliography(results,reg):
         if source.get('url'): entry+=r' \href{'+textext(source['url'])+r'}{Source}'
         out += [r'\item['+textext(source['label'])+'] '+entry]
     return '\n'.join(out+[r'\end{description}',''])
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

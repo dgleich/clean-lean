@@ -91,3 +91,5 @@ class ModuleTests(unittest.TestCase):
     def test_missing_file(self):
         with self.assertRaises(FileNotFoundError):
             self.load('Import "missing.clean"\n'+RESULT)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

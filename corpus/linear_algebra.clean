@@ -140,3 +140,5 @@ Result determinant matrix square:
     Let n: Natural
     Let A: Matrix(n,n,Complex)
     Conclude: det(matrix square(A)) = det(A)*det(A)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

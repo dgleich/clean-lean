@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Validation after registry removal
 
 Validated on 2026-10-16 with Python 3.11.2 and Lean/Mathlib v4.24.0, pinned to Mathlib commit f897ebcf72cd16f89ab4577d0c826cd14afaafc7.

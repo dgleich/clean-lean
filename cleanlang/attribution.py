@@ -131,3 +131,5 @@ class Sources:
         elif source.get('url'):
             resolved['url'] = source['url']
         return resolved
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

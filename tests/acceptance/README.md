@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Language acceptance cases
 
 These cases support the hard [language change acceptance contract](../../docs/language-change-acceptance.md). The catalog is a set of specification oracles, not an executable test runner or a list of passing tests. The original general-language cases remain `pending`. The authored-definition slice is `partial`: its executable checks cover three expression trees and three canonical Lean targets/types, while its remaining obligations are recorded explicitly.

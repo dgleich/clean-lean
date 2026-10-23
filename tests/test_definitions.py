@@ -86,3 +86,5 @@ class DefinitionTests(unittest.TestCase):
     def test_definition_attribution_checked(self):
         with self.assertRaises(CleanError):
             self.load(IDENTITY+'  Attribution: unknown; result\n')
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

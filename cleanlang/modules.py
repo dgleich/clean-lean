@@ -264,3 +264,5 @@ def load_module(path, env, *, document=False):
 
 def load_document(path, env):
     return parse(load_module(path, env, document=True),env)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -82,3 +82,5 @@ class ContextTests(unittest.TestCase):
         self.assertEqual(r.line,5)
         self.assertEqual(r.clauses[0].line,2)
 if __name__=='__main__': unittest.main()
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -125,3 +125,5 @@ def dualBound {n m : ℕ} (C : Mat n) (B : Measurements n m)
     (b y : Fin m → ℝ) (α : ℝ) : ℝ :=
   (∑ k, y k * b k) + α * min (smallestEigenvalue (C - measurementAdjoint B y)) 0
 end CleanPapers
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -6,3 +6,5 @@ Theorem square matrix transpose:
     Let n: Natural
     Let A be square complex matrices of order n
     Conclude: det(transpose(A)) = det(A)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

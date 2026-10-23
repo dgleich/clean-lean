@@ -87,3 +87,5 @@ Define nonadjacent(G, u, v):
   Returns: Proposition
   Equals: not adjacent(G,u,v)
   Render: {u} and {v} are nonadjacent in {G}
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

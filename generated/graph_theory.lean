@@ -344,3 +344,5 @@ def complement_from_nonadjacency : Prop :=
   ((cleanNotation_adjacent_7c95186c3948254b956e ((cleanNotation_complement_954dec16190ec6a37dd0 (G))) (u) (v)) ↔ ((u ≠ v) ∧ (cleanDefine_nonadjacent_950fcfd8028c2fac7d74 (G) (u) (v))))
 
 end CleanStatements
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

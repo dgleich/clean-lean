@@ -162,3 +162,5 @@ class CleanTests(unittest.TestCase):
     def test_reference_alias_conflict(self):
         self.reject(self.attribution('Attribution: mathlib; Matrix.det_mul_left_comm; location: other'),'only one reference')
 if __name__=='__main__': unittest.main()
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -6,3 +6,5 @@ Result insertion sort preserves length:
     Attribution: mathlib; List.length_insertionSort; specialized
     Let xs: List(Natural)
     Conclude: length(insertion sort(xs)) = length(xs)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

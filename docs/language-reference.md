@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Clean syntax and semantics draft
 
 This draft specifies the next language design: a mathematical statement language elaborated into Lean, with module-declared vocabulary and a shared representation for Lean and LaTeX. It is a contract for the refactor, not a description of features already implemented. The current implementation is described in [spec.md](spec.md).

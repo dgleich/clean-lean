@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Editing Clean mathematics
 
 The editor files provide **lexical highlighting**, not a second Clean parser.

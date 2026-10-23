@@ -80,3 +80,5 @@ def square_matrix_transpose : Prop :=
   ((cleanNotation_det_7326e962c725ce45b521 ((cleanNotation_transpose_ec7d2405c8c143132e84 (A)))) = (cleanNotation_det_7326e962c725ce45b521 (A)))
 
 end CleanStatements
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

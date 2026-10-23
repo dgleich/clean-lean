@@ -115,3 +115,5 @@ example : (heapSort #[]).2 = 0 := by native_decide
 example : (heapSort #[7]).1 = #[7] := by native_decide
 example : (heapSort #[2, 2, 1]).1 = #[1, 2, 2] := by native_decide
 end CleanSorting
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

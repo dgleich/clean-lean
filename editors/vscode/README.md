@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Clean Mathematics
 
 Local, declarative syntax highlighting for `.clean` mathematical statements and

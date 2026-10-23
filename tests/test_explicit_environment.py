@@ -76,3 +76,5 @@ class ExplicitEnvironmentTests(unittest.TestCase):
     def test_noninferable_parameter_rejected(self):
         text=f'Import "{ROOT}/library/types.clean"\nNotation bad(x):\n    Let n: Natural\n    Let x: Natural\n    Returns: Natural\n    Means: n\n    Render: {{x}}\n'
         with self.assertRaisesRegex(CleanError,'absent from argument'): self.module(text)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

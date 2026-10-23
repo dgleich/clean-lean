@@ -20,3 +20,5 @@ for item in items:
 out+=['end CleanValidation']
 (root/'generated'/'VerifiedCorpus.lean').write_text('\n'.join(out)+'\n')
 print('Wrote',len(items),'proof fixtures')
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

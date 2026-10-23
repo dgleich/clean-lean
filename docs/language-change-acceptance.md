@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Language change acceptance requirements
 
 Every proposed language change must specify a deterministic parse and a precise, unambiguous translation to Lean. These are hard requirements, not performance goals. A proposal may remain exploratory while these obligations are unresolved, but it cannot be accepted as a fully specified feature or declared conforming. Intermediate commits remain allowed under the repository's linear-history policy.

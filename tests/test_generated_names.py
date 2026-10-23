@@ -35,3 +35,5 @@ class GeneratedNameTests(unittest.TestCase):
             with self.assertRaisesRegex(CleanError,'identifier collision'):
                 add_definition(env,'cleanDefine_','a_b',' : Nat := 1')
             self.assertEqual(env.notation_definitions[key],before)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

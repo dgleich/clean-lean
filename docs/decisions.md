@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Design decisions
 
 These decisions separate requested behavior from provisional implementation choices. All can be revisited; no remote repository has been created.
@@ -78,3 +80,7 @@ These decisions separate requested behavior from provisional implementation choi
 6. Which CLR edition and algorithm families should anchor the next collection expansion?
 7. Should generic algebraic structures and Lean typeclasses be expressible directly in Clean?
 8. Which additional operator precedence and associativity rules need explicit examples? Unary minus already follows `-x^2 = -(x^2)`.
+
+## Publication update — 23 October 2026
+
+The user authorized GitHub publication as `dgleich/clean-lean`, superseding the original local-only restriction (D03 and D30). Preserve the existing chronological history. Publication initially uses private visibility pending a different user preference. Shared LLM-authored documents and code carry provenance markers, with upstream data excluded as documented in `PROVENANCE.md`.

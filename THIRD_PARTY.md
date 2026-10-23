@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Source attribution
 
 The collection adapts statements from Mathlib v4.24.0, commit f897ebcf72cd16f89ab4577d0c826cd14afaafc7. Source declaration names, source file paths, exact revision URLs, and short source excerpts are recorded in `corpus/catalog.json`. Mathlib is distributed under the Apache License 2.0. Original file author headers are preserved in the local Mathlib checkout; the source links identify their files. A copy of the upstream license is included as `licenses/mathlib-LICENSE`.

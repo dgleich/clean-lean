@@ -321,3 +321,5 @@ def certified_sort_unchanged : Prop :=
   ((cleanNotation_insertionSort_6aaed7bf698e562b4aa5 (ys)) = ys)
 
 end CleanStatements
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

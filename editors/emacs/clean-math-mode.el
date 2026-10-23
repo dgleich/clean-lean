@@ -32,3 +32,5 @@
 (add-to-list 'auto-mode-alist '("\\.clean\\'" . clean-math-mode))
 (provide 'clean-math-mode)
 ;;; clean-math-mode.el ends here
+
+;; generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

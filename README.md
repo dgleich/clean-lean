@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Clean statement prototype
 
 A local prototype for readable mathematical statements, mandatory attribution, LaTeX rendering, and translation to Lean. For readers who know Lean, start with the [Clean to Lean HTML reference](docs/clean-to-lean.html). Also see the [aspirational syntax](docs/aspirational-syntax.md), the [syntax and semantics draft](docs/language-reference.md), the [current prototype specification](docs/spec.md), [decision log](docs/decisions.md), and [rendered specimen](generated/specimen.pdf).
@@ -101,3 +103,7 @@ See the [review walkthrough](docs/review-workflow.md) and
 ## Authored sorting examples
 
 See [sorting examples and proof status](docs/sorting-examples.md) for proposed Clean insertion sort and heapsort, and an independent Lean proof of heapsort comparison complexity.
+
+## Provenance
+
+This human-directed prototype includes LLM-authored code and text. See [provenance and source boundaries](PROVENANCE.md), including the distinction between generated adaptations and upstream mathematics. Historical commits predate the retrospective tags.

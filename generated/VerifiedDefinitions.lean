@@ -148,3 +148,5 @@ noncomputable def expected_matrix_square {k : ℕ} (X : Matrix (Fin k) (Fin k) �
 assert_same_target cleanDefine_matrix_square_59c5fc3d3e7ab2ab3d9b expected_matrix_square
 noncomputable def expected_cos (a : ℝ) : ℝ := Real.cos a
 assert_same_target cleanNotation_cos_1efb67bf51334208e223 expected_cos
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

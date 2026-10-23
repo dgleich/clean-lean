@@ -111,3 +111,5 @@ Result insertion sort quadratic work bound:
   Let xs: List(Natural)
   Let n = length(xs)
   Conclude: insertion sort work(xs) ≤ n*n + n + 1
+
+# generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

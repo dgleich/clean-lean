@@ -167,3 +167,5 @@ Result complement from nonadjacency:
     Let G: Graph(n)
     Let u, v: Vertex(n)
     Conclude: adjacent(complement(G),u,v) ↔ (u ≠ v and nonadjacent(G,u,v))
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

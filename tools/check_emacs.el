@@ -25,3 +25,5 @@
     (search-forward "Real")
     (should (eq (get-text-property (1- (point)) 'face) 'font-lock-type-face))))
 (ert-run-tests-batch-and-exit)
+
+;; generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

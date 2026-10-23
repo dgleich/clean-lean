@@ -3,3 +3,5 @@ Import "linear_algebra.clean"
 Import "analysis.clean"
 Import "graph_theory.clean"
 Import "algorithms.clean"
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

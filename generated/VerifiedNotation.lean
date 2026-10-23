@@ -110,3 +110,5 @@ end CleanStatements
 example : CleanStatements.insertion_sort_preserves_length := by
   intro xs
   exact List.length_insertionSort (r := (· ≤ ·)) xs
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

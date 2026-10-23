@@ -308,3 +308,5 @@ def determinant_matrix_square : Prop :=
   ((cleanNotation_det_7326e962c725ce45b521 ((cleanDefine_matrix_square_59c5fc3d3e7ab2ab3d9b (A)))) = ((cleanNotation_det_7326e962c725ce45b521 (A)) * (cleanNotation_det_7326e962c725ce45b521 (A))))
 
 end CleanStatements
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

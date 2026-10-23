@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Explicit definitions modules
 
 The earlier compatibility prototype is superseded. The JSON registry, its generator, extension JSON, source sidecar, project import sidecar, and their CLI flags have been deleted. `Environment()` starts with no types, functions, phrases, aliases, sources, or imports. The environment is only an internal symbol table populated from authored module declarations.

@@ -8,3 +8,5 @@ rev = "v4.24.0"
 
 [[lean_lib]]
 name = "CleanPapers"
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

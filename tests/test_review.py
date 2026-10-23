@@ -44,3 +44,5 @@ class ReviewTests(unittest.TestCase):
             self.assertEqual(sample['lean'], '')
             self.assertIn('Proposed syntax', sample['status'])
             self.assertTrue(any(s['kind']=='define' for s in sample['symbols']))
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

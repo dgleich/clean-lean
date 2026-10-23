@@ -121,3 +121,5 @@ Result reflexivity:
         self.assertEqual(len(results), 1)
         self.assertEqual(env.sources.entries['stewart2001']['kind'], 'book')
         self.assertEqual(results[0].attribution['reference'], 'Theorem 1.10, page 9')
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

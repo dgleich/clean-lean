@@ -8,6 +8,7 @@
 @media(max-width:1000px){.panes{grid-template-columns:1fr}}@media(max-width:680px){main{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--edge)}#files{max-height:180px}#workspace{padding:14px}header{padding:18px}pre{max-height:55vh}}
 [hidden]{display:none!important}
 </style></head><body>
+<llm date="2026-10-23" role="assisted" style="display:contents">
 <header><h1>Clean <span class="muted">/ review workspace</span></h1><p>Read the mathematics. Inspect the translation. Record the rough edges.</p><nav aria-label="References"><a href="clean-to-lean.html">Clean → Lean map</a><a href="../generated/specimen.pdf">Typeset corpus (PDF)</a><a href="porting-findings.md">Porting findings</a><a href="aspirational-syntax.md">Aspirational syntax</a></nav></header>
 <noscript>This browser needs JavaScript for local navigation. Read the <a href="clean-to-lean.html">Clean-to-Lean reference</a> or open the source files in your editor. No network service is used.</noscript>
 <main id="app" hidden><aside aria-label="Files"><label for="search">Search files and contents</label><input id="search" type="search" placeholder="commutator, conductance, …"><label for="group">Folder</label><select id="group"><option value="">All files</option><option>library</option><option>corpus</option><option>examples</option></select><p id="count" class="muted" aria-live="polite"></p><div id="files"></div><p id="empty" hidden>No matching files.</p></aside>
@@ -15,7 +16,7 @@
 <h2 id="path"></h2><p id="snapshot" class="muted"></p><p id="status"></p><pre id="error" hidden></pre><div id="imports"></div><div id="outline" aria-label="Declarations"></div>
 <div class="toolbar"><label><input type="checkbox" id="show-lean" checked> Show generated Lean</label><label><input type="checkbox" id="wrap"> Wrap long lines</label><a id="raw">Open source</a><button id="download-source">Download source</button></div>
 <div class="panes" id="panes"><section class="pane"><h3>Authored Clean</h3><pre id="source" aria-label="Clean source" tabindex="0"></pre></section><section class="pane" id="lean-pane"><h3>Generated Lean · full imported prelude included</h3><pre id="lean" aria-label="Generated Lean" tabindex="0"></pre></section></div>
-<section class="notes"><label for="note">Review notes for this file</label><p class="muted">What reads awkwardly? What meaning is unclear? Which definition should be expressible in Clean?</p><textarea id="note" placeholder="Line 42: I would prefer … because …"></textarea><div class="toolbar"><button id="export">Export review notes</button><span id="saved" role="status"></span></div><p class="muted">Notes stay in this browser profile when storage is available. Export a JSON copy before rebuilding or moving the page. This viewer does not edit repository files.</p></section>
+<section class="notes"><label for="note">Review notes for this file</label><p class="muted">What reads awkwardly? What meaning is unclear? Which definition should be expressible in Clean?</p><human><textarea id="note" placeholder="Line 42: I would prefer … because …"></textarea></human><div class="toolbar"><button id="export">Export review notes</button><span id="saved" role="status"></span></div><p class="muted">Notes stay in this browser profile when storage is available. Export a JSON copy before rebuilding or moving the page. This viewer does not edit repository files.</p></section>
 </section></main>
 <script id="review-data" type="application/json">/* REVIEW_DATA */</script>
 <script>
@@ -38,4 +39,5 @@ $('note').oninput=()=>{notes[selected.path]={text:$('note').value,sourceSHA256:s
 $('export').onclick=()=>download('clean-review-notes.json',JSON.stringify({schemaVersion:1,revision:data.revision,workingChanges:data.dirty,notes:Object.entries(notes).filter(([,note])=>note&&typeof note.text==='string'&&note.text.trim()).map(([path,note])=>({path,sourceSHA256:note.sourceSHA256||null,text:note.text}))},null,2),'application/json');
 $('download-source').onclick=()=>download(selected.path.split('/').pop(),selected.source,'text/plain');
 window.addEventListener('hashchange',route);$('app').hidden=false;route();
-</script></body></html>
+</script></llm>
+</body></html>

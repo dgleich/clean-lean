@@ -12,3 +12,5 @@ example : CleanStatements.insertion_sort_preserves_length := by
   exact List.length_insertionSort (r := (· ≤ ·)) xs
 '''
 Path('generated/VerifiedNotation.lean').write_text(output)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

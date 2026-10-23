@@ -59,3 +59,5 @@ def main():
     except (CleanError,OSError,KeyError,ValueError) as e: p.exit(1,str(e)+'\n')
 
 if __name__=='__main__': main()
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Paper definitions and Lean translations
 
 The three paper specimens now have working [Clean statements](../examples/recent-papers.clean), an explicit [Clean vocabulary module](../library/papers.clean), and complete [Lean definitions](../CleanPapers/Definitions.lean). The [generated Lean](../generated/RecentPapers.lean) defines their propositions. It does **not** prove the three paper results. The [PDF](../generated/recent-papers.pdf) presents the statements with their main definitions.

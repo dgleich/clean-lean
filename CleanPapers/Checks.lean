@@ -53,3 +53,5 @@ example (μ φ ψ : ℝ) (hμ : 0 < μ) (hhalf : μ ≤ 1/2) :
   field_simp
   rw [← hd]
   ring
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

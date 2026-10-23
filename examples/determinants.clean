@@ -24,3 +24,5 @@ Context complex square matrices:
     Result determinant right swap:
         Attribution: mathlib; Matrix.det_mul_right_comm; specialized
         Conclude: det(A*B*C) = det(A*C*B)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

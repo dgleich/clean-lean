@@ -27,3 +27,5 @@ example : CleanStatements.trace_bound_gives_a_suboptimality_certificate =
       frobenius C X - frobenius C Z ≤ frobenius C X -
         ((∑ k, y k * b k) + α * min
           (smallestEigenvalue (C - ∑ k, y k • B k)) 0)) := rfl
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

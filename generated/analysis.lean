@@ -308,3 +308,5 @@ def distance_square_root : Prop :=
   ((cleanNotation_sqrt_bab2de5a3de5967c5bae ((cleanDefine_squared_distance_efa301df5f4a584cafc8 (x) (y)))) = (cleanNotation_abs_17502ff021fd42a8ce97 ((x - y))))
 
 end CleanStatements
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

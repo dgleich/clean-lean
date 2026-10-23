@@ -183,3 +183,5 @@ for cat in ['linear_algebra','graph_theory','analysis','algorithms']:
 refs={x['source_declaration']:{'url':x['source_url'],'file':x['source_file'],'line':x['source_line'],'revision':x['mathlib_revision']} for x in items}
 (ROOT/'corpus'/'references.json').write_text(json.dumps(refs,indent=2)+'\n')
 print('Collected',len(items),'statements at',rev)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

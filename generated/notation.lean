@@ -106,3 +106,5 @@ def insertion_sort_preserves_length : Prop :=
   ((cleanNotation_length_6016b9cfd65d60648fc3 ((cleanNotation_insertion_sort_f2524e2a525ed6e98912 (xs)))) = (cleanNotation_length_6016b9cfd65d60648fc3 (xs)))
 
 end CleanStatements
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

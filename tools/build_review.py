@@ -98,3 +98,5 @@ def build():
     print(f'Built {dest}: {len(payload["files"])} files; '+str(sum(f['error'] is not None for f in payload['files']))+' translation errors')
 
 if __name__=='__main__': build()
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

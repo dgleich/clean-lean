@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Reading the theorem collection
 
 Start with `generated/specimen.pdf` to compare the mathematical presentation across subjects. The four `.clean` files in `corpus/` contain exactly 20 statements each. The generated `.lean` files define their propositions without claiming proofs. `corpus/catalog.json` includes the source declaration, immutable GitHub URL, source excerpt, specialization, and validation proof term for each entry.

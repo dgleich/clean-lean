@@ -66,3 +66,5 @@ Define trigonometric energy(x):
   Returns: Real
   Equals:
     square(sin(x)) + square(cos(x))
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

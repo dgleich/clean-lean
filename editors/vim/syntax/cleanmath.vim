@@ -30,3 +30,5 @@ highlight default link cleanMathImport Include
 highlight default link cleanMathComment Comment
 highlight default link cleanMathTab Error
 let b:current_syntax = 'cleanmath'
+
+" generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

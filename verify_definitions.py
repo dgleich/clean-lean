@@ -64,3 +64,5 @@ out.extend(['noncomputable def expected_cos (a : ℝ) : ℝ := Real.cos a',
             f"assert_same_target {cosine['lean'].split()[0]} expected_cos"])
 (ROOT/'generated/VerifiedDefinitions.lean').write_text('\n'.join(out)+'\n')
 print('Checked 3 expression trees; wrote 4 canonical Lean target checks and 2 comparator guards')
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

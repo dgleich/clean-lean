@@ -1496,3 +1496,5 @@ theorem certified_sort_unchanged : CleanStatements.certified_sort_unchanged := b
   exact certificate.1.insertionSort_eq
 
 end CleanValidation
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

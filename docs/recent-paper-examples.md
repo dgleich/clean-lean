@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Recent paper results in aspirational Clean
 
 **Working translations are now available:** see [paper definitions and Lean translations](paper-translations.md). The code blocks below retain the aspirational syntax; the working version uses explicit Lean-backed notation modules.

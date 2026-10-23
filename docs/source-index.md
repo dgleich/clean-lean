@@ -1,3 +1,5 @@
+:::llm 2026-10-23 role=assisted
+
 # Mathlib source index
 
 | Area | Clean result | Mathlib declaration |

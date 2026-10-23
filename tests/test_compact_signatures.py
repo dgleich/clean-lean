@@ -84,3 +84,5 @@ class CompactSignatureTests(unittest.TestCase):
         ]
         for case in cases:
             with self.subTest(case=case),self.assertRaises(CleanError):self.load(case)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

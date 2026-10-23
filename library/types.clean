@@ -91,3 +91,5 @@ Phrase real (?P<m>\w+)\s*[×x]\s*(?P<n>\w+) matrix => Matrix({m},{n},Real)
 Phrase real (?P<n>\w+)-vectors? => Vector({n},Real)
 Phrase lists? of natural numbers => List(Natural)
 Phrase real functions => Function(Real,Real)
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
