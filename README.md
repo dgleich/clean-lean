@@ -1,24 +1,46 @@
-:::llm 2026-10-23 role=assisted
+:::llm gpt-6 2026-10-23 role=assisted
 
-# Clean statement prototype
+# Clean: readable mathematics for Lean
 
-A local prototype for readable mathematical statements, mandatory attribution, LaTeX rendering, and translation to Lean. For readers who know Lean, start with the [Clean to Lean HTML reference](docs/clean-to-lean.html). Also see the [aspirational syntax](docs/aspirational-syntax.md), the [syntax and semantics draft](docs/language-reference.md), the [current prototype specification](docs/spec.md), [decision log](docs/decisions.md), and [rendered specimen](generated/specimen.pdf).
+Clean is an experimental language for writing mathematical definitions and theorem
+statements in a form you can read aloud. The same source translates to Lean and
+renders as LaTeX, with attribution attached to each result.
 
-All mathematical vocabulary comes from **explicit Clean imports**. There is no JSON registry, default vocabulary loader, or compatibility switch. A fresh translation environment is empty. Lean dependencies are pinned by `lean-toolchain` and `lake-manifest.json`.
+For example, the determinant of a product is the product of the determinants:
 
 ```text
-Import "../library/algorithms.clean"
+Import "../library/linear_algebra.clean"
 Import "../library/sources.clean"
 
-Result insertion sort length:
-    Attribution: mathlib; List.length_insertionSort; specialized
-    Let xs: List(Natural)
-    Conclude: length(insertionSort(xs)) = length(xs)
+Result determinant product:
+    Attribution: mathlib; Matrix.det_mul; specialized
+    Let n be a natural number
+    Let A, B be complex n×n matrices
+    Conclude: det(A*B) = det(A)*det(B)
 ```
 
-The [algorithm module](library/algorithms.clean) declares the meaning and rendering of every function used here. It imports [type declarations](library/types.clean). [Source declarations](library/sources.clean) supply bibliography details. The [multiword notation example](examples/notation.clean) uses `insertion sort(xs)` from a separate module; see its [PDF](generated/notation.pdf).
+`Let` introduces the objects; `Conclude` states the claim. `Attribution` records
+where the result comes from—here, Mathlib's determinant theorem, specialized to
+complex matrices. The two imports supply the mathematical vocabulary and source
+details. Import paths in this example are relative to a file in `examples/`.
 
-Every language change must satisfy the [hard acceptance requirements](docs/language-change-acceptance.md): a unique parse and a precise, unique fully elaborated Lean target. [AGENTS.md](AGENTS.md) requires grammar and translation rules, a uniqueness argument, and independent test oracles. The [initial acceptance cases](tests/acceptance/language-contract.json) are pending; existing regression tests do not certify the prototype.
+For a result with hypotheses, use named `Assume` clauses. The
+[eigenvector example](examples/similarity.clean) shows how an eigenvector changes
+under a change of basis, using phrases such as `Let x be a complex n-vector` and
+`Assume eigenpair: A*x = μ*x`.
+
+Clean currently translates **statements, not proofs**. The repository includes
+92 statements checked against their Mathlib proofs, along with exploratory
+examples that show where the language still needs work.
+
+See the [typeset examples](generated/specimen.pdf),
+[Clean-to-Lean reference](docs/clean-to-lean.html), or
+[language specification](docs/spec.md). For the direction of the design, see
+[aspirational syntax](docs/aspirational-syntax.md).
+
+:::
+
+:::llm 2026-10-23 role=assisted
 
 ## Try it
 
@@ -51,8 +73,6 @@ lake env lean generated/extension.lean
 
 Normal translation defines propositions; it does not prove them. The corpus fixture proves all **92 statements, 23 each** in linear algebra, graph theory, analysis, and CLR-aligned undergraduate algorithms against their Mathlib sources. Algorithm coverage is sorting and arithmetic, not a complete CLR formalization. The Stewart proof lives in the sibling `stewart-lean` project; this project's generated Stewart output is a statement.
 
-This workspace shares dependencies with `../stewart-lean` through an ignored `.lake/packages` symlink. No remote repository is configured.
-
 ## Recent paper statements
 
 Three [working Clean statements](examples/recent-papers.clean) now use complete [Lean mathematical definitions](CleanPapers/Definitions.lean): magnetic walk profiles, size-specific conductance, and an SDP certificate. See [definitions, domain choices, and reproduction commands](docs/paper-translations.md), [generated Lean](generated/RecentPapers.lean), and the [PDF](generated/recent-papers.pdf). These three statements are typechecked, not proved; independent Lean checks verify their translated shapes.
@@ -69,6 +89,8 @@ pdflatex -interaction=nonstopmode -halt-on-error -output-directory generated lat
 The same commands apply to `latex/contexts.tex` and `latex/notation.tex`. Context rendering is selected explicitly with `\CleanInput[contexts=expanded]{examples/determinants.clean}` or `contexts=referenced`. Expanded is the default; referenced results always say which context they use. See the [comparison](generated/contexts.pdf).
 
 ## Files and workflow
+
+Every language change must satisfy the [hard acceptance requirements](docs/language-change-acceptance.md): a unique parse and a precise, unique fully elaborated Lean target. [AGENTS.md](AGENTS.md) requires grammar and translation rules, a uniqueness argument, and independent test oracles. The [initial acceptance cases](tests/acceptance/language-contract.json) are pending; existing regression tests do not certify the prototype.
 
 - `library/*.clean`: authored types, notations, phrases, imports, and sources.
 - `examples/modules/square-matrices.clean`: a derived type alias and prose phrase.
