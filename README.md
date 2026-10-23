@@ -9,11 +9,13 @@ renders as LaTeX, with attribution attached to each result.
 For example, the determinant of a product is the product of the determinants:
 
 ```text
+# Import mathematical vocabulary and bibliography entries.
 Import "../library/linear_algebra.clean"
 Import "../library/sources.clean"
 
 Result determinant product:
     Attribution: mathlib; Matrix.det_mul; specialized
+    # Introduce a dimension and two matrices of that size.
     Let n be a natural number
     Let A, B be complex n×n matrices
     Conclude: det(A*B) = det(A)*det(B)
@@ -37,6 +39,176 @@ See the [typeset examples](generated/specimen.pdf),
 [Clean-to-Lean reference](docs/clean-to-lean.html), or
 [language specification](docs/spec.md). For the direction of the design, see
 [aspirational syntax](docs/aspirational-syntax.md).
+
+## More examples, with annotations
+
+Clean supports full-line `#` comments, including inside indented blocks.
+Comments explain the source without becoming part of the mathematical statement
+or its LaTeX rendering. Put comments on their own lines; trailing comments after
+code are not currently supported. Each block below is a separate example, with
+import paths relative to `examples/`.
+
+### State hypotheses and name an intermediate expression
+
+A change of basis carries an eigenvector to an eigenvector of the transformed
+matrix. Named assumptions make the conditions explicit.
+
+```text
+Import "../library/linear_algebra.clean"
+Import "../library/sources.clean"
+
+Result similarity transforms eigenvector:
+    # Cite just the part of Stewart's theorem being adapted.
+    Attribution: stewart2001; Theorem 1.10, page 9; adapted; scope: eigenvector part
+    Let n be a natural number
+    Let A, S be complex n×n matrices
+    Let x be a complex n-vector
+    Let μ be a complex number
+
+    # Every assumption has a name for later reference.
+    Assume invertibility: det(S) ≠ 0
+    Assume nonzero: x ≠ 0
+    Assume eigenpair: A*x = μ*x
+
+    # Give the transformed vector a local name.
+    Let y = inverse(S)*x
+    Conclude:
+        y ≠ 0
+        and
+        (inverse(S)*A*S)*y = μ*y
+```
+
+The word `and` joins two claims in one conclusion. Indentation groups the
+multiline expression. See the [source example](examples/similarity.clean).
+
+### State a graph property
+
+For an undirected graph, an edge from u to v is also an edge from v to u.
+
+```text
+Import "../library/graph_theory.clean"
+Import "../library/sources.clean"
+
+Result adjacency symmetry:
+    Attribution: mathlib; SimpleGraph.adj_symm; specialized
+    Let n: Natural
+    Let G: Graph(n)
+    # Both vertices belong to the same finite vertex type.
+    Let u, v: Vertex(n)
+    Assume edge: adjacent(G,u,v)
+    Conclude: adjacent(G,v,u)
+```
+
+`Let n: Natural` is the compact alternative to `Let n be a natural number`.
+The [graph module](library/graph_theory.clean) supplies the meaning of `adjacent`.
+
+### Work with functions and predicates
+
+The composition of two continuous real functions is continuous.
+
+```text
+Import "../library/analysis.clean"
+Import "../library/sources.clean"
+
+Result continuous composition:
+    Attribution: mathlib; Continuous.comp; specialized
+    # The two type arguments are the domain and codomain.
+    Let f, g: Function(Real,Real)
+    Assume hf: continuous(f)
+    Assume hg: continuous(g)
+    Conclude: continuous(compose(f,g))
+```
+
+Here `hf` and `hg` name the two hypotheses. Result names can contain spaces;
+the current parser requires each assumption name to be a single identifier.
+
+### Define your own mathematical expressions
+
+Definitions can be written directly in Clean and reused by later definitions.
+This block is a definitions module rather than a theorem statement.
+
+```text
+Import "../library/types.clean"
+
+Define square(x: Real): Real:
+    # Equals gives the definition in Clean.
+    Equals: x^2
+    # The rendering template substitutes the actual argument for {x}.
+    Render latex: ({x})^{{2}}
+
+Define squared distance(x: Real, y: Real): Real:
+    # Multiword names work in function calls too.
+    Equals: square(x-y)
+```
+
+The header declares argument types and a return type. `Render latex` is optional;
+its doubled braces preserve literal LaTeX braces. Definitions in one file can be
+used in another through an explicit `Import`.
+
+### Give an existing Lean definition a readable interface
+
+When a definition already exists in Lean, `Notation` supplies its Clean spelling,
+type, and mathematical rendering. This is another standalone definitions module.
+
+```text
+Import "../library/types.clean"
+
+Notation cos(x: Real): Real:
+    # Means is a Lean expression, using the declared argument x.
+    Means: Real.cos x
+    Render latex: \cos({x})
+```
+
+Use `Define … Equals:` to author an expression in Clean; use `Notation … Means:`
+to expose an existing Lean expression. Both typed headers currently need the final
+block colon, including the colon after the return type.
+
+### Share a context across several results
+
+State common objects once when presenting a family of related theorems.
+
+```text
+Import "../library/linear_algebra.clean"
+Import "../library/sources.clean"
+
+Context complex square matrices:
+    Let n be a natural number
+    Let A, B be complex n×n matrices
+
+    # Both results inherit the declarations above.
+    Result determinant product:
+        Attribution: mathlib; Matrix.det_mul; specialized
+        Conclude: det(A*B) = det(A)*det(B)
+
+    Result determinant transpose:
+        Attribution: mathlib; Matrix.det_transpose; specialized
+        Conclude: det(transpose(A)) = det(A)
+```
+
+LaTeX can repeat the declarations in each result or show the context once and
+explicitly say “Using Context (1).” See the [rendering comparison](generated/contexts.pdf).
+
+### Use readable names for algorithms
+
+This statement says that sorting preserves the number of list elements.
+
+```text
+Import "../library/algorithms.clean"
+Import "../library/sources.clean"
+Import "modules/sorting.clean"
+
+Result insertion sort preserves length:
+    Attribution: mathlib; List.length_insertionSort; specialized
+    Let xs: List(Natural)
+    # Here, insertion sort is one function name, including the space.
+    Conclude: length(insertion sort(xs)) = length(xs)
+```
+
+This example exposes Mathlib's insertion sort. To explore defining the algorithms
+in Clean itself, see the proposed [insertion-sort](examples/proposed/insertion-sort.clean)
+and [heapsort](examples/proposed/heap-sort.clean) specimens. Their recursive syntax
+is not implemented; [sorting examples and proof status](docs/sorting-examples.md)
+explains the distinction and the independent Lean comparison-complexity proof.
 
 :::
 
