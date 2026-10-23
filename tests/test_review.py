@@ -36,3 +36,11 @@ class ReviewTests(unittest.TestCase):
         for file in files.values():
             for imported in file['imports']:
                 self.assertIn(imported['path'],files)
+
+    def test_proposed_algorithms_are_not_claimed_translated(self):
+        files={f['path']:f for f in review.collect()}
+        for name in ('insertion-sort', 'heap-sort'):
+            sample=files[f'examples/proposed/{name}.clean']
+            self.assertEqual(sample['lean'], '')
+            self.assertIn('Proposed syntax', sample['status'])
+            self.assertTrue(any(s['kind']=='define' for s in sample['symbols']))

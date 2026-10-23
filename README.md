@@ -97,3 +97,7 @@ files beside their generated Lean, follow imports, and export review notes.
 See the [review walkthrough](docs/review-workflow.md) and
 [VS Code / Emacs / Vim setup](editors/README.md). Rebuild the offline snapshot with
 `python3 tools/build_review.py`; highlighting does not certify parsing or proofs.
+
+## Authored sorting examples
+
+See [sorting examples and proof status](docs/sorting-examples.md) for proposed Clean insertion sort and heapsort, and an independent Lean proof of heapsort comparison complexity.

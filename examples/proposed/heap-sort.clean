@@ -1,0 +1,131 @@
+# Status: proposed recursive syntax. Not translated by the Clean compiler.
+# Independent checked Lean reference: examples/lean/HeapSortRuntime.lean.
+# The counter measures element comparisons, not wall-clock or bit complexity.
+Import "../../library/types.clean"
+Import Lean Mathlib.Data.Nat.Log
+
+Source sorting_design:
+  Kind: other
+  Label: Clean sorting design
+  Title: Heap sort reference and comparison-count proofs
+
+# Foundational representations and primitives; no sorting algorithm is imported.
+Type Array(T: Type):
+  Means: Array T
+  Render latex: \operatorname{{Array}}({T})
+
+Type Pair(A: Type, B: Type):
+  Means: Prod (A) (B)
+  Render latex: ({A},{B})
+
+Notation size(a: Array(Natural)): Natural
+  Means: a.size
+  Render latex: \lvert {a}\rvert
+
+Notation at(a: Array(Natural), i: Natural): Natural
+  Means: a[i]!
+  Render latex: {a}[{i}]
+
+Notation swap(a: Array(Natural), i: Natural, j: Natural): Array(Natural)
+  Means: a.swapIfInBounds i j
+  Render: swap entries {i} and {j} of {a}
+
+Notation floor binary logarithm(n: Natural): Natural
+  Means: Nat.log 2 n
+  Render latex: \lfloor\log_2({n})\rfloor
+
+Notation output(step: Pair(Array(Natural),Natural)): Array(Natural)
+  Means: step.1
+  Render: output of {step}
+
+Notation comparisons(step: Pair(Array(Natural),Natural)): Natural
+  Means: step.2
+  Render: comparisons in {step}
+
+# 'stop' is an exclusive heap boundary. Indices are zero-based.
+# Level budget is floor(log2(size(a))) + 1; it bounds root-to-leaf descent.
+Define sift down(
+  levels: Natural,
+  stop: Natural,
+  root: Natural,
+  a: Array(Natural)
+): Pair(Array(Natural),Natural)
+  Equals:
+    match levels:
+      case 0:
+        (a, 0)
+      case successor(remaining):
+        Let left = 2*root + 1
+        Let right = left + 1
+        if left < stop:
+          Let child =
+            if right < stop:
+              if at(a,left) < at(a,right):
+                right
+              else:
+                left
+            else:
+              left
+          Let charged =
+            if right < stop:
+              2
+            else:
+              1
+          if at(a,root) < at(a,child):
+            Let next = sift down(remaining, stop, child, swap(a,root,child))
+            (output(next), charged + comparisons(next))
+          else:
+            (a, charged)
+        else:
+          (a, 0)
+  Decreases: levels
+
+Define build heap(levels: Natural, stop: Natural, roots: Natural, a: Array(Natural)): Pair(Array(Natural),Natural)
+  Equals:
+    match roots:
+      case 0:
+        (a, 0)
+      case successor(k):
+        Let step = sift down(levels, stop, k, a)
+        Let rest = build heap(levels, stop, k, output(step))
+        (output(rest), comparisons(step) + comparisons(rest))
+  Decreases: roots
+
+Define extract heap(levels: Natural, count: Natural, a: Array(Natural)): Pair(Array(Natural),Natural)
+  Equals:
+    match count:
+      case 0:
+        (a, 0)
+      case successor(k):
+        Let step = sift down(levels, k+1, 0, swap(a,0,k+1))
+        Let rest = extract heap(levels, k, output(step))
+        (output(rest), comparisons(step) + comparisons(rest))
+  Decreases: count
+
+Define heap sort(a: Array(Natural)): Pair(Array(Natural),Natural)
+  Equals:
+    Let n = size(a)
+    Let levels = floor binary logarithm(n) + 1
+    Let built = build heap(levels, n, n / 2, a)
+    Let result = extract heap(levels, n-1, output(built))
+    (output(result), comparisons(built) + comparisons(result))
+
+# Both bounds below are proved for the independent instrumented Lean reference.
+# A Clean-to-Lean translation equivalence proof is still pending.
+Result heap sort uniform comparison bound:
+  Attribution: sorting_design; CleanSorting.heapSort_comparisons; adapted
+  Let a: Array(Natural)
+  Let n = size(a)
+  Conclude:
+    comparisons(heap sort(a)) ≤ 4*n*(floor binary logarithm(n)+1)
+
+Result heap sort n log n comparison bound:
+  Attribution: sorting_design; CleanSorting.heapSort_nlogn_bound; adapted
+  Let a: Array(Natural)
+  Let n = size(a)
+  Assume large: n ≥ 2
+  Conclude:
+    comparisons(heap sort(a)) ≤ 8*n*floor binary logarithm(n)
+
+# The reference additionally proves CleanSorting.heapSort_isBigO using Mathlib's
+# =O[atTop], uniformly for every input family whose nth array has length n.

@@ -51,7 +51,7 @@ def highlight(line):
         pos=m.end()
     return ''.join(out)
 
-DECL = re.compile(r'^ *(Result|Theorem|Context|Define|Notation|Type|Source)\s+(.+?):\s*$',re.I)
+DECL = re.compile(r'^ *(Result|Theorem|Context|Define|Notation|Type|Source)\s+(.+?):?\s*$',re.I)
 
 def collect(root=ROOT):
     files=[]
@@ -64,20 +64,24 @@ def collect(root=ROOT):
                 if m:=re.fullmatch(r'Import\s+"([^"\n]+)"',line,re.I):
                     target=(path.parent/m[1]).resolve()
                     imports.append({'label':m[1], 'path':str(target.relative_to(root)) if target.is_relative_to(root) else None})
-            env=Environment()
-            try:
-                is_document=any(s['kind'] in ('result','theorem','context') for s in symbols)
-                results=load_document(path,env) if is_document else []
-                if not is_document: load_module(path,env)
-                target=lean(results,env,[])
-                for symbol in symbols:
-                    name=symbol['name'].split('(')[0].strip()
-                    if name in env.definitions: symbol['leanName']=env.definitions[name]['key']
-                    elif symbol['kind'] in ('result','theorem'): symbol['leanName']=re.sub(r'[_\s]+','_',name)
-                status='Translated · Lean not checked by this browser'
-                error=None
-            except (CleanError, ValueError, OSError, KeyError, ImportError) as exc:
-                target=''; status='Translation unavailable'; error=str(exc).replace(str(root)+'/', '')
+            proposed=path.is_relative_to(root/'examples/proposed')
+            if proposed:
+                target=''; status='Proposed syntax · no translation attempted'; error=None
+            else:
+                env=Environment()
+                try:
+                    is_document=any(s['kind'] in ('result','theorem','context') for s in symbols)
+                    results=load_document(path,env) if is_document else []
+                    if not is_document: load_module(path,env)
+                    target=lean(results,env,[])
+                    for symbol in symbols:
+                        name=symbol['name'].split('(')[0].strip()
+                        if name in env.definitions: symbol['leanName']=env.definitions[name]['key']
+                        elif symbol['kind'] in ('result','theorem'): symbol['leanName']=re.sub(r'[_\s]+','_',name)
+                    status='Translated · Lean not checked by this browser'
+                    error=None
+                except (CleanError, ValueError, OSError, KeyError, ImportError) as exc:
+                    target=''; status='Translation unavailable'; error=str(exc).replace(str(root)+'/', '')
             files.append({'path':str(path.relative_to(root)), 'source':source,
                 'highlighted':[highlight(line) for line in source.splitlines()], 'symbols':symbols,
                 'imports':imports,'lean':target,'status':status,'error':error,

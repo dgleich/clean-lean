@@ -9,7 +9,7 @@ with sync_playwright() as p:
     errors=[]; page.on('pageerror',lambda e:errors.append(str(e)))
     page.goto((ROOT/'docs/review.html').as_uri())
     expect(page.locator('#path')).to_have_text('library/analysis.clean')
-    assert page.locator('#files button').count()==20
+    assert page.locator('#files button').count()==len(json.loads(page.locator('#review-data').text_content())['files'])
     assert page.locator('#source .keyword').count()>0
     page.locator('#search').fill('commutator')
     assert page.locator('#files button').count()==2

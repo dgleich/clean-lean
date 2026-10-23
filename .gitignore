@@ -7,3 +7,8 @@ __pycache__/
 *.log
 *.out
 *.toc
+
+# Local GitHub credential; never publish.
+.gh_token
+
+.github_token

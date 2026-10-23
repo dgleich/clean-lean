@@ -1,0 +1,113 @@
+# Status: proposed syntax, not translated or proved by the Clean compiler.
+# See docs/sorting-examples.md for scope, cost model, and pending language rules.
+Import "../../library/types.clean"
+
+Source clr:
+  Kind: book
+  Label: CLR
+  Title: Introduction to Algorithms
+  Author: Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest
+
+Source sorting_design:
+  Kind: other
+  Label: Clean sorting design
+  Title: Recursive sorting examples and explicit cost models
+
+Notation length(xs: List(Natural)): Natural
+  Means: List.length xs
+  Render latex: \lvert {xs}\rvert
+
+Define insert in order(x: Natural, xs: List(Natural)): List(Natural)
+  Equals:
+    match xs:
+      case []:
+        [x]
+      case first :: rest:
+        if x ≤ first:
+          x :: xs
+        else:
+          first :: insert in order(x, rest)
+  Decreases: length(xs)
+
+Define insertion sort(xs: List(Natural)): List(Natural)
+  Equals:
+    match xs:
+      case []:
+        []
+      case first :: rest:
+        insert in order(first, insertion sort(rest))
+  Decreases: length(xs)
+
+Define sorted(xs: List(Natural)): Proposition
+  Equals:
+    match xs:
+      case []:
+        True
+      case first :: rest:
+        match rest:
+          case []:
+            True
+          case second :: remaining:
+            first ≤ second and sorted(rest)
+  Decreases: length(xs)
+
+Define occurrences(x: Natural, xs: List(Natural)): Natural
+  Equals:
+    match xs:
+      case []:
+        0
+      case first :: rest:
+        if x = first:
+          1 + occurrences(x, rest)
+        else:
+          occurrences(x, rest)
+  Decreases: length(xs)
+
+Result insertion sort produces sorted output:
+  Attribution: clr; insertion sort; adapted; scope: recursive list formulation
+  Let xs: List(Natural)
+  Conclude: sorted(insertion sort(xs))
+
+Result insertion sort preserves occurrences:
+  Attribution: clr; insertion sort; adapted; scope: element multiplicities
+  Let x: Natural
+  Let xs: List(Natural)
+  Conclude:
+    occurrences(x, insertion sort(xs)) = occurrences(x, xs)
+
+# Abstract work: one unit per outer list match and one per key comparison.
+# Arithmetic, allocation, and accessing the returned list are not charged here.
+# These are mathematical cost recurrences, not extra passes run by the algorithm.
+Define insertion work(x: Natural, xs: List(Natural)): Natural
+  Equals:
+    match xs:
+      case []:
+        1
+      case first :: rest:
+        if x ≤ first:
+          2
+        else:
+          2 + insertion work(x, rest)
+  Decreases: length(xs)
+
+Define insertion sort work(xs: List(Natural)): Natural
+  Equals:
+    match xs:
+      case []:
+        1
+      case first :: rest:
+        1 + insertion sort work(rest) +
+          insertion work(first, insertion sort(rest))
+  Decreases: length(xs)
+
+Result insertion work bound:
+  Attribution: sorting_design; insertion work recurrence; original
+  Let x: Natural
+  Let xs: List(Natural)
+  Conclude: insertion work(x, xs) ≤ 2*length(xs) + 1
+
+Result insertion sort quadratic work bound:
+  Attribution: sorting_design; insertion sort work recurrence; original
+  Let xs: List(Natural)
+  Let n = length(xs)
+  Conclude: insertion sort work(xs) ≤ n*n + n + 1
