@@ -1,0 +1,112 @@
+# generated: gpt-6 2026-10-29 role=assisted; see PROVENANCE.md
+# Basic operations are imported; composite matrix definitions are authored here.
+Import "types.clean"
+Import Lean CleanPapers.Magnetic
+
+Source magnetic2025:
+    Kind: other
+    Label: Huang, Gleich, Li 2025
+    Title: Powers of Magnetic Graph Matrix: Fourier Spectrum, Walk Compression, and Applications
+    Author: Yinan Huang, David F. Gleich, Pan Li
+    Version: arXiv:2506.07343v1
+    Url: https://arxiv.org/html/2506.07343v1
+
+Source magneticformalization:
+    Kind: other
+    Label: Clean magnetic formalization
+    Title: Supporting results for the magnetic graph matrix
+    Note: Supporting lemmas and conventions in CleanPapers/Magnetic.lean
+
+Notation pi(): Real:
+    Means: Real.pi
+    Render latex: \pi
+
+Notation imaginary unit(): Complex:
+    Means: Complex.I
+    Render latex: i
+
+Notation complex scalar(x: Real): Complex:
+    Means: (x : ℂ)
+    Render latex: {x}
+
+Notation complex exponential(z: Complex): Complex:
+    Means: Complex.exp z
+    Render latex: \exp({z})
+
+Define magnetic phase(q: Real): Complex:
+    Equals: complex exponential(imaginary unit()*complex scalar(2*pi()*q))
+    Render latex: e^{{2\pi i {q}}}
+
+Notation complex matrix(A):
+    Let n: Natural
+    Let A: Matrix(n,n,Real)
+    Returns: Matrix(n,n,Complex)
+    Means: CleanPapers.complexify A
+    Render latex: {A}
+
+Notation real transpose(A):
+    Let n: Natural
+    Let A: Matrix(n,n,Real)
+    Returns: Matrix(n,n,Real)
+    Means: A.transpose
+    Render latex: {A}^{{\mathsf{{T}}}}
+
+Define magnetic adjacency(A, q):
+    Let n: Natural
+    Let A: Matrix(n,n,Real)
+    Let q: Real
+    Returns: Matrix(n,n,Complex)
+    Equals:
+        magnetic phase(q)*complex matrix(A) +
+        magnetic phase(-q)*complex matrix(real transpose(A))
+    Render latex: M_{{{q}}}({A})
+
+# The row sum and diagonal constructor still need binders in Clean.
+Define magnetic degree matrix(A):
+    Let n: Natural
+    Let A: Matrix(n,n,Real)
+    Returns: Matrix(n,n,Complex)
+    From Lean: CleanPapers.complexify (Matrix.diagonal (CleanPapers.magneticDegree A))
+    Render latex: D({A})
+
+Define magnetic Laplacian(A, q):
+    Let n: Natural
+    Let A: Matrix(n,n,Real)
+    Let q: Real
+    Returns: Matrix(n,n,Complex)
+    Equals: magnetic degree matrix(A) - magnetic adjacency(A,q)
+    Render latex: L_{{{q}}}({A})
+
+# Explicit temporary Lean boundaries: finite words, filtering, and summation.
+# These are definitions, not assumed theorems. See docs/magnetic-formalization.md.
+Define walk profile(A, m, k):
+    Let n: Natural
+    Let A: Matrix(n,n,Real)
+    Let m: Natural
+    Let k: Natural
+    Returns: Matrix(n,n,Real)
+    From Lean: CleanPapers.walkProfile A m k
+    Render latex: \Phi_{{{A}}}({m},{k})
+
+Define walk Fourier sum(A, m, q):
+    Let n: Natural
+    Let A: Matrix(n,n,Real)
+    Let m: Natural
+    Let q: Real
+    Returns: Matrix(n,n,Complex)
+    From Lean: CleanPapers.walkFourierSum A m q
+    Render latex: e^{{-2\pi i {q}{m}}}\sum_{{k=0}}^{{{m}}}e^{{4\pi i {q}k}}\Phi_{{{A}}}({m},k)
+
+Notation Hermitian(M):
+    Let n: Natural
+    Let M: Matrix(n,n,Complex)
+    Returns: Proposition
+    Means: M.IsHermitian
+    Render latex: {M}\text{{ is Hermitian}}
+
+# Concrete regression witness for the odd-length inverse endpoint.
+Notation directed single edge(): Matrix(2,2,Real):
+    Means: CleanPapers.directedSingleEdge
+    Render latex: E_{{01}}
+
+# generated: gpt-6 2026-10-29 role=assisted; LLM-authored portions; see PROVENANCE.md
