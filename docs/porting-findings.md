@@ -80,3 +80,12 @@ The pinned source's inverse formula has a checked counterexample at m = 1, so it
 odd-length endpoint must be resolved before porting it as a theorem.
 
 :::
+
+
+:::llm gpt-6 2026-10-29 role=assisted
+
+The later self-contained study supersedes the three `From Lean` boundaries above:
+word enumeration, profiles, degree sums, and the Fourier sum are now Clean-authored
+using generic finite operations and [typed function expressions](function-expressions.md).
+See [the five study artifacts](../studies/magnetic/README.md).
+:::

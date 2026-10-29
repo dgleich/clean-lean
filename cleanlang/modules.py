@@ -122,6 +122,7 @@ def notation(header, fields, env, *, authored=False):
     name, params, fields = signature_fields(header, fields)
     if len(set(params))!=len(params) or any(not re.fullmatch(ID,p) for p in params):
         raise CleanError('Invalid or duplicate parameters')
+    if name.lower() == 'function': raise CleanError('function is reserved for typed function expressions')
     if name in env.data['functions']: raise CleanError('Duplicate visible name: '+name)
     local, implicit, types, other = {}, {}, {}, []
     for field in fields:

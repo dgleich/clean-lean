@@ -351,3 +351,15 @@ same normalized declaration regardless of compact or expanded spelling. There
 are no new candidate meanings or type-directed parse choices. The emitted Lean
 signature/body, generated identifier, and target are identical under identical
 explicit environments. The existing general elaboration-conformance gaps remain.
+
+
+:::
+
+:::llm gpt-6 2026-10-29 role=assisted
+
+## Bounded lambda extension
+
+[Parenthesized typed function expressions](function-expressions.md) adds
+`function(identifier: type-expression, expression)` as an atom. That document
+specifies its unique parse, lexical scope, arrow interface, and constructive target.
+General binding notation remains outside this draft.

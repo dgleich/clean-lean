@@ -84,3 +84,20 @@ These decisions separate requested behavior from provisional implementation choi
 ## Publication update — 23 October 2026
 
 The user authorized GitHub publication as `dgleich/clean-lean`, superseding the original local-only restriction (D03 and D30). Preserve the existing chronological history. Publication initially uses private visibility pending a different user preference. Shared LLM-authored documents and code carry provenance markers, with upstream data excluded as documented in `PROVENANCE.md`.
+
+
+:::
+
+:::llm gpt-6 2026-10-29 role=assisted
+
+## Self-contained magnetic study and explicit functions
+
+The user requires five independent artifacts: reference Lean with proofs, reference
+Lean propositions, one Clean source, generated Lean propositions, and generated Lean
+with proofs. All include their mathematical definitions and import only Mathlib.
+The study must not depend on the earlier paper helper module.
+
+Chosen bounded syntax: `function(x: T, body)` supplies an explicitly typed lambda.
+It permits generic imported finite operations to express the study in Clean.
+See [its contract](function-expressions.md). The spelling is a recorded implementation
+choice to revisit for readability; natural-language sum binders remain proposed.

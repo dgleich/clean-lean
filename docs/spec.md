@@ -363,3 +363,15 @@ The analysis module now provides compact `cos`, `square`, and `squared distance`
 examples. Equivalent forms produce identical wrapper names and Lean text;
 independent normalized signature/body-tree checks and four canonical Lean-target
 checks cover the bounded fixtures. General language conformance remains pending.
+
+
+:::
+
+:::llm gpt-6 2026-10-29 role=assisted
+
+## Typed function expressions
+
+The bounded `function(x: T, expression)` form is implemented. Its grammar, scope,
+hygiene, constructive translation, and acceptance limits are specified in
+[function expressions](function-expressions.md). It supplies a lambda to ordinary
+module-declared operations; it does not add special sum, map, or filter semantics.

@@ -22,7 +22,8 @@ const tm=require('vscode-textmate'),onig=require('vscode-oniguruma');
  has('\tLet x: Real','\t','invalid.illegal.tab.clean');
  has('Notation cos(x: Real): Real:','cos','entity.name.function.clean');
  has('Notation cos(x: Real): Real:','x: Real','meta.signature.clean');
- console.log('14 TextMate/Oniguruma scope checks passed');
+ has('  Equals: function(x: Real,x)','function','keyword.control.clean');
+ console.log('15 TextMate/Oniguruma scope checks passed');
 })().catch(e=>{console.error(e);process.exitCode=1;});
 
 // generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

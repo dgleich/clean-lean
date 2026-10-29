@@ -177,6 +177,15 @@ class Environment:
         args=[self.render_type(a,target) if isinstance(a,Type) else (texid(a) if target=='latex' and not a.isdigit() else a) for a in t.args]
         if t.name not in self.data['types']: return t.name
         return self.data['types'][t.name][target].format(*args)
+    def is_function_type(self,t):
+        spec=self.data['types'].get(t.name,{})
+        return (spec.get('args')==['type','type'] and
+                re.sub(r'\s+','',spec.get('lean',''))=='({0})→({1})')
+    def function_type(self,domain,codomain):
+        names=[name for name in self.data['types'] if self.is_function_type(Type(name))]
+        if len(names)!=1:
+            raise CleanError('Function expressions require one explicit Lean arrow type binding')
+        return Type(names[0],(domain,codomain))
     def describe_type(self,t,plural=False):
         spec=self.data['types'][t.name]
         template=spec.get('prose_plural' if plural else 'prose')
@@ -207,7 +216,7 @@ class Environment:
         for p,a in zip(s['params'],args): self.match(p,a.type,bind)
         return Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]])
 
-TOKEN=re.compile(r'\s*(\d+|'+ID+r'|↔|→|≤|≥|≠|∧|∨|¬|∈|⊆|∪|∩|∣|<=|>=|!=|[(),+*/^=<>-])')
+TOKEN=re.compile(r'\s*(\d+|'+ID+r'|↔|→|≤|≥|≠|∧|∨|¬|∈|⊆|∪|∩|∣|<=|>=|!=|[(),:+*/^=<>-])')
 class Expressions:
     PREC={'↔':1,'→':2,'or':3,'∨':3,'and':4,'∧':4,'=':5,'≠':5,'!=':5,'<':5,'>':5,'≤':5,'≥':5,'<=':5,'>=':5,'∈':5,'⊆':5,'∣':5,'+':6,'-':6,'∪':6,'∩':6,'*':7,'/':7,'^':8}
     def __init__(self,reg,env): self.reg,self.env=reg,env
@@ -215,7 +224,7 @@ class Expressions:
         # Match multiword function names only when followed by a call parenthesis.
         names=sorted((n for n in self.reg.data['functions'] if ' ' in n), key=len, reverse=True)
         phrase_token=re.compile(r'\s*('+'|'.join(re.escape(n).replace(r'\ ', r' +') for n in names)+r')(?=\s*\()') if names else None
-        s=s.strip(); self.tokens=[]; pos=0; self.i=0
+        s=s.strip(); self.tokens=[]; pos=0; self.i=0; self.bound_counter=0
         while pos<len(s):
             m=(phrase_token.match(s,pos) if phrase_token else None) or TOKEN.match(s,pos)
             if not m: raise CleanError('Unsupported expression near '+repr(s[pos:pos+25]))
@@ -240,6 +249,37 @@ class Expressions:
             inner=('('+a.tex+')') if a.precedence < 8 else a.tex
             tx=('-'+inner) if tok=='-' else (r'\text{not }('+a.tex+')')
             x=Expr('('+('-' if tok=='-' else '¬')+a.lean+')',tx,a.type,7 if tok=='-' else 5,['Unary', '-' if tok=='-' else 'not', a.tree])
+        elif tok.lower()=='function' and self.peek()=='(':
+            self.take()
+            name=self.take()
+            if not re.fullmatch(ID,name) or name in self.env or name in self.reg.data['functions'] or name in self.reg.data['types'] or name.lower()=='function':
+                raise CleanError('Function binder must be a fresh identifier')
+            if self.take()!=':': raise CleanError('Function binder requires an explicit type')
+            parts=[]; depth=0
+            while self.peek() is not None:
+                token=self.peek()
+                if token==',' and depth==0: break
+                if token==')' and depth==0: raise CleanError('Function requires a body after a comma')
+                token=self.take(); parts.append(token)
+                depth += (token=='(')-(token==')')
+            if self.take()!=',': raise CleanError('Function requires a body')
+            domain=self.reg.type(''.join(parts),self.env,phrases=False)
+            occupied=set(self.env)
+            for value in self.env.values(): occupied.update(re.findall(ID,value.lean))
+            while f'clean_bound_{self.bound_counter}' in occupied: self.bound_counter+=1
+            bound=f'clean_bound_{self.bound_counter}'; self.bound_counter+=1
+            previous=self.env
+            self.env={**previous,name:Expr(bound,texid(name),domain)}
+            try:
+                body=self.expr(0)
+                if self.take()!=')': raise CleanError('Expected ) after function body')
+            finally: self.env=previous
+            if body.type==NUM or name in re.findall(ID,str(body.type)):
+                raise CleanError('Function body requires a determined, nondependent return type')
+            result=self.reg.function_type(domain,body.type)
+            x=Expr(f'(fun ({bound} : {self.reg.render_type(domain,"lean")}) => {body.lean})',
+                   r'\left('+texid(name)+r' \mapsto '+body.tex+r'\right)',result,
+                   tree=['Lambda',name,str(domain),body.tree])
         elif tok.isdigit(): x=Expr(tok,tok,NUM,tree=['Decimal',tok])
         elif self.peek()=='(':
             self.take(); args=[]
@@ -249,10 +289,10 @@ class Expressions:
                     if self.peek()!=',': break
                     self.take()
             if self.take()!=')': raise CleanError('Expected )')
-            if tok in self.env and self.env[tok].type.name=='Function':
+            if tok in self.env and self.reg.is_function_type(self.env[tok].type):
                 t=self.env[tok].type
                 if len(args)!=1 or not compatible(args[0].type,t.args[0]): raise CleanError('Function argument mismatch')
-                x=Expr('('+tok+' '+args[0].lean+')',texid(tok)+'('+args[0].tex+')',t.args[1],tree=['Call',tok,[a.tree for a in args]])
+                x=Expr('('+self.env[tok].lean+' '+args[0].lean+')',texid(tok)+'('+args[0].tex+')',t.args[1],tree=['Call',tok,[a.tree for a in args]])
             else: x=self.reg.call(tok,args)
         elif tok in self.env:
             value=self.env[tok]

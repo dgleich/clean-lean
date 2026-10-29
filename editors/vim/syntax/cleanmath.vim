@@ -4,7 +4,7 @@ syntax case match
 syntax match cleanMathNumber '\<\d\+\>'
 syntax match cleanMathOperator '[+*/^=<>−-]\|[↔→≤≥≠∧∨¬∈⊆∪∩∣]'
 syntax match cleanMathDelimiter '[(),:;]'
-syntax match cleanMathLogic '\c\<\%(and\|or\|not\)\>'
+syntax match cleanMathLogic '\c\<\%(and\|or\|not\|function\)\>'
 syntax match cleanMathSignature '(.*\ze:\s*$' contained
 syntax match cleanMathKeyword '\c^ *\%(Let\|Define\|Assume\|Conclude\|Returns\|Equals\|Alias\|Phrase\|Result\|Theorem\|Context\|Notation\|Type\|Source\)\>' containedin=ALLBUT,cleanMathComment,cleanMathOpaque,cleanMathLean,cleanMathImport
 syntax match cleanMathDeclaration '\c^ *\%(Result\|Theorem\|Context\|Define\|Notation\|Type\|Source\)\>.*:$' contains=cleanMathKeyword,cleanMathDelimiter,cleanMathSignature

@@ -1,5 +1,6 @@
 -- generated: gpt-6 2026-10-29 role=assisted; see PROVENANCE.md
-import CleanPapers.Definitions
+import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Algebra.BigOperators.Ring.List
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
@@ -7,7 +8,33 @@ import Mathlib.Tactic.Linarith
 
 noncomputable section
 open scoped BigOperators
-namespace CleanPapers
+namespace MagneticReference
+abbrev Mat (n : ℕ) := Matrix (Fin n) (Fin n) ℝ
+abbrev CMat (n : ℕ) := Matrix (Fin n) (Fin n) ℂ
+
+/-- Ordered words; true chooses A, false chooses its transpose. -/
+def wordProduct {n : ℕ} (A : Mat n) (word : List Bool) : Mat n :=
+  (word.map fun forward => if forward then A else A.transpose).prod
+
+/-- All words of exactly the requested length, each occurring once. -/
+def words : ℕ → List (List Bool)
+  | 0 => [[]]
+  | m + 1 => (words m).map (true :: ·) ++ (words m).map (false :: ·)
+
+/-- Exactly k forward factors; empty product is I and out-of-range sums are zero. -/
+def walkProfile {n : ℕ} (A : Mat n) (m k : ℕ) : Mat n :=
+  (((words m).filter fun w => w.count true = k).map (wordProduct A)).sum
+
+def complexify {n : ℕ} (A : Mat n) : CMat n := fun i j => (A i j : ℂ)
+def phase (q : ℝ) : ℂ := Complex.exp (2 * (Real.pi : ℂ) * Complex.I * (q : ℂ))
+def magneticMatrix {n : ℕ} (A : Mat n) (q : ℝ) : CMat n :=
+  phase q • complexify A + phase (-q) • complexify A.transpose
+
+def walkFourierSum {n : ℕ} (A : Mat n) (m : ℕ) (q : ℝ) : CMat n :=
+  phase (-(q * m)) • ∑ k ∈ Finset.range (m + 1),
+    phase (2 * q * k) • complexify (walkProfile A m k)
+
+
 
 private def complexifyHom (n : ℕ) : Mat n →+* CMat n :=
   Complex.ofRealHom.mapMatrix
@@ -185,6 +212,6 @@ theorem inverse_v1_length_one_fails :
   change (1 : ℂ) = 1 / 2 * (1 + 0) at entry
   norm_num at entry
 
-end CleanPapers
+end MagneticReference
 
 -- generated: gpt-6 2026-10-29 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -17,6 +17,8 @@ call assert_equal('cleanMathComment', synIDattr(synID(3,6,1),'name'))
 call assert_equal('cleanMathOpaque', synIDattr(synID(4,25,1),'name'))
 call setline(5, 'Notation cos(x: Real): Real:')
 call assert_equal('cleanMathSignature', synIDattr(synID(5,16,1),'name'))
+call setline(6, '  Equals: function(x: Real,x)')
+call assert_equal('cleanMathLogic', synIDattr(synID(6,11,1),'name'))
 if len(v:errors)
  for error in v:errors | echom error | endfor
  cquit

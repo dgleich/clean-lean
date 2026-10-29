@@ -1,11 +1,11 @@
-% generated: gpt-6 2026-10-29 role=assisted; see PROVENANCE.md
+% generated: gpt-6 2026-10-29 role=assisted; LLM-authored portions; see PROVENANCE.md
 % Generated statements, not proof certificates.
 \begin{cleanresult}{magnetic powers encode walk profiles}\cleanattribution{\href{https://arxiv.org/html/2506.07343v1}{[Huang, Gleich, Li 2025, equation (1), Supplement S.II equation (17), Theorem 1]}}
 Let $n$ be a natural number.
 Let $A$ be a matrix of size $n\times n$ over $\mathbb{R}$.
 Let $m$ be a natural number.
 Let $q$ be a real number.
-Then \[{M_{q}(A)}^{m} = e^{-2\pi i qm}\sum_{k=0}^{m}e^{4\pi i qk}\Phi_{A}(m,k).\]
+Then \[{M_{q}(A)}^{m} = e^{2\pi i -(q \, m)} \, \operatorname{sumBefore}(m + 1,\left(k \mapsto e^{2\pi i 2 \, q \, k} \, \Phi_{A}(m,k)\right)).\]
 \par\smallskip{\footnotesize Adapted from the cited source. Scope: forward transform only.}
 \end{cleanresult}
 
@@ -42,5 +42,3 @@ Then \[\Phi_{A}(2,1) = A \, A^{\mathsf{T}} + A^{\mathsf{T}} \, A.\]
 Then \[\Phi_{E_{01}}(1,1) \ne \frac{1}{2} \, M_{0}(E_{01}).\]
 \par\smallskip{\footnotesize Scope: v1 equation (24) at m = 1.}
 \end{cleanresult}
-
-% generated: gpt-6 2026-10-29 role=assisted; LLM-authored portions; see PROVENANCE.md

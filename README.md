@@ -257,11 +257,10 @@ Three [working Clean statements](examples/recent-papers.clean) now use complete 
 
 The [magnetic formalization](studies/magnetic/README.md) proves the forward
 walk-profile/Fourier identity for all walk lengths, Hermitian symmetry, and supporting
-results. Read the [Clean definitions](studies/magnetic/definitions.clean),
-[annotated statements](studies/magnetic/results.clean), [Lean proof](studies/magnetic/lean/MagneticStudy.lean),
+results. Read the [Clean definitions](studies/magnetic/Statements.clean),
+[annotated statements](studies/magnetic/Statements.clean), [Lean proof](studies/magnetic/Reference.lean),
 or [PDF](studies/magnetic/generated/magnetic.pdf). The verification also identifies an odd-length
-endpoint counterexample to the pinned v1 inverse formula. Finite sums and word
-enumeration remain explicit Clean-to-Lean boundaries.
+endpoint counterexample to the pinned v1 inverse formula. The study provides five self-contained files, from the authored Lean and Clean statements to the generated Lean proofs.
 
 :::
 

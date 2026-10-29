@@ -218,6 +218,30 @@
       ],
       "observed": "Independent signature oracle, pre-resolution normalization oracle, identical expanded/compact emitted targets, and structural cosine target comparison implemented. Negative tests cover mixed/partial signatures, missing final colon, duplicates, trailing commas, unknown dimensions and return mismatch; interaction tests cover nested/prose types, case, multiline headers, zero arguments, and From Lean.",
       "obligation": "Full module/declaration ASTs and general ambiguity/incomplete-elaboration checks remain pending. Compact syntax reuses the existing elaborator and cannot certify its wider inference policies."
+    },
+    {
+      "id": "typed_function_expression",
+      "status": "partial",
+      "specification": "docs/function-expressions.md",
+      "source": "function(x: Real, x)",
+      "expected_tree": [
+        "Lambda",
+        "x",
+        "Real",
+        [
+          "Local",
+          "x"
+        ]
+      ],
+      "expected_lean": "fun (x : Real) => x",
+      "checks": [
+        "tests/test_function_expressions.py",
+        "tools/check_function_targets.py"
+      ],
+      "pending": [
+        "General subexpression/operator target uniqueness",
+        "Resource-exhaustion outcome integration"
+      ]
     }
   ]
 }

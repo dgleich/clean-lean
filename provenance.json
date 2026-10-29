@@ -953,36 +953,6 @@
         ""
       ]
     },
-    "studies/magnetic/lean/MagneticStudy.lean": {
-      "origin": "llm-assisted",
-      "model": "gpt-6",
-      "date": "2026-10-29",
-      "mode": "comment",
-      "comment": [
-        "-- ",
-        ""
-      ]
-    },
-    "studies/magnetic/definitions.clean": {
-      "origin": "llm-assisted",
-      "model": "gpt-6",
-      "date": "2026-10-29",
-      "mode": "comment",
-      "comment": [
-        "# ",
-        ""
-      ]
-    },
-    "studies/magnetic/results.clean": {
-      "origin": "llm-assisted",
-      "model": "gpt-6",
-      "date": "2026-10-29",
-      "mode": "comment",
-      "comment": [
-        "# ",
-        ""
-      ]
-    },
     "studies/magnetic/verify.py": {
       "origin": "llm-assisted",
       "model": "gpt-6",
@@ -990,26 +960,6 @@
       "mode": "comment",
       "comment": [
         "# ",
-        ""
-      ]
-    },
-    "studies/magnetic/generated/VerifiedMagnetic.lean": {
-      "origin": "derived-from-authored-sources; cited data retains source origin",
-      "model": "gpt-6",
-      "date": "2026-10-29",
-      "mode": "comment",
-      "comment": [
-        "-- ",
-        ""
-      ]
-    },
-    "studies/magnetic/generated/VerifiedMagneticOriginal.lean": {
-      "origin": "derived-from-authored-sources; cited data retains source origin",
-      "model": "gpt-6",
-      "date": "2026-10-29",
-      "mode": "comment",
-      "comment": [
-        "-- ",
         ""
       ]
     },
@@ -1044,6 +994,82 @@
       ]
     },
     "studies/magnetic/README.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "markdown"
+    },
+    "studies/magnetic/Reference.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/magnetic/Statements.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/magnetic/Statements.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/magnetic/Generated.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/magnetic/Verified.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "tests/test_function_expressions.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/check_function_targets.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "docs/function-expressions.md": {
       "origin": "llm-assisted",
       "model": "gpt-6",
       "date": "2026-10-29",
