@@ -10,14 +10,15 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def marked(path, text, entry):
     model = entry.get('model', '')
-    info = ' '.join(x for x in (model, '2026-10-23', 'role=assisted') if x)
+    date = entry.get('date', '2026-10-23')
+    info = ' '.join(x for x in (model, date, 'role=assisted') if x)
     if entry['mode'] == 'markdown':
         return text if text.startswith(':::llm ') else f':::llm {info}\n\n' + text
     if entry['mode'] == 'html':
         if '<llm ' in text:
             return text
         attrs = f' model="{model}"' if model else ''
-        text = text.replace('<body>', f'<body>\n<llm{attrs} date="2026-10-23" role="assisted" style="display:contents">', 1)
+        text = text.replace('<body>', f'<body>\n<llm{attrs} date="{date}" role="assisted" style="display:contents">', 1)
         text = text.replace('</body>', '</llm>\n</body>', 1)
         # Review notes are authored by the reader, not the page generator.
         text = re.sub(r'(<textarea\b[^>]*>.*?</textarea>)', r'<human>\1</human>', text, flags=re.S)

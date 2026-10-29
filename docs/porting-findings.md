@@ -62,3 +62,21 @@ Checkpoint checks: 115 Python tests pass with the BibTeX optional dependency; al
 LaTeX specimen compiled twice with no overfull boxes or unresolved references;
 the new analysis and sorting pages were inspected. The HTML reference passed
 desktop/mobile, search/filter, anchor, and no-JavaScript checks.
+
+
+:::
+
+:::llm gpt-6 2026-10-29 role=assisted
+
+## Magnetic forward identity: proof milestone and remaining boundaries
+
+The [magnetic proof project](magnetic-formalization.md) now proves the forward
+Fourier identity for arbitrary walk lengths. Its phase, adjacency, and unnormalized
+Laplacian are Clean `Equals` definitions. Three visible `From Lean` definitions
+remain for the degree diagonal, word-profile filter/product/sum, and Fourier sum.
+They require finite binders, list enumeration/filtering, and recursion; no parser
+extension is claimed here. Proofs inhabit the actual translated Clean propositions.
+The pinned source's inverse formula has a checked counterexample at m = 1, so its
+odd-length endpoint must be resolved before porting it as a theorem.
+
+:::

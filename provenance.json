@@ -952,6 +952,102 @@
         "# ",
         ""
       ]
+    },
+    "CleanPapers/Magnetic.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "library/magnetic.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "examples/magnetic.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "verify_magnetic.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "generated/VerifiedMagnetic.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/VerifiedMagneticOriginal.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/magnetic.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "generated/magnetic-references.tex": {
+      "origin": "upstream-or-bibliographic-data",
+      "mode": "sidecar"
+    },
+    "generated/magnetic.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "sidecar"
+    },
+    "latex/magnetic.tex": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "docs/magnetic-formalization.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-29",
+      "mode": "markdown"
     }
   }
 }

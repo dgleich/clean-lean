@@ -1,0 +1,46 @@
+% generated: gpt-6 2026-10-29 role=assisted; see PROVENANCE.md
+% Generated statements, not proof certificates.
+\begin{cleanresult}{magnetic powers encode walk profiles}\cleanattribution{\href{https://arxiv.org/html/2506.07343v1}{[Huang, Gleich, Li 2025, equation (1), Supplement S.II equation (17), Theorem 1]}}
+Let $n$ be a natural number.
+Let $A$ be a matrix of size $n\times n$ over $\mathbb{R}$.
+Let $m$ be a natural number.
+Let $q$ be a real number.
+Then \[{M_{q}(A)}^{m} = e^{-2\pi i qm}\sum_{k=0}^{m}e^{4\pi i qk}\Phi_{A}(m,k).\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: forward transform only.}
+\end{cleanresult}
+
+\begin{cleanresult}{magnetic adjacency is Hermitian}\cleanattribution{\href{https://arxiv.org/html/2506.07343v1}{[Huang, Gleich, Li 2025, magnetic graph matrix definition]}}
+Let $n$ be a natural number.
+Let $A$ be a matrix of size $n\times n$ over $\mathbb{R}$.
+Let $q$ be a real number.
+Then \[M_{q}(A)\text{ is Hermitian}.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{magnetic Laplacian is Hermitian}\cleanattribution{[Clean magnetic formalization, unnormalized D minus M convention]}
+Let $n$ be a natural number.
+Let $A$ be a matrix of size $n\times n$ over $\mathbb{R}$.
+Let $q$ be a real number.
+Then \[L_{q}(A)\text{ is Hermitian}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{zero potential symmetrizes adjacency}\cleanattribution{\href{https://arxiv.org/html/2506.07343v1}{[Huang, Gleich, Li 2025, discussion following equation (1)]}}
+Let $n$ be a natural number.
+Let $A$ be a matrix of size $n\times n$ over $\mathbb{R}$.
+Then \[M_{0}(A) = A + A^{\mathsf{T}}.\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: first power.}
+\end{cleanresult}
+
+\begin{cleanresult}{two step mixed walk profile}\cleanattribution{\href{https://arxiv.org/html/2506.07343v1}{[Huang, Gleich, Li 2025, walk profile examples preceding equation (1)]}}
+Let $n$ be a natural number.
+Let $A$ be a matrix of size $n\times n$ over $\mathbb{R}$.
+Then \[\Phi_{A}(2,1) = A \, A^{\mathsf{T}} + A^{\mathsf{T}} \, A.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{odd length inverse endpoint counterexample}\cleanattribution{[Clean magnetic formalization, inverse\_v1\_length\_one\_fails]}
+Then \[\Phi_{E_{01}}(1,1) \ne \frac{1}{2} \, M_{0}(E_{01}).\]
+\par\smallskip{\footnotesize Scope: v1 equation (24) at m = 1.}
+\end{cleanresult}
+
+% generated: gpt-6 2026-10-29 role=assisted; LLM-authored portions; see PROVENANCE.md

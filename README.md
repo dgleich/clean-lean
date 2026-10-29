@@ -247,7 +247,25 @@ Normal translation defines propositions; it does not prove them. The corpus fixt
 
 ## Recent paper statements
 
-Three [working Clean statements](examples/recent-papers.clean) now use complete [Lean mathematical definitions](CleanPapers/Definitions.lean): magnetic walk profiles, size-specific conductance, and an SDP certificate. See [definitions, domain choices, and reproduction commands](docs/paper-translations.md), [generated Lean](generated/RecentPapers.lean), and the [PDF](generated/recent-papers.pdf). These three statements are typechecked, not proved; independent Lean checks verify their translated shapes.
+Three [working Clean statements](examples/recent-papers.clean) now use complete [Lean mathematical definitions](CleanPapers/Definitions.lean): magnetic walk profiles, size-specific conductance, and an SDP certificate. See [definitions, domain choices, and reproduction commands](docs/paper-translations.md), [generated Lean](generated/RecentPapers.lean), and the [PDF](generated/recent-papers.pdf). The magnetic forward identity now has a proof; the Cheeger and SDP statements remain typechecked but unproved. Independent Lean checks also verify their translated shapes.
+
+:::
+
+:::llm gpt-6 2026-10-29 role=assisted
+
+## Magnetic matrices: Clean statements with Lean proofs
+
+The [magnetic formalization](docs/magnetic-formalization.md) proves the forward
+walk-profile/Fourier identity for all walk lengths, Hermitian symmetry, and supporting
+results. Read the [Clean definitions](library/magnetic.clean),
+[annotated statements](examples/magnetic.clean), [Lean proof](CleanPapers/Magnetic.lean),
+or [PDF](generated/magnetic.pdf). The verification also identifies an odd-length
+endpoint counterexample to the pinned v1 inverse formula. Finite sums and word
+enumeration remain explicit Clean-to-Lean boundaries.
+
+:::
+
+:::llm 2026-10-23 role=assisted
 
 ## LaTeX
 
