@@ -55,7 +55,7 @@ DECL = re.compile(r'^ *(Result|Theorem|Context|Define|Notation|Type|Source)\s+(.
 
 def collect(root=ROOT):
     files=[]
-    for folder in ('library','corpus','examples'):
+    for folder in ('library','corpus','examples','studies'):
         for path in sorted((root/folder).rglob('*.clean')):
             source=path.read_text(); symbols=[]; imports=[]
             for number,line in enumerate(source.splitlines(),1):

@@ -1,12 +1,15 @@
 # generated: gpt-6 2026-10-29 role=assisted; see PROVENANCE.md
 """Generate proofs of actual Clean propositions, not only shape checks."""
 from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
 from cleanlang.core import Environment, lean, latex, bibliography
 from cleanlang.modules import load_document
 
-ROOT = Path(__file__).resolve().parent
 env = Environment()
-results = load_document(ROOT/'examples/magnetic.clean', env)
+results = load_document(ROOT/'studies/magnetic/results.clean', env)
 phase = env.definitions['magnetic phase']['key']
 adjacency = env.definitions['magnetic adjacency']['key']
 laplacian = env.definitions['magnetic Laplacian']['key']
@@ -84,9 +87,9 @@ end CleanMagneticProofs
 #print axioms CleanMagneticProofs.forward_transform
 '''
 header = '-- generated: gpt-6 2026-10-29 role=assisted; see PROVENANCE.md\n'
-(ROOT/'generated/VerifiedMagnetic.lean').write_text(header+lean(results, env, [])+proofs)
-(ROOT/'generated/magnetic.tex').write_text('% generated: gpt-6 2026-10-29 role=assisted; see PROVENANCE.md\n'+latex(results, env))
-(ROOT/'generated/magnetic-references.tex').write_text(bibliography(results, env))
+(ROOT/'studies/magnetic/generated/VerifiedMagnetic.lean').write_text(header+lean(results, env, [])+proofs)
+(ROOT/'studies/magnetic/generated/magnetic.tex').write_text('% generated: gpt-6 2026-10-29 role=assisted; see PROVENANCE.md\n'+latex(results, env))
+(ROOT/'studies/magnetic/generated/magnetic-references.tex').write_text(bibliography(results, env))
 # Prove the original paper specimen too, without changing its existing statement.
 original_env = Environment()
 original = load_document(ROOT/'examples/recent-papers.clean', original_env)[0]
@@ -95,8 +98,8 @@ theorem magnetic_paper_original_proved : CleanStatements.magnetic_powers_encode_
   intro n _ A m q
   exact CleanPapers.magnetic_power_fourier A m q
 '''
-(ROOT/'generated/VerifiedMagneticOriginal.lean').write_text(header+
-    'import CleanPapers.Magnetic\n'+lean([original], original_env, [])+original_proof)
+(ROOT/'studies/magnetic/generated/VerifiedMagneticOriginal.lean').write_text(header+
+    'import MagneticStudy\n'+lean([original], original_env, [])+original_proof)
 print('Checked 2 definition trees; generated 6 Clean theorem proofs and the original paper proof')
 
 # generated: gpt-6 2026-10-29 role=assisted; LLM-authored portions; see PROVENANCE.md

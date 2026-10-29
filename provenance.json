@@ -953,7 +953,7 @@
         ""
       ]
     },
-    "CleanPapers/Magnetic.lean": {
+    "studies/magnetic/lean/MagneticStudy.lean": {
       "origin": "llm-assisted",
       "model": "gpt-6",
       "date": "2026-10-29",
@@ -963,7 +963,7 @@
         ""
       ]
     },
-    "library/magnetic.clean": {
+    "studies/magnetic/definitions.clean": {
       "origin": "llm-assisted",
       "model": "gpt-6",
       "date": "2026-10-29",
@@ -973,7 +973,7 @@
         ""
       ]
     },
-    "examples/magnetic.clean": {
+    "studies/magnetic/results.clean": {
       "origin": "llm-assisted",
       "model": "gpt-6",
       "date": "2026-10-29",
@@ -983,7 +983,7 @@
         ""
       ]
     },
-    "verify_magnetic.py": {
+    "studies/magnetic/verify.py": {
       "origin": "llm-assisted",
       "model": "gpt-6",
       "date": "2026-10-29",
@@ -993,7 +993,7 @@
         ""
       ]
     },
-    "generated/VerifiedMagnetic.lean": {
+    "studies/magnetic/generated/VerifiedMagnetic.lean": {
       "origin": "derived-from-authored-sources; cited data retains source origin",
       "model": "gpt-6",
       "date": "2026-10-29",
@@ -1003,7 +1003,7 @@
         ""
       ]
     },
-    "generated/VerifiedMagneticOriginal.lean": {
+    "studies/magnetic/generated/VerifiedMagneticOriginal.lean": {
       "origin": "derived-from-authored-sources; cited data retains source origin",
       "model": "gpt-6",
       "date": "2026-10-29",
@@ -1013,7 +1013,7 @@
         ""
       ]
     },
-    "generated/magnetic.tex": {
+    "studies/magnetic/generated/magnetic.tex": {
       "origin": "derived-from-authored-sources; cited data retains source origin",
       "model": "gpt-6",
       "date": "2026-10-29",
@@ -1023,17 +1023,17 @@
         ""
       ]
     },
-    "generated/magnetic-references.tex": {
+    "studies/magnetic/generated/magnetic-references.tex": {
       "origin": "upstream-or-bibliographic-data",
       "mode": "sidecar"
     },
-    "generated/magnetic.pdf": {
+    "studies/magnetic/generated/magnetic.pdf": {
       "origin": "derived-from-authored-sources; cited data retains source origin",
       "model": "gpt-6",
       "date": "2026-10-29",
       "mode": "sidecar"
     },
-    "latex/magnetic.tex": {
+    "studies/magnetic/latex/magnetic.tex": {
       "origin": "llm-assisted",
       "model": "gpt-6",
       "date": "2026-10-29",
@@ -1043,7 +1043,7 @@
         ""
       ]
     },
-    "docs/magnetic-formalization.md": {
+    "studies/magnetic/README.md": {
       "origin": "llm-assisted",
       "model": "gpt-6",
       "date": "2026-10-29",

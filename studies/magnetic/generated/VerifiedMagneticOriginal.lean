@@ -1,5 +1,5 @@
 -- generated: gpt-6 2026-10-29 role=assisted; see PROVENANCE.md
-import CleanPapers.Magnetic
+import MagneticStudy
 import Mathlib.Data.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 import Mathlib.LinearAlgebra.Matrix.Trace

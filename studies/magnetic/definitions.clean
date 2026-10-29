@@ -1,7 +1,7 @@
 # generated: gpt-6 2026-10-29 role=assisted; see PROVENANCE.md
 # Basic operations are imported; composite matrix definitions are authored here.
-Import "types.clean"
-Import Lean CleanPapers.Magnetic
+Import "../../library/types.clean"
+Import Lean MagneticStudy
 
 Source magnetic2025:
     Kind: other
@@ -15,7 +15,7 @@ Source magneticformalization:
     Kind: other
     Label: Clean magnetic formalization
     Title: Supporting results for the magnetic graph matrix
-    Note: Supporting lemmas and conventions in CleanPapers/Magnetic.lean
+    Note: Supporting lemmas and conventions in studies/magnetic/lean/MagneticStudy.lean
 
 Notation pi(): Real:
     Means: Real.pi
@@ -78,7 +78,7 @@ Define magnetic Laplacian(A, q):
     Render latex: L_{{{q}}}({A})
 
 # Explicit temporary Lean boundaries: finite words, filtering, and summation.
-# These are definitions, not assumed theorems. See docs/magnetic-formalization.md.
+# These are definitions, not assumed theorems. See README.md.
 Define walk profile(A, m, k):
     Let n: Natural
     Let A: Matrix(n,n,Real)

@@ -70,7 +70,7 @@ desktop/mobile, search/filter, anchor, and no-JavaScript checks.
 
 ## Magnetic forward identity: proof milestone and remaining boundaries
 
-The [magnetic proof project](magnetic-formalization.md) now proves the forward
+The [magnetic proof project](../studies/magnetic/README.md) now proves the forward
 Fourier identity for arbitrary walk lengths. Its phase, adjacency, and unnormalized
 Laplacian are Clean `Equals` definitions. Three visible `From Lean` definitions
 remain for the degree diagonal, word-profile filter/product/sum, and Fourier sum.

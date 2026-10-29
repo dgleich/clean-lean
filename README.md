@@ -255,11 +255,11 @@ Three [working Clean statements](examples/recent-papers.clean) now use complete 
 
 ## Magnetic matrices: Clean statements with Lean proofs
 
-The [magnetic formalization](docs/magnetic-formalization.md) proves the forward
+The [magnetic formalization](studies/magnetic/README.md) proves the forward
 walk-profile/Fourier identity for all walk lengths, Hermitian symmetry, and supporting
-results. Read the [Clean definitions](library/magnetic.clean),
-[annotated statements](examples/magnetic.clean), [Lean proof](CleanPapers/Magnetic.lean),
-or [PDF](generated/magnetic.pdf). The verification also identifies an odd-length
+results. Read the [Clean definitions](studies/magnetic/definitions.clean),
+[annotated statements](studies/magnetic/results.clean), [Lean proof](studies/magnetic/lean/MagneticStudy.lean),
+or [PDF](studies/magnetic/generated/magnetic.pdf). The verification also identifies an odd-length
 endpoint counterexample to the pinned v1 inverse formula. Finite sums and word
 enumeration remain explicit Clean-to-Lean boundaries.
 

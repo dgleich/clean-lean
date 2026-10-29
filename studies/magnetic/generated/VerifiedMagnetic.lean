@@ -10,7 +10,7 @@ import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Analysis.Calculus.Deriv.Basic
 import Mathlib.Data.List.Sort
 import Mathlib.Data.Nat.GCD.Basic
-import CleanPapers.Magnetic
+import MagneticStudy
 
 noncomputable def cleanType_Natural_469c53b6dafb7a218246  : Type :=
   ℕ

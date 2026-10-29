@@ -4,14 +4,27 @@
 
 The forward walk-profile/Fourier identity now has a Lean proof for every finite
 real square matrix, every natural walk length, and every real potential. The
-[Clean statements](../examples/magnetic.clean) translate to propositions that are
-actually proved in [VerifiedMagnetic.lean](../generated/VerifiedMagnetic.lean).
+[Clean statements](results.clean) translate to propositions that are
+actually proved in [VerifiedMagnetic.lean](generated/VerifiedMagnetic.lean).
 They are not merely checked for well-formedness.
 
-Start with the [Clean definitions](../library/magnetic.clean), then the
-[Lean proof](../CleanPapers/Magnetic.lean). The original magnetic statement in the
+This directory collects the study's sources, proofs, rendered output, and verification
+script. It shares the repository's Clean compiler, foundational vocabulary, pinned
+Lean dependencies, and earlier paper definitions; it is not a separate Lake project.
+
+| Path | Contents |
+| --- | --- |
+| `definitions.clean` | Authored definitions and explicit Lean boundaries |
+| `results.clean` | Six annotated, proved statements |
+| `lean/MagneticStudy.lean` | Supporting definitions and mathematical proofs |
+| `verify.py` | Translation and proof-artifact generation |
+| `generated/` | Checked Lean propositions, LaTeX fragments, and PDF |
+| `latex/magnetic.tex` | PDF document source |
+
+Start with the [Clean definitions](definitions.clean), then the
+[Lean proof](lean/MagneticStudy.lean). The original magnetic statement in the
 three-paper gallery is also proved in
-[VerifiedMagneticOriginal.lean](../generated/VerifiedMagneticOriginal.lean).
+[VerifiedMagneticOriginal.lean](generated/VerifiedMagneticOriginal.lean).
 Its positive-dimension hypothesis is unnecessary; the new statement allows n = 0.
 
 The source is Huang, Gleich, and Li,
@@ -108,7 +121,7 @@ Three definitions use visible `From Lean` boundaries:
 - `walk Fourier sum`: a finite indexed sum with a bound variable.
 
 These are language gaps, not opaque or assumed mathematical facts: their full
-bodies are in `CleanPapers/Definitions.lean` and `CleanPapers/Magnetic.lean`.
+bodies are in the shared [`CleanPapers/Definitions.lean`](../../CleanPapers/Definitions.lean) and [`lean/MagneticStudy.lean`](lean/MagneticStudy.lean).
 Removing the boundaries needs specified binder and recursion constructs with
 unique parse and elaborated-target rules. This change adds no parser syntax,
 registry, or name-based mathematical dispatch.
@@ -122,17 +135,17 @@ inverse-transform statement and proof.
 Use the pinned Lean 4.24.0 / Mathlib environment from the repository root:
 
 ```sh
-lake build CleanPapers.Magnetic
-python3 verify_magnetic.py
-lake env lean generated/VerifiedMagnetic.lean
-lake env lean generated/VerifiedMagneticOriginal.lean
-pdflatex -interaction=nonstopmode -halt-on-error -output-directory generated latex/magnetic.tex
-pdflatex -interaction=nonstopmode -halt-on-error -output-directory generated latex/magnetic.tex
+lake build MagneticStudy
+python3 studies/magnetic/verify.py
+lake env lean studies/magnetic/generated/VerifiedMagnetic.lean
+lake env lean studies/magnetic/generated/VerifiedMagneticOriginal.lean
+pdflatex -interaction=nonstopmode -halt-on-error -output-directory studies/magnetic/generated studies/magnetic/latex/magnetic.tex
+pdflatex -interaction=nonstopmode -halt-on-error -output-directory studies/magnetic/generated studies/magnetic/latex/magnetic.tex
 python3 tools/provenance.py --apply
 python3 tools/build_review.py
 python3 tools/provenance.py
 ```
 
-The [PDF specimen](../generated/magnetic.pdf) renders all six statements. The
-[offline browser](review.html) shows the Clean source and translated propositions;
+The [PDF specimen](generated/magnetic.pdf) renders all six statements. The
+[offline browser](../../docs/review.html) shows the Clean source and translated propositions;
 it does not run the proof checker itself.

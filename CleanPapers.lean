@@ -1,4 +1,4 @@
 import CleanPapers.Definitions
-import CleanPapers.Magnetic
+import MagneticStudy
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

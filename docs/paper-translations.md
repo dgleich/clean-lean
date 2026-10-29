@@ -1,7 +1,7 @@
 :::llm gpt-6 2026-10-29 role=assisted
 
 **Update, 29 October 2026:** the magnetic forward identity is now proved, including
-the original gallery statement. See [the magnetic formalization](magnetic-formalization.md)
+the original gallery statement. See [the magnetic formalization](../studies/magnetic/README.md)
 for the Clean-authored definitions, Lean proofs, and a verified inverse-formula
 boundary case. The Cheeger and SDP statements remain unproved.
 

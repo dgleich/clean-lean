@@ -1,7 +1,7 @@
 # generated: gpt-6 2026-10-29 role=assisted; see PROVENANCE.md
-Import "../library/magnetic.clean"
+Import "definitions.clean"
 
-# All results here have proofs checked in generated/VerifiedMagnetic.lean.
+# All results here have proofs checked in studies/magnetic/generated/VerifiedMagnetic.lean.
 # A is any real weighted matrix, with no symmetry or positivity assumption.
 Result magnetic powers encode walk profiles:
     Attribution: magnetic2025; equation (1), Supplement S.II equation (17), Theorem 1; adapted; scope: forward transform only
