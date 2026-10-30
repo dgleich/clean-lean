@@ -1,0 +1,34 @@
+# generated: gpt-6 2026-10-30 role=assisted; LLM-authored portions; see PROVENANCE.md
+Import "../library/Common.clean"
+
+Source conditionexamples:
+    Kind: other
+    Label: Clean condition examples
+    Title: Conditions and grouped assumptions
+
+Condition symmetric(A):
+    Let n: Natural
+    Let A: Matrix(n,n,Real)
+    Holds when: A = real transpose(A)
+    Assumption name: symmetry of {A}
+    Render latex: {A}\text{{ is symmetric}}
+
+Condition positive(x: Real):
+    Holds when: x > 0
+    Assumption name: positivity of {x}
+    Render latex: {x} > 0
+
+Context symmetric matrices:
+    Let n: Natural
+    Let A, B: Matrix(n,n,Real)
+    Assume symmetric(A), symmetric(B)
+    Result symmetry restated:
+        Attribution: conditionexamples; symmetry restated; original
+        Conclude: symmetric(A) and symmetric(B)
+
+Result positive values:
+    Attribution: conditionexamples; positive values; original
+    Let x, y: Real
+    Assume positive(x),
+      positive(y)
+    Conclude: x > 0 and y > 0

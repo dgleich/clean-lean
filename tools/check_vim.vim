@@ -19,6 +19,10 @@ call setline(5, 'Notation cos(x: Real): Real:')
 call assert_equal('cleanMathSignature', synIDattr(synID(5,16,1),'name'))
 call setline(6, '  Equals: function(x: Real,x)')
 call assert_equal('cleanMathLogic', synIDattr(synID(6,11,1),'name'))
+call setline(7, 'Condition positive(x: Real):')
+call setline(8, '  Assumption name: positivity of {x}')
+call assert_equal('cleanMathKeyword', synIDattr(synID(7,1,1),'name'))
+call assert_equal('cleanMathOpaque', synIDattr(synID(8,20,1),'name'))
 if len(v:errors)
  for error in v:errors | echom error | endfor
  cquit

@@ -1074,6 +1074,108 @@
       "model": "gpt-6",
       "date": "2026-10-29",
       "mode": "markdown"
+    },
+    "cleanlang/conditions.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-30",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "docs/conditions.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-30",
+      "mode": "markdown"
+    },
+    "examples/conditions.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-30",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "generated/Conditions.lean": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-10-30",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "generated/conditions.tex": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-10-30",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "generated/conditions.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-10-30",
+      "mode": "sidecar"
+    },
+    "grammar/conditions.ebnf": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-30",
+      "mode": "comment",
+      "comment": [
+        "(* ",
+        " *)"
+      ]
+    },
+    "latex/conditions.tex": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-30",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "library/Common.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-30",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_conditions.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-30",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/check_condition_targets.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-10-30",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

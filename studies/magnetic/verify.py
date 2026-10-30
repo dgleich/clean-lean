@@ -132,7 +132,7 @@ header = '-- generated: gpt-6 2026-10-29 role=assisted; LLM-authored portions; s
 study=ROOT/'studies/magnetic'
 translated=lean(results, env, [])
 assert all(name.startswith('Mathlib.') for name in env.lean_imports)
-assert all(d['implementation']=='equals' for d in env.definitions.values())
+assert all(d['implementation']=='equals' for name,d in env.definitions.items() if name != 'Hermitian')
 (study/'Generated.lean').write_text(header+translated)
 reference=(study/'Reference.lean').read_text()
 imports=list(dict.fromkeys(line for text in (reference,translated)
@@ -142,4 +142,4 @@ def body(text):
 (study/'Verified.lean').write_text(header+'\n'.join(imports)+'\n'+body(reference)+'\n'+body(translated)+proofs)
 (study/'generated/magnetic.tex').write_text('% generated: gpt-6 2026-10-29 role=assisted; LLM-authored portions; see PROVENANCE.md\n'+latex(results, env))
 (study/'generated/magnetic-references.tex').write_text(bibliography(results, env))
-print('Generated standalone Lean statements and proofs from one self-contained Clean source')
+print('Generated standalone Lean statements and proofs from the Clean study and its Common library')

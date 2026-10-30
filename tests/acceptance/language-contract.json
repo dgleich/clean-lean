@@ -242,6 +242,36 @@
         "General subexpression/operator target uniqueness",
         "Resource-exhaustion outcome integration"
       ]
+    },
+    {
+      "id": "conditions_and_grouped_assumptions",
+      "status": "partial",
+      "specification": "docs/conditions.md",
+      "grammar": "grammar/conditions.ebnf",
+      "checks": [
+        "tests/test_conditions.py",
+        "tools/check_condition_targets.py"
+      ],
+      "expected_tree": [
+        "Call",
+        "positive",
+        [
+          [
+            "Local",
+            "x"
+          ]
+        ]
+      ],
+      "expected_hypothesis": [
+        "assume",
+        "positivity_of_x",
+        "positivity of x"
+      ],
+      "pending": [
+        "Complete machine-readable grammar and parser generation",
+        "General inherited target uniqueness and resource-exhaustion outcomes",
+        "Removal of inherited Proposition type display-name coupling"
+      ]
     }
   ]
 }

@@ -22,7 +22,7 @@ main{max-width:1200px;margin:auto;padding:40px 28px 70px}h1{font-size:clamp(2rem
 <div class="eyebrow">Local language reference · For Lean users · Updated 19 October 2026</div>
 <h1>Clean to Lean</h1>
 <p>New proposed examples: <a href="sorting-examples.md">insertion sort, heapsort, and their runtime statements</a>. Recursion and pattern syntax remain unspecified; the heapsort comparison proof is an independent Lean reference.</p>
-<p><llm model="gpt-6" date="2026-10-29" role="assisted">Worked proof project: <a href="../studies/magnetic/README.md">magnetic matrices and walk profiles</a>. The five self-contained study files include Clean-authored word profiles and Fourier sums, with agreement proofs against an independent Lean reference.</llm></p>
+<p><llm model="gpt-6" date="2026-10-29" role="assisted">Worked proof project: <a href="../studies/magnetic/README.md">magnetic matrices and walk profiles</a>. The study uses a shared standard Clean library and includes Clean-authored word profiles and Fourier sums, with agreement proofs against an independent Lean reference.</llm></p>
 <div class="intro"><p>Read Clean syntax in terms of Lean binders, terms, declarations, and elaboration. Each mapping records its status so that proposed syntax cannot be mistaken for a compiler feature.</p>
 <p>The Lean panels are <strong>readable equivalents or explicitly labelled sketches</strong>, not canonical kernel-expression dumps. Snippets marked as fragments assume the surrounding parameters and explicitly imported mathematical vocabulary. The compiler’s exact unique-target obligation is stronger than these explanatory displays.</p></div>
 <nav aria-label="Jump to topic"><a href="#result">Statements</a><a href="#notation">Definitions</a><a href="#sum">Binding forms</a><a href="#imports">Imports</a><a href="#contract">Acceptance contract</a></nav>
@@ -161,6 +161,19 @@ Define absolute value(x: Real): Real:
   <section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>noncomputable def absolute_value (x : ℝ) : ℝ :=
   abs x</code></pre></section></div>
   <div class="notes"><p>The Clean type names require separate explicit Clean imports. Only inline <code>From Lean</code> is implemented; the accepted indented Lean-body form remains pending. A checked adapter can fix parameters or wrap representations; it is not restricted to an alias. <code>Equals</code> and <code>From Lean</code> are mutually exclusive. Generated naming and inference must satisfy the unique-target contract.</p></div>
+</article>
+<article id="conditions" data-status="implemented" class="mapping">
+<header><h2>Conditions and named assumptions</h2><span class="badge implemented">Implemented slice</span></header>
+<div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Condition positive(x: Real):
+  Holds when: x &gt; 0
+  Assumption name: positivity of {x}
+
+Assume positive(x), positive(y)</code></pre></section>
+<section aria-label="Lean equivalent"><h3>Lean</h3><pre><code>def positive (x : ℝ) : Prop := x &gt; 0
+-- Inside the result's quantified statement:
+∀ («positivity_of_x» : positive x),
+∀ («positivity_of_y» : positive y), ...</code></pre></section></div>
+<div class="notes"><p>Readable schematic Lean names; actual definitions retain generated identifiers. The Assume line belongs inside a result or context. Commas outside parentheses separate hypotheses; internal call/lambda commas do not. Templates supply human labels, and duplicate labels or Lean identifiers are errors. Labels name evidence and are not condition expressions. Condition also supports an inline From Lean body. See the <a href="conditions.md">normative contract</a> and <a href="../grammar/conditions.ebnf">EBNF extension</a>. The parser is handwritten, not generated from this grammar. General elaboration conformance remains pending.</p></div>
 </article>
 <article id="typed-function" data-status="implemented" class="mapping">
 <header><h2>Typed function expressions</h2><span class="badge implemented">Implemented slice</span></header>

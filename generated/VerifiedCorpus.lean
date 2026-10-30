@@ -224,7 +224,7 @@ relationship: specialized
 -/
 def sorted_input_unchanged : Prop :=
   ∀ (xs : List (ℕ)),
-  ∀ (ordered : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
+  ∀ («ordered» : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
   ((cleanNotation_insertionSort_6aaed7bf698e562b4aa5 (xs)) = xs)
 
 /--
@@ -265,7 +265,7 @@ relationship: specialized
 def ordered_insert_preserves_sortedness : Prop :=
   ∀ (xs : List (ℕ)),
   ∀ (a : ℕ),
-  ∀ (ordered : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
+  ∀ («ordered» : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
   (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed ((cleanNotation_insert_fc17db7c59c6361dc276 (a) (xs))))
 
 /--
@@ -284,7 +284,7 @@ relationship: specialized
 -/
 def merge_sort_sorted_input : Prop :=
   ∀ (xs : List (ℕ)),
-  ∀ (ordered : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
+  ∀ («ordered» : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
   ((cleanNotation_mergeSort_51561cc64977417a701c (xs)) = xs)
 
 /--
@@ -303,8 +303,8 @@ relationship: specialized
 -/
 def merge_preserves_sortedness : Prop :=
   ∀ (xs ys : List (ℕ)),
-  ∀ (hx : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
-  ∀ (hy : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (ys))),
+  ∀ («hx» : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
+  ∀ («hy» : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (ys))),
   (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed ((cleanNotation_merge_afbf80a28ac74f1f01c4 (xs) (ys))))
 
 /--
@@ -314,8 +314,8 @@ relationship: specialized
 -/
 def insertion_sort_subsequence : Prop :=
   ∀ (xs ys : List (ℕ)),
-  ∀ (ordered : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (ys))),
-  ∀ (subsequence : (cleanNotation_sublist_ef3e1617947e64ecf0be (ys) (xs))),
+  ∀ («ordered» : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (ys))),
+  ∀ («subsequence» : (cleanNotation_sublist_ef3e1617947e64ecf0be (ys) (xs))),
   (cleanNotation_sublist_ef3e1617947e64ecf0be (ys) ((cleanNotation_insertionSort_6aaed7bf698e562b4aa5 (xs))))
 
 /--
@@ -344,7 +344,7 @@ relationship: specialized
 -/
 def euclidean_coprime_subtraction : Prop :=
   ∀ (a b : ℕ),
-  ∀ (ordered : (a ≤ b)),
+  ∀ («ordered» : (a ≤ b)),
   ((cleanDefine_coprime_90926a1fc5d9967320f9 ((b - a)) (a)) ↔ (cleanDefine_coprime_90926a1fc5d9967320f9 (b) (a)))
 
 /--
@@ -354,7 +354,7 @@ relationship: specialized
 -/
 def coprime_lcm_product : Prop :=
   ∀ (a b : ℕ),
-  ∀ (cop : (cleanDefine_coprime_90926a1fc5d9967320f9 (a) (b))),
+  ∀ («cop» : (cleanDefine_coprime_90926a1fc5d9967320f9 (a) (b))),
   ((cleanNotation_lcm_6a337f2a1fee7d9b19ad (a) (b)) = (a * b))
 
 /--
@@ -364,9 +364,9 @@ relationship: specialized
 -/
 def common_divisor_of_coprimes : Prop :=
   ∀ (a b k : ℕ),
-  ∀ (cop : (cleanDefine_coprime_90926a1fc5d9967320f9 (a) (b))),
-  ∀ (divides_a : (k ∣ a)),
-  ∀ (divides_b : (k ∣ b)),
+  ∀ («cop» : (cleanDefine_coprime_90926a1fc5d9967320f9 (a) (b))),
+  ∀ («divides_a» : (k ∣ a)),
+  ∀ («divides_b» : (k ∣ b)),
   (k = 1)
 
 /--
@@ -376,7 +376,7 @@ relationship: specialized
 -/
 def coprime_product_divisibility : Prop :=
   ∀ (a b k : ℕ),
-  ∀ (cop : (cleanDefine_coprime_90926a1fc5d9967320f9 (k) (b))),
+  ∀ («cop» : (cleanDefine_coprime_90926a1fc5d9967320f9 (k) (b))),
   ((k ∣ (a * b)) ↔ (k ∣ a))
 
 /--
@@ -404,7 +404,7 @@ relationship: adapted
 -/
 def certified_sort_unchanged : Prop :=
   ∀ (xs ys : List (ℕ)),
-  ∀ (certificate : (cleanDefine_sorting_certificate_1c271b4f1c624120844f (xs) (ys))),
+  ∀ («certificate» : (cleanDefine_sorting_certificate_1c271b4f1c624120844f (xs) (ys))),
   ((cleanNotation_insertionSort_6aaed7bf698e562b4aa5 (ys)) = ys)
 
 /--
@@ -459,7 +459,7 @@ relationship: specialized
 -/
 def exponential_logarithm : Prop :=
   ∀ (x : ℝ),
-  ∀ (positive : (0 < x)),
+  ∀ («positive» : (0 < x)),
   ((cleanNotation_exp_7915ccfe7848eb4fc048 ((cleanNotation_log_3a02e02cafc4602764f4 (x)))) = x)
 
 /--
@@ -469,8 +469,8 @@ relationship: specialized
 -/
 def logarithm_product : Prop :=
   ∀ (x y : ℝ),
-  ∀ (nonzero_x : (x ≠ 0)),
-  ∀ (nonzero_y : (y ≠ 0)),
+  ∀ («nonzero_x» : (x ≠ 0)),
+  ∀ («nonzero_y» : (y ≠ 0)),
   ((cleanNotation_log_3a02e02cafc4602764f4 ((x * y))) = ((cleanNotation_log_3a02e02cafc4602764f4 (x)) + (cleanNotation_log_3a02e02cafc4602764f4 (y))))
 
 /--
@@ -480,8 +480,8 @@ relationship: specialized
 -/
 def logarithm_quotient : Prop :=
   ∀ (x y : ℝ),
-  ∀ (nonzero_x : (x ≠ 0)),
-  ∀ (nonzero_y : (y ≠ 0)),
+  ∀ («nonzero_x» : (x ≠ 0)),
+  ∀ («nonzero_y» : (y ≠ 0)),
   ((cleanNotation_log_3a02e02cafc4602764f4 ((x / y))) = ((cleanNotation_log_3a02e02cafc4602764f4 (x)) - (cleanNotation_log_3a02e02cafc4602764f4 (y))))
 
 /--
@@ -500,7 +500,7 @@ relationship: specialized
 -/
 def square_of_square_root : Prop :=
   ∀ (x : ℝ),
-  ∀ (nonnegative : (0 ≤ x)),
+  ∀ («nonnegative» : (0 ≤ x)),
   (((cleanNotation_sqrt_bab2de5a3de5967c5bae (x)) ^ 2) = x)
 
 /--
@@ -519,7 +519,7 @@ relationship: specialized
 -/
 def square_root_product : Prop :=
   ∀ (x y : ℝ),
-  ∀ (nonnegative : (0 ≤ x)),
+  ∀ («nonnegative» : (0 ≤ x)),
   ((cleanNotation_sqrt_bab2de5a3de5967c5bae ((x * y))) = ((cleanNotation_sqrt_bab2de5a3de5967c5bae (x)) * (cleanNotation_sqrt_bab2de5a3de5967c5bae (y))))
 
 /--
@@ -574,8 +574,8 @@ relationship: specialized
 -/
 def continuous_composition : Prop :=
   ∀ (f g : (ℝ) → (ℝ)),
-  ∀ (hf : (cleanNotation_continuous_723e95f1cf7739171880 (f))),
-  ∀ (hg : (cleanNotation_continuous_723e95f1cf7739171880 (g))),
+  ∀ («hf» : (cleanNotation_continuous_723e95f1cf7739171880 (f))),
+  ∀ («hg» : (cleanNotation_continuous_723e95f1cf7739171880 (g))),
   (cleanNotation_continuous_723e95f1cf7739171880 ((cleanNotation_compose_7439357a91f0e39bc193 (f) (g))))
 
 /--
@@ -585,8 +585,8 @@ relationship: specialized
 -/
 def continuous_sum : Prop :=
   ∀ (f g : (ℝ) → (ℝ)),
-  ∀ (hf : (cleanNotation_continuous_723e95f1cf7739171880 (f))),
-  ∀ (hg : (cleanNotation_continuous_723e95f1cf7739171880 (g))),
+  ∀ («hf» : (cleanNotation_continuous_723e95f1cf7739171880 (f))),
+  ∀ («hg» : (cleanNotation_continuous_723e95f1cf7739171880 (g))),
   (cleanNotation_continuous_723e95f1cf7739171880 ((f + g)))
 
 /--
@@ -596,8 +596,8 @@ relationship: specialized
 -/
 def continuous_product : Prop :=
   ∀ (f g : (ℝ) → (ℝ)),
-  ∀ (hf : (cleanNotation_continuous_723e95f1cf7739171880 (f))),
-  ∀ (hg : (cleanNotation_continuous_723e95f1cf7739171880 (g))),
+  ∀ («hf» : (cleanNotation_continuous_723e95f1cf7739171880 (f))),
+  ∀ («hg» : (cleanNotation_continuous_723e95f1cf7739171880 (g))),
   (cleanNotation_continuous_723e95f1cf7739171880 ((f * g)))
 
 /--
@@ -636,7 +636,7 @@ def adjacency_symmetry : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ∀ (edge : (cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v))),
+  ∀ («edge» : (cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v))),
   (cleanNotation_adjacent_7c95186c3948254b956e (G) (v) (u))
 
 /--
@@ -670,7 +670,7 @@ def adjacent_vertices_distinct : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ∀ (edge : (cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v))),
+  ∀ («edge» : (cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v))),
   (u ≠ v)
 
 /--
@@ -714,7 +714,7 @@ relationship: specialized
 def support_monotonicity : Prop :=
   ∀ (n : ℕ),
   ∀ (G H : SimpleGraph (Fin n)),
-  ∀ (inclusion : (cleanNotation_subgraph_32b2b617f7e2adc8d649 (G) (H))),
+  ∀ («inclusion» : (cleanNotation_subgraph_32b2b617f7e2adc8d649 (G) (H))),
   ((cleanNotation_support_c53e656ac6b9efb817db (G)) ⊆ (cleanNotation_support_c53e656ac6b9efb817db (H)))
 
 /--
@@ -825,7 +825,7 @@ def reachability_symmetric : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ∀ (path : (cleanNotation_reachable_947639a9d52df05827e1 (G) (u) (v))),
+  ∀ («path» : (cleanNotation_reachable_947639a9d52df05827e1 (G) (u) (v))),
   (cleanNotation_reachable_947639a9d52df05827e1 (G) (v) (u))
 
 /--
@@ -837,8 +837,8 @@ def reachability_transitive : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v w : Fin n),
-  ∀ (first : (cleanNotation_reachable_947639a9d52df05827e1 (G) (u) (v))),
-  ∀ (second : (cleanNotation_reachable_947639a9d52df05827e1 (G) (v) (w))),
+  ∀ («first» : (cleanNotation_reachable_947639a9d52df05827e1 (G) (u) (v))),
+  ∀ («second» : (cleanNotation_reachable_947639a9d52df05827e1 (G) (v) (w))),
   (cleanNotation_reachable_947639a9d52df05827e1 (G) (u) (w))
 
 /--
@@ -850,7 +850,7 @@ def edge_implies_reachability : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ∀ (edge : (cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v))),
+  ∀ («edge» : (cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v))),
   (cleanNotation_reachable_947639a9d52df05827e1 (G) (u) (v))
 
 /--

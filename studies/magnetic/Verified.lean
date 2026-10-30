@@ -304,14 +304,17 @@ noncomputable def cleanNotation_complex_scalar_6201cf55b76113d50a6e  (x : ℝ) :
 noncomputable def cleanNotation_complex_exponential_88b7620f1ee63bf4a99d  (z : ℂ) : ℂ :=
   Complex.exp z
 
-noncomputable def cleanDefine_magnetic_phase_a916b64fe81e8c939d24  (q : ℝ) : ℂ :=
-  (cleanNotation_complex_exponential_88b7620f1ee63bf4a99d (((cleanNotation_imaginary_unit_dd12d90e3449de458b3a) * (cleanNotation_complex_scalar_6201cf55b76113d50a6e (((2 * (cleanNotation_pi_3318d6df42e441010576)) * q))))))
-
 noncomputable def cleanNotation_complex_matrix_8ce504730fda017d8908 {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) : Matrix (Fin n) (Fin n) ℂ :=
   Complex.ofRealHom.mapMatrix A
 
 noncomputable def cleanNotation_real_transpose_110eeb37f2a3ed58943f {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) : Matrix (Fin n) (Fin n) ℝ :=
   A.transpose
+
+noncomputable def cleanDefine_Hermitian_1667495db879ea20ebaa {n : ℕ} (M : Matrix (Fin n) (Fin n) ℂ) : Prop :=
+  M.IsHermitian
+
+noncomputable def cleanDefine_magnetic_phase_a916b64fe81e8c939d24  (q : ℝ) : ℂ :=
+  (cleanNotation_complex_exponential_88b7620f1ee63bf4a99d (((cleanNotation_imaginary_unit_dd12d90e3449de458b3a) * (cleanNotation_complex_scalar_6201cf55b76113d50a6e (((2 * (cleanNotation_pi_3318d6df42e441010576)) * q))))))
 
 noncomputable def cleanDefine_magnetic_adjacency_0d1d57e2d9820070fae8 {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) (q : ℝ) : Matrix (Fin n) (Fin n) ℂ :=
   (((cleanDefine_magnetic_phase_a916b64fe81e8c939d24 (q)) • (cleanNotation_complex_matrix_8ce504730fda017d8908 (A))) + ((cleanDefine_magnetic_phase_a916b64fe81e8c939d24 ((-q))) • (cleanNotation_complex_matrix_8ce504730fda017d8908 ((cleanNotation_real_transpose_110eeb37f2a3ed58943f (A))))))
@@ -333,9 +336,6 @@ noncomputable def cleanDefine_walk_profile_46777589a8677b4798d1 {n : ℕ} (A : M
 
 noncomputable def cleanDefine_walk_Fourier_sum_cb5cf8d3bdceb3ae6707 {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) (m : ℕ) (q : ℝ) : Matrix (Fin n) (Fin n) ℂ :=
   ((cleanDefine_magnetic_phase_a916b64fe81e8c939d24 ((-(q * (cleanNotation_real_index_c182be2e79fff5553306 (m)))))) • (cleanNotation_sum_before_769a3c05d6498272ed95 ((m + 1)) ((fun (clean_bound_0 : ℕ) => ((cleanDefine_magnetic_phase_a916b64fe81e8c939d24 (((2 * q) * (cleanNotation_real_index_c182be2e79fff5553306 (clean_bound_0))))) • (cleanNotation_complex_matrix_8ce504730fda017d8908 ((cleanDefine_walk_profile_46777589a8677b4798d1 (A) (m) (clean_bound_0)))))))))
-
-noncomputable def cleanNotation_Hermitian_1667495db879ea20ebaa {n : ℕ} (M : Matrix (Fin n) (Fin n) ℂ) : Prop :=
-  M.IsHermitian
 
 noncomputable def cleanNotation_directed_single_edge_8a959dc38adad95c005b   : Matrix (Fin 2) (Fin 2) ℝ :=
   !![0, 1; 0, 0]
@@ -370,7 +370,7 @@ def magnetic_adjacency_is_Hermitian : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℝ),
   ∀ (q : ℝ),
-  (cleanNotation_Hermitian_1667495db879ea20ebaa ((cleanDefine_magnetic_adjacency_0d1d57e2d9820070fae8 (A) (q))))
+  (cleanDefine_Hermitian_1667495db879ea20ebaa ((cleanDefine_magnetic_adjacency_0d1d57e2d9820070fae8 (A) (q))))
 
 /--
 source: magneticformalization
@@ -381,7 +381,7 @@ def magnetic_Laplacian_is_Hermitian : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℝ),
   ∀ (q : ℝ),
-  (cleanNotation_Hermitian_1667495db879ea20ebaa ((cleanDefine_magnetic_Laplacian_c378e4a8cb113327c8a9 (A) (q))))
+  (cleanDefine_Hermitian_1667495db879ea20ebaa ((cleanDefine_magnetic_Laplacian_c378e4a8cb113327c8a9 (A) (q))))
 
 /--
 source: magnetic2025

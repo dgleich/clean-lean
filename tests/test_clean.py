@@ -35,7 +35,7 @@ class CleanTests(unittest.TestCase):
     def test_dimensions_checked(self):
         self.reject(SOURCE.replace('complex n-vector','complex 2-vector'),'dimension')
     def test_conclusion_must_be_proposition(self): self.reject(SOURCE[:SOURCE.index('    Conclude:')]+'    Conclude: x\n','proposition')
-    def test_assumption_must_be_proposition(self): self.reject(SOURCE.replace('Assume nonzero: x ≠ 0','Assume nonzero: x'),'proposition')
+    def test_assumption_must_be_proposition(self): self.reject(SOURCE.replace('Assume nonzero: x ≠ 0','Assume nonzero: x'),'condition')
     def test_define_alias(self):
         self.assertEqual(lean(parse(SOURCE,self.reg),self.reg,[]),lean(parse(SOURCE.replace('Let y =','DEFINE y ='),self.reg),self.reg,[]))
     def test_extension_canonicalization(self):
@@ -85,7 +85,7 @@ class CleanTests(unittest.TestCase):
     def test_assumption_order_after_definition(self):
         source=SOURCE.replace('    Conclude:','    Assume hy: y ≠ 0\n    Conclude:')
         code=lean(parse(source,self.reg),self.reg,[])
-        self.assertLess(code.index('let y :'),code.index('∀ (hy :'))
+        self.assertLess(code.index('let y :'),code.index('∀ («hy» :'))
     def test_english_logic_in_latex_keeps_lean_semantics(self):
         env={x:Expr(x,x,PROP) for x in ['p','q']}
         for op,word in [('and','and'),('or','or'),('↔','if and only if'),('→','implies')]:

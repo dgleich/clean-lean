@@ -37,7 +37,7 @@ The leading keyword is case-insensitive: `let`, `Let`, and `LET` are equivalent,
 
 Result titles may be English words separated by spaces, for example `Result determinant left swap:`. The Lean identifier is generated as `determinant_left_swap`; the displayed LaTeX title is “determinant left swap.” Capitalization is preserved. Repeated spaces and underscores normalize to a single word separator, and collisions between generated identifiers are errors. Existing underscored titles remain accepted and display as words. Titles are word-based in this version; arbitrary punctuation is not supported. Generated metadata records both `name` (Lean identifier) and `title` (display text).
 
-Object and assumption names remain Unicode identifiers, with underscores allowed. A declaration cannot reuse an earlier name within the same result. Multiple objects may be introduced together; each gets the specified type, rather than forming a collection. Every dimension must already be declared as a natural number, or be a numeral. Universal quantification is implicit in typed object declarations.
+Object names remain Unicode identifiers. Assumption labels may contain identifier words; declared conditions can supply automatic labels. A declaration cannot reuse an earlier name within the same result. Multiple objects may be introduced together; each gets the specified type, rather than forming a collection. Every dimension must already be declared as a natural number, or be a numeral. Universal quantification is implicit in typed object declarations.
 
 ## Objects and local definitions
 
@@ -64,7 +64,7 @@ Definitions are local to a result and ordered: later clauses may use earlier nam
 
 ## Assumptions and conclusions
 
-An assumption is a labelled proposition:
+An assumption asserts a condition. Explicit labels remain supported:
 
 ```text
 Assume nonzero: x ≠ 0
@@ -375,3 +375,15 @@ The bounded `function(x: T, expression)` form is implemented. Its grammar, scope
 hygiene, constructive translation, and acceptance limits are specified in
 [function expressions](function-expressions.md). It supplies a lambda to ordinary
 module-declared operations; it does not add special sum, map, or filter semantics.
+
+
+:::llm gpt-6 2026-10-30 role=assisted
+
+## Conditions and assumption lists
+
+Top-level `Condition` declarations and comma-separated `Assume` lists are implemented.
+The normative [condition contract](conditions.md) and [EBNF extension](../grammar/conditions.ebnf)
+specify fixed condition results, `Holds when`, imported `From Lean` bodies, name templates,
+continuation, collision checks, and the unique expansion into ordered Lean hypotheses.
+This EBNF does not generate the handwritten parser.
+:::

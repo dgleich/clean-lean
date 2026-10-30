@@ -1,0 +1,25 @@
+(* generated: gpt-6 2026-10-30 role=assisted; see PROVENANCE.md *)
+(* Normative extension fragment, NOT parser-generator input for the current parser.
+   Lexing/layout and external productions: docs/conditions.md.
+   Keywords are case-insensitive; identifiers and names are case-sensitive. *)
+condition = "Condition", name, "(", [ parameters ], ")", ":", NEWLINE,
+            INDENT, fields, DEDENT ;
+parameters = expanded_parameters | compact_parameters ;
+expanded_parameters = identifier, { ",", identifier } ;
+compact_parameters = typed_parameter, { ",", typed_parameter } ;
+typed_parameter = identifier, ":", type_expression ;
+fields = field, { field } ;
+field = let_field | holds_when | from_lean | assumption_name | rendering | attribution ;
+holds_when = "Holds when", ":", expression, NEWLINE
+           | "Holds when", ":", NEWLINE, INDENT, expression, NEWLINE, DEDENT ;
+from_lean = "From Lean", ":", lean_line, NEWLINE ;
+assumption_name = "Assumption name", ":", name_template, NEWLINE ;
+assume = "Assume", assumption_item, { ",", assumption_item }, NEWLINE ;
+assumption_item = [ label, ":" ], expression ;
+label = identifier, { SPACE, identifier } ;
+(* Mandatory static constraints: exactly one body field; no Returns; compact and
+   expanded parameter forms cannot mix. Comma/label colon separators in assume
+   occur only at parenthesis depth zero. See normative prose for continuation,
+   template validation, automatic naming, scoping, and target construction. *)
+
+(* generated: gpt-6 2026-10-30 role=assisted; LLM-authored portions; see PROVENANCE.md *)

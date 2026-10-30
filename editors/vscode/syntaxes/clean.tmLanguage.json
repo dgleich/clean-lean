@@ -18,7 +18,7 @@
       "match": "\\b(?i:function)(?=\\s*\\()"
     },
     {
-      "match": "^ *(?i:(Notation|Define))\\s+([^\\(]+)(\\(.*)(:)\\s*$",
+      "match": "^ *(?i:(Notation|Define|Condition))\\s+([^\\(]+)(\\(.*)(:)\\s*$",
       "captures": {
         "1": {
           "name": "keyword.declaration.clean"
@@ -35,7 +35,7 @@
       }
     },
     {
-      "match": "^ *(?i:(Result|Theorem|Context|Define|Notation|Type|Source))\\b(.*?)(:)\\s*$",
+      "match": "^ *(?i:(Result|Theorem|Context|Define|Notation|Condition|Type|Source))\\b(.*?)(:)\\s*$",
       "captures": {
         "1": {
           "name": "keyword.declaration.clean"
@@ -63,7 +63,7 @@
       }
     },
     {
-      "match": "^ *(?i:(Render(?: latex)?|Describe(?: plural)?|Attribution|Kind|Label|Title|Author|Year|Version|Revision|URL|References|source|reference|relationship|scope|changes|note))\\s*(:)(.*)$",
+      "match": "^ *(?i:(Assumption name|Render(?: latex)?|Describe(?: plural)?|Attribution|Kind|Label|Title|Author|Year|Version|Revision|URL|References|source|reference|relationship|scope|changes|note))\\s*(:)(.*)$",
       "captures": {
         "1": {
           "name": "keyword.other.metadata.clean"
@@ -108,7 +108,7 @@
       }
     },
     {
-      "match": "^ *(?i:(Assume))\\s+([^:]+)(:)",
+      "match": "^ *(?i:(Assume))\\s+([^:(),]+)(:)",
       "captures": {
         "1": {
           "name": "keyword.control.clean"
@@ -123,7 +123,11 @@
     },
     {
       "name": "keyword.control.clean",
-      "match": "^ *(?i:Let|Define|Conclude|Returns|Equals|Alias|Phrase)\\b"
+      "match": "^ *(?i:Holds when)\\s*:"
+    },
+    {
+      "name": "keyword.control.clean",
+      "match": "^ *(?i:Let|Define|Assume|Conclude|Returns|Equals|Holds when|Alias|Phrase)\\b"
     },
     {
       "name": "keyword.operator.word.clean",
@@ -135,7 +139,7 @@
     },
     {
       "name": "keyword.operator.clean",
-      "match": "\u2194|\u2192|\u2264|\u2265|\u2260|\u2227|\u2228|\u00ac|\u2208|\u2286|\u222a|\u2229|\u2223|<=|>=|!=|[+*/^=<>-]"
+      "match": "↔|→|≤|≥|≠|∧|∨|¬|∈|⊆|∪|∩|∣|<=|>=|!=|[+*/^=<>-]"
     },
     {
       "name": "punctuation.separator.clean",

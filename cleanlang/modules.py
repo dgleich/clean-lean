@@ -191,6 +191,42 @@ def notation(header, fields, env, *, authored=False):
             'body': values[implementation], 'returns': str(result), 'attribution': attribution}
 
 
+def condition_declaration(header, fields, env):
+    """A condition is an explicitly Prop-valued definition, not a hypothesis."""
+    from .conditions import name_template
+    truth=env.data['types'].get('Proposition',{})
+    if truth.get('args') != [] or truth.get('lean','').strip() != 'Prop':
+        raise CleanError('Condition requires the foundational Proposition binding to Lean Prop')
+    m = re.fullmatch(r'Condition\s+('+ID+r'(?: +'+ID+r')*)\((.*)\):', header, re.I)
+    if not m: raise CleanError('Expected Condition name(parameters): without a return annotation')
+    name, parameters = m.groups()
+    parts = split(parameters)
+    if parameters.rstrip().endswith(','): raise CleanError('Trailing condition parameter comma')
+    compact = any(':' in part for part in parts)
+    values = fields_map([f for f in fields if not re.match(r'Let\b',f,re.I)])
+    if 'returns' in values: raise CleanError('Condition already specifies a condition result; omit Returns')
+    if set(values) - {'holds when','from lean','assumption name','render','render latex','attribution'}:
+        raise CleanError('Unknown Condition field')
+    if len(set(values) & {'holds when','from lean'}) != 1:
+        raise CleanError('Condition requires exactly one Holds when or From Lean')
+    params = [part.split(':',1)[0].strip() for part in parts]
+    naming = name_template(values.get('assumption name'),name,params)
+    transformed=[]
+    for f in fields:
+        key=f.split(':',1)[0].lower()
+        if key=='assumption name': continue
+        if key=='holds when': f='Equals:'+f.split(':',1)[1]
+        transformed.append(f)
+    normalized='Define '+name+'('+parameters+')'+(': Proposition:' if compact else ':')
+    if not compact: transformed.append('Returns: Proposition')
+    notation(normalized,transformed,env,authored=True)
+    spec=env.data['functions'][name]
+    spec['condition']={'parameters':params,'assumption_name':naming}
+    spec['condition_tree']=['Condition',spec['signature_tree'],
+        ['HoldsWhen',env.definitions[name]['tree']] if 'holds when' in values else ['FromLean',values['from lean']],
+        ['AssumptionName',naming]]
+
+
 def load_module(path, env, *, document=False):
     """Resolve imports into an explicitly provided, initially empty environment."""
     active=[]
@@ -213,7 +249,7 @@ def load_module(path, env, *, document=False):
                 li=re.fullmatch(r'Import Lean\s+([A-Za-z_][\w.]*)',line,re.I)
                 bi=re.fullmatch(r'Import BibTeX\s+"([^"\n]+)"',line,re.I)
                 ci=re.fullmatch(r'Import\s+"([^"\n]+)"',line,re.I)
-                block=re.match(r'(Notation|Define|Type|Source)\s',line,re.I)
+                block=re.match(r'(Notation|Define|Condition|Type|Source)\s',line,re.I)
                 alias=re.fullmatch(r'Alias\s+('+ID+r'):\s*('+ID+r')',line,re.I)
                 phrase=re.fullmatch(r'Phrase\s+(.+?)\s+=>\s+(.+)',line,re.I)
                 if any((li,bi,ci,block,alias,phrase)):
@@ -234,7 +270,7 @@ def load_module(path, env, *, document=False):
                         while j<len(lines) and (not lines[j].strip() or lines[j][0].isspace() or lines[j].lstrip().startswith('#')):
                             f=lines[j]
                             if f.strip() and not f.lstrip().startswith('#'):
-                                if f.startswith('        ') and block[1].lower() == 'define':
+                                if f.startswith('        ') and block[1].lower() in ('define','condition'):
                                     if not expression_block:
                                         raise CleanError('Only Equals expression blocks are implemented; From Lean must be inline')
                                     if f.startswith('         '):
@@ -243,10 +279,11 @@ def load_module(path, env, *, document=False):
                                 else:
                                     if not f.startswith('    ') or f.startswith('     '): raise CleanError('Declaration fields must align at one indentation level')
                                     fields.append(f.strip())
-                                    expression_block = bool(re.fullmatch(r'Equals\s*:', f.strip(), re.I))
+                                    expression_block = bool(re.fullmatch(r'(?:Equals|Holds when)\s*:', f.strip(), re.I))
                             j+=1
                         kind=block[1].lower()
                         if kind in ('notation', 'define'): notation(line,fields,env,authored=kind=='define')
+                        elif kind=='condition': condition_declaration(line,fields,env)
                         elif kind=='type': type_declaration(line,fields,env)
                         else:
                             m=re.fullmatch(r'Source\s+('+ID+r'):',line,re.I)

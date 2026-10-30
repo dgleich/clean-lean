@@ -260,7 +260,7 @@ walk-profile/Fourier identity for all walk lengths, Hermitian symmetry, and supp
 results. Read the [Clean definitions](studies/magnetic/Statements.clean),
 [annotated statements](studies/magnetic/Statements.clean), [Lean proof](studies/magnetic/Reference.lean),
 or [PDF](studies/magnetic/generated/magnetic.pdf). The verification also identifies an odd-length
-endpoint counterexample to the pinned v1 inverse formula. The study provides five self-contained files, from the authored Lean and Clean statements to the generated Lean proofs.
+endpoint counterexample to the pinned v1 inverse formula. The study provides five artifacts, from authored statements to generated Lean proofs. Its Clean source imports the placeholder [Common library](library/Common.clean); the Lean files import only Mathlib.
 
 :::
 
@@ -318,3 +318,21 @@ See [sorting examples and proof status](docs/sorting-examples.md) for proposed C
 ## Provenance
 
 This human-directed prototype includes LLM-authored code and text. See [provenance and source boundaries](PROVENANCE.md), including the distinction between generated adaptations and upstream mathematics. Historical commits predate the retrospective tags.
+
+
+:::llm gpt-6 2026-10-30 role=assisted
+
+Named [conditions](docs/conditions.md) now support readable assumption names:
+
+```text
+Condition positive(x: Real):
+    Holds when: x > 0
+    Assumption name: positivity of {x}
+
+# Within a result declaring x and y:
+Assume positive(x), positive(y)
+```
+
+See the [working example](examples/conditions.clean). Commas inside function arguments
+stay inside the expression; commas outside parentheses separate assumptions.
+:::

@@ -1,0 +1,206 @@
+# generated: gpt-6 2026-10-30 role=assisted; LLM-authored portions; see PROVENANCE.md
+# Placeholder standard library: types, finite operations, and imported conditions.
+Import Lean Mathlib.LinearAlgebra.Matrix.PosDef
+Import Lean Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+
+Type Natural():
+    Means: ℕ
+    Render latex: \mathbb{{N}}
+    Describe: a natural number
+    Describe plural: natural numbers
+
+Type Real():
+    Means: ℝ
+    Render latex: \mathbb{{R}}
+    Describe: a real number
+    Describe plural: real numbers
+
+Type Complex():
+    Means: ℂ
+    Render latex: \mathbb{{C}}
+    Describe: a complex number
+    Describe plural: complex numbers
+
+Type Proposition():
+    Means: Prop
+    Render latex: \mathrm{{Prop}}
+    Describe: a proposition
+    Describe plural: propositions
+
+Type Matrix(p0: Natural, p1: Natural, p2: Type):
+    Means: Matrix (Fin p0) (Fin p1) p2
+    Render latex: {p2}^{{{p0}\times {p1}}}
+    Describe: a matrix of size ${p0}\times {p1}$ over ${p2}$
+    Describe plural: ${p0}\times {p1}$ matrices over ${p2}$
+
+Type Vertex(p0: Natural):
+    Means: Fin p0
+    Render latex: \{{0,\ldots,{p0}-1\}}
+    Describe: a vertex in $\{{0,\ldots,{p0}-1\}}$
+    Describe plural: vertices in $\{{0,\ldots,{p0}-1\}}$
+
+Type List(p0: Type):
+    Means: List (p0)
+    Render latex: \operatorname{{List}}({p0})
+    Describe: a list with entries in ${p0}$
+    Describe plural: lists with entries in ${p0}$
+
+Type Function(p0: Type, p1: Type):
+    Means: (p0) → (p1)
+    Render latex: ({p0}\to {p1})
+    Describe: a function from ${p0}$ to ${p1}$
+    Describe plural: functions from ${p0}$ to ${p1}$
+
+# Generic finite operations. There are no magnetic or paper-specific Lean definitions here.
+
+Type Boolean():
+    Means: Bool
+    Render latex: \{{\mathrm{{false}},\mathrm{{true}}\}}
+
+Notation forward(): Boolean:
+    Means: true
+    Render latex: \mathrm{{true}}
+
+Notation backward(): Boolean:
+    Means: false
+    Render latex: \mathrm{{false}}
+
+Notation pair(x,y):
+    Let T: Type
+    Let x,y: T
+    Returns: List(T)
+    Means: [x,y]
+    Render latex: [{x},{y}]
+
+Notation repeat(m,x):
+    Let T: Type
+    Let m: Natural
+    Let x: T
+    Returns: List(T)
+    Means: List.replicate m x
+    Render latex: \operatorname{{repeat}}({m},{x})
+
+Notation choices(xs):
+    Let T: Type
+    Let xs: List(List(T))
+    Returns: List(List(T))
+    Means: xs.sections
+    Render latex: \operatorname{{choices}}({xs})
+
+Notation map(f,xs):
+    Let T,U: Type
+    Let f: Function(T,U)
+    Let xs: List(T)
+    Returns: List(U)
+    Means: xs.map f
+    Render latex: \operatorname{{map}}({f},{xs})
+
+Notation filter(p,xs):
+    Let T: Type
+    Let p: Function(T,Proposition)
+    Let xs: List(T)
+    Returns: List(T)
+    Means: by classical exact xs.filter (fun x => decide (p x))
+    Render latex: \operatorname{{filter}}({p},{xs})
+
+Notation choose(b,x,y):
+    Let T: Type
+    Let b: Boolean
+    Let x,y: T
+    Returns: T
+    Means: if b then x else y
+    Render latex: \operatorname{{choose}}({b},{x},{y})
+
+Notation count(b,w):
+    Let b: Boolean
+    Let w: List(Boolean)
+    Returns: Natural
+    Means: w.count b
+    Render latex: \operatorname{{count}}({b},{w})
+
+Notation real index(k: Natural): Real:
+    Means: (k : ℝ)
+    Render latex: {k}
+
+Notation sum matrices(xs):
+    Let n: Natural
+    Let xs: List(Matrix(n,n,Real))
+    Returns: Matrix(n,n,Real)
+    Means: xs.sum
+    Render latex: \operatorname{{sum}}({xs})
+
+Notation ordered product(xs):
+    Let n: Natural
+    Let xs: List(Matrix(n,n,Real))
+    Returns: Matrix(n,n,Real)
+    Means: xs.prod
+    Render latex: \operatorname{{orderedProduct}}({xs})
+
+Notation sum before(m,f):
+    Let n: Natural
+    Let m: Natural
+    Let f: Function(Natural,Matrix(n,n,Complex))
+    Returns: Matrix(n,n,Complex)
+    Means: ∑ k ∈ Finset.range m, f k
+    Render latex: \operatorname{{sumBefore}}({m},{f})
+
+Notation sum vertices(f):
+    Let n: Natural
+    Let f: Function(Vertex(n),Real)
+    Returns: Real
+    Means: ∑ i, f i
+    Render latex: \operatorname{{sumVertices}}({f})
+
+Notation entry(A,i,j):
+    Let n: Natural
+    Let A: Matrix(n,n,Real)
+    Let i,j: Vertex(n)
+    Returns: Real
+    Means: A i j
+    Render latex: {A}_{{{i},{j}}}
+
+Notation diagonal(f):
+    Let n: Natural
+    Let f: Function(Vertex(n),Real)
+    Returns: Matrix(n,n,Real)
+    Means: Matrix.diagonal f
+    Render latex: \operatorname{{diag}}({f})
+
+# Standard scalar and matrix operations.
+
+Notation pi(): Real:
+    Means: Real.pi
+    Render latex: \pi
+
+Notation imaginary unit(): Complex:
+    Means: Complex.I
+    Render latex: i
+
+Notation complex scalar(x: Real): Complex:
+    Means: (x : ℂ)
+    Render latex: {x}
+
+Notation complex exponential(z: Complex): Complex:
+    Means: Complex.exp z
+    Render latex: \exp({z})
+
+Notation complex matrix(A):
+    Let n: Natural
+    Let A: Matrix(n,n,Real)
+    Returns: Matrix(n,n,Complex)
+    Means: Complex.ofRealHom.mapMatrix A
+    Render latex: {A}
+
+Notation real transpose(A):
+    Let n: Natural
+    Let A: Matrix(n,n,Real)
+    Returns: Matrix(n,n,Real)
+    Means: A.transpose
+    Render latex: {A}^{{\mathsf{{T}}}}
+
+Condition Hermitian(M):
+    Let n: Natural
+    Let M: Matrix(n,n,Complex)
+    From Lean: M.IsHermitian
+    Render latex: {M}\text{{ is Hermitian}}
+    Assumption name: Hermitian symmetry of {M}

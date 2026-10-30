@@ -51,7 +51,7 @@ def highlight(line):
         pos=m.end()
     return ''.join(out)
 
-DECL = re.compile(r'^ *(Result|Theorem|Context|Define|Notation|Type|Source)\s+(.+?):?\s*$',re.I)
+DECL = re.compile(r'^ *(Result|Theorem|Context|Define|Notation|Condition|Type|Source)\s+(.+?):?\s*$',re.I)
 
 def collect(root=ROOT):
     files=[]

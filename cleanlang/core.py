@@ -22,9 +22,10 @@ def _expression_lines(text):
     depth = 0
     continuation_column = 0
     conclusion_column = None
+    assumption_list = False
     def unfinished(line):
         last = re.search(r'('+ID+r'|[^\w\s])$', line)
-        return bool(last and (last[0].lower() in Expressions.PREC or
+        return (assumption_list and line.rstrip().endswith(',')) or bool(last and (last[0].lower() in Expressions.PREC or
                               last[0].lower() in ('not', '¬')))
     for i, raw in enumerate(lines):
         stripped = raw.strip()
@@ -34,11 +35,12 @@ def _expression_lines(text):
         if start is None:
             if conclusion_column is not None and column <= conclusion_column:
                 conclusion_column = None
-            if re.fullmatch(r'(?:Conclude|Equals)\s*:', stripped, re.I):
+            assumption_list = bool(re.match(r'Assume\b',stripped,re.I))
+            if re.fullmatch(r'(?:Conclude|Equals|Holds when)\s*:', stripped, re.I):
                 conclusion_column = column
                 continue
             expression = conclusion_column is not None or re.match(
-                r'(Let|Define|Notation|Assume|Conclude|Returns|Equals)\b', stripped, re.I)
+                r'(Let|Define|Notation|Condition|Assume|Conclude|Returns|Equals|Holds when)\b', stripped, re.I)
             if not expression:
                 continue
             depth = stripped.count('(') - stripped.count(')')
@@ -48,7 +50,7 @@ def _expression_lines(text):
         else:
             if depth <= 0 and column < continuation_column:
                 raise CleanError(f'line {i + 1}: continued expression must be indented at least two spaces beyond its first line')
-            if re.match(r'(Let|Define|Assume|Conclude|Result|Theorem|Context|Import|Attribution|Returns|Means|Render)\b', stripped, re.I):
+            if re.match(r'(Let|Define|Condition|Assume|Conclude|Result|Theorem|Context|Import|Attribution|Returns|Means|Render|Holds when|Assumption name)(?=\s|:|$)', stripped, re.I):
                 raise CleanError(f'line {i + 1}: expected a continued expression, not a new clause')
             output[start] += ' ' + stripped
             output[i] = ''
@@ -106,6 +108,7 @@ class Clause:
     names: list
     value: object
     line: int
+    label: str = ''
 @dataclass
 class Result:
     name: str
@@ -346,7 +349,7 @@ def binary(op,a,b):
     return Expr('('+a.lean+' '+lop+' '+b.lean+')',tex,t,prec,['Operator',op,a.tree,b.tree])
 
 def _parse_flat(text,reg):
-    results=[]; r=None; env={}; mode=None; conclusion=[]
+    results=[]; r=None; env={}; labels=set(); mode=None; conclusion=[]
     attribution_seen=False
     def finish():
         if r is None: return
@@ -365,7 +368,7 @@ def _parse_flat(text,reg):
             if indent==0:
                 m=re.fullmatch(r'(?:result|theorem)\s+('+ID+r'(?:\s+\w+)*):',s,re.I)
                 if not m: raise CleanError('Expected Result name: at column 1')
-                finish(); r=Result(re.sub(r'[_\s]+', '_', m[1]),line=num); env={}; mode=None; conclusion=[]; attribution_seen=False
+                finish(); r=Result(re.sub(r'[_\s]+', '_', m[1]),line=num); env={}; labels=set(); mode=None; conclusion=[]; attribution_seen=False
                 if any(x.name==r.name for x in results): raise CleanError('Duplicate result name')
                 continue
             if r is None: raise CleanError('Clause outside result')
@@ -391,13 +394,14 @@ def _parse_flat(text,reg):
                 mode='conclude'; rest=re.sub(r'^conclude\s*:?', '',s,flags=re.I).strip()
                 if rest: conclusion.append(rest)
                 continue
-            m=re.fullmatch(r'assume\s+('+ID+r')\s*:\s*(.+)',s,re.I)
+            m=re.fullmatch(r'assume\s+(.+)',s,re.I)
             if m:
-                name,expr=m.groups()
-                if name in env: raise CleanError('Duplicate name: '+name)
-                value=Expressions(reg,env).parse(expr)
-                if value.type!=PROP: raise CleanError('Assume requires a proposition')
-                r.clauses.append(Clause('assume',[name],value,num)); env[name]=Expr(name,texid(name),PROP); continue
+                from .conditions import assumption_items
+                for label,name,value in assumption_items(m[1],reg,env):
+                    if name in env or label in env or name in labels or label in labels: raise CleanError('Duplicate assumption/local name: '+label)
+                    labels.update((name,label))
+                    r.clauses.append(Clause('assume',[name],value,num,label))
+                continue
             m=re.fullmatch(r'(let|define)\s+(.+)',s,re.I)
             if not m: raise CleanError('Expected Let, Define, Assume, Attribution, or Conclude')
             verb,tail=m.groups(); typed=re.fullmatch(r'(.+?)\s*(?::|\bbe\b)\s*(.+)',tail,re.I)
@@ -405,20 +409,20 @@ def _parse_flat(text,reg):
                 if verb.lower()=='define': raise CleanError('Define is a synonym for value definitions only')
                 ns,ts=typed.groups(); names=[n.strip() for n in ns.split(',')]; t=reg.type(ts,env)
                 for name in names:
-                    if not re.fullmatch(ID,name) or name in env: raise CleanError('Invalid or duplicate name: '+name)
+                    if not re.fullmatch(ID,name) or name in env or name in labels: raise CleanError('Invalid or duplicate name: '+name)
                     env[name]=Expr(name,texid(name),t)
                 r.clauses.append(Clause('let',names,t,num))
             else:
                 m=re.fullmatch(r'('+ID+r')\s*=\s*(.+)',tail)
                 if not m: raise CleanError('Expected let x: Type, let x be Type, or let x = expression')
                 name,rhs=m.groups()
-                if name in env: raise CleanError('Duplicate name: '+name)
+                if name in env or name in labels: raise CleanError('Duplicate name: '+name)
                 try: reg.type(rhs,env)
                 except CleanError: pass
                 else: raise CleanError('Cannot use let x = Type; use let x: Type or let x be Type')
                 value=Expressions(reg,env).parse(rhs)
                 if value.type==NUM: value.type=NAT
-                if value.type==PROP: raise CleanError('Use Assume for named propositions')
+                if value.type==PROP: raise CleanError('Local condition abbreviations are not implemented; use a top-level Condition declaration')
                 env[name]=Expr(name,texid(name),value.type); r.clauses.append(Clause('define',[name],value,num))
         except CleanError as e: raise CleanError(f'line {num}: {e}') from e
     finish()
@@ -454,7 +458,7 @@ def _select_context_parameters(result,inherited):
         elif clause.kind=='define' and not keep:
             keep=clause.names[0] in used
         if keep:
-            kept.append(Clause(clause.kind,names,clause.value,clause.line))
+            kept.append(Clause(clause.kind,names,clause.value,clause.line,clause.label))
             used.difference_update(names)
             used.update(_dependencies(clause.value))
     return list(reversed(kept))
@@ -511,13 +515,14 @@ def parse(text,reg):
                 for clause in r.clauses: clause.line=original[clause.line-1]
                 offset=0; contexts=[]
                 for a in ancestors:
-                    count=len(a['declarations'])
+                    source_lines={num for num,_ in a['declarations']}
+                    count=sum(c.line in source_lines for c in r.clauses)
                     if a['key'] not in cache:
                         cache[a['key']]=Context(a['name'],a['key'],r.clauses[offset:offset+count],list(contexts),a['line'])
                     contexts.append(cache[a['key']]); offset+=count
                 r.contexts=contexts
-                r.local_clauses=r.clauses[len(inherited):]
-                r.clauses=_select_context_parameters(r,len(inherited))
+                r.local_clauses=r.clauses[offset:]
+                r.clauses=_select_context_parameters(r,offset)
                 results.append(r)
             i=stop
     scope(0,len(lines),0,[])
@@ -532,7 +537,7 @@ def lean(results,reg,imports):
         out+=['/--']+[k+': '+v.replace('/-','/ -').replace('-/','- /') for k,v in r.attribution.items()]+['-/',f'def {r.name} : Prop :=']
         for c in r.clauses:
             if c.kind=='let': out+=['  ∀ ('+' '.join(c.names)+' : '+reg.render_type(c.value,'lean')+'),']
-            elif c.kind=='assume': out+=[f'  ∀ ({c.names[0]} : {c.value.lean}),']
+            elif c.kind=='assume': out+=[f'  ∀ («{c.names[0]}» : {c.value.lean}),']
             else: out+=[f'  let {c.names[0]} : {reg.render_type(c.value.type,"lean")} := {c.value.lean};']
         out+=['  '+r.conclusion.lean,'']
     return '\n'.join(out+['end CleanStatements',''])
@@ -546,7 +551,7 @@ def _latex_clauses(clauses,reg):
             subjects=('$'+names[0]+'$') if len(names)==1 else ', '.join('$'+n+'$' for n in names[:-1])+' and $'+names[-1]+'$'
             out+=['Let '+subjects+' be '+reg.describe_type(c.value,len(names)>1)+'.']
         elif c.kind=='define': out+=['Let $'+ns+' = '+c.value.tex+'$.']
-        else: out+=['Assume $'+c.value.tex+r'$ (\texttt{'+textext(c.names[0])+'}).']
+        else: out+=['Assume $'+c.value.tex+r'$ (\texttt{'+textext(c.label or c.names[0])+'}).']
     return out
 
 

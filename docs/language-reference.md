@@ -363,3 +363,22 @@ explicit environments. The existing general elaboration-conformance gaps remain.
 `function(identifier: type-expression, expression)` as an atom. That document
 specifies its unique parse, lexical scope, arrow interface, and constructive target.
 General binding notation remains outside this draft.
+
+
+:::
+
+:::llm gpt-6 2026-10-30 role=assisted
+
+## Conditions and grouped assumptions
+
+The [condition extension](conditions.md) specifies `Condition name(parameters):`,
+`Holds when`, and `Assumption name` templates. A condition has a fixed logical result,
+so it has no `Returns` annotation. `Assume c(A), c(B)` creates two hypotheses, splitting
+commas only outside parentheses. Explicit labels apply to one item. Automatic names
+are derived from templates and canonical argument ASTs; collisions are errors.
+Hypothesis labels do not enter expression scope. The [EBNF fragment](../grammar/conditions.ebnf)
+is normative documentation, not an input that generates the current parser.
+The magnetic study now imports placeholder `library/Common.clean` for standard vocabulary,
+superseding the earlier requirement to inline that vocabulary in its authored Clean file.
+Generated Lean files remain standalone apart from Mathlib.
+:::
