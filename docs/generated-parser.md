@@ -144,3 +144,20 @@ conflict resolution or Lean elaboration. No parser-table change is needed for th
 lexical extension. Comment erasure/target invariance and error cases are exercised
 in `tests/test_layout.py`.
 :::
+
+:::llm gpt-6 2026-11-05 role=assisted
+
+Literate payloads use the explicit source-mode scanner in `cleanlang/literate.py`.
+It emits private prose/documentation tokens with immutable payload records before
+layout. The generated grammar owns placement and attachment; typed elaboration
+does not choose those parses. See [the lexical and semantic contract](literate-text.md).
+:::
+
+:::llm gpt-6 2026-11-05 role=assisted
+
+Shared prose productions expose both header and local-clause token categories in
+some LALR states. Their `Define` spellings are disjoint lexically: a definition
+header contains no `=`, while a local `Define name = expression` line requires it.
+Fragment productions still validate exact names, signatures, and expressions.
+This eliminates a strict lexer collision without priority or first-match rules.
+:::

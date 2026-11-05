@@ -6,6 +6,26 @@
   ],
   "patterns": [
     {
+      "name": "markup.raw.clean",
+      "begin": "(?i)^( *)Text(?: +(plain|latex|typst))? *: *$",
+      "end": "^(?!\\1 +)(?= *\\S)"
+    },
+    {
+      "name": "markup.raw.clean",
+      "begin": "^( *)\"\"\"(?i:plain|latex|typst)? *$",
+      "end": "^\\1\"\"\" *$"
+    },
+    {
+      "name": "comment.block.documentation.clean",
+      "begin": "^ */-(?:-|!)",
+      "end": "-/",
+      "patterns": [
+        {
+          "include": "#block"
+        }
+      ]
+    },
+    {
       "name": "meta.embedded.line.lean.clean",
       "match": "(?i)^ *(?:Means|From Lean)\\s*:.*$"
     },

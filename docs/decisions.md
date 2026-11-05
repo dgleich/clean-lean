@@ -169,3 +169,18 @@ uses actual code columns. Embedded Lean/rendering fields remain opaque. Clean do
 not adopt Lean documentation-comment semantics. See the current
 [lexical contract](spec.md#comment-lexing-implemented) for exact precedence and scope.
 :::
+
+:::llm gpt-6 2026-11-05 role=assisted
+
+## Literate prose and Lean documentation
+
+Adopt the user's `Text:` and triple-quoted forms and Lean's distinction between
+free module documentation (`/-!`) and attached declaration documentation (`/--`).
+Do not introduce `Section:` or other document-structure keywords. Use literal
+LaTeX/Typst in tagged blocks for headings and layout. Default prose is plain text;
+this is an implementation decision, not an implicit Markdown dialect. Tags are
+case-insensitive. The [literate-text contract](literate-text.md) records exact
+boundaries, nesting and attachment, and the first-slice placement/rendering limits.
+LaTeX is the implemented document backend; Typst payloads are parsed and preserved,
+but LaTeX explicitly rejects them until a Typst renderer exists.
+:::

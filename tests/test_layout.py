@@ -117,7 +117,8 @@ class LayoutTests(unittest.TestCase):
         from cleanlang.core import comment_lines
         self.assertEqual(comment_lines('-- /- ignored -/')[0][0].strip(), '')
         self.assertEqual(comment_lines('/- " -- /- nested -/ -/x')[0][0].strip(), 'x')
-        self.assertEqual(comment_lines('/-- text -//-! text -/x')[0][0].strip(), 'x')
+        with self.assertRaisesRegex(CleanError, 'documentation'):
+            comment_lines('/-- text -//-! text -/x')
         with self.assertRaises(CleanError):
             self.output(self.result().replace('Real', 'Re/- split -/al'))
         with self.assertRaisesRegex(CleanError, 'unclosed'):

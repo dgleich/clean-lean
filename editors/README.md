@@ -82,6 +82,10 @@ remain lexical approximations, particularly when comments precede opaque fields.
 Emacs rescans the buffer prefix to recover block nesting; incremental highlighting
 and performance tuning remain future work.
 
+`Text:` bodies and triple-quoted bodies are displayed as prose; `/--` and `/-!`
+have documentation highlighting. The offline browser uses exact scanner regions.
+Editor grammars remain lexical approximations; source validation remains authoritative.
+
 Checks:
 
 ```sh

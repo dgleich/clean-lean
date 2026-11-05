@@ -216,6 +216,29 @@ explains the distinction and the independent Lean comparison-complexity proof.
 
 :::llm 2026-10-23 role=assisted
 
+## Write a paper around the statements
+
+Published prose can use indented `Text:` blocks or equivalent triple-quoted blocks.
+There is no separate Clean heading syntax: put headings inside a tagged payload.
+
+```text
+Text latex:
+    \section{Matrix products}
+    We study $n \times n$ matrices.
+
+"""latex
+\section{Matrix products}
+We study $n \times n$ matrices.
+"""
+```
+
+Untagged text is plain prose. `/-! … -/` supplies free prose, while `/-- … -/`
+attaches documentation to the following definition or result and its generated
+Lean declaration. Ordinary comments remain unpublished. See the
+[literate source](examples/literate.clean), [typeset specimen](generated/literate.pdf),
+and [precise syntax and limits](docs/literate-text.md). LaTeX rendering is implemented;
+Typst payloads are preserved but require a future Typst renderer.
+
 ## Try it
 
 Python 3.10+ is sufficient for the core translator. BibTeX imports use an optional dependency: install with `python3 -m pip install -e ".[bibtex]"`. Run from this directory:

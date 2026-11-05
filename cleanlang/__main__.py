@@ -2,7 +2,7 @@ import argparse
 import json
 from pathlib import Path
 from .modules import load_document
-from .core import CleanError, Environment, lean, latex, bibliography
+from .core import CleanError, Environment, lean, latex, bibliography, Document
 
 
 def combine(environments):
@@ -19,6 +19,8 @@ def combine(environments):
             merged.sources.entries[name]=value
         merged.sources.references.update(env.sources.references)
         merged.notation_definitions.update(env.notation_definitions)
+        merged.declaration_docs.update(env.declaration_docs)
+        merged.module_docs.extend(env.module_docs)
         merged.lean_imports.extend(i for i in env.lean_imports if i not in merged.lean_imports)
     return merged
 
@@ -35,7 +37,8 @@ def main():
             env=Environment()
             results=load_document(path,env)
             batches.append((path,results,env))
-        all_results=[r for _,rs,_ in batches for r in rs]
+        all_results=Document([r for _,rs,_ in batches for r in rs],
+                             [event for _,rs,_ in batches for event in rs.events])
         names=[r.name for r in all_results]
         if len(set(names))!=len(names): raise CleanError('Duplicate result names across input files')
         merged=combine([env for _,_,env in batches])
@@ -48,6 +51,7 @@ def main():
                 (dest/(path.stem+'.lean')).write_text(lean(results,env,[]))
                 metadata=[{'name':r.name,'title':r.title,'line':r.line,'file':str(path),
                     'contexts':[{'name':c.name,'title':c.title,'key':c.key,'line':c.line} for c in r.contexts],
+                    'documentation':r.documentation.body if r.documentation else None,
                     'attribution':r.attribution,'resolved_attribution':env.sources.resolve(r.attribution)} for r in results]
                 (dest/(path.stem+'.metadata.json')).write_text(json.dumps(metadata,indent=2,ensure_ascii=False)+'\n')
             (dest/'references.tex').write_text(bibliography(all_results,merged))

@@ -19,13 +19,13 @@ main{max-width:1200px;margin:auto;padding:40px 28px 70px}h1{font-size:clamp(2rem
 <body>
 <llm date="2026-10-23" role="assisted" style="display:contents">
 <main>
-<div class="eyebrow">Local language reference · For Lean users · Updated 19 October 2026</div>
+<div class="eyebrow">Local language reference · For Lean users · Updated 5 November 2026</div>
 <h1>Clean to Lean</h1>
 <p>New proposed examples: <a href="sorting-examples.md">insertion sort, heapsort, and their runtime statements</a>. Recursion and pattern syntax remain unspecified; the heapsort comparison proof is an independent Lean reference.</p>
 <p><llm model="gpt-6" date="2026-10-29" role="assisted">Worked proof project: <a href="../studies/magnetic/README.md">magnetic matrices and walk profiles</a>. The study uses a shared standard Clean library and includes Clean-authored word profiles and Fourier sums, with agreement proofs against an independent Lean reference.</llm></p>
 <div class="intro"><p>Read Clean syntax in terms of Lean binders, terms, declarations, and elaboration. Each mapping records its status so that proposed syntax cannot be mistaken for a compiler feature.</p>
 <p>The Lean panels are <strong>readable equivalents or explicitly labelled sketches</strong>, not canonical kernel-expression dumps. Snippets marked as fragments assume the surrounding parameters and explicitly imported mathematical vocabulary. The compiler’s exact unique-target obligation is stronger than these explanatory displays.</p></div>
-<nav aria-label="Jump to topic"><a href="#result">Statements</a><a href="#notation">Definitions</a><a href="#sum">Binding forms</a><a href="#imports">Imports</a><a href="#contract">Acceptance contract</a></nav>
+<nav aria-label="Jump to topic"><a href="#result">Statements</a><a href="#notation">Definitions</a><a href="#sum">Binding forms</a><a href="#imports">Imports</a><a href="#literate-text">Prose and documentation</a><a href="#contract">Acceptance contract</a></nav>
 <div class="legend" aria-label="Status legend"><span><b class="badge implemented">Implemented</b> Current restricted prototype</span><span><b class="badge accepted">Accepted design</b> Not fully implemented</span><span><b class="badge proposed">Proposed</b> Grammar or semantics still open</span></div>
 <div class="controls" hidden id="controls"><label>Find a mapping<input id="search" type="search" placeholder="Try lambda, context, coercion, or sum"></label><label>Status<select id="status"><option value="all">All statuses</option><option value="implemented">Implemented</option><option value="accepted">Accepted design</option><option value="proposed">Proposed</option></select></label></div>
 <p id="count" role="status" aria-live="polite"></p>
@@ -262,6 +262,38 @@ spaces while preserving newlines and source positions. Quoted text and embedded
 Lean/rendering fields retain their own syntax. Reserve adjacent comment delimiters
 before math tokens: write <code>x - -y</code> for subtraction followed by negation.
 See the <a href="spec.md#comment-lexing-implemented">precise lexical rules</a>.</p>
+<!-- generated: gpt-6 2026-11-05 role=assisted -->
+<article id="literate-text" data-status="implemented" class="mapping">
+<header><h2><a href="#literate-text">Published prose and declaration documentation</a></h2><span class="badge implemented">Implemented first slice</span></header>
+<pre><code>Text latex:
+    \section{Matrix products}
+    We study $n \times n$ matrices.
+
+"""latex
+\section{Matrix products}
+We study $n \times n$ matrices.
+"""
+
+/-- The square of a real number. -/
+Define square(x: Real): Real:
+    Equals: x*x</code></pre>
+<p>The first two blocks have the same prose node. Free prose emits Lean
+<code>/-! … -/</code>; attached documentation emits <code>/-- … -/</code> before
+the generated declaration. Mathematical terms and generated identifiers are unchanged.</p>
+<pre><code>/-!
+```latex
+\section{Matrix products}
+We study $n \times n$ matrices.
+```
+-/
+/-- The square of a real number. -/
+noncomputable def square (x : Real) : Real := x * x</code></pre>
+<p>The Lean definition uses a schematic readable name. Untagged prose is plain text;
+<code>/-! … -/</code> is another plain-prose spelling. Headings belong in the payload,
+not in a Clean Section declaration. Imports do not insert library prose into the paper.
+Typst bodies are preserved but rejected by the LaTeX renderer; a Typst renderer remains
+pending. See <a href="literate-text.md">the full contract and limits</a>.</p>
+</article>
 <article id="layout" data-status="accepted" class="mapping">
   <header><h2><a href="#layout">Layout determines scope before mathematical meaning</a></h2><span class="badge accepted">Accepted design</span></header>
   <p>At least two spaces open a block; siblings align; tabs are forbidden. Inline expression continuation depends on whether the expression is incomplete.</p>

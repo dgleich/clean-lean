@@ -7,17 +7,23 @@ syntax match cleanMathOperator '[+*/^=<>−-]\|[↔→≤≥≠∧∨¬∈⊆∪
 syntax match cleanMathDelimiter '[(),:;]'
 syntax match cleanMathLogic '\c\<\%(and\|or\|not\|function\)\>'
 syntax match cleanMathSignature '(.*\ze:\s*$' contained
-syntax match cleanMathKeyword '\c^ *\%(Condition\|Holds when\|Let\|Define\|Assume\|Conclude\|Returns\|Equals\|Alias\|Phrase\|Result\|Theorem\|Context\|Notation\|Condition\|Type\|Source\)\>' containedin=ALLBUT,cleanMathComment,cleanMathOpaque,cleanMathLean,cleanMathImport
+syntax match cleanMathKeyword '\c^ *\%(Condition\|Holds when\|Let\|Define\|Assume\|Conclude\|Returns\|Equals\|Alias\|Phrase\|Result\|Theorem\|Context\|Notation\|Condition\|Type\|Source\)\>' containedin=ALLBUT,cleanMathComment,cleanMathOpaque,cleanMathLean,cleanMathImport,cleanMathText,cleanMathTriple,cleanMathDoc
 syntax match cleanMathDeclaration '\c^ *\%(Result\|Theorem\|Context\|Define\|Notation\|Condition\|Type\|Source\)\>.*:$' contains=cleanMathKeyword,cleanMathDelimiter,cleanMathSignature
 syntax match cleanMathTypedLet '\c^ *Let\>.*\%(:\|\<be\>\).*' contains=cleanMathKeyword,cleanMathDelimiter
 syntax match cleanMathMetadataKey '\c^ *\%(Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:' contained
 syntax match cleanMathOpaque '\c^ *\%(Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:.*$' contains=cleanMathMetadataKey
 syntax match cleanMathLean '\c^ *\%(Means\|From Lean\)\s*:.*$'
 syntax match cleanMathImport '\c^ *Import\>.*$'
-syntax region cleanMathQuote start='"' end='"' oneline containedin=ALLBUT,cleanMathComment,cleanMathBlock,cleanMathLean,cleanMathOpaque
-syntax match cleanMathComment '--.*$' containedin=ALLBUT,cleanMathQuote,cleanMathLean,cleanMathRender,cleanMathBlock
-syntax region cleanMathBlock start='/-' end='-/' contains=cleanMathBlock containedin=ALLBUT,cleanMathQuote,cleanMathLean,cleanMathRender,cleanMathComment
+syntax region cleanMathQuote start='"' end='"' oneline containedin=ALLBUT,cleanMathComment,cleanMathBlock,cleanMathLean,cleanMathOpaque,cleanMathText,cleanMathTriple,cleanMathDoc
+syntax match cleanMathComment '--.*$' containedin=ALLBUT,cleanMathQuote,cleanMathLean,cleanMathRender,cleanMathBlock,cleanMathText,cleanMathTriple,cleanMathDoc
+syntax region cleanMathBlock start='/-' end='-/' contains=cleanMathBlock containedin=ALLBUT,cleanMathQuote,cleanMathLean,cleanMathRender,cleanMathComment,cleanMathText,cleanMathTriple,cleanMathDoc
 syntax match cleanMathRender '\c^ *Render\%( latex\)\?\s*:.*$'
+syntax region cleanMathText start='\c^\z( *\)Text\%( \+\%(plain\|latex\|typst\)\)\? *: *$' end='^\%(\z1 \+\)\@!\ze *\S'
+syntax region cleanMathTriple start='\c^\z( *\)"""\%(plain\|latex\|typst\)\? *$' end='^\z1""" *$'
+syntax region cleanMathDoc matchgroup=cleanMathDoc start='^ */-[-!]' end='-/' contains=cleanMathBlock
+highlight default link cleanMathText String
+highlight default link cleanMathTriple String
+highlight default link cleanMathDoc SpecialComment
 highlight default link cleanMathRender String
 highlight default link cleanMathBlock Comment
 syntax match cleanMathTab '\t' containedin=ALL

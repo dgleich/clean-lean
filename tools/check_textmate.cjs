@@ -36,6 +36,15 @@ const tm=require('vscode-textmate'),onig=require('vscode-oniguruma');
  has('  Let x: /- inline -/ Real','inline','comment.block.clean');
  has('  Let x: /- inline -/ Real -- end','--','comment.line.double-dash.clean');
  assert(!scopeAt('  Let x: /- inline -/ Real','Real').includes('comment.block.clean'));
+ has('/-- A definition. -/','definition','comment.block.documentation.clean');
+ for (const opener of ['Text latex:', '\"\"\"latex']) {
+   let state=grammar.tokenizeLine(opener).ruleStack;
+   let body=grammar.tokenizeLine('  Result fake: -- literal prose',state);
+   assert(body.tokens.every(t=>t.scopes.includes('markup.raw.clean')));
+   state=body.ruleStack;
+   if(opener.startsWith('"')) state=grammar.tokenizeLine('"""',state).ruleStack;
+   assert(!grammar.tokenizeLine('Result real:',state).tokens[0].scopes.includes('markup.raw.clean'));
+ }
  console.log('TextMate/Oniguruma scope checks passed');
 })().catch(e=>{console.error(e);process.exitCode=1;});
 

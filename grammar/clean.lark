@@ -50,7 +50,10 @@ phrase_line: "Phrase"i PHRASE "=>" OPAQUE
 field: FIELD ":" OPAQUE
 // Document blocks are recognized from lexical logical lines, after layout/continuation.
 document: (_NL | top_level)*
-?top_level: declaration | result | context | import_stmt | alias_stmt | phrase_stmt
+?top_level: declaration | result | context | import_stmt | alias_stmt | phrase_stmt | prose | documented
+prose: PROSE_LINE _NL
+documented: DOC_LINE _NL (declaration | result)
+documented_result: DOC_LINE _NL result
 import_stmt: IMPORT_LINE _NL
 alias_stmt: ALIAS_LINE _NL
 phrase_stmt: PHRASE_LINE _NL
@@ -65,7 +68,7 @@ result: RESULT_LINE _NL _INDENT result_field* conclusion _DEDENT
              | ATTRIBUTION_LINE _NL (_INDENT attribution_entry+ _DEDENT)? -> attribution
 conclusion: CONCLUDE_LINE _NL (_INDENT expression_line+ _DEDENT)?
 attribution_entry: FIELD_LINE _NL
-context: CONTEXT_LINE _NL _INDENT context_clause* (result | context)+ _DEDENT
+context: CONTEXT_LINE _NL _INDENT (context_clause | prose)* (result | context | documented_result) (result | context | prose | documented_result)* _DEDENT
 ?context_clause: LET_LINE _NL -> context_let
                | ASSUME_LINE _NL -> context_assume
 DECL: /(?i:Notation|Define|Condition)(?!\w)/
@@ -92,13 +95,15 @@ STRING: /"[^"\n]+"/
 MODULE: /[A-Za-z_][\w.]*/
 PHRASE: /\S[^\n]*?(?=\s*=>)/
 OPAQUE: /\S[^\n]*/
+PROSE_LINE: /\uE000T[0-9]+/
+DOC_LINE: /\uE000D[0-9]+/
 IMPORT_LINE: /(?i:Import)[ ]+[^\n]+/
 ALIAS_LINE: /(?i:Alias)[ ]+[^\n]+/
 PHRASE_LINE: /(?i:Phrase)[ ]+[^\n]+/
-HEADER_LINE: /(?i:Notation|Define|Condition|Type|Source)[ ]+[^\n]+/
+HEADER_LINE: /(?i:Notation|Condition|Type|Source)[ ]+[^\n]+|(?i:Define)[ ]+[^=\n]+/
 RESULT_LINE: /(?i:Result|Theorem)[ ]+[^\n]+/
 CONTEXT_LINE: /(?i:Context)[ ]+[^\n]+/
-LET_LINE: /(?i:Let|Define)[ ]+[^\n]+/
+LET_LINE: /(?i:Let)[ ]+[^\n]+|(?i:Define)[ ]+[^ =\n]+[ ]*=[^\n]*/
 ASSUME_LINE: /(?i:Assume)[ ]+[^\n]+/
 ATTRIBUTION_LINE: /(?i:Attribution)[ ]*:[^\n]*/
 CONCLUDE_LINE: /(?i:Conclude)(?!\w)[^\n]*/

@@ -42,6 +42,13 @@ class ReviewTests(unittest.TestCase):
         self.assertIn('Real', rendered.split('<span class="comment">/- note -/</span>')[1])
         self.assertEqual(html.unescape(re.sub('<[^>]*>', '', rendered)), source)
 
+    def test_literate_payload_is_not_highlighted_as_clean_code(self):
+        source='Text latex:\n  Result fake: -- prose\n"""\n/- literal\n"""'
+        lines=review.highlight_source(source)
+        self.assertIn('class="string"',lines[1])
+        self.assertNotIn('class="comment"',lines[1])
+        self.assertNotIn('class="keyword"',lines[3])
+
     def test_import_navigation_and_fresh_targets(self):
         files={f['path']:f for f in review.collect()}
         sample=files['library/analysis.clean']

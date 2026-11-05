@@ -214,25 +214,27 @@ def load_module(path, env, *, document=False):
     def visit(file,root=False):
         file=file.resolve()
         if file in active:raise CleanError('Cyclic Clean import: '+' -> '.join(map(str,active+[file])))
-        if file in env.loaded_modules:return ''
+        if file in env.loaded_modules:return []
         active.append(file)
         try:
             try:
                 normalized=normalize_layout(file.read_text())
                 nodes=parse_document(normalized)
             except CleanError as e:raise CleanError(f'{file}: {e}') from e
-            output=['']*len(normalized.splitlines());started=False
+            output=[];started=False
             for node in nodes:
                 try:
+                    if node.kind=='prose':
+                        if root: output.append(node)
+                        else: env.module_docs.append(node.payload)
+                        continue
                     if node.kind in ('result','context'):
                         if not root:raise CleanError('Imported modules may contain only declarations and imports')
                         started=True
-                        def copy(n,indent=0):
-                            output[n.line-1]=' '*indent+n.text
-                            for child in n.children:copy(child,indent+4)
-                        copy(node);continue
+                        output.append(node);continue
                     if started:raise CleanError('Imports and declarations must precede results')
                     line=node.text
+                    before=set(env.notation_definitions)
                     if node.kind=='import_stmt':
                         tree=syntax_parse(line,'import_line');value=str(tree.children[0])
                         if tree.data=='lean_import':
@@ -257,10 +259,18 @@ def load_module(path, env, *, document=False):
                         else:
                             key=str(syntax_parse(line,'source_header').children[0])
                             env.sources.declare(key,fields_map(fields),file.parent)
+                    if node.documentation:
+                        keys=set(env.notation_definitions)-before
+                        if len(keys)!=1:
+                            raise CleanError('Documentation requires a declaration with one generated Lean definition')
+                        env.declaration_docs[keys.pop()]=node.documentation
+                        if root:
+                            from .syntax import Node
+                            output.append(Node('prose','',node.documentation.line,payload=node.documentation))
                 except (ValueError,KeyError) as e:raise CleanError(f'{file}:{node.line}: {e}') from e
         finally:active.pop()
         env.loaded_modules.add(file)
-        return '\n'.join(output)
+        return output
     return visit(Path(path),root=document)
 
 

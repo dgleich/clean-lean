@@ -1,0 +1,36 @@
+-- generated: gpt-6 2026-11-05 role=assisted; LLM-authored portions; see PROVENANCE.md
+Import "../library/linear_algebra.clean"
+Import "../library/sources.clean"
+
+"""latex
+\section{Determinants of matrix products}
+This short paper is authored in Clean. Its prose and theorem statements
+share a source, while the mathematical statements also translate to Lean.
+"""
+
+Text:
+    The determinant converts matrix multiplication into scalar multiplication.
+    The explanation is published prose; it introduces no hidden assumptions.
+
+/-- Multiplicativity for complex square matrices. -/
+Result determinant product:
+    Attribution: mathlib; Matrix.det_mul; specialized
+    Let n: Natural
+    Let A, B: Matrix(n,n,Complex)
+    Conclude: det(A*B) = det(A)*det(B)
+
+Text latex:
+    \subsection{Reversing the order}
+    Since scalar multiplication commutes, the two products $AB$ and $BA$
+    have the same determinant.
+
+Result determinant product swap:
+    Attribution: mathlib; Matrix.det_mul_comm; specialized
+    Let n: Natural
+    Let A, B: Matrix(n,n,Complex)
+    Conclude: det(A*B) = det(B*A)
+
+/-!
+The statements above are formal mathematical propositions. These explanatory
+paragraphs are informal and do not constitute machine-checked proofs.
+-/

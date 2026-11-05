@@ -8,71 +8,18 @@ class CleanError(ValueError): pass
 ID = r'[^\W\d]\w*'
 
 def comment_lines(text):
-    """Return (masked line, comment spans), preserving physical positions.
-
-    Reserved -- and /- delimiters precede mathematical token recognition.
-    Quoted fields and embedded Lean/rendering payloads remain literal.
-    """
-    output = []
-    openings = []
-    for number, raw in enumerate(text.splitlines(), 1):
-        if '\t' in raw:
-            raise CleanError(f'line {number}: tabs are not allowed')
-        masked = list(raw)
-        spans = []
-        quoted = False
-        i = 0
-        start = 0 if openings else None
-        while i < len(raw):
-            pair = raw[i:i + 2]
-            if openings:
-                if pair == '/-':
-                    openings.append(number)
-                    i += 2
-                elif pair == '-/':
-                    openings.pop()
-                    i += 2
-                    if not openings:
-                        spans.append((start, i))
-                        masked[start:i] = ' ' * (i - start)
-                        start = None
-                else:
-                    i += 1
-                continue
-            if not quoted and not ''.join(masked[:i]).strip() and re.match(
-                    r'(?:Means|From Lean|Render(?: latex)?)\s*:', raw[i:], re.I):
-                break
-            if raw[i] == '"':
-                quoted = not quoted
-                i += 1
-            elif not quoted and pair == '--':
-                spans.append((i, len(raw)))
-                masked[i:] = ' ' * (len(raw) - i)
-                break
-            elif not quoted and pair == '/-':
-                openings.append(number)
-                start = i
-                i += 2
-            elif not quoted and pair == '-/':
-                raise CleanError(f'line {number}: unmatched block comment terminator')
-            else:
-                i += 1
-        if openings:
-            spans.append((start, len(raw)))
-            masked[start:] = ' ' * (len(raw) - start)
-        output.append((''.join(masked), spans))
-    if openings:
-        raise CleanError(f'line {openings[0]}: unclosed block comment')
-    return output
+    from .literate import scan
+    lines, _, regions = scan(text)
+    return [(line, [(a,b) for a,b,_ in spans]) for line,spans in zip(lines,regions)]
 
 
-def _expression_lines(text):
+def _expression_lines(text, *, masked=False):
     """Join incomplete Clean expressions, keeping their first source line.
 
     Consumed physical lines remain blank, so diagnostics retain line numbers.
     Lean bodies, metadata, and rendering templates are deliberately opaque.
     """
-    lines = [line for line, _ in comment_lines(text)]
+    lines = text.splitlines() if masked else [line for line, _ in comment_lines(text)]
     output = list(lines)
     start = None
     depth = 0
@@ -125,9 +72,11 @@ def normalize_layout(text):
     Widths belong to blocks, not the file. Preserve physical line numbers;
     blank/comment lines neither open nor close a block. Tabs are always errors.
     """
+    from .literate import scan, Prepared
+    lines, prose, _ = scan(text)
     columns = [0]
     output = []
-    for number, raw in enumerate(_expression_lines(text), 1):
+    for number, raw in enumerate(_expression_lines('\n'.join(lines), masked=True), 1):
         if '\t' in raw:
             raise CleanError(f'line {number}: tabs are not allowed')
         if not raw.strip():
@@ -144,7 +93,7 @@ def normalize_layout(text):
             while columns[-1] > column:
                 columns.pop()
         output.append(' ' * (4 * (len(columns) - 1)) + raw[column:])
-    return '\n'.join(output)
+    return Prepared('\n'.join(output), prose)
 
 @dataclass(frozen=True)
 class Type:
@@ -174,6 +123,7 @@ class Result:
     line: int = 0
     contexts: list = field(default_factory=list)
     local_clauses: list = field(default_factory=list)
+    documentation: object = None
     @property
     def title(self): return self.name.replace('_', ' ')
 PROP, NAT, NUM = Type('Proposition'), Type('Natural'), Type('_number')
@@ -208,6 +158,8 @@ class Environment:
         self.definitions={}
         self.lean_imports=[]
         self.loaded_modules=set()
+        self.declaration_docs={}
+        self.module_docs=[]
     def type(self,s,env=None,phrases=True,trail=()):
         s=re.sub(r'^(a|an)\s+','',s.strip(),flags=re.I)
         if phrases:
@@ -484,14 +436,23 @@ def _select_context_parameters(result,inherited):
     return list(reversed(kept))
 
 
+class Document(list):
+    """Results remain list-compatible; events retain authored prose order."""
+    def __init__(self, results=(), events=None):
+        super().__init__(results)
+        self.events=list(self) if events is None else events
+
+
 def parse(text,reg):
     """Interpret generated context/result trees; inherited scope is semantic."""
     from .syntax import document,parse as syntax_parse,name as syntax_name
-    nodes=document(normalize_layout(text))
-    results=[];names=set();context_names=set();cache={}
-    file_key=hashlib.sha256(text.encode()).hexdigest()[:12]
+    nodes=document(normalize_layout(text)) if isinstance(text,str) else text
+    results=[];events=[];names=set();context_names=set();cache={}
+    file_key=hashlib.sha256((text if isinstance(text,str) else repr(nodes)).encode()).hexdigest()[:12]
     def walk(nodes,ancestors):
         for node in nodes:
+            if node.kind=='prose':
+                events.append(node.payload);continue
             if node.kind not in ('context','result'):raise CleanError('Expected Context or Result')
             header=syntax_parse(node.text,'scope_header')
             title=syntax_name(header.children[1]);name=re.sub(r'[_\s]+','_',title)
@@ -501,7 +462,7 @@ def parse(text,reg):
                 if path in context_names:raise CleanError(f'line {node.line}: Duplicate context name')
                 context_names.add(path)
                 declarations=[(c.line,c.text) for c in node.children if c.kind.startswith('context_')]
-                children=[c for c in node.children if c.kind in ('context','result')]
+                children=[c for c in node.children if c.kind in ('context','result','prose')]
                 item={'name':name,'key':file_key+'-'+str(node.line),'line':node.line,'declarations':declarations}
                 walk(children,ancestors+[item]);continue
             if name in names:raise CleanError(f'line {node.line}: Duplicate result name')
@@ -518,6 +479,7 @@ def parse(text,reg):
                 message=re.sub(r'^line (\d+):',lambda m:'line '+str(original[int(m[1])-1])+':',str(e))
                 raise CleanError(message) from e
             r.line=node.line
+            r.documentation=node.documentation
             for clause in r.clauses:clause.line=original[clause.line-1]
             offset=0;contexts=[]
             for a in ancestors:
@@ -527,17 +489,23 @@ def parse(text,reg):
                     cache[a['key']]=Context(a['name'],a['key'],r.clauses[offset:offset+count],list(contexts),a['line'])
                 contexts.append(cache[a['key']]);offset+=count
             r.contexts=contexts;r.local_clauses=r.clauses[offset:]
-            r.clauses=_select_context_parameters(r,offset);results.append(r)
+            r.clauses=_select_context_parameters(r,offset);results.append(r);events.append(r)
     walk(nodes,[])
-    if not results:raise CleanError('No results found')
-    return results
+    if not results and not events:raise CleanError('No results found')
+    return Document(results,events)
 
 
 def lean(results,reg,imports):
+    from .literate import Prose, lean_documentation
     imports=list(dict.fromkeys([*imports,*getattr(reg,'lean_imports',[])]))
-    out=[*(f'import {i}' for i in imports),'',*getattr(reg,'notation_definitions',{}).values(),'',*(['open scoped Matrix'] if any(i == 'Mathlib' or 'Matrix' in i for i in imports) else []),'','-- Named hypothesis binders document assumptions even when not dependent.','set_option linter.unusedVariables false','','namespace CleanStatements','']
-    for r in results:
-        out+=['/--']+[k+': '+v.replace('/-','/ -').replace('-/','- /') for k,v in r.attribution.items()]+['-/',f'def {r.name} : Prop :=']
+    definitions=[(lean_documentation(reg.declaration_docs[key],True) if key in reg.declaration_docs else '')+value for key,value in reg.notation_definitions.items()]
+    out=[*(f'import {i}' for i in imports),'',*(lean_documentation(p) for p in reg.module_docs),*definitions,'',*(['open scoped Matrix'] if any(i == 'Mathlib' or 'Matrix' in i for i in imports) else []),'','-- Named hypothesis binders document assumptions even when not dependent.','set_option linter.unusedVariables false','','namespace CleanStatements','']
+    for r in getattr(results,'events',results):
+        if isinstance(r,Prose):
+            if not r.attached: out.append(lean_documentation(r))
+            continue
+        doc=r.documentation.body.replace('/-','/ -').replace('-/','- /') if r.documentation else ''
+        out+=['/--']+([doc,''] if doc else [])+[k+': '+v.replace('/-','/ -').replace('-/','- /') for k,v in r.attribution.items()]+['-/',f'def {r.name} : Prop :=']
         for c in r.clauses:
             if c.kind=='let': out+=['  ∀ ('+' '.join(c.names)+' : '+reg.render_type(c.value,'lean')+'),']
             elif c.kind=='assume': out+=[f'  ∀ («{c.names[0]}» : {c.value.lean}),']
@@ -570,6 +538,9 @@ def _latex_result(r,reg,referenced=False):
     citation='['+textext(label)+']'
     if resolved.get('url'): citation=r'\href{'+textext(resolved['url'])+'}{'+citation+'}'
     out=[r'\begin{cleanresult}{'+textext(r.title)+'}'+r'\cleanattribution{'+citation+'}']
+    if r.documentation:
+        from .literate import latex_prose
+        out.append(latex_prose(r.documentation))
     if referenced and r.contexts: out.append(_context_references(r.contexts))
     out+=_latex_clauses(r.local_clauses if referenced else r.clauses,reg)
     out+=[r'Then \['+r.conclusion.tex+r'.\]']
@@ -583,9 +554,12 @@ def _latex_result(r,reg,referenced=False):
 
 
 def latex(results,reg):
+    from .literate import Prose, latex_prose
     out=['% Generated statements, not proof certificates.']
     seen=set()
-    for r in results:
+    for r in getattr(results,'events',results):
+        if isinstance(r,Prose):
+            out.extend([latex_prose(r),'']);continue
         if r.contexts:
             out.append(r'\ifcleanreferenced')
             for context in r.contexts:

@@ -90,6 +90,7 @@ class Node:
     line: int
     children: list = field(default_factory=list)
     payload: object = None
+    documentation: object = None
 
 
 def document(normalized):
@@ -106,8 +107,13 @@ def document(normalized):
     except (MemoryError,RecursionError) as e:raise CleanError('Incomplete syntax analysis: resource exhaustion') from e
     def convert(tree):
         token=tree.children[0]
+        if tree.data in ('documented', 'documented_result'):
+            node=convert(tree.children[1])
+            node.documentation=normalized.prose[lines[token.line-1][0]]
+            return node
         node=Node(str(tree.data),str(token).strip(),lines[token.line-1][0],
                   [convert(c) for c in tree.children[1:] if isinstance(c,generated.Tree)])
+        if node.kind=='prose': node.payload=normalized.prose[node.line]
         return node
     nodes=[convert(c) for c in tree.children if isinstance(c,generated.Tree)]
     def validate(node):

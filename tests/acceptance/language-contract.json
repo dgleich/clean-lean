@@ -346,6 +346,36 @@
         "General inherited elaboration uniqueness obligations",
         "Emacs runtime validation unavailable in this environment"
       ]
+    },
+    {
+      "id": "literate_text_and_documentation",
+      "status": "partial",
+      "specification": "docs/literate-text.md",
+      "grammar": "grammar/clean.lark",
+      "source": "Text latex:\n  \\section{Matrices}\n",
+      "equivalent_source": "\"\"\"latex\n\\section{Matrices}\n\"\"\"\n",
+      "expected_tree": [
+        "Prose",
+        "latex",
+        "\\section{Matrices}"
+      ],
+      "lean_rule": "Module documentation for free prose; declaration docstrings for attached documentation; no change to canonical mathematical types or terms.",
+      "checks": [
+        "tests/test_literate.py",
+        "tools/check_literate_targets.py",
+        "tools/generate_parser.py --check",
+        "tools/check_textmate.cjs",
+        "tools/check_vim.vim",
+        "tools/check_emacs.el",
+        "latex/literate.tex"
+      ],
+      "pending": [
+        "Inherited general Lean elaboration uniqueness obligations",
+        "Typst document rendering",
+        "General mathematical definition rendering",
+        "Markdown rendering and semantic prose references",
+        "Emacs runtime validation unavailable"
+      ]
     }
   ]
 }

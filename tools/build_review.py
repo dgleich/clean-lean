@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from cleanlang.core import Environment, lean, CleanError, comment_lines
 from cleanlang.modules import load_document, load_module
+from cleanlang.literate import scan
 
 GRAMMAR = ROOT/'editors/vscode/syntaxes/clean.tmLanguage.json'
 RULES = [(re.compile(p['match']), p) for p in json.loads(GRAMMAR.read_text())['repository']['code']['patterns'] if 'match' in p]
@@ -54,16 +55,17 @@ def highlight(line):
 def highlight_source(source):
     result = []
     try:
-        masked = comment_lines(source)
+        _, _, regions = scan(source)
     except CleanError:
         # Keep malformed files readable; collect reports their translation error.
         return [html.escape(line) for line in source.splitlines()]
-    for raw, (_, spans) in zip(source.splitlines(), masked):
+    for raw, spans in zip(source.splitlines(), regions):
         pieces = []
         cursor = 0
-        for start, end in spans:
+        for start, end, kind in spans:
             pieces.append(highlight(raw[cursor:start]))
-            pieces.append('<span class="comment">' + html.escape(raw[start:end]) + '</span>')
+            css='comment' if kind=='comment' else 'string'
+            pieces.append('<span class="'+css+'">' + html.escape(raw[start:end]) + '</span>')
             cursor = end
         pieces.append(highlight(raw[cursor:]))
         result.append(''.join(pieces))

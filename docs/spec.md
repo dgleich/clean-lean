@@ -401,7 +401,8 @@ before mathematical token recognition, with no surrounding-space requirement.
 special meaning. Other text, including quotes and `--`, is ignored there.
 An unmatched `-/` or a nonempty stack at EOF is an error with its physical line.
 After the outermost closer, ordinary scanning resumes immediately on the same line.
-`/--` and `/-!` are ordinary block comments in Clean, not documentation constructs.
+`/--` and `/-!` now select documentation at physical-line boundaries, as specified
+in [literate text](literate-text.md); they are not ordinary discarded comments.
 
 Outside comments, double quotes pair within each physical line, protecting comment
 markers; there is no backslash escape convention. At the start of a logical field
@@ -441,4 +442,15 @@ under the same explicit environment. The generated grammar consumes that masked
 source; no parser-table change is required. Its uniqueness obligations are
 unchanged by comment text.
 
+:::
+
+:::llm gpt-6 2026-11-05 role=assisted
+
+## Literate text (implemented first slice)
+
+`Text:`, tagged `Text latex:` / `Text typst:`, and equivalent triple-quoted blocks
+carry published prose. Lean-style `/-! … -/` is free prose; `/-- … -/` attaches to
+a declaration. There is no `Section:` declaration: headings belong inside prose.
+The [normative contract](literate-text.md) defines exact delimiters, placement,
+attachment, erasure to mathematical Lean terms, and current rendering limits.
 :::

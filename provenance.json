@@ -1218,6 +1218,94 @@
       "mode": "sidecar",
       "generator": "tools/generate_parser.py",
       "grammar": "grammar/clean.lark"
+    },
+    "cleanlang/literate.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_literate.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/check_literate_targets.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "examples/literate.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "latex/literate.tex": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "generated/literate.tex": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "generated/literate.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "docs/literate-text.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "markdown"
+    },
+    "generated/literate.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "sidecar"
+    },
+    "generated/literate.metadata.json": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "sidecar"
     }
   }
 }

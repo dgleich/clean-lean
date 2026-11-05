@@ -42,6 +42,16 @@
     (should-not (eq (get-text-property (1- (point)) 'face) 'font-lock-comment-face))
     (search-forward "end")
     (should (eq (get-text-property (1- (point)) 'face) 'font-lock-comment-face))))
+(ert-deftest clean-math-literate-text ()
+  (with-temp-buffer
+    (insert "Text latex:\n  -- prose\n\"\"\"latex\n/- prose\n\"\"\"\n/-- Attached documentation. -/\n")
+    (clean-math-mode) (font-lock-ensure)
+    (goto-char (point-min)) (search-forward "-- prose")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-string-face))
+    (search-forward "/- prose")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-string-face))
+    (search-forward "documentation")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-doc-face))))
 (ert-run-tests-batch-and-exit)
 
 ;; generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

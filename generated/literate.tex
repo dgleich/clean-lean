@@ -1,0 +1,32 @@
+% Generated statements, not proof certificates.
+\section{Determinants of matrix products}
+This short paper is authored in Clean. Its prose and theorem statements
+share a source, while the mathematical statements also translate to Lean.
+
+The determinant converts matrix multiplication into scalar multiplication.
+The explanation is published prose; it introduces no hidden assumptions.
+\par
+
+\begin{cleanresult}{determinant product}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean\#L134}{[Mathlib]}}
+Multiplicativity for complex square matrices.
+\par
+Let $n$ be a natural number.
+Let $A$ and $B$ be $n\times n$ matrices over $\mathbb{C}$.
+Then \[\det(A \, B) = \det(A) \, \det(B).\]
+\end{cleanresult}
+
+\subsection{Reversing the order}
+Since scalar multiplication commutes, the two products $AB$ and $BA$
+have the same determinant.
+
+\begin{cleanresult}{determinant product swap}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/blob/f897ebcf72cd16f89ab4577d0c826cd14afaafc7/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean\#L176}{[Mathlib]}}
+Let $n$ be a natural number.
+Let $A$ and $B$ be $n\times n$ matrices over $\mathbb{C}$.
+Then \[\det(A \, B) = \det(B \, A).\]
+\end{cleanresult}
+
+The statements above are formal mathematical propositions. These explanatory
+paragraphs are informal and do not constitute machine-checked proofs.
+\par
+
+% generated: gpt-6 2026-11-05 role=assisted; LLM-authored portions; see PROVENANCE.md
