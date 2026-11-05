@@ -5,20 +5,6 @@ import string
 from .core import CleanError, ID, PROP, Expressions
 
 
-def separated(text, delimiter):
-    parts=[]; start=0; depth=0
-    for i,c in enumerate(text):
-        if c=='(': depth+=1
-        elif c==')': depth-=1
-        if depth<0: raise CleanError('Unmatched assumption parenthesis')
-        if c==delimiter and depth==0:
-            parts.append(text[start:i].strip()); start=i+1
-    if depth: raise CleanError('Unmatched assumption parenthesis')
-    parts.append(text[start:].strip())
-    if any(not p for p in parts): raise CleanError('Empty assumption item or label')
-    return parts
-
-
 def source_expression(tree):
     """Canonical source spelling for every current expression AST constructor."""
     kind=tree[0]
@@ -52,15 +38,11 @@ def lean_name(label):
 
 
 def assumption_items(text,reg,env):
-    for item in separated(text,','):
-        labelled=separated(item,':')
-        if len(labelled)>2: raise CleanError('Multiple assumption label colons')
-        if len(labelled)==2:
-            label,expression=labelled
-            if not re.fullmatch(ID+r'(?: +'+ID+r')*',label):
-                raise CleanError('An explicit assumption label must contain identifier words')
-        else: expression=item; label=None
-        value=Expressions(reg,env).parse(expression)
+    from .syntax import parse, name as syntax_name, expression_tree
+    syntax=parse(text,'assumptions')
+    for item in syntax.children:
+        label=syntax_name(item.children[0]) if len(item.children)==2 else None
+        value=Expressions(reg,env).elaborate(expression_tree(item.children[-1]))
         if value.type!=PROP: raise CleanError('Assume requires a condition')
         if label is None:
             tree=value.tree

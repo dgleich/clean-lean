@@ -74,9 +74,9 @@ class ContextTests(unittest.TestCase):
         s=SOURCE.replace('        Conclude:', '        Let A: Real\n        Conclude:',1)
         with self.assertRaisesRegex(CleanError,'duplicate name'): parse(s,self.reg)
     def test_context_declarations_must_precede_results(self):
-        with self.assertRaisesRegex(CleanError,'Expected Context name'): parse(SOURCE+'    Let x: Real\n',self.reg)
+        with self.assertRaisesRegex(CleanError,'Unexpected nesting or syntax'): parse(SOURCE+'    Let x: Real\n',self.reg)
     def test_empty_context_rejected(self):
-        with self.assertRaisesRegex(CleanError,'must contain a result'): parse('Context empty:\n    Let x: Real\n',self.reg)
+        with self.assertRaisesRegex(CleanError,'Unexpected nesting or syntax'): parse('Context empty:\n    Let x: Real\n',self.reg)
     def test_original_line_numbers_preserved(self):
         r=parse(SOURCE,self.reg)[0]
         self.assertEqual(r.line,5)

@@ -336,3 +336,21 @@ Assume positive(x), positive(y)
 See the [working example](examples/conditions.clean). Commas inside function arguments
 stay inside the expression; commas outside parentheses separate assumptions.
 :::
+
+
+:::llm gpt-6 2026-11-05 role=assisted
+
+Clean now uses a **generated parser**: [grammar/clean.lark](grammar/clean.lark) is
+the executable syntax source. After editing it, run:
+
+```sh
+python3 -m pip install -e ".[parser]"
+python3 tools/generate_parser.py
+python3 tools/generate_parser.py --check
+```
+
+The checked-in parser runs without Lark installed. Generation rejects grammar and
+lexer conflicts; tests check independent syntax trees and detect stale output.
+[The parser guide](docs/generated-parser.md) explains layout, name/type checking,
+and Lean translation boundaries.
+:::

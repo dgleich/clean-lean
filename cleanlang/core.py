@@ -158,9 +158,12 @@ class Environment:
             matches=[p['type'].format(**m.groupdict()) for p in self.data['phrases'] if (m:=re.fullmatch(p['pattern'],s,re.I))]
             if len(matches)>1: raise CleanError('Ambiguous type phrase: '+s)
             if matches: return self.type(matches[0],env,False)
-        m=re.fullmatch(r'('+ID+r')(?:\((.*)\))?',s)
-        if not m: raise CleanError('Unknown type phrase: '+s)
-        name=self.data.get('aliases',{}).get(m[1],m[1]); args=split(m[2] or '')
+        from .syntax import parse as syntax_parse, type_spelling
+        try:syntax=syntax_parse(s,'type_ref')
+        except CleanError as e:raise CleanError('Unknown type phrase: '+s) from e
+        source_name=str(syntax.children[0])
+        name=self.data.get('aliases',{}).get(source_name,source_name)
+        args=[type_spelling(x) for x in syntax.children[1].children] if len(syntax.children)>1 else []
         if env and name in env and env[name].type == Type('Type') and not args: return Type(name)
         if name not in self.data['types']: raise CleanError('Unknown type: '+name)
         kinds=self.data['types'][name].get('args',[])
@@ -219,94 +222,56 @@ class Environment:
         for p,a in zip(s['params'],args): self.match(p,a.type,bind)
         return Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]])
 
-TOKEN=re.compile(r'\s*(\d+|'+ID+r'|↔|→|≤|≥|≠|∧|∨|¬|∈|⊆|∪|∩|∣|<=|>=|!=|[(),:+*/^=<>-])')
 class Expressions:
+    # Presentation/continuation precedence; syntax precedence lives in grammar/clean.lark.
     PREC={'↔':1,'→':2,'or':3,'∨':3,'and':4,'∧':4,'=':5,'≠':5,'!=':5,'<':5,'>':5,'≤':5,'≥':5,'<=':5,'>=':5,'∈':5,'⊆':5,'∣':5,'+':6,'-':6,'∪':6,'∩':6,'*':7,'/':7,'^':8}
     def __init__(self,reg,env): self.reg,self.env=reg,env
     def parse(self,s):
-        # Match multiword function names only when followed by a call parenthesis.
-        names=sorted((n for n in self.reg.data['functions'] if ' ' in n), key=len, reverse=True)
-        phrase_token=re.compile(r'\s*('+'|'.join(re.escape(n).replace(r'\ ', r' +') for n in names)+r')(?=\s*\()') if names else None
-        s=s.strip(); self.tokens=[]; pos=0; self.i=0; self.bound_counter=0
-        while pos<len(s):
-            m=(phrase_token.match(s,pos) if phrase_token else None) or TOKEN.match(s,pos)
-            if not m: raise CleanError('Unsupported expression near '+repr(s[pos:pos+25]))
-            self.tokens.append(re.sub(' +', ' ', m[1])); pos=m.end()
-        if not self.tokens: raise CleanError('Empty expression')
-        x=self.expr(0)
-        if self.peek() is not None: raise CleanError('Unexpected token: '+self.peek())
-        return x
-    def peek(self): return self.tokens[self.i] if self.i<len(self.tokens) else None
-    def take(self):
-        t=self.peek()
-        if t is None: raise CleanError('Unexpected end of expression')
-        self.i+=1; return t
-    def expr(self,minimum):
-        tok=self.take()
-        if tok=='(':
-            x=self.expr(0)
-            if self.take()!=')': raise CleanError('Expected )')
-        elif tok in ('-','¬') or tok.lower()=='not':
-            a=self.expr(8 if tok=='-' else 5)
-            if tok!='-' and a.type!=PROP: raise CleanError('Not requires a proposition')
+        from .syntax import parse,expression_tree
+        return self.elaborate(expression_tree(parse(s,'expression')))
+    def elaborate(self,tree):
+        self.bound_counter=0
+        return self._elaborate(tree)
+    def _elaborate(self,tree):
+        kind=tree[0]
+        if kind=='Decimal':return Expr(tree[1],tree[1],NUM,tree=tree)
+        if kind=='Local':
+            if tree[1] not in self.env:raise CleanError('Unknown name: '+tree[1])
+            value=self.env[tree[1]]
+            return Expr(value.lean,value.tex,value.type,value.precedence,tree)
+        if kind=='Operator':return binary(tree[1],self._elaborate(tree[2]),self._elaborate(tree[3]))
+        if kind=='Unary':
+            tok=tree[1];a=self._elaborate(tree[2])
+            if tok!='-' and a.type!=PROP:raise CleanError('Not requires a proposition')
             inner=('('+a.tex+')') if a.precedence < 8 else a.tex
             tx=('-'+inner) if tok=='-' else (r'\text{not }('+a.tex+')')
-            x=Expr('('+('-' if tok=='-' else '¬')+a.lean+')',tx,a.type,7 if tok=='-' else 5,['Unary', '-' if tok=='-' else 'not', a.tree])
-        elif tok.lower()=='function' and self.peek()=='(':
-            self.take()
-            name=self.take()
-            if not re.fullmatch(ID,name) or name in self.env or name in self.reg.data['functions'] or name in self.reg.data['types'] or name.lower()=='function':
-                raise CleanError('Function binder must be a fresh identifier')
-            if self.take()!=':': raise CleanError('Function binder requires an explicit type')
-            parts=[]; depth=0
-            while self.peek() is not None:
-                token=self.peek()
-                if token==',' and depth==0: break
-                if token==')' and depth==0: raise CleanError('Function requires a body after a comma')
-                token=self.take(); parts.append(token)
-                depth += (token=='(')-(token==')')
-            if self.take()!=',': raise CleanError('Function requires a body')
-            domain=self.reg.type(''.join(parts),self.env,phrases=False)
-            occupied=set(self.env)
-            for value in self.env.values(): occupied.update(re.findall(ID,value.lean))
-            while f'clean_bound_{self.bound_counter}' in occupied: self.bound_counter+=1
-            bound=f'clean_bound_{self.bound_counter}'; self.bound_counter+=1
-            previous=self.env
-            self.env={**previous,name:Expr(bound,texid(name),domain)}
-            try:
-                body=self.expr(0)
-                if self.take()!=')': raise CleanError('Expected ) after function body')
-            finally: self.env=previous
-            if body.type==NUM or name in re.findall(ID,str(body.type)):
-                raise CleanError('Function body requires a determined, nondependent return type')
-            result=self.reg.function_type(domain,body.type)
-            x=Expr(f'(fun ({bound} : {self.reg.render_type(domain,"lean")}) => {body.lean})',
-                   r'\left('+texid(name)+r' \mapsto '+body.tex+r'\right)',result,
-                   tree=['Lambda',name,str(domain),body.tree])
-        elif tok.isdigit(): x=Expr(tok,tok,NUM,tree=['Decimal',tok])
-        elif self.peek()=='(':
-            self.take(); args=[]
-            if self.peek()!=')':
-                while True:
-                    args.append(self.expr(0))
-                    if self.peek()!=',': break
-                    self.take()
-            if self.take()!=')': raise CleanError('Expected )')
+            return Expr('('+('-' if tok=='-' else '¬')+a.lean+')',tx,a.type,7 if tok=='-' else 5,tree)
+        if kind=='Call':
+            tok=tree[1];args=[self._elaborate(a) for a in tree[2]]
             if tok in self.env and self.reg.is_function_type(self.env[tok].type):
                 t=self.env[tok].type
                 if len(args)!=1 or not compatible(args[0].type,t.args[0]): raise CleanError('Function argument mismatch')
-                x=Expr('('+self.env[tok].lean+' '+args[0].lean+')',texid(tok)+'('+args[0].tex+')',t.args[1],tree=['Call',tok,[a.tree for a in args]])
-            else: x=self.reg.call(tok,args)
-        elif tok in self.env:
-            value=self.env[tok]
-            x=Expr(value.lean,value.tex,value.type,value.precedence,['Local',tok])
-        else: raise CleanError('Unknown name: '+tok)
-        while self.peek() is not None:
-            op=self.peek().lower(); prec=self.PREC.get(op,-1)
-            if prec<minimum: break
-            self.take(); b=self.expr(prec if op in ('^','→') else prec+1)
-            x=binary(op,x,b)
-        return x
+                return Expr('('+self.env[tok].lean+' '+args[0].lean+')',texid(tok)+'('+args[0].tex+')',t.args[1],tree=tree)
+            return self.reg.call(tok,args)
+        if kind=='Lambda':
+            name=tree[1]
+            if name in self.env or name in self.reg.data['functions'] or name in self.reg.data['types']:
+                raise CleanError('Function binder must be a fresh identifier')
+            domain=self.reg.type(tree[2],self.env,phrases=False)
+            occupied=set(self.env)
+            for value in self.env.values():occupied.update(re.findall(ID,value.lean))
+            while f'clean_bound_{self.bound_counter}' in occupied:self.bound_counter+=1
+            bound=f'clean_bound_{self.bound_counter}';self.bound_counter+=1
+            previous=self.env;self.env={**previous,name:Expr(bound,texid(name),domain)}
+            try:body=self._elaborate(tree[3])
+            finally:self.env=previous
+            if body.type==NUM or name in re.findall(ID,str(body.type)):
+                raise CleanError('Function body requires a determined, nondependent return type')
+            result=self.reg.function_type(domain,body.type)
+            return Expr(f'(fun ({bound} : {self.reg.render_type(domain,"lean")}) => {body.lean})',
+                        r'\left('+texid(name)+r' \mapsto '+body.tex+r'\right)',result,
+                        tree=['Lambda',name,str(domain),body.tree])
+        raise CleanError('Unknown syntax constructor: '+kind)
 
 def binary(op,a,b):
     op={'!=':'≠','<=':'≤','>=':'≥','and':'∧','or':'∨'}.get(op,op)
@@ -366,9 +331,11 @@ def _parse_flat(text,reg):
         indent=len(raw)-len(raw.lstrip()); s=raw.strip()
         try:
             if indent==0:
-                m=re.fullmatch(r'(?:result|theorem)\s+('+ID+r'(?:\s+\w+)*):',s,re.I)
-                if not m: raise CleanError('Expected Result name: at column 1')
-                finish(); r=Result(re.sub(r'[_\s]+', '_', m[1]),line=num); env={}; labels=set(); mode=None; conclusion=[]; attribution_seen=False
+                from .syntax import parse as syntax_parse,name as syntax_name
+                header=syntax_parse(s,'scope_header')
+                if str(header.children[0]).lower() not in ('result','theorem'):raise CleanError('Expected Result')
+                finish();r=Result(re.sub(r'[_\s]+','_',syntax_name(header.children[1])),line=num)
+                env={};labels=set();mode=None;conclusion=[];attribution_seen=False
                 if any(x.name==r.name for x in results): raise CleanError('Duplicate result name')
                 continue
             if r is None: raise CleanError('Clause outside result')
@@ -402,28 +369,25 @@ def _parse_flat(text,reg):
                     labels.update((name,label))
                     r.clauses.append(Clause('assume',[name],value,num,label))
                 continue
-            m=re.fullmatch(r'(let|define)\s+(.+)',s,re.I)
-            if not m: raise CleanError('Expected Let, Define, Assume, Attribution, or Conclude')
-            verb,tail=m.groups(); typed=re.fullmatch(r'(.+?)\s*(?::|\bbe\b)\s*(.+)',tail,re.I)
-            if typed:
-                if verb.lower()=='define': raise CleanError('Define is a synonym for value definitions only')
-                ns,ts=typed.groups(); names=[n.strip() for n in ns.split(',')]; t=reg.type(ts,env)
+            from .syntax import let_clause
+            kind,names,payload=let_clause(s)
+            if kind=='let':
+                t=reg.type(payload,env)
                 for name in names:
-                    if not re.fullmatch(ID,name) or name in env or name in labels: raise CleanError('Invalid or duplicate name: '+name)
+                    if name in env or name in labels:raise CleanError('Invalid or duplicate name: '+name)
                     env[name]=Expr(name,texid(name),t)
                 r.clauses.append(Clause('let',names,t,num))
             else:
-                m=re.fullmatch(r'('+ID+r')\s*=\s*(.+)',tail)
-                if not m: raise CleanError('Expected let x: Type, let x be Type, or let x = expression')
-                name,rhs=m.groups()
-                if name in env or name in labels: raise CleanError('Duplicate name: '+name)
-                try: reg.type(rhs,env)
-                except CleanError: pass
-                else: raise CleanError('Cannot use let x = Type; use let x: Type or let x be Type')
-                value=Expressions(reg,env).parse(rhs)
-                if value.type==NUM: value.type=NAT
-                if value.type==PROP: raise CleanError('Local condition abbreviations are not implemented; use a top-level Condition declaration')
-                env[name]=Expr(name,texid(name),value.type); r.clauses.append(Clause('define',[name],value,num))
+                name=names[0]
+                if name in env or name in labels:raise CleanError('Duplicate name: '+name)
+                # A bare type name is never a value definition.
+                if payload[0] in ('Local','Call') and (payload[1] in reg.data['types'] or payload[1] in reg.data['aliases']):
+                    raise CleanError('Cannot use let x = Type; use let x: Type or let x be Type')
+                value=Expressions(reg,env).elaborate(payload)
+                if value.type==NUM:value.type=NAT
+                if value.type==PROP:raise CleanError('Local condition abbreviations are not implemented; use a top-level Condition declaration')
+                env[name]=Expr(name,texid(name),value.type)
+                r.clauses.append(Clause('define',[name],value,num))
         except CleanError as e: raise CleanError(f'line {num}: {e}') from e
     finish()
     if not results: raise CleanError('No results found')
@@ -465,68 +429,51 @@ def _select_context_parameters(result,inherited):
 
 
 def parse(text,reg):
-    # Parse indentation scopes, then reuse the statement parser on explicit expansions.
-    lines=[]
-    for number,raw in enumerate(normalize_layout(text).splitlines(),1):
-        if '\t' in raw: raise CleanError(f'line {number}: tabs are not allowed')
-        if not raw.strip() or raw.lstrip().startswith('#'): continue
-        indent=len(raw)-len(raw.lstrip())
-        lines.append((number,indent,raw.strip()))
-    results=[]; names=set(); context_names=set(); cache={}
+    """Interpret generated context/result trees; inherited scope is semantic."""
+    from .syntax import document,parse as syntax_parse,name as syntax_name
+    nodes=document(normalize_layout(text))
+    results=[];names=set();context_names=set();cache={}
     file_key=hashlib.sha256(text.encode()).hexdigest()[:12]
-    def scope(start,end,level,ancestors):
-        i=start
-        while i<end:
-            number,indent,line=lines[i]
-            if indent!=level: raise CleanError(f'line {number}: Expected a Context or Result at this indentation')
-            match=re.fullmatch(r'(context|result|theorem)\s+('+ID+r'(?:\s+\w+)*):',line,re.I)
-            if not match: raise CleanError(f'line {number}: Expected Context name: or Result name:')
-            kind,title=match.groups(); kind=kind.lower(); name=re.sub(r'[_\s]+','_',title)
-            stop=i+1
-            while stop<end and lines[stop][1]>level: stop+=1
-            if kind=='context':
+    def walk(nodes,ancestors):
+        for node in nodes:
+            if node.kind not in ('context','result'):raise CleanError('Expected Context or Result')
+            header=syntax_parse(node.text,'scope_header')
+            title=syntax_name(header.children[1]);name=re.sub(r'[_\s]+','_',title)
+            if not re.fullmatch(ID+r'(?:[_\s]+\w+)*',title):raise CleanError('Invalid result/context name')
+            if node.kind=='context':
                 path=tuple(a['name'] for a in ancestors)+(name,)
-                if path in context_names: raise CleanError(f'line {number}: Duplicate context name')
+                if path in context_names:raise CleanError(f'line {node.line}: Duplicate context name')
                 context_names.add(path)
-                child=i+1; declarations=[]
-                while child<stop:
-                    num,ind,txt=lines[child]
-                    if ind==level+4 and re.match(r'(context|result|theorem)\b',txt,re.I): break
-                    if ind!=level+4 or not re.match(r'(let|define|assume)\b',txt,re.I):
-                        raise CleanError(f'line {num}: Contexts contain Let/Define/Assume clauses before nested results')
-                    declarations.append((num,txt)); child+=1
-                if child==stop: raise CleanError(f'line {number}: Context must contain a result')
-                item={'name':name,'key':file_key+'-'+str(number),'line':number,'declarations':declarations}
-                scope(child,stop,level+4,ancestors+[item])
-            else:
-                if name in names: raise CleanError(f'line {number}: Duplicate result name')
-                names.add(name)
-                inherited=[d for a in ancestors for d in a['declarations']]
-                flattened=['Result '+name+':']+['    '+txt for _,txt in inherited]
-                original=[number]+[num for num,_ in inherited]
-                for num,ind,txt in lines[i+1:stop]:
-                    flattened.append(' '*(ind-level)+txt); original.append(num)
-                try: r=_parse_flat('\n'.join(flattened),reg)[0]
-                except CleanError as e:
-                    message=str(e)
-                    message=re.sub(r'^line (\d+):',lambda m:'line '+str(original[int(m[1])-1])+':',message)
-                    raise CleanError(message) from e
-                r.line=number
-                for clause in r.clauses: clause.line=original[clause.line-1]
-                offset=0; contexts=[]
-                for a in ancestors:
-                    source_lines={num for num,_ in a['declarations']}
-                    count=sum(c.line in source_lines for c in r.clauses)
-                    if a['key'] not in cache:
-                        cache[a['key']]=Context(a['name'],a['key'],r.clauses[offset:offset+count],list(contexts),a['line'])
-                    contexts.append(cache[a['key']]); offset+=count
-                r.contexts=contexts
-                r.local_clauses=r.clauses[offset:]
-                r.clauses=_select_context_parameters(r,offset)
-                results.append(r)
-            i=stop
-    scope(0,len(lines),0,[])
-    if not results: raise CleanError('No results found')
+                declarations=[(c.line,c.text) for c in node.children if c.kind.startswith('context_')]
+                children=[c for c in node.children if c.kind in ('context','result')]
+                item={'name':name,'key':file_key+'-'+str(node.line),'line':node.line,'declarations':declarations}
+                walk(children,ancestors+[item]);continue
+            if name in names:raise CleanError(f'line {node.line}: Duplicate result name')
+            names.add(name)
+            inherited=[d for a in ancestors for d in a['declarations']]
+            flattened=['Result '+name+':']+['    '+txt for _,txt in inherited]
+            original=[node.line]+[num for num,_ in inherited]
+            def append(n,indent):
+                flattened.append(' '*indent+n.text);original.append(n.line)
+                for child in n.children:append(child,indent+4)
+            for child in node.children:append(child,4)
+            try:r=_parse_flat('\n'.join(flattened),reg)[0]
+            except CleanError as e:
+                message=re.sub(r'^line (\d+):',lambda m:'line '+str(original[int(m[1])-1])+':',str(e))
+                raise CleanError(message) from e
+            r.line=node.line
+            for clause in r.clauses:clause.line=original[clause.line-1]
+            offset=0;contexts=[]
+            for a in ancestors:
+                source_lines={num for num,_ in a['declarations']}
+                count=sum(c.line in source_lines for c in r.clauses)
+                if a['key'] not in cache:
+                    cache[a['key']]=Context(a['name'],a['key'],r.clauses[offset:offset+count],list(contexts),a['line'])
+                contexts.append(cache[a['key']]);offset+=count
+            r.contexts=contexts;r.local_clauses=r.clauses[offset:]
+            r.clauses=_select_context_parameters(r,offset);results.append(r)
+    walk(nodes,[])
+    if not results:raise CleanError('No results found')
     return results
 
 

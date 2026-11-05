@@ -32,10 +32,10 @@ def substitute(text, names):
 def fields_map(fields):
     values = {}
     for field in fields:
-        if ':' not in field:
-            raise CleanError('Expected field: value')
-        key, value = field.split(':', 1)
-        key, value = key.lower(), value.strip()
+        from .syntax import parse as syntax_parse
+        parsed=syntax_parse(field,'field')
+        key,value=(str(c).strip() for c in parsed.children)
+        key=key.lower()
         if key in values or not value:
             raise CleanError('Duplicate or empty field: '+key)
         values[key] = value
@@ -54,16 +54,17 @@ def add_definition(env, prefix, name, body):
 
 
 def type_declaration(header, fields, env):
-    m = re.fullmatch(r'Type\s+('+ID+r')\((.*?)\):', header, re.I)
-    if not m: raise CleanError('Expected Type Name(parameters):')
-    name, parameters = m[1], split(m[2])
-    if name in env.data['types'] or name in env.data['aliases']:
-        raise CleanError('Duplicate type: '+name)
-    names, kinds = [], []
+    from .syntax import parse as syntax_parse
+    syntax=syntax_parse(header,'type_header')
+    name=str(syntax.children[0])
+    if name in env.data['types'] or name in env.data['aliases']:raise CleanError('Duplicate type: '+name)
+    names,kinds=[],[]
+    parameters=syntax.children[1].children if len(syntax.children)>1 else []
     for parameter in parameters:
-        p = re.fullmatch('('+ID+r'):\s*(Natural|Type)', parameter)
-        if not p or p[1] in names: raise CleanError('Type parameters require distinct names and Natural or Type kinds')
-        names.append(p[1]); kinds.append('dimension' if p[2]=='Natural' else 'type')
+        p=str(parameter.children[0])
+        kind=header[parameter.children[1].meta.start_pos:parameter.children[1].meta.end_pos].strip() if len(parameter.children)>1 else ''
+        if kind not in ('Natural','Type') or p in names:raise CleanError('Type parameters require distinct names and Natural or Type kinds')
+        names.append(p);kinds.append('dimension' if kind=='Natural' else 'type')
     values = fields_map(fields)
     if 'equals' in values:
         if set(values) != {'equals'}: raise CleanError('Type alias accepts only Equals')
@@ -83,39 +84,17 @@ def type_declaration(header, fields, env):
 
 
 def signature_fields(header, fields):
-    """Normalize compact syntax before any type/name resolution.
-
-    The first balanced closing parenthesis ends the parameter list. Only the
-    suffix decides between the expanded ':' and compact ': ReturnType:' forms.
-    """
-    match = re.match(r'(?:Notation|Define)\s+('+ID+r'(?: +'+ID+r')*)\(', header, re.I)
-    if not match: raise CleanError('Invalid Notation or Define header')
-    name = re.sub(' +', ' ', match[1])
-    rest = header[match.end():]
-    depth = 1
-    for end, char in enumerate(rest):
-        if char == '(': depth += 1
-        elif char == ')': depth -= 1
-        if depth == 0: break
-    else: raise CleanError('Unclosed parameter list')
-    parameters, suffix = rest[:end], rest[end+1:].strip()
-    if suffix == ':':
-        return name, split(parameters), list(fields)
-    compact = re.fullmatch(r':\s*(.+?)\s*:', suffix)
-    if not compact: raise CleanError('Expected : or : ReturnType: after parameters')
-    if any(re.match(r'(?:Let\b|Returns\s*:)', field, re.I) for field in fields):
+    """Normalize the generated header AST before type/name resolution."""
+    from .syntax import header as parse_header
+    kind,name,parameters,result=parse_header(header)
+    if kind not in ('notation','define'):raise CleanError('Expected Notation or Define')
+    if result is None:
+        if any(t is not None for _,t in parameters):raise CleanError('Expanded signatures require bare argument names')
+        return name,[n for n,_ in parameters],list(fields)
+    if any(re.match(r'(?:Let\b|Returns\s*:)', f,re.I) for f in fields):
         raise CleanError('Compact signatures cannot also contain Let or Returns fields')
-    parts = split(parameters)
-    if parameters.rstrip().endswith(','):
-        raise CleanError('Trailing comma in compact parameter list')
-    names, declarations = [], []
-    for part in parts:
-        parameter = re.fullmatch(r'('+ID+r')\s*:\s*(.+)', part)
-        if not parameter:
-            raise CleanError('Every compact parameter requires name: Type')
-        names.append(parameter[1])
-        declarations.append('Let '+parameter[1]+': '+parameter[2])
-    return name, names, declarations + ['Returns: '+compact[1]] + list(fields)
+    if any(t is None for _,t in parameters):raise CleanError('Every compact parameter requires name: Type')
+    return name,[n for n,_ in parameters],['Let '+n+': '+t for n,t in parameters]+['Returns: '+result]+list(fields)
 
 
 def notation(header, fields, env, *, authored=False):
@@ -126,13 +105,14 @@ def notation(header, fields, env, *, authored=False):
     if name in env.data['functions']: raise CleanError('Duplicate visible name: '+name)
     local, implicit, types, other = {}, {}, {}, []
     for field in fields:
-        decl = re.fullmatch(r'Let\s+('+ID+r'(?:\s*,\s*'+ID+r')*)\s*(?::|\bbe\b)\s*(.+)', field, re.I)
-        if not decl:
-            other.append(field); continue
-        text = decl[2]
+        if not re.match(r'Let\b',field,re.I):
+            other.append(field);continue
+        from .syntax import let_clause
+        clause_kind,names,text=let_clause(field)
+        if clause_kind!='let':raise CleanError('Declaration parameters require typed Let')
         # The group type is resolved before introducing any member of the group.
         t = Type('Type') if text=='Type' else env.type(text,local)
-        for n in split(decl[1]):
+        for n in names:
             if n in local: raise CleanError('Duplicate parameter: '+n)
             if n not in params:
                 if types or t not in (NAT,Type('Type')): raise CleanError('Implicit dimensions/types must precede arguments')
@@ -197,19 +177,19 @@ def condition_declaration(header, fields, env):
     truth=env.data['types'].get('Proposition',{})
     if truth.get('args') != [] or truth.get('lean','').strip() != 'Prop':
         raise CleanError('Condition requires the foundational Proposition binding to Lean Prop')
-    m = re.fullmatch(r'Condition\s+('+ID+r'(?: +'+ID+r')*)\((.*)\):', header, re.I)
-    if not m: raise CleanError('Expected Condition name(parameters): without a return annotation')
-    name, parameters = m.groups()
-    parts = split(parameters)
-    if parameters.rstrip().endswith(','): raise CleanError('Trailing condition parameter comma')
-    compact = any(':' in part for part in parts)
+    from .syntax import header as parse_header
+    kind,name,parameter_fields,result=parse_header(header)
+    if kind!='condition' or result is not None:raise CleanError('Condition has no explicit return annotation')
+    compact=any(t is not None for _,t in parameter_fields)
+    if compact and any(t is None for _,t in parameter_fields):raise CleanError('Mixed condition parameter forms')
+    parameters=', '.join(n+(': '+t if t is not None else '') for n,t in parameter_fields)
     values = fields_map([f for f in fields if not re.match(r'Let\b',f,re.I)])
     if 'returns' in values: raise CleanError('Condition already specifies a condition result; omit Returns')
     if set(values) - {'holds when','from lean','assumption name','render','render latex','attribution'}:
         raise CleanError('Unknown Condition field')
     if len(set(values) & {'holds when','from lean'}) != 1:
         raise CleanError('Condition requires exactly one Holds when or From Lean')
-    params = [part.split(':',1)[0].strip() for part in parts]
+    params = [n for n,_ in parameter_fields]
     naming = name_template(values.get('assumption name'),name,params)
     transformed=[]
     for f in fields:
@@ -228,74 +208,58 @@ def condition_declaration(header, fields, env):
 
 
 def load_module(path, env, *, document=False):
-    """Resolve imports into an explicitly provided, initially empty environment."""
+    """Interpret generated module syntax; imports populate an explicit environment."""
+    from .syntax import document as parse_document, parse as syntax_parse, fields as node_fields
     active=[]
-    def visit(file, root=False):
+    def visit(file,root=False):
         file=file.resolve()
-        if file in active: raise CleanError('Cyclic Clean import: '+' -> '.join(map(str,active+[file])))
-        if file in env.loaded_modules: return ''
+        if file in active:raise CleanError('Cyclic Clean import: '+' -> '.join(map(str,active+[file])))
+        if file in env.loaded_modules:return ''
         active.append(file)
         try:
-            lines=normalize_layout(file.read_text()).splitlines()
-        except CleanError as e:
-            raise CleanError(f'{file}: {e}') from e
-        output=['']*len(lines); i=0; started=False
-        while i<len(lines):
-            line=lines[i]
-            if not line.strip() or line.lstrip().startswith('#'): i+=1; continue
-            origin=f'{file}:{i+1}'
             try:
-                if '\t' in line: raise CleanError('Tabs are not allowed')
-                li=re.fullmatch(r'Import Lean\s+([A-Za-z_][\w.]*)',line,re.I)
-                bi=re.fullmatch(r'Import BibTeX\s+"([^"\n]+)"',line,re.I)
-                ci=re.fullmatch(r'Import\s+"([^"\n]+)"',line,re.I)
-                block=re.match(r'(Notation|Define|Condition|Type|Source)\s',line,re.I)
-                alias=re.fullmatch(r'Alias\s+('+ID+r'):\s*('+ID+r')',line,re.I)
-                phrase=re.fullmatch(r'Phrase\s+(.+?)\s+=>\s+(.+)',line,re.I)
-                if any((li,bi,ci,block,alias,phrase)):
-                    if started: raise CleanError('Imports and declarations must precede results')
-                    if li:
-                        if li[1] not in env.lean_imports: env.lean_imports.append(li[1])
-                    elif bi: env.sources.import_bibtex(file.parent/bi[1])
-                    elif ci: visit(file.parent/ci[1])
-                    elif alias:
-                        if alias[1] in env.data['types'] or alias[1] in env.data['aliases']: raise CleanError('Duplicate type alias')
-                        if alias[2] not in env.data['types']: raise CleanError('Unknown alias target')
-                        env.data['aliases'][alias[1]]=alias[2]
-                    elif phrase:
-                        re.compile(phrase[1])
-                        env.data['phrases'].append({'pattern':phrase[1],'type':phrase[2]})
+                normalized=normalize_layout(file.read_text())
+                nodes=parse_document(normalized)
+            except CleanError as e:raise CleanError(f'{file}: {e}') from e
+            output=['']*len(normalized.splitlines());started=False
+            for node in nodes:
+                try:
+                    if node.kind in ('result','context'):
+                        if not root:raise CleanError('Imported modules may contain only declarations and imports')
+                        started=True
+                        def copy(n,indent=0):
+                            output[n.line-1]=' '*indent+n.text
+                            for child in n.children:copy(child,indent+4)
+                        copy(node);continue
+                    if started:raise CleanError('Imports and declarations must precede results')
+                    line=node.text
+                    if node.kind=='import_stmt':
+                        tree=syntax_parse(line,'import_line');value=str(tree.children[0])
+                        if tree.data=='lean_import':
+                            if value not in env.lean_imports:env.lean_imports.append(value)
+                        elif tree.data=='bib_import':env.sources.import_bibtex(file.parent/value[1:-1])
+                        else:visit(file.parent/value[1:-1])
+                    elif node.kind=='alias_stmt':
+                        alias,target=map(str,syntax_parse(line,'alias_line').children)
+                        if alias in env.data['types'] or alias in env.data['aliases']:raise CleanError('Duplicate type alias')
+                        if target not in env.data['types']:raise CleanError('Unknown alias target')
+                        env.data['aliases'][alias]=target
+                    elif node.kind=='phrase_stmt':
+                        pattern,meaning=map(str,syntax_parse(line,'phrase_line').children)
+                        pattern=pattern.strip();meaning=meaning.strip();re.compile(pattern)
+                        env.data['phrases'].append({'pattern':pattern,'type':meaning})
                     else:
-                        fields=[];j=i+1; expression_block=False
-                        while j<len(lines) and (not lines[j].strip() or lines[j][0].isspace() or lines[j].lstrip().startswith('#')):
-                            f=lines[j]
-                            if f.strip() and not f.lstrip().startswith('#'):
-                                if f.startswith('        ') and block[1].lower() in ('define','condition'):
-                                    if not expression_block:
-                                        raise CleanError('Only Equals expression blocks are implemented; From Lean must be inline')
-                                    if f.startswith('         '):
-                                        raise CleanError('Expression block lines must align')
-                                    fields[-1] += ' ' + f.strip()
-                                else:
-                                    if not f.startswith('    ') or f.startswith('     '): raise CleanError('Declaration fields must align at one indentation level')
-                                    fields.append(f.strip())
-                                    expression_block = bool(re.fullmatch(r'(?:Equals|Holds when)\s*:', f.strip(), re.I))
-                            j+=1
-                        kind=block[1].lower()
-                        if kind in ('notation', 'define'): notation(line,fields,env,authored=kind=='define')
-                        elif kind=='condition': condition_declaration(line,fields,env)
-                        elif kind=='type': type_declaration(line,fields,env)
+                        fields=node_fields(node.children)
+                        kind=line.split(None,1)[0].lower()
+                        if kind in ('notation','define'):notation(line,fields,env,authored=kind=='define')
+                        elif kind=='condition':condition_declaration(line,fields,env)
+                        elif kind=='type':type_declaration(line,fields,env)
                         else:
-                            m=re.fullmatch(r'Source\s+('+ID+r'):',line,re.I)
-                            if not m: raise CleanError('Invalid Source header')
-                            env.sources.declare(m[1],fields_map(fields),file.parent)
-                        i=j;continue
-                else:
-                    if not root: raise CleanError('Imported modules may contain only declarations and imports')
-                    started=True;output[i]=line
-                i+=1
-            except (ValueError,KeyError) as e: raise CleanError(f'{origin}: {e}') from e
-        active.pop();env.loaded_modules.add(file)
+                            key=str(syntax_parse(line,'source_header').children[0])
+                            env.sources.declare(key,fields_map(fields),file.parent)
+                except (ValueError,KeyError) as e:raise CleanError(f'{file}:{node.line}: {e}') from e
+        finally:active.pop()
+        env.loaded_modules.add(file)
         return '\n'.join(output)
     return visit(Path(path),root=document)
 

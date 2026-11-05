@@ -382,8 +382,8 @@ module-declared operations; it does not add special sum, map, or filter semantic
 ## Conditions and assumption lists
 
 Top-level `Condition` declarations and comma-separated `Assume` lists are implemented.
-The normative [condition contract](conditions.md) and [EBNF extension](../grammar/conditions.ebnf)
+The normative [condition contract](conditions.md) and [executable grammar](../grammar/clean.lark)
 specify fixed condition results, `Holds when`, imported `From Lean` bodies, name templates,
 continuation, collision checks, and the unique expansion into ordered Lean hypotheses.
-This EBNF does not generate the handwritten parser.
+The grammar now generates the parser; see [generation and checking](generated-parser.md).
 :::

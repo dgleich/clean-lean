@@ -247,7 +247,7 @@
       "id": "conditions_and_grouped_assumptions",
       "status": "partial",
       "specification": "docs/conditions.md",
-      "grammar": "grammar/conditions.ebnf",
+      "grammar": "grammar/clean.lark",
       "checks": [
         "tests/test_conditions.py",
         "tools/check_condition_targets.py"
@@ -268,9 +268,52 @@
         "positivity of x"
       ],
       "pending": [
-        "Complete machine-readable grammar and parser generation",
         "General inherited target uniqueness and resource-exhaustion outcomes",
         "Removal of inherited Proposition type display-name coupling"
+      ]
+    },
+    {
+      "id": "generated_syntax_parser",
+      "status": "partial",
+      "specification": "docs/generated-parser.md",
+      "grammar": "grammar/clean.lark",
+      "checks": [
+        "tools/generate_parser.py --check",
+        "tests/test_generated_parser.py",
+        "tools/check_function_targets.py",
+        "tools/check_condition_targets.py",
+        "verify_definitions.py"
+      ],
+      "expected_tree": [
+        "Operator",
+        "∧",
+        [
+          "Unary",
+          "not",
+          [
+            "Operator",
+            "=",
+            [
+              "Local",
+              "x"
+            ],
+            [
+              "Local",
+              "y"
+            ]
+          ]
+        ],
+        [
+          "Local",
+          "P"
+        ]
+      ],
+      "source": "not x = y and P",
+      "observed": "Strict LALR and lexical collision generation; independent AST oracles; deterministic standalone regeneration; grammar and lexer conflict negative checks; resource exhaustion reports incomplete. Existing target checks and corpus proofs preserved.",
+      "pending": [
+        "General inherited unique-Lean-target obligations",
+        "Layout scanner remains an explicit handwritten boundary",
+        "Prose type and embedded metadata/template languages retain explicit interpreters"
       ]
     }
   ]

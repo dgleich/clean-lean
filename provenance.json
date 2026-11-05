@@ -1127,16 +1127,6 @@
       "date": "2026-10-30",
       "mode": "sidecar"
     },
-    "grammar/conditions.ebnf": {
-      "origin": "llm-assisted",
-      "model": "gpt-6",
-      "date": "2026-10-30",
-      "mode": "comment",
-      "comment": [
-        "(* ",
-        " *)"
-      ]
-    },
     "latex/conditions.tex": {
       "origin": "llm-assisted",
       "model": "gpt-6",
@@ -1176,6 +1166,58 @@
         "# ",
         ""
       ]
+    },
+    "grammar/clean.lark": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "comment",
+      "comment": [
+        "// ",
+        ""
+      ]
+    },
+    "cleanlang/syntax.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/generate_parser.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_generated_parser.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "docs/generated-parser.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-05",
+      "mode": "markdown"
+    },
+    "cleanlang/generated_parser.py": {
+      "origin": "mixed: upstream Lark standalone runtime under its retained MPL-2.0 notice; parser tables derived from LLM-assisted Clean grammar",
+      "mode": "sidecar",
+      "generator": "tools/generate_parser.py",
+      "grammar": "grammar/clean.lark"
     }
   }
 }

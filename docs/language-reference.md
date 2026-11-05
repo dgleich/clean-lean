@@ -78,7 +78,7 @@ Metadata and rendering remain single-line values, except where their own schema 
 
 ## 3 Declaration grammar
 
-This EBNF describes the proposed operator/type/statement slice. `NEWLINE`, `INDENT`, and `DEDENT` are produced by the layout lexer. `expression` is parameterized by the visible syntax environment; section 4 defines it. Metadata and phrase declaration bodies retain their separate schemas in the prototype documentation; this is not yet a complete grammar for those facilities.
+This EBNF describes the proposed operator/type/statement slice, not the executable implementation. The implemented grammar is [grammar/clean.lark](../grammar/clean.lark); see [generated parser](generated-parser.md). `NEWLINE`, `INDENT`, and `DEDENT` are produced by the layout lexer. `expression` is parameterized by the visible syntax environment; section 4 defines it. Metadata and phrase declaration bodies retain their separate schemas in the prototype documentation; this is not yet a complete grammar for those facilities.
 
 ```ebnf
 module           = { import | declaration | result | context } ;
@@ -376,9 +376,22 @@ The [condition extension](conditions.md) specifies `Condition name(parameters):`
 so it has no `Returns` annotation. `Assume c(A), c(B)` creates two hypotheses, splitting
 commas only outside parentheses. Explicit labels apply to one item. Automatic names
 are derived from templates and canonical argument ASTs; collisions are errors.
-Hypothesis labels do not enter expression scope. The [EBNF fragment](../grammar/conditions.ebnf)
-is normative documentation, not an input that generates the current parser.
+Hypothesis labels do not enter expression scope. The [executable grammar](../grammar/clean.lark) now generates the parser, superseding
+the earlier documentation-only EBNF. See [the generation contract](generated-parser.md).
 The magnetic study now imports placeholder `library/Common.clean` for standard vocabulary,
 superseding the earlier requirement to inline that vocabulary in its authored Clean file.
 Generated Lean files remain standalone apart from Mathlib.
+:::
+
+
+:::llm gpt-6 2026-11-05 role=assisted
+
+## Generated syntax parser
+
+The [executable grammar](../grammar/clean.lark) generates a checked-in standalone
+parser with pinned Lark 1.3.1 and interegular 0.3.3. Generation is strict: grammar
+and lexer conflicts fail. The [generation contract](generated-parser.md) records
+syntax normalization, deterministic artifact generation, layout and semantic boundaries,
+and the reservation of logical expression keywords independent of module lookup.
+`python3 tools/generate_parser.py --check` detects stale generated code.
 :::

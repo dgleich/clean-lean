@@ -9,6 +9,7 @@ description = "Local prototype for mathematical statement syntax and LaTeX rende
 requires-python = ">=3.10"
 
 [project.optional-dependencies]
+parser = ["lark==1.3.1", "interegular==0.3.3"]
 bibtex = ["pybtex==0.26.1"]
 
 [tool.setuptools]

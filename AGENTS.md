@@ -63,3 +63,19 @@ Checks document progress; they are not commit gates. Record known failures or ch
 ## Publication provenance
 
 Follow [PROVENANCE.md](PROVENANCE.md) and the linked LLM tagging skill for all authored documents and code. Preserve upstream and human origin boundaries. Classify new files in `provenance.json`; after regeneration run `python3 tools/provenance.py --apply` and then its check mode. Keep credentials ignored. Tags are required for shared artifacts, not conversational replies.
+
+
+:::llm gpt-6 2026-11-05 role=assisted
+
+## Generated parser workflow
+
+- Edit `grammar/clean.lark` for syntax changes; do not edit `cleanlang/generated_parser.py`.
+- Install the pinned `parser` development extra, run `python3 tools/generate_parser.py`,
+  then `python3 tools/generate_parser.py --check` and the syntax/translation tests.
+- Never disable strict grammar/lexer checks or use a default conflict resolution to
+  make a grammar build. Record lexical compatibility changes in `docs/generated-parser.md`.
+- Layout/continuation and semantic interpreters are explicit separate boundaries.
+  Update their specifications and independent tests if changed. Generating the parser
+  does not discharge the unique Lean-target acceptance contract.
+- Preserve upstream Lark runtime licensing and provenance in the generated artifact.
+:::

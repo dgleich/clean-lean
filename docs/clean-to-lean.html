@@ -162,6 +162,14 @@ Define absolute value(x: Real): Real:
   abs x</code></pre></section></div>
   <div class="notes"><p>The Clean type names require separate explicit Clean imports. Only inline <code>From Lean</code> is implemented; the accepted indented Lean-body form remains pending. A checked adapter can fix parameters or wrap representations; it is not restricted to an alias. <code>Equals</code> and <code>From Lean</code> are mutually exclusive. Generated naming and inference must satisfy the unique-target contract.</p></div>
 </article>
+<article id="generated-syntax" data-status="implemented" class="mapping">
+<header><h2>Generated syntax and Lean translation</h2><span class="badge implemented">Implemented slice</span></header>
+<p><a href="../grammar/clean.lark">The executable grammar</a> generates Clean's standalone Python parser. Strict LALR and lexer checks reject conflicts during generation. Parsed syntax then passes through explicit module binding and Lean translation; parser generation does not replace those semantic checks.</p>
+<pre><code>python3 -m pip install -e '.[parser]'
+python3 tools/generate_parser.py
+python3 tools/generate_parser.py --check</code></pre>
+<p>See <a href="generated-parser.md">the generation contract</a> for layout boundaries, reserved logical words, source positions, independent AST/Lean checks, and remaining elaboration obligations.</p>
+</article>
 <article id="conditions" data-status="implemented" class="mapping">
 <header><h2>Conditions and named assumptions</h2><span class="badge implemented">Implemented slice</span></header>
 <div class="pair"><section aria-label="Clean example"><h3>Clean</h3><pre><code>Condition positive(x: Real):
@@ -173,7 +181,7 @@ Assume positive(x), positive(y)</code></pre></section>
 -- Inside the result's quantified statement:
 ∀ («positivity_of_x» : positive x),
 ∀ («positivity_of_y» : positive y), ...</code></pre></section></div>
-<div class="notes"><p>Readable schematic Lean names; actual definitions retain generated identifiers. The Assume line belongs inside a result or context. Commas outside parentheses separate hypotheses; internal call/lambda commas do not. Templates supply human labels, and duplicate labels or Lean identifiers are errors. Labels name evidence and are not condition expressions. Condition also supports an inline From Lean body. See the <a href="conditions.md">normative contract</a> and <a href="../grammar/conditions.ebnf">EBNF extension</a>. The parser is handwritten, not generated from this grammar. General elaboration conformance remains pending.</p></div>
+<div class="notes"><p>Readable schematic Lean names; actual definitions retain generated identifiers. The Assume line belongs inside a result or context. Commas outside parentheses separate hypotheses; internal call/lambda commas do not. Templates supply human labels, and duplicate labels or Lean identifiers are errors. Labels name evidence and are not condition expressions. Condition also supports an inline From Lean body. See the <a href="conditions.md">normative contract</a> and <a href="../grammar/clean.lark">executable grammar</a>. The executable grammar now generates the standalone parser; layout and semantic checks remain explicit. General elaboration conformance remains pending.</p></div>
 </article>
 <article id="typed-function" data-status="implemented" class="mapping">
 <header><h2>Typed function expressions</h2><span class="badge implemented">Implemented slice</span></header>

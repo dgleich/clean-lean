@@ -66,7 +66,7 @@ class CleanTests(unittest.TestCase):
             self.assertEqual(len(rs),len(entries))
             self.assertGreaterEqual(len(set(x['source_declaration'] for x in entries)),20)
             self.assertEqual(len(entries),len(set(x['name'] for x in entries)))
-    def test_conclude_is_last(self): self.reject(SOURCE+'    Let z: Real\n','Conclude must be last')
+    def test_conclude_is_last(self): self.reject(SOURCE+'    Let z: Real\n','Unexpected nesting or syntax')
     def test_logical_precedence(self):
         env={x:Expr(x,x,PROP) for x in ['p','q','r']}
         self.assertEqual(Expressions(self.reg,env).parse('p and q or r').lean,'((p ∧ q) ∨ r)')

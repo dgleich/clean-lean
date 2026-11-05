@@ -28,13 +28,10 @@ naming template for that item only. A labeled conjunction remains one hypothesis
 
 ## Grammar and parsing
 
-The [EBNF extension](../grammar/conditions.ebnf) and these rules are normative for
-this bounded feature. **It does not generate the current parser.** The parser is
-handwritten Python; the grammar is a specification fragment, not a complete grammar
-for a parser generator. Existing expression, type, lexical, layout, and module
-productions remain defined in the language reference. Syntax tests check their
-agreement but do not prove it. A generated parser would require consolidating those
-productions and their lexical/layout boundary into a machine-readable grammar.
+The [executable grammar](../grammar/clean.lark) generates the parser used by Clean.
+These rules specify binding, naming, and translation. See the
+[generated-parser guide](generated-parser.md) for regeneration, layout handling,
+strict conflict checks, and the remaining semantic boundaries.
 
 Keywords and field names are case-insensitive. Condition names and variables are
 case-sensitive: `symmetric(A)` and `Symmetric(A)` are different names. Headers end

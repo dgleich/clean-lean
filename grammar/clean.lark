@@ -1,0 +1,112 @@
+// generated: gpt-6 2026-11-05 role=assisted; see PROVENANCE.md
+// Logical keywords and function are reserved expression words (case insensitive).
+// Fragment input ends with one ignored ASCII space (the explicit EOF boundary).
+?expression: equivalence
+?equivalence: implication (IFF implication)* -> chain
+?implication: disjunction (IMPLIES implication)? -> chain
+?disjunction: conjunction (OR conjunction)* -> chain
+?conjunction: negation (AND negation)* -> chain
+?negation: NOT negation -> unary
+         | comparison
+?comparison: sum (COMPARE sum)* -> chain
+?sum: product (ADD product)* -> chain
+?product: signed (MULTIPLY signed)* -> chain
+?signed: MINUS signed -> unary
+       | power
+?power: atom (POWER signed)? -> chain
+?atom: NUMBER -> decimal
+     | name "(" [arguments] ")" -> call
+     | ID -> local
+     | "(" expression ")" -> group
+     | FUNCTION "(" ID ":" type_ref "," expression ")" -> function
+name: ID+
+arguments: expression ("," expression)*
+type_ref: TYPE_ID ["(" [type_arguments] ")"]
+type_arguments: type_argument ("," type_argument)*
+?type_argument: type_ref | NUMBER
+assumptions: assumption ("," assumption)*
+assumption: [name ":"] expression
+// Entry points used by the declaration interpreter. Opaque payloads are preserved.
+header: DECL name "(" [parameters] ")" [":" type_text] ":"
+parameters: parameter ("," parameter)*
+parameter: ID [":" type_text]
+source_header: "Source"i TYPE_ID ":"
+scope_header: SCOPE title ":"
+title: TITLE_WORD+
+SCOPE: /(?i:Result|Theorem|Context)(?!\w)/
+type_header: "Type"i TYPE_ID "(" [parameters] ")" ":"
+let_clause: LET identifiers ":" type_text -> typed_let
+          | LET identifiers "be"i type_text -> typed_let
+          | LET ID "=" expression -> value_let
+          | DEFINE ID "=" expression -> value_let
+identifiers: ID ("," ID)*
+// Prose type phrases are resolved after parsing, using explicit module bindings.
+type_text: TYPE_PART ("(" [type_text ("," type_text)*] ")" TYPE_PART?)*
+import_line: "Import"i STRING -> clean_import
+           | "Import"i "Lean"i MODULE -> lean_import
+           | "Import"i "BibTeX"i STRING -> bib_import
+alias_line: "Alias"i TYPE_ID ":" TYPE_ID
+phrase_line: "Phrase"i PHRASE "=>" OPAQUE
+field: FIELD ":" OPAQUE
+// Document blocks are recognized from lexical logical lines, after layout/continuation.
+document: (_NL | top_level)*
+?top_level: declaration | result | context | import_stmt | alias_stmt | phrase_stmt
+import_stmt: IMPORT_LINE _NL
+alias_stmt: ALIAS_LINE _NL
+phrase_stmt: PHRASE_LINE _NL
+declaration: HEADER_LINE _NL _INDENT declaration_field+ _DEDENT
+?declaration_field: LET_LINE _NL -> declaration_let
+                  | FIELD_LINE _NL -> declaration_field
+                  | EXPR_FIELD_LINE _NL (_INDENT expression_line+ _DEDENT)? -> expression_field
+expression_line: EXPR_LINE _NL
+result: RESULT_LINE _NL _INDENT result_field* conclusion _DEDENT
+?result_field: LET_LINE _NL -> result_let
+             | ASSUME_LINE _NL -> result_assume
+             | ATTRIBUTION_LINE _NL (_INDENT attribution_entry+ _DEDENT)? -> attribution
+conclusion: CONCLUDE_LINE _NL (_INDENT expression_line+ _DEDENT)?
+attribution_entry: FIELD_LINE _NL
+context: CONTEXT_LINE _NL _INDENT context_clause* (result | context)+ _DEDENT
+?context_clause: LET_LINE _NL -> context_let
+               | ASSUME_LINE _NL -> context_assume
+DECL: /(?i:Notation|Define|Condition)(?!\w)/
+LET: /(?i:Let)(?!\w)/
+DEFINE: /(?i:Define)(?!\w)/
+FIELD: /(?i:Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
+IFF: "↔"
+IMPLIES: "→"
+OR: /(?i:or)(?=\W)/ | "∨"
+AND: /(?i:and)(?=\W)/ | "∧"
+NOT: /(?i:not)(?=\W)/ | "¬"
+FUNCTION: /(?i:function)(?=\W)/
+COMPARE: "=" | "≠" | "!=" | "<=" | ">=" | "≤" | "≥" | "<" | ">" | "∈" | "⊆" | "∣"
+ADD: "+" | "-" | "∪" | "∩"
+MINUS: "-"
+MULTIPLY: "*" | "/"
+POWER: "^"
+ID: /(?!(?i:and|or|not|function)\W)[^\W\d]\w*/
+TYPE_ID: /[^\W\d]\w*/
+TITLE_WORD: /\w+/
+NUMBER: /\d+/
+TYPE_PART: /[^(),:\s][^(),:\n]*/
+STRING: /"[^"\n]+"/
+MODULE: /[A-Za-z_][\w.]*/
+PHRASE: /\S[^\n]*?(?=\s*=>)/
+OPAQUE: /\S[^\n]*/
+IMPORT_LINE: /(?i:Import)[ ]+[^\n]+/
+ALIAS_LINE: /(?i:Alias)[ ]+[^\n]+/
+PHRASE_LINE: /(?i:Phrase)[ ]+[^\n]+/
+HEADER_LINE: /(?i:Notation|Define|Condition|Type|Source)[ ]+[^\n]+/
+RESULT_LINE: /(?i:Result|Theorem)[ ]+[^\n]+/
+CONTEXT_LINE: /(?i:Context)[ ]+[^\n]+/
+LET_LINE: /(?i:Let|Define)[ ]+[^\n]+/
+ASSUME_LINE: /(?i:Assume)[ ]+[^\n]+/
+ATTRIBUTION_LINE: /(?i:Attribution)[ ]*:[^\n]*/
+CONCLUDE_LINE: /(?i:Conclude)(?!\w)[^\n]*/
+EXPR_FIELD_LINE: /(?i:Equals|Holds when)[ ]*:[^\n]*/
+FIELD_LINE: /(?i:Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
+EXPR_LINE: /\S[^\n]*/
+_NL: /\n[ ]*/
+%declare _INDENT _DEDENT
+%ignore /[ \t]+/
+
+// generated: gpt-6 2026-11-05 role=assisted; LLM-authored portions; see PROVENANCE.md
