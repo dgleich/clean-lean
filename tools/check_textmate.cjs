@@ -18,7 +18,13 @@ const tm=require('vscode-textmate'),onig=require('vscode-oniguruma');
  has('  Means: if p then a else b','if','meta.embedded.line.lean.clean');
  has('  Render latex: x^2 and y','and','string.unquoted.metadata.clean');
  has('  # Let x = 1','Let','comment.line.number-sign.clean');
- assert(!scopeAt('  Let x = 1 # not a comment','#').includes('comment.line.number-sign.clean'));
+ has('  Let x = 1 # a comment','#','comment.line.number-sign.clean');
+ has('  Means: #[1, 2]','#','meta.embedded.line.lean.clean');
+ let state=grammar.tokenizeLine('#|').ruleStack;
+ let block=grammar.tokenizeLine('  Let ignored: Real',state);
+ assert(block.tokens.every(t=>t.scopes.includes('comment.block.clean')));
+ state=grammar.tokenizeLine('|#',block.ruleStack).ruleStack;
+ assert(!grammar.tokenizeLine('Let x: Real',state).tokens[0].scopes.includes('comment.block.clean'));
  has('\tLet x: Real','\t','invalid.illegal.tab.clean');
  has('Notation cos(x: Real): Real:','cos','entity.name.function.clean');
  has('Notation cos(x: Real): Real:','x: Real','meta.signature.clean');
@@ -27,7 +33,7 @@ const tm=require('vscode-textmate'),onig=require('vscode-oniguruma');
  has('  Assume positive(x), positive(y)','Assume','keyword.control.clean');
  has('  Holds when: x > 0','Holds when','keyword.control.clean');
  has('  Assumption name: positivity of {x}','positivity','string.unquoted.metadata.clean');
- console.log('19 TextMate/Oniguruma scope checks passed');
+ console.log('TextMate/Oniguruma scope checks passed');
 })().catch(e=>{console.error(e);process.exitCode=1;});
 
 // generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

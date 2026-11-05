@@ -133,3 +133,14 @@ syntax normalization, deterministic artifact generation, layout and semantic bou
 and the reservation of logical expression keywords independent of module lookup.
 `python3 tools/generate_parser.py --check` detects stale generated code.
 :::
+
+:::llm gpt-6 2026-11-05 role=assisted
+
+## Trailing and block comments
+
+Added whitespace-delimited trailing `#` comments and nested whole-line `#|` / `|#`
+blocks. Whole-line block delimiters avoid changing indentation halfway through a
+line. Embedded Lean and rendering fields remain opaque. Quoted paths and attached
+URL fragments preserve hashes. These choices are revisitable; the exact lexical
+algorithm is in [the specification](spec.md#comment-lexing-implemented).
+:::

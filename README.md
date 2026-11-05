@@ -42,7 +42,9 @@ See the [typeset examples](generated/specimen.pdf),
 
 ## More examples, with annotations
 
-Clean supports full-line `#` comments, including inside indented blocks.
+Clean supports full-line and trailing `#` comments. Nested multiline comments use
+`#|` and `|#` on separate lines. See [comment rules](docs/spec.md#comment-lexing-implemented)
+for quoted text and embedded Lean/LaTeX fields.
 Comments explain the source without becoming part of the mathematical statement
 or its LaTeX rendering. Put comments on their own lines; trailing comments after
 code are not currently supported. Each block below is a separate example, with

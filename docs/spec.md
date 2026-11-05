@@ -31,7 +31,7 @@ Result similarity transforms eigenvector:
 
 ## Layout and names
 
-One declaration occupies one physical line. Tabs are forbidden everywhere. Each block increases indentation by at least two spaces relative to its parent. Sibling clauses align at the same column, and a dedent must return to an established enclosing column. Widths may differ between blocks; two, three, four, or more spaces are valid. Blank lines and full-line `#` comments are allowed. An indented conclusion may span several lines; those lines form one expression, so `and` must appear explicitly. Clean expressions continue automatically inside open parentheses or after a trailing operator. Outside parentheses, a continuation is indented at least two spaces beyond its first physical line; inside a `Conclude:` expression block, aligned expression lines are also allowed. Continuation indentation does not create scope. A complete expression ends at the newline: an operator on the next line alone does not request continuation. No backslash is needed. Blank lines and full-line comments may occur during continuation. Lean `Means` bodies, rendering fields, and metadata remain single-line opaque fields. Semicolon-separated mathematical statements and inline comments remain unsupported. Semicolons are permitted as field separators inside compact attribution clauses.
+One declaration occupies one physical line. Tabs are forbidden everywhere. Each block increases indentation by at least two spaces relative to its parent. Sibling clauses align at the same column, and a dedent must return to an established enclosing column. Widths may differ between blocks; two, three, four, or more spaces are valid. Blank lines and full-line `#` comments are allowed. An indented conclusion may span several lines; those lines form one expression, so `and` must appear explicitly. Clean expressions continue automatically inside open parentheses or after a trailing operator. Outside parentheses, a continuation is indented at least two spaces beyond its first physical line; inside a `Conclude:` expression block, aligned expression lines are also allowed. Continuation indentation does not create scope. A complete expression ends at the newline: an operator on the next line alone does not request continuation. No backslash is needed. Blank lines and full-line comments may occur during continuation. Lean `Means` bodies, rendering fields, and metadata remain single-line opaque fields. Semicolon-separated mathematical statements remain unsupported. Comments follow the lexical rules below. Semicolons are permitted as field separators inside compact attribution clauses.
 
 The leading keyword is case-insensitive: `let`, `Let`, and `LET` are equivalent, as are `Define` and `define`. This rule also applies to `Result`, `Theorem`, `Assume`, `Conclude`, attribution field names, and logical `and`, `or`, `not`. Variable names and notation names are case-sensitive. Type constructor spellings and aliases are registered explicitly; prose type patterns match without regard to case.
 
@@ -386,4 +386,42 @@ The normative [condition contract](conditions.md) and [executable grammar](../gr
 specify fixed condition results, `Holds when`, imported `From Lean` bodies, name templates,
 continuation, collision checks, and the unique expansion into ordered Lean hypotheses.
 The grammar now generates the parser; see [generation and checking](generated-parser.md).
+:::
+
+:::llm gpt-6 2026-11-05 role=assisted
+
+## Comment lexing (implemented)
+
+Before continuation or layout processing, scan physical lines in order. Tabs remain
+errors everywhere, including comments. Outside a block comment, a `#` at column zero
+or immediately after an ASCII space starts a comment through end of line, unless
+inside double quotes. Double quotes pair within each physical line; there is no
+backslash escape convention. A hash attached to another character stays literal.
+`Means:`, `From Lean:`, `Render:`, and `Render latex:` lines are opaque: their payloads
+retain all hashes and quotes. Put comments about these fields on separate lines.
+Other fields, including attribution, support trailing comments.
+
+A physical line whose stripped contents are exactly `#|` opens a block comment;
+a line containing exactly `|#` closes it. These delimiters may have surrounding
+spaces and arbitrary indentation. Blocks nest. Inside a block, only these two
+whole-line delimiters are recognized; quotes and ordinary hashes have no effect.
+An unmatched closer or unclosed opener is an error with its physical line number.
+`#| text` is an ordinary line comment, not a block opener. Inline block comments
+are not supported. Newlines are preserved: block comments cannot join statements.
+
+```clean
+Let x: Real # the variable used below
+#|
+This explanation spans lines.
+  #|
+  A nested explanation.
+  |#
+|#
+Assume positive(x), positive(y) # two named assumptions
+```
+
+Each comment character becomes a space, preserving physical lines and columns.
+Blank lines have no layout effect. This deterministic scan has no mathematical
+AST constructor and no Lean term: the parse and fully elaborated target are
+exactly those of the masked source under the same explicit environment.
 :::

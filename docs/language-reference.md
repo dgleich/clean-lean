@@ -34,6 +34,11 @@ The compiler owns layout, lexical binding, declaration structure, module loading
 
 ## 2 Lexical and layout rules
 
+Implemented comment lexing is specified in [the current spec](spec.md#comment-lexing-implemented).
+It precedes layout and supports trailing hashes and nested whole-line blocks.
+The escaped-string proposal below is not yet implemented: current quoted fields
+pair double quotes without backslash escapes.
+
 - UTF-8 input; each indentation increase is at least two spaces; tabs are errors everywhere, including blank lines, comments, and continuations. Siblings align; dedents return to an enclosing column. Block widths need not match across the file. Blank lines and full-line `#` comments do not affect indentation.
 - Inline Clean expressions continue across physical newlines while parentheses remain open or the expression parser requires a further operand. A complete postfix application does not require an operand. Outside parentheses, a continued line begins at least two columns beyond the first physical line of the clause; parenthesized continuation indentation is visual and does not introduce scope. A complete inline expression ends at the physical newline; a leading operator on the next line cannot reopen it. Explicit expression blocks have separate boundaries, specified below.
 - Declaration keywords and field labels are case-insensitive. Mathematical names are case-sensitive. Word-operator spellings may have module-declared case-insensitive aliases; the compiler does not hard-code English logical words.

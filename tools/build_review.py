@@ -11,11 +11,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from cleanlang.core import Environment, lean, CleanError
+from cleanlang.core import Environment, lean, CleanError, comment_lines
 from cleanlang.modules import load_document, load_module
 
 GRAMMAR = ROOT/'editors/vscode/syntaxes/clean.tmLanguage.json'
-RULES = [(re.compile(p['match']), p) for p in json.loads(GRAMMAR.read_text())['patterns']]
+RULES = [(re.compile(p['match']), p) for p in json.loads(GRAMMAR.read_text())['repository']['code']['patterns'] if 'match' in p]
 
 def style(scope):
     if scope.startswith('invalid'): return 'invalid'
@@ -51,6 +51,18 @@ def highlight(line):
         pos=m.end()
     return ''.join(out)
 
+def highlight_source(source):
+    result = []
+    try:
+        masked = comment_lines(source)
+    except CleanError:
+        # Keep malformed files readable; collect reports their translation error.
+        return [html.escape(line) for line in source.splitlines()]
+    for raw, (_, start) in zip(source.splitlines(), masked):
+        result.append(highlight(raw) if start is None else
+                      highlight(raw[:start]) + '<span class="comment">' + html.escape(raw[start:]) + '</span>')
+    return result
+
 DECL = re.compile(r'^ *(Result|Theorem|Context|Define|Notation|Condition|Type|Source)\s+(.+?):?\s*$',re.I)
 
 def collect(root=ROOT):
@@ -58,7 +70,12 @@ def collect(root=ROOT):
     for folder in ('library','corpus','examples','studies'):
         for path in sorted((root/folder).rglob('*.clean')):
             source=path.read_text(); symbols=[]; imports=[]
-            for number,line in enumerate(source.splitlines(),1):
+            try:
+                masked = comment_lines(source)
+            except CleanError:
+                masked = []
+            for number,(line, _) in enumerate(masked,1):
+                line = line.rstrip()
                 if m:=DECL.fullmatch(line):
                     symbols.append({'kind':m[1].lower(),'name':m[2],'line':number})
                 if m:=re.fullmatch(r'Import\s+"([^"\n]+)"',line,re.I):
@@ -83,7 +100,7 @@ def collect(root=ROOT):
                 except (CleanError, ValueError, OSError, KeyError, ImportError) as exc:
                     target=''; status='Translation unavailable'; error=str(exc).replace(str(root)+'/', '')
             files.append({'path':str(path.relative_to(root)), 'source':source,
-                'highlighted':[highlight(line) for line in source.splitlines()], 'symbols':symbols,
+                'highlighted':highlight_source(source), 'symbols':symbols,
                 'imports':imports,'lean':target,'status':status,'error':error,
                 'sha256':hashlib.sha256(source.encode()).hexdigest()})
     return files

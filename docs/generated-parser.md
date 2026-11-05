@@ -134,3 +134,13 @@ coercions, typeclass search, universes, and `From Lean` remain documented in the
 checks for definitions, lambdas, and conditions, plus the corpus and magnetic proof
 checks, continue to exercise the unchanged translation layer.
 :::
+
+:::llm gpt-6 2026-11-05 role=assisted
+
+Comment masking is a deterministic lexical stage before the generated parser and
+before layout/continuation. See [comment lexing](spec.md#comment-lexing-implemented).
+The grammar consumes the masked source; comment text never participates in parser
+conflict resolution or Lean elaboration. No parser-table change is needed for this
+lexical extension. Comment erasure/target invariance and error cases are exercised
+in `tests/test_layout.py`.
+:::

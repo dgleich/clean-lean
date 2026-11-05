@@ -1,6 +1,7 @@
 " Lexical display only. Mathematical names are case-sensitive; keyword spelling is not.
 if exists('b:current_syntax') | finish | endif
 syntax case match
+syntax sync fromstart
 syntax match cleanMathNumber '\<\d\+\>'
 syntax match cleanMathOperator '[+*/^=<>−-]\|[↔→≤≥≠∧∨¬∈⊆∪∩∣]'
 syntax match cleanMathDelimiter '[(),:;]'
@@ -13,7 +14,12 @@ syntax match cleanMathMetadataKey '\c^ *\%(Assumption name\|Render\%( latex\)\?\
 syntax match cleanMathOpaque '\c^ *\%(Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:.*$' contains=cleanMathMetadataKey
 syntax match cleanMathLean '\c^ *\%(Means\|From Lean\)\s*:.*$'
 syntax match cleanMathImport '\c^ *Import\>.*$'
-syntax match cleanMathComment '^ *#.*$'
+syntax region cleanMathQuote start='"' end='"' oneline containedin=ALLBUT,cleanMathComment,cleanMathBlock,cleanMathLean,cleanMathOpaque
+syntax match cleanMathComment '\%(^\| \)\zs#.*$' containedin=ALLBUT,cleanMathQuote,cleanMathLean,cleanMathBlock
+syntax region cleanMathBlock start='^ *#| *$' end='^ *|# *$' contains=cleanMathBlock
+syntax match cleanMathRender '\c^ *Render\%( latex\)\?\s*:.*$'
+highlight default link cleanMathRender String
+highlight default link cleanMathBlock Comment
 syntax match cleanMathTab '\t' containedin=ALL
 highlight default link cleanMathSignature Type
 highlight default link cleanMathDeclaration Function

@@ -74,7 +74,13 @@ not guaranteed byte-for-byte identical. None provides semantic diagnostics,
 completion, rename, go-to-definition, proof checking, or a formatter. A future
 language server should get those capabilities from the authoritative compiler;
 a Tree-sitter parser would need its own conformance work and is not added here.
-Only full-line `#` comments belong to Clean. No inline comment toggle is enabled.
+Full-line and whitespace-delimited trailing `#` comments are supported, as are
+nested whole-line `#|` / `|#` blocks. VS Code enables line-comment toggling; block
+delimiters must be entered on separate lines. Embedded Lean/rendering fields keep
+literal hashes. The browser uses the compiler comment scanner before applying
+the portable TextMate match rules. Emacs comment highlighting rescans the buffer
+prefix for block nesting; performance tuning and editor-level incremental updates
+remain future work.
 
 Checks:
 

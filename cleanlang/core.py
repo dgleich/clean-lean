@@ -7,16 +7,56 @@ from .attribution import Sources, compact, normalize
 class CleanError(ValueError): pass
 ID = r'[^\W\d]\w*'
 
+def comment_lines(text):
+    """Mask comments with spaces, preserving every physical line and column.
+
+    Return (masked line, comment start or None) pairs for compiler and browser.
+    Block delimiters occupy whole lines; nested blocks are supported.
+    """
+    output = []
+    openings = []
+    for number, raw in enumerate(text.splitlines(), 1):
+        if '\t' in raw:
+            raise CleanError(f'line {number}: tabs are not allowed')
+        token = raw.strip()
+        if token == '#|':
+            openings.append(number)
+            output.append((' ' * len(raw), 0))
+            continue
+        if token == '|#':
+            if not openings:
+                raise CleanError(f'line {number}: unmatched block comment terminator')
+            openings.pop()
+            output.append((' ' * len(raw), 0))
+            continue
+        if openings:
+            output.append((' ' * len(raw), 0))
+            continue
+        # These fields belong to their embedded languages, including hashes/quotes.
+        if re.match(r' *(?:Means|From Lean|Render(?: latex)?)\s*:', raw, re.I):
+            output.append((raw, None))
+            continue
+        quoted = False
+        start = None
+        for i, char in enumerate(raw):
+            if char == '"':
+                quoted = not quoted
+            elif char == '#' and not quoted and (i == 0 or raw[i - 1] == ' '):
+                start = i
+                break
+        output.append((raw if start is None else raw[:start] + ' ' * (len(raw) - start), start))
+    if openings:
+        raise CleanError(f'line {openings[0]}: unclosed block comment')
+    return output
+
+
 def _expression_lines(text):
     """Join incomplete Clean expressions, keeping their first source line.
 
     Consumed physical lines remain blank, so diagnostics retain line numbers.
     Lean bodies, metadata, and rendering templates are deliberately opaque.
     """
-    lines = text.splitlines()
-    for number, raw in enumerate(lines, 1):
-        if '\t' in raw:
-            raise CleanError(f'line {number}: tabs are not allowed')
+    lines = [line for line, _ in comment_lines(text)]
     output = list(lines)
     start = None
     depth = 0

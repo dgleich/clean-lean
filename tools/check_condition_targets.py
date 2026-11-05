@@ -35,10 +35,17 @@ Condition positive(x: Real):
   Assumption name: positivity of {x}
 Condition imported positive(x: Real):
   From Lean: x > 0
-Result two positive values:
+#|
+Ignored text with unmatched ( and "
+#|
+Nested comment
+|#
+|#
+Result two positive values: # theorem
   Attribution: checks; two positive values; original
   Let x,y: Real
-  Assume positive(x), positive(y)
+  Assume positive(x), # first hypothesis
+    positive(y) # second hypothesis
   Conclude: x > 0 and y > 0
 '''.replace('COMMON',str(ROOT/'library/Common.clean'))
 with tempfile.TemporaryDirectory() as tmp:

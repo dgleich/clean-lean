@@ -24,6 +24,14 @@
     (goto-char (point-min))
     (search-forward "Real")
     (should (eq (get-text-property (1- (point)) 'face) 'font-lock-type-face))))
+(ert-deftest clean-math-comments ()
+  (with-temp-buffer
+    (insert "Let x: Real # note\n#|\nignored\n|#\nMeans: #[1]\n")
+    (clean-math-mode) (font-lock-ensure)
+    (goto-char (point-min)) (search-forward "note")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-comment-face))
+    (search-forward "ignored")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-comment-face))))
 (ert-run-tests-batch-and-exit)
 
 ;; generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

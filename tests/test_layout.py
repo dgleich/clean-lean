@@ -62,6 +62,39 @@ class LayoutTests(unittest.TestCase):
         source = self.result(3, 2).replace('   Let x', ' # arbitrarily aligned comment\n \n   Let x')
         self.assertEqual(self.output(source), self.output(self.result(3, 2)))
 
+    def test_trailing_comments_preserve_target(self):
+        source = self.result()
+        annotated = '\n'.join(line + ' # explanation' for line in source.splitlines())
+        self.assertEqual(self.output(source), self.output(annotated))
+
+    def test_nested_block_comments_preserve_target_and_lines(self):
+        source = self.result().replace('    Let x',
+            '#|\nignored even with " and (\n  #|\nnested\n|#\n|#\n    Let x')
+        self.assertEqual(self.output(source), self.output(self.result()))
+        self.assertEqual(parse(source, self.env)[0].clauses[0].line, 9)
+
+    def test_comment_lexical_boundaries(self):
+        from cleanlang.core import comment_lines
+        lines = ['Import "a # b.clean" # note', 'URL: https://example.org/#anchor',
+                 '  Means: #[1, 2]', r'  Render latex: \#',
+                 '  Let x: Real#not_comment', 'Let x: Real #| one-line comment']
+        masked = [line.rstrip() for line, _ in comment_lines('\n'.join(lines))]
+        self.assertEqual(masked, ['Import "a # b.clean"', lines[1], lines[2], lines[3],
+                                  lines[4], 'Let x: Real'])
+
+    def test_comment_errors(self):
+        from cleanlang.core import comment_lines
+        for source, error in [('#|\ntext', 'line 1: unclosed'),
+                              ('|#', 'line 1: unmatched'),
+                              ('#|\n\ttext\n|#', 'line 2: tabs')]:
+            with self.subTest(source=source), self.assertRaisesRegex(CleanError, error):
+                comment_lines(source)
+
+    def test_comments_during_continuation(self):
+        source = self.result().replace('x = x', 'x + # continued\n#|\nignored\n|#\n          x = x + x # done')
+        expected = self.result().replace('x = x', 'x + x = x + x')
+        self.assertEqual(self.output(source), self.output(expected))
+
     def test_tabs_rejected_even_in_comments_and_blank_lines(self):
         for suffix in ['\t\n', '#\tcomment\n']:
             with self.assertRaisesRegex(CleanError, 'tabs'):
