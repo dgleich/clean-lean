@@ -96,7 +96,7 @@ def document(normalized):
     """Parse an already layout-normalized source; preserve original source lines."""
     from .core import CleanError
     lines=[(i,line.rstrip()) for i,line in enumerate(normalized.splitlines(),1)
-           if line.strip() and not line.lstrip().startswith('#')]
+           if line.strip()]
     if not lines:return []
     source='\n'.join(line for _,line in lines)+'\n'
     try:tree=_DOCUMENT.parse(source,start='document')

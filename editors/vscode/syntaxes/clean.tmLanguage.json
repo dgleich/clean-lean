@@ -6,26 +6,31 @@
   ],
   "patterns": [
     {
+      "name": "meta.embedded.line.lean.clean",
+      "match": "(?i)^ *(?:Means|From Lean)\\s*:.*$"
+    },
+    {
+      "name": "string.unquoted.metadata.clean",
+      "match": "(?i)^ *Render(?: latex)?\\s*:.*$"
+    },
+    {
       "include": "#block"
     },
     {
-      "name": "meta.commented-line.clean",
-      "match": "(?i)^(?! *(?:Means|From Lean|Render(?: latex)?)\\s*:)((?:[^\"#]|\"[^\"\\n]*\"|(?<! )#)*?)(?<!\\S)(#.*)$",
+      "name": "comment.line.double-dash.clean",
+      "match": "--.*$"
+    },
+    {
+      "match": "(?:[^\"/\\-\\n]|\"[^\"\\n]*\"|/(?!-)|-(?![-/]))+",
       "captures": {
-        "1": {
+        "0": {
           "patterns": [
             {
               "include": "#code"
             }
           ]
-        },
-        "2": {
-          "name": "comment.line.number-sign.clean"
         }
       }
-    },
-    {
-      "include": "#code"
     }
   ],
   "repository": {
@@ -36,8 +41,8 @@
           "match": "\\t+"
         },
         {
-          "name": "comment.line.number-sign.clean",
-          "match": "^ *#.*$"
+          "name": "comment.line.double-dash.clean",
+          "match": "--.*$"
         },
         {
           "name": "keyword.control.clean",
@@ -175,8 +180,8 @@
     },
     "block": {
       "name": "comment.block.clean",
-      "begin": "^ *#= *$",
-      "end": "^ *=# *$",
+      "begin": "/-",
+      "end": "-/",
       "patterns": [
         {
           "include": "#block"

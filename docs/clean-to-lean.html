@@ -254,12 +254,14 @@ Render latex: M({A},{q})</code></pre></section>
   <div class="notes"><p>The last two lines illustrate fields in their respective containing declarations, not one complete block. Bibliographic citation keys become source keys. BibTeX parsing is optional (<code>.[bibtex]</code>); crossref/xdata inheritance is currently rejected. Imports and source declarations do not establish a theorem’s truth.</p></div>
 </article>
 <!-- generated: gpt-6 2026-11-05 role=assisted -->
-<p>Implemented comments: <code>Let x: Real # explanation</code> erases to the same
-Clean declaration and Lean binder as <code>Let x: Real</code>. Multiline comments
-use <code>#=</code> and <code>=#</code> on separate lines and may nest. Comments
-produce no Lean term and preserve source line numbers. Quoted hashes and hashes
-in embedded Lean/rendering fields stay literal. See the
-<a href="spec.md#comment-lexing-implemented">precise lexical rules</a>.</p>
+<p>Implemented comments: <code>Let x: Real -- explanation</code> erases to the same
+Clean declaration and Lean binder as <code>Let x: Real</code>. Block comments use
+<code>/- … -/</code>, nest, and may appear inline:
+<code>Let x: /- a scalar -/ Real</code>. Comments produce no Lean term; they become
+spaces while preserving newlines and source positions. Quoted text and embedded
+Lean/rendering fields retain their own syntax. Reserve adjacent comment delimiters
+before math tokens: write <code>x - -y</code> for subtraction followed by negation.
+See the <a href="spec.md#comment-lexing-implemented">precise lexical rules</a>.</p>
 <article id="layout" data-status="accepted" class="mapping">
   <header><h2><a href="#layout">Layout determines scope before mathematical meaning</a></h2><span class="badge accepted">Accepted design</span></header>
   <p>At least two spaces open a block; siblings align; tabs are forbidden. Inline expression continuation depends on whether the expression is incomplete.</p>

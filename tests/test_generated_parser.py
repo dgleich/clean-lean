@@ -41,7 +41,7 @@ class GeneratedSyntax(unittest.TestCase):
         self.assertEqual(syntax.type_spelling(syntax.parse('Natural()','type_ref')),'Natural')
 
     def test_document_shape_and_source_locations(self):
-        text='''# A comment
+        text='''-- A comment
 Condition positive(x: Real):
   Holds when: x > 0
   Assumption name: positivity of {x}

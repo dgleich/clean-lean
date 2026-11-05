@@ -320,7 +320,7 @@
       "id": "comment_erasure",
       "status": "partial",
       "specification": "docs/spec.md#comment-lexing-implemented",
-      "source": "Conclude: x = x # explanation",
+      "source": "Conclude: x /- left -/ = x -- explanation",
       "expected_tree": [
         "Operator",
         "=",
@@ -333,7 +333,7 @@
           "x"
         ]
       ],
-      "translation_rule": "Erase comments to spaces before layout; same canonical Lean target and type as masked source in the same explicit environment.",
+      "translation_rule": "Reserve --, /-, -/ before math lexing. Mask nested comments with spaces preserving newlines. Same canonical Lean target and type as masked source in the same explicit environment.",
       "checks": [
         "tests/test_layout.py",
         "tests/test_review.py",

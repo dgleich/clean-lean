@@ -58,9 +58,15 @@ def highlight_source(source):
     except CleanError:
         # Keep malformed files readable; collect reports their translation error.
         return [html.escape(line) for line in source.splitlines()]
-    for raw, (_, start) in zip(source.splitlines(), masked):
-        result.append(highlight(raw) if start is None else
-                      highlight(raw[:start]) + '<span class="comment">' + html.escape(raw[start:]) + '</span>')
+    for raw, (_, spans) in zip(source.splitlines(), masked):
+        pieces = []
+        cursor = 0
+        for start, end in spans:
+            pieces.append(highlight(raw[cursor:start]))
+            pieces.append('<span class="comment">' + html.escape(raw[start:end]) + '</span>')
+            cursor = end
+        pieces.append(highlight(raw[cursor:]))
+        result.append(''.join(pieces))
     return result
 
 DECL = re.compile(r'^ *(Result|Theorem|Context|Define|Notation|Condition|Type|Source)\s+(.+?):?\s*$',re.I)

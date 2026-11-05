@@ -8,7 +8,7 @@ review=importlib.util.module_from_spec(spec);spec.loader.exec_module(review)
 
 class ReviewTests(unittest.TestCase):
     def test_source_markup_is_escaped(self):
-        rendered=review.highlight('# </script><img src=x onerror=alert(1)>')
+        rendered=review.highlight('-- </script><img src=x onerror=alert(1)>')
         self.assertNotIn('</script>',rendered)
         self.assertNotIn('<img',rendered)
         self.assertIn('&lt;/script&gt;',rendered)
@@ -16,7 +16,7 @@ class ReviewTests(unittest.TestCase):
     def test_highlighting_preserves_text(self):
         import html
         for source in ['Let μ be a Complex','Define f(x):','Attribution: mathlib; x; direct',
-                       '  Equals: x + 2','  # <&>','  From Lean: x + x']:
+                       '  Equals: x + 2','  -- <&>','  From Lean: x + x']:
             with self.subTest(source=source):
                 self.assertEqual(html.unescape(re.sub('<[^>]*>','',review.highlight(source))),source)
 
@@ -26,13 +26,21 @@ class ReviewTests(unittest.TestCase):
             self.assertNotIn('>and</span>',review.highlight(source))
 
     def test_unclosed_comment_remains_browsable(self):
-        self.assertEqual(review.highlight_source('#=\n<unfinished>'), ['#=', '&lt;unfinished&gt;'])
+        self.assertEqual(review.highlight_source('/-\n<unfinished>'), ['/-', '&lt;unfinished&gt;'])
 
     def test_comment_source_highlighting(self):
-        lines = review.highlight_source('Let x: Real # note\n#=\nignored <tag>\n=#\nMeans: #[1]')
-        self.assertIn('<span class="comment"># note</span>', lines[0])
+        lines = review.highlight_source('Let x: Real -- note\n/-\nignored <tag>\n-/\nMeans: #[1]')
+        self.assertIn('<span class="comment">-- note</span>', lines[0])
         self.assertEqual(lines[2], '<span class="comment">ignored &lt;tag&gt;</span>')
         self.assertNotIn('class="comment"', lines[4])
+
+    def test_inline_comment_keeps_following_code_visible(self):
+        import html
+        source = 'Let x: /- note -/ Real -- end'
+        rendered = review.highlight_source(source)[0]
+        self.assertIn('<span class="comment">/- note -/</span>', rendered)
+        self.assertIn('Real', rendered.split('<span class="comment">/- note -/</span>')[1])
+        self.assertEqual(html.unescape(re.sub('<[^>]*>', '', rendered)), source)
 
     def test_import_navigation_and_fresh_targets(self):
         files={f['path']:f for f in review.collect()}

@@ -4,7 +4,7 @@
                         (file-name-directory load-file-name)) nil t)
 (ert-deftest clean-math-highlights ()
   (with-temp-buffer
-    (insert "rEsUlT sample:\n  Let μ be Complex\n  Means: if p then x else y\n  # Let z: Real\n")
+    (insert "rEsUlT sample:\n  Let μ be Complex\n  Means: if p then x else y\n  -- Let z: Real\n")
     (clean-math-mode)
     (font-lock-ensure)
     (should-not indent-tabs-mode)
@@ -26,11 +26,21 @@
     (should (eq (get-text-property (1- (point)) 'face) 'font-lock-type-face))))
 (ert-deftest clean-math-comments ()
   (with-temp-buffer
-    (insert "Let x: Real # note\n#=\nignored\n=#\nMeans: #[1]\n")
+    (insert "Let x: Real -- note\n/-\nignored\n-/\nMeans: #[1]\n")
     (clean-math-mode) (font-lock-ensure)
     (goto-char (point-min)) (search-forward "note")
     (should (eq (get-text-property (1- (point)) 'face) 'font-lock-comment-face))
     (search-forward "ignored")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-comment-face))))
+(ert-deftest clean-math-inline-comments ()
+  (with-temp-buffer
+    (insert "Let x: /- outer /- inner -/ tail -/ Real -- end\n")
+    (clean-math-mode) (font-lock-ensure)
+    (goto-char (point-min)) (search-forward "inner")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-comment-face))
+    (search-forward "Real")
+    (should-not (eq (get-text-property (1- (point)) 'face) 'font-lock-comment-face))
+    (search-forward "end")
     (should (eq (get-text-property (1- (point)) 'face) 'font-lock-comment-face))))
 (ert-run-tests-batch-and-exit)
 

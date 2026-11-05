@@ -155,3 +155,17 @@ Clean retains its whole-line delimiter rule; this change adopts the spelling,
 not Julia's inline block-comment syntax. No compatibility alias is retained.
 Comment masking, source positions, nesting, and the Lean erasure rule are unchanged.
 :::
+
+:::llm gpt-6 2026-11-05 role=assisted
+
+## Lean-style comments, including inline blocks
+
+The user's preference supersedes both earlier comment choices: use `--` and nested
+`/- … -/`. Blocks may start and end inline. No hash-comment compatibility aliases
+remain. Reserve these pairs lexically before mathematical tokens, independent of
+imports; separate adjacent arithmetic operators when they would form a delimiter.
+The scanner masks comment characters with spaces and retains newlines, so layout
+uses actual code columns. Embedded Lean/rendering fields remain opaque. Clean does
+not adopt Lean documentation-comment semantics. See the current
+[lexical contract](spec.md#comment-lexing-implemented) for exact precedence and scope.
+:::

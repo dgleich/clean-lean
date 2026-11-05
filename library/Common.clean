@@ -1,5 +1,5 @@
-# generated: gpt-6 2026-10-30 role=assisted; LLM-authored portions; see PROVENANCE.md
-# Placeholder standard library: types, finite operations, and imported conditions.
+-- generated: gpt-6 2026-10-30 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- Placeholder standard library: types, finite operations, and imported conditions.
 Import Lean Mathlib.LinearAlgebra.Matrix.PosDef
 Import Lean Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 
@@ -51,7 +51,7 @@ Type Function(p0: Type, p1: Type):
     Describe: a function from ${p0}$ to ${p1}$
     Describe plural: functions from ${p0}$ to ${p1}$
 
-# Generic finite operations. There are no magnetic or paper-specific Lean definitions here.
+-- Generic finite operations. There are no magnetic or paper-specific Lean definitions here.
 
 Type Boolean():
     Means: Bool
@@ -166,7 +166,7 @@ Notation diagonal(f):
     Means: Matrix.diagonal f
     Render latex: \operatorname{{diag}}({f})
 
-# Standard scalar and matrix operations.
+-- Standard scalar and matrix operations.
 
 Notation pi(): Real:
     Means: Real.pi

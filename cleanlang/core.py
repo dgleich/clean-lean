@@ -8,43 +8,59 @@ class CleanError(ValueError): pass
 ID = r'[^\W\d]\w*'
 
 def comment_lines(text):
-    """Mask comments with spaces, preserving every physical line and column.
+    """Return (masked line, comment spans), preserving physical positions.
 
-    Return (masked line, comment start or None) pairs for compiler and browser.
-    Block delimiters occupy whole lines; nested blocks are supported.
+    Reserved -- and /- delimiters precede mathematical token recognition.
+    Quoted fields and embedded Lean/rendering payloads remain literal.
     """
     output = []
     openings = []
     for number, raw in enumerate(text.splitlines(), 1):
         if '\t' in raw:
             raise CleanError(f'line {number}: tabs are not allowed')
-        token = raw.strip()
-        if token == '#=':
-            openings.append(number)
-            output.append((' ' * len(raw), 0))
-            continue
-        if token == '=#':
-            if not openings:
-                raise CleanError(f'line {number}: unmatched block comment terminator')
-            openings.pop()
-            output.append((' ' * len(raw), 0))
-            continue
-        if openings:
-            output.append((' ' * len(raw), 0))
-            continue
-        # These fields belong to their embedded languages, including hashes/quotes.
-        if re.match(r' *(?:Means|From Lean|Render(?: latex)?)\s*:', raw, re.I):
-            output.append((raw, None))
-            continue
+        masked = list(raw)
+        spans = []
         quoted = False
-        start = None
-        for i, char in enumerate(raw):
-            if char == '"':
-                quoted = not quoted
-            elif char == '#' and not quoted and (i == 0 or raw[i - 1] == ' '):
-                start = i
+        i = 0
+        start = 0 if openings else None
+        while i < len(raw):
+            pair = raw[i:i + 2]
+            if openings:
+                if pair == '/-':
+                    openings.append(number)
+                    i += 2
+                elif pair == '-/':
+                    openings.pop()
+                    i += 2
+                    if not openings:
+                        spans.append((start, i))
+                        masked[start:i] = ' ' * (i - start)
+                        start = None
+                else:
+                    i += 1
+                continue
+            if not quoted and not ''.join(masked[:i]).strip() and re.match(
+                    r'(?:Means|From Lean|Render(?: latex)?)\s*:', raw[i:], re.I):
                 break
-        output.append((raw if start is None else raw[:start] + ' ' * (len(raw) - start), start))
+            if raw[i] == '"':
+                quoted = not quoted
+                i += 1
+            elif not quoted and pair == '--':
+                spans.append((i, len(raw)))
+                masked[i:] = ' ' * (len(raw) - i)
+                break
+            elif not quoted and pair == '/-':
+                openings.append(number)
+                start = i
+                i += 2
+            elif not quoted and pair == '-/':
+                raise CleanError(f'line {number}: unmatched block comment terminator')
+            else:
+                i += 1
+        if openings:
+            spans.append((start, len(raw)))
+            masked[start:] = ' ' * (len(raw) - start)
+        output.append((''.join(masked), spans))
     if openings:
         raise CleanError(f'line {openings[0]}: unclosed block comment')
     return output
@@ -69,7 +85,7 @@ def _expression_lines(text):
                               last[0].lower() in ('not', '¬')))
     for i, raw in enumerate(lines):
         stripped = raw.strip()
-        if not stripped or stripped.startswith('#'):
+        if not stripped:
             continue
         column = len(raw) - len(raw.lstrip(' '))
         if start is None:
@@ -114,7 +130,7 @@ def normalize_layout(text):
     for number, raw in enumerate(_expression_lines(text), 1):
         if '\t' in raw:
             raise CleanError(f'line {number}: tabs are not allowed')
-        if not raw.strip() or raw.lstrip().startswith('#'):
+        if not raw.strip():
             output.append(raw)
             continue
         column = len(raw) - len(raw.lstrip(' '))
@@ -367,7 +383,7 @@ def _parse_flat(text,reg):
         results.append(r)
     for num,raw in enumerate(text.splitlines(),1):
         if '\t' in raw: raise CleanError(f'line {num}: tabs are not allowed')
-        if not raw.strip() or raw.lstrip().startswith('#'): continue
+        if not raw.strip(): continue
         indent=len(raw)-len(raw.lstrip()); s=raw.strip()
         try:
             if indent==0:

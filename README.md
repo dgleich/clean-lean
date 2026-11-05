@@ -9,13 +9,13 @@ renders as LaTeX, with attribution attached to each result.
 For example, the determinant of a product is the product of the determinants:
 
 ```text
-# Import mathematical vocabulary and bibliography entries.
+-- Import mathematical vocabulary and bibliography entries.
 Import "../library/linear_algebra.clean"
 Import "../library/sources.clean"
 
 Result determinant product:
     Attribution: mathlib; Matrix.det_mul; specialized
-    # Introduce a dimension and two matrices of that size.
+    -- Introduce a dimension and two matrices of that size.
     Let n be a natural number
     Let A, B be complex n×n matrices
     Conclude: det(A*B) = det(A)*det(B)
@@ -42,13 +42,13 @@ See the [typeset examples](generated/specimen.pdf),
 
 ## More examples, with annotations
 
-Clean supports full-line and trailing `#` comments. Nested multiline comments use
-`#=` and `=#` on separate lines. See [comment rules](docs/spec.md#comment-lexing-implemented)
+Clean supports full-line and trailing `--` comments. Nested block comments use
+`/- … -/`, including within a line. See [comment rules](docs/spec.md#comment-lexing-implemented)
 for quoted text and embedded Lean/LaTeX fields.
 Comments explain the source without becoming part of the mathematical statement
-or its LaTeX rendering. Put comments on their own lines; trailing comments after
-code are not currently supported. Each block below is a separate example, with
-import paths relative to `examples/`.
+or its LaTeX rendering. Use line comments for short explanations and block comments
+for longer notes. Each block below is a separate example, with import paths
+relative to `examples/`.
 
 ### State hypotheses and name an intermediate expression
 
@@ -60,19 +60,19 @@ Import "../library/linear_algebra.clean"
 Import "../library/sources.clean"
 
 Result similarity transforms eigenvector:
-    # Cite just the part of Stewart's theorem being adapted.
+    -- Cite just the part of Stewart's theorem being adapted.
     Attribution: stewart2001; Theorem 1.10, page 9; adapted; scope: eigenvector part
     Let n be a natural number
     Let A, S be complex n×n matrices
     Let x be a complex n-vector
     Let μ be a complex number
 
-    # Every assumption has a name for later reference.
+    -- Every assumption has a name for later reference.
     Assume invertibility: det(S) ≠ 0
     Assume nonzero: x ≠ 0
     Assume eigenpair: A*x = μ*x
 
-    # Give the transformed vector a local name.
+    -- Give the transformed vector a local name.
     Let y = inverse(S)*x
     Conclude:
         y ≠ 0
@@ -95,7 +95,7 @@ Result adjacency symmetry:
     Attribution: mathlib; SimpleGraph.adj_symm; specialized
     Let n: Natural
     Let G: Graph(n)
-    # Both vertices belong to the same finite vertex type.
+    -- Both vertices belong to the same finite vertex type.
     Let u, v: Vertex(n)
     Assume edge: adjacent(G,u,v)
     Conclude: adjacent(G,v,u)
@@ -114,7 +114,7 @@ Import "../library/sources.clean"
 
 Result continuous composition:
     Attribution: mathlib; Continuous.comp; specialized
-    # The two type arguments are the domain and codomain.
+    -- The two type arguments are the domain and codomain.
     Let f, g: Function(Real,Real)
     Assume hf: continuous(f)
     Assume hg: continuous(g)
@@ -133,13 +133,13 @@ This block is a definitions module rather than a theorem statement.
 Import "../library/types.clean"
 
 Define square(x: Real): Real:
-    # Equals gives the definition in Clean.
+    -- Equals gives the definition in Clean.
     Equals: x^2
-    # The rendering template substitutes the actual argument for {x}.
+    -- The rendering template substitutes the actual argument for {x}.
     Render latex: ({x})^{{2}}
 
 Define squared distance(x: Real, y: Real): Real:
-    # Multiword names work in function calls too.
+    -- Multiword names work in function calls too.
     Equals: square(x-y)
 ```
 
@@ -156,7 +156,7 @@ type, and mathematical rendering. This is another standalone definitions module.
 Import "../library/types.clean"
 
 Notation cos(x: Real): Real:
-    # Means is a Lean expression, using the declared argument x.
+    -- Means is a Lean expression, using the declared argument x.
     Means: Real.cos x
     Render latex: \cos({x})
 ```
@@ -177,7 +177,7 @@ Context complex square matrices:
     Let n be a natural number
     Let A, B be complex n×n matrices
 
-    # Both results inherit the declarations above.
+    -- Both results inherit the declarations above.
     Result determinant product:
         Attribution: mathlib; Matrix.det_mul; specialized
         Conclude: det(A*B) = det(A)*det(B)
@@ -202,7 +202,7 @@ Import "modules/sorting.clean"
 Result insertion sort preserves length:
     Attribution: mathlib; List.length_insertionSort; specialized
     Let xs: List(Natural)
-    # Here, insertion sort is one function name, including the space.
+    -- Here, insertion sort is one function name, including the space.
     Conclude: length(insertion sort(xs)) = length(xs)
 ```
 
@@ -331,7 +331,7 @@ Condition positive(x: Real):
     Holds when: x > 0
     Assumption name: positivity of {x}
 
-# Within a result declaring x and y:
+-- Within a result declaring x and y:
 Assume positive(x), positive(y)
 ```
 

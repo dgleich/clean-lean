@@ -16,4 +16,4 @@ Result similarity transforms eigenvector:
         and
         (inverse(S)*A*S)*y = μ*y
 
-# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

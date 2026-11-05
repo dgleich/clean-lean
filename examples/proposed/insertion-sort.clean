@@ -1,5 +1,5 @@
-# Status: proposed syntax, not translated or proved by the Clean compiler.
-# See docs/sorting-examples.md for scope, cost model, and pending language rules.
+-- Status: proposed syntax, not translated or proved by the Clean compiler.
+-- See docs/sorting-examples.md for scope, cost model, and pending language rules.
 Import "../../library/types.clean"
 
 Source clr:
@@ -75,9 +75,9 @@ Result insertion sort preserves occurrences:
   Conclude:
     occurrences(x, insertion sort(xs)) = occurrences(x, xs)
 
-# Abstract work: one unit per outer list match and one per key comparison.
-# Arithmetic, allocation, and accessing the returned list are not charged here.
-# These are mathematical cost recurrences, not extra passes run by the algorithm.
+-- Abstract work: one unit per outer list match and one per key comparison.
+-- Arithmetic, allocation, and accessing the returned list are not charged here.
+-- These are mathematical cost recurrences, not extra passes run by the algorithm.
 Define insertion work(x: Natural, xs: List(Natural)): Natural
   Equals:
     match xs:
@@ -112,4 +112,4 @@ Result insertion sort quadratic work bound:
   Let n = length(xs)
   Conclude: insertion sort work(xs) ≤ n*n + n + 1
 
-# generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

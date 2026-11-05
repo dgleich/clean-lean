@@ -1,8 +1,8 @@
-#=
+/-
 Conditions can be defined in Clean or imported from Lean.
 The examples below demonstrate both forms.
-=#
-# generated: gpt-6 2026-10-30 role=assisted; LLM-authored portions; see PROVENANCE.md
+-/
+-- generated: gpt-6 2026-10-30 role=assisted; LLM-authored portions; see PROVENANCE.md
 Import "../library/Common.clean"
 
 Source conditionexamples:

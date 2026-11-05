@@ -1,5 +1,5 @@
-# generated: gpt-6 2026-10-30 role=assisted; LLM-authored portions; see PROVENANCE.md
-# Paper-specific definitions and statements; no proofs or project Lean imports.
+-- generated: gpt-6 2026-10-30 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- Paper-specific definitions and statements; no proofs or project Lean imports.
 Import "../../library/Common.clean"
 
 Source magnetic2025:
@@ -47,7 +47,7 @@ Define magnetic Laplacian(A, q):
     Equals: magnetic degree matrix(A) - magnetic adjacency(A,q)
     Render latex: L_{{{q}}}({A})
 
-# Every ordered word chooses one of the two directions at each position.
+-- Every ordered word chooses one of the two directions at each position.
 Define direction words(m: Natural): List(List(Boolean)):
     Equals: choices(repeat(m,pair(forward(),backward())))
 
@@ -88,8 +88,8 @@ Notation directed single edge(): Matrix(2,2,Real):
 
 
 
-# All results here have proofs checked in Verified.lean.
-# A is any real weighted matrix, with no symmetry or positivity assumption.
+-- All results here have proofs checked in Verified.lean.
+-- A is any real weighted matrix, with no symmetry or positivity assumption.
 Result magnetic powers encode walk profiles:
     Attribution: magnetic2025; equation (1), Supplement S.II equation (17), Theorem 1; adapted; scope: forward transform only
     Let n: Natural
@@ -130,12 +130,12 @@ Result two step mixed walk profile:
         walk profile(A,2,1) =
             A*real transpose(A) + real transpose(A)*A
 
-# In v1 equation (24), m = 1 leaves only the zero-potential term.
-# The resulting half-symmetrization fails on a directed edge.
+-- In v1 equation (24), m = 1 leaves only the zero-potential term.
+-- The resulting half-symmetrization fails on a directed edge.
 Result odd length inverse endpoint counterexample:
     Attribution: magneticformalization; inverse_v1_length_one_fails; direct; scope: v1 equation (24) at m = 1
     Conclude:
         complex matrix(walk profile(directed single edge(),1,1)) ≠
             complex scalar(1/2)*magnetic adjacency(directed single edge(),0)
 
-# generated: gpt-6 2026-10-29 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- generated: gpt-6 2026-10-29 role=assisted; LLM-authored portions; see PROVENANCE.md

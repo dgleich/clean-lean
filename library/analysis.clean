@@ -67,4 +67,4 @@ Define trigonometric energy(x):
   Equals:
     square(sin(x)) + square(cos(x))
 
-# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

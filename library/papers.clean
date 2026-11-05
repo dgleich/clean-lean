@@ -1,4 +1,4 @@
-# Explicit mathematical definitions; no paper result is assumed.
+-- Explicit mathematical definitions; no paper result is assumed.
 Import "types.clean"
 Import Lean CleanPapers.Definitions
 
@@ -161,7 +161,7 @@ Notation dual bound(C, B, b, y, α):
     Means: CleanPapers.dualBound C B b y α
     Render latex: d({C},{B},{b},{y},{α})
 
-# Building blocks are also available to other Clean statements.
+-- Building blocks are also available to other Clean statements.
 Type VertexSet(n: Natural):
     Means: Finset (Fin n)
     Render latex: \mathcal{{P}}(\operatorname{{Fin}}({n}))
@@ -278,4 +278,4 @@ Notation smallest eigenvalue(M):
     Means: CleanPapers.smallestEigenvalue M
     Render latex: \lambda_{{\min}}\left({M}\right)
 
-# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

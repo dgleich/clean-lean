@@ -59,49 +59,90 @@ class LayoutTests(unittest.TestCase):
             parse(self.result().replace('    Let x', '      Let x'), self.env)
 
     def test_comments_and_blank_lines_do_not_change_scope(self):
-        source = self.result(3, 2).replace('   Let x', ' # arbitrarily aligned comment\n \n   Let x')
+        source = self.result(3, 2).replace('   Let x', ' -- arbitrarily aligned comment\n \n   Let x')
         self.assertEqual(self.output(source), self.output(self.result(3, 2)))
 
     def test_trailing_comments_preserve_target(self):
         source = self.result()
-        annotated = '\n'.join(line + ' # explanation' for line in source.splitlines())
+        annotated = '\n'.join(line + ' -- explanation' for line in source.splitlines())
         self.assertEqual(self.output(source), self.output(annotated))
 
     def test_nested_block_comments_preserve_target_and_lines(self):
         source = self.result().replace('    Let x',
-            '#=\nignored even with " and (\n  #=\nnested\n=#\n=#\n    Let x')
+            '/-\nignored even with " and (\n  /-\nnested\n-/\n-/\n    Let x')
         self.assertEqual(self.output(source), self.output(self.result()))
         self.assertEqual(parse(source, self.env)[0].clauses[0].line, 9)
 
     def test_comment_lexical_boundaries(self):
         from cleanlang.core import comment_lines
-        lines = ['Import "a # b.clean" # note', 'URL: https://example.org/#anchor',
+        lines = ['Import "a # b.clean" -- note', 'URL: https://example.org/#anchor',
                  '  Means: #[1, 2]', r'  Render latex: \#',
-                 '  Let x: Real#not_comment', 'Let x: Real #= one-line comment']
+                 '  Let x: Real#not_comment', 'Let x: Real /- one-line comment -/']
         masked = [line.rstrip() for line, _ in comment_lines('\n'.join(lines))]
         self.assertEqual(masked, ['Import "a # b.clean"', lines[1], lines[2], lines[3],
                                   lines[4], 'Let x: Real'])
 
-    def test_old_block_delimiters_are_not_aliases(self):
+    def test_hash_and_percent_are_not_comments(self):
         from cleanlang.core import comment_lines
-        self.assertEqual([line.rstrip() for line, _ in comment_lines('#|\nLet x: Real\n|#')],
-                         ['', 'Let x: Real', '|#'])
+        for source in ['# text', '#= text =#', '#| text |#', 'x % 2', '#S = n']:
+            self.assertEqual(comment_lines(source), [(source, [])])
+        with self.assertRaises(CleanError):
+            parse('# old comment\n' + self.result(), self.env)
+
+    def test_inline_blocks_and_reserved_delimiters(self):
+        from cleanlang.core import comment_lines
+        source = 'x/- outer /- inner -/ tail -/ + y/-second-/-- rest'
+        masked, spans = comment_lines(source)[0]
+        self.assertEqual(masked, 'x' + ' ' * 28 + ' + y' + ' ' * 17)
+        self.assertEqual([source[a:b] for a,b in spans],
+                         ['/- outer /- inner -/ tail -/', '/-second-/', '-- rest'])
+        self.assertEqual(comment_lines('x--y')[0][0], 'x   ')
+        self.assertEqual(comment_lines('x - -y')[0][0], 'x - -y')
+        self.assertEqual(comment_lines('"/- -- -/"')[0][0], '"/- -- -/"')
+
+    def test_inline_blocks_preserve_target(self):
+        source = self.result().replace('Let x: Real', 'Let x: /- a scalar -/ Real')
+        source = source.replace('x = x', 'x/- left -/ = /- right -/x')
+        self.assertEqual(self.output(source), self.output(self.result()))
+
+    def test_block_newlines_and_indentation_are_preserved(self):
+        from cleanlang.core import comment_lines
+        source = 'Let x:/- first\nsecond -/ Real'
+        self.assertEqual([line for line, _ in comment_lines(source)],
+                         ['Let x:        ', '          Real'])
+        with self.assertRaisesRegex(CleanError, 'indent|nest|syntax'):
+            self.output(self.result().replace('    Let x', '    /- gap -/Let x'))
+
+    def test_comment_precedence_and_token_separation(self):
+        from cleanlang.core import comment_lines
+        self.assertEqual(comment_lines('-- /- ignored -/')[0][0].strip(), '')
+        self.assertEqual(comment_lines('/- " -- /- nested -/ -/x')[0][0].strip(), 'x')
+        self.assertEqual(comment_lines('/-- text -//-! text -/x')[0][0].strip(), 'x')
+        with self.assertRaises(CleanError):
+            self.output(self.result().replace('Real', 'Re/- split -/al'))
+        with self.assertRaisesRegex(CleanError, 'unclosed'):
+            comment_lines('/- open -- not a line comment')
+
+    def test_opaque_fields_after_blocks(self):
+        from cleanlang.core import comment_lines
+        source = '/- note -/ Means: -- Lean comment /-'
+        self.assertEqual(comment_lines(source)[0][0], '           Means: -- Lean comment /-')
 
     def test_comment_errors(self):
         from cleanlang.core import comment_lines
-        for source, error in [('#=\ntext', 'line 1: unclosed'),
-                              ('=#', 'line 1: unmatched'),
-                              ('#=\n\ttext\n=#', 'line 2: tabs')]:
+        for source, error in [('/-\ntext', 'line 1: unclosed'),
+                              ('-/', 'line 1: unmatched'),
+                              ('/-\n\ttext\n-/', 'line 2: tabs')]:
             with self.subTest(source=source), self.assertRaisesRegex(CleanError, error):
                 comment_lines(source)
 
     def test_comments_during_continuation(self):
-        source = self.result().replace('x = x', 'x + # continued\n#=\nignored\n=#\n          x = x + x # done')
+        source = self.result().replace('x = x', 'x + -- continued\n/-\nignored\n-/\n          x = x + x -- done')
         expected = self.result().replace('x = x', 'x + x = x + x')
         self.assertEqual(self.output(source), self.output(expected))
 
     def test_tabs_rejected_even_in_comments_and_blank_lines(self):
-        for suffix in ['\t\n', '#\tcomment\n']:
+        for suffix in ['\t\n', '--\tcomment\n']:
             with self.assertRaisesRegex(CleanError, 'tabs'):
                 parse(self.result() + suffix, self.env)
 

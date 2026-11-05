@@ -31,7 +31,7 @@ Result similarity transforms eigenvector:
 
 ## Layout and names
 
-One declaration occupies one physical line. Tabs are forbidden everywhere. Each block increases indentation by at least two spaces relative to its parent. Sibling clauses align at the same column, and a dedent must return to an established enclosing column. Widths may differ between blocks; two, three, four, or more spaces are valid. Blank lines and full-line `#` comments are allowed. An indented conclusion may span several lines; those lines form one expression, so `and` must appear explicitly. Clean expressions continue automatically inside open parentheses or after a trailing operator. Outside parentheses, a continuation is indented at least two spaces beyond its first physical line; inside a `Conclude:` expression block, aligned expression lines are also allowed. Continuation indentation does not create scope. A complete expression ends at the newline: an operator on the next line alone does not request continuation. No backslash is needed. Blank lines and full-line comments may occur during continuation. Lean `Means` bodies, rendering fields, and metadata remain single-line opaque fields. Semicolon-separated mathematical statements remain unsupported. Comments follow the lexical rules below. Semicolons are permitted as field separators inside compact attribution clauses.
+One declaration occupies one physical line. Tabs are forbidden everywhere. Each block increases indentation by at least two spaces relative to its parent. Sibling clauses align at the same column, and a dedent must return to an established enclosing column. Widths may differ between blocks; two, three, four, or more spaces are valid. Blank lines and full-line `--` comments are allowed. An indented conclusion may span several lines; those lines form one expression, so `and` must appear explicitly. Clean expressions continue automatically inside open parentheses or after a trailing operator. Outside parentheses, a continuation is indented at least two spaces beyond its first physical line; inside a `Conclude:` expression block, aligned expression lines are also allowed. Continuation indentation does not create scope. A complete expression ends at the newline: an operator on the next line alone does not request continuation. No backslash is needed. Blank lines and full-line comments may occur during continuation. Lean `Means` bodies, rendering fields, and metadata remain single-line opaque fields. Semicolon-separated mathematical statements remain unsupported. Comments follow the lexical rules below. Semicolons are permitted as field separators inside compact attribution clauses.
 
 The leading keyword is case-insensitive: `let`, `Let`, and `LET` are equivalent, as are `Define` and `define`. This rule also applies to `Result`, `Theorem`, `Assume`, `Conclude`, attribution field names, and logical `and`, `or`, `not`. Variable names and notation names are case-sensitive. Type constructor spellings and aliases are registered explicitly; prose type patterns match without regard to case.
 
@@ -392,36 +392,53 @@ The grammar now generates the parser; see [generation and checking](generated-pa
 
 ## Comment lexing (implemented)
 
-Before continuation or layout processing, scan physical lines in order. Tabs remain
-errors everywhere, including comments. Outside a block comment, a `#` at column zero
-or immediately after an ASCII space starts a comment through end of line, unless
-inside double quotes. Double quotes pair within each physical line; there is no
-backslash escape convention. A hash attached to another character stays literal.
-`Means:`, `From Lean:`, `Render:`, and `Render latex:` lines are opaque: their payloads
-retain all hashes and quotes. Put comments about these fields on separate lines.
-Other fields, including attribution, support trailing comments.
+Before continuation or layout processing, scan physical lines left to right, with
+an initially empty block stack. Tabs remain errors everywhere, including comments.
+Outside quoted text and opaque fields, reserve the pairs `--`, `/-`, and `-/`
+before mathematical token recognition, with no surrounding-space requirement.
+`--` consumes the rest of the physical line, including any apparent block markers.
+`/-` pushes a block opener; inside a block only `/-` (push) and `-/` (pop) have
+special meaning. Other text, including quotes and `--`, is ignored there.
+An unmatched `-/` or a nonempty stack at EOF is an error with its physical line.
+After the outermost closer, ordinary scanning resumes immediately on the same line.
+`/--` and `/-!` are ordinary block comments in Clean, not documentation constructs.
 
-A physical line whose stripped contents are exactly `#=` opens a block comment;
-a line containing exactly `=#` closes it. These delimiters may have surrounding
-spaces and arbitrary indentation. Blocks nest. Inside a block, only these two
-whole-line delimiters are recognized; quotes and ordinary hashes have no effect.
-An unmatched closer or unclosed opener is an error with its physical line number.
-`#= text` is an ordinary line comment, not a block opener. Inline block comments
-are not supported. Newlines are preserved: block comments cannot join statements.
+Outside comments, double quotes pair within each physical line, protecting comment
+markers; there is no backslash escape convention. At the start of a logical field
+on a physical line (preceded only by spaces or masked comments), `Means:`,
+`From Lean:`, `Render:`, and `Render latex:` select an opaque payload through the
+end of that line. Its characters are left to the embedded language, including
+comment markers and quotes. Put Clean comments about these fields on separate
+lines. Other fields, including attribution, support comments.
 
 ```clean
-Let x: Real # the variable used below
-#=
-This explanation spans lines.
-  #=
-  A nested explanation.
-  =#
-=#
-Assume positive(x), positive(y) # two named assumptions
+Let x: Real -- the variable used below
+Let y: /- another scalar -/ Real
+/- An explanation spanning lines.
+   /- A nested explanation. -/
+   Continue here. -/
+Assume positive(x), positive(y) -- two named assumptions
 ```
 
-Each comment character becomes a space, preserving physical lines and columns.
-Blank lines have no layout effect. This deterministic scan has no mathematical
-AST constructor and no Lean term: the parse and fully elaborated target are
-exactly those of the masked source under the same explicit environment.
+Each comment character becomes an ASCII space; every newline is preserved.
+This prevents token concatenation and retains physical line and column positions.
+Layout and continuation run on this masked text: a block's newline does not itself
+request continuation, and code after a leading block is indented at its actual
+column. Prefer leading explanations on their own lines when introducing clauses.
+For example, `Let x:/- note` followed by `-/ Real` does not silently join the lines;
+write a single-line block or use an otherwise permitted expression continuation.
+Blank masked lines have no layout effect.
+
+Write subtraction followed by negation as `x - -y` or `x - (-y)`; `x--y` starts a
+comment. A division followed by a negative operand similarly needs separation:
+`x / -y` or `x / (-y)`. Reserved comment pairs cannot be redefined by imports.
+`#`, `#=`, `=#`, and `%` have no comment meaning; mathematical support for these
+symbols is a separate notation feature, not supplied by this change.
+
+This deterministic scan has no mathematical AST constructor and no Lean term:
+the parse and fully elaborated target are exactly those of the masked source
+under the same explicit environment. The generated grammar consumes that masked
+source; no parser-table change is required. Its uniqueness obligations are
+unchanged by comment text.
+
 :::

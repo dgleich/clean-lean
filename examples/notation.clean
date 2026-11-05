@@ -7,4 +7,4 @@ Result insertion sort preserves length:
     Let xs: List(Natural)
     Conclude: length(insertion sort(xs)) = length(xs)
 
-# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

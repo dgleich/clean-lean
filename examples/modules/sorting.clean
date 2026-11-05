@@ -7,4 +7,4 @@ Notation insertion sort(xs):
     Means: List.insertionSort (· ≤ ·) xs
     Render: insertion sort of {xs}
 
-# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

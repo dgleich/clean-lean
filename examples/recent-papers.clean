@@ -44,4 +44,4 @@ Result trace bound gives a suboptimality certificate:
     Let d = dual bound(C,B,b,y,α)
     Conclude: matrix inner product(C,X) - matrix inner product(C,Z) ≤ matrix inner product(C,X) - d
 
-# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

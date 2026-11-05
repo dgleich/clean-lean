@@ -6,30 +6,31 @@
 (defconst clean-math--metadata
   (regexp-opt '("Assumption name" "Render" "Render latex" "Describe" "Describe plural" "Attribution" "Kind" "Label" "Title" "Author" "Year" "Version" "Revision" "URL" "References" "source" "reference" "relationship" "scope" "changes" "note") t))
 (defun clean-math--comment (limit)
-  "Find a comment using Clean's whole-line block and quoted-text rules."
-  (let ((origin (point)) (depth 0) found)
+  "Find line or nested block comments, preserving embedded fields and strings."
+  (let ((origin (point)) (depth 0) (quoted nil) start found)
     (save-excursion
       (goto-char (point-min))
       (while (and (< (point) limit) (not found))
-        (let* ((begin (line-beginning-position)) (end (line-end-position))
-               (line (buffer-substring-no-properties begin end)) (start nil))
-          (cond
-           ((string-match-p "^ *#= *$" line) (setq depth (1+ depth) start begin))
-           ((string-match-p "^ *=# *$" line) (setq depth (max 0 (1- depth)) start begin))
-           ((> depth 0) (setq start begin))
-           ((let ((case-fold-search t))
-              (string-match-p "^ *\\(?:Means\\|From Lean\\|Render\\(?: latex\\)?\\) *:" line)) nil)
-           (t (let ((i 0) (quoted nil))
-                (while (and (< i (length line)) (not start))
-                  (let ((ch (aref line i)))
-                    (cond ((eq ch ?\") (setq quoted (not quoted)))
-                          ((and (eq ch ?#) (not quoted)
-                                (or (= i 0) (eq (aref line (1- i)) ? )))
-                           (setq start (+ begin i)))))
-                  (setq i (1+ i))))))
-          (when (and start (>= start origin) (< start end))
-            (setq found (cons start end))))
-        (forward-line 1)))
+        (cond
+         ((> depth 0)
+          (cond ((looking-at "/-") (setq depth (1+ depth)) (forward-char 2))
+                ((looking-at "-/") (setq depth (1- depth)) (forward-char 2)
+                 (when (and (= depth 0) (> (point) origin))
+                   (setq found (cons (max start origin) (point)))))
+                (t (forward-char 1))))
+         ((eq (char-after) ?\n) (setq quoted nil) (forward-char 1))
+         ((eq (char-after) ?\") (setq quoted (not quoted)) (forward-char 1))
+         (quoted (forward-char 1))
+         ((and (bolp) (let ((case-fold-search t))
+                        (looking-at " *\\(?:Means\\|From Lean\\|Render\\(?: latex\\)?\\) *:")))
+          (end-of-line))
+         ((looking-at "--")
+          (setq start (point)) (end-of-line)
+          (when (> (point) origin) (setq found (cons (max start origin) (point)))))
+         ((looking-at "/-") (setq start (point) depth 1) (forward-char 2))
+         (t (forward-char 1))))
+      (when (and (not found) (> depth 0) (> (point) origin))
+        (setq found (cons (max start origin) (point)))))
     (when found
       (set-match-data (list (car found) (cdr found)))
       (goto-char (cdr found)) t)))
@@ -53,6 +54,8 @@
 (define-derived-mode clean-math-mode prog-mode "Clean Math"
   "Display Clean statements and definitions. Does not validate or rewrite layout."
   (setq-local font-lock-defaults '(clean-math-font-lock-keywords t t))
+  (setq-local comment-start "-- ")
+  (setq-local comment-end "")
   (setq-local indent-tabs-mode nil)
   (setq-local tab-width 2)
   ;; Leave indentation under author control; no speculative language formatter.

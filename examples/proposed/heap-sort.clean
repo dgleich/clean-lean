@@ -1,6 +1,6 @@
-# Status: proposed recursive syntax. Not translated by the Clean compiler.
-# Independent checked Lean reference: examples/lean/HeapSortRuntime.lean.
-# The counter measures element comparisons, not wall-clock or bit complexity.
+-- Status: proposed recursive syntax. Not translated by the Clean compiler.
+-- Independent checked Lean reference: examples/lean/HeapSortRuntime.lean.
+-- The counter measures element comparisons, not wall-clock or bit complexity.
 Import "../../library/types.clean"
 Import Lean Mathlib.Data.Nat.Log
 
@@ -9,7 +9,7 @@ Source sorting_design:
   Label: Clean sorting design
   Title: Heap sort reference and comparison-count proofs
 
-# Foundational representations and primitives; no sorting algorithm is imported.
+-- Foundational representations and primitives; no sorting algorithm is imported.
 Type Array(T: Type):
   Means: Array T
   Render latex: \operatorname{{Array}}({T})
@@ -42,8 +42,8 @@ Notation comparisons(step: Pair(Array(Natural),Natural)): Natural
   Means: step.2
   Render: comparisons in {step}
 
-# 'stop' is an exclusive heap boundary. Indices are zero-based.
-# Level budget is floor(log2(size(a))) + 1; it bounds root-to-leaf descent.
+-- 'stop' is an exclusive heap boundary. Indices are zero-based.
+-- Level budget is floor(log2(size(a))) + 1; it bounds root-to-leaf descent.
 Define sift down(
   levels: Natural,
   stop: Natural,
@@ -110,8 +110,8 @@ Define heap sort(a: Array(Natural)): Pair(Array(Natural),Natural)
     Let result = extract heap(levels, n-1, output(built))
     (output(result), comparisons(built) + comparisons(result))
 
-# Both bounds below are proved for the independent instrumented Lean reference.
-# A Clean-to-Lean translation equivalence proof is still pending.
+-- Both bounds below are proved for the independent instrumented Lean reference.
+-- A Clean-to-Lean translation equivalence proof is still pending.
 Result heap sort uniform comparison bound:
   Attribution: sorting_design; CleanSorting.heapSort_comparisons; adapted
   Let a: Array(Natural)
@@ -127,7 +127,7 @@ Result heap sort n log n comparison bound:
   Conclude:
     comparisons(heap sort(a)) ≤ 8*n*floor binary logarithm(n)
 
-# The reference additionally proves CleanSorting.heapSort_isBigO using Mathlib's
-# =O[atTop], uniformly for every input family whose nth array has length n.
+-- The reference additionally proves CleanSorting.heapSort_isBigO using Mathlib's
+-- =O[atTop], uniformly for every input family whose nth array has length n.
 
-# generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

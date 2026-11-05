@@ -43,4 +43,4 @@ Define matrix square(A):
   Equals: A*A
   Render latex: ({A})^{{2}}
 
-# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
