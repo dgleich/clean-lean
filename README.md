@@ -38,7 +38,7 @@ examples that show where the language still needs work.
 See the [typeset examples](generated/specimen.pdf),
 [Clean-to-Lean reference](docs/clean-to-lean.html),
 [Clean and Dafny comparison](docs/clean-and-dafny.html),
-[topology theorem comparisons](docs/topology-clean-and-lean.html), or
+[topology theorem comparisons](studies/topology/comparison.html), or
 [language specification](docs/spec.md). For the direction of the design, see
 [aspirational syntax](docs/aspirational-syntax.md).
 

@@ -1313,7 +1313,7 @@
       "model": "gpt-6",
       "date": "2026-11-05"
     },
-    "docs/topology-clean-and-lean.html": {
+    "studies/topology/comparison.html": {
       "origin": "llm-assisted",
       "mode": "html",
       "model": "gpt-6",
