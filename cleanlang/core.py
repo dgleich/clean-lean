@@ -19,11 +19,11 @@ def comment_lines(text):
         if '\t' in raw:
             raise CleanError(f'line {number}: tabs are not allowed')
         token = raw.strip()
-        if token == '#|':
+        if token == '#=':
             openings.append(number)
             output.append((' ' * len(raw), 0))
             continue
-        if token == '|#':
+        if token == '=#':
             if not openings:
                 raise CleanError(f'line {number}: unmatched block comment terminator')
             openings.pop()

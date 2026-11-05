@@ -26,10 +26,10 @@ class ReviewTests(unittest.TestCase):
             self.assertNotIn('>and</span>',review.highlight(source))
 
     def test_unclosed_comment_remains_browsable(self):
-        self.assertEqual(review.highlight_source('#|\n<unfinished>'), ['#|', '&lt;unfinished&gt;'])
+        self.assertEqual(review.highlight_source('#=\n<unfinished>'), ['#=', '&lt;unfinished&gt;'])
 
     def test_comment_source_highlighting(self):
-        lines = review.highlight_source('Let x: Real # note\n#|\nignored <tag>\n|#\nMeans: #[1]')
+        lines = review.highlight_source('Let x: Real # note\n#=\nignored <tag>\n=#\nMeans: #[1]')
         self.assertIn('<span class="comment"># note</span>', lines[0])
         self.assertEqual(lines[2], '<span class="comment">ignored &lt;tag&gt;</span>')
         self.assertNotIn('class="comment"', lines[4])

@@ -401,22 +401,22 @@ backslash escape convention. A hash attached to another character stays literal.
 retain all hashes and quotes. Put comments about these fields on separate lines.
 Other fields, including attribution, support trailing comments.
 
-A physical line whose stripped contents are exactly `#|` opens a block comment;
-a line containing exactly `|#` closes it. These delimiters may have surrounding
+A physical line whose stripped contents are exactly `#=` opens a block comment;
+a line containing exactly `=#` closes it. These delimiters may have surrounding
 spaces and arbitrary indentation. Blocks nest. Inside a block, only these two
 whole-line delimiters are recognized; quotes and ordinary hashes have no effect.
 An unmatched closer or unclosed opener is an error with its physical line number.
-`#| text` is an ordinary line comment, not a block opener. Inline block comments
+`#= text` is an ordinary line comment, not a block opener. Inline block comments
 are not supported. Newlines are preserved: block comments cannot join statements.
 
 ```clean
 Let x: Real # the variable used below
-#|
+#=
 This explanation spans lines.
-  #|
+  #=
   A nested explanation.
-  |#
-|#
+  =#
+=#
 Assume positive(x), positive(y) # two named assumptions
 ```
 

@@ -35,12 +35,12 @@ Condition positive(x: Real):
   Assumption name: positivity of {x}
 Condition imported positive(x: Real):
   From Lean: x > 0
-#|
+#=
 Ignored text with unmatched ( and "
-#|
+#=
 Nested comment
-|#
-|#
+=#
+=#
 Result two positive values: # theorem
   Attribution: checks; two positive values; original
   Let x,y: Real

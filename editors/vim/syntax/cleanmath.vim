@@ -16,7 +16,7 @@ syntax match cleanMathLean '\c^ *\%(Means\|From Lean\)\s*:.*$'
 syntax match cleanMathImport '\c^ *Import\>.*$'
 syntax region cleanMathQuote start='"' end='"' oneline containedin=ALLBUT,cleanMathComment,cleanMathBlock,cleanMathLean,cleanMathOpaque
 syntax match cleanMathComment '\%(^\| \)\zs#.*$' containedin=ALLBUT,cleanMathQuote,cleanMathLean,cleanMathBlock
-syntax region cleanMathBlock start='^ *#| *$' end='^ *|# *$' contains=cleanMathBlock
+syntax region cleanMathBlock start='^ *#= *$' end='^ *=# *$' contains=cleanMathBlock
 syntax match cleanMathRender '\c^ *Render\%( latex\)\?\s*:.*$'
 highlight default link cleanMathRender String
 highlight default link cleanMathBlock Comment

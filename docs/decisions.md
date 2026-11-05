@@ -144,3 +144,14 @@ line. Embedded Lean and rendering fields remain opaque. Quoted paths and attache
 URL fragments preserve hashes. These choices are revisitable; the exact lexical
 algorithm is in [the specification](spec.md#comment-lexing-implemented).
 :::
+
+:::llm gpt-6 2026-11-05 role=assisted
+
+## Julia-style block comment delimiters
+
+At the user's preference, `#=` / `=#` replace the initial `#|` / `|#` spelling.
+These are [Julia's nested comment delimiters](https://docs.julialang.org/en/v1/base/punctuation/).
+Clean retains its whole-line delimiter rule; this change adopts the spelling,
+not Julia's inline block-comment syntax. No compatibility alias is retained.
+Comment masking, source positions, nesting, and the Lean erasure rule are unchanged.
+:::

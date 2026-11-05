@@ -175,8 +175,8 @@
     },
     "block": {
       "name": "comment.block.clean",
-      "begin": "^ *#\\| *$",
-      "end": "^ *\\|# *$",
+      "begin": "^ *#= *$",
+      "end": "^ *=# *$",
       "patterns": [
         {
           "include": "#block"

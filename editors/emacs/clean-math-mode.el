@@ -14,8 +14,8 @@
         (let* ((begin (line-beginning-position)) (end (line-end-position))
                (line (buffer-substring-no-properties begin end)) (start nil))
           (cond
-           ((string-match-p "^ *#| *$" line) (setq depth (1+ depth) start begin))
-           ((string-match-p "^ *|# *$" line) (setq depth (max 0 (1- depth)) start begin))
+           ((string-match-p "^ *#= *$" line) (setq depth (1+ depth) start begin))
+           ((string-match-p "^ *=# *$" line) (setq depth (max 0 (1- depth)) start begin))
            ((> depth 0) (setq start begin))
            ((let ((case-fold-search t))
               (string-match-p "^ *\\(?:Means\\|From Lean\\|Render\\(?: latex\\)?\\) *:" line)) nil)
