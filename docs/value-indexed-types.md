@@ -8,8 +8,8 @@ means. Parsing does not guess whether an argument is a type or a value.
 
 **Implemented scope:** type declarations with ordered, explicitly typed parameters;
 theorem/context binders and quantifier domains using earlier named values; type
-aliases; module-declared prose phrases; Lean and LaTeX output. General dependent
-callable signatures and arbitrary expression indices remain unsupported.
+aliases; module-declared prose phrases; Lean and LaTeX output. Dependent callable signatures are now supported under the
+[named-argument rules](dependent-calls.md); arbitrary expression indices remain unsupported.
 
 ## Syntax: one constructor tree
 
@@ -180,9 +180,9 @@ path declaration prints “Let p be a path from x to y in X with topology t.”
 ## Boundaries and acceptance
 
 Definitions, notations, and conditions with value-indexed argument/result types
-are explicitly rejected in this slice. Supporting them requires inference and
-substitution of actual arguments throughout dependent signatures. The parser
-accepting such a header is not evidence that the translator supports it.
+are now supported by the [dependent-call contract](dependent-calls.md). That
+extension requires named arguments for positions used as indices and structural
+substitution throughout the signature.
 Similarly, no Basis, IntervalBasis, or SpanningTree construction is invented here.
 Those require real mathematical definitions in their modules.
 
@@ -191,7 +191,7 @@ Validation consists of:
 - `tests/test_value_indices.py`: independent neutral ASTs, malformed syntax,
   unresolved/wrong-type dependencies, declaration order, different ambient sets,
   type aliases, prose equivalence/case/ambiguity, reserved constructor syntax,
-  nested quantifier capture, and explicit rejection of unsupported callables.
+  nested quantifier capture, and indexed callable parameter support.
 - `studies/topology/verify_indices.py`: four independent canonical Lean statement
   oracles and four proofs, including a constant path witness and a named preimage.
 - Strict generated-parser checks, full regression tests, and typeset specimens.

@@ -478,3 +478,16 @@ neutral parse tree, typing and Lean map, prose normalization, and explicit limit
 Dependent callable signatures remain pending; no type-checked reinterpretation
 of an ambiguous parse is permitted.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Dependent callable signatures
+
+[Dependent calls](dependent-calls.md) extend existing Notation, Define, and
+Condition declarations to named value-indexed argument/result types. There is no
+new surface syntax. Parameter types match structurally; actual named indices are
+substituted into the result; generated calls explicitly pass all inferred type and
+dimension parameters. Computed indices must first be bound with Let. The first
+checked wrappers expose subtype values, constant/reversed paths, and path composition.
+General expression indices, Pi-valued functions and universes remain pending.
+:::

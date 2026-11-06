@@ -1,0 +1,48 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "indexed.clean"
+
+Notation underlying point(S,x):
+  Let X: Type
+  Let S: Set(X)
+  Let x: Element(X,S)
+  Returns: X
+  Means: x.val
+  Render latex: {x}
+
+Notation constant path(t,x):
+  Let X: Type
+  Let t: Topology(X)
+  Let x: X
+  Returns: Path(X,t,x,x)
+  Means: @Path.refl X t x
+  Render latex: \operatorname{{constant}}({x})
+
+Notation reverse path(t,x,y,p):
+  Let X: Type
+  Let t: Topology(X)
+  Let x,y: X
+  Let p: Path(X,t,x,y)
+  Returns: Path(X,t,y,x)
+  Means: @Path.symm X t x y p
+  Render latex: {p}^{{-1}}
+
+Notation join paths(t,x,y,z,p,q):
+  Let X: Type
+  Let t: Topology(X)
+  Let x,y,z: X
+  Let p: Path(X,t,x,y)
+  Let q: Path(X,t,y,z)
+  Returns: Path(X,t,x,z)
+  Means: @Path.trans X t x y z p q
+  Render latex: {p} * {q}
+
+Define reverse twice(t,x,y,p):
+  Let X: Type
+  Let t: Topology(X)
+  Let x,y: X
+  Let p: Path(X,t,x,y)
+  Returns: Path(X,t,x,y)
+  Equals: reverse path(t,y,x,reverse path(t,x,y,p))
+  Render latex: ({p}^{{-1}})^{{-1}}
+
+-- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

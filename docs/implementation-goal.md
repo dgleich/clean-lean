@@ -43,3 +43,18 @@ commits and the established publication provenance. The first concrete work item
 is dependent callable substitution, followed by records rather than inventing
 special syntax for each topology definition.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## First implemented slice
+
+Named-index dependent calls are implemented in the bounded profile described in
+[dependent-calls.md](dependent-calls.md). The explicit paths module supplies subtype
+projection, constant paths, reversal, composition, and Clean-authored reversal twice.
+Validation: 252 Python tests; five independent canonical wrapper targets and four
+statement targets; four path proofs; old quantifier/function/index checks; compact
+image proof; 92 corpus proofs; generated-parser checks; LaTeX compilation and browser
+checks. General expression indices and dependent function-valued results remain
+open. The next work item is authored structures with constructor/accessor semantics.
+The overall goal remains active; this is not completion of the topology port.
+:::

@@ -461,6 +461,49 @@
         "Inherited general elaboration uniqueness",
         "General universe-polymorphic constructors"
       ]
+    },
+    {
+      "id": "dependent_callable_named_indices",
+      "status": "partial",
+      "specification": "docs/dependent-calls.md",
+      "grammar": "grammar/clean.lark (unchanged call/header/type productions)",
+      "source_fragment": "reverse path(t,x,y,p)",
+      "expected_tree": [
+        "Call",
+        "reverse path",
+        [
+          [
+            "Local",
+            "t"
+          ],
+          [
+            "Local",
+            "x"
+          ],
+          [
+            "Local",
+            "y"
+          ],
+          [
+            "Local",
+            "p"
+          ]
+        ]
+      ],
+      "environment": "Explicit paths.clean with t:Topology(X), x,y:X, p:Path(X,t,x,y)",
+      "expected_lean": "@reversePathWrapper X t x y p (schematic wrapper identity; actual identity and body compared in verify_paths.py)",
+      "expected_lean_type": "@Path X t y x",
+      "checks": [
+        "tests/test_dependent_calls.py",
+        "studies/topology/verify_paths.py",
+        "tools/generate_parser.py --check"
+      ],
+      "pending": [
+        "Inherited general Lean body/type elaboration uniqueness",
+        "General expression indices",
+        "Pi-valued functions",
+        "Universe-polymorphic APIs"
+      ]
     }
   ]
 }

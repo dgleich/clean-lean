@@ -57,7 +57,8 @@ lambda expansion. Their mathematical operations are already expressible.
 **Status update:** constructor declarations, named value arguments, theorem
 binders, aliases and prose normalization are now implemented; see the
 [precise implemented contract](../../docs/value-indexed-types.md). Callable
-substitution and arbitrary mathematical expressions as indices remain pending.
+substitution now works under the [named-argument contract](../../docs/dependent-calls.md).
+Arbitrary mathematical expressions as indices remain pending.
 The design below originally identified the restriction to type and natural-number arguments.
 It blocks `IntervalBasis(Z)` where Z is a diagram value and `Subspace(V)` where V
 is a bundled vector-space value.

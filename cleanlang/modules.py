@@ -135,8 +135,7 @@ def notation(header, fields, env, *, authored=False):
     if len(renders)>1 or (not authored and not renders):
         raise CleanError('Provide exactly one Render or Render latex field')
     result = env.type(values['returns'],local)
-    if any(has_value_indices(t) for t in [result,*types.values()]):
-        raise CleanError('Value-indexed callable signatures are pending; type declarations and theorem binders are supported')
+    dependent=any(has_value_indices(t) for t in [result,*types.values()])
     implementation = next(iter(implementations))
     expression = None
     if implementation == 'equals':
@@ -172,6 +171,10 @@ def notation(header, fields, env, *, authored=False):
         'signature_tree':['Signature', name,
             [['Parameter', n, str(v.type), 'implicit' if n in implicit else 'explicit'] for n,v in local.items()],
             str(result)]}
+    if dependent:
+        env.data['functions'][name]['dependent_signature']={
+            'implicit':list(implicit.items()),'parameters':list(types.items()),
+            'result':result,'key':key}
     if authored:
         env.definitions[name] = {'key': key, 'parameters': list(local), 'implementation': implementation,
             'tree': expression.tree if expression else None,

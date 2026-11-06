@@ -1,0 +1,44 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/paths.clean"
+
+Source mathlib:
+  Kind: other
+  Label: Mathlib
+  Title: Mathlib v4.24.0
+  Url: https://github.com/leanprover-community/mathlib4/tree/v4.24.0
+
+Result underlying point belongs:
+  Attribution: mathlib; Subtype.property; adapted
+  Let X: Type
+  Let S: Set(X)
+  Let x: Element(X,S)
+  Conclude: underlying point(S,x) ∈ S
+
+Result reversing a path twice:
+  Attribution: mathlib; Path.symm_symm; adapted
+  Let X: Type
+  Let t: Topology(X)
+  Let x,y: X
+  Let p: Path(X,t,x,y)
+  Conclude: reverse twice(t,x,y,p) = p
+
+Result constant paths exist:
+  Attribution: mathlib; Path.refl; adapted
+  Let X: Type
+  Let t: Topology(X)
+  Conclude:
+    for every (x: X,
+      there exists (p: Path(X,t,x,x), p = constant path(t,x)))
+
+Result paths can be joined:
+  Attribution: mathlib; Path.trans; adapted
+  Let X: Type
+  Let t: Topology(X)
+  Let x,y,z: X
+  Let p: Path(X,t,x,y)
+  Let q: Path(X,t,y,z)
+  Conclude:
+    there exists (r: Path(X,t,x,z), r = join paths(t,x,y,z,p,q))
+
+-- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

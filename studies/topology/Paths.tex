@@ -1,0 +1,36 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{underlying point belongs}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, Subtype.property]}}
+Let $X$ be a type.
+Let $S$ be a subset of $X$.
+Let $x$ be an element of $S$.
+Then \[x \text{ belongs to } S.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{reversing a path twice}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, Path.symm\_symm]}}
+Let $X$ be a type.
+Let $t$ be a topology on $X$.
+Let $x$ and $y$ be elements of $X$.
+Let $p$ be a path from $x$ to $y$ in $X$ with topology $t$.
+Then \[(p^{-1})^{-1} = p.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{constant paths exist}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, Path.refl]}}
+Let $X$ be a type.
+Let $t$ be a topology on $X$.
+Then \[\left(\text{for every }x : X,\; \left(\text{there exists }p : \operatorname{Path}_{t}(x,x),\; p = \operatorname{constant}(x)\right)\right).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{paths can be joined}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, Path.trans]}}
+Let $X$ be a type.
+Let $t$ be a topology on $X$.
+Let $x$, $y$ and $z$ be elements of $X$.
+Let $p$ be a path from $x$ to $y$ in $X$ with topology $t$.
+Let $q$ be a path from $y$ to $z$ in $X$ with topology $t$.
+Then \[\left(\text{there exists }r : \operatorname{Path}_{t}(x,z),\; r = p * q\right).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+% generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

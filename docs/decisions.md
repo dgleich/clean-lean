@@ -226,3 +226,17 @@ No implicit carrier/topology inference or general expression indices are added.
 See the [contract](value-indexed-types.md) and
 [study](../studies/topology/README.md).
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Dependent calls before authored structures
+
+Implement a structured callable telescope on the named-index path. Infer omitted
+type/dimension parameters by exact structural matching and pass them explicitly
+to the generated Lean wrapper. Substitute actual named locals for declared value
+indices; do not equate different locals through Lean conversion or assumptions.
+Computed index arguments need a preceding Let. Non-indexed arguments may be nested
+calls. Preserve legacy nondependent calls until their separate inference audit.
+Use subtype/path wrappers and independent canonical Lean checks before building
+record constructors on this machinery. See [the contract](dependent-calls.md).
+:::

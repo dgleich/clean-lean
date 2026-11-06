@@ -109,3 +109,30 @@ Regenerate and check with:
 LAKE=lake python3 studies/topology/verify_compact_image.py
 ```
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Dependent path operations
+
+[Paths.clean](Paths.clean) uses [paths.clean](../../library/topology/paths.clean)
+to state subtype membership, reversal twice, existence of constant paths, and
+composition of paths. The wrappers use actual Mathlib definitions; reverse twice
+is authored in Clean. [PathsVerified.lean](PathsVerified.lean) checks five canonical
+wrapper targets, four canonical statement targets, and four proofs. Regenerate
+with `LAKE=lake python3 studies/topology/verify_paths.py`.
+
+Dependent callable signatures are now implemented under the
+[named-argument contract](../../docs/dependent-calls.md), superseding the older
+milestone notes above. Structures, general expression indices and homology interfaces
+remain work under the [implementation goal](../../docs/implementation-goal.md).
+:::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+[Paths.pdf](Paths.pdf) renders the four path/subtype results. Run
+`pdflatex -output-directory=/tmp studies/topology/latex_paths.tex` twice and copy
+`/tmp/latex_paths.pdf` to `studies/topology/Paths.pdf` after regeneration.
+The dependent-call milestone passes 252 Python tests, the canonical wrapper and
+statement comparisons, four path proofs, existing indexed/compactness specimens,
+and the 92-proof corpus. The LaTeX specimen has been compiled and inspected.
+:::

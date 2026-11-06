@@ -72,10 +72,11 @@ class ValueIndices(unittest.TestCase):
     def test_alias_preserves_indices(self):
         type_declaration('Type Member(X: Type, S: Set(X)):', ['Equals: Element(X,S)'],self.e)
         self.assertEqual(self.e.type('Member(X,S)',self.locals),self.e.type('Element(X,S)',self.locals))
-    def test_callable_boundary_is_explicit(self):
-        with self.assertRaisesRegex(CleanError,'callable signatures are pending'):
-            notation('Notation forget(S,x):',['Let X: Type','Let S: Set(X)','Let x: Element(X,S)',
-                'Returns: X','Means: x.val','Render latex: {x}'],self.e)
+    def test_callable_preserves_indexed_parameter(self):
+        notation('Notation forget(S,x):',['Let X: Type','Let S: Set(X)','Let x: Element(X,S)',
+            'Returns: X','Means: x.val','Render latex: {x}'],self.e)
+        locals={**self.locals,'a':Expr('a','a',self.e.type('Element(X,S)',self.locals))}
+        self.assertEqual(Expressions(self.e,locals).parse('forget(S,a)').type,Type('X'))
     def test_real_study_parses_and_renders(self):
         e=Environment();rs=load_document(ROOT/'studies/topology/ValueIndices.clean',e)
         self.assertEqual(len(rs),4)

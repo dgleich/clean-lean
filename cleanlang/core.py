@@ -249,10 +249,76 @@ class Environment:
         if p.startswith('$'): return bind[p]
         m=re.fullmatch(r'(\w+)(?:\((.*)\))?',p)
         return Type(m[1],tuple(self.instantiate(a,bind) for a in split(m[2] or '')))
-    def call(self,name,args):
+    def dependent_call(self, name, spec, args, locals):
+        """Ordered structural substitution; never ask Lean to choose an index."""
+        signature=spec['dependent_signature']
+        implicit=dict(signature['implicit'])
+        parameters=signature['parameters']
+        actuals=dict(zip((n for n,_ in parameters),args))
+        substitutions={}
+
+        def bind(n,value):
+            if n in substitutions and substitutions[n]!=value:
+                raise CleanError('Inconsistent dependent argument: '+n)
+            substitutions[n]=value
+
+        def index(n):
+            a=actuals[n]
+            if not a.tree or a.tree[0]!='Local':
+                raise CleanError('Dependent index argument must be a named local; bind the expression with Let first: '+n)
+            return ValueIndex(a.tree[1],a.lean,a.tex)
+
+        def replace(t):
+            if isinstance(t,ValueIndex):return index(t.name)
+            if isinstance(t,Type):
+                if not t.args and t.name in substitutions:return substitutions[t.name]
+                return Type(t.name,tuple(replace(a) for a in t.args))
+            if t in actuals and dict(parameters)[t]==NAT:return index(t).name
+            return substitutions.get(t,t)
+
+        def match(pattern,actual):
+            if isinstance(pattern,ValueIndex):
+                if index(pattern.name)!=actual:
+                    raise CleanError('Dependent index mismatch: '+pattern.name)
+            elif isinstance(pattern,Type):
+                if pattern.name in implicit and not pattern.args:
+                    if implicit[pattern.name]!=Type('Type') or not isinstance(actual,Type):
+                        raise CleanError('Expected a type argument: '+pattern.name)
+                    bind(pattern.name,actual)
+                elif not pattern.args and pattern.name in substitutions:
+                    if substitutions[pattern.name]!=actual:raise CleanError('Dependent type mismatch: '+pattern.name)
+                else:
+                    expected=replace(Type(pattern.name))
+                    if not isinstance(actual,Type) or expected.name!=actual.name or len(pattern.args)!=len(actual.args):
+                        raise CleanError(f'Expected {replace(pattern)}, got {actual}')
+                    for p,a in zip(pattern.args,actual.args):match(p,a)
+            elif pattern in implicit:
+                if implicit[pattern]!=NAT or not isinstance(actual,str):
+                    raise CleanError('Expected a natural dimension: '+pattern)
+                bind(pattern,actual)
+            elif replace(pattern)!=actual:raise CleanError('Dimension mismatch')
+
+        for n,t in parameters:
+            match(t,actuals[n].type)
+            if t==Type('Type'):
+                bind(n,Type(index(n).name))
+        for n in implicit:
+            if n not in substitutions:raise CleanError('Cannot infer implicit parameter: '+n)
+        targets=[]
+        for n,t in signature['implicit']:
+            v=substitutions[n]
+            targets.append(self.render_type(v,'lean',locals) if isinstance(v,Type) else
+                           locals[v].lean if v in locals else v)
+        targets.extend(a.lean for a in args)
+        target='(@'+signature['key']+''.join(' ('+v+')' for v in targets)+')'
+        return Expr(target,spec['latex'].format(*(a.tex for a in args)),replace(signature['result']),
+                    tree=['Call',name,[a.tree for a in args]])
+
+    def call(self,name,args,locals=None):
         if name not in self.data['functions']: raise CleanError('Unknown function: '+name)
         s=self.data['functions'][name]; bind={}
         if len(args)!=len(s['params']): raise CleanError('Wrong number of arguments for '+name)
+        if 'dependent_signature' in s:return self.dependent_call(name,s,args,locals or {})
         for p,a in zip(s['params'],args): self.match(p,a.type,bind)
         return Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]])
 
@@ -286,7 +352,7 @@ class Expressions:
                 t=self.env[tok].type
                 if len(args)!=1 or not compatible(args[0].type,t.args[0]): raise CleanError('Function argument mismatch')
                 return Expr('('+self.env[tok].lean+' '+args[0].lean+')',texid(tok)+'('+args[0].tex+')',t.args[1],tree=tree)
-            return self.reg.call(tok,args)
+            return self.reg.call(tok,args,self.env)
         if kind in ('Lambda','Forall','Exists'):
             name=tree[1]
             if name in self.env or name in self.reg.data['functions'] or name in self.reg.data['types'] or name in self.reg.data['aliases']:
