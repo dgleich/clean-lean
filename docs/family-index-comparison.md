@@ -67,7 +67,8 @@ bodies. Existing explicit-producer projection emission still applies: selecting 
 field may expose the producer body according to that earlier rule.
 
 The tests in `tests/test_family_comparison.py` cover aliases, alpha-renamed and nested
-binders, dependent domains, free-versus-bound distinctions, caller names resembling
+binders, dependent domains, universal-versus-existential quantifiers, free-versus-bound
+distinctions, caller names resembling
 compiler identities, hash consistency, opaque native bodies, module shadowing and
 continued rejection of directly authored binder indices.
 
@@ -75,4 +76,17 @@ continued rejection of directly authored binder indices.
 the rule in actual topology interfaces. Its independent native verifier compares ten
 canonical targets and proves five statements. The higher-level constructions are
 Clean definitions; the only new native binding is the generic chain identity map.
+:::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Confirmed remaining scope boundary
+
+A separate negative probe stores a key for an authored family, then adds a caller
+local named `clean_bound_0` and computes the same family's key again. The two keys
+differ because the ordinary compiler allocator now selects a different fresh bound
+identity. This is a conservative false negative across saved scopes, not a different
+accepted Lean target. Same-scope alias/alpha comparisons above pass. Fully scoped
+alpha keys independent of later freshness choices remain required for broader
+local-family conversion; the current template-based rule does not claim them.
 :::

@@ -80,3 +80,15 @@ class NestedFamilies(unittest.TestCase):
         self.assertEqual(self.key('sized first()'),self.key('sized second()'))
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+class QuantifiedFamilyKeys(unittest.TestCase):
+    def test_quantifier_kind_and_bound_identity(self):
+        e=Environment();load_module(ROOT/'library/types.clean',e)
+        for name,kind,binder in [('universal first','for every','x'),('universal second','for every','y'),
+                                 ('existential first','there exists','x')]:
+            notation('Define '+name+'(n: Natural): Proposition:',
+                ['Equals: '+kind+' ('+binder+': Natural,'+binder+' = n)'],e,authored=True)
+        local={'n':Expr('n','n',Type('Natural'))}
+        def key(s):return index_value(Expressions(e,local).parse(s),e,local)
+        self.assertEqual(key('universal first(n)'),key('universal second(n)'))
+        self.assertNotEqual(key('universal first(n)'),key('existential first(n)'))

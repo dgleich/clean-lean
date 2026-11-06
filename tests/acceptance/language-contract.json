@@ -1130,7 +1130,8 @@
       "pending": [
         "Normalization inside binder bodies",
         "Family congruence through opaque outer calls",
-        "General higher-order conversion and resolved module identities"
+        "General higher-order conversion and resolved module identities",
+        "Scope-independent alpha keys: a later caller name can change fresh compiler binder allocation and cause a false negative against a stored family key"
       ]
     }
   ]
