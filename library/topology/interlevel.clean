@@ -1,0 +1,149 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "spaces.clean"
+Import "bundles.clean"
+Import "../logic/booleans.clean"
+Import "../logic/functions.clean"
+Import Lean Mathlib.Topology.Instances.Real.Lemmas
+
+Type ContinuousRealMap(X: TopologicalSpace):
+  Means: (@ContinuousMap X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)
+  Render latex: C({X},\mathbb{{R}})
+  Describe: a continuous real-valued map on ${X}$
+
+Notation underlying real map(X,f):
+  Let X: TopologicalSpace
+  Let f: ContinuousRealMap(X)
+  Returns: Function(Point(X),Real)
+  Means: @ContinuousMap.toFun X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace f
+  Render latex: {f}
+
+Structure EndpointSelection():
+  Let lower,upper: Boolean
+  Constructor: endpoint selection
+  Describe: a selection of the lower and upper endpoints
+
+Define no endpoints(): EndpointSelection:
+  Equals: endpoint selection(false value(),false value())
+  Render: none
+
+Define lower endpoint(): EndpointSelection:
+  Equals: endpoint selection(true value(),false value())
+  Render: lower
+
+Define upper endpoint(): EndpointSelection:
+  Equals: endpoint selection(false value(),true value())
+  Render: upper
+
+Define both endpoints(): EndpointSelection:
+  Equals: endpoint selection(true value(),true value())
+  Render: both
+
+Define closed interval(I):
+  Let I: Endpoints
+  Returns: Set(Real)
+  Equals: set of(function(x: Real, I.lower ≤ x and x ≤ I.upper))
+  Render latex: [{I}.lower,{I}.upper]
+
+Define selected endpoints(I,E):
+  Let I: Endpoints
+  Let E: EndpointSelection
+  Returns: Set(Real)
+  Equals:
+    set of(function(x: Real,
+      (E.lower = true value() and x = I.lower) or
+      (E.upper = true value() and x = I.upper)))
+  Render latex: E({I},{E})
+
+Define expanded interval(I,r):
+  Let I: Endpoints
+  Let r: Real
+  Returns: Set(Real)
+  Equals: set of(function(x: Real, I.lower-r ≤ x and x ≤ I.upper+r))
+  Render latex: [{I}.lower-{r},{I}.upper+{r}]
+
+Define expanded endpoints(I,E,r):
+  Let I: Endpoints
+  Let E: EndpointSelection
+  Let r: Real
+  Returns: Set(Real)
+  Equals:
+    set of(function(x: Real,
+      (E.lower = true value() and I.lower-r ≤ x and x ≤ I.lower+r) or
+      (E.upper = true value() and I.upper-r ≤ x and x ≤ I.upper+r)))
+  Render latex: E_{{{r}}}({I},{E})
+
+Structure InterlevelProblem():
+  Universe: 1
+  Let space: TopologicalSpace
+  Let map: ContinuousRealMap(space)
+  Let interval: Endpoints
+  Let selection: EndpointSelection
+  Constructor: interlevel problem
+  Describe: interlevel problem data
+
+Structure SpacePairData(X: TopologicalSpace):
+  Let ambient,relative: Set(Point(X))
+  Constructor: space pair data
+  Describe: two subsets of ${X}$
+
+Condition nested pair(X,Q):
+  Let X: TopologicalSpace
+  Let Q: SpacePairData(X)
+  Holds when: Q.relative ⊆ Q.ambient
+  Render: {Q} is a nested pair
+
+Define expanded pair(P,r):
+  Let P: InterlevelProblem
+  Let r: Real
+  Returns: SpacePairData(P.space)
+  Equals:
+    space pair data(P.space,
+      inverse image(underlying real map(P.space,P.map),expanded interval(P.interval,r)),
+      inverse image(underlying real map(P.space,P.map),expanded endpoints(P.interval,P.selection,r)))
+  Render latex: X_{{{r}}}({P})
+
+Define shifted pair(P,t):
+  Let P: InterlevelProblem
+  Let t: Real
+  Returns: SpacePairData(P.space)
+  Equals:
+    space pair data(P.space,
+      inverse image(underlying real map(P.space,P.map),closed interval(shifted endpoints(P.interval,t))),
+      inverse image(underlying real map(P.space,P.map),selected endpoints(shifted endpoints(P.interval,t),P.selection)))
+  Render latex: T_{{{t}}}({P})
+
+Condition pair included in(X,Q,R):
+  Let X: TopologicalSpace
+  Let Q,R: SpacePairData(X)
+  Holds when: Q.ambient ⊆ R.ambient and Q.relative ⊆ R.relative
+  Render: {Q} is included in {R}
+
+Define real map value(X,f,x):
+  Let X: TopologicalSpace
+  Let f: ContinuousRealMap(X)
+  Let x: Point(X)
+  Returns: Real
+  Equals: evaluate map(underlying real map(X,f),x)
+  Render latex: {f}({x})
+
+Condition bounded perturbation(P,h,r):
+  Let P: InterlevelProblem
+  Let h: ContinuousRealMap(P.space)
+  Let r: Real
+  Holds when:
+    for every (x: Point(P.space),
+      -r ≤ real map value(P.space,h,x)-real map value(P.space,P.map,x) and
+      real map value(P.space,h,x)-real map value(P.space,P.map,x) ≤ r)
+  Render: {h} is a perturbation of {P} bounded by {r}
+
+Define perturbed pair(P,h):
+  Let P: InterlevelProblem
+  Let h: ContinuousRealMap(P.space)
+  Returns: SpacePairData(P.space)
+  Equals:
+    space pair data(P.space,
+      inverse image(underlying real map(P.space,h),closed interval(P.interval)),
+      inverse image(underlying real map(P.space,h),selected endpoints(P.interval,P.selection)))
+  Render latex: A({P},{h})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

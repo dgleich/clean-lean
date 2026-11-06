@@ -217,6 +217,15 @@ end MagneticReference
 
 -- generated: gpt-6 2026-10-29 role=assisted; LLM-authored portions; see PROVENANCE.md
 
+noncomputable def cleanType_Boolean_b98a4c98fcdb0f46359e  : Type :=
+  Bool
+
+noncomputable def cleanNotation_true_value_2fd5fc223c8905693b89   : Bool :=
+  true
+
+noncomputable def cleanNotation_false_value_d4e3155033dd79d1d53f   : Bool :=
+  false
+
 noncomputable def cleanType_Natural_469c53b6dafb7a218246  : Type :=
   ℕ
 
@@ -240,9 +249,6 @@ noncomputable def cleanType_List_530f2b2df99696550311 (p0 : Type) : Type :=
 
 noncomputable def cleanType_Function_9d746dbeb0e035328deb (p0 : Type) (p1 : Type) : Type :=
   (p0) → (p1)
-
-noncomputable def cleanType_Boolean_b98a4c98fcdb0f46359e  : Type :=
-  Bool
 
 noncomputable def cleanNotation_forward_0788bcbcf6947fc792d8   : Bool :=
   true

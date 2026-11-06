@@ -1,0 +1,69 @@
+% Generated statements, not proof certificates.
+Write $P=(X,f,(a,b),E)$ for the ambient space, continuous map, endpoints,
+and endpoint selection. The selection has four values: none, lower, upper, both.
+In the following notation, regard $E$ as its selected subset of $\{a,b\}$.
+The expanded pair $X_r(P)$ has components $f^{-1}[a-r,b+r]$ and
+$f^{-1}(\bigcup_{e\in E}[e-r,e+r])$.
+The shifted pair $T_t(P)$ has components $f^{-1}[a+t,b+t]$ and $f^{-1}(E+t)$.
+For a perturbation $h$, $A(P,h)$ has components $h^{-1}[a,b]$ and $h^{-1}(E)$.
+Pair inclusion means inclusion of both components. These results establish
+set inclusions; they do not assert the well-group characterization.
+
+\begin{cleanresult}{endpoint choices are exhaustive}\cleanattribution{[Topology foundations, two Boolean endpoint flags]}
+Let $E$ be a selection of the lower and upper endpoints.
+Then \[E = \text{none} \text{ or } E = \text{lower} \text{ or } E = \text{upper} \text{ or } E = \text{both}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{selected endpoints lie in the interval}\cleanattribution{\href{https://mrzv.org/publications/robustness-interlevelsets/manuscript/}{[Bendich, Edelsbrunner, Morozov, and Patel, setup for Theorem 4]}}
+Let $I$ be a pair of real endpoints.
+Let $E$ be a selection of the lower and upper endpoints.
+Assume $I.\mathrm{lower} \le I.\mathrm{upper}$ (\texttt{order}).
+Then \[E(I,E) \text{ is a subset of } [I.lower,I.upper].\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: endpoint inclusion.}
+\end{cleanresult}
+
+\begin{cleanresult}{expanded pair is nested}\cleanattribution{\href{https://mrzv.org/publications/robustness-interlevelsets/manuscript/}{[Bendich, Edelsbrunner, Morozov, and Patel, setup for Theorem 4]}}
+Let $P$ be interlevel problem data.
+Let $r$ be a real number.
+Assume $P.\mathrm{interval}.\mathrm{lower} \le P.\mathrm{interval}.\mathrm{upper}$ (\texttt{order}).
+Assume $r \ge 0$ (\texttt{radius}).
+Then \[X_{r}(P)\text{ is a nested pair}.\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: pair inclusion.}
+\end{cleanresult}
+
+\begin{cleanresult}{shifted pair is nested}\cleanattribution{\href{https://mrzv.org/publications/robustness-interlevelsets/manuscript/}{[Bendich, Edelsbrunner, Morozov, and Patel, setup for Theorem 4]}}
+Let $P$ be interlevel problem data.
+Let $t$ be a real number.
+Assume $P.\mathrm{interval}.\mathrm{lower} \le P.\mathrm{interval}.\mathrm{upper}$ (\texttt{order}).
+Then \[T_{t}(P)\text{ is a nested pair}.\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: pair inclusion.}
+\end{cleanresult}
+
+\begin{cleanresult}{shifted pair lies in expanded pair}\cleanattribution{\href{https://mrzv.org/publications/robustness-interlevelsets/manuscript/}{[Bendich, Edelsbrunner, Morozov, and Patel, setup for Theorem 4]}}
+Let $P$ be interlevel problem data.
+Let $r$ and $t$ be real numbers.
+Assume $r \ge 0$ (\texttt{radius}).
+Assume $-r \le t \text{ and } t \le r$ (\texttt{shift}).
+Then \[T_{t}(P)\text{ is included in }X_{r}(P).\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: all bounded shifts.}
+\end{cleanresult}
+
+\begin{cleanresult}{perturbed pair is nested}\cleanattribution{\href{https://mrzv.org/publications/robustness-interlevelsets/manuscript/}{[Bendich, Edelsbrunner, Morozov, and Patel, definition of perturbation pairs]}}
+Let $P$ be interlevel problem data.
+Let $h$ be a continuous real-valued map on $P.\mathrm{space}$.
+Assume $P.\mathrm{interval}.\mathrm{lower} \le P.\mathrm{interval}.\mathrm{upper}$ (\texttt{order}).
+Then \[A(P,h)\text{ is a nested pair}.\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: pair inclusion.}
+\end{cleanresult}
+
+\begin{cleanresult}{bounded perturbation lies in expanded pair}\cleanattribution{\href{https://mrzv.org/publications/robustness-interlevelsets/manuscript/}{[Bendich, Edelsbrunner, Morozov, and Patel, definition of relative well groups]}}
+Let $P$ be interlevel problem data.
+Let $h$ be a continuous real-valued map on $P.\mathrm{space}$.
+Let $r$ be a real number.
+Assume $r \ge 0$ (\texttt{radius}).
+Assume $h\text{ is a perturbation of }P\text{ bounded by }r$ (\texttt{bounded perturbation(P, h, r)}).
+Then \[A(P,h)\text{ is included in }X_{r}(P).\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: pair inclusion.}
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

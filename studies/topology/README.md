@@ -206,3 +206,15 @@ canonical comparisons and five proofs. [Homology.pdf](Homology.pdf) is generated
 from `latex_homology.tex`, compiled twice. These results do not prove any of the
 five research targets.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Interlevel problem data and preparatory inclusions
+
+[Interlevel.clean](Interlevel.clean), [InterlevelVerified.lean](InterlevelVerified.lean)
+and [Interlevel.pdf](Interlevel.pdf) now provide actual endpoint selections,
+problem data and expanded/shifted/perturbed pairs. Seven inclusion results have
+proofs, with 53 independent canonical targets. [The interface note](interlevel-data.md)
+explains the distinction between raw pair data and a certified map of pairs.
+The relative homology and well-group characterization remain unfinished.
+:::

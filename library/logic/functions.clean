@@ -1,0 +1,12 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../types.clean"
+
+Notation evaluate map(f,x):
+  Let X,Y: Type
+  Let f: Function(X,Y)
+  Let x: X
+  Returns: Y
+  Means: f x
+  Render latex: {f}({x})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

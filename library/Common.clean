@@ -1,5 +1,6 @@
 -- generated: gpt-6 2026-10-30 role=assisted; LLM-authored portions; see PROVENANCE.md
 -- Placeholder standard library: types, finite operations, and imported conditions.
+Import "logic/booleans.clean"
 Import Lean Mathlib.LinearAlgebra.Matrix.PosDef
 Import Lean Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 
@@ -52,10 +53,6 @@ Type Function(p0: Type, p1: Type):
     Describe plural: functions from ${p0}$ to ${p1}$
 
 -- Generic finite operations. There are no magnetic or paper-specific Lean definitions here.
-
-Type Boolean():
-    Means: Bool
-    Render latex: \{{\mathrm{{false}},\mathrm{{true}}\}}
 
 Notation forward(): Boolean:
     Means: true

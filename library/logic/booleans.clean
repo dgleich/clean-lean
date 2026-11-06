@@ -1,0 +1,14 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Type Boolean():
+  Means: Bool
+  Render latex: \{{\mathrm{{false}},\mathrm{{true}}\}}
+
+Notation true value(): Boolean:
+  Means: true
+  Render latex: \mathrm{{true}}
+
+Notation false value(): Boolean:
+  Means: false
+  Render latex: \mathrm{{false}}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

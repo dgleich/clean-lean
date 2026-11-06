@@ -498,6 +498,31 @@ dependent calls, including generic module-map ranges. This adds no conversion
 search, local-alias unfolding or inference by inverting computations. Computed type-valued arguments remain unsupported. <a href="computed-indices.md">Grammar, scope,
 constructive translation and acceptance evidence</a>.</p>
 </article>
+
+<article id="interlevel-data" data-status="implemented" class="mapping">
+<h2>Interlevel data and pair inclusions</h2>
+<div class="pair"><section><h3>Clean — interlevel module imported</h3><pre><code>Let P: InterlevelProblem
+Let h: ContinuousRealMap(P.space)
+Let r: Real
+Assume radius: r ≥ 0
+Assume bounded perturbation(P,h,r)
+Conclude:
+  pair included in(P.space,
+    perturbed pair(P,h),expanded pair(P,r))</code></pre></section>
+<section><h3>Readable native statement shape</h3><pre><code>-- Shortened names; actual definitions are authored in Clean.
+∀ (P : Problem) (h : ContinuousMap P.space.carrier ℝ)
+  (r : ℝ), 0 ≤ r →
+  (∀ x, -r ≤ h x-P.map x ∧ h x-P.map x ≤ r) →
+  (perturbedPair P h).ambient ⊆ (expandedPair P r).ambient ∧
+  (perturbedPair P h).relative ⊆ (expandedPair P r).relative</code></pre></section></div>
+<p>The native fragment is schematic: the actual type explicitly supplies the
+source topology and standard real topology. Endpoint choices and problem/pair
+records are authored; intervals, inverse images and boundedness are authored too.
+Seven preparatory results have proofs and 53 canonical target checks. Pair data
+has no implicit inclusion proof. Relative homology and the well-group theorem
+remain unfinished. <a href="../studies/topology/interlevel-data.md">Definitions,
+source conventions, exact interfaces and validation</a>.</p>
+</article>
 </main>
 <script>
 (() => {

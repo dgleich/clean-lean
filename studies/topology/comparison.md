@@ -8,7 +8,7 @@
 
 [Read this report as Markdown on GitHub](comparison.md).
 
-**Update:** this original comparison preserves proposed interfaces. See the [working study](README.md) and [current syntax decisions and blockers](requirements.md). Scoped quantifiers, dependent calls, fixed-carrier authored structures with field references, and an authored topology foundation are now implemented; the five target theorems remain pending. Actual bundled spaces and absolute singular homology now have [checked interfaces and functor-law proofs](singular-homology.md).
+**Update:** this original comparison preserves proposed interfaces. See the [working study](README.md) and [current syntax decisions and blockers](requirements.md). Scoped quantifiers, dependent calls, fixed-carrier authored structures with field references, and an authored topology foundation are now implemented; the five target theorems remain pending. Actual bundled spaces and absolute singular homology now have [checked interfaces and functor-law proofs](singular-homology.md). Endpoint choices and perturbation pairs now have [authored definitions and inclusion proofs](interlevel-data.md).
 
 Design report · 5 November 2026 · Clean baseline: commit 460014e
 

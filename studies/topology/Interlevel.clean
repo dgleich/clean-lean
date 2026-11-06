@@ -1,0 +1,69 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/interlevel.clean"
+
+Text latex:
+  Write $P=(X,f,(a,b),E)$ for the ambient space, continuous map, endpoints,
+  and endpoint selection. The selection has four values: none, lower, upper, both.
+  In the following notation, regard $E$ as its selected subset of $\{a,b\}$.
+  The expanded pair $X_r(P)$ has components $f^{-1}[a-r,b+r]$ and
+  $f^{-1}(\bigcup_{e\in E}[e-r,e+r])$.
+  The shifted pair $T_t(P)$ has components $f^{-1}[a+t,b+t]$ and $f^{-1}(E+t)$.
+  For a perturbation $h$, $A(P,h)$ has components $h^{-1}[a,b]$ and $h^{-1}(E)$.
+  Pair inclusion means inclusion of both components. These results establish
+  set inclusions; they do not assert the well-group characterization.
+
+Result endpoint choices are exhaustive:
+  Attribution: topology; two Boolean endpoint flags; original
+  Let E: EndpointSelection
+  Conclude:
+    E = no endpoints() or E = lower endpoint() or
+      E = upper endpoint() or E = both endpoints()
+
+Result selected endpoints lie in the interval:
+  Attribution: interlevel; setup for Theorem 4; adapted; scope: endpoint inclusion
+  Let I: Endpoints
+  Let E: EndpointSelection
+  Assume order: I.lower ≤ I.upper
+  Conclude: selected endpoints(I,E) ⊆ closed interval(I)
+
+Result expanded pair is nested:
+  Attribution: interlevel; setup for Theorem 4; adapted; scope: pair inclusion
+  Let P: InterlevelProblem
+  Let r: Real
+  Assume order: P.interval.lower ≤ P.interval.upper
+  Assume radius: r ≥ 0
+  Conclude: nested pair(P.space,expanded pair(P,r))
+
+Result shifted pair is nested:
+  Attribution: interlevel; setup for Theorem 4; adapted; scope: pair inclusion
+  Let P: InterlevelProblem
+  Let t: Real
+  Assume order: P.interval.lower ≤ P.interval.upper
+  Conclude: nested pair(P.space,shifted pair(P,t))
+
+Result shifted pair lies in expanded pair:
+  Attribution: interlevel; setup for Theorem 4; adapted; scope: all bounded shifts
+  Let P: InterlevelProblem
+  Let r,t: Real
+  Assume radius: r ≥ 0
+  Assume shift: -r ≤ t and t ≤ r
+  Conclude: pair included in(P.space,shifted pair(P,t),expanded pair(P,r))
+
+Result perturbed pair is nested:
+  Attribution: interlevel; definition of perturbation pairs; adapted; scope: pair inclusion
+  Let P: InterlevelProblem
+  Let h: ContinuousRealMap(P.space)
+  Assume order: P.interval.lower ≤ P.interval.upper
+  Conclude: nested pair(P.space,perturbed pair(P,h))
+
+Result bounded perturbation lies in expanded pair:
+  Attribution: interlevel; definition of relative well groups; adapted; scope: pair inclusion
+  Let P: InterlevelProblem
+  Let h: ContinuousRealMap(P.space)
+  Let r: Real
+  Assume radius: r ≥ 0
+  Assume bounded perturbation(P,h,r)
+  Conclude: pair included in(P.space,perturbed pair(P,h),expanded pair(P,r))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

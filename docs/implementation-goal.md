@@ -173,3 +173,30 @@ hypotheses, proof-bearing authored records and the paper-specific constructions
 remain open. General local-alias conversion, binder-bearing indices and full
 opaque Lean elaboration conformance are not claimed. The goal remains active.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Seventh implemented slice
+
+[Interlevel problem data](../studies/topology/interlevel-data.md) now has actual
+Clean-authored endpoint choices, problem records, interval/preimage sets,
+expanded/shifted/perturbed pairs, and pointwise perturbation bounds. Seven
+preparatory inclusion results have Lean proofs and 53 canonical target checks.
+The only new native mathematical interface is the standard real-valued continuous
+map; a generic function evaluation operation supports its authored value function.
+Boolean declarations were extracted into a shared module while retaining the
+existing Common names. No grammar extension was necessary.
+
+All 332 Python tests, the 92-proof corpus and the magnetic study proofs pass.
+The new PDF compiles without overfull lines. Pair data deliberately contains no
+unproved inclusion field; nestedness is a separately stated and proved condition.
+The shift and perturbation results concern both components, with all indices
+preserved. The mathematical source is the setup for Theorem 4, not a proof of that
+theorem or a replacement of the well group by the two-image formula.
+
+The next step is proof-bearing pair maps and their relative homology construction,
+or an explicit source-language representation of the needed inclusion evidence.
+Intersections of induced images must then share one fixed ambient relative module.
+Exactness/excision and the research theorem proofs remain open. The goal remains
+active; passing these preparatory lemmas does not complete it.
+:::

@@ -217,3 +217,15 @@ no longer blocks explicit computations. General local-alias conversion is still
 unsupported. Relative homology, exactness/excision and paper constructions remain
 open; the range-membership proof is not a well-group characterization.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Authored interlevel data
+
+[Interlevel data](interlevel-data.md) now implements all four endpoint selections,
+problem records, intervals, expanded/shifted/perturbed pairs, and uniform
+perturbation bounds. Their preparatory inclusions are proved. This resolves the
+finite-choice and base pair-data requirements using existing syntax. It does not
+provide proof-bearing maps of pairs, relative homology, the well-group intersection
+or its two-image characterization; those remain open.
+:::
