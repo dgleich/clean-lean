@@ -19,7 +19,7 @@ main{max-width:1200px;margin:auto;padding:40px 28px 70px}h1{font-size:clamp(2rem
 <body>
 <llm date="2026-10-23" role="assisted" style="display:contents">
 <main>
-<div class="eyebrow">Local language reference · For Lean users · Updated 5 November 2026</div>
+<div class="eyebrow">Local language reference · For Lean users · Updated 6 November 2026</div>
 <h1>Clean to Lean</h1>
 <p><llm model="gpt-6" date="2026-11-05" role="assisted">Related reports: <a href="clean-and-dafny.html">Clean and Dafny</a> and <a href="../studies/topology/comparison.html">five topology theorems in Clean and Lean</a>.</llm></p>
 <p>New proposed examples: <a href="sorting-examples.md">insertion sort, heapsort, and their runtime statements</a>. Recursion and pattern syntax remain unspecified; the heapsort comparison proof is an independent Lean reference.</p>
@@ -31,6 +31,22 @@ main{max-width:1200px;margin:auto;padding:40px 28px 70px}h1{font-size:clamp(2rem
 <div class="controls" hidden id="controls"><label>Find a mapping<input id="search" type="search" placeholder="Try lambda, context, coercion, or sum"></label><label>Status<select id="status"><option value="all">All statuses</option><option value="implemented">Implemented</option><option value="accepted">Accepted design</option><option value="proposed">Proposed</option></select></label></div>
 <p id="count" role="status" aria-live="polite"></p>
 <div id="mappings">
+<article id="quantifiers" data-status="implemented" class="mapping">
+<header><h2><a href="#quantifiers">Scoped quantified conditions</a></h2><span class="badge implemented">Implemented</span></header>
+<llm model="gpt-6" date="2026-11-06" role="assisted">
+<div class="pair"><section><h3>Clean</h3><pre><code>for every (x: Real,
+  there exists (y: Real, x = y))</code></pre></section>
+<section><h3>Lean equivalent</h3><pre><code>∀ (x : ℝ), @Exists ℝ (fun (y : ℝ) =&gt; x = y)</code></pre></section></div>
+<p>The final parenthesis ends each scope; a comma outside it may separate assumptions.
+Domains are explicit and bodies must be conditions. Keywords are case-insensitive;
+shadowing is rejected. Nested domain types refer to the correctly renamed outer
+locals. LaTeX uses English “for every” and “there exists”.</p>
+<p>The <a href="quantifiers.md">contract</a> specifies exact grammar and translation.
+The <a href="../studies/topology/README.md">working topology study</a> authors
+images and continuity with these forms. Six independent canonical target checks
+cover this slice; inherited general elaboration obligations remain pending.</p>
+</llm></article>
+
 <article id="result" data-status="implemented" class="mapping">
   <header><h2><a href="#result">Results are proposition definitions</a></h2><span class="badge implemented">Implemented</span></header>
   <p>A Clean result declares its statement. It does not introduce a proof, axiom, or Lean <code>theorem</code>.</p>

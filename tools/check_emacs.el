@@ -2,6 +2,14 @@
 (require 'ert)
 (load (expand-file-name "../editors/emacs/clean-math-mode.el"
                         (file-name-directory load-file-name)) nil t)
+(ert-deftest clean-math-quantifiers ()
+  (with-temp-buffer
+    (insert "for every (x: Real, there exists (y: Real,x=y))")
+    (clean-math-mode) (font-lock-ensure)
+    (goto-char (point-min))
+    (dolist (word '("for" "every" "there" "exists"))
+      (search-forward word)
+      (should (eq (get-text-property (1- (point)) 'face) 'font-lock-keyword-face)))))
 (ert-deftest clean-math-highlights ()
   (with-temp-buffer
     (insert "rEsUlT sample:\n  Let μ be Complex\n  Means: if p then x else y\n  -- Let z: Real\n")

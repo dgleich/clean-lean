@@ -1,0 +1,50 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+-- Proposed signatures, NOT compiling Lean definitions.
+-- No paper-specific constant below is asserted to exist.
+
+-- Proposed types carry the input invariants.
+def increasingDeathCriticalSet
+    (F : Type u) [Field F]
+    (K : OrderedFilteredComplex F) (p : ℕ)
+    (L : LazyReduction K p) (τ : NegativeSimplex L)
+    (target : ℝ) : Prop :=
+  K.value τ.simplex < target →
+    accumulatedCriticalSet K L τ target =
+      (K.pSimplices p).filter (fun s =>
+        K.value τ.simplex ≤ K.value s ∧
+        K.value s ≤ target ∧
+        L.U τ.simplex s ≠ 0)
+
+def levelSetBasisExtension
+    (F : Type u) [Field F]
+    (P : LevelSetPyramid F)
+    (b : IntervalBasis P.bottom) : Prop :=
+  ∃ B : PyramidBasis P, B.restrictBottom = b
+
+def levelWellGroupFormula
+    (F : Type u) [Field F]
+    (X : Type v) [TopologicalSpace X] [CompactSpace X]
+    (f : C(X, ℝ)) (p : ℕ) (a r : ℝ) : Prop :=
+  0 ≤ r →
+    levelWellGroup F p f a r =
+      levelImage F p f (a+r) (a-r) (a+r) ⊓
+      levelImage F p f (a-r) (a-r) (a+r)
+
+def interlevelWellGroupFormula
+    (F : Type u) [Field F]
+    (X : Type v) [TopologicalSpace X] [CompactSpace X]
+    (f : C(X, ℝ)) (p : ℕ) (a b r : ℝ)
+    (E : EndpointSelection a b) : Prop :=
+  a < b → 0 ≤ r →
+    relativeWellGroup F p f a b E r =
+      shiftedPairImage F p f a b E r r ⊓
+      shiftedPairImage F p f a b E r (-r)
+
+def mayerVietorisStatement
+    (F : Type u) [Field F]
+    (X : Type v) [TopologicalSpace X]
+    (U V : TopologicalSpace.Opens X) : Prop :=
+  (U : Set X) ∪ (V : Set X) = Set.univ →
+    ExactSequence (mayerVietorisSequence F X U V)
+
+-- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

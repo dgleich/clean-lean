@@ -19,6 +19,8 @@
      | ID -> local
      | "(" expression ")" -> group
      | FUNCTION "(" ID ":" type_ref "," expression ")" -> function
+     | FOR EVERY "(" ID ":" type_ref "," expression ")" -> universal
+     | THERE EXISTS "(" ID ":" type_ref "," expression ")" -> existential
 name: ID+
 arguments: expression ("," expression)*
 type_ref: TYPE_ID ["(" [type_arguments] ")"]
@@ -81,12 +83,16 @@ OR: /(?i:or)(?=\W)/ | "∨"
 AND: /(?i:and)(?=\W)/ | "∧"
 NOT: /(?i:not)(?=\W)/ | "¬"
 FUNCTION: /(?i:function)(?=\W)/
+FOR: /(?i:for)(?=\W)/
+EVERY: /(?i:every)(?=\W)/
+THERE: /(?i:there)(?=\W)/
+EXISTS: /(?i:exists)(?=\W)/
 COMPARE: "=" | "≠" | "!=" | "<=" | ">=" | "≤" | "≥" | "<" | ">" | "∈" | "⊆" | "∣"
 ADD: "+" | "-" | "∪" | "∩"
 MINUS: "-"
 MULTIPLY: "*" | "/"
 POWER: "^"
-ID: /(?!(?i:and|or|not|function)\W)[^\W\d]\w*/
+ID: /(?!(?i:and|or|not|function|for|every|there|exists)\W)[^\W\d]\w*/
 TYPE_ID: /[^\W\d]\w*/
 TITLE_WORD: /\w+/
 NUMBER: /\d+/

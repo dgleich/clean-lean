@@ -376,6 +376,48 @@
         "Markdown rendering and semantic prose references",
         "Emacs runtime validation unavailable"
       ]
+    },
+    {
+      "id": "scoped_quantifiers",
+      "status": "partial",
+      "specification": "docs/quantifiers.md",
+      "grammar": "grammar/clean.lark",
+      "source_fragment": "for every (x: Real, there exists (y: Real, x = y))",
+      "expected_tree": [
+        "Forall",
+        "x",
+        "Real",
+        [
+          "Exists",
+          "y",
+          "Real",
+          [
+            "Operator",
+            "=",
+            [
+              "Local",
+              "x"
+            ],
+            [
+              "Local",
+              "y"
+            ]
+          ]
+        ]
+      ],
+      "expected_lean": "∀ (x : ℝ), @Exists ℝ (fun (y : ℝ) => x = y)",
+      "expected_lean_type": "Prop",
+      "checks": [
+        "tests/test_quantifiers.py",
+        "tools/check_quantifier_targets.py",
+        "studies/topology/verify.py",
+        "tools/generate_parser.py --check"
+      ],
+      "pending": [
+        "Inherited general body/type elaboration uniqueness",
+        "Arbitrary value-indexed constructors",
+        "Universe-polymorphic structure authoring"
+      ]
     }
   ]
 }

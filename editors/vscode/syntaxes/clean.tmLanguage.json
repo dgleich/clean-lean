@@ -182,7 +182,7 @@
         },
         {
           "name": "keyword.operator.word.clean",
-          "match": "\\b(?i:and|or|not)\\b"
+          "match": "\\b(?i:and|or|not|for|every|there|exists)\\b"
         },
         {
           "name": "constant.numeric.clean",

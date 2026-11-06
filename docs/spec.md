@@ -454,3 +454,14 @@ a declaration. There is no `Section:` declaration: headings belong inside prose.
 The [normative contract](literate-text.md) defines exact delimiters, placement,
 attachment, erasure to mathematical Lean terms, and current rendering limits.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Nested quantified conditions
+
+The implemented forms `for every (x: T, P)` and `there exists (x: T, P)`
+introduce a typed local scoped to the parenthesized condition. See the
+[quantifier contract](quantifiers.md) for grammar, reservations, binding,
+Lean targets, universe limits, and acceptance checks. Type-valued theorem
+parameters require the explicit foundational `Type() -> Type` binding.
+:::

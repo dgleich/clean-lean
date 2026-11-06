@@ -51,6 +51,8 @@ def expression_tree(tree):
     if kind=='decimal':return ['Decimal',str(c[0])]
     if kind=='call':return ['Call',name(c[0]),[expression_tree(x) for x in c[1].children] if len(c)>1 else []]
     if kind=='unary':return ['Unary','-' if str(c[0])=='-' else 'not',expression_tree(c[1])]
+    if kind in ('universal','existential'):
+        return ['Forall' if kind=='universal' else 'Exists',str(c[2]),type_spelling(c[3]),expression_tree(c[4])]
     if kind=='function':return ['Lambda',str(c[1]),type_spelling(c[2]),expression_tree(c[3])]
     raise ValueError('Unknown generated expression node: '+kind)
 

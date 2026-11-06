@@ -184,3 +184,24 @@ boundaries, nesting and attachment, and the first-slice placement/rendering limi
 LaTeX is the implemented document backend; Typst payloads are parsed and preserved,
 but LaTeX explicitly rejects them until a Typst renderer exists.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Topology foundation and scoped quantifiers
+
+Use explicit carrier types and topology values in the first topology module.
+Define preimages, images, continuity, selection and family intersection in Clean.
+Introduce `for every (x: T, P)` and `there exists (x: T, P)` as expression atoms:
+parentheses delimit scope and protect their comma from assumption grouping.
+Reserve for/every/there/exists case-insensitively. Reject shadowing and non-Prop
+bodies. Emit Lean forall and explicit Exists terms with deterministic renaming.
+Render quantifier words in English. This is an implementation choice for review;
+the earlier unparenthesized prose spelling is not an accepted alias.
+
+The explicit Type binding targets Lean Type 0 and has a Type 1 wrapper.
+Universe-polymorphic structures and arbitrary value-indexed constructors remain
+pending; a bounded design and acceptance obligations are in the
+[topology study](../studies/topology/requirements.md). Do not add topology-specific
+binders or paper theorem adapters to evade those gaps. The original comparison
+is historical; the study README distinguishes executable foundation from targets.
+:::

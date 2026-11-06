@@ -79,7 +79,7 @@ def type_declaration(header, fields, env):
         if src in values: spec[dst] = template(values[src], names)
     env.data['types'][name] = spec
     signature=' '.join(f'({n} : '+('Nat' if k=='dimension' else 'Type')+')' for n,k in zip(names,kinds))
-    sort='Sort 1' if values['means']=='Prop' else 'Type'
+    sort={'Prop':'Sort 1', 'Type':'Type 1'}.get(values['means'],'Type')
     add_definition(env, 'cleanType_', name, f'{signature} : {sort} :=\n  {values["means"]}')
 
 
@@ -101,7 +101,8 @@ def notation(header, fields, env, *, authored=False):
     name, params, fields = signature_fields(header, fields)
     if len(set(params))!=len(params) or any(not re.fullmatch(ID,p) for p in params):
         raise CleanError('Invalid or duplicate parameters')
-    if name.lower() == 'function': raise CleanError('function is reserved for typed function expressions')
+    if any(word.lower() in {'function','for','every','there','exists'} for word in name.split()):
+        raise CleanError('Reserved expression binder word in declaration name: '+name)
     if name in env.data['functions']: raise CleanError('Duplicate visible name: '+name)
     local, implicit, types, other = {}, {}, {}, []
     for field in fields:

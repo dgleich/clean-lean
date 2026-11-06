@@ -8,6 +8,7 @@ const tm=require('vscode-textmate'),onig=require('vscode-oniguruma');
  const grammar=await registry.loadGrammar('source.clean');
  function scopeAt(line,word){const pos=line.indexOf(word);return grammar.tokenizeLine(line).tokens.find(t=>t.startIndex<=pos&&t.endIndex>pos).scopes;}
  function has(line,word,scope){assert(scopeAt(line,word).includes(scope),JSON.stringify({line,word,scopes:scopeAt(line,word)}));}
+ for (const word of ['for','every','there','exists']) has('for every (x: Real, there exists (y: Real,x=y))',word,'keyword.operator.word.clean');
  has('rEsUlT determinant product:','rEsUlT','keyword.declaration.clean');
  has('Define squared distance(x, y):','squared','entity.name.function.clean');
  has('  Let μ be a Complex','μ','variable.parameter.clean');

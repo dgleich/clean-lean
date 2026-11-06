@@ -1,0 +1,71 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+-- Pending mathematical interfaces; NOT an accepted Clean module.
+-- See requirements.md for each blocker.
+Import "Common.clean"
+
+Result increasing death critical set:
+  Attribution: bigsteps; Theorem 9; adapted
+  Let F: Field
+  Let K: OrderedFilteredComplex(F)
+  Let p: Natural
+  Let L: LazyReduction(K,p)
+  Let τ: NegativeSimplex(L)
+  Let target: Real
+  Assume increase: value(K,τ) < target
+  Conclude:
+    accumulated critical set(K,L,τ,target) =
+      simplices s in p simplices(K)
+        satisfying:
+          value(K,τ) ≤ value(K,s)
+          and value(K,s) ≤ target
+          and entry(inverse change basis(L),τ,s) ≠ 0
+
+Result level set basis extension:
+  Attribution: interlevel; Theorem 1; adapted
+  Let F: Field
+  Let P: LevelSetPyramid(F)
+  Let b: IntervalBasis(bottom zigzag(P))
+  Conclude:
+    there exists (B: PyramidBasis(P),
+      restrict basis(B,bottom zigzag(P)) = b)
+
+Result level well group:
+  Attribution: interlevel; Theorem 3; adapted
+  Let F: Field
+  Let X: CompactTopologicalSpace
+  Let f: ContinuousMap(X,Real)
+  Let p: Natural
+  Let a,r: Real
+  Assume radius: r ≥ 0
+  Conclude:
+    level well group(F,p,f,a,r) =
+      intersection(
+        level image(F,p,f,a+r,a-r,a+r),
+        level image(F,p,f,a-r,a-r,a+r))
+
+Result interlevel well group:
+  Attribution: interlevel; Theorem 4; adapted
+  Let F: Field
+  Let X: CompactTopologicalSpace
+  Let f: ContinuousMap(X,Real)
+  Let p: Natural
+  Let a,b,r: Real
+  Assume endpoints: a < b
+  Assume radius: r ≥ 0
+  Let E: EndpointSelection(a,b)
+  Conclude:
+    relative well group(F,p,f,a,b,E,r) =
+      intersection(
+        shifted pair image(F,p,f,a,b,E,r,r),
+        shifted pair image(F,p,f,a,b,E,r,-r))
+
+Result Mayer Vietoris:
+  Attribution: hatcher; section 2.2; specialized
+  Let F: Field
+  Let X: TopologicalSpace
+  Let U,V: OpenSubset(X)
+  Assume cover: union(U,V) = whole space(X)
+  Conclude:
+    exact(mayer vietoris sequence(F,X,U,V))
+
+-- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

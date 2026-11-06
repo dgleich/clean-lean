@@ -187,9 +187,13 @@ class Environment:
             expanded=self.data['types'][name]['canonical'].format(*map(str,out))
             return self.type(expanded,env,False,trail+(name,))
         return Type(name,tuple(out))
-    def render_type(self,t,target):
-        args=[self.render_type(a,target) if isinstance(a,Type) else (texid(a) if target=='latex' and not a.isdigit() else a) for a in t.args]
-        if t.name not in self.data['types']: return t.name
+    def render_type(self,t,target,bindings=None):
+        bindings=bindings or {}
+        args=[self.render_type(a,target,bindings) if isinstance(a,Type) else
+              bindings[a].lean if target=='lean' and a in bindings else
+              texid(a) if target=='latex' and not a.isdigit() else a for a in t.args]
+        if t.name not in self.data['types']:
+            return bindings[t.name].lean if target=='lean' and t.name in bindings else t.name
         return self.data['types'][t.name][target].format(*args)
     def is_function_type(self,t):
         spec=self.data['types'].get(t.name,{})
@@ -201,7 +205,7 @@ class Environment:
             raise CleanError('Function expressions require one explicit Lean arrow type binding')
         return Type(names[0],(domain,codomain))
     def describe_type(self,t,plural=False):
-        spec=self.data['types'][t.name]
+        spec=self.data['types'].get(t.name,{})
         template=spec.get('prose_plural' if plural else 'prose')
         if template:
             args=[self.render_type(a,'latex') if isinstance(a,Type) else (a if a.isdigit() else texid(a)) for a in t.args]
@@ -261,11 +265,12 @@ class Expressions:
                 if len(args)!=1 or not compatible(args[0].type,t.args[0]): raise CleanError('Function argument mismatch')
                 return Expr('('+self.env[tok].lean+' '+args[0].lean+')',texid(tok)+'('+args[0].tex+')',t.args[1],tree=tree)
             return self.reg.call(tok,args)
-        if kind=='Lambda':
+        if kind in ('Lambda','Forall','Exists'):
             name=tree[1]
-            if name in self.env or name in self.reg.data['functions'] or name in self.reg.data['types']:
-                raise CleanError('Function binder must be a fresh identifier')
+            if name in self.env or name in self.reg.data['functions'] or name in self.reg.data['types'] or name in self.reg.data['aliases']:
+                raise CleanError('Binder must be a fresh identifier')
             domain=self.reg.type(tree[2],self.env,phrases=False)
+            lean_domain=self.reg.render_type(domain,'lean',self.env)
             occupied=set(self.env)
             for value in self.env.values():occupied.update(re.findall(ID,value.lean))
             while f'clean_bound_{self.bound_counter}' in occupied:self.bound_counter+=1
@@ -273,10 +278,22 @@ class Expressions:
             previous=self.env;self.env={**previous,name:Expr(bound,texid(name),domain)}
             try:body=self._elaborate(tree[3])
             finally:self.env=previous
+            if kind in ('Forall','Exists'):
+                if body.type != PROP: raise CleanError('Quantifier body must be a condition')
+                truth=self.reg.data['types'].get('Proposition',{})
+                if truth.get('args') != [] or truth.get('lean','').strip() != 'Prop':
+                    raise CleanError('Quantifiers require the foundational Proposition binding to Lean Prop')
+                lean_type=lean_domain
+                target=(f'(∀ ({bound} : {lean_type}), {body.lean})' if kind=='Forall' else
+                        f'(@Exists ({lean_type}) (fun ({bound} : {lean_type}) => {body.lean}))')
+                words='for every' if kind=='Forall' else 'there exists'
+                tex=(r'\left(\text{'+words+' }'+texid(name)+r' : '+
+                     self.reg.render_type(domain,'latex')+r',\; '+body.tex+r'\right)')
+                return Expr(target,tex,PROP,tree=[kind,name,str(domain),body.tree])
             if body.type==NUM or name in re.findall(ID,str(body.type)):
                 raise CleanError('Function body requires a determined, nondependent return type')
             result=self.reg.function_type(domain,body.type)
-            return Expr(f'(fun ({bound} : {self.reg.render_type(domain,"lean")}) => {body.lean})',
+            return Expr(f'(fun ({bound} : {lean_domain}) => {body.lean})',
                         r'\left('+texid(name)+r' \mapsto '+body.tex+r'\right)',result,
                         tree=['Lambda',name,str(domain),body.tree])
         raise CleanError('Unknown syntax constructor: '+kind)

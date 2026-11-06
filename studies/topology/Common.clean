@@ -1,0 +1,27 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../../library/topology/basic.clean"
+
+Source topology:
+  Kind: other
+  Label: Topology foundations
+  Title: Clean topology foundation checks
+
+Source bigsteps:
+  Kind: other
+  Label: Nigmetov and Morozov
+  Title: Topological Optimization with Big Steps
+  Url: https://mrzv.org/publications/topological-optimization-big-steps/manuscript/
+
+Source interlevel:
+  Kind: other
+  Label: Bendich, Edelsbrunner, Morozov, and Patel
+  Title: Homology and Robustness of Level and Interlevel Sets
+  Url: https://mrzv.org/publications/robustness-interlevelsets/manuscript/
+
+Source hatcher:
+  Kind: book
+  Label: Hatcher
+  Title: Algebraic Topology
+  Url: https://pi.math.cornell.edu/~hatcher/AT/ATch2.pdf
+
+-- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -44,6 +44,10 @@ call assert_equal('cleanMathText', synIDattr(synID(15,5,1),'name'))
 call assert_equal('cleanMathTriple', synIDattr(synID(17,5,1),'name'))
 call assert_equal('cleanMathDoc', synIDattr(synID(19,8,1),'name'))
 call assert_equal('cleanMathKeyword', synIDattr(synID(20,1,1),'name'))
+call setline(21, 'for every (x: Real, there exists (y: Real,x=y))')
+syntax sync fromstart
+call assert_equal('cleanMathLogic', synIDattr(synID(21,1,1),'name'))
+call assert_equal('cleanMathLogic', synIDattr(synID(21,27,1),'name'))
 if len(v:errors)
  for error in v:errors | echom error | endfor
  cquit
