@@ -77,7 +77,9 @@ separator is added. Keywords retain their existing capitalization rules.
    type/alias names and callable names, just as for function expressions.
 2. Give the binder a fresh local identity of the resolved domain type. It scopes
    only over the codomain. Nested binders extend that scope; shadowing is rejected.
-   Restore the surrounding environment even on failure.
+   Restore the surrounding environment even on failure. Carry the existing alias
+   expansion trail through domains, codomains and nested type arguments, so a cycle
+   crossing a bound arrow is rejected as a cyclic alias.
 3. Resolve the codomain using the ordinary type checker, including typed dimension
    and value indices. The result carries the binder identity, its domain and its
    resolved codomain. No source-name substitution into an opaque Lean body is used.

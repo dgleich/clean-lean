@@ -105,7 +105,7 @@ def make(constructor,binder,bound,domain,codomain):
     return DependentFunctionType(constructor,binder,bound,domain,codomain)
 
 
-def parse_type(syntax,env,locals):
+def parse_type(syntax,env,locals,trail=()):
     from .syntax import type_spelling,parse,expression_tree
     head=str(syntax.children[0]);head=env.data['aliases'].get(head,head)
     if not env.is_function_type(Type(head)):raise CleanError('Bound type arguments require an explicit arrow binding')
@@ -113,11 +113,11 @@ def parse_type(syntax,env,locals):
     if expression_tree(parse(binder,'expression'))!=['Local',binder]:raise CleanError('Invalid dependent function binder')
     if binder in locals or binder in env.data['types'] or binder in env.data['aliases'] or binder in env.data['functions']:
         raise CleanError('Dependent function binder must be fresh')
-    domain=env.type(type_spelling(domain),locals,phrases=False)
+    domain=env.type(type_spelling(domain),locals,phrases=False,trail=trail)
     if domain==Type('Type'):raise CleanError('Type-valued dependent function binders are not implemented')
     bound=fresh_bound(env,locals)
     scope={**locals,binder:Expr(bound,texid(binder),domain)}
-    codomain=env.type(type_spelling(codomain),scope,phrases=False)
+    codomain=env.type(type_spelling(codomain),scope,phrases=False,trail=trail)
     return make(head,binder,bound,domain,codomain)
 
 

@@ -115,3 +115,10 @@ class DependentFunctions(unittest.TestCase):
         t=self.typ('Function(q: Natural,Matrix(n,q,Real))',local)
         local['f']=Expr('f','f',t)
         self.assertEqual(self.expr('compiler named family(f)',local).type,t)
+    def test_alias_cycles_crossing_bound_arrows_reject(self):
+        from cleanlang.modules import type_declaration
+        for body in ['Function(n: Natural,RecursiveFamily)',
+                     'Function(n: Natural,Function(Real,RecursiveFamily))']:
+            self.e.data['types'].pop('RecursiveFamily',None)
+            with self.subTest(body=body),self.assertRaisesRegex(CleanError,'Cyclic type alias'):
+                type_declaration('Type RecursiveFamily():',['Equals: '+body],self.e)

@@ -202,7 +202,7 @@ class Environment:
         if phrases and not s.startswith('(') and not re.match(ID+r'\s*\(',s):
             matches=[p['type'].format(**m.groupdict()) for p in self.data['phrases'] if (m:=re.fullmatch(p['pattern'],s,re.I))]
             if len(matches)>1: raise CleanError('Ambiguous type phrase: '+s)
-            if matches: return self.type(matches[0],env,False)
+            if matches: return self.type(matches[0],env,False,trail)
         from .syntax import parse as syntax_parse, type_spelling
         try:syntax=syntax_parse(s,'type_ref')
         except CleanError as e:raise CleanError('Unknown type phrase: '+s) from e
@@ -211,7 +211,7 @@ class Environment:
             return proof_type(Expressions(self,env or {}).elaborate(expression_tree(syntax.children[0])),self,env or {})
         if len(syntax.children)>1 and syntax.children[1].data=='bound_type_arguments':
             from .dependent_functions import parse_type
-            return parse_type(syntax,self,env or {})
+            return parse_type(syntax,self,env or {},trail)
         source_name=str(syntax.children[0])
         name=self.data.get('aliases',{}).get(source_name,source_name)
         args=[type_spelling(x) for x in syntax.children[1].children] if len(syntax.children)>1 else []
@@ -222,7 +222,7 @@ class Environment:
         out=[]
         for a,k in zip(args,kinds):
             if k=='type':
-                value=self.type(a,env)
+                value=self.type(a,env,trail=trail)
                 if isinstance(value,ProofType):raise CleanError('Proof types cannot instantiate Type parameters')
                 out.append(value);continue
             if isinstance(k,dict):
