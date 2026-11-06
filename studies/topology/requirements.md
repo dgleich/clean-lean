@@ -167,13 +167,14 @@ any higher-universe and proof-field requirements. Encoding it as an unconstraine
 
 ## Target obligations
 
-| Target | Required data/construction | Proof dependency | Language blocker |
+| Target | Required data/construction | Proof dependency | Current language/interface status |
 |---|---|---|---|
-| Big Steps 9 | Finite complex; ordered filtration; boundary; lazy reduction; Algorithm 2 run and accumulated p-simplices | Reduction invariants, transposition invariants, equality with initial row-support filter | Finite collection module, recursive algorithms, indexed input/output types |
-| Interlevel 1 | Graded relative-homology pyramid and bottom zigzag, fixed interval labels | Basis flip across exact diamonds, compatibility and restriction | Indexed types, authored diagram structures; existence itself now works |
-| Interlevel 3 | Thickening, level inclusions, inclusion-induced ranges, perturbation-indexed intersection | Two extreme perturbations and the applicable Mayer–Vietoris intersection lemma | Homology/submodule interfaces and their dependencies; quantification itself now works |
-| Interlevel 4 | Endpoint selection and relative pairs, translated pairs, relative ranges | Relative version of the preceding argument | Same interfaces plus finite case data and relative homology |
-| Mayer–Vietoris | Chain-level sequence and connecting maps for an open cover | Excision and the long exact sequence construction | Indexed groups/maps, graded sequence structures |
+| Big Steps 9 | Finite complex; ordered filtration; boundary; lazy reduction; Algorithm 2 run and accumulated p-simplices | Reduction and transposition invariants; equality with independently computed initial row support | Finite collection and recursive algorithm interfaces remain unfinished; indexed input/output types are supported in the bounded profile |
+| Interlevel 1 | Graded relative-homology pyramid and bottom zigzag, fixed interval labels, basis restriction | Basis flip across exact diamonds, compatibility and extension | Indexed records and dependent fields are implemented; [actual zigzag/basis data](../zigzag-bases/README.md) exists, but pyramid and restriction constructions remain missing |
+| Interlevel 3 | Thickening, level inclusions, inclusion-induced ranges, perturbation-indexed intersection | Two extreme perturbations and an applicable Mayer–Vietoris intersection lemma | Homology, submodule and perturbation interfaces now exist; the level-set specialization and its theorem have not been assembled |
+| Interlevel 4 | Endpoint selection and relative pairs, translated pairs, relative ranges | Relative version of the preceding argument | [TwoImageCandidate.clean](TwoImageCandidate.clean) is a translated singular-homology candidate over actual definitions; reverse inclusion and the cover/excision audit remain open |
+| Mayer–Vietoris | Chain-level sequence and connecting maps for an open cover | Excision and the long exact sequence construction | Graded objects/maps are implemented; connecting maps and an authored sequence/exactness interface remain missing |
+
 
 The target snippets specify expected interfaces, not sufficient definitions. For
 Theorem 9, the two sides must be computed independently: never define accumulated
