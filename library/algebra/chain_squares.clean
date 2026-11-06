@@ -1,0 +1,48 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "chains.clean"
+Import "../logic/evidence.clean"
+
+Structure ChainSquare(K: Type, field: FieldStructure(K), C: ModuleChainComplex(K,field), D: ModuleChainComplex(K,field), E: ModuleChainComplex(K,field), F: ModuleChainComplex(K,field)):
+  Let source: ChainMap(K,field,C,D)
+  Let target: ChainMap(K,field,E,F)
+  Let left: ChainMap(K,field,C,E)
+  Let right: ChainMap(K,field,D,F)
+  Let commutes: Evidence((compose chain maps(field,C,D,F,right,source) = compose chain maps(field,C,E,F,target,left)))
+  Constructor: chain square
+  Describe: a commuting square of chain maps
+
+Notation chain cokernel map(field,C,D,E,F,f,g,p,q,h):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D,E,F: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Let g: ChainMap(K,field,E,F)
+  Let p: ChainMap(K,field,C,E)
+  Let q: ChainMap(K,field,D,F)
+  Let h: Evidence((compose chain maps(field,C,D,F,q,f) = compose chain maps(field,C,E,F,g,p)))
+  Returns: ChainMap(K,field,(chain cokernel(field,C,D,f)),(chain cokernel(field,E,F,g)))
+  Means: (letI : Field K := field; CategoryTheory.Limits.cokernel.map f g p q h)
+  Render latex: \overline{{{q}}}
+
+Define square quotient map(field,C,D,E,F,S):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D,E,F: ModuleChainComplex(K,field)
+  Let S: ChainSquare(K,field,C,D,E,F)
+  Returns: ChainMap(K,field,(chain cokernel(field,C,D,S.source)),(chain cokernel(field,E,F,S.target)))
+  Equals: chain cokernel map(field,C,D,E,F,S.source,S.target,S.left,S.right,S.commutes)
+  Render latex: \overline{{{S}.right}}
+
+Define square homology map(field,C,D,E,F,S,n):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D,E,F: ModuleChainComplex(K,field)
+  Let S: ChainSquare(K,field,C,D,E,F)
+  Let n: Natural
+  Returns: ModuleMap(K,field,(chain homology(field,chain cokernel(field,C,D,S.source),n)),(chain homology(field,chain cokernel(field,E,F,S.target),n)))
+  Equals:
+    induced chain homology map(field,chain cokernel(field,C,D,S.source),chain cokernel(field,E,F,S.target),
+      square quotient map(field,C,D,E,F,S),n)
+  Render latex: H_{{{n}}}(\overline{{{S}.right}})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

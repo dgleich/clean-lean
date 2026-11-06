@@ -117,3 +117,15 @@ and four kernel checks pass. Relative induced maps, exactness/excision and the
 research theorem proofs remain unfinished; the report distinguishes definition
 checks from mathematical theorems and records the computed-index conversion gap.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Induced quotient maps
+
+[Chain squares](chain-squares.md) now supplies proof-bearing commuting squares,
+induced cokernel maps and induced homology maps. The pair-inclusion study proves
+that the actual four singular-chain maps form such a square. Seventeen canonical
+targets and two kernel-checked proofs cover these interfaces. The square witness
+is explicit; packaging the relative functor and converting its computed indices
+remain open, as do exactness/excision and the research targets.
+:::

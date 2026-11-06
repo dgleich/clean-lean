@@ -583,6 +583,20 @@ selected definitions. None proves excision or a well-group characterization.</p>
 <a href="../studies/topology/Relative.clean">Clean statements</a>, and
 <a href="../studies/topology/RelativeVerified.lean">native target comparisons and proofs</a>.</p>
 </section>
+<section class="mapping" id="chain-squares" data-status="implemented">
+<h2>Commuting squares and quotient maps</h2>
+<p><strong>Implemented with explicit evidence.</strong> ChainSquare stores four
+maps and their commutativity proof. Its four corner complexes are type parameters.</p>
+<pre><code>square quotient map(field,C,D,E,F,S)
+square homology map(field,C,D,E,F,S,n)</code></pre>
+<p>The quotient operation passes S.source, S.target, S.left, S.right and
+S.commutes to Mathlib's cokernel.map. The homology operation applies the native
+homology functor in degree n. Both compositions are authored in Clean.</p>
+<p>A checked existence theorem constructs the singular-chain square of every
+certified pair inclusion. The witness remains explicit; a packaged relative
+functor, index conversion, exactness and excision remain pending.</p>
+<p>See <a href="../studies/topology/chain-squares.md">orientation, source, and checks</a>.</p>
+</section>
 </main>
 <script>
 (() => {

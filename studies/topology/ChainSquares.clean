@@ -1,0 +1,34 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/pair_chain_squares.clean"
+
+Text latex:
+  A square $S$ has source and target horizontal maps, left and right vertical
+  maps, and evidence that the two composites agree. Its quotient map is the
+  map between cokernels induced by the right vertical map.
+  For an inclusion of topological pairs, the four corners are the singular chains
+  on the relative and ambient subsets of the source and target pairs.
+
+Result quotient square commutes:
+  Attribution: topology; cokernel.map; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D,E,F: ModuleChainComplex(K,field)
+  Let S: ChainSquare(K,field,C,D,E,F)
+  Conclude:
+    compose chain maps(field,D,chain cokernel(field,C,D,S.source),chain cokernel(field,E,F,S.target),
+      square quotient map(field,C,D,E,F,S),chain cokernel projection(field,C,D,S.source)) =
+    compose chain maps(field,D,F,chain cokernel(field,E,F,S.target),
+      chain cokernel projection(field,E,F,S.target),S.right)
+
+Result pair inclusion induces a chain square:
+  Attribution: topology; singular chain functor applied to pair inclusions; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Conclude:
+    there exists (S: PairChainSquare(K,field,H,X,Q), square represents pair inclusion(field,H,X,Q,S))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

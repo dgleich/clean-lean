@@ -62,3 +62,13 @@ Notation chain homology(field,C,n):
   Render latex: H_{{{n}}}({C})
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Notation induced chain homology map(field,C,D,f,n):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Let n: Natural
+  Returns: ModuleMap(K,field,(chain homology(field,C,n)),(chain homology(field,D,n)))
+  Means: (letI : Field K := field; (HomologicalComplex.homologyFunctor (ModuleCat.{0} K) (ComplexShape.down ℕ) n).map f)
+  Render latex: H_{{{n}}}({f})

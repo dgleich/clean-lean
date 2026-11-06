@@ -316,6 +316,9 @@ noncomputable def cleanNotation_zero_chain_map_aedd3eb32a6dc949f8cd {K : Type} (
 noncomputable def cleanNotation_chain_homology_08373901ee9ce5bedd90 {K : Type} (field : Field K) (C : (letI : Field K := field; ChainComplex (ModuleCat.{0} K) ℕ)) (n : ℕ) : (@ModuleCat.{0,0} K field.toRing) :=
   (letI : Field K := field; (HomologicalComplex.homologyFunctor (ModuleCat.{0} K) (ComplexShape.down ℕ) n).obj C)
 
+noncomputable def cleanNotation_induced_chain_homology_map_62c79a897825782bdcd3 {K : Type} (field : Field K) (C : (letI : Field K := field; ChainComplex (ModuleCat.{0} K) ℕ)) (D : (letI : Field K := field; ChainComplex (ModuleCat.{0} K) ℕ)) (f : (letI : Field K := field; @Quiver.Hom (ChainComplex (ModuleCat.{0} K) ℕ) inferInstance C D)) (n : ℕ) : (@ModuleCat.Hom K field.toRing (@cleanNotation_chain_homology_08373901ee9ce5bedd90 (K) (field) (C) (n)) (@cleanNotation_chain_homology_08373901ee9ce5bedd90 (K) (field) (D) (n))) :=
+  (letI : Field K := field; (HomologicalComplex.homologyFunctor (ModuleCat.{0} K) (ComplexShape.down ℕ) n).map f)
+
 noncomputable def cleanNotation_singular_chains_5896876ad7f8802529c6 {K : Type} (field : Field K) (H : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b (K) (field)) (X : TopCat.{0}) : (letI : Field K := field; ChainComplex (ModuleCat.{0} K) ℕ) :=
   (letI : Field K := field; ((AlgebraicTopology.singularChainComplexFunctor (ModuleCat.{0} K)).obj H.coefficients).obj X)
 
