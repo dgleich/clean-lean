@@ -1198,6 +1198,31 @@
         "Compound type expressions as explicit value arguments",
         "Pyramid basis extension"
       ]
+    },
+    {
+      "id": "dependent_assumption_labels",
+      "status": "implemented-slice",
+      "specification": "docs/dependent-function-types.md",
+      "source_fragment": "preserves family(function(f: Function(n: Natural,Vector(n,Real)),f))",
+      "expected_tree": [
+        "Call",
+        "preserves family",
+        [
+          [
+            "Lambda",
+            "f",
+            "Function(n: Natural,Vector(n,Real))",
+            [
+              "Local",
+              "f"
+            ]
+          ]
+        ]
+      ],
+      "checks": [
+        "tests/test_dependent_functions.py::DependentAssumptionNames"
+      ],
+      "obligation": "Names follow normalized source spelling, not alpha-equivalence of dependent types. Reject repeated and explicitly encoded name collisions before Lean emission."
     }
   ]
 }

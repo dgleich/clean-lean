@@ -122,3 +122,47 @@ class DependentFunctions(unittest.TestCase):
             self.e.data['types'].pop('RecursiveFamily',None)
             with self.subTest(body=body),self.assertRaisesRegex(CleanError,'Cyclic type alias'):
                 type_declaration('Type RecursiveFamily():',['Equals: '+body],self.e)
+
+class DependentAssumptionNames(unittest.TestCase):
+    """Independent names and collision oracles for bound-domain lambda arguments."""
+    PRELUDE='''Import "COMMON"
+Source tests:
+  Kind: other
+  Label: Tests
+  Title: Dependent assumption naming
+Condition preserves family(f: Function(Function(n: Natural,Vector(n,Real)),Function(n: Natural,Vector(n,Real)))):
+  Holds when: 0 = 0
+'''.replace('COMMON',str(ROOT/'library/types.clean'))
+    RESULT='''Result example:
+  Attribution: tests; naming; original
+  Assume ASSUMPTIONS
+  Conclude: 0 = 0
+'''
+    ARG='function(f: Function(n: Natural,Vector(n,Real)),f)'
+    LABEL='preserves family(function(f: Function(n: Natural,Vector(n,Real)), f))'
+    def load(self,assumptions):
+        from test_conditions import Conditions
+        return Conditions().load(self.RESULT.replace('ASSUMPTIONS',assumptions),self.PRELUDE)
+    def test_nested_commas_are_one_assumption_and_name_is_fixed(self):
+        _,rs=self.load('preserves family('+self.ARG+')')
+        a=[c for c in rs[0].clauses if c.kind=='assume']
+        self.assertEqual(len(a),1)
+        self.assertEqual(a[0].label,self.LABEL)
+        self.assertEqual(a[0].value.tree,['Call','preserves family',[
+            ['Lambda','f','Function(n: Natural,Vector(n,Real))',['Local','f']]]])
+        self.assertEqual(a[0].names,[
+            'preserves_family_u28_function_u28_f_u3a__Function_u28_n_u3a__Natural_u2c_Vector_u28_n_u2c_Real_u29__u29__u2c__f_u29__u29_'])
+    def test_parenthesis_equivalent_duplicate_rejects(self):
+        with self.assertRaisesRegex(CleanError,'Duplicate'):
+            self.load('preserves family('+self.ARG+'), preserves family(('+self.ARG+'))')
+    def test_explicit_encoded_name_collision_rejects(self):
+        encoded='preserves_family_u28_function_u28_f_u3a__Function_u28_n_u3a__Natural_u2c_Vector_u28_n_u2c_Real_u29__u29__u2c__f_u29__u29_'
+        with self.assertRaisesRegex(CleanError,'Duplicate'):
+            self.load('preserves family('+self.ARG+'), '+encoded+': 0 = 0')
+    def test_alpha_equivalent_types_keep_source_labels(self):
+        _,rs=self.load('preserves family('+self.ARG+'), preserves family('+self.ARG.replace('n:','k:').replace('Vector(n,','Vector(k,')+')')
+        a=[c for c in rs[0].clauses if c.kind=='assume']
+        self.assertEqual(len(a),2)
+        self.assertEqual(a[0].label,self.LABEL)
+        self.assertEqual(a[1].label,self.LABEL.replace('n:','k:').replace('Vector(n,','Vector(k,'))
+        self.assertNotEqual(a[0].names,a[1].names)

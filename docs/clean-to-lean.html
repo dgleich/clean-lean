@@ -735,7 +735,9 @@ inference and Type-valued dependent binders remain separate work.</p>
 <code>(clean_pi_bound_0 : ℕ) → (Fin clean_pi_bound_0 → ℝ)</code>.
 The domain is checked before binding n; only the codomain is in its scope.
 Renaming the bound variable preserves type identity. Application substitutes the
-checked argument, and a constant codomain becomes an ordinary arrow.</p>
+checked argument. A syntactically independent codomain uses an ordinary arrow;
+when independence is discovered by checked conversion, comparison agrees with the
+ordinary arrow but emission retains the declared binder.</p>
 <p><code>Function(p: Natural,ModuleMap(K,field,(M.component(p)),(N.component(p))))</code>
 now defines the component field of an authored graded map. The exact target retains
 the explicit field, module-category instance and universe levels. Identity and
@@ -744,7 +746,9 @@ Mathlib declarations explicitly.</p>
 <p><a href="../studies/dependent-functions/Maps.clean">Three graded-map statements</a>
 have <a href="../studies/dependent-functions/MapsVerified.lean">eleven exact native target checks and three proofs</a>.
 Type-valued binders remain unsupported. Selected proof-domain and universe cases now have native checks; broader universe
-and naming acceptance cases remain pending. See the <a href="dependent-function-types.md">semantic contract</a>
+acceptance cases remain pending. Automatic naming has exact source-tree and label
+checks for nested dependent domains, duplicate parentheses, encoded-name collisions
+and alpha-equivalent types with distinct source labels. See the <a href="dependent-function-types.md">semantic contract</a>
 and <a href="../studies/dependent-functions/README.md">study status</a>.</p>
 </section>
 

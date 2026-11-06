@@ -9,8 +9,8 @@ and English/LaTeX rendering. The [graded-map study](../studies/dependent-functio
 translates authored identity/composition and checks eleven canonical native targets
 and three proofs. This is not yet a claim of full acceptance-contract coverage:
 the selected proof-domain/codomain, empty/singleton and higher-universe cases now
-have [native acceptance oracles](proof-valued-functions.md), while broader naming
-and universe interactions remain pending.
+have [native acceptance oracles](proof-valued-functions.md), while broader universe interactions remain pending. Bound-domain
+automatic-label collision cases are covered by the naming checks below.
 
 ## Authored form and explicit module binding
 
@@ -180,9 +180,16 @@ containing that binder are rejected before it leaves scope.
 
 The [proof-family acceptance extension](proof-valued-functions.md) now checks
 selected proof domains/codomains, empty/singleton native families and higher-universe
-domains. Broader universe and automatic-label collision oracles remain pending. Type-valued binders
+domains. Bound-domain automatic naming now has independent AST and exact label
+oracles for nested commas, redundant parentheses, explicit encoded-name collisions,
+and two alpha-equivalent types with different source binder spellings. Labels
+follow the normalized source AST, so the last pair intentionally keeps distinct
+labels even though its types compare equally. This is the existing naming rule,
+not a new equivalence test for assumptions. Broader universe oracles remain pending. Type-valued binders
 remain explicitly unsupported. Applied fields of explicit authored producers now use the
 [hygienic conversion extension](hygienic-producer-conversion.md); unapplied
-binder-bearing families remain opaque in index comparison. Neither this feature nor the graded-map laws prove the topology
+binder-bearing families use the bounded [family comparison](family-index-comparison.md)
+and [saved-scope identity](scoped-family-keys.md) rules; general higher-order
+conversion is still unsupported. Neither this feature nor the graded-map laws prove the topology
 paper theorems.
 :::

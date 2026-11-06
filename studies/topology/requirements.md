@@ -21,7 +21,7 @@ congruArg to produce field-equality evidence entirely through Clean expressions.
 Dependent function fields, proof-valued functions, and graded homology objects/maps
 are now checked in the [dependent-function study](../dependent-functions/README.md).
 Saved graded-family indices are stable under later locals. Still open are general
-universe polymorphism, the actual pyramid/basis and algorithm constructions,
+universe polymorphism, the pyramid and its basis extension, algorithm constructions,
 relative functor laws, connecting maps, exactness/excision and the five research
 theorem proofs. These mathematical
 obligations must not be conflated with merely parsing their proposed signatures.
@@ -158,7 +158,10 @@ constructors and scoped projections. A general universe-polymorphic record/induc
 declaration remains a separate feature:
 it needs ordered dependent fields, constructor and accessor generation, universes,
 and positivity rules. `Structure Name(parameters):` is specified explicitly; it does not include recursive
-inductives, proof fields or fields that store carrier types.
+inductives or fields that store carrier types. Proof fields are now supported by
+explicit `Evidence` types, including proof-valued dependent functions. The
+[zigzag study](../zigzag-bases/README.md) exercises actual vertex bases and their
+support/compatibility evidence.
 A full pyramid still requires actual diagram and homology definitions, including
 any higher-universe and proof-field requirements. Encoding it as an unconstrained name is not a solution.
 
