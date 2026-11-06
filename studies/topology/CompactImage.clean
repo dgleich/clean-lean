@@ -1,0 +1,25 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/compactness.clean"
+
+Source mathlib:
+  Kind: other
+  Label: Mathlib
+  Title: Mathlib v4.24.0
+  Url: https://github.com/leanprover-community/mathlib4/tree/v4.24.0
+
+Text:
+  A continuous image of a compact set is compact.
+  Both topologies are explicit; no separation assumption is needed.
+
+Result continuous image of a compact set:
+  Attribution: mathlib; IsCompact.image; adapted
+  Let X,Y: Type
+  Let t: Topology(X)
+  Let u: Topology(Y)
+  Let f: Function(X,Y)
+  Let S: Set(X)
+  Assume continuous between(f,t,u), compact in(S,t)
+  Conclude: compact in(image(f,S),u)
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

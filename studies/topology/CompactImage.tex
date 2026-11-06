@@ -1,0 +1,18 @@
+% Generated statements, not proof certificates.
+A continuous image of a compact set is compact.
+Both topologies are explicit; no separation assumption is needed.
+\par
+
+\begin{cleanresult}{continuous image of a compact set}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, IsCompact.image]}}
+Let $X$ and $Y$ be types.
+Let $t$ be a topology on $X$.
+Let $u$ be a topology on $Y$.
+Let $f$ be a function from $X$ to $Y$.
+Let $S$ be a subset of $X$.
+Assume $f\text{ is continuous from }t\text{ to }u$ (\texttt{continuity of f from t to u}).
+Assume $S\text{ is compact in }t$ (\texttt{compactness of S in t}).
+Then \[f(S)\text{ is compact in }u.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+% generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

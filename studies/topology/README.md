@@ -86,3 +86,26 @@ statement comparisons and proofs, existing quantifier/lambda target checks, and
 the 92-theorem corpus. The typeset named-index specimen compiles and the offline
 browser checks pass. Dependent callable signatures remain outside this milestone.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Continuous images of compact sets
+
+[CompactImage.clean](CompactImage.clean) states an actual topology theorem:
+a continuous image of a compact set is compact. It uses Clean-authored image and
+continuity definitions and explicitly imports Mathlib's compactness definition
+through [compactness.clean](../../library/topology/compactness.clean).
+
+[CompactImage.lean](CompactImage.lean) is generated from that source;
+[CompactImageVerified.lean](CompactImageVerified.lean) adds a kernel-checked proof
+using `IsCompact.image` and an equivalence proof against an independently written
+native Mathlib statement. This equivalence is a mathematical agreement check,
+not a canonical-expression comparison or a new language-conformance claim.
+No new syntax is introduced. The paper-specific targets remain pending.
+
+Regenerate and check with:
+
+```sh
+LAKE=lake python3 studies/topology/verify_compact_image.py
+```
+:::

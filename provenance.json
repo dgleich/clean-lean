@@ -1570,6 +1570,60 @@
       ],
       "model": "gpt-6",
       "date": "2026-11-06"
+    },
+    "library/topology/compactness.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/topology/CompactImage.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/topology/CompactImage.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/topology/CompactImageVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/topology/CompactImage.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/topology/verify_compact_image.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6"
     }
   }
 }
