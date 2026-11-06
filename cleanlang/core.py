@@ -224,7 +224,8 @@ class Environment:
         for a,k in zip(args,kinds):
             if k=='type':
                 value=self.type(a,env,trail=trail)
-                if isinstance(value,ProofType):raise CleanError('Proof types cannot instantiate Type parameters')
+                if self.is_proof_type(value) and not self.is_function_type(Type(name)):
+                    raise CleanError('Proof types cannot instantiate Type parameters')
                 out.append(value);continue
             if isinstance(k,dict):
                 if not (a.startswith('(') or re.fullmatch(ID+r'(?:\.'+ID+r')*',a)):
@@ -270,6 +271,9 @@ class Environment:
         spec=self.data['types'].get(t.name,{})
         return (spec.get('args')==['type','type'] and
                 re.sub(r'\s+','',spec.get('lean',''))=='({0})→({1})')
+    def is_proof_type(self,t):
+        if isinstance(t,ProofType):return True
+        return isinstance(t,Type) and self.is_function_type(t) and len(t.args)==2 and self.is_proof_type(t.args[1])
     def function_type(self,domain,codomain):
         names=[name for name in self.data['types'] if self.is_function_type(Type(name))]
         if len(names)!=1:
@@ -278,7 +282,8 @@ class Environment:
     def describe_type(self,t,plural=False):
         from .dependent_functions import DependentFunctionType
         if isinstance(t,DependentFunctionType):
-            return ('functions' if plural else 'a function')+' assigning to each $'+texid(t.binder)+' : '+self.render_type(t.domain,'latex')+'$ a value of type $'+self.render_type(t.codomain,'latex')+'$'
+            value='evidence that $' if self.is_proof_type(t.codomain) else 'a value of type $'
+            return ('functions' if plural else 'a function')+' assigning to each $'+texid(t.binder)+' : '+self.render_type(t.domain,'latex')+'$ '+value+self.render_type(t.codomain,'latex')+'$'
         if isinstance(t,ProofType):return 'evidence that $'+self.render_type(t,'latex')+'$'
         spec=self.data['types'].get(t.name,{})
         template=spec.get('prose_plural' if plural else 'prose')
@@ -288,7 +293,7 @@ class Environment:
         return ('elements of $' if plural else 'an element of $')+self.render_type(t,'latex')+'$'
     def match(self,p,a,bind):
         if p.startswith('$'):
-            if isinstance(a,ProofType):raise CleanError('Proof types cannot instantiate Type parameters')
+            if self.is_proof_type(a):raise CleanError('Proof types cannot instantiate Type parameters')
             if p in bind and bind[p]!=a: raise CleanError('Type or dimension mismatch: '+p)
             bind[p]=a; return
         m=re.fullmatch(r'(\w+)(?:\((.*)\))?',p)
@@ -367,7 +372,7 @@ class Environment:
                     raise CleanError('Dependent index mismatch: '+pattern.name)
             elif isinstance(pattern,Type):
                 if pattern.name in implicit and not pattern.args:
-                    if implicit[pattern.name]!=Type('Type') or not isinstance(actual,Type) or isinstance(actual,ProofType):
+                    if implicit[pattern.name]!=Type('Type') or not isinstance(actual,Type) or self.is_proof_type(actual):
                         raise CleanError('Expected a type argument: '+pattern.name)
                     bind(pattern.name,actual)
                 elif not pattern.args and pattern.name in substitutions:

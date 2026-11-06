@@ -1006,6 +1006,50 @@
         "General higher-order family keys and inferred-parameter body expansion",
         "Resolved module identities through all comparison ASTs"
       ]
+    },
+    {
+      "id": "proof_valued_function_sorts",
+      "status": "implemented-slice",
+      "specification": "docs/proof-valued-functions.md",
+      "source_fragment": "Function(v: Vertex(n),(v = v))",
+      "expected_tree": [
+        "BoundTypeApply",
+        "Function",
+        "v",
+        [
+          "Apply",
+          "Vertex",
+          [
+            [
+              "Name",
+              "n"
+            ]
+          ]
+        ],
+        [
+          "ComputedIndex",
+          [
+            "Operator",
+            "=",
+            [
+              "Local",
+              "v"
+            ],
+            [
+              "Local",
+              "v"
+            ]
+          ]
+        ]
+      ],
+      "checks": [
+        "tests/test_proof_families.py",
+        "studies/dependent-functions/verify_proof_families.py"
+      ],
+      "pending": [
+        "General universe inference and Type-valued binders",
+        "Further automatic label collision cases"
+      ]
     }
   ]
 }

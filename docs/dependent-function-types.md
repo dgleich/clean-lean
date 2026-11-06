@@ -8,8 +8,9 @@ free Type/Natural argument inference, inferred dependent lambdas, record fields,
 and English/LaTeX rendering. The [graded-map study](../studies/dependent-functions/Maps.clean)
 translates authored identity/composition and checks eleven canonical native targets
 and three proofs. This is not yet a claim of full acceptance-contract coverage:
-proof-valued domains/codomains, all naming collisions, and additional native
-empty/singleton-domain and universe interaction oracles remain pending.
+the selected proof-domain/codomain, empty/singleton and higher-universe cases now
+have [native acceptance oracles](proof-valued-functions.md), while broader naming
+and universe interactions remain pending.
 
 ## Authored form and explicit module binding
 
@@ -177,8 +178,9 @@ and rechecks affected indices. Unaffected indices retain their already checked
 values. A temporary shared binder aligns callable codomains; inferred parameters
 containing that binder are rejected before it leaves scope.
 
-Pending acceptance work includes broader proof-domain/codomain, empty/singleton
-native family, universe, and automatic-label collision oracles. Type-valued binders
+The [proof-family acceptance extension](proof-valued-functions.md) now checks
+selected proof domains/codomains, empty/singleton native families and higher-universe
+domains. Broader universe and automatic-label collision oracles remain pending. Type-valued binders
 remain explicitly unsupported. Applied fields of explicit authored producers now use the
 [hygienic conversion extension](hygienic-producer-conversion.md); unapplied
 binder-bearing families remain opaque in index comparison. Neither this feature nor the graded-map laws prove the topology

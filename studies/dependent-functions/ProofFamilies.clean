@@ -1,0 +1,81 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../topology/Common.clean"
+Import "../../library/logic/equalities.clean"
+Import "../../library/algebra/module_spaces.clean"
+
+Define finite reflexivity(n):
+  Let n: Natural
+  Returns: Function(v: Vertex(n),(v = v))
+  Equals: function(v: Vertex(n),equality reflexivity(v))
+  Render latex: \operatorname{{refl}}_{{{n}}}
+
+Define proof identity(n):
+  Let n: Natural
+  Returns: Function((n = n),(n = n))
+  Equals: function(h: (n = n),h)
+  Render latex: \operatorname{{id}}
+
+Define module reflexivity(K,field):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Returns: Function(M: CoefficientModule(K,field),
+    Function(x: ModuleElement(K,field,M),(x = x)))
+  Equals: function(M: CoefficientModule(K,field),
+    function(x: ModuleElement(K,field,M),equality reflexivity(x)))
+  Render latex: \operatorname{{refl}}_{{{K}}}
+
+Define proof to natural(n):
+  Let n: Natural
+  Returns: Function((n = n),Natural)
+  Equals: function(h: (n = n),n)
+  Render latex: \operatorname{{constant}}_{{{n}}}
+
+Define module identity family(K,field):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Returns: Function(CoefficientModule(K,field),CoefficientModule(K,field))
+  Equals: function(M: CoefficientModule(K,field),M)
+  Render latex: \operatorname{{id}}
+
+Result finite family application:
+  Attribution: topology; dependent proof family application; original
+  Let n: Natural
+  Let f = finite reflexivity(n)
+  Let v: Vertex(n)
+  Let h = f(v)
+  Conclude: v = v
+
+Result empty family:
+  Attribution: topology; proof family over Fin zero; original
+  Let f: Function(v: Vertex(0),(v = v))
+  Let v: Vertex(0)
+  Let h = f(v)
+  Conclude: v = v
+
+Result singleton family:
+  Attribution: topology; proof family over Fin one; original
+  Let f: Function(v: Vertex(1),(v = v))
+  Let v: Vertex(1)
+  Let h = f(v)
+  Conclude: v = v
+
+Result proof domain application:
+  Attribution: topology; explicit proof-domain function; original
+  Let n: Natural
+  Assume same: n = n
+  Let f = proof identity(n)
+  Let h = f(same)
+  Conclude: n = n
+
+Result module family application:
+  Attribution: topology; higher-universe proof family application; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let x: ModuleElement(K,field,M)
+  Let f = module reflexivity(K,field)
+  Let g = f(M)
+  Let h = g(x)
+  Conclude: x = x
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

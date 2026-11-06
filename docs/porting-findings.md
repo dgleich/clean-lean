@@ -322,3 +322,16 @@ The induced graded-homology map is authored in Clean, with four exact native tar
 and three functor-law/component proofs. General higher-order conversion, inferred
 body parameters, and unapplied family comparison remain outside this profile.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Proof-valued function sorts
+
+[Proof-valued functions](proof-valued-functions.md) extends the explicit arrow
+interface to proof operands in both ordinary and bound forms. Proof-sort checking
+now follows the codomain of ordinary/dependent arrows, and every Type-parameter
+gate rejects these proof families. No lift or general native-sort inference is added.
+Ten exact targets, five native sort assertions and five proofs cover finite,
+empty/singleton, proof-domain and higher-universe domain examples. General universe
+inference and Type-valued binders remain outside the current profile.
+:::

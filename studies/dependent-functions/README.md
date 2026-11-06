@@ -54,6 +54,18 @@ The native probe exposed a practical adapter requirement: composition and its la
 need the module category supplied explicitly, because Lean cannot always recover
 it from the bundled Hom values alone. The Clean wrappers retain
 that category, its named Mathlib instance and coefficient choice explicitly.
+## Proof families
+
+[ProofFamilies.clean](ProofFamilies.clean) exercises proof codomains, proof domains,
+empty/singleton finite domains and a family over the Type 1 module category.
+[ProofFamiliesVerified.lean](ProofFamiliesVerified.lean) checks ten exact targets,
+five inferred declaration sorts and five theorem proofs. Run
+`LAKE=lake python3 studies/dependent-functions/verify_proof_families.py`.
+The [sort contract](../../docs/proof-valued-functions.md) explains why a function
+returning proofs is rejected by an ordinary Type parameter, while a function taking
+a proof and returning a natural number is allowed. No new author-facing keyword is
+needed. General universe inference and Type-valued dependent binders remain open.
+
 ## Initial dependent-arrow validation checkpoint
 
 The initial dependent-map implementation checks eleven canonical Lean targets and

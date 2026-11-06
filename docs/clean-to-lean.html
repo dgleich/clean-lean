@@ -693,6 +693,23 @@ check the definition and its component, identity and composition statements.</p>
 bodies under shadowed module bindings. No general extensionality or implicit proof
 search is added. See the <a href="hygienic-producer-conversion.md">normative conversion contract</a>.</p>
 </section>
+<section class="mapping" id="proof-valued-functions" data-status="implemented">
+<h2>Functions returning proofs</h2>
+<p><span class="status implemented">Selected proof-family profile checked</span>
+<code>Function(v: Vertex(n),(v = v))</code> maps to <code>(v : Fin n) → v = v</code>
+and lives in Lean Prop. <code>Function((n = n),Natural)</code> maps to
+<code>(n = n) → ℕ</code> and lives in Type. The codomain determines whether the
+whole function type is a proposition; a proof domain alone does not.</p>
+<p>The explicitly declared arrow binding admits proof operands in both ordinary and
+bound syntax. Other Type parameters reject proof families, with no implicit lift.
+The native arrow grant is determined by the module template, not the word Function.</p>
+<p><a href="../studies/dependent-functions/ProofFamilies.clean">Authored examples</a>
+cover empty/singleton domains, locally named proof applications and a family over
+ModuleCat. <a href="../studies/dependent-functions/ProofFamiliesVerified.lean">Ten exact targets,
+five native sort checks and five proofs</a> retain wrappers, instances, universes and lets.
+See the <a href="proof-valued-functions.md">normative profile</a>; general universe
+inference and Type-valued dependent binders remain separate work.</p>
+</section>
 <section class="mapping" id="dependent-function-types" data-status="implemented">
 <h2>Dependent function fields</h2>
 <p><span class="status implemented">Initial implementation; broader acceptance pending</span>
@@ -708,8 +725,8 @@ composition are authored in Clean; foundational identity/composition adapters na
 Mathlib declarations explicitly.</p>
 <p><a href="../studies/dependent-functions/Maps.clean">Three graded-map statements</a>
 have <a href="../studies/dependent-functions/MapsVerified.lean">eleven exact native target checks and three proofs</a>.
-Type-valued binders remain unsupported. Additional proof-domain, universe and naming
-acceptance cases remain pending. See the <a href="dependent-function-types.md">semantic contract</a>
+Type-valued binders remain unsupported. Selected proof-domain and universe cases now have native checks; broader universe
+and naming acceptance cases remain pending. See the <a href="dependent-function-types.md">semantic contract</a>
 and <a href="../studies/dependent-functions/README.md">study status</a>.</p>
 </section>
 

@@ -3366,6 +3366,72 @@
       "model": "gpt-6",
       "date": "2026-11-06",
       "mode": "sidecar"
+    },
+    "docs/proof-valued-functions.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "tests/test_proof_families.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/dependent-functions/ProofFamilies.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/dependent-functions/ProofFamilies.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/dependent-functions/ProofFamilies.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/dependent-functions/ProofFamiliesVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/dependent-functions/verify_proof_families.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/dependent-functions/latex_proof_families.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/dependent-functions/ProofFamilies.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "sidecar"
     }
   }
 }
