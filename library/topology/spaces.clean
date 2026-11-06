@@ -1,0 +1,78 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "basic.clean"
+Import Lean Mathlib.Topology.Category.TopCat.Basic
+
+Type TopologicalSpace():
+  Universe: 1
+  Means: TopCat.{0}
+  Render latex: \mathrm{{Top}}
+  Describe: a topological space
+  Describe plural: topological spaces
+
+Type Point(X: TopologicalSpace):
+  Means: (TopCat.carrier X)
+  Render latex: {X}
+  Describe: a point of ${X}$
+  Describe plural: points of ${X}$
+
+Type ContinuousMap(X: TopologicalSpace, Y: TopologicalSpace):
+  Means: (@ContinuousMap X.carrier Y.carrier X.str Y.str)
+  Render latex: C({X},{Y})
+  Describe: a continuous map from ${X}$ to ${Y}$
+  Describe plural: continuous maps from ${X}$ to ${Y}$
+
+Notation topological space(X,t):
+  Let X: Type
+  Let t: Topology(X)
+  Returns: TopologicalSpace
+  Means: @TopCat.of.{0} X t
+  Render: {X} with topology {t}
+
+Notation space topology(X):
+  Let X: TopologicalSpace
+  Returns: Topology(Point(X))
+  Means: TopCat.str X
+  Render latex: \mathcal{{T}}_{{{X}}}
+
+Notation underlying continuous map(X,Y,f):
+  Let X,Y: TopologicalSpace
+  Let f: ContinuousMap(X,Y)
+  Returns: Function(Point(X),Point(Y))
+  Means: @ContinuousMap.toFun X.carrier Y.carrier X.str Y.str f
+  Render latex: {f}
+
+Notation continuous value(X,Y,f,x):
+  Let X,Y: TopologicalSpace
+  Let f: ContinuousMap(X,Y)
+  Let x: Point(X)
+  Returns: Point(Y)
+  Means: @ContinuousMap.toFun X.carrier Y.carrier X.str Y.str f x
+  Render latex: {f}({x})
+
+Notation identity continuous map(X):
+  Let X: TopologicalSpace
+  Returns: ContinuousMap(X,X)
+  Means: @ContinuousMap.id X.carrier X.str
+  Render latex: \operatorname{{id}}_{{{X}}}
+
+Notation compose continuous maps(X,Y,Z,g,f):
+  Let X,Y,Z: TopologicalSpace
+  Let g: ContinuousMap(Y,Z)
+  Let f: ContinuousMap(X,Y)
+  Returns: ContinuousMap(X,Z)
+  Means: @ContinuousMap.comp X.carrier Y.carrier Z.carrier X.str Y.str Z.str g f
+  Render latex: \left({g} \circ {f}\right)
+
+Structure TopologicalDiagram():
+  Universe: 1
+  Let source,target: TopologicalSpace
+  Let arrow: ContinuousMap(source,target)
+  Constructor: topological diagram
+  Describe: a diagram consisting of one continuous map
+
+Define identity diagram(X):
+  Let X: TopologicalSpace
+  Returns: TopologicalDiagram
+  Equals: topological diagram(X,X,identity continuous map(X))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

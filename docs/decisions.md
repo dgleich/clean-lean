@@ -255,3 +255,14 @@ carrier-type fields and universes need separate extensions. Never replace hypoth
 with unconstrained proposition fields. These implementation choices are recorded in
 [structures.md](structures.md) and remain reviewable.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Fixed universes for imported bundles
+
+`Universe: n` on an imported Type or authored Structure fixes its Lean result sort.
+See [fixed universes](fixed-universes.md) for the grammar, default normalization,
+translation and acceptance checks. TopCat spaces and continuous maps now have an
+explicit Clean module, with authored diagrams and five verified statements.
+General universe polymorphism and carrier-type record fields remain pending.
+:::

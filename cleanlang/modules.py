@@ -53,6 +53,20 @@ def add_definition(env, prefix, name, body):
     return key
 
 
+def universe_level(values, default=0):
+    """An explicit closed Lean universe; never infer one from an opaque body."""
+    if 'universe' not in values:return default
+    value=values['universe']
+    if not re.fullmatch(r'0|[1-9][0-9]*',value):
+        raise CleanError('Universe requires a nonnegative decimal integer without leading zeros')
+    try:return int(value)
+    except ValueError as e:raise CleanError('Incomplete universe analysis: integer exceeds runtime limit') from e
+
+
+def universe_sort(level):
+    return 'Type' if level==0 else 'Type '+str(level)
+
+
 def type_declaration(header, fields, env):
     from .syntax import parse as syntax_parse
     syntax=syntax_parse(header,'type_header')
@@ -76,14 +90,17 @@ def type_declaration(header, fields, env):
         env.data['types'][name] = {'args': kinds, 'canonical': substitute(values['equals'], names)}
         env.type(name+'('+','.join(names)+')' if names else name, local)
         return
-    if not {'means','render latex'} <= values.keys() or values.keys()-{'means','render latex','describe','describe plural'}:
-        raise CleanError('Type requires Means and Render latex; optional Describe and Describe plural')
+    if not {'means','render latex'} <= values.keys() or values.keys()-{'means','render latex','describe','describe plural','universe'}:
+        raise CleanError('Type requires Means and Render latex; optional Describe, Describe plural and Universe')
+    default_level=1 if values['means']=='Type' else 0
+    level=universe_level(values,default_level)
     spec={'args': kinds, 'lean': substitute(values['means'], names), 'latex': template(values['render latex'], names)}
+    if level!=default_level:spec['universe']=level
     for src,dst in [('describe','prose'),('describe plural','prose_plural')]:
         if src in values: spec[dst] = template(values[src], names)
     env.data['types'][name] = spec
     signature=' '.join(f'({n} : '+('Type' if t==Type('Type') else 'Nat' if t==NAT else env.render_type(t,'lean'))+')' for n,t in zip(names,parameter_types))
-    sort={'Prop':'Sort 1', 'Type':'Type 1'}.get(values['means'],'Type')
+    sort=universe_sort(level) if level!=default_level else {'Prop':'Sort 1', 'Type':'Type 1'}.get(values['means'],'Type')
     add_definition(env, 'cleanType_', name, f'{signature} : {sort} :=\n  {values["means"]}')
 
 

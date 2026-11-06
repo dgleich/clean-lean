@@ -10,6 +10,7 @@ const tm=require('vscode-textmate'),onig=require('vscode-oniguruma');
  function has(line,word,scope){assert(scopeAt(line,word).includes(scope),JSON.stringify({line,word,scopes:scopeAt(line,word)}));}
  for (const word of ['for','every','there','exists']) has('for every (x: Real, there exists (y: Real,x=y))',word,'keyword.operator.word.clean');
  has('Structure Endpoints():','Structure','keyword.declaration.clean');
+ has('  Universe: 1','Universe','keyword.other.metadata.clean');
  has('  Constructor: endpoints','Constructor','keyword.other.metadata.clean');
  has('rEsUlT determinant product:','rEsUlT','keyword.declaration.clean');
  has('Define squared distance(x, y):','squared','entity.name.function.clean');

@@ -49,7 +49,7 @@ def project(env, base, field, locals):
 
 def declare(header, fields, env):
     from .syntax import parse, let_clause, structure_header
-    from .modules import fields_map, template, substitute, add_definition
+    from .modules import fields_map, template, substitute, add_definition, universe_level, universe_sort
     header_tree=structure_header(header)
     name=header_tree[1]
     if name in env.data['types'] or name in env.data['aliases']:
@@ -76,8 +76,9 @@ def declare(header, fields, env):
             members.append((n,t));local[n]=Expr('«'+n+'»',texid(n),t)
     values=fields_map(metadata)
     if not members:raise CleanError('Structure requires at least one field')
-    if 'constructor' not in values or values.keys()-{'constructor','render latex','describe','describe plural'}:
-        raise CleanError('Structure requires Constructor; optional Render latex, Describe and Describe plural')
+    if 'constructor' not in values or values.keys()-{'constructor','render latex','describe','describe plural','universe'}:
+        raise CleanError('Structure requires Constructor; optional Render latex, Describe, Describe plural and Universe')
+    level=universe_level(values)
     constructor=values['constructor']
     ctree=parse(constructor+'()','expression')
     # The same generated call grammar governs constructor names.
@@ -89,12 +90,13 @@ def declare(header, fields, env):
         raise CleanError('Constructor must have a fresh callable name distinct from type names: '+constructor)
     pnames=[n for n,_ in params]
     signature=' '.join('(«'+n+'» : '+('Type' if t==Type('Type') else env.render_type(t,'lean',local))+')' for n,t in params)
-    body=signature+' : Type where\n'+''.join('  «'+n+'» : '+env.render_type(t,'lean',local)+'\n' for n,t in members)
+    body=signature+' : '+universe_sort(level)+' where\n'+''.join('  «'+n+'» : '+env.render_type(t,'lean',local)+'\n' for n,t in members)
     stem=''.join(c if c.isascii() and (c.isalnum() or c=='_') else f'_u{ord(c):x}_' for c in name)
     key='cleanStructure_'+stem+'_'+hashlib.sha256((name+body).encode()).hexdigest()[:20]
     if key in env.notation_definitions:raise CleanError('Generated structure identifier collision')
     spec={'args':kinds,'lean':key+''.join(' ({'+str(i)+'})' for i in range(len(params))),
           'latex':template(values.get('render latex',r'\operatorname{{'+name+'}}'),pnames)}
+    if level:spec['universe']=level
     for source,dest in [('describe','prose'),('describe plural','prose_plural')]:
         if source in values:spec[dest]=template(values[source],pnames)
     # Publish only after source-side signature validation. Lean checks the record's fixed sort.

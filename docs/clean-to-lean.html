@@ -428,6 +428,34 @@ let total := count + extra
 </section>
 <footer><p>This HTML is the maintained explanatory map, not a competing grammar. Authority: <a href="language-reference.md">target syntax and semantics</a> · <a href="spec.md">current prototype</a> · <a href="decisions.md">decisions</a> · <a href="paper-translations.md">paper definitions and translations</a>.</p>
 <p>Maintenance: every syntax or translation change updates its mapping, status, scope notes, and Lean target here. New binding forms remain proposed until their parse and translation contracts are complete. No network requests, external assets, or build step are required to read this file.</p></footer>
+
+<article id="fixed-universes" data-status="implemented" class="mapping">
+<h2>Fixed universes and bundled spaces</h2>
+<p><span class="badge">Implemented slice</span> Library declarations can specify a closed Lean universe level.</p>
+<div class="pair"><pre><code>Type TopologicalSpace():
+  Universe: 1
+  Means: TopCat.{0}
+  Render latex: \mathrm{{Top}}
+
+Structure TopologicalDiagram():
+  Universe: 1
+  Let source,target: TopologicalSpace
+  Let arrow: ContinuousMap(source,target)
+  Constructor: topological diagram</code></pre>
+<pre><code>-- Readable native equivalents, not canonical names:
+def Space : Type 1 := TopCat.{0}
+structure Diagram : Type 1 where
+  source : TopCat.{0}
+  target : TopCat.{0}
+  arrow : @ContinuousMap source.carrier target.carrier
+    source.str target.str</code></pre></div>
+<p>Universe accepts a canonical nonnegative decimal integer. Ordinary declarations
+ default to zero; the foundational Type wrapper retains its level-one default.
+ Explicit defaults normalize identically to omission. Carrier types remain Type 0;
+ carrier-type fields and universe polymorphism are pending. Opaque bodies require
+ Lean kernel validation. <a href="fixed-universes.md">Normative rules and limits</a>;
+ <a href="../studies/topology/Spaces.clean">five statement examples</a>.</p>
+</article>
 </main>
 <script>
 (() => {

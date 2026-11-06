@@ -503,3 +503,14 @@ fields in order. Field-valued functions support `P.map(x)`. Stable field referen
 can be dependent type arguments and natural dimensions. No proof fields, carrier-type
 fields, recursive records, inheritance or implicit coercions are included yet.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Fixed universes for imported bundles
+
+`Universe: n` on an imported Type or authored Structure fixes its Lean result sort.
+See [fixed universes](fixed-universes.md) for the grammar, default normalization,
+translation and acceptance checks. TopCat spaces and continuous maps now have an
+explicit Clean module, with authored diagrams and five verified statements.
+General universe polymorphism and carrier-type record fields remain pending.
+:::

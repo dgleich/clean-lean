@@ -557,6 +557,44 @@
         "Definitional equality or transport for aliases",
         "Emacs runtime check (not installed)"
       ]
+    },
+    {
+      "id": "fixed_universe_bundled_space",
+      "status": "implemented-slice",
+      "source": "Type TopologicalSpace():\n  Universe: 1\n  Means: TopCat.{0}\n  Render latex: T",
+      "environment": "Explicit topology module; pinned Lean/Mathlib v4.24.0; TopCat.{0}",
+      "expected_tree": [
+        "Type",
+        "TopologicalSpace",
+        [],
+        [
+          [
+            "Universe",
+            "1"
+          ],
+          [
+            "Means",
+            "TopCat.{0}"
+          ],
+          [
+            "Render latex",
+            "T"
+          ]
+        ]
+      ],
+      "expected_lean": "noncomputable def spaceType : Type 1 := TopCat.{0}",
+      "expected_lean_type": "Type 1",
+      "checks": [
+        "tests/test_universes.py",
+        "studies/topology/verify_spaces.py",
+        "tools/generate_parser.py --check"
+      ],
+      "pending": [
+        "General universe polymorphism",
+        "Carrier-type fields",
+        "Inherited opaque Lean elaboration contract",
+        "Emacs runtime unavailable"
+      ]
     }
   ]
 }

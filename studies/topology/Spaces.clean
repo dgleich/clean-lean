@@ -1,0 +1,45 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/spaces.clean"
+
+Source mathlib:
+  Kind: other
+  Label: Mathlib
+  Title: Mathlib v4.24.0
+  Url: https://github.com/leanprover-community/mathlib4/tree/v4.24.0
+
+Result continuous identity fixes each point:
+  Attribution: mathlib; ContinuousMap.id_apply; adapted
+  Let X: TopologicalSpace
+  Let x: Point(X)
+  Conclude: continuous value(X,X,identity continuous map(X),x) = x
+
+Result continuous composition acts pointwise:
+  Attribution: mathlib; ContinuousMap.comp_apply; adapted
+  Let X,Y,Z: TopologicalSpace
+  Let f: ContinuousMap(X,Y)
+  Let g: ContinuousMap(Y,Z)
+  Let x: Point(X)
+  Conclude:
+    continuous value(X,Z,compose continuous maps(X,Y,Z,g,f),x) =
+      continuous value(Y,Z,g,continuous value(X,Y,f,x))
+
+Result identity on the target preserves a continuous map:
+  Attribution: mathlib; ContinuousMap.id_comp; adapted
+  Let X,Y: TopologicalSpace
+  Let f: ContinuousMap(X,Y)
+  Conclude: compose continuous maps(X,Y,Y,identity continuous map(Y),f) = f
+
+Result identity diagram has its declared spaces:
+  Attribution: topology; identity diagram projections; original
+  Let X: TopologicalSpace
+  Let D = identity diagram(X)
+  Conclude: D.source = X and D.target = X
+
+Result diagram supplies its continuous map:
+  Attribution: topology; dependent diagram field; original
+  Let D: TopologicalDiagram
+  Conclude:
+    there exists (f: ContinuousMap(D.source,D.target), f = D.arrow)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

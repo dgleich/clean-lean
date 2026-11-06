@@ -4,7 +4,7 @@
 (defconst clean-math--keyword
   (regexp-opt '("Condition" "Holds when" "Let" "Define" "Assume" "Conclude" "Returns" "Equals" "Alias" "Phrase" "Import" "Result" "Theorem" "Context" "Notation" "Structure" "Type" "Source") 'words))
 (defconst clean-math--metadata
-  (regexp-opt '("Constructor" "Assumption name" "Render" "Render latex" "Describe" "Describe plural" "Attribution" "Kind" "Label" "Title" "Author" "Year" "Version" "Revision" "URL" "References" "source" "reference" "relationship" "scope" "changes" "note") t))
+  (regexp-opt '("Universe" "Constructor" "Assumption name" "Render" "Render latex" "Describe" "Describe plural" "Attribution" "Kind" "Label" "Title" "Author" "Year" "Version" "Revision" "URL" "References" "source" "reference" "relationship" "scope" "changes" "note") t))
 (defvar-local clean-math--matched-face 'font-lock-comment-face)
 (defun clean-math--comment (limit)
   "Find line or nested block comments, preserving embedded fields and strings."

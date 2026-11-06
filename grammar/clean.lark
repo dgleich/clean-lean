@@ -81,7 +81,7 @@ context: CONTEXT_LINE _NL _INDENT (context_clause | prose)* (result | context | 
 DECL: /(?i:Notation|Define|Condition)(?!\w)/
 LET: /(?i:Let)(?!\w)/
 DEFINE: /(?i:Define)(?!\w)/
-FIELD: /(?i:Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
+FIELD: /(?i:Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
 IFF: "↔"
 IMPLIES: "→"
 OR: /(?i:or)(?=\W)/ | "∨"
@@ -119,7 +119,7 @@ ASSUME_LINE: /(?i:Assume)[ ]+[^\n]+/
 ATTRIBUTION_LINE: /(?i:Attribution)[ ]*:[^\n]*/
 CONCLUDE_LINE: /(?i:Conclude)(?!\w)[^\n]*/
 EXPR_FIELD_LINE: /(?i:Equals|Holds when)[ ]*:[^\n]*/
-FIELD_LINE: /(?i:Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
+FIELD_LINE: /(?i:Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
 EXPR_LINE: /\S[^\n]*/
 _NL: /\n[ ]*/
 %declare _INDENT _DEDENT

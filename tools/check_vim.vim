@@ -52,6 +52,8 @@ call setline(22, 'Structure Endpoints():')
 call setline(23, '  Constructor: endpoints')
 call assert_equal('cleanMathKeyword', synIDattr(synID(22,1,1),'name'))
 call assert_equal('cleanMathMetadataKey', synIDattr(synID(23,3,1),'name'))
+call setline(24, '  Universe: 1')
+call assert_equal('cleanMathMetadataKey', synIDattr(synID(24,3,1),'name'))
 if len(v:errors)
  for error in v:errors | echom error | endfor
  cquit

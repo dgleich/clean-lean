@@ -173,3 +173,12 @@ Dot syntax is lexical; no type information selects its parse. Existing named cal
 are unchanged. Strict LALR/lexer generation remains required. See the
 [structure contract](structures.md) for normalized trees and semantic restrictions.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+`Universe` is now a metadata-line keyword, alongside Constructor and Render.
+The generated strict grammar fixes the line's syntactic role; Type/Structure
+interpreters alone permit it and validate its canonical integer value. It adds
+no expression operator or ambiguity resolution rule. See
+[fixed universe levels](fixed-universes.md).
+:::

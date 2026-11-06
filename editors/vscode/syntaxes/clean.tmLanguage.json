@@ -114,7 +114,7 @@
           }
         },
         {
-          "match": "^ *(?i:(Constructor|Assumption name|Render(?: latex)?|Describe(?: plural)?|Attribution|Kind|Label|Title|Author|Year|Version|Revision|URL|References|source|reference|relationship|scope|changes|note))\\s*(:)(.*)$",
+          "match": "^ *(?i:(Universe|Constructor|Assumption name|Render(?: latex)?|Describe(?: plural)?|Attribution|Kind|Label|Title|Author|Year|Version|Revision|URL|References|source|reference|relationship|scope|changes|note))\\s*(:)(.*)$",
           "captures": {
             "1": {
               "name": "keyword.other.metadata.clean"
