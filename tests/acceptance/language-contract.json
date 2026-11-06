@@ -955,16 +955,17 @@
           ]
         ]
       ],
-      "expected_current_result": "Unique syntax tree followed by explicit semantic unsupported-feature error",
+      "expected_current_result": "Unique syntax tree and initial dependent arrow translation; graded-map targets checked",
       "checks": [
         "tests/test_dependent_type_syntax.py",
-        "tools/generate_parser.py --check"
+        "tools/generate_parser.py --check",
+        "tests/test_dependent_functions.py",
+        "studies/dependent-functions/verify_maps.py"
       ],
       "pending": [
-        "Binder-aware type representation and alpha-equivalence",
-        "Capture-free substitution and dependent application",
-        "Dependent lambda result inference and exact Lean-target comparisons",
-        "Automatic labels and LaTeX for bound function types"
+        "Native proof-domain/codomain and empty/singleton family oracles",
+        "Additional universe and automatic-label collision cases",
+        "Type-valued binders remain unsupported"
       ]
     }
   ]

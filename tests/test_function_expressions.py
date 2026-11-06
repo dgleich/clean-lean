@@ -38,7 +38,6 @@ class FunctionExpressions(unittest.TestCase):
         for s in ('function(x, x)', 'function(x: Real)',
                   'function(x: Real, 1)', 'function(x: Real,x,x)',
                   'function(x: Real,function(x: Real,x))',
-                  'function(n: Natural,function(i: Vertex(n),i))',
                   'function(Real: Natural,Real)', 'function(function: Real,function)'):
             with self.subTest(s=s),self.assertRaises(CleanError):self.parse(s)
         with self.assertRaises(CleanError):

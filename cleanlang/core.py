@@ -210,7 +210,8 @@ class Environment:
             from .syntax import expression_tree
             return proof_type(Expressions(self,env or {}).elaborate(expression_tree(syntax.children[0])),self,env or {})
         if len(syntax.children)>1 and syntax.children[1].data=='bound_type_arguments':
-            raise CleanError('Dependent function types are parsed but not implemented')
+            from .dependent_functions import parse_type
+            return parse_type(syntax,self,env or {})
         source_name=str(syntax.children[0])
         name=self.data.get('aliases',{}).get(source_name,source_name)
         args=[type_spelling(x) for x in syntax.children[1].children] if len(syntax.children)>1 else []
@@ -247,7 +248,12 @@ class Environment:
             return self.type(expanded,env,False,trail+(name,))
         return Type(name,tuple(out))
     def render_type(self,t,target,bindings=None):
+        from .dependent_functions import DependentFunctionType
         bindings=bindings or {}
+        if isinstance(t,DependentFunctionType):
+            domain=self.render_type(t.domain,target,bindings);codomain=self.render_type(t.codomain,target,bindings)
+            if target=='lean':return '('+t.bound+' : '+domain+') → ('+codomain+')'
+            return r'\prod_{'+texid(t.binder)+':'+domain+'} '+codomain
         if isinstance(t,ProofType):
             return '('+t.args[0].lean+')' if target=='lean' else t.args[0].tex
         args=[self.render_type(a,target,bindings) if isinstance(a,Type) else
@@ -258,6 +264,8 @@ class Environment:
             return bindings[t.name].lean if target=='lean' and t.name in bindings else t.name
         return self.data['types'][t.name][target].format(*args)
     def is_function_type(self,t):
+        from .dependent_functions import DependentFunctionType
+        if isinstance(t,DependentFunctionType):return True
         spec=self.data['types'].get(t.name,{})
         return (spec.get('args')==['type','type'] and
                 re.sub(r'\s+','',spec.get('lean',''))=='({0})→({1})')
@@ -267,6 +275,9 @@ class Environment:
             raise CleanError('Function expressions require one explicit Lean arrow type binding')
         return Type(names[0],(domain,codomain))
     def describe_type(self,t,plural=False):
+        from .dependent_functions import DependentFunctionType
+        if isinstance(t,DependentFunctionType):
+            return ('functions' if plural else 'a function')+' assigning to each $'+texid(t.binder)+' : '+self.render_type(t.domain,'latex')+'$ a value of type $'+self.render_type(t.codomain,'latex')+'$'
         if isinstance(t,ProofType):return 'evidence that $'+self.render_type(t,'latex')+'$'
         spec=self.data['types'].get(t.name,{})
         template=spec.get('prose_plural' if plural else 'prose')
@@ -311,6 +322,8 @@ class Environment:
 
         def replace(t):
             from .indices import ComputedIndex, DimensionIndex, substitute_index
+            from .dependent_functions import DependentFunctionType,substitute
+            if isinstance(t,DependentFunctionType):return substitute(t,{**substitutions,**actuals},self,locals)
             if isinstance(t,ProofType):return ProofType(replace(t.args[0]))
             if isinstance(t,DimensionIndex) and t.name in substitutions:return substitutions[t.name]
             if isinstance(t,ComputedIndex):
@@ -325,7 +338,26 @@ class Environment:
             # Preserve concrete numeric argument compatibility on migrated dimension signatures.
             if actual==NUM and pattern in (NAT,Type('Real'),Type('Complex')):return
             from .indices import DimensionIndex
-            if isinstance(pattern,DimensionIndex) and pattern.name in implicit:
+            from .dependent_functions import DependentFunctionType,substitute,fresh_source,fresh_bound
+            if isinstance(pattern,DependentFunctionType):
+                if not isinstance(actual,DependentFunctionType) or pattern.constructor!=actual.constructor:
+                    raise CleanError('Dependent function type mismatch')
+                match(pattern.domain,actual.domain)
+                shared=fresh_source('clean_comparison_binder',self,locals,
+                                    {**substitutions,**actuals,'__pattern':pattern,'__actual':actual})
+                identity=fresh_bound(self,locals)
+                value=Expr(identity,texid(shared),actual.domain,tree=['Local',shared])
+                locals[shared]=value
+                try:
+                    p=substitute(pattern.codomain,{**substitutions,**actuals,pattern.binder:value},self,locals)
+                    a=substitute(actual.codomain,{actual.binder:value},self,locals)
+                    match(p,a)
+                    from .dependent_functions import occurs
+                    if any(occurs(v,shared) for v in substitutions.values()):
+                        raise CleanError('A dependent function binder cannot escape into an inferred argument')
+                finally:
+                    del locals[shared]
+            elif isinstance(pattern,DimensionIndex) and pattern.name in implicit:
                 if implicit[pattern.name]!=NAT or not isinstance(actual,DimensionIndex):
                     raise CleanError('Expected a natural dimension: '+pattern.name)
                 bind(pattern.name,actual)
@@ -394,9 +426,8 @@ class Expressions:
             return Expr(value.lean,value.tex,value.type,value.precedence,tree)
         if kind=='Apply':
             function=self._elaborate(tree[1]);args=[self._elaborate(a) for a in tree[2]]
-            if not self.reg.is_function_type(function.type) or len(args)!=1 or not compatible(args[0].type,function.type.args[0]):
-                raise CleanError('Function field argument mismatch')
-            return Expr('('+function.lean+' '+args[0].lean+')',function.tex+'('+args[0].tex+')',function.type.args[1],tree=['Apply',function.tree,[a.tree for a in args]])
+            from .dependent_functions import application
+            return application(function,args,self.reg,self.env,['Apply',function.tree,[a.tree for a in args]],function.tex+'('+args[0].tex+')' if args else '')
         if kind=='Projection':
             from .structures import project
             return project(self.reg,self._elaborate(tree[1]),tree[2],self.env)
@@ -410,9 +441,8 @@ class Expressions:
         if kind=='Call':
             tok=tree[1];args=[self._elaborate(a) for a in tree[2]]
             if tok in self.env and self.reg.is_function_type(self.env[tok].type):
-                t=self.env[tok].type
-                if len(args)!=1 or not compatible(args[0].type,t.args[0]): raise CleanError('Function argument mismatch')
-                return Expr('('+self.env[tok].lean+' '+args[0].lean+')',texid(tok)+'('+args[0].tex+')',t.args[1],tree=['Call',tok,[a.tree for a in args]])
+                from .dependent_functions import application
+                return application(self.env[tok],args,self.reg,self.env,['Call',tok,[a.tree for a in args]],texid(tok)+'('+args[0].tex+')' if args else '')
             return self.reg.call(tok,args,self.env)
         if kind in ('Lambda','Forall','Exists'):
             name=tree[1]
@@ -439,9 +469,10 @@ class Expressions:
                 tex=(r'\left(\text{'+words+' }'+texid(name)+r' : '+
                      self.reg.render_type(domain,'latex')+r',\; '+body.tex+r'\right)')
                 return Expr(target,tex,PROP,tree=[kind,name,str(domain),body.tree])
-            if body.type==NUM or name in re.findall(ID,str(body.type)):
-                raise CleanError('Function body requires a determined, nondependent return type')
-            result=self.reg.function_type(domain,body.type)
+            if body.type==NUM:
+                raise CleanError('Function body requires a determined return type')
+            from .dependent_functions import inferred_type
+            result=inferred_type(name,bound,domain,body.type,self.reg,self.env)
             return Expr(f'(fun ({bound} : {lean_domain}) => {body.lean})',
                         r'\left('+texid(name)+r' \mapsto '+body.tex+r'\right)',result,
                         tree=['Lambda',name,str(domain),body.tree])

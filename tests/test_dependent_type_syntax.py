@@ -37,10 +37,10 @@ class DependentTypeSyntax(unittest.TestCase):
                   'Function(n: Natural: Real,Real)','Function(n Natural,Real)',
                   'Function(n: ,Real)','Function(: Natural,Real)']:
             with self.subTest(s=s),self.assertRaises(CleanError):self.tree(s)
-    def test_semantics_are_explicitly_unimplemented(self):
+    def test_semantics_construct_bound_arrow(self):
         e=Environment();load_module(ROOT/'library/types.clean',e)
-        with self.assertRaisesRegex(CleanError,'parsed but not implemented'):
-            e.type('Function(n: Natural,Vector(n,Real))')
+        from cleanlang.dependent_functions import DependentFunctionType
+        self.assertIsInstance(e.type('Function(n: Natural,Vector(n,Real))'),DependentFunctionType)
     def test_multiline_document_grammar(self):
         source='''Result family:
   Attribution: test; parser; original

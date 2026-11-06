@@ -1,0 +1,33 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../topology/Common.clean"
+Import "../../library/algebra/graded_maps.clean"
+
+Result graded left identity:
+  Attribution: topology; graded map left identity; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: GradedModule(K,field)
+  Let f: GradedMap(K,field,M,N)
+  Conclude: graded composition(field,M,M,N,graded identity(field,M),f) = f
+
+Result graded right identity:
+  Attribution: topology; graded map right identity; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: GradedModule(K,field)
+  Let f: GradedMap(K,field,M,N)
+  Conclude: graded composition(field,M,N,N,f,graded identity(field,N)) = f
+
+Result graded associativity:
+  Attribution: topology; graded map associativity; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N,P,Q: GradedModule(K,field)
+  Let f: GradedMap(K,field,M,N)
+  Let g: GradedMap(K,field,N,P)
+  Let h: GradedMap(K,field,P,Q)
+  Conclude:
+    graded composition(field,M,P,Q,graded composition(field,M,N,P,f,g),h) =
+      graded composition(field,M,N,Q,f,graded composition(field,N,P,Q,g,h))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -2,12 +2,14 @@
 
 # Dependent function types: grammar and implementation contract
 
-**Status:** the generated parser and syntax-tree normalization are implemented.
-The type checker deliberately rejects this new form with “Dependent function types
-are parsed but not implemented.” The semantic rules below are the selected design
-for the next implementation step, not a claim of a working Clean-to-Lean translation.
-The [study](../studies/dependent-functions/README.md) separates working graded-object
-definitions from the pending dependent-map interface.
+**Status:** dependent arrows now have an initial semantic implementation: scoped
+binding identities, alpha-equivalent comparison and hashing, capture-free application,
+free Type/Natural argument inference, inferred dependent lambdas, record fields,
+and English/LaTeX rendering. The [graded-map study](../studies/dependent-functions/Maps.clean)
+translates authored identity/composition and checks eleven canonical native targets
+and three proofs. This is not yet a claim of full acceptance-contract coverage:
+proof-valued domains/codomains, all naming collisions, and additional native
+empty/singleton-domain and universe interaction oracles remain pending.
 
 ## Authored form and explicit module binding
 
@@ -20,7 +22,7 @@ Let g: Function(p: Natural,
 The colon distinguishes a bound domain from an ordinary type argument. The latter
 remains `Function(Natural,Real)`. The head is a normal, case-sensitive type name;
 Function is not a new keyword. A spelling such as Mapping is equally parseable.
-The intended semantic gate is the existing explicit arrow binding: after aliases
+The semantic gate is the existing explicit arrow binding: after aliases
 resolve, the selected constructor must have two type parameters and Lean template
 `({0}) → ({1})`, modulo the already specified whitespace normalization. No other
 constructor acquires binder semantics merely because it has two parameters.
@@ -67,7 +69,7 @@ Existing parenthesized continuation, comments, tabs prohibition and indentation
 rules apply. No new document block, token keyword, operator precedence or comma
 separator is added. Keywords retain their existing capitalization rules.
 
-## Scope and elaboration to implement
+## Scope and elaboration
 
 1. Resolve the head to its one explicit arrow declaration. Resolve the domain
    before binding the new name. The binder must satisfy the expression-identifier
@@ -156,24 +158,26 @@ The compact type rendering is the dependent product `\prod_{x:D} C`; the text
 explains it when used in a declaration. Source binder names survive rendering.
 Rendering never supplies a missing scope or selects the Lean target.
 
-The parser tests already cover nested types, commas within domains, header and Let
-envelopes, lambdas using a dependent domain, multiline layout, malformed syntax,
-ordinary-arrow compatibility, and the explicit semantic rejection boundary.
-The native graded-map probe proves that the intended Mathlib objects and maps can
-be assembled; it is **not** a translated Clean example or a canonical-target check.
+The parser tests cover nested types, commas within domains, header and Let envelopes,
+lambda domains, multiline layout, malformed syntax and ordinary-arrow compatibility.
+Semantic tests independently exercise alpha identity/hash, nested capture avoidance,
+free versus bound dimensions, compiler-name freshness, applications at 0 and 1,
+implicit Type/Natural inference, dependent fields, aliases and label serialization.
+The native graded-map checks retain instances, universes, wrapper applications and
+binder information. Three generated statements have kernel-checked proofs.
 
-Before enabling the new type form, implement and check: binder-aware type identity;
-free-variable and escape analysis; capture-free application and record substitution;
-alpha-equivalent hashing; inferred dependent lambda result types; automatic label
-serialization; English/LaTeX rendering; and independent native target comparisons
-retaining universes, instances, lets, wrappers and binder information. Cover empty
-or singleton domains, proof-valued codomains, nested binders, conflicting inferred
-indices, wrong argument types, collisions and resource exhaustion. The graded-map
-identity/composition specimen must then be authored in Clean and compared against
-its independently checked native model. The graded-homology study also exposes
-lambda-bearing producer conversion: its component equals the named homology module
-in Lean but currently has a different Clean comparison key. Supporting induced
-maps of those particular families must resolve that conversion with capture-free
-rules rather than hiding the mismatch in a native adapter. Paper theorem proofs
-remain separate.
+Implementation detail: checked index comparison templates retain their existing
+representation. Fresh compiler identities avoid identifiers in all loaded native
+declarations and visible emitted local terms/types. Comparison tokenizes these
+templates and abstracts only the allocated identities; it never substitutes a
+source binder spelling in an opaque native body. Substitution traverses source ASTs
+and rechecks affected indices. Unaffected indices retain their already checked
+values. A temporary shared binder aligns callable codomains; inferred parameters
+containing that binder are rejected before it leaves scope.
+
+Pending acceptance work includes broader proof-domain/codomain, empty/singleton
+native family, universe, and automatic-label collision oracles. Type-valued binders
+remain explicitly unsupported. Lambda-bearing authored producers remain opaque in
+index comparison. Neither this feature nor the graded-map laws prove the topology
+paper theorems.
 :::

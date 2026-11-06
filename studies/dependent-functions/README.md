@@ -14,7 +14,7 @@ an exact sequence; no differential or connecting map has been invented.
 [Available.pdf](Available.pdf) is its rendered form. Run
 `LAKE=lake python3 studies/dependent-functions/verify.py`.
 
-The next interface is a family of maps whose source and target vary with degree:
+The implemented map interface is a family of maps whose source and target vary with degree:
 
 ```clean
 Structure GradedMap(K: Type,field: FieldStructure(K),M: GradedModule(K,field),N: GradedModule(K,field)):
@@ -23,12 +23,15 @@ Structure GradedMap(K: Type,field: FieldStructure(K),M: GradedModule(K,field),N:
   Constructor: graded map
 ```
 
-This is **not yet a working Clean declaration**. The
-[proposed source](Proposed.clean.txt) has an intentionally non-Clean filename so the
-review browser does not present it as translated. The new type form has one checked
-parse, but the type checker explicitly rejects it pending dependent application,
-alpha-equivalence, substitution and rendering. See the
-[implementation contract](../../docs/dependent-function-types.md).
+This declaration now lives in [graded_maps.clean](../../library/algebra/graded_maps.clean).
+Identity and composition use authored Clean lambdas; only the underlying module
+identity/composition are explicit Mathlib adapters. [Maps.clean](Maps.clean) states
+the two identity laws and associativity. [MapsVerified.lean](MapsVerified.lean)
+checks eleven exact native targets and proves all three generated statements.
+Run `LAKE=lake python3 studies/dependent-functions/verify_maps.py`.
+The earlier [proposed source](Proposed.clean.txt) is retained as the design specimen.
+See the [implementation contract](../../docs/dependent-function-types.md) for the
+remaining acceptance cases; this is an initial implementation, not full coverage.
 
 [Native.lean](Native.lean) is a separate, handwritten Lean design probe. It defines
 graded modules and maps and proves the two identity laws and associativity, plus a
@@ -47,6 +50,6 @@ will not resolve that mismatch.
 
 The native probe exposed a practical adapter requirement: composition and its laws
 need the module category supplied explicitly, because Lean cannot always recover
-it from the bundled Hom values alone. The forthcoming Clean wrappers should retain
-that category and coefficient choice explicitly.
+it from the bundled Hom values alone. The Clean wrappers retain
+that category, its named Mathlib instance and coefficient choice explicitly.
 :::

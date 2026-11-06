@@ -16,6 +16,8 @@ def reference_name(tree):
 
 def substitute_type(t, bindings, env=None, locals=None):
     from .indices import ComputedIndex, substitute_index
+    from .dependent_functions import DependentFunctionType,substitute
+    if isinstance(t,DependentFunctionType):return substitute(t,bindings,env,locals)
     if isinstance(t,ProofType):return ProofType(substitute_index(t.args[0],bindings,env,locals))
     if isinstance(t,ComputedIndex):return substitute_index(t,bindings,env,locals)
     if isinstance(t,ValueIndex):

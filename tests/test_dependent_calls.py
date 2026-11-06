@@ -57,9 +57,9 @@ class DependentCalls(unittest.TestCase):
     def test_fresh_bound_carrier_is_used(self):
         term=self.expr('for every (Y: Type, for every (v: Topology(Y), for every (b: Y, constant path(v,b) = constant path(v,b))))')
         self.assertIn('(clean_bound_0) (clean_bound_1) (clean_bound_2)',term.lean)
-    def test_no_lambda_index_escape(self):
-        with self.assertRaisesRegex(CleanError,'nondependent return'):
-            self.expr('function(a: X, constant path(t,a))')
+    def test_lambda_binds_dependent_result(self):
+        from cleanlang.dependent_functions import DependentFunctionType
+        self.assertIsInstance(self.expr('function(a: X, constant path(t,a))').type,DependentFunctionType)
     def test_local_identity_not_just_printed_name(self):
         self.local['p'].type=Type('Path',(Type('X'),ValueIndex('t','different_t','t'),
                                        ValueIndex('x','x','x'),ValueIndex('y','y','y')))

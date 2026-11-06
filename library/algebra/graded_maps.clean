@@ -1,0 +1,50 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "graded_modules.clean"
+
+Structure GradedMap(K: Type,field: FieldStructure(K),M: GradedModule(K,field),N: GradedModule(K,field)):
+  Let component: Function(p: Natural,
+    ModuleMap(K,field,(M.component(p)),(N.component(p))))
+  Constructor: graded map
+  Render latex: \operatorname{{GrHom}}_{{{K}}}({M},{N})
+  Describe: a degree-preserving map from ${M}$ to ${N}$
+
+Notation module identity(field,M):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Returns: ModuleMap(K,field,M,M)
+  Means: @CategoryTheory.CategoryStruct.id (@ModuleCat.{0,0} K field.toRing) (@ModuleCat.moduleCategory.{0,0} K field.toRing).toCategoryStruct M
+  Render latex: \operatorname{{id}}_{{{M}}}
+
+Notation module composition(field,M,N,P,f,g):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N,P: CoefficientModule(K,field)
+  Let f: ModuleMap(K,field,M,N)
+  Let g: ModuleMap(K,field,N,P)
+  Returns: ModuleMap(K,field,M,P)
+  Means: @CategoryTheory.CategoryStruct.comp (@ModuleCat.{0,0} K field.toRing) (@ModuleCat.moduleCategory.{0,0} K field.toRing).toCategoryStruct M N P f g
+  Render latex: {g} \circ {f}
+
+Define graded identity(field,M):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: GradedModule(K,field)
+  Returns: GradedMap(K,field,M,M)
+  Equals: graded map(K,field,M,M,
+    function(p: Natural,module identity(field,M.component(p))))
+  Render latex: \operatorname{{id}}_{{{M}}}
+
+Define graded composition(field,M,N,P,f,g):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N,P: GradedModule(K,field)
+  Let f: GradedMap(K,field,M,N)
+  Let g: GradedMap(K,field,N,P)
+  Returns: GradedMap(K,field,M,P)
+  Equals: graded map(K,field,M,P,
+    function(p: Natural,module composition(field,
+      M.component(p),N.component(p),P.component(p),f.component(p),g.component(p))))
+  Render latex: ({g} \circ {f})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

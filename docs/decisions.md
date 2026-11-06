@@ -370,9 +370,11 @@ functions, broader literal inference and the topology research obligations remai
 
 [Dependent function types](dependent-function-types.md) specifies the selected
 bound-domain form and its intended scope, alpha-equivalence and Lean mapping.
-Only its generated grammar and syntax normalization are implemented: semantic
-elaboration explicitly rejects the new form. No translated-Pi claim is made.
-The [working graded-object study](../studies/dependent-functions/README.md) uses
-existing ordinary functions, with seven canonical targets and a component proof.
-Its separate native graded-map model has four proofs, but is not translated Clean.
+The initial semantic implementation now supports bound value domains, alpha-equivalent
+types, capture-free substitution, dependent application/lambda inference and graded
+map fields. The study includes eleven exact native graded-map targets and three
+proofs. Inference rejects any bound local escaping into a free implicit argument.
+Type-valued binders remain unsupported; the contract records the remaining proof,
+universe and naming acceptance cases. The earlier ordinary-function graded objects
+still have seven canonical targets and their component proof.
 :::
