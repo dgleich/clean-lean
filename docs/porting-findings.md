@@ -335,3 +335,12 @@ Ten exact targets, five native sort assertions and five proofs cover finite,
 empty/singleton, proof-domain and higher-universe domain examples. General universe
 inference and Type-valued binders remain outside the current profile.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+A negative [universe-boundary probe](proof-valued-functions.md#confirmed-remaining-universe-boundary)
+now confirms that a Type 1 CoefficientModule carrier can still be inferred for a
+native wrapper requiring Type 0. Clean accepts this input; Lean rejects the emitted
+application. This is a source-checking gap, not a proved mathematical statement.
+The proof-family sort checks above do not discharge this remaining closed-level gate.
+:::

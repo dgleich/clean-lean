@@ -1047,6 +1047,7 @@
         "studies/dependent-functions/verify_proof_families.py"
       ],
       "pending": [
+        "Confirmed: reject Type 1 CoefficientModule inference for equality reflexivity carrier X : Type 0",
         "General universe inference and Type-valued binders",
         "Further automatic label collision cases"
       ]

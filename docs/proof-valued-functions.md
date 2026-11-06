@@ -112,4 +112,26 @@ Type-argument rejection, and a renamed/rebound arrow interface. This completes
 these selected proof/empty/singleton/higher-universe acceptance cases, not a claim
 that all dependent-function or universe interactions have been audited. Broader
 naming collisions, general universe parameters and Type-valued binders remain open.
+## Confirmed remaining universe boundary
+
+A separate negative probe is accepted by the current Clean checker but rejected
+by the Lean kernel:
+
+```clean
+Define universe boundary(K,field,M):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Returns: (M = M)
+  Equals: equality reflexivity(M)
+```
+
+The equality-reflexivity wrapper declares its inferred carrier as `X : Type`
+(Lean Type 0). CoefficientModule is declared in Type 1. The emitted application
+therefore fails with a native application-type mismatch. The new proof-sort gate
+correctly excludes Prop carriers but does not yet enforce all closed Type levels.
+This probe is not a verified example or a proof. The next implementation needs to
+propagate declared closed universe levels through ordinary/dependent arrows and
+check them against explicit Type-parameter bounds, with the arrow's documented
+Sort grant kept separate. General universe polymorphism remains a further task.
 :::
