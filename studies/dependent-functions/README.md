@@ -52,4 +52,19 @@ The native probe exposed a practical adapter requirement: composition and its la
 need the module category supplied explicitly, because Lean cannot always recover
 it from the bundled Hom values alone. The Clean wrappers retain
 that category, its named Mathlib instance and coefficient choice explicitly.
+## Validation checkpoint
+
+The initial dependent-map implementation checks eleven canonical Lean targets and
+three generated theorem proofs; the existing 92-proof corpus and strict generated
+parser check also pass. The 471-test regression run completed with three failures,
+all caused by the shared application checker changing an expected error message.
+The field-specific diagnostic was restored; 86 focused tests, including all three
+cases and the dependent-function interactions, then passed. A separate alias-cycle
+follow-up passed 81 focused tests. The full suite was not repeated after these small
+follow-ups. An earlier attempt terminated with exit 143 during review-data collection
+without a test failure; the completed run above was its serial retry.
+
+The rendered map specimen compiles without overfull boxes; reference-page search,
+local links and mobile width checks pass. Broader dependent-family acceptance work
+remains listed in the contract, separately from this regression evidence.
 :::

@@ -148,7 +148,7 @@ def substitute(typ,bindings,env,locals):
 def application(function,args,env,locals,tree,tex):
     from .core import compatible
     if not env.is_function_type(function.type) or len(args)!=1 or not compatible(args[0].type,function.type.args[0]):
-        raise CleanError('Function argument mismatch')
+        raise CleanError('Function field argument mismatch' if tree[0]=='Apply' else 'Function argument mismatch')
     typ=function.type
     result=substitute(typ.codomain,{typ.binder:args[0]},env,locals) if isinstance(typ,DependentFunctionType) else typ.args[1]
     return Expr('('+function.lean+' '+args[0].lean+')',tex,result,tree=tree)
