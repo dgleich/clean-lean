@@ -1462,6 +1462,114 @@
         "# ",
         ""
       ]
+    },
+    "docs/value-indexed-types.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "markdown"
+    },
+    "library/topology/indexed.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/ValueIndices.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/ValueIndices.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/ValueIndices.tex": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/topology/ValueIndices.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "sidecar"
+    },
+    "studies/topology/ValueIndicesVerified.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/indices.tex": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/topology/verify_indices.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_value_indices.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/topology/comparison.md": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "markdown",
+      "model": "gpt-6",
+      "date": "2026-11-06"
+    },
+    "tools/comparison_markdown.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-06"
     }
   }
 }

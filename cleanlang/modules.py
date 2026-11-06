@@ -3,7 +3,7 @@ import hashlib
 import re
 import string
 from pathlib import Path
-from .core import CleanError, ID, Expr, Type, NAT, parse, split, textext, normalize_layout, Expressions, compatible
+from .core import CleanError, ID, Expr, Type, NAT, parse, split, textext, normalize_layout, Expressions, compatible, has_value_indices
 
 
 def template(text, names, plain=False):
@@ -58,18 +58,22 @@ def type_declaration(header, fields, env):
     syntax=syntax_parse(header,'type_header')
     name=str(syntax.children[0])
     if name in env.data['types'] or name in env.data['aliases']:raise CleanError('Duplicate type: '+name)
-    names,kinds=[],[]
+    names,kinds,parameter_types,local=[],[],[],{}
     parameters=syntax.children[1].children if len(syntax.children)>1 else []
     for parameter in parameters:
         p=str(parameter.children[0])
         kind=header[parameter.children[1].meta.start_pos:parameter.children[1].meta.end_pos].strip() if len(parameter.children)>1 else ''
-        if kind not in ('Natural','Type') or p in names:raise CleanError('Type parameters require distinct names and Natural or Type kinds')
-        names.append(p);kinds.append('dimension' if kind=='Natural' else 'type')
+        if not kind or p in names or p in env.data['types'] or p in env.data['aliases']:
+            raise CleanError('Type parameters require distinct fresh names and explicit types')
+        t=Type('Type') if kind=='Type' else env.type(kind,local,phrases=False)
+        parameter_types.append(t)
+        kinds.append('type' if t==Type('Type') else 'dimension' if t==NAT else
+                     {'value':substitute(str(t),names)})
+        names.append(p);local[p]=Expr(p,p,t)
     values = fields_map(fields)
     if 'equals' in values:
         if set(values) != {'equals'}: raise CleanError('Type alias accepts only Equals')
         env.data['types'][name] = {'args': kinds, 'canonical': substitute(values['equals'], names)}
-        local={n: Expr(n,n,NAT if k=='dimension' else Type('Type')) for n,k in zip(names,kinds)}
         env.type(name+'('+','.join(names)+')' if names else name, local)
         return
     if not {'means','render latex'} <= values.keys() or values.keys()-{'means','render latex','describe','describe plural'}:
@@ -78,7 +82,7 @@ def type_declaration(header, fields, env):
     for src,dst in [('describe','prose'),('describe plural','prose_plural')]:
         if src in values: spec[dst] = template(values[src], names)
     env.data['types'][name] = spec
-    signature=' '.join(f'({n} : '+('Nat' if k=='dimension' else 'Type')+')' for n,k in zip(names,kinds))
+    signature=' '.join(f'({n} : '+('Type' if t==Type('Type') else 'Nat' if t==NAT else env.render_type(t,'lean'))+')' for n,t in zip(names,parameter_types))
     sort={'Prop':'Sort 1', 'Type':'Type 1'}.get(values['means'],'Type')
     add_definition(env, 'cleanType_', name, f'{signature} : {sort} :=\n  {values["means"]}')
 
@@ -131,6 +135,8 @@ def notation(header, fields, env, *, authored=False):
     if len(renders)>1 or (not authored and not renders):
         raise CleanError('Provide exactly one Render or Render latex field')
     result = env.type(values['returns'],local)
+    if any(has_value_indices(t) for t in [result,*types.values()]):
+        raise CleanError('Value-indexed callable signatures are pending; type declarations and theorem binders are supported')
     implementation = next(iter(implementations))
     expression = None
     if implementation == 'equals':

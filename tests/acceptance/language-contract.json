@@ -418,6 +418,49 @@
         "Arbitrary value-indexed constructors",
         "Universe-polymorphic structure authoring"
       ]
+    },
+    {
+      "id": "named_value_type_indices",
+      "status": "partial",
+      "specification": "docs/value-indexed-types.md",
+      "grammar": "grammar/clean.lark (unchanged type_ref productions)",
+      "source_fragment": "Path(X,t,x,y)",
+      "expected_tree": [
+        "Apply",
+        "Path",
+        [
+          [
+            "Name",
+            "X"
+          ],
+          [
+            "Name",
+            "t"
+          ],
+          [
+            "Name",
+            "x"
+          ],
+          [
+            "Name",
+            "y"
+          ]
+        ]
+      ],
+      "environment": "Explicit Path(X:Type,t:Topology(X),x:X,y:X) -> @Path X t x y; existing X,t,x,y locals",
+      "expected_lean": "@Path X t x y",
+      "expected_lean_type": "Type",
+      "checks": [
+        "tests/test_value_indices.py",
+        "studies/topology/verify_indices.py",
+        "tools/generate_parser.py --check"
+      ],
+      "pending": [
+        "Value-indexed callable signatures",
+        "Arbitrary expression indices",
+        "Inherited general elaboration uniqueness",
+        "General universe-polymorphic constructors"
+      ]
     }
   ]
 }

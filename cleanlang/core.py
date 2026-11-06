@@ -100,6 +100,17 @@ class Type:
     name: str
     args: tuple = ()
     def __str__(self): return self.name + ('(' + ','.join(map(str,self.args)) + ')' if self.args else '')
+@dataclass(frozen=True)
+class ValueIndex:
+    name: str
+    lean: str
+    tex: str
+    def __str__(self): return self.name
+
+
+def has_value_indices(t):
+    return isinstance(t,Type) and any(isinstance(a,ValueIndex) or has_value_indices(a) for a in t.args)
+
 @dataclass
 class Expr:
     lean: str
@@ -162,7 +173,8 @@ class Environment:
         self.module_docs=[]
     def type(self,s,env=None,phrases=True,trail=()):
         s=re.sub(r'^(a|an)\s+','',s.strip(),flags=re.I)
-        if phrases:
+        # Constructor applications have reserved structural syntax, never prose dispatch.
+        if phrases and not re.match(ID+r'\s*\(',s):
             matches=[p['type'].format(**m.groupdict()) for p in self.data['phrases'] if (m:=re.fullmatch(p['pattern'],s,re.I))]
             if len(matches)>1: raise CleanError('Ambiguous type phrase: '+s)
             if matches: return self.type(matches[0],env,False)
@@ -179,6 +191,15 @@ class Environment:
         out=[]
         for a,k in zip(args,kinds):
             if k=='type': out.append(self.type(a,env)); continue
+            if isinstance(k,dict):
+                if not re.fullmatch(ID,a):
+                    raise CleanError('Value index must be a previously declared name: '+a)
+                if env is None or a not in env:raise CleanError('Unknown value index: '+a)
+                expected=self.type(k['value'].format(*map(str,out)),env,False)
+                actual=env[a]
+                if actual.type!=expected:
+                    raise CleanError(f'Value index {a} requires {expected}, got {actual.type}')
+                out.append(ValueIndex(a,actual.lean,actual.tex));continue
             if not re.fullmatch(r'\d+|'+ID,a): raise CleanError('Dimension must be a numeral or natural parameter')
             if env is not None and not a.isdigit() and (a not in env or env[a].type!=NAT): raise CleanError('Declare dimension '+a+' as Natural first')
             out.append(a)
@@ -190,6 +211,7 @@ class Environment:
     def render_type(self,t,target,bindings=None):
         bindings=bindings or {}
         args=[self.render_type(a,target,bindings) if isinstance(a,Type) else
+              (a.lean if target=='lean' else a.tex) if isinstance(a,ValueIndex) else
               bindings[a].lean if target=='lean' and a in bindings else
               texid(a) if target=='latex' and not a.isdigit() else a for a in t.args]
         if t.name not in self.data['types']:
@@ -208,7 +230,7 @@ class Environment:
         spec=self.data['types'].get(t.name,{})
         template=spec.get('prose_plural' if plural else 'prose')
         if template:
-            args=[self.render_type(a,'latex') if isinstance(a,Type) else (a if a.isdigit() else texid(a)) for a in t.args]
+            args=[self.render_type(a,'latex') if isinstance(a,Type) else a.tex if isinstance(a,ValueIndex) else (a if a.isdigit() else texid(a)) for a in t.args]
             return template.format(*args)
         return ('elements of $' if plural else 'an element of $')+self.render_type(t,'latex')+'$'
     def match(self,p,a,bind):

@@ -1,0 +1,41 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/indexed.clean"
+
+Text:
+  Named mathematical values can index types. The topology and endpoints below
+  are explicit parameters; no ambient topology is selected implicitly.
+
+Result subset element reflexivity:
+  Attribution: topology; subset element reflexivity; original
+  Let X: Type
+  Let S: Set(X)
+  Let x: Element(X,S)
+  Conclude: x = x
+
+Result path reflexivity:
+  Attribution: topology; path reflexivity; original
+  Let X: Type
+  Let t: Topology(X)
+  Let x,y: X
+  Let p be a path from x to y in X with topology t
+  Conclude: p = p
+
+Result constant path exists:
+  Attribution: topology; constant path exists; original
+  Let X: Type
+  Let t: Topology(X)
+  Conclude:
+    for every (x: X,
+      there exists (p: Path(X,t,x,x), p = p))
+
+Result named subset expression:
+  Attribution: topology; named subset expression; original
+  Let X,Y: Type
+  Let f: Function(X,Y)
+  Let S: Set(Y)
+  Let T = inverse image(f,S)
+  Let x be an element of T in X
+  Conclude: x = x
+
+-- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

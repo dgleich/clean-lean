@@ -31,6 +31,27 @@ main{max-width:1200px;margin:auto;padding:40px 28px 70px}h1{font-size:clamp(2rem
 <div class="controls" hidden id="controls"><label>Find a mapping<input id="search" type="search" placeholder="Try lambda, context, coercion, or sum"></label><label>Status<select id="status"><option value="all">All statuses</option><option value="implemented">Implemented</option><option value="accepted">Accepted design</option><option value="proposed">Proposed</option></select></label></div>
 <p id="count" role="status" aria-live="polite"></p>
 <div id="mappings">
+<article id="value-indexed-types" data-status="implemented" class="mapping">
+<header><h2><a href="#value-indexed-types">Types indexed by named values</a></h2><span class="badge implemented">Implemented subset</span></header>
+<llm model="gpt-6" date="2026-11-06" role="assisted">
+<div class="pair"><section><h3>Clean — indexed module imported</h3><pre><code>Let X: Type
+Let t: Topology(X)
+Let x,y: X
+Let p be a path from x to y in X with topology t
+-- Equivalent last clause:
+-- Let p: Path(X,t,x,y)</code></pre></section>
+<section><h3>Lean binder shape</h3><pre><code>∀ (X : Type) (t : TopologicalSpace X)
+  (x y : X) (p : @Path X t x y), …</code></pre></section></div>
+<p>The constructor grammar already parses the application. Ordered parameter types
+then classify and check its arguments. Named value indices preserve their bound
+Lean locals. No topology is inferred. Prose phrases normalize before type checking;
+ambiguous full phrase matches fail. Module descriptions render “a path from x to y”.</p>
+<p>See the <a href="value-indexed-types.md">syntax and translation contract</a> and
+<a href="../studies/topology/ValueIndices.clean">working source</a>. Four canonical
+statement targets and proofs check this subset. Dependent callable signatures and
+arbitrary expression indices are explicitly unsupported; no IntervalBasis library
+construction is claimed.</p></llm></article>
+
 <article id="quantifiers" data-status="implemented" class="mapping">
 <header><h2><a href="#quantifiers">Scoped quantified conditions</a></h2><span class="badge implemented">Implemented</span></header>
 <llm model="gpt-6" date="2026-11-06" role="assisted">

@@ -8,7 +8,8 @@ pending; they are not included in the verified theorem count.
 
 | File | Purpose |
 |---|---|
-| [comparison.html](comparison.html) | Original side-by-side comparison; historical proposed interfaces |
+| [comparison.md](comparison.md) | GitHub-readable theorem comparisons; historical proposed interfaces |
+| [comparison.html](comparison.html) | Same comparison with side-by-side panels |
 | [requirements.md](requirements.md) | Current decisions, precise next-slice design, blockers and proof obligations |
 | [Common.clean](Common.clean) | Explicit topology import and source declarations |
 | [Foundations.clean](Foundations.clean) | Four implemented foundation statements |
@@ -20,8 +21,9 @@ pending; they are not included in the verified theorem count.
 | [Targets.lean.proposed](Targets.lean.proposed) | Corresponding proposed Lean signatures, not compilable targets |
 
 The implemented syntax is specified in [quantifiers](../../docs/quantifiers.md).
-General value-indexed types are the next language change, specified as a bounded
-proposal in requirements.md. Paper-specific structures and algorithms still need
+Named value-indexed types now work in constructor declarations and theorem
+binders; see [their contract](../../docs/value-indexed-types.md). Dependent callable
+signatures and the broader design in requirements.md remain pending. Paper-specific structures and algorithms still need
 real definitions; the proposed files do not manufacture those definitions.
 
 From the repository root:
@@ -51,6 +53,36 @@ no `sorry`, axioms, or imported paper-specific theorem stubs.
 - LaTeX compiles twice; the one-page foundation specimen was visually inspected.
 - VS Code/TextMate, Vim, and the offline browser checks pass. Emacs grammar and
   tests are updated, but Emacs is unavailable here, so its runtime check is pending.
-- The five target theorem interfaces and the generalized value-indexed-type
-  proposal are not counted as implemented or verified.
+- The five target theorem interfaces and dependent callable support are not
+  counted as implemented or verified.
+:::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Named-index parsing specimen
+
+[ValueIndices.clean](ValueIndices.clean) uses actual Element and Path declarations
+from [indexed.clean](../../library/topology/indexed.clean). It includes prose and
+constructor spellings, nested quantified endpoints, and a named preimage index.
+[ValueIndices.lean](ValueIndices.lean) is the generated statement file;
+[ValueIndicesVerified.lean](ValueIndicesVerified.lean) contains four independent
+canonical target comparisons and four proofs. These are foundation specimens,
+not the five paper theorems. [ValueIndices.pdf](ValueIndices.pdf) shows their rendering.
+
+Run `LAKE=lake python3 studies/topology/verify_indices.py` to regenerate and check.
+The remaining callable boundary is deliberate and produces an explicit error.
+`IntervalBasis` still needs its mathematical diagram and basis definitions.
+:::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+The comparison Markdown is generated from the HTML source. After editing the
+report, run `python3 tools/comparison_markdown.py`; check synchronization with
+`python3 tools/comparison_markdown.py --check`. All eleven code panels are
+preserved, with stacked Clean/Lean panels and Markdown tables for GitHub.
+
+The named-index milestone passes 230 Python tests, four additional canonical Lean
+statement comparisons and proofs, existing quantifier/lambda target checks, and
+the 92-theorem corpus. The typeset named-index specimen compiles and the offline
+browser checks pass. Dependent callable signatures remain outside this milestone.
 :::

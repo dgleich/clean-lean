@@ -54,8 +54,11 @@ lambda expansion. Their mathematical operations are already expressible.
 
 ## Next language slice: arbitrary named type indices
 
-**Status: design worked out below; implementation and acceptance pending.** This
-is a real gap. Current constructors allow only type and natural-number arguments.
+**Status update:** constructor declarations, named value arguments, theorem
+binders, aliases and prose normalization are now implemented; see the
+[precise implemented contract](../../docs/value-indexed-types.md). Callable
+substitution and arbitrary mathematical expressions as indices remain pending.
+The design below originally identified the restriction to type and natural-number arguments.
 It blocks `IntervalBasis(Z)` where Z is a diagram value and `Subspace(V)` where V
 is a bundled vector-space value.
 
@@ -117,7 +120,9 @@ wrong ambient spaces; earlier/later index references; nested quantified indices;
 indices after a local definition; conflicting names; no instance-dependent
 reinterpretation; escaped binder indices; and canonical Lean types with explicit
 universe/structure arguments. Tests must compare raw elaborated structure, not
-just definitional equality. Until these checks exist, the extension is not accepted.
+just definitional equality. The implemented subset has executable checks in `tests/test_value_indices.py`
+and `verify_indices.py`. This does not establish the broader callable or
+universe-polymorphic extension.
 
 ## Bundles and authored structures
 

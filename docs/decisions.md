@@ -205,3 +205,24 @@ pending; a bounded design and acceptance obligations are in the
 binders or paper theorem adapters to evade those gaps. The original comparison
 is historical; the study README distinguishes executable foundation from targets.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Parsing value-dependent types
+
+Retain constructor spelling and the existing generated type grammar. Normalize to
+neutral Name/Apply/Numeral trees before checking argument roles. Generalize Type
+parameter declarations to ordered, explicitly typed values, initially accepting
+only earlier named locals as non-natural value indices. Preserve bound local
+identities inside nested quantifiers; reject differing indices without transport.
+Constructor applications take structural precedence over Phrase rules. Prose
+captures retain identifier case; multiple full phrase matches fail before typing.
+LaTeX uses module-declared descriptions. No new dependent-type keyword is needed.
+
+This bounded implementation supports type aliases and theorem binders, with
+kernel-checked Element and Path specimens. Callable signatures containing these
+indices are explicitly rejected pending a constructive argument-substitution rule.
+No implicit carrier/topology inference or general expression indices are added.
+See the [contract](value-indexed-types.md) and
+[study](../studies/topology/README.md).
+:::

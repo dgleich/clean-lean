@@ -37,6 +37,14 @@ def type_spelling(tree):
     raise ValueError('Expected a type syntax tree')
 
 
+def type_tree(tree):
+    """Neutral constructor syntax: names are not classified as types or values here."""
+    if isinstance(tree,generated.Token):return ['Numeral',str(tree)]
+    head=str(tree.children[0])
+    if len(tree.children)==1:return ['Name',head]
+    return ['Apply',head,[type_tree(x) for x in tree.children[1].children]]
+
+
 def expression_tree(tree):
     """Pure syntax normalization, independent of the binding environment."""
     kind=tree.data; c=tree.children

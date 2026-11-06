@@ -1,0 +1,20 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "basic.clean"
+Import Lean Mathlib.Topology.Path
+
+Type Element(X: Type, S: Set(X)):
+  Means: {x : X // x ∈ S}
+  Render latex: {S}
+  Describe: an element of ${S}$
+  Describe plural: elements of ${S}$
+
+Type Path(X: Type, t: Topology(X), x: X, y: X):
+  Means: @Path X t x y
+  Render latex: \operatorname{{Path}}_{{{t}}}({x},{y})
+  Describe: a path from ${x}$ to ${y}$ in ${X}$ with topology ${t}$
+  Describe plural: paths from ${x}$ to ${y}$ in ${X}$ with topology ${t}$
+
+Phrase elements? of (?P<S>\w+) in (?P<X>\w+) => Element({X},{S})
+Phrase paths? from (?P<x>\w+) to (?P<y>\w+) in (?P<X>\w+) with topology (?P<t>\w+) => Path({X},{t},{x},{y})
+
+-- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

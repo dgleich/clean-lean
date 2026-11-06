@@ -465,3 +465,16 @@ introduce a typed local scoped to the parenthesized condition. See the
 Lean targets, universe limits, and acceptance checks. Type-valued theorem
 parameters require the explicit foundational `Type() -> Type` binding.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Named value indices in types
+
+Constructor syntax remains `Name(argument,...)`. Type declarations may now use
+ordered value parameters, such as `Type Element(X: Type, S: Set(X)):`.
+Previously declared names can supply those indices in theorem binders and
+quantifier domains. See [named value indices](value-indexed-types.md) for the
+neutral parse tree, typing and Lean map, prose normalization, and explicit limits.
+Dependent callable signatures remain pending; no type-checked reinterpretation
+of an ambiguous parse is permitted.
+:::
