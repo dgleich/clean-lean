@@ -24,7 +24,7 @@ for oracle,actual in [('yes','true value'),('no','false value'),('ends','endpoin
  ('expanded','expanded interval'),('boundary','expanded endpoints'),('problem','interlevel problem'),
  ('pair','space pair data'),('nested','nested pair'),('expandedPair','expanded pair'),
  ('shiftedPair','shifted pair'),('included','pair included in'),('evaluate','evaluate map'),
- ('value','real map value'),('bounded','bounded perturbation'),('perturbed','perturbed pair')]:mapping['InterlevelOracle.'+oracle]=function(actual)
+ ('value','real map value'),('bounded','bounded perturbation'),('perturbed','perturbed pair'),('certify','certify pair data'),('represents','has pair data')]:mapping['InterlevelOracle.'+oracle]=function(actual)
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
 open Lean Elab Command
@@ -144,8 +144,31 @@ def perturbedStatement : Prop := ∀ (P : Problem)
 def boundedStatement : Prop := ∀ (P : Problem)
   (h : @ContinuousMap P.space.carrier ℝ P.space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace) (r : ℝ),
   r ≥ 0 → @bounded P h r → @included P.space (@perturbed P h) (@expandedPair P r)
+noncomputable def certify (X : TopCat.{0}) (Q : Pair X) (h : Q.relative ⊆ Q.ambient) : CERTPAIR X :=
+  @CERTCONSTRUCTOR X Q.ambient Q.relative h
+noncomputable def represents (X : TopCat.{0}) (Q : CERTPAIR X) (S : Pair X) : Prop :=
+  Q.ambient=S.ambient ∧ Q.relative=S.relative
+def certifiedExpandedStatement : Prop := ∀ (P : Problem) (r : ℝ),
+  P.interval.lower ≤ P.interval.upper → r ≥ 0 →
+  let T : Pair P.space := @expandedPair P r;
+  ∃ Q : CERTPAIR P.space, @represents P.space Q T
+def certifiedShiftStatement : Prop := ∀ (P : Problem) (r t : ℝ),
+  P.interval.lower ≤ P.interval.upper → r ≥ 0 → (-r ≤ t ∧ t ≤ r) →
+  let S : Pair P.space := @shiftedPair P t;
+  let T : Pair P.space := @expandedPair P r;
+  ∃ Q : CERTINCLUSION P.space,
+    @represents P.space Q.source S ∧ @represents P.space Q.target T
+def certifiedPerturbationStatement : Prop := ∀ (P : Problem)
+  (h : @ContinuousMap P.space.carrier ℝ P.space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace) (r : ℝ),
+  P.interval.lower ≤ P.interval.upper → r ≥ 0 → @bounded P h r →
+  let S : Pair P.space := @perturbed P h;
+  let T : Pair P.space := @expandedPair P r;
+  ∃ Q : CERTINCLUSION P.space,
+    @represents P.space Q.source S ∧ @represents P.space Q.target T
+
 end InterlevelOracle
 '''
+expected=expected.replace('CERTPAIR',env.structures['TopologicalPair']['key']).replace('CERTINCLUSION',env.structures['PairInclusion']['key']).replace('CERTCONSTRUCTOR',function('topological pair'))
 checks=[f'same_target {target} {oracle}' for oracle,target in mapping.items()]
 for name,fields in [('Ends',['mk','lower','upper']),('Selection',['mk','lower','upper']),
                     ('Problem',['mk','space','map','interval','selection']),('Pair',['mk','ambient','relative'])]:
@@ -154,7 +177,10 @@ checks += [f'same_target CleanStatements.{name} InterlevelOracle.{oracle}' for n
  ('endpoint_choices_are_exhaustive','choicesStatement'),('selected_endpoints_lie_in_the_interval','endpointsStatement'),
  ('expanded_pair_is_nested','expandedStatement'),('shifted_pair_is_nested','shiftedStatement'),
  ('shifted_pair_lies_in_expanded_pair','inclusionStatement'),
- ('perturbed_pair_is_nested','perturbedStatement'),('bounded_perturbation_lies_in_expanded_pair','boundedStatement')]]
+ ('perturbed_pair_is_nested','perturbedStatement'),('bounded_perturbation_lies_in_expanded_pair','boundedStatement'),
+ ('expanded_pair_has_a_certificate','certifiedExpandedStatement'),
+ ('bounded_shift_has_a_certified_inclusion','certifiedShiftStatement'),
+ ('bounded_perturbation_has_a_certified_inclusion','certifiedPerturbationStatement')]]
 proofs=r'''
 namespace InterlevelProofs
 theorem endpoint_choices_are_exhaustive : CleanStatements.endpoint_choices_are_exhaustive := by
@@ -234,10 +260,37 @@ theorem bounded_perturbation_lies_in_expanded_pair : CleanStatements.bounded_per
       exact ⟨⟨he,by linarith [(hb x).1,(hb x).2]⟩,by linarith [(hb x).1,(hb x).2]⟩
     · right
       exact ⟨⟨he,by linarith [(hb x).1,(hb x).2]⟩,by linarith [(hb x).1,(hb x).2]⟩
+theorem expanded_pair_has_a_certificate : CleanStatements.expanded_pair_has_a_certificate := by
+  intro P r ho hr
+  let T := EXPANDED P r
+  refine ⟨⟨T.ambient,T.relative,?_⟩,rfl,rfl⟩
+  exact expanded_pair_is_nested P r ho hr
+
+theorem bounded_shift_has_a_certified_inclusion : CleanStatements.bounded_shift_has_a_certified_inclusion := by
+  intro P r t ho hr ht
+  let S := SHIFTED P t
+  let T := EXPANDED P r
+  have hs := shifted_pair_is_nested P t ho
+  have ht' := expanded_pair_is_nested P r ho hr
+  have hi := shifted_pair_lies_in_expanded_pair P r t hr ht
+  refine ⟨⟨⟨S.ambient,S.relative,hs⟩,⟨T.ambient,T.relative,ht'⟩,hi.1,hi.2⟩,?_⟩
+  exact ⟨⟨rfl,rfl⟩,⟨rfl,rfl⟩⟩
+
+theorem bounded_perturbation_has_a_certified_inclusion : CleanStatements.bounded_perturbation_has_a_certified_inclusion := by
+  intro P h r ho hr hb
+  let S := PERTURBED P h
+  let T := EXPANDED P r
+  have hs := perturbed_pair_is_nested P h ho
+  have ht := expanded_pair_is_nested P r ho hr
+  have hi := bounded_perturbation_lies_in_expanded_pair P h r hr hb
+  refine ⟨⟨⟨S.ambient,S.relative,hs⟩,⟨T.ambient,T.relative,ht⟩,hi.1,hi.2⟩,?_⟩
+  exact ⟨⟨rfl,rfl⟩,⟨rfl,rfl⟩⟩
+
 end InterlevelProofs
 '''
+proofs=proofs.replace('EXPANDED',function('expanded pair')).replace('SHIFTED',function('shifted pair')).replace('PERTURBED',function('perturbed pair'))
 path=here/'InterlevelVerified.lean';path.write_text(source+comparison+expected+'\n'.join(checks)+'\n'+proofs)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print(f'{len(checks)} canonical interlevel targets and seven proofs passed.')
+print(f'{len(checks)} canonical interlevel targets and ten proofs passed.')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -229,3 +229,16 @@ finite-choice and base pair-data requirements using existing syntax. It does not
 provide proof-bearing maps of pairs, relative homology, the well-group intersection
 or its two-image characterization; those remain open.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Interlevel certificates
+
+The [certification bridge](interlevel-data.md#certification-bridge-and-an-exposed-language-gap)
+now proves existence of a certified expanded pair and certified inclusions of
+bounded shifts and perturbations. These results construct proof-bearing records
+from the earlier inequalities, preserving all component sets. The continuous
+pair maps are available through `pairs.clean`. This does not yet construct relative
+homology. Direct Clean composition of certificate constructors exposes a remaining
+computed-record projection/reduction gap, recorded in that same report.
+:::

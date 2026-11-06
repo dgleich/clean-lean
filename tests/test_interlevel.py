@@ -42,7 +42,7 @@ class InterlevelInterfaces(unittest.TestCase):
         self.assertEqual(e.data['types']['Boolean'],self.e.data['types']['Boolean'])
     def test_study_statements_translate(self):
         e=Environment();r=load_document(ROOT/'studies/topology/Interlevel.clean',e)
-        self.assertEqual(len(r),7)
+        self.assertEqual(len(r),10)
         target=lean(r,e,[])
         self.assertNotIn('CleanPapers',target)
         self.assertNotIn('sorry',target)
@@ -54,3 +54,13 @@ class InterlevelInterfaces(unittest.TestCase):
             self.expr('bounded perturbation(P,f,r)')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+    def test_certification_requires_the_actual_nesting_proof(self):
+        load_module(ROOT/'library/topology/certified_interlevel.clean',self.e)
+        self.local['Q']=Expr('Q','Q',self.e.type('SpacePairData(X)',self.local))
+        self.local['h']=Expr('h','h',self.e.type('(Q.relative ⊆ Q.ambient)',self.local))
+        self.assertEqual(self.expr('certify pair data(X,Q,h)').type,
+                         self.e.type('TopologicalPair(X)',self.local))
+        self.local['wrong']=Expr('wrong','wrong',self.e.type('(Q.ambient ⊆ Q.relative)',self.local))
+        with self.assertRaises(CleanError):self.expr('certify pair data(X,Q,wrong)')
+        with self.assertRaises(CleanError):self.expr('certify pair data(Y,Q,h)')

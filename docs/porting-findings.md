@@ -156,3 +156,16 @@ exclusion of proof fields. Matching is structural; direct binder-bearing evidenc
 requires a named Condition. No implicit proof search or general Sort parameters
 are introduced. Certified subset and continuous pair inclusions exercise this map.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Interlevel certificates
+
+The [certification bridge](../studies/topology/interlevel-data.md#certification-bridge-and-an-exposed-language-gap)
+now proves existence of a certified expanded pair and certified inclusions of
+bounded shifts and perturbations. These results construct proof-bearing records
+from the earlier inequalities, preserving all component sets. The continuous
+pair maps are available through `pairs.clean`. This does not yet construct relative
+homology. Direct Clean composition of certificate constructors exposes a remaining
+computed-record projection/reduction gap, recorded in that same report.
+:::

@@ -1,6 +1,6 @@
 -- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
 Import "Common.clean"
-Import "../../library/topology/interlevel.clean"
+Import "../../library/topology/certified_interlevel.clean"
 
 Text latex:
   Write $P=(X,f,(a,b),E)$ for the ambient space, continuous map, endpoints,
@@ -11,7 +11,10 @@ Text latex:
   The shifted pair $T_t(P)$ has components $f^{-1}[a+t,b+t]$ and $f^{-1}(E+t)$.
   For a perturbation $h$, $A(P,h)$ has components $h^{-1}[a,b]$ and $h^{-1}(E)$.
   Pair inclusion means inclusion of both components. These results establish
-  set inclusions; they do not assert the well-group characterization.
+  set inclusions and certified pair inclusions; they do not assert the well-group characterization.
+  A certified pair $Q$ represents pair data $S$ when their ambient subsets agree
+  and their relative subsets agree. A certified inclusion stores the nesting
+  and both component-inclusion proofs.
 
 Result endpoint choices are exhaustive:
   Attribution: topology; two Boolean endpoint flags; original
@@ -67,3 +70,41 @@ Result bounded perturbation lies in expanded pair:
   Conclude: pair included in(P.space,perturbed pair(P,h),expanded pair(P,r))
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Result expanded pair has a certificate:
+  Attribution: topology; certified expanded pair; original
+  Let P: InterlevelProblem
+  Let r: Real
+  Assume order: P.interval.lower ≤ P.interval.upper
+  Assume radius: r ≥ 0
+  Let T = expanded pair(P,r)
+  Conclude:
+    there exists (Q: TopologicalPair(P.space),
+      has pair data(P.space,Q,T))
+
+Result bounded shift has a certified inclusion:
+  Attribution: interlevel; setup for Theorem 4; adapted; scope: certified inclusion
+  Let P: InterlevelProblem
+  Let r,t: Real
+  Assume order: P.interval.lower ≤ P.interval.upper
+  Assume radius: r ≥ 0
+  Assume shift: -r ≤ t and t ≤ r
+  Let S = shifted pair(P,t)
+  Let T = expanded pair(P,r)
+  Conclude:
+    there exists (Q: PairInclusion(P.space),
+      has pair data(P.space,Q.source,S) and has pair data(P.space,Q.target,T))
+
+Result bounded perturbation has a certified inclusion:
+  Attribution: interlevel; definition of relative well groups; adapted; scope: certified inclusion
+  Let P: InterlevelProblem
+  Let h: ContinuousRealMap(P.space)
+  Let r: Real
+  Assume order: P.interval.lower ≤ P.interval.upper
+  Assume radius: r ≥ 0
+  Assume bounded perturbation(P,h,r)
+  Let S = perturbed pair(P,h)
+  Let T = expanded pair(P,r)
+  Conclude:
+    there exists (Q: PairInclusion(P.space),
+      has pair data(P.space,Q.source,S) and has pair data(P.space,Q.target,T))

@@ -1,0 +1,20 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "interlevel.clean"
+Import "pairs.clean"
+
+Define certify pair data(X,Q,h):
+  Let X: TopologicalSpace
+  Let Q: SpacePairData(X)
+  Let h: Evidence((Q.relative ⊆ Q.ambient))
+  Returns: TopologicalPair(X)
+  Equals: topological pair(X,Q.ambient,Q.relative,h)
+  Render latex: \widehat{{{Q}}}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Condition has pair data(X,Q,S):
+  Let X: TopologicalSpace
+  Let Q: TopologicalPair(X)
+  Let S: SpacePairData(X)
+  Holds when: Q.ambient = S.ambient and Q.relative = S.relative
+  Render: {Q} represents {S}
