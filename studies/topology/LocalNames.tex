@@ -1,0 +1,37 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{named relative homology image membership}\cleanattribution{[Topology foundations, module map range membership]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $X$ be a topological space.
+Let $Q$ be a certified inclusion between pairs in $X$.
+Assume $\text{the chain square of }Q\text{ commutes}$ (\texttt{h}).
+Let $M = H(Q.\mathrm{source})$.
+Let $N = H(Q.\mathrm{target})$.
+Let $f = H(Q)$.
+Let $U = \operatorname{range}(H(Q))$.
+Let $x$ be an element of $N$.
+Then \[x\text{ belongs to }U \text{ if and only if } \left(\text{there exists }y : M,\; f(y) = x\right).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{named relative quotient maps commute}\cleanattribution{[Topology foundations, cokernel projection naturality]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $X$ be a topological space.
+Let $Q$ be a certified inclusion between pairs in $X$.
+Assume $\text{the chain square of }Q\text{ commutes}$ (\texttt{h}).
+Let $A = C_*(Q.\mathrm{source}.\mathrm{ambient};H)$.
+Let $B = C_*(Q.\mathrm{target}.\mathrm{ambient};H)$.
+Let $C = C_*(Q.\mathrm{source};H)$.
+Let $D = C_*(Q.\mathrm{target};H)$.
+Let $f = C_*(Q)$.
+Let $p = \pi_{Q.\mathrm{source}}$.
+Let $q = \pi_{Q.\mathrm{target}}$.
+Let $g = C_*(Q.ambient)$.
+Then \[f\circ p = q\circ g.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -869,6 +869,49 @@
         "Inherited opaque Lean-adapter target contract",
         "Proof of the separately labelled two-image candidate"
       ]
+    },
+    {
+      "id": "local_definition_comparison_values",
+      "status": "partial",
+      "specification": "docs/local-definition-conversion.md",
+      "grammar": "Existing local definition and expression/type productions; unchanged",
+      "source_fragment": "Let M = relative homology(field,H,X,Q.source)",
+      "expected_tree": [
+        "Call",
+        "relative homology",
+        [
+          [
+            "Local",
+            "field"
+          ],
+          [
+            "Local",
+            "H"
+          ],
+          [
+            "Local",
+            "X"
+          ],
+          [
+            "Projection",
+            [
+              "Local",
+              "Q"
+            ],
+            "source"
+          ]
+        ]
+      ],
+      "comparison_rule": "Freeze eligible checked comparison values in earlier scope; preserve emitted let and original annotations",
+      "checks": [
+        "tests/test_local_conversion.py",
+        "studies/topology/verify_local_names.py"
+      ],
+      "pending": [
+        "Inherited opaque Lean-adapter target contract",
+        "Binder-bearing local definition conversion",
+        "Legacy bare-natural dimension slots do not yet use value-index comparison"
+      ]
     }
   ]
 }

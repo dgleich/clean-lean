@@ -1,0 +1,40 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/relative_maps.clean"
+
+Result named relative homology image membership:
+  Attribution: topology; module map range membership; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Assume h: pair chain commutes(field,H,X,Q)
+  Let M = relative homology(field,H,X,Q.source)
+  Let N = relative homology(field,H,X,Q.target)
+  Let f = relative homology map(field,H,X,Q,h)
+  Let U = relative homology image(field,H,X,Q,h)
+  Let x: ModuleElement(K,field,N)
+  Conclude:
+    belongs to module subspace(field,N,x,U) ↔
+      there exists (y: ModuleElement(K,field,M), module map value(field,M,N,f,y) = x)
+
+Result named relative quotient maps commute:
+  Attribution: topology; cokernel projection naturality; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Assume h: pair chain commutes(field,H,X,Q)
+  Let A = singular chains(field,H,subspace(X,Q.source.ambient))
+  Let B = singular chains(field,H,subspace(X,Q.target.ambient))
+  Let C = relative chains(field,H,X,Q.source)
+  Let D = relative chains(field,H,X,Q.target)
+  Let f = relative chain map(field,H,X,Q,h)
+  Let p = relative chain projection(field,H,X,Q.source)
+  Let q = relative chain projection(field,H,X,Q.target)
+  Let g = ambient chain map(field,H,X,Q)
+  Conclude: compose chain maps(field,A,C,D,f,p) = compose chain maps(field,A,B,D,q,g)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -339,3 +339,15 @@ existing punctuation encoding and collision rejection are unchanged. No new synt
 or implicit hypothesis is introduced. Native statement checks and independent
 binder-name tests cover compactness of P.space.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Local definitions in dependent indices
+
+[Local definition conversion](local-definition-conversion.md) now saves checked,
+binder-free comparison values for local definitions. It supersedes the earlier
+blanket local-alias restriction. Emitted Lean lets, authored names and inferred
+annotations are preserved; ordinary variables and assumed equalities remain opaque.
+The relative-homology specimen checks two exact native propositions and two proofs.
+Binder-bearing local definitions and general dependent functions remain open.
+:::

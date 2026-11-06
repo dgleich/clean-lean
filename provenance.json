@@ -2960,6 +2960,72 @@
       "model": "gpt-6",
       "date": "2026-11-06",
       "mode": "sidecar"
+    },
+    "tests/test_local_conversion.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/topology/verify_local_names.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/topology/LocalNames.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/LocalNames.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/LocalNamesVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/LocalNames.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/topology/latex_local_names.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "docs/local-definition-conversion.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/topology/LocalNames.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "sidecar"
     }
   }
 }

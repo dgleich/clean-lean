@@ -676,6 +676,19 @@ Checked proofs establish certificate independence and well-group containment in
 every shifted image. No implicit certificate choice or two-image equality is supplied.</p>
 <p>See <a href="../studies/topology/shifted-perturbations.md">sign convention, proofs and limits</a>.</p>
 </section>
+<section class="mapping" id="local-definition-conversion" data-status="implemented">
+<h2>Local names in dependent types</h2>
+<p><span class="status implemented">Implemented, bounded</span> Local definitions now carry a checked comparison value. This lets a named ambient module match its defining expression while preserving its name in the target.</p>
+<pre><code>Let M = relative homology(field,H,X,Q.source)
+Let N = relative homology(field,H,X,Q.target)
+Let f = relative homology map(field,H,X,Q,h)
+Let x: ModuleElement(K,field,M)
+Conclude: module map value(field,M,N,f,x) = module map value(field,M,N,f,x)</code></pre>
+<p>The Lean shape is an explicit <code>let M := …; let N := …; let f := …; ∀ x : M, …</code>. This is schematic: selected wrappers, structures and their exact inferred annotations remain in the generated proposition.</p>
+<p>Comparison expands eligible binder-free local values in declaration order. Emission and automatic labels keep the authored names. Ordinary variables, equality assumptions and lambda-defined locals do not become rewrite rules.</p>
+<p>See the <a href="local-definition-conversion.md">normative contract</a>, <a href="../studies/topology/LocalNames.clean">working statements</a>, and <a href="../studies/topology/LocalNamesVerified.lean">two exact native targets and proofs</a>. General dependent functions remain separate work.</p>
+</section>
+
 <section class="mapping" id="structural-assumption-names" data-status="implemented">
 <h2>Assumption names from record fields</h2>
 <pre><code>Assume compact space(P.space)

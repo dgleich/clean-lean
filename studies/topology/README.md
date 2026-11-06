@@ -344,3 +344,16 @@ rechecked. The source's relative Mayer–Vietoris argument still needs a justifi
 cover/excision theorem in this model. Automatic assumption naming now handles
 record fields such as P.space, with unchanged collision rejection.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Readable local names for dependent objects
+
+[LocalNames.clean](LocalNames.clean) names source/target homology modules and chain
+complexes once, then uses them in image membership and quotient commutation.
+[Local definition conversion](../../docs/local-definition-conversion.md) resolves
+the earlier local-alias gap without erasing the Lean lets. Two exact native
+proposition comparisons and two proofs check the specimen; [PDF](LocalNames.pdf).
+Binder-bearing local definitions and the previously listed research obligations
+remain open.
+:::

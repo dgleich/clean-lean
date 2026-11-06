@@ -28,8 +28,9 @@ Each value index retains its source spelling/tree, original Lean term and LaTeX
 rendering. It additionally carries a comparison key. To compute the key under a
 fixed explicit environment, recursively process its already checked expression:
 
-1. Named locals, literals and opaque binder nodes retain their terms. A local
-   definition is not unfolded, and a theorem assumption is not used as a rewrite.
+1. Named locals, literals and opaque binder nodes retain their terms. An ordinary local remains opaque; the later
+   [local-definition extension](local-definition-conversion.md) specifies comparison
+   values for eligible local definitions, and a theorem assumption is not used as a rewrite.
 2. Process operator, unary, application and projection operands in source order.
    Rebuild the typed expression with processed operands. Projections use the
    specified computed-record rules; processing a base may expose a constructor.
@@ -89,7 +90,7 @@ fully expanded native expressions.
 
 ## Limits and acceptance
 
-Local aliases, native adapters, binder-bearing definitions, bodies explicitly
+Binder-bearing local aliases, native adapters, binder-bearing definitions, bodies explicitly
 using inferred parameters, and untyped-literal coercion cases remain opaque.
 Commutativity/associativity, extensionality and equality assumptions do not enable
 conversion. General Lean definitional equality and universe-polymorphic coercion

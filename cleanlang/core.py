@@ -140,6 +140,8 @@ class Expr:
     type: Type
     precedence: int = 99
     tree: object = None
+    # Checked comparison value for a local definition; never used for emission.
+    local_normal: object = None
 @dataclass
 class Clause:
     kind: str
@@ -565,7 +567,8 @@ def _parse_flat(text,reg):
                 value=Expressions(reg,env).elaborate(payload)
                 if value.type==NUM:value.type=NAT
                 if value.type==PROP:raise CleanError('Local condition abbreviations are not implemented; use a top-level Condition declaration')
-                env[name]=Expr(name,texid(name),value.type)
+                from .conversion import local_definition
+                env[name]=local_definition(name,value,reg,env)
                 r.clauses.append(Clause('define',[name],value,num))
         except CleanError as e: raise CleanError(f'line {num}: {e}') from e
     finish()

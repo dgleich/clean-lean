@@ -10,7 +10,10 @@ def comparison_normal_form(expression,environment,locals):
     tree=expression.tree
     if not tree:return expression
     kind=tree[0]
-    if kind in ('Local','Decimal','Lambda','Forall','Exists'):return expression
+    if kind=='Local':
+        local=locals.get(tree[1])
+        return local.local_normal if local is not None and local.local_normal is not None else expression
+    if kind in ('Decimal','Lambda','Forall','Exists'):return expression
     if kind=='Operator':return binary(tree[1],normal(tree[2]),normal(tree[3]))
     if kind=='Unary':
         a=normal(tree[2]);op='-' if tree[1]=='-' else '¬'
@@ -30,8 +33,9 @@ def comparison_normal_form(expression,environment,locals):
     if kind!='Call':return expression
     name=tree[1];args=[normal(a) for a in tree[2]]
     if name in locals and env.is_function_type(locals[name].type):
-        return Expr('('+locals[name].lean+' '+args[0].lean+')',expression.tex,expression.type,
-                    tree=['Call',name,[a.tree for a in args]])
+        head=normal(['Local',name])
+        return Expr('('+head.lean+' '+args[0].lean+')',expression.tex,expression.type,
+                    tree=['Apply',head.tree,[a.tree for a in args]])
     definition=env.definitions.get(name)
     if definition and definition['implementation']=='equals':
         parameters=env.data['functions'][name]['signature_tree'][2]
@@ -62,3 +66,17 @@ def comparison_normal_form(expression,environment,locals):
     return env.call(name,args,locals)
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+
+def local_definition(name,value,environment,locals):
+    """Freeze a binder-free definition's comparison value in its earlier scope."""
+    from .core import texid
+    def has_binder(node):
+        if not isinstance(node,list):return False
+        if node and isinstance(node[0],str) and node[0] in ('Lambda','Forall','Exists'):return True
+        return any(has_binder(child) for child in node)
+    result=Expr(name,texid(name),value.type)
+    if not has_binder(value.tree):
+        normal=comparison_normal_form(value,environment,locals)
+        if normal.type==value.type:result.local_normal=normal
+    return result
