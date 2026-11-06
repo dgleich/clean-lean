@@ -80,11 +80,11 @@ def similarity_transforms_eigenvector : Prop :=
   ∀ (A S : Matrix (Fin n) (Fin n) ℂ),
   ∀ (x : Fin n → ℂ),
   ∀ (μ : ℂ),
-  ∀ (invertibility : ((cleanNotation_det_7326e962c725ce45b521 (S)) ≠ 0)),
-  ∀ (nonzero : (x ≠ 0)),
-  ∀ (eigenpair : ((A *ᵥ x) = (μ • x))),
-  let y : Fin n → ℂ := ((cleanNotation_inverse_60f5a255d86c84175527 (S)) *ᵥ x);
-  ((y ≠ 0) ∧ (((((cleanNotation_inverse_60f5a255d86c84175527 (S)) * A) * S) *ᵥ y) = (μ • y)))
+  ∀ («invertibility» : ((@cleanNotation_det_7326e962c725ce45b521 (n) (S)) ≠ 0)),
+  ∀ («nonzero» : (x ≠ 0)),
+  ∀ («eigenpair» : ((A *ᵥ x) = (μ • x))),
+  let y : Fin n → ℂ := ((@cleanNotation_inverse_60f5a255d86c84175527 (n) (S)) *ᵥ x);
+  ((y ≠ 0) ∧ (((((@cleanNotation_inverse_60f5a255d86c84175527 (n) (S)) * A) * S) *ᵥ y) = (μ • y)))
 
 end CleanStatements
 

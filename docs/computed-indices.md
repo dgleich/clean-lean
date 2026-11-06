@@ -67,11 +67,11 @@ not introduced.
 
 The declared constructor parameter fixes the slot's role. A computed value-index
 expression must have exactly that parameter's already-substituted type. A computed
-natural dimension must have Natural type. There is no expected-type numeral
-coercion: `Vector(3,Real)` retains its existing dimension-literal rule, while
-`Vector((3),Real)` fails because the expression numeral has the existing literal
-placeholder type. `Vector((next size(n)),Real)` works when that declared function
-returns Natural. Computed expressions in a type-valued slot are rejected.
+natural dimension follows the later [dimension contract](dimension-indices.md):
+decimal literals receive Natural with or without parentheses; other expressions
+must already have Natural type. Thus both `Vector(3,Real)` and `Vector((3),Real)`
+work, while general literal-only arithmetic remains outside this contextual rule.
+`Vector((next size(n)),Real)` works when that declared function returns Natural. Computed expressions in a type-valued slot are rejected.
 
 Only previously declared names are visible. A computation cannot introduce a
 self-reference or a forward reference. An explicitly parenthesized local or stable

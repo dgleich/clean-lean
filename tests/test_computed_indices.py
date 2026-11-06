@@ -88,8 +88,7 @@ class ComputedIndices(unittest.TestCase):
         t=self.e.type('Vector((next size(n)),Real)',self.local)
         self.assertIsInstance(t.args[0],ComputedIndex)
         self.assertIn('cleanNotation_next_size',self.e.render_type(t,'lean'))
-        with self.assertRaisesRegex(CleanError,'must be Natural'):
-            self.e.type('Vector((1),Real)',self.local)
+        self.assertEqual(self.e.type('Vector((1),Real)',self.local),self.e.type('Vector(1,Real)',self.local))
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
 

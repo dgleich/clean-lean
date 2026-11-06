@@ -139,7 +139,7 @@ relationship: specialized
 -/
 def exponential_logarithm : Prop :=
   ∀ (x : ℝ),
-  ∀ (positive : (0 < x)),
+  ∀ («positive» : (0 < x)),
   ((cleanNotation_exp_7915ccfe7848eb4fc048 ((cleanNotation_log_3a02e02cafc4602764f4 (x)))) = x)
 
 /--
@@ -149,8 +149,8 @@ relationship: specialized
 -/
 def logarithm_product : Prop :=
   ∀ (x y : ℝ),
-  ∀ (nonzero_x : (x ≠ 0)),
-  ∀ (nonzero_y : (y ≠ 0)),
+  ∀ («nonzero_x» : (x ≠ 0)),
+  ∀ («nonzero_y» : (y ≠ 0)),
   ((cleanNotation_log_3a02e02cafc4602764f4 ((x * y))) = ((cleanNotation_log_3a02e02cafc4602764f4 (x)) + (cleanNotation_log_3a02e02cafc4602764f4 (y))))
 
 /--
@@ -160,8 +160,8 @@ relationship: specialized
 -/
 def logarithm_quotient : Prop :=
   ∀ (x y : ℝ),
-  ∀ (nonzero_x : (x ≠ 0)),
-  ∀ (nonzero_y : (y ≠ 0)),
+  ∀ («nonzero_x» : (x ≠ 0)),
+  ∀ («nonzero_y» : (y ≠ 0)),
   ((cleanNotation_log_3a02e02cafc4602764f4 ((x / y))) = ((cleanNotation_log_3a02e02cafc4602764f4 (x)) - (cleanNotation_log_3a02e02cafc4602764f4 (y))))
 
 /--
@@ -180,7 +180,7 @@ relationship: specialized
 -/
 def square_of_square_root : Prop :=
   ∀ (x : ℝ),
-  ∀ (nonnegative : (0 ≤ x)),
+  ∀ («nonnegative» : (0 ≤ x)),
   (((cleanNotation_sqrt_bab2de5a3de5967c5bae (x)) ^ 2) = x)
 
 /--
@@ -199,7 +199,7 @@ relationship: specialized
 -/
 def square_root_product : Prop :=
   ∀ (x y : ℝ),
-  ∀ (nonnegative : (0 ≤ x)),
+  ∀ («nonnegative» : (0 ≤ x)),
   ((cleanNotation_sqrt_bab2de5a3de5967c5bae ((x * y))) = ((cleanNotation_sqrt_bab2de5a3de5967c5bae (x)) * (cleanNotation_sqrt_bab2de5a3de5967c5bae (y))))
 
 /--
@@ -254,8 +254,8 @@ relationship: specialized
 -/
 def continuous_composition : Prop :=
   ∀ (f g : (ℝ) → (ℝ)),
-  ∀ (hf : (cleanNotation_continuous_723e95f1cf7739171880 (f))),
-  ∀ (hg : (cleanNotation_continuous_723e95f1cf7739171880 (g))),
+  ∀ («hf» : (cleanNotation_continuous_723e95f1cf7739171880 (f))),
+  ∀ («hg» : (cleanNotation_continuous_723e95f1cf7739171880 (g))),
   (cleanNotation_continuous_723e95f1cf7739171880 ((cleanNotation_compose_7439357a91f0e39bc193 (f) (g))))
 
 /--
@@ -265,8 +265,8 @@ relationship: specialized
 -/
 def continuous_sum : Prop :=
   ∀ (f g : (ℝ) → (ℝ)),
-  ∀ (hf : (cleanNotation_continuous_723e95f1cf7739171880 (f))),
-  ∀ (hg : (cleanNotation_continuous_723e95f1cf7739171880 (g))),
+  ∀ («hf» : (cleanNotation_continuous_723e95f1cf7739171880 (f))),
+  ∀ («hg» : (cleanNotation_continuous_723e95f1cf7739171880 (g))),
   (cleanNotation_continuous_723e95f1cf7739171880 ((f + g)))
 
 /--
@@ -276,8 +276,8 @@ relationship: specialized
 -/
 def continuous_product : Prop :=
   ∀ (f g : (ℝ) → (ℝ)),
-  ∀ (hf : (cleanNotation_continuous_723e95f1cf7739171880 (f))),
-  ∀ (hg : (cleanNotation_continuous_723e95f1cf7739171880 (g))),
+  ∀ («hf» : (cleanNotation_continuous_723e95f1cf7739171880 (f))),
+  ∀ («hg» : (cleanNotation_continuous_723e95f1cf7739171880 (g))),
   (cleanNotation_continuous_723e95f1cf7739171880 ((f * g)))
 
 /--

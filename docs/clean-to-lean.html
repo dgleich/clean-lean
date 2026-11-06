@@ -676,6 +676,18 @@ Checked proofs establish certificate independence and well-group containment in
 every shifted image. No implicit certificate choice or two-image equality is supplied.</p>
 <p>See <a href="../studies/topology/shifted-perturbations.md">sign convention, proofs and limits</a>.</p>
 </section>
+<section class="mapping" id="dimension-indices" data-status="implemented">
+<h2>Dimensions and their local names</h2>
+<p><span class="status implemented">Implemented</span> Natural dimension slots now use checked value indices. <code>Let m = n</code> allows a matrix over dimension m to match an expected dimension n while preserving both authored names.</p>
+<pre><code>Let n: Natural
+Let m = n
+Let A: Matrix(n,n,Complex)
+Let B: Matrix(m,m,Complex)
+Conclude: det(A*B) = det(A)*det(B)</code></pre>
+<p>Dimension-bearing calls emit <code>@wrapper</code> with every inferred parameter explicit. Matching traverses declared arguments left to right; repeated consistent occurrences select the last representative. A matrix with row n and column m therefore selects m for the determinant wrapper. The full native target retains <code>let m : ℕ := n</code>.</p>
+<p>Record-field dimensions and explicit literal dimension arguments use the same substitution. Arithmetic identities and assumed equalities do not become conversion rules. See the <a href="dimension-indices.md">contract</a>, <a href="../studies/dimensions/Statements.clean">examples</a>, and <a href="../studies/dimensions/Verified.lean">five exact targets and four proofs</a>.</p>
+</section>
+
 <section class="mapping" id="local-definition-conversion" data-status="implemented">
 <h2>Local names in dependent types</h2>
 <p><span class="status implemented">Implemented, bounded</span> Local definitions now carry a checked comparison value. This lets a named ambient module match its defining expression while preserving its name in the target.</p>

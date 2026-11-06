@@ -97,8 +97,8 @@ class DependentCalls(unittest.TestCase):
         notation('Notation tag(x):',['Let n: Natural','Let x: Vector(n,Real)',
                                     'Returns: Tagged(n,x)','Means: none','Render latex: {x}'],self.e)
         # This test checks structural natural-index inference, not adapter elaboration.
-        self.local['v']=Expr('v','v',Type('Vector',('3',Type('Real'))))
-        self.assertEqual(self.expr('tag(v)').type,Type('Tagged',('3',ValueIndex('v','v','v'))))
+        self.local['v']=Expr('v','v',self.e.type('Vector(3,Real)',self.local))
+        self.assertEqual(self.expr('tag(v)').type,self.e.type('Tagged(3,v)',self.local))
     def test_actual_local_index_does_not_capture_declared_name(self):
         self.local['a']=Expr('bound_a','a',Type('X'))
         result=self.expr('constant path(t,a)')

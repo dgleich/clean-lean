@@ -159,3 +159,11 @@ matching remains structural, with no local-alias unfolding or inversion of
 computations. This supersedes the earlier requirement to name every computed
 index first. Type-valued arguments remain named carriers.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+The [dimension migration](dimension-indices.md) supersedes the original bare-string
+natural-dimension representation and uses this structured call path for every
+dimension-bearing signature. Its ordered representative-selection and concrete
+numeric-argument rules replace the corresponding original restrictions above.
+:::

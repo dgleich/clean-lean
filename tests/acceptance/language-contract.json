@@ -909,8 +909,22 @@
       ],
       "pending": [
         "Inherited opaque Lean-adapter target contract",
-        "Binder-bearing local definition conversion",
-        "Legacy bare-natural dimension slots do not yet use value-index comparison"
+        "Binder-bearing local definition conversion"
+      ]
+    },
+    {
+      "id": "typed_natural_dimensions",
+      "status": "partial",
+      "specification": "docs/dimension-indices.md",
+      "grammar": "Existing numeral/name/field/computed type arguments; unchanged",
+      "source_fragment": "Matrix(n,m,Complex), with Let m = n",
+      "comparison_rule": "Typed Natural indices use checked comparison keys; declared left-to-right inference retains the last consistent representative",
+      "checks": [
+        "tests/test_dimension_indices.py",
+        "studies/dimensions/verify.py"
+      ],
+      "pending": [
+        "General literal inference and native-adapter target contract"
       ]
     }
   ]

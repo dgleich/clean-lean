@@ -153,12 +153,12 @@ scope: forward transform
 -/
 def magnetic_powers_encode_walk_profiles : Prop :=
   ∀ (n : ℕ),
-  ∀ (positive : (n > 0)),
+  ∀ («positive» : (n > 0)),
   ∀ (A : Matrix (Fin n) (Fin n) ℝ),
   ∀ (m : ℕ),
   ∀ (q : ℝ),
-  let M : Matrix (Fin n) (Fin n) ℂ := (cleanNotation_magnetic_matrix_7e71ff9ce8e5fb9a3ecc (A) (q));
-  ((cleanNotation_matrix_power_fe049b47ad3bd900dad8 (M) (m)) = (cleanNotation_walk_Fourier_sum_95c17a1962f2591077ef (A) (m) (q)))
+  let M : Matrix (Fin n) (Fin n) ℂ := (@cleanNotation_magnetic_matrix_7e71ff9ce8e5fb9a3ecc (n) (A) (q));
+  ((@cleanNotation_matrix_power_fe049b47ad3bd900dad8 (n) (M) (m)) = (@cleanNotation_walk_Fourier_sum_95c17a1962f2591077ef (n) (A) (m) (q)))
 
 /--
 source: cheeger2026
@@ -170,13 +170,13 @@ def size_specific_Cheeger_inequality : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (μ : ℝ),
-  ∀ (connectivity : (cleanNotation_connected_62464f562221e73033dc (G))),
-  ∀ (nontrivial : (n ≥ 2)),
-  ∀ (range : ((0 < μ) ∧ (μ ≤ (1 / 2)))),
-  ∀ (admissibility : (cleanNotation_admissible_size_832d57ecf03758266826 (G) (μ))),
-  let φ : ℝ := (cleanNotation_conductance_b14cb25b6df298f1eaff (G) (μ));
-  let ψ : ℝ := (cleanNotation_ordinary_conductance_bb3d42e457aba48f4082 (G));
-  let spectral : ℝ := (cleanNotation_spectral_minimum_141734dfa77b823d61c7 (G) (μ));
+  ∀ («connectivity» : (@cleanNotation_connected_62464f562221e73033dc (n) (G))),
+  ∀ («nontrivial» : (n ≥ 2)),
+  ∀ («range» : ((0 < μ) ∧ (μ ≤ (1 / 2)))),
+  ∀ («admissibility» : (@cleanNotation_admissible_size_832d57ecf03758266826 (n) (G) (μ))),
+  let φ : ℝ := (@cleanNotation_conductance_b14cb25b6df298f1eaff (n) (G) (μ));
+  let ψ : ℝ := (@cleanNotation_ordinary_conductance_bb3d42e457aba48f4082 (n) (G));
+  let spectral : ℝ := (@cleanNotation_spectral_minimum_141734dfa77b823d61c7 (n) (G) (μ));
   let t : ℝ := ((μ ^ 2) / (((μ ^ 2) + (1 / 2)) - μ));
   ((((((t * φ) + ((1 - t) * ψ)) ^ 2) / 4) ≤ spectral) ∧ (spectral ≤ (2 * φ)))
 
@@ -188,18 +188,18 @@ scope: symmetric coefficient representation of the measurement map
 -/
 def trace_bound_gives_a_suboptimality_certificate : Prop :=
   ∀ (n m : ℕ),
-  ∀ (dimensions : ((n > 0) ∧ (m > 0))),
+  ∀ («dimensions» : ((n > 0) ∧ (m > 0))),
   ∀ (C X Z : Matrix (Fin n) (Fin n) ℝ),
   ∀ (B : CleanPapers.Measurements n m),
   ∀ (b y : Fin m → ℝ),
   ∀ (α : ℝ),
-  ∀ (cost : (cleanNotation_symmetric_64d8ee79f9785328e87e (C))),
-  ∀ (measurements : (cleanNotation_symmetric_measurements_d53512bf4073b121644a (B))),
-  ∀ (bound : (α ≥ 0)),
-  ∀ (candidate : (cleanNotation_feasible_13e0c02e296fcc8bb789 (B) (b) (α) (X))),
-  ∀ (optimizer : (cleanNotation_minimizer_f9615cff2c2349a72b76 (C) (B) (b) (α) (Z))),
-  let d : ℝ := (cleanNotation_dual_bound_c8ce030c21b0ee9d6ab8 (C) (B) (b) (y) (α));
-  (((cleanNotation_matrix_inner_product_6c3d3df751586b8dd7e6 (C) (X)) - (cleanNotation_matrix_inner_product_6c3d3df751586b8dd7e6 (C) (Z))) ≤ ((cleanNotation_matrix_inner_product_6c3d3df751586b8dd7e6 (C) (X)) - d))
+  ∀ («cost» : (@cleanNotation_symmetric_64d8ee79f9785328e87e (n) (C))),
+  ∀ («measurements» : (@cleanNotation_symmetric_measurements_d53512bf4073b121644a (n) (m) (B))),
+  ∀ («bound» : (α ≥ 0)),
+  ∀ («candidate» : (@cleanNotation_feasible_13e0c02e296fcc8bb789 (n) (m) (B) (b) (α) (X))),
+  ∀ («optimizer» : (@cleanNotation_minimizer_f9615cff2c2349a72b76 (n) (m) (C) (B) (b) (α) (Z))),
+  let d : ℝ := (@cleanNotation_dual_bound_c8ce030c21b0ee9d6ab8 (n) (m) (C) (B) (b) (y) (α));
+  (((@cleanNotation_matrix_inner_product_6c3d3df751586b8dd7e6 (n) (C) (X)) - (@cleanNotation_matrix_inner_product_6c3d3df751586b8dd7e6 (n) (C) (Z))) ≤ ((@cleanNotation_matrix_inner_product_6c3d3df751586b8dd7e6 (n) (C) (X)) - d))
 
 end CleanStatements
 

@@ -1,0 +1,48 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../../library/linear_algebra.clean"
+Source mathlib:
+  Kind: other
+  Label: mathlib
+  Title: mathlib4 at the repository-pinned revision
+  Url: https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7
+
+Source dimensions:
+  Kind: other
+  Label: Dimension interfaces
+  Title: Checked dimension aliases and explicit arguments
+
+Define vector identity(n: Natural,x: Vector(n,Real)): Vector(n,Real):
+  Equals: x
+  Render latex: {x}
+
+Structure SizedVector():
+  Let size: Natural
+  Let vector: Vector(size,Real)
+  Constructor: sized vector
+
+Result determinant with named dimension:
+  Attribution: mathlib; Matrix.det_mul; specialized
+  Let n: Natural
+  Let m = n
+  Let A: Matrix(n,n,Complex)
+  Let B: Matrix(m,m,Complex)
+  Conclude: det(A*B) = det(A)*det(B)
+
+Result transpose with named dimension:
+  Attribution: mathlib; Matrix.transpose_transpose; specialized
+  Let n: Natural
+  Let m = n
+  Let A: Matrix(m,n,Complex)
+  Conclude: transpose(transpose(A)) = A
+
+Result explicit dimension literal:
+  Attribution: dimensions; vector identity; original
+  Let x: Vector(3,Real)
+  Conclude: vector identity(3,x) = x
+
+Result dimension from record field:
+  Attribution: dimensions; vector identity on stored dimension; original
+  Let S: SizedVector
+  Conclude: vector identity(S.size,S.vector) = S.vector
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -77,7 +77,7 @@ relationship: specialized
 def determinant_product : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((A * B))) = ((cleanNotation_det_7326e962c725ce45b521 (A)) * (cleanNotation_det_7326e962c725ce45b521 (B))))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((A * B))) = ((@cleanNotation_det_7326e962c725ce45b521 (n) (A)) * (@cleanNotation_det_7326e962c725ce45b521 (n) (B))))
 
 /--
 source: mathlib
@@ -87,7 +87,7 @@ relationship: specialized
 def determinant_transpose : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((cleanNotation_transpose_ec7d2405c8c143132e84 (A)))) = (cleanNotation_det_7326e962c725ce45b521 (A)))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) (A)))) = (@cleanNotation_det_7326e962c725ce45b521 (n) (A)))
 
 /--
 source: mathlib
@@ -97,7 +97,7 @@ relationship: specialized
 def determinant_product_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((A * B))) = (cleanNotation_det_7326e962c725ce45b521 ((B * A))))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((A * B))) = (@cleanNotation_det_7326e962c725ce45b521 (n) ((B * A))))
 
 /--
 source: mathlib
@@ -107,7 +107,7 @@ relationship: specialized
 def determinant_left_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B C : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((A * (B * C)))) = (cleanNotation_det_7326e962c725ce45b521 ((B * (A * C)))))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((A * (B * C)))) = (@cleanNotation_det_7326e962c725ce45b521 (n) ((B * (A * C)))))
 
 /--
 source: mathlib
@@ -117,7 +117,7 @@ relationship: specialized
 def determinant_right_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B C : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 (((A * B) * C))) = (cleanNotation_det_7326e962c725ce45b521 (((A * C) * B))))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) (((A * B) * C))) = (@cleanNotation_det_7326e962c725ce45b521 (n) (((A * C) * B))))
 
 end CleanStatements
 

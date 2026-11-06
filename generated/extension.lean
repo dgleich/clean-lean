@@ -77,7 +77,7 @@ relationship: specialized
 def square_matrix_transpose : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((cleanNotation_transpose_ec7d2405c8c143132e84 (A)))) = (cleanNotation_det_7326e962c725ce45b521 (A)))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) (A)))) = (@cleanNotation_det_7326e962c725ce45b521 (n) (A)))
 
 end CleanStatements
 

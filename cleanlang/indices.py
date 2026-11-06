@@ -64,6 +64,31 @@ def substitute_index(index,bindings,env,locals):
         if node[0]=='Operator':return ['Operator',node[1],replace(node[2]),replace(node[3])]
         if node[0]=='Unary':return ['Unary',node[1],replace(node[2])]
         return node
-    return index_value(Expressions(env,locals).elaborate(replace(tree)),env,locals)
+    result=Expressions(env,locals).elaborate(replace(tree))
+    return dimension_index(result,env,locals) if isinstance(index,DimensionIndex) else index_value(result,env,locals)
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+
+@dataclass(frozen=True, eq=False)
+class DimensionIndex(ComputedIndex):
+    """Natural-number slot, retaining its checked source expression."""
+
+
+def dimension_index(expression,environment,locals):
+    from .core import NAT,NUM
+    if expression.type==NUM and expression.tree[0]=='Decimal':
+        from .core import Expr
+        expression=Expr(expression.lean,expression.tex,NAT,expression.precedence,expression.tree)
+    if expression.type!=NAT:raise CleanError('Dimension reference must be Natural')
+    from .conversion import comparison_normal_form
+    def negative(node):
+        if node[0]=='Unary' and node[1]=='-':return True
+        if node[0]=='Operator':return negative(node[2]) or negative(node[3])
+        return False
+    if negative(comparison_normal_form(expression,environment,locals).tree):
+        raise CleanError('Natural dimensions do not support unary negation')
+    value=index_value(expression,environment,locals)
+    syntax=value.syntax if isinstance(value,ComputedIndex) else json.dumps(expression.tree,ensure_ascii=False,separators=(',',':'))
+    name=expression.tree[1] if expression.tree[0]=='Decimal' else value.name
+    return DimensionIndex(name,value.lean,value.tex,syntax,comparison=value.comparison)

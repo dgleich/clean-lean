@@ -280,3 +280,15 @@ annotations are preserved; ordinary variables and assumed equalities remain opaq
 The relative-homology specimen checks two exact native propositions and two proofs.
 Binder-bearing local definitions and general dependent functions remain open.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Typed dimensions
+
+[Dimension indices](dimension-indices.md) migrates declared Natural slots to the
+same checked value-index comparison and substitution mechanism. Local dimension
+aliases now work; calls explicitly supply their inferred dimensions. Repeated
+consistent inference uses the last occurrence in declared traversal order.
+Five canonical targets and four proofs cover readable examples. Generic dependent
+functions, broader literal inference and the topology research obligations remain open.
+:::

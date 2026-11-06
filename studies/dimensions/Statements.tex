@@ -1,0 +1,27 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{determinant with named dimension}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7}{[mathlib, Matrix.det\_mul]}}
+Let $n$ be a natural number.
+Let $m = n$.
+Let $A$ be a matrix of size $n\times n$ over $\mathbb{C}$.
+Let $B$ be a matrix of size $m\times m$ over $\mathbb{C}$.
+Then \[\det(A \, B) = \det(A) \, \det(B).\]
+\end{cleanresult}
+
+\begin{cleanresult}{transpose with named dimension}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/f897ebcf72cd16f89ab4577d0c826cd14afaafc7}{[mathlib, Matrix.transpose\_transpose]}}
+Let $n$ be a natural number.
+Let $m = n$.
+Let $A$ be a matrix of size $m\times n$ over $\mathbb{C}$.
+Then \[{{A}^{\mathsf T}}^{\mathsf T} = A.\]
+\end{cleanresult}
+
+\begin{cleanresult}{explicit dimension literal}\cleanattribution{[Dimension interfaces, vector identity]}
+Let $x$ be a vector of length $3$ over $\mathbb{R}$.
+Then \[x = x.\]
+\end{cleanresult}
+
+\begin{cleanresult}{dimension from record field}\cleanattribution{[Dimension interfaces, vector identity on stored dimension]}
+Let $S$ be an element of $\operatorname{SizedVector}$.
+Then \[S.\mathrm{vector} = S.\mathrm{vector}.\]
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

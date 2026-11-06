@@ -65,7 +65,8 @@ constructor-style type and a fresh name. Its type may refer to earlier parameter
 never itself or later parameters. There are three parameter classes:
 
 - Type-valued parameters, such as X, receive a type expression.
-- Natural dimensions retain the existing named-natural or numeral rule.
+- Natural dimensions now follow the [typed dimension contract](dimension-indices.md),
+  superseding the original bare-name/numeral representation.
 - Other value parameters receive exactly one earlier local identifier whose type
   matches the instantiated parameter type.
 

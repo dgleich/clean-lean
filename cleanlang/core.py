@@ -232,15 +232,13 @@ class Environment:
                     raise CleanError(f'Value index {a} requires {expected}, got {actual.type}')
                 from .indices import index_value
                 out.append(index_value(actual,self,env or {}));continue
-            if '.' in a or a.startswith('('):
-                if env is None:raise CleanError('Unknown dimension reference: '+a)
-                actual=Expressions(self,env).parse(a)
-                if actual.type!=NAT:raise CleanError('Dimension reference must be Natural: '+a)
-                from .indices import index_value
-                out.append(actual.tree[1] if actual.tree[0]=='Local' else index_value(actual,self,env or {}));continue
-            if not re.fullmatch(r'\d+|'+ID,a): raise CleanError('Dimension must be a numeral or natural parameter')
-            if env is not None and not a.isdigit() and (a not in env or env[a].type!=NAT): raise CleanError('Declare dimension '+a+' as Natural first')
-            out.append(a)
+            if not (a.startswith('(') or re.fullmatch(r'\d+|'+ID+r'(?:\.'+ID+r')*',a)):
+                raise CleanError('Dimension must be a numeral, natural parameter, field or parenthesized computation')
+            if re.fullmatch(ID,a) and (env is None or a not in env or env[a].type!=NAT):
+                raise CleanError('Declare dimension '+a+' as Natural first')
+            from .indices import dimension_index
+            actual=Expressions(self,env or {}).parse(a)
+            out.append(dimension_index(actual,self,env or {}))
         if 'canonical' in self.data['types'][name]:
             if name in trail: raise CleanError('Cyclic type alias: '+name)
             expanded=self.data['types'][name]['canonical'].format(*map(str,out))
@@ -310,22 +308,26 @@ class Environment:
             return substitute_index(ValueIndex(n,'',''),{**substitutions,**actuals},self,locals)
 
         def replace(t):
-            from .indices import ComputedIndex, substitute_index
+            from .indices import ComputedIndex, DimensionIndex, substitute_index
             if isinstance(t,ProofType):return ProofType(replace(t.args[0]))
+            if isinstance(t,DimensionIndex) and t.name in substitutions:return substitutions[t.name]
             if isinstance(t,ComputedIndex):
                 return substitute_index(t,{**substitutions,**actuals},self,locals)
             if isinstance(t,ValueIndex):return index(t.name)
             if isinstance(t,Type):
                 if not t.args and t.name in substitutions:return substitutions[t.name]
                 return Type(t.name,tuple(replace(a) for a in t.args))
-            if t in actuals and dict(parameters)[t]==NAT:
-                ref=index(t)
-                from .indices import ComputedIndex
-                return ref if isinstance(ref,ComputedIndex) or actuals[t].tree[0]=='Projection' else ref.name
             return substitutions.get(t,t)
 
         def match(pattern,actual):
-            if isinstance(pattern,ValueIndex):
+            # Preserve concrete numeric argument compatibility on migrated dimension signatures.
+            if actual==NUM and pattern in (NAT,Type('Real'),Type('Complex')):return
+            from .indices import DimensionIndex
+            if isinstance(pattern,DimensionIndex) and pattern.name in implicit:
+                if implicit[pattern.name]!=NAT or not isinstance(actual,DimensionIndex):
+                    raise CleanError('Expected a natural dimension: '+pattern.name)
+                bind(pattern.name,actual)
+            elif isinstance(pattern,ValueIndex):
                 if replace(pattern)!=actual:
                     raise CleanError('Dependent index mismatch: '+pattern.name)
             elif isinstance(pattern,Type):
@@ -340,10 +342,6 @@ class Environment:
                     if not isinstance(actual,Type) or expected.name!=actual.name or len(pattern.args)!=len(actual.args):
                         raise CleanError(f'Expected {replace(pattern)}, got {actual}')
                     for p,a in zip(pattern.args,actual.args):match(p,a)
-            elif pattern in implicit:
-                if implicit[pattern]!=NAT or not isinstance(actual,(str,ValueIndex)):
-                    raise CleanError('Expected a natural dimension: '+pattern)
-                bind(pattern,actual)
             elif replace(pattern)!=actual:raise CleanError('Dimension mismatch')
 
         for n,t in parameters:

@@ -137,7 +137,7 @@ relationship: specialized
 -/
 def sorted_input_unchanged : Prop :=
   ∀ (xs : List (ℕ)),
-  ∀ (ordered : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
+  ∀ («ordered» : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
   ((cleanNotation_insertionSort_6aaed7bf698e562b4aa5 (xs)) = xs)
 
 /--
@@ -178,7 +178,7 @@ relationship: specialized
 def ordered_insert_preserves_sortedness : Prop :=
   ∀ (xs : List (ℕ)),
   ∀ (a : ℕ),
-  ∀ (ordered : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
+  ∀ («ordered» : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
   (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed ((cleanNotation_insert_fc17db7c59c6361dc276 (a) (xs))))
 
 /--
@@ -197,7 +197,7 @@ relationship: specialized
 -/
 def merge_sort_sorted_input : Prop :=
   ∀ (xs : List (ℕ)),
-  ∀ (ordered : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
+  ∀ («ordered» : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
   ((cleanNotation_mergeSort_51561cc64977417a701c (xs)) = xs)
 
 /--
@@ -216,8 +216,8 @@ relationship: specialized
 -/
 def merge_preserves_sortedness : Prop :=
   ∀ (xs ys : List (ℕ)),
-  ∀ (hx : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
-  ∀ (hy : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (ys))),
+  ∀ («hx» : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (xs))),
+  ∀ («hy» : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (ys))),
   (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed ((cleanNotation_merge_afbf80a28ac74f1f01c4 (xs) (ys))))
 
 /--
@@ -227,8 +227,8 @@ relationship: specialized
 -/
 def insertion_sort_subsequence : Prop :=
   ∀ (xs ys : List (ℕ)),
-  ∀ (ordered : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (ys))),
-  ∀ (subsequence : (cleanNotation_sublist_ef3e1617947e64ecf0be (ys) (xs))),
+  ∀ («ordered» : (cleanNotation_sorted_bb5cb4068b5c2ce6d1ed (ys))),
+  ∀ («subsequence» : (cleanNotation_sublist_ef3e1617947e64ecf0be (ys) (xs))),
   (cleanNotation_sublist_ef3e1617947e64ecf0be (ys) ((cleanNotation_insertionSort_6aaed7bf698e562b4aa5 (xs))))
 
 /--
@@ -257,7 +257,7 @@ relationship: specialized
 -/
 def euclidean_coprime_subtraction : Prop :=
   ∀ (a b : ℕ),
-  ∀ (ordered : (a ≤ b)),
+  ∀ («ordered» : (a ≤ b)),
   ((cleanDefine_coprime_90926a1fc5d9967320f9 ((b - a)) (a)) ↔ (cleanDefine_coprime_90926a1fc5d9967320f9 (b) (a)))
 
 /--
@@ -267,7 +267,7 @@ relationship: specialized
 -/
 def coprime_lcm_product : Prop :=
   ∀ (a b : ℕ),
-  ∀ (cop : (cleanDefine_coprime_90926a1fc5d9967320f9 (a) (b))),
+  ∀ («cop» : (cleanDefine_coprime_90926a1fc5d9967320f9 (a) (b))),
   ((cleanNotation_lcm_6a337f2a1fee7d9b19ad (a) (b)) = (a * b))
 
 /--
@@ -277,9 +277,9 @@ relationship: specialized
 -/
 def common_divisor_of_coprimes : Prop :=
   ∀ (a b k : ℕ),
-  ∀ (cop : (cleanDefine_coprime_90926a1fc5d9967320f9 (a) (b))),
-  ∀ (divides_a : (k ∣ a)),
-  ∀ (divides_b : (k ∣ b)),
+  ∀ («cop» : (cleanDefine_coprime_90926a1fc5d9967320f9 (a) (b))),
+  ∀ («divides_a» : (k ∣ a)),
+  ∀ («divides_b» : (k ∣ b)),
   (k = 1)
 
 /--
@@ -289,7 +289,7 @@ relationship: specialized
 -/
 def coprime_product_divisibility : Prop :=
   ∀ (a b k : ℕ),
-  ∀ (cop : (cleanDefine_coprime_90926a1fc5d9967320f9 (k) (b))),
+  ∀ («cop» : (cleanDefine_coprime_90926a1fc5d9967320f9 (k) (b))),
   ((k ∣ (a * b)) ↔ (k ∣ a))
 
 /--
@@ -317,7 +317,7 @@ relationship: adapted
 -/
 def certified_sort_unchanged : Prop :=
   ∀ (xs ys : List (ℕ)),
-  ∀ (certificate : (cleanDefine_sorting_certificate_1c271b4f1c624120844f (xs) (ys))),
+  ∀ («certificate» : (cleanDefine_sorting_certificate_1c271b4f1c624120844f (xs) (ys))),
   ((cleanNotation_insertionSort_6aaed7bf698e562b4aa5 (ys)) = ys)
 
 end CleanStatements

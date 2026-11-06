@@ -148,11 +148,11 @@ noncomputable def cleanNotation_reachable_947639a9d52df05827e1 {n : ℕ} (x0 : S
 noncomputable def cleanNotation_connected_39ef10558c6b507db5c6 {n : ℕ} (x0 : SimpleGraph (Fin n)) : Prop :=
   (x0).Connected
 
-noncomputable def cleanDefine_commonNeighbors_679582fb71c83da5a33f {n : ℕ} (x0 : SimpleGraph (Fin n)) (x1 : Fin n) (x2 : Fin n) : Set (Fin n) :=
-  ((cleanNotation_neighbors_587d371eac8330440de6 (x0) (x1)) ∩ (cleanNotation_neighbors_587d371eac8330440de6 (x0) (x2)))
+noncomputable def cleanDefine_commonNeighbors_ac652bb6d2aacae52e7b {n : ℕ} (x0 : SimpleGraph (Fin n)) (x1 : Fin n) (x2 : Fin n) : Set (Fin n) :=
+  ((@cleanNotation_neighbors_587d371eac8330440de6 (n) (x0) (x1)) ∩ (@cleanNotation_neighbors_587d371eac8330440de6 (n) (x0) (x2)))
 
-noncomputable def cleanDefine_nonadjacent_950fcfd8028c2fac7d74 {n : ℕ} (G : SimpleGraph (Fin n)) (u : Fin n) (v : Fin n) : Prop :=
-  (¬(cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v)))
+noncomputable def cleanDefine_nonadjacent_49d9f61c1cb73786225c {n : ℕ} (G : SimpleGraph (Fin n)) (u : Fin n) (v : Fin n) : Prop :=
+  (¬(@cleanNotation_adjacent_7c95186c3948254b956e (n) (G) (u) (v)))
 
 noncomputable def cleanNotation_det_7326e962c725ce45b521 {n : ℕ} (x0 : Matrix (Fin n) (Fin n) ℂ) : ℂ :=
   Matrix.det x0
@@ -636,8 +636,8 @@ def adjacency_symmetry : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ∀ («edge» : (cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v))),
-  (cleanNotation_adjacent_7c95186c3948254b956e (G) (v) (u))
+  ∀ («edge» : (@cleanNotation_adjacent_7c95186c3948254b956e (n) (G) (u) (v))),
+  (@cleanNotation_adjacent_7c95186c3948254b956e (n) (G) (v) (u))
 
 /--
 source: mathlib
@@ -648,7 +648,7 @@ def adjacency_commutes : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v)) ↔ (cleanNotation_adjacent_7c95186c3948254b956e (G) (v) (u)))
+  ((@cleanNotation_adjacent_7c95186c3948254b956e (n) (G) (u) (v)) ↔ (@cleanNotation_adjacent_7c95186c3948254b956e (n) (G) (v) (u)))
 
 /--
 source: mathlib
@@ -659,7 +659,7 @@ def no_self_edges : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u : Fin n),
-  (¬(cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (u)))
+  (¬(@cleanNotation_adjacent_7c95186c3948254b956e (n) (G) (u) (u)))
 
 /--
 source: mathlib
@@ -670,7 +670,7 @@ def adjacent_vertices_distinct : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ∀ («edge» : (cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v))),
+  ∀ («edge» : (@cleanNotation_adjacent_7c95186c3948254b956e (n) (G) (u) (v))),
   (u ≠ v)
 
 /--
@@ -682,7 +682,7 @@ def union_adjacency : Prop :=
   ∀ (n : ℕ),
   ∀ (G H : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((cleanNotation_adjacent_7c95186c3948254b956e ((cleanNotation_union_0624f3ebbf6554a04047 (G) (H))) (u) (v)) ↔ ((cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v)) ∨ (cleanNotation_adjacent_7c95186c3948254b956e (H) (u) (v))))
+  ((@cleanNotation_adjacent_7c95186c3948254b956e (n) ((@cleanNotation_union_0624f3ebbf6554a04047 (n) (G) (H))) (u) (v)) ↔ ((@cleanNotation_adjacent_7c95186c3948254b956e (n) (G) (u) (v)) ∨ (@cleanNotation_adjacent_7c95186c3948254b956e (n) (H) (u) (v))))
 
 /--
 source: mathlib
@@ -693,7 +693,7 @@ def intersection_adjacency : Prop :=
   ∀ (n : ℕ),
   ∀ (G H : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((cleanNotation_adjacent_7c95186c3948254b956e ((cleanNotation_intersection_5a5227c120f070958445 (G) (H))) (u) (v)) ↔ ((cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v)) ∧ (cleanNotation_adjacent_7c95186c3948254b956e (H) (u) (v))))
+  ((@cleanNotation_adjacent_7c95186c3948254b956e (n) ((@cleanNotation_intersection_5a5227c120f070958445 (n) (G) (H))) (u) (v)) ↔ ((@cleanNotation_adjacent_7c95186c3948254b956e (n) (G) (u) (v)) ∧ (@cleanNotation_adjacent_7c95186c3948254b956e (n) (H) (u) (v))))
 
 /--
 source: mathlib
@@ -704,7 +704,7 @@ def complement_adjacency : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((cleanNotation_adjacent_7c95186c3948254b956e ((cleanNotation_complement_954dec16190ec6a37dd0 (G))) (u) (v)) ↔ ((u ≠ v) ∧ (¬(cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v)))))
+  ((@cleanNotation_adjacent_7c95186c3948254b956e (n) ((@cleanNotation_complement_954dec16190ec6a37dd0 (n) (G))) (u) (v)) ↔ ((u ≠ v) ∧ (¬(@cleanNotation_adjacent_7c95186c3948254b956e (n) (G) (u) (v)))))
 
 /--
 source: mathlib
@@ -714,8 +714,8 @@ relationship: specialized
 def support_monotonicity : Prop :=
   ∀ (n : ℕ),
   ∀ (G H : SimpleGraph (Fin n)),
-  ∀ («inclusion» : (cleanNotation_subgraph_32b2b617f7e2adc8d649 (G) (H))),
-  ((cleanNotation_support_c53e656ac6b9efb817db (G)) ⊆ (cleanNotation_support_c53e656ac6b9efb817db (H)))
+  ∀ («inclusion» : (@cleanNotation_subgraph_32b2b617f7e2adc8d649 (n) (G) (H))),
+  ((@cleanNotation_support_c53e656ac6b9efb817db (n) (G)) ⊆ (@cleanNotation_support_c53e656ac6b9efb817db (n) (H)))
 
 /--
 source: mathlib
@@ -726,7 +726,7 @@ def neighbors_in_support : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u : Fin n),
-  ((cleanNotation_neighbors_587d371eac8330440de6 (G) (u)) ⊆ (cleanNotation_support_c53e656ac6b9efb817db (G)))
+  ((@cleanNotation_neighbors_587d371eac8330440de6 (n) (G) (u)) ⊆ (@cleanNotation_support_c53e656ac6b9efb817db (n) (G)))
 
 /--
 source: mathlib
@@ -737,7 +737,7 @@ def neighbor_membership : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((v ∈ (cleanNotation_neighbors_587d371eac8330440de6 (G) (u))) ↔ (cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v)))
+  ((v ∈ (@cleanNotation_neighbors_587d371eac8330440de6 (n) (G) (u))) ↔ (@cleanNotation_adjacent_7c95186c3948254b956e (n) (G) (u) (v)))
 
 /--
 source: mathlib
@@ -748,7 +748,7 @@ def not_own_neighbor : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u : Fin n),
-  (¬(u ∈ (cleanNotation_neighbors_587d371eac8330440de6 (G) (u))))
+  (¬(u ∈ (@cleanNotation_neighbors_587d371eac8330440de6 (n) (G) (u))))
 
 /--
 source: mathlib
@@ -759,7 +759,7 @@ def common_neighbors_intersection : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((cleanDefine_commonNeighbors_679582fb71c83da5a33f (G) (u) (v)) = ((cleanNotation_neighbors_587d371eac8330440de6 (G) (u)) ∩ (cleanNotation_neighbors_587d371eac8330440de6 (G) (v))))
+  ((@cleanDefine_commonNeighbors_ac652bb6d2aacae52e7b (n) (G) (u) (v)) = ((@cleanNotation_neighbors_587d371eac8330440de6 (n) (G) (u)) ∩ (@cleanNotation_neighbors_587d371eac8330440de6 (n) (G) (v))))
 
 /--
 source: mathlib
@@ -770,7 +770,7 @@ def common_neighbors_membership : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v w : Fin n),
-  ((w ∈ (cleanDefine_commonNeighbors_679582fb71c83da5a33f (G) (u) (v))) ↔ ((cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (w)) ∧ (cleanNotation_adjacent_7c95186c3948254b956e (G) (v) (w))))
+  ((w ∈ (@cleanDefine_commonNeighbors_ac652bb6d2aacae52e7b (n) (G) (u) (v))) ↔ ((@cleanNotation_adjacent_7c95186c3948254b956e (n) (G) (u) (w)) ∧ (@cleanNotation_adjacent_7c95186c3948254b956e (n) (G) (v) (w))))
 
 /--
 source: mathlib
@@ -781,7 +781,7 @@ def common_neighbors_symmetry : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((cleanDefine_commonNeighbors_679582fb71c83da5a33f (G) (u) (v)) = (cleanDefine_commonNeighbors_679582fb71c83da5a33f (G) (v) (u)))
+  ((@cleanDefine_commonNeighbors_ac652bb6d2aacae52e7b (n) (G) (u) (v)) = (@cleanDefine_commonNeighbors_ac652bb6d2aacae52e7b (n) (G) (v) (u)))
 
 /--
 source: mathlib
@@ -792,7 +792,7 @@ def common_neighbors_left : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((cleanDefine_commonNeighbors_679582fb71c83da5a33f (G) (u) (v)) ⊆ (cleanNotation_neighbors_587d371eac8330440de6 (G) (u)))
+  ((@cleanDefine_commonNeighbors_ac652bb6d2aacae52e7b (n) (G) (u) (v)) ⊆ (@cleanNotation_neighbors_587d371eac8330440de6 (n) (G) (u)))
 
 /--
 source: mathlib
@@ -803,7 +803,7 @@ def common_neighbors_right : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((cleanDefine_commonNeighbors_679582fb71c83da5a33f (G) (u) (v)) ⊆ (cleanNotation_neighbors_587d371eac8330440de6 (G) (v)))
+  ((@cleanDefine_commonNeighbors_ac652bb6d2aacae52e7b (n) (G) (u) (v)) ⊆ (@cleanNotation_neighbors_587d371eac8330440de6 (n) (G) (v)))
 
 /--
 source: mathlib
@@ -814,7 +814,7 @@ def reachability_reflexive : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u : Fin n),
-  (cleanNotation_reachable_947639a9d52df05827e1 (G) (u) (u))
+  (@cleanNotation_reachable_947639a9d52df05827e1 (n) (G) (u) (u))
 
 /--
 source: mathlib
@@ -825,8 +825,8 @@ def reachability_symmetric : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ∀ («path» : (cleanNotation_reachable_947639a9d52df05827e1 (G) (u) (v))),
-  (cleanNotation_reachable_947639a9d52df05827e1 (G) (v) (u))
+  ∀ («path» : (@cleanNotation_reachable_947639a9d52df05827e1 (n) (G) (u) (v))),
+  (@cleanNotation_reachable_947639a9d52df05827e1 (n) (G) (v) (u))
 
 /--
 source: mathlib
@@ -837,9 +837,9 @@ def reachability_transitive : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v w : Fin n),
-  ∀ («first» : (cleanNotation_reachable_947639a9d52df05827e1 (G) (u) (v))),
-  ∀ («second» : (cleanNotation_reachable_947639a9d52df05827e1 (G) (v) (w))),
-  (cleanNotation_reachable_947639a9d52df05827e1 (G) (u) (w))
+  ∀ («first» : (@cleanNotation_reachable_947639a9d52df05827e1 (n) (G) (u) (v))),
+  ∀ («second» : (@cleanNotation_reachable_947639a9d52df05827e1 (n) (G) (v) (w))),
+  (@cleanNotation_reachable_947639a9d52df05827e1 (n) (G) (u) (w))
 
 /--
 source: mathlib
@@ -850,8 +850,8 @@ def edge_implies_reachability : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ∀ («edge» : (cleanNotation_adjacent_7c95186c3948254b956e (G) (u) (v))),
-  (cleanNotation_reachable_947639a9d52df05827e1 (G) (u) (v))
+  ∀ («edge» : (@cleanNotation_adjacent_7c95186c3948254b956e (n) (G) (u) (v))),
+  (@cleanNotation_reachable_947639a9d52df05827e1 (n) (G) (u) (v))
 
 /--
 source: mathlib
@@ -862,7 +862,7 @@ def nonadjacency_symmetry : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((cleanDefine_nonadjacent_950fcfd8028c2fac7d74 (G) (u) (v)) ↔ (cleanDefine_nonadjacent_950fcfd8028c2fac7d74 (G) (v) (u)))
+  ((@cleanDefine_nonadjacent_49d9f61c1cb73786225c (n) (G) (u) (v)) ↔ (@cleanDefine_nonadjacent_49d9f61c1cb73786225c (n) (G) (v) (u)))
 
 /--
 source: mathlib
@@ -873,7 +873,7 @@ def nonadjacency_reflexive : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u : Fin n),
-  (cleanDefine_nonadjacent_950fcfd8028c2fac7d74 (G) (u) (u))
+  (@cleanDefine_nonadjacent_49d9f61c1cb73786225c (n) (G) (u) (u))
 
 /--
 source: mathlib
@@ -884,7 +884,7 @@ def complement_from_nonadjacency : Prop :=
   ∀ (n : ℕ),
   ∀ (G : SimpleGraph (Fin n)),
   ∀ (u v : Fin n),
-  ((cleanNotation_adjacent_7c95186c3948254b956e ((cleanNotation_complement_954dec16190ec6a37dd0 (G))) (u) (v)) ↔ ((u ≠ v) ∧ (cleanDefine_nonadjacent_950fcfd8028c2fac7d74 (G) (u) (v))))
+  ((@cleanNotation_adjacent_7c95186c3948254b956e (n) ((@cleanNotation_complement_954dec16190ec6a37dd0 (n) (G))) (u) (v)) ↔ ((u ≠ v) ∧ (@cleanDefine_nonadjacent_49d9f61c1cb73786225c (n) (G) (u) (v))))
 
 /--
 source: mathlib
@@ -894,7 +894,7 @@ relationship: specialized
 def determinant_product : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((A * B))) = ((cleanNotation_det_7326e962c725ce45b521 (A)) * (cleanNotation_det_7326e962c725ce45b521 (B))))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((A * B))) = ((@cleanNotation_det_7326e962c725ce45b521 (n) (A)) * (@cleanNotation_det_7326e962c725ce45b521 (n) (B))))
 
 /--
 source: mathlib
@@ -904,7 +904,7 @@ relationship: specialized
 def determinant_transpose : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((cleanNotation_transpose_ec7d2405c8c143132e84 (A)))) = (cleanNotation_det_7326e962c725ce45b521 (A)))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) (A)))) = (@cleanNotation_det_7326e962c725ce45b521 (n) (A)))
 
 /--
 source: mathlib
@@ -914,7 +914,7 @@ relationship: specialized
 def determinant_product_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((A * B))) = (cleanNotation_det_7326e962c725ce45b521 ((B * A))))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((A * B))) = (@cleanNotation_det_7326e962c725ce45b521 (n) ((B * A))))
 
 /--
 source: mathlib
@@ -924,7 +924,7 @@ relationship: specialized
 def determinant_left_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B C : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((A * (B * C)))) = (cleanNotation_det_7326e962c725ce45b521 ((B * (A * C)))))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((A * (B * C)))) = (@cleanNotation_det_7326e962c725ce45b521 (n) ((B * (A * C)))))
 
 /--
 source: mathlib
@@ -934,7 +934,7 @@ relationship: specialized
 def determinant_right_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B C : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 (((A * B) * C))) = (cleanNotation_det_7326e962c725ce45b521 (((A * C) * B))))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) (((A * B) * C))) = (@cleanNotation_det_7326e962c725ce45b521 (n) (((A * C) * B))))
 
 /--
 source: mathlib
@@ -945,7 +945,7 @@ def determinant_power : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
   ∀ (k : ℕ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((A ^ k))) = ((cleanNotation_det_7326e962c725ce45b521 (A)) ^ k))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((A ^ k))) = ((@cleanNotation_det_7326e962c725ce45b521 (n) (A)) ^ k))
 
 /--
 source: mathlib
@@ -955,7 +955,7 @@ relationship: specialized
 def trace_sum : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a ((A + B))) = ((cleanNotation_trace_77213551dad9a763052a (A)) + (cleanNotation_trace_77213551dad9a763052a (B))))
+  ((@cleanNotation_trace_77213551dad9a763052a (n) ((A + B))) = ((@cleanNotation_trace_77213551dad9a763052a (n) (A)) + (@cleanNotation_trace_77213551dad9a763052a (n) (B))))
 
 /--
 source: mathlib
@@ -965,7 +965,7 @@ relationship: specialized
 def trace_difference : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a ((A - B))) = ((cleanNotation_trace_77213551dad9a763052a (A)) - (cleanNotation_trace_77213551dad9a763052a (B))))
+  ((@cleanNotation_trace_77213551dad9a763052a (n) ((A - B))) = ((@cleanNotation_trace_77213551dad9a763052a (n) (A)) - (@cleanNotation_trace_77213551dad9a763052a (n) (B))))
 
 /--
 source: mathlib
@@ -975,7 +975,7 @@ relationship: specialized
 def trace_negative : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a ((-A))) = (-(cleanNotation_trace_77213551dad9a763052a (A))))
+  ((@cleanNotation_trace_77213551dad9a763052a (n) ((-A))) = (-(@cleanNotation_trace_77213551dad9a763052a (n) (A))))
 
 /--
 source: mathlib
@@ -985,7 +985,7 @@ relationship: specialized
 def trace_transpose : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a ((cleanNotation_transpose_ec7d2405c8c143132e84 (A)))) = (cleanNotation_trace_77213551dad9a763052a (A)))
+  ((@cleanNotation_trace_77213551dad9a763052a (n) ((@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) (A)))) = (@cleanNotation_trace_77213551dad9a763052a (n) (A)))
 
 /--
 source: mathlib
@@ -995,7 +995,7 @@ relationship: specialized
 def trace_product_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a ((A * B))) = (cleanNotation_trace_77213551dad9a763052a ((B * A))))
+  ((@cleanNotation_trace_77213551dad9a763052a (n) ((A * B))) = (@cleanNotation_trace_77213551dad9a763052a (n) ((B * A))))
 
 /--
 source: mathlib
@@ -1005,7 +1005,7 @@ relationship: specialized
 def trace_cycle : Prop :=
   ∀ (n : ℕ),
   ∀ (A B C : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a (((A * B) * C))) = (cleanNotation_trace_77213551dad9a763052a (((C * A) * B))))
+  ((@cleanNotation_trace_77213551dad9a763052a (n) (((A * B) * C))) = (@cleanNotation_trace_77213551dad9a763052a (n) (((C * A) * B))))
 
 /--
 source: mathlib
@@ -1082,7 +1082,7 @@ relationship: specialized
 def transpose_involution : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_transpose_ec7d2405c8c143132e84 ((cleanNotation_transpose_ec7d2405c8c143132e84 (A)))) = A)
+  ((@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) ((@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) (A)))) = A)
 
 /--
 source: mathlib
@@ -1092,7 +1092,7 @@ relationship: specialized
 def transpose_product : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_transpose_ec7d2405c8c143132e84 ((A * B))) = ((cleanNotation_transpose_ec7d2405c8c143132e84 (B)) * (cleanNotation_transpose_ec7d2405c8c143132e84 (A))))
+  ((@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) ((A * B))) = ((@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) (B)) * (@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) (A))))
 
 /--
 source: mathlib
@@ -1102,7 +1102,7 @@ relationship: adapted
 def trace_commutator : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a ((cleanDefine_commutator_dec87a8766301eb4176d (A) (B)))) = 0)
+  ((@cleanNotation_trace_77213551dad9a763052a (n) ((@cleanDefine_commutator_dec87a8766301eb4176d (n) (A) (B)))) = 0)
 
 /--
 source: mathlib
@@ -1112,7 +1112,7 @@ relationship: adapted
 def trace_matrix_square : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a ((cleanDefine_matrix_square_59c5fc3d3e7ab2ab3d9b (A)))) = (cleanNotation_trace_77213551dad9a763052a ((A * A))))
+  ((@cleanNotation_trace_77213551dad9a763052a (n) ((@cleanDefine_matrix_square_59c5fc3d3e7ab2ab3d9b (n) (A)))) = (@cleanNotation_trace_77213551dad9a763052a (n) ((A * A))))
 
 /--
 source: mathlib
@@ -1122,7 +1122,7 @@ relationship: adapted
 def determinant_matrix_square : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((cleanDefine_matrix_square_59c5fc3d3e7ab2ab3d9b (A)))) = ((cleanNotation_det_7326e962c725ce45b521 (A)) * (cleanNotation_det_7326e962c725ce45b521 (A))))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((@cleanDefine_matrix_square_59c5fc3d3e7ab2ab3d9b (n) (A)))) = ((@cleanNotation_det_7326e962c725ce45b521 (n) (A)) * (@cleanNotation_det_7326e962c725ce45b521 (n) (A))))
 
 end CleanStatements
 

@@ -77,7 +77,7 @@ relationship: specialized
 def determinant_product : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((A * B))) = ((cleanNotation_det_7326e962c725ce45b521 (A)) * (cleanNotation_det_7326e962c725ce45b521 (B))))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((A * B))) = ((@cleanNotation_det_7326e962c725ce45b521 (n) (A)) * (@cleanNotation_det_7326e962c725ce45b521 (n) (B))))
 
 /--
 source: mathlib
@@ -87,7 +87,7 @@ relationship: specialized
 def determinant_transpose : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((cleanNotation_transpose_ec7d2405c8c143132e84 (A)))) = (cleanNotation_det_7326e962c725ce45b521 (A)))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) (A)))) = (@cleanNotation_det_7326e962c725ce45b521 (n) (A)))
 
 /--
 source: mathlib
@@ -97,7 +97,7 @@ relationship: specialized
 def determinant_product_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((A * B))) = (cleanNotation_det_7326e962c725ce45b521 ((B * A))))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((A * B))) = (@cleanNotation_det_7326e962c725ce45b521 (n) ((B * A))))
 
 /--
 source: mathlib
@@ -107,7 +107,7 @@ relationship: specialized
 def determinant_left_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B C : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((A * (B * C)))) = (cleanNotation_det_7326e962c725ce45b521 ((B * (A * C)))))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((A * (B * C)))) = (@cleanNotation_det_7326e962c725ce45b521 (n) ((B * (A * C)))))
 
 /--
 source: mathlib
@@ -117,7 +117,7 @@ relationship: specialized
 def determinant_right_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B C : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 (((A * B) * C))) = (cleanNotation_det_7326e962c725ce45b521 (((A * C) * B))))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) (((A * B) * C))) = (@cleanNotation_det_7326e962c725ce45b521 (n) (((A * C) * B))))
 
 /--
 source: mathlib
@@ -128,7 +128,7 @@ def determinant_power : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
   ∀ (k : ℕ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((A ^ k))) = ((cleanNotation_det_7326e962c725ce45b521 (A)) ^ k))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((A ^ k))) = ((@cleanNotation_det_7326e962c725ce45b521 (n) (A)) ^ k))
 
 /--
 source: mathlib
@@ -138,7 +138,7 @@ relationship: specialized
 def trace_sum : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a ((A + B))) = ((cleanNotation_trace_77213551dad9a763052a (A)) + (cleanNotation_trace_77213551dad9a763052a (B))))
+  ((@cleanNotation_trace_77213551dad9a763052a (n) ((A + B))) = ((@cleanNotation_trace_77213551dad9a763052a (n) (A)) + (@cleanNotation_trace_77213551dad9a763052a (n) (B))))
 
 /--
 source: mathlib
@@ -148,7 +148,7 @@ relationship: specialized
 def trace_difference : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a ((A - B))) = ((cleanNotation_trace_77213551dad9a763052a (A)) - (cleanNotation_trace_77213551dad9a763052a (B))))
+  ((@cleanNotation_trace_77213551dad9a763052a (n) ((A - B))) = ((@cleanNotation_trace_77213551dad9a763052a (n) (A)) - (@cleanNotation_trace_77213551dad9a763052a (n) (B))))
 
 /--
 source: mathlib
@@ -158,7 +158,7 @@ relationship: specialized
 def trace_negative : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a ((-A))) = (-(cleanNotation_trace_77213551dad9a763052a (A))))
+  ((@cleanNotation_trace_77213551dad9a763052a (n) ((-A))) = (-(@cleanNotation_trace_77213551dad9a763052a (n) (A))))
 
 /--
 source: mathlib
@@ -168,7 +168,7 @@ relationship: specialized
 def trace_transpose : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a ((cleanNotation_transpose_ec7d2405c8c143132e84 (A)))) = (cleanNotation_trace_77213551dad9a763052a (A)))
+  ((@cleanNotation_trace_77213551dad9a763052a (n) ((@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) (A)))) = (@cleanNotation_trace_77213551dad9a763052a (n) (A)))
 
 /--
 source: mathlib
@@ -178,7 +178,7 @@ relationship: specialized
 def trace_product_swap : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a ((A * B))) = (cleanNotation_trace_77213551dad9a763052a ((B * A))))
+  ((@cleanNotation_trace_77213551dad9a763052a (n) ((A * B))) = (@cleanNotation_trace_77213551dad9a763052a (n) ((B * A))))
 
 /--
 source: mathlib
@@ -188,7 +188,7 @@ relationship: specialized
 def trace_cycle : Prop :=
   ∀ (n : ℕ),
   ∀ (A B C : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a (((A * B) * C))) = (cleanNotation_trace_77213551dad9a763052a (((C * A) * B))))
+  ((@cleanNotation_trace_77213551dad9a763052a (n) (((A * B) * C))) = (@cleanNotation_trace_77213551dad9a763052a (n) (((C * A) * B))))
 
 /--
 source: mathlib
@@ -265,7 +265,7 @@ relationship: specialized
 def transpose_involution : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_transpose_ec7d2405c8c143132e84 ((cleanNotation_transpose_ec7d2405c8c143132e84 (A)))) = A)
+  ((@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) ((@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) (A)))) = A)
 
 /--
 source: mathlib
@@ -275,7 +275,7 @@ relationship: specialized
 def transpose_product : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_transpose_ec7d2405c8c143132e84 ((A * B))) = ((cleanNotation_transpose_ec7d2405c8c143132e84 (B)) * (cleanNotation_transpose_ec7d2405c8c143132e84 (A))))
+  ((@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) ((A * B))) = ((@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) (B)) * (@cleanNotation_transpose_ec7d2405c8c143132e84 (n) (n) (A))))
 
 /--
 source: mathlib
@@ -285,7 +285,7 @@ relationship: adapted
 def trace_commutator : Prop :=
   ∀ (n : ℕ),
   ∀ (A B : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a ((cleanDefine_commutator_dec87a8766301eb4176d (A) (B)))) = 0)
+  ((@cleanNotation_trace_77213551dad9a763052a (n) ((@cleanDefine_commutator_dec87a8766301eb4176d (n) (A) (B)))) = 0)
 
 /--
 source: mathlib
@@ -295,7 +295,7 @@ relationship: adapted
 def trace_matrix_square : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_trace_77213551dad9a763052a ((cleanDefine_matrix_square_59c5fc3d3e7ab2ab3d9b (A)))) = (cleanNotation_trace_77213551dad9a763052a ((A * A))))
+  ((@cleanNotation_trace_77213551dad9a763052a (n) ((@cleanDefine_matrix_square_59c5fc3d3e7ab2ab3d9b (n) (A)))) = (@cleanNotation_trace_77213551dad9a763052a (n) ((A * A))))
 
 /--
 source: mathlib
@@ -305,7 +305,7 @@ relationship: adapted
 def determinant_matrix_square : Prop :=
   ∀ (n : ℕ),
   ∀ (A : Matrix (Fin n) (Fin n) ℂ),
-  ((cleanNotation_det_7326e962c725ce45b521 ((cleanDefine_matrix_square_59c5fc3d3e7ab2ab3d9b (A)))) = ((cleanNotation_det_7326e962c725ce45b521 (A)) * (cleanNotation_det_7326e962c725ce45b521 (A))))
+  ((@cleanNotation_det_7326e962c725ce45b521 (n) ((@cleanDefine_matrix_square_59c5fc3d3e7ab2ab3d9b (n) (A)))) = ((@cleanNotation_det_7326e962c725ce45b521 (n) (A)) * (@cleanNotation_det_7326e962c725ce45b521 (n) (A))))
 
 end CleanStatements
 

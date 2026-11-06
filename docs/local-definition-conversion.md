@@ -63,11 +63,9 @@ compares their canonical elaborated expressions without delta/zeta reduction.
 It also proves their image-membership and quotient-map-commutation conclusions.
 These proofs concern existing constructions, not any unproved research theorem.
 
-This rule applies to typed value-index comparison. The older bare-natural dimension
-slots (for example `Vector(n,Real)`) still compare their stored dimension names;
-they do not yet use this comparison-value mechanism. Migrating those legacy slots
-is a separate tracked gap, not evidence that two differently named dimensions differ
-mathematically.
+[Dimension indices](dimension-indices.md) now applies the same comparison-value
+mechanism to Natural dimension slots, superseding the earlier bare-dimension
+exception.
 
 Binder-bearing local bodies, native definitional equality, arbitrary dependent
 function types and universe-polymorphic inference remain outside this extension.

@@ -79,7 +79,7 @@ Result local names:
         self.assertNotEqual(self.typ('Evidence((R = P))'),self.typ('Evidence((R = Q))'))
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
-    def test_legacy_bare_dimensions_remain_outside_this_rule(self):
+    def test_bare_dimensions_use_local_comparison(self):
         self.locals['n']=Expr('n','n',self.typ('Natural'))
         self.bind('m','n')
-        self.assertNotEqual(self.typ('Vector(n,Real)'),self.typ('Vector(m,Real)'))
+        self.assertEqual(self.typ('Vector(n,Real)'),self.typ('Vector(m,Real)'))
