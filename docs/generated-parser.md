@@ -161,3 +161,15 @@ header contains no `=`, while a local `Define name = expression` line requires i
 Fragment productions still validate exact names, signatures, and expressions.
 This eliminates a strict lexer collision without priority or first-match rules.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Structures and projections
+
+The generated grammar now recognizes Structure headers, Constructor metadata,
+postfix dot fields, function-field application, and field references in type
+arguments. A trailing dot continues an expression under the existing layout rule.
+Dot syntax is lexical; no type information selects its parse. Existing named calls
+are unchanged. Strict LALR/lexer generation remains required. See the
+[structure contract](structures.md) for normalized trees and semantic restrictions.
+:::

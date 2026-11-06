@@ -136,3 +136,39 @@ The dependent-call milestone passes 252 Python tests, the canonical wrapper and
 statement comparisons, four path proofs, existing indexed/compactness specimens,
 and the 92-proof corpus. The LaTeX specimen has been compiled and inspected.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Authored bundles and scoped fields
+
+[Bundles.clean](Bundles.clean) contains six implemented results: constructor
+projections, order preservation under endpoint shifts, a path with its declared
+endpoints, reversal twice, function-field application, and a dimension-dependent
+vector field. [bundles.clean](../../library/topology/bundles.clean) authors endpoint
+and path bundles, shifting, and reversal in Clean.
+
+[Bundles.lean](Bundles.lean) is generated from Clean.
+[BundlesVerified.lean](BundlesVerified.lean) adds 31 independent canonical comparisons
+of records, constructors, projections, definitions and statements, plus six proofs.
+No proposed research theorem is assumed. [Bundles.pdf](Bundles.pdf) is the typeset
+specimen. Regenerate with:
+
+```sh
+LAKE=lake python3 studies/topology/verify_bundles.py
+pdflatex -output-directory=/tmp studies/topology/latex_bundles.tex
+pdflatex -output-directory=/tmp studies/topology/latex_bundles.tex
+```
+
+Copy `/tmp/latex_bundles.pdf` to `studies/topology/Bundles.pdf` after regeneration.
+The [structure contract](../../docs/structures.md) records the fixed-carrier scope;
+proof fields, carrier-containing structures and general universes remain pending.
+:::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+The authored-bundle milestone passes 283 Python tests, 31 canonical comparisons,
+six new proofs, and the existing 92-proof corpus. Strict generated-parser checks,
+VS Code/TextMate, Vim, the offline browser, and the maintained reference checks pass.
+The PDF compiles without overfull lines and was inspected. Emacs runtime validation
+remains pending because Emacs is not installed.
+:::

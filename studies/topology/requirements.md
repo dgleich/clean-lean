@@ -133,11 +133,15 @@ imported, with the selected carrier and operations fixed in their templates.
 This is not permission to import a paper's whole mathematical construction.
 
 For statements, first implement the indexed-type slice above against a small real
-bundle. A general user-authored record/inductive declaration is a separate feature:
+bundle. Fixed-carrier, nonrecursive authored records are now implemented in the
+[structure contract](../../docs/structures.md), with dependent fields, explicit
+constructors and scoped projections. A general universe-polymorphic record/inductive
+declaration remains a separate feature:
 it needs ordered dependent fields, constructor and accessor generation, universes,
-and positivity rules. No `Structure:` keyword is silently added in this study.
-Until that feature is specified, authoring a new pyramid record entirely in Clean
-remains a recorded blocker. Encoding it as an unconstrained name is not a solution.
+and positivity rules. `Structure Name(parameters):` is specified explicitly; it does not include recursive
+inductives, proof fields or fields that store carrier types.
+A full pyramid still requires actual diagram and homology definitions, including
+any higher-universe and proof-field requirements. Encoding it as an unconstrained name is not a solution.
 
 ## Target obligations
 

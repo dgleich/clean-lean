@@ -2,6 +2,14 @@
 (require 'ert)
 (load (expand-file-name "../editors/emacs/clean-math-mode.el"
                         (file-name-directory load-file-name)) nil t)
+(ert-deftest clean-math-structures ()
+  (with-temp-buffer
+    (insert "Structure Endpoints():\n  Constructor: endpoints\n")
+    (clean-math-mode) (font-lock-ensure)
+    (goto-char (point-min))
+    (should (eq (get-text-property (point) 'face) 'font-lock-keyword-face))
+    (search-forward "Constructor")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-keyword-face))))
 (ert-deftest clean-math-quantifiers ()
   (with-temp-buffer
     (insert "for every (x: Real, there exists (y: Real,x=y))")

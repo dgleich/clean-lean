@@ -31,6 +31,34 @@ main{max-width:1200px;margin:auto;padding:40px 28px 70px}h1{font-size:clamp(2rem
 <div class="controls" hidden id="controls"><label>Find a mapping<input id="search" type="search" placeholder="Try lambda, context, coercion, or sum"></label><label>Status<select id="status"><option value="all">All statuses</option><option value="implemented">Implemented</option><option value="accepted">Accepted design</option><option value="proposed">Proposed</option></select></label></div>
 <p id="count" role="status" aria-live="polite"></p>
 <div id="mappings">
+<article id="structures" data-status="implemented" class="mapping">
+<header><h2><a href="#structures">Authored structures and scoped fields</a></h2><span class="badge implemented">Implemented subset</span></header>
+<llm model="gpt-6" date="2026-11-06" role="assisted">
+<div class="pair"><section><h3>Clean</h3><pre><code>Structure Endpoints():
+  Let lower,upper: Real
+  Constructor: endpoints
+
+Let I = endpoints(a,b)
+Conclude: I.lower = a and I.upper = b</code></pre></section>
+<section><h3>Lean declaration shape</h3><pre><code>structure EndpointsRecord : Type where
+  lower : ℝ
+  upper : ℝ
+
+let I := EndpointsRecord.mk a b
+I.lower = a ∧ I.upper = b</code></pre></section></div>
+<p>The Lean identifier above is schematic; the actual constructor is a generated
+wrapper with explicit parameters. Fields may depend on earlier fields. A bundled
+path field can have type <code>Path(X,P.topology,P.start,P.finish)</code> when projected
+from P. Natural fields can index dimensions. Function-valued fields support
+<code>P.map(x)</code>. Projection and type-index references must start from a named local.</p>
+<p>This slice uses finite nonrecursive records in Type 0. Header carrier parameters
+are explicit; fields containing their own carrier types, proof fields, inheritance,
+record updates and recursive inductives remain pending. Mathematical hypotheses stay
+explicit theorem assumptions. The <a href="structures.md">normative contract</a> gives
+scope, grammar and target rules. See <a href="../studies/topology/Bundles.clean">actual
+source</a> and <a href="../studies/topology/BundlesVerified.lean">checked targets and proofs</a>.</p>
+</llm></article>
+
 <article id="value-indexed-types" data-status="implemented" class="mapping">
 <header><h2><a href="#value-indexed-types">Types indexed by named values</a></h2><span class="badge implemented">Implemented subset</span></header>
 <llm model="gpt-6" date="2026-11-06" role="assisted">
@@ -65,7 +93,7 @@ let q : @Path X t y x := @reversePathWrapper X t x y p
 <p>The wrapper identifier above is schematic. The translator infers X by structural
 matching and supplies it explicitly. Indices use actual local bindings, including
 fresh quantified locals. Distinct topologies/endpoints do not unify through assumptions.
-An argument used as an index must be named with Let before use; other arguments can
+An argument used as an index must be a named local or stable field reference; other arguments can
 be nested calls. The same rules apply to authored definitions and conditions.</p>
 <p><a href="dependent-calls.md">Contract and boundaries</a> ·
 <a href="../library/topology/paths.clean">Actual wrappers</a> ·

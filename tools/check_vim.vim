@@ -48,6 +48,10 @@ call setline(21, 'for every (x: Real, there exists (y: Real,x=y))')
 syntax sync fromstart
 call assert_equal('cleanMathLogic', synIDattr(synID(21,1,1),'name'))
 call assert_equal('cleanMathLogic', synIDattr(synID(21,27,1),'name'))
+call setline(22, 'Structure Endpoints():')
+call setline(23, '  Constructor: endpoints')
+call assert_equal('cleanMathKeyword', synIDattr(synID(22,1,1),'name'))
+call assert_equal('cleanMathMetadataKey', synIDattr(synID(23,3,1),'name'))
 if len(v:errors)
  for error in v:errors | echom error | endfor
  cquit

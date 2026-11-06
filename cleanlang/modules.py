@@ -135,7 +135,7 @@ def notation(header, fields, env, *, authored=False):
     if len(renders)>1 or (not authored and not renders):
         raise CleanError('Provide exactly one Render or Render latex field')
     result = env.type(values['returns'],local)
-    dependent=any(has_value_indices(t) for t in [result,*types.values()])
+    dependent=any(has_value_indices(t) for t in [result,*types.values()]) or Type('Type') in types.values()
     implementation = next(iter(implementations))
     expression = None
     if implementation == 'equals':
@@ -266,11 +266,16 @@ def load_module(path, env, *, document=False):
                         if kind in ('notation','define'):notation(line,fields,env,authored=kind=='define')
                         elif kind=='condition':condition_declaration(line,fields,env)
                         elif kind=='type':type_declaration(line,fields,env)
+                        elif kind=='structure':
+                            from .structures import declare
+                            declare(line,fields,env)
                         else:
                             key=str(syntax_parse(line,'source_header').children[0])
                             env.sources.declare(key,fields_map(fields),file.parent)
                     if node.documentation:
                         keys=set(env.notation_definitions)-before
+                        if node.kind=='declaration' and line.split(None,1)[0].lower()=='structure':
+                            keys={env.structures[str(node.payload.children[0])]['key']}
                         if len(keys)!=1:
                             raise CleanError('Documentation requires a declaration with one generated Lean definition')
                         env.declaration_docs[keys.pop()]=node.documentation

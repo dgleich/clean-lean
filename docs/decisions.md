@@ -240,3 +240,18 @@ calls. Preserve legacy nondependent calls until their separate inference audit.
 Use subtype/path wrappers and independent canonical Lean checks before building
 record constructors on this machinery. See [the contract](dependent-calls.md).
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## First authored record interface
+
+Use Structure headers, typed Let fields and an explicitly named constructor. Fields
+are scoped through dot notation, avoiding global accessor-name collisions. Preserve
+header/field order; permit dependence only on preceding bindings. A stable field
+reference may be a type index or dimension. Require a local name before projecting
+from computed records. Function-valued fields support `P.map(x)` with the existing
+ordinary Function semantics. Use fixed-carrier Type 0 records first; proof fields,
+carrier-type fields and universes need separate extensions. Never replace hypotheses
+with unconstrained proposition fields. These implementation choices are recorded in
+[structures.md](structures.md) and remain reviewable.
+:::

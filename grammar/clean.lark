@@ -13,7 +13,10 @@
 ?product: signed (MULTIPLY signed)* -> chain
 ?signed: MINUS signed -> unary
        | power
-?power: atom (POWER signed)? -> chain
+?power: projection (POWER signed)? -> chain
+?projection: atom ("." ID)+ [field_arguments] -> projection
+           | atom
+field_arguments: "(" [arguments] ")"
 ?atom: NUMBER -> decimal
      | name "(" [arguments] ")" -> call
      | ID -> local
@@ -25,7 +28,8 @@ name: ID+
 arguments: expression ("," expression)*
 type_ref: TYPE_ID ["(" [type_arguments] ")"]
 type_arguments: type_argument ("," type_argument)*
-?type_argument: type_ref | NUMBER
+?type_argument: type_ref | NUMBER | index_reference
+index_reference: TYPE_ID ("." TYPE_ID)+
 assumptions: assumption ("," assumption)*
 assumption: [name ":"] expression
 // Entry points used by the declaration interpreter. Opaque payloads are preserved.
@@ -37,6 +41,7 @@ scope_header: SCOPE title ":"
 title: TITLE_WORD+
 SCOPE: /(?i:Result|Theorem|Context)(?!\w)/
 type_header: "Type"i TYPE_ID "(" [parameters] ")" ":"
+structure_header: "Structure"i TYPE_ID "(" [parameters] ")" ":"
 let_clause: LET identifiers ":" type_text -> typed_let
           | LET identifiers "be"i type_text -> typed_let
           | LET ID "=" expression -> value_let
@@ -76,7 +81,7 @@ context: CONTEXT_LINE _NL _INDENT (context_clause | prose)* (result | context | 
 DECL: /(?i:Notation|Define|Condition)(?!\w)/
 LET: /(?i:Let)(?!\w)/
 DEFINE: /(?i:Define)(?!\w)/
-FIELD: /(?i:Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
+FIELD: /(?i:Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
 IFF: "↔"
 IMPLIES: "→"
 OR: /(?i:or)(?=\W)/ | "∨"
@@ -106,7 +111,7 @@ DOC_LINE: /\uE000D[0-9]+/
 IMPORT_LINE: /(?i:Import)[ ]+[^\n]+/
 ALIAS_LINE: /(?i:Alias)[ ]+[^\n]+/
 PHRASE_LINE: /(?i:Phrase)[ ]+[^\n]+/
-HEADER_LINE: /(?i:Notation|Condition|Type|Source)[ ]+[^\n]+|(?i:Define)[ ]+[^=\n]+/
+HEADER_LINE: /(?i:Structure|Notation|Condition|Type|Source)[ ]+[^\n]+|(?i:Define)[ ]+[^=\n]+/
 RESULT_LINE: /(?i:Result|Theorem)[ ]+[^\n]+/
 CONTEXT_LINE: /(?i:Context)[ ]+[^\n]+/
 LET_LINE: /(?i:Let)[ ]+[^\n]+|(?i:Define)[ ]+[^ =\n]+[ ]*=[^\n]*/
@@ -114,7 +119,7 @@ ASSUME_LINE: /(?i:Assume)[ ]+[^\n]+/
 ATTRIBUTION_LINE: /(?i:Attribution)[ ]*:[^\n]*/
 CONCLUDE_LINE: /(?i:Conclude)(?!\w)[^\n]*/
 EXPR_FIELD_LINE: /(?i:Equals|Holds when)[ ]*:[^\n]*/
-FIELD_LINE: /(?i:Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
+FIELD_LINE: /(?i:Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
 EXPR_LINE: /\S[^\n]*/
 _NL: /\n[ ]*/
 %declare _INDENT _DEDENT

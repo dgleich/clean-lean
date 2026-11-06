@@ -9,7 +9,8 @@ means. Parsing does not guess whether an argument is a type or a value.
 **Implemented scope:** type declarations with ordered, explicitly typed parameters;
 theorem/context binders and quantifier domains using earlier named values; type
 aliases; module-declared prose phrases; Lean and LaTeX output. Dependent callable signatures are now supported under the
-[named-argument rules](dependent-calls.md); arbitrary expression indices remain unsupported.
+[named-argument rules](dependent-calls.md); stable field references are also supported by [structures](structures.md).
+Arbitrary expression indices remain unsupported.
 
 ## Syntax: one constructor tree
 

@@ -1,0 +1,39 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "paths.clean"
+
+/-- A topology, two points, and a path between them, on a fixed carrier. -/
+Structure BasedPath(X: Type):
+  Let topology: Topology(X)
+  Let start,finish: X
+  Let path: Path(X,topology,start,finish)
+  Constructor: based path
+  Render latex: \operatorname{{BasedPath}}({X})
+  Describe: a path with its topology and endpoints on ${X}$
+  Describe plural: paths with their topologies and endpoints on ${X}$
+
+Define reversed bundle(X,P):
+  Let X: Type
+  Let P: BasedPath(X)
+  Returns: BasedPath(X)
+  Equals:
+    based path(X,P.topology,P.finish,P.start,
+      reverse path(P.topology,P.start,P.finish,P.path))
+
+Structure Endpoints():
+  Let lower,upper: Real
+  Constructor: endpoints
+  Describe: a pair of real endpoints
+  Describe plural: pairs of real endpoints
+
+Condition ordered endpoints(I):
+  Let I: Endpoints
+  Holds when: I.lower < I.upper
+  Assumption name: ordering of {I}
+
+Define shifted endpoints(I,s):
+  Let I: Endpoints
+  Let s: Real
+  Returns: Endpoints
+  Equals: endpoints(I.lower+s,I.upper+s)
+
+-- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

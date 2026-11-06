@@ -89,3 +89,17 @@ word enumeration, profiles, degree sums, and the Fourier sum are now Clean-autho
 using generic finite operations and [typed function expressions](function-expressions.md).
 See [the five study artifacts](../studies/magnetic/README.md).
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Authored bundle milestone
+
+Finite fixed-carrier records, constructors and dependent projections now work in
+Clean. The topology bundle study authors endpoint shifting and path reversal without
+Lean bodies. A field's natural dimension and an ordinary function-valued field are
+also checked. The remaining representation gaps are records storing their own
+carrier types (universes), proof fields/invariants, and dependent function-valued
+fields. Projected values are stable indices; equating a separately named alias to
+its projection still needs a future definitional-equality/transport policy. None of
+these gaps justifies importing a paper-specific mathematical construction wholesale.
+:::

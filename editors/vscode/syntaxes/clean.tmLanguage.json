@@ -86,7 +86,7 @@
           }
         },
         {
-          "match": "^ *(?i:(Result|Theorem|Context|Define|Notation|Condition|Type|Source))\\b(.*?)(:)\\s*$",
+          "match": "^ *(?i:(Result|Theorem|Context|Define|Notation|Condition|Structure|Type|Source))\\b(.*?)(:)\\s*$",
           "captures": {
             "1": {
               "name": "keyword.declaration.clean"
@@ -114,7 +114,7 @@
           }
         },
         {
-          "match": "^ *(?i:(Assumption name|Render(?: latex)?|Describe(?: plural)?|Attribution|Kind|Label|Title|Author|Year|Version|Revision|URL|References|source|reference|relationship|scope|changes|note))\\s*(:)(.*)$",
+          "match": "^ *(?i:(Constructor|Assumption name|Render(?: latex)?|Describe(?: plural)?|Attribution|Kind|Label|Title|Author|Year|Version|Revision|URL|References|source|reference|relationship|scope|changes|note))\\s*(:)(.*)$",
           "captures": {
             "1": {
               "name": "keyword.other.metadata.clean"
@@ -194,7 +194,7 @@
         },
         {
           "name": "punctuation.separator.clean",
-          "match": "[(),:;]"
+          "match": "[().,:;]"
         }
       ]
     },

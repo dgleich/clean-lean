@@ -1,0 +1,39 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{endpoint constructor}\cleanattribution{[Topology foundations, endpoint constructor]}
+Let $a$ and $b$ be real numbers.
+Let $I = \operatorname{endpoints}(a, b)$.
+Then \[I.\mathrm{lower} = a \text{ and } I.\mathrm{upper} = b.\]
+\end{cleanresult}
+
+\begin{cleanresult}{shifting endpoints preserves order}\cleanattribution{[Topology foundations, translating ordered endpoints]}
+Let $I$ be a pair of real endpoints.
+Let $s$ be a real number.
+Assume $\operatorname{ordered\ endpoints}(I)$ (\texttt{ordering of I}).
+Then \[\operatorname{ordered\ endpoints}(\operatorname{shifted\ endpoints}(I, s)).\]
+\end{cleanresult}
+
+\begin{cleanresult}{bundled path has its declared endpoints}\cleanattribution{[Topology foundations, dependent path projection]}
+Let $X$ be a type.
+Let $P$ be a path with its topology and endpoints on $X$.
+Then \[\left(\text{there exists }p : \operatorname{Path}_{P.\mathrm{topology}}(P.\mathrm{start},P.\mathrm{finish}),\; p = P.\mathrm{path}\right).\]
+\end{cleanresult}
+
+\begin{cleanresult}{reversing a bundled path twice}\cleanattribution{[Topology foundations, bundled path involution]}
+Let $X$ be a type.
+Let $P$ be a path with its topology and endpoints on $X$.
+Then \[\operatorname{reversed\ bundle}(X, \operatorname{reversed\ bundle}(X, P)) = P.\]
+\end{cleanresult}
+
+\begin{cleanresult}{function field application}\cleanattribution{[Topology foundations, function field application]}
+Let $f$ be a function from $\mathbb{R}$ to $\mathbb{R}$.
+Let $x$ be a real number.
+Let $P = \operatorname{scalar\ map}(f)$.
+Then \[P.\mathrm{map}(x) = f(x).\]
+\end{cleanresult}
+
+\begin{cleanresult}{vector field dimensions}\cleanattribution{[Topology foundations, natural field dependency]}
+Let $V$ be an element of $\operatorname{SizedVector}$.
+Then \[\left(\text{there exists }v : \mathbb{R}^{V.\mathrm{size}},\; v = V.\mathrm{vector}\right).\]
+\end{cleanresult}
+
+% generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

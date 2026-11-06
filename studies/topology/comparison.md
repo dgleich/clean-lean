@@ -8,7 +8,7 @@
 
 [Read this report as Markdown on GitHub](comparison.md).
 
-**Update:** this original comparison preserves proposed interfaces. See the [working study](README.md) and [current syntax decisions and blockers](requirements.md). Scoped quantifiers, named value indices in theorem binders, and an authored topology foundation are now implemented; the five target theorems remain pending.
+**Update:** this original comparison preserves proposed interfaces. See the [working study](README.md) and [current syntax decisions and blockers](requirements.md). Scoped quantifiers, dependent calls, fixed-carrier authored structures with field references, and an authored topology foundation are now implemented; the five target theorems remain pending.
 
 Design report · 5 November 2026 · Clean baseline: commit 460014e
 

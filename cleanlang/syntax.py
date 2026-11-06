@@ -31,6 +31,7 @@ def name(tree):return ' '.join(map(str,tree.children))
 
 def type_spelling(tree):
     if isinstance(tree,generated.Token):return str(tree)
+    if tree.data=='index_reference':return '.'.join(map(str,tree.children))
     if tree.data=='type_ref':
         head=str(tree.children[0])
         return head+('('+','.join(type_spelling(x) for x in tree.children[1].children)+')' if len(tree.children)>1 else '')
@@ -40,6 +41,10 @@ def type_spelling(tree):
 def type_tree(tree):
     """Neutral constructor syntax: names are not classified as types or values here."""
     if isinstance(tree,generated.Token):return ['Numeral',str(tree)]
+    if tree.data=='index_reference':
+        result=['Name',str(tree.children[0])]
+        for field in tree.children[1:]:result=['Projection',result,str(field)]
+        return result
     head=str(tree.children[0])
     if len(tree.children)==1:return ['Name',head]
     return ['Apply',head,[type_tree(x) for x in tree.children[1].children]]
@@ -53,6 +58,13 @@ def expression_tree(tree):
         for i in range(1,len(c),2):
             op=str(c[i]).lower();op={'!=':'≠','<=':'≤','>=':'≥','and':'∧','or':'∨'}.get(op,op)
             result=['Operator',op,result,expression_tree(c[i+1])]
+        return result
+    if kind=='projection':
+        result=expression_tree(c[0])
+        for field in c[1:]:
+            if isinstance(field,generated.Tree):
+                result=['Apply',result,[expression_tree(a) for a in field.children[0].children] if field.children else []]
+            else:result=['Projection',result,str(field)]
         return result
     if kind=='group':return expression_tree(c[0])
     if kind=='local':return ['Local',str(c[0])]
@@ -72,6 +84,15 @@ def header(text):
             params=[(str(p.children[0]),text[p.children[1].meta.start_pos:p.children[1].meta.end_pos].strip() if len(p.children)>1 else None) for p in child.children]
         else:result=text[child.meta.start_pos:child.meta.end_pos].strip()
     return str(kind).lower(),name(called),params,result
+
+
+def structure_header(text):
+    tree=parse(text,'structure_header')
+    parameters=[]
+    for p in (tree.children[1].children if len(tree.children)>1 else []):
+        typ=text[p.children[1].meta.start_pos:p.children[1].meta.end_pos].strip() if len(p.children)>1 else None
+        parameters.append([str(p.children[0]),typ])
+    return ['StructureHeader',str(tree.children[0]),parameters]
 
 
 class Layout:
@@ -132,7 +153,7 @@ def document(normalized):
         try:
             if node.kind=='declaration':
                 kind=text.split(None,1)[0].lower()
-                start={'type':'type_header','source':'source_header'}.get(kind,'header')
+                start={'type':'type_header','source':'source_header','structure':'structure_header'}.get(kind,'header')
                 node.payload=parse(text,start)
                 if kind not in ('define','condition') and any(c.children for c in node.children):
                     raise CleanError('Expression blocks are only implemented for Define and Condition')

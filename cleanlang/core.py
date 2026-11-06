@@ -29,7 +29,7 @@ def _expression_lines(text, *, masked=False):
     def unfinished(line):
         last = re.search(r'('+ID+r'|[^\w\s])$', line)
         return (assumption_list and line.rstrip().endswith(',')) or bool(last and (last[0].lower() in Expressions.PREC or
-                              last[0].lower() in ('not', '¬')))
+                              last[0].lower() in ('not', '¬', '.')))
     for i, raw in enumerate(lines):
         stripped = raw.strip()
         if not stripped:
@@ -43,7 +43,7 @@ def _expression_lines(text, *, masked=False):
                 conclusion_column = column
                 continue
             expression = conclusion_column is not None or re.match(
-                r'(Let|Define|Notation|Condition|Assume|Conclude|Returns|Equals|Holds when)\b', stripped, re.I)
+                r'(Let|Define|Notation|Condition|Structure|Type|Assume|Conclude|Returns|Equals|Holds when)\b', stripped, re.I)
             if not expression:
                 continue
             depth = stripped.count('(') - stripped.count(')')
@@ -53,7 +53,7 @@ def _expression_lines(text, *, masked=False):
         else:
             if depth <= 0 and column < continuation_column:
                 raise CleanError(f'line {i + 1}: continued expression must be indented at least two spaces beyond its first line')
-            if re.match(r'(Let|Define|Condition|Assume|Conclude|Result|Theorem|Context|Import|Attribution|Returns|Means|Render|Holds when|Assumption name)(?=\s|:|$)', stripped, re.I):
+            if re.match(r'(Let|Define|Condition|Structure|Constructor|Assume|Conclude|Result|Theorem|Context|Import|Attribution|Returns|Means|Render|Holds when|Assumption name)(?=\s|:|$)', stripped, re.I):
                 raise CleanError(f'line {i + 1}: expected a continued expression, not a new clause')
             output[start] += ' ' + stripped
             output[i] = ''
@@ -164,6 +164,7 @@ class Environment:
     """Names introduced by explicit module declarations; initially empty."""
     def __init__(self):
         self.data={'types': {}, 'aliases': {}, 'phrases': [], 'functions': {}}
+        self.structures={}
         self.sources=Sources()
         self.notation_definitions={}
         self.definitions={}
@@ -192,13 +193,18 @@ class Environment:
         for a,k in zip(args,kinds):
             if k=='type': out.append(self.type(a,env)); continue
             if isinstance(k,dict):
-                if not re.fullmatch(ID,a):
-                    raise CleanError('Value index must be a previously declared name: '+a)
-                if env is None or a not in env:raise CleanError('Unknown value index: '+a)
+                if not re.fullmatch(ID+r'(?:\.'+ID+r')*',a):
+                    raise CleanError('Value index must be a previously declared name or field reference: '+a)
+                if env is None:raise CleanError('Unknown value index: '+a)
+                actual=Expressions(self,env).parse(a)
                 expected=self.type(k['value'].format(*map(str,out)),env,False)
-                actual=env[a]
                 if actual.type!=expected:
                     raise CleanError(f'Value index {a} requires {expected}, got {actual.type}')
+                out.append(ValueIndex(a,actual.lean,actual.tex));continue
+            if '.' in a:
+                if env is None:raise CleanError('Unknown dimension reference: '+a)
+                actual=Expressions(self,env).parse(a)
+                if actual.type!=NAT:raise CleanError('Dimension reference must be Natural: '+a)
                 out.append(ValueIndex(a,actual.lean,actual.tex));continue
             if not re.fullmatch(r'\d+|'+ID,a): raise CleanError('Dimension must be a numeral or natural parameter')
             if env is not None and not a.isdigit() and (a not in env or env[a].type!=NAT): raise CleanError('Declare dimension '+a+' as Natural first')
@@ -264,16 +270,20 @@ class Environment:
 
         def index(n):
             a=actuals[n]
-            if not a.tree or a.tree[0]!='Local':
-                raise CleanError('Dependent index argument must be a named local; bind the expression with Let first: '+n)
-            return ValueIndex(a.tree[1],a.lean,a.tex)
+            from .structures import reference_name
+            ref=reference_name(a.tree)
+            if ref is None:
+                raise CleanError('Dependent index argument must be a named local or field reference; bind the expression with Let first: '+n)
+            return ValueIndex(ref,a.lean,a.tex)
 
         def replace(t):
             if isinstance(t,ValueIndex):return index(t.name)
             if isinstance(t,Type):
                 if not t.args and t.name in substitutions:return substitutions[t.name]
                 return Type(t.name,tuple(replace(a) for a in t.args))
-            if t in actuals and dict(parameters)[t]==NAT:return index(t).name
+            if t in actuals and dict(parameters)[t]==NAT:
+                ref=index(t)
+                return ref if actuals[t].tree[0]=='Projection' else ref.name
             return substitutions.get(t,t)
 
         def match(pattern,actual):
@@ -293,7 +303,7 @@ class Environment:
                         raise CleanError(f'Expected {replace(pattern)}, got {actual}')
                     for p,a in zip(pattern.args,actual.args):match(p,a)
             elif pattern in implicit:
-                if implicit[pattern]!=NAT or not isinstance(actual,str):
+                if implicit[pattern]!=NAT or not isinstance(actual,(str,ValueIndex)):
                     raise CleanError('Expected a natural dimension: '+pattern)
                 bind(pattern,actual)
             elif replace(pattern)!=actual:raise CleanError('Dimension mismatch')
@@ -308,7 +318,7 @@ class Environment:
         for n,t in signature['implicit']:
             v=substitutions[n]
             targets.append(self.render_type(v,'lean',locals) if isinstance(v,Type) else
-                           locals[v].lean if v in locals else v)
+                           v.lean if isinstance(v,ValueIndex) else locals[v].lean if v in locals else v)
         targets.extend(a.lean for a in args)
         target='(@'+signature['key']+''.join(' ('+v+')' for v in targets)+')'
         return Expr(target,spec['latex'].format(*(a.tex for a in args)),replace(signature['result']),
@@ -339,6 +349,14 @@ class Expressions:
             if tree[1] not in self.env:raise CleanError('Unknown name: '+tree[1])
             value=self.env[tree[1]]
             return Expr(value.lean,value.tex,value.type,value.precedence,tree)
+        if kind=='Apply':
+            function=self._elaborate(tree[1]);args=[self._elaborate(a) for a in tree[2]]
+            if not self.reg.is_function_type(function.type) or len(args)!=1 or not compatible(args[0].type,function.type.args[0]):
+                raise CleanError('Function field argument mismatch')
+            return Expr('('+function.lean+' '+args[0].lean+')',function.tex+'('+args[0].tex+')',function.type.args[1],tree=tree)
+        if kind=='Projection':
+            from .structures import project
+            return project(self.reg,self._elaborate(tree[1]),tree[2],self.env)
         if kind=='Operator':return binary(tree[1],self._elaborate(tree[2]),self._elaborate(tree[3]))
         if kind=='Unary':
             tok=tree[1];a=self._elaborate(tree[2])

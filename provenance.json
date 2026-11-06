@@ -1722,6 +1722,108 @@
         "% ",
         ""
       ]
+    },
+    "cleanlang/structures.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "docs/structures.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "markdown"
+    },
+    "library/topology/bundles.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/Bundles.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/Bundles.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/Bundles.tex": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/topology/BundlesVerified.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/verify_bundles.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/topology/latex_bundles.tex": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "tests/test_structures.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/topology/Bundles.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "sidecar"
     }
   }
 }

@@ -2,9 +2,9 @@
 ;; Local prototype. Highlighting is not parsing or semantic validation.
 (require 'prog-mode)
 (defconst clean-math--keyword
-  (regexp-opt '("Condition" "Holds when" "Let" "Define" "Assume" "Conclude" "Returns" "Equals" "Alias" "Phrase" "Import" "Result" "Theorem" "Context" "Notation" "Type" "Source") 'words))
+  (regexp-opt '("Condition" "Holds when" "Let" "Define" "Assume" "Conclude" "Returns" "Equals" "Alias" "Phrase" "Import" "Result" "Theorem" "Context" "Notation" "Structure" "Type" "Source") 'words))
 (defconst clean-math--metadata
-  (regexp-opt '("Assumption name" "Render" "Render latex" "Describe" "Describe plural" "Attribution" "Kind" "Label" "Title" "Author" "Year" "Version" "Revision" "URL" "References" "source" "reference" "relationship" "scope" "changes" "note") t))
+  (regexp-opt '("Constructor" "Assumption name" "Render" "Render latex" "Describe" "Describe plural" "Attribution" "Kind" "Label" "Title" "Author" "Year" "Version" "Revision" "URL" "References" "source" "reference" "relationship" "scope" "changes" "note") t))
 (defvar-local clean-math--matched-face 'font-lock-comment-face)
 (defun clean-math--comment (limit)
   "Find line or nested block comments, preserving embedded fields and strings."
@@ -65,7 +65,7 @@
   `(("\\b[0-9]+\\b" . font-lock-constant-face)
     ("\\b\\(and\\|or\\|not\\|function\\|for\\|every\\|there\\|exists\\)\\b" . font-lock-keyword-face)
     (,(concat "^ *" clean-math--keyword) . font-lock-keyword-face)
-    ("^ *\\(Result\\|Theorem\\|Context\\|Define\\|Notation\\|Condition\\|Type\\|Source\\) +\\(.+\\): *$"
+    ("^ *\\(Result\\|Theorem\\|Context\\|Define\\|Notation\\|Condition\\|Structure\\|Type\\|Source\\) +\\(.+\\): *$"
      (1 font-lock-keyword-face t) (2 font-lock-function-name-face t))
     ("^ *\\(Notation\\|Condition\\|Define\\) +\\([^(]+\\)\\((.*\\): *$"
      (1 font-lock-keyword-face t) (2 font-lock-function-name-face t) (3 font-lock-type-face t))

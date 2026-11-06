@@ -58,3 +58,26 @@ checks. General expression indices and dependent function-valued results remain
 open. The next work item is authored structures with constructor/accessor semantics.
 The overall goal remains active; this is not completion of the topology port.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Second implemented slice
+
+The [structure contract](structures.md) now has an implementation: fixed-carrier
+nonrecursive records, ordered dependent fields, named constructors, scoped projections,
+function-field calls, and projected value/dimension indices. Endpoint shifting and
+bundled path reversal are authored in Clean. The six-result bundle study passes
+31 canonical record/constructor/projection/definition/statement comparisons and
+six Lean proofs. All 283 Python tests and the 92-proof corpus pass, as do the
+existing path/index/quantifier/function oracles, VS Code/TextMate, Vim and browser
+checks. The LaTeX specimen compiles and was inspected. Emacs remains unavailable;
+its grammar and regression test were updated but not executed.
+
+The next concrete work is proof-bearing bundles and explicit foundational algebra
+and topology interfaces. Records containing their own carrier types need a precise
+universe/type-projection extension. Proof fields need explicit assumption binding
+and constructor evidence, not automatic proof search. Expected-type numeral elaboration in the new structural call path remains open. General
+expression indices and alias transport remain open. Homology constructions and
+research theorem proofs remain separately tracked in the topology requirements.
+The overall goal remains active.
+:::

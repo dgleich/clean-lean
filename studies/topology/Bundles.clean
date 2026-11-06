@@ -1,0 +1,53 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/bundles.clean"
+
+Structure ScalarMap():
+  Let map: Function(Real,Real)
+  Constructor: scalar map
+
+Structure SizedVector():
+  Let size: Natural
+  Let vector: Vector(size,Real)
+  Constructor: sized vector
+
+Result endpoint constructor:
+  Attribution: topology; endpoint constructor; original
+  Let a,b: Real
+  Let I = endpoints(a,b)
+  Conclude: I.lower = a and I.upper = b
+
+Result shifting endpoints preserves order:
+  Attribution: topology; translating ordered endpoints; original
+  Let I: Endpoints
+  Let s: Real
+  Assume ordered endpoints(I)
+  Conclude: ordered endpoints(shifted endpoints(I,s))
+
+Result bundled path has its declared endpoints:
+  Attribution: topology; dependent path projection; original
+  Let X: Type
+  Let P: BasedPath(X)
+  Conclude:
+    there exists (p: Path(X,P.topology,P.start,P.finish), p = P.path)
+
+Result reversing a bundled path twice:
+  Attribution: topology; bundled path involution; original
+  Let X: Type
+  Let P: BasedPath(X)
+  Conclude: reversed bundle(X,reversed bundle(X,P)) = P
+
+Result function field application:
+  Attribution: topology; function field application; original
+  Let f: Function(Real,Real)
+  Let x: Real
+  Let P = scalar map(f)
+  Conclude: P.map(x) = f(x)
+
+Result vector field dimensions:
+  Attribution: topology; natural field dependency; original
+  Let V: SizedVector
+  Conclude:
+    there exists (v: Vector(V.size,Real), v = V.vector)
+
+-- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

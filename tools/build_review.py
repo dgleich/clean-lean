@@ -71,7 +71,7 @@ def highlight_source(source):
         result.append(''.join(pieces))
     return result
 
-DECL = re.compile(r'^ *(Result|Theorem|Context|Define|Notation|Condition|Type|Source)\s+(.+?):?\s*$',re.I)
+DECL = re.compile(r'^ *(Result|Theorem|Context|Define|Notation|Condition|Structure|Type|Source)\s+(.+?):?\s*$',re.I)
 
 def collect(root=ROOT):
     files=[]
@@ -102,6 +102,7 @@ def collect(root=ROOT):
                     for symbol in symbols:
                         name=symbol['name'].split('(')[0].strip()
                         if name in env.definitions: symbol['leanName']=env.definitions[name]['key']
+                        elif symbol['kind']=='structure' and name in env.structures: symbol['leanName']=env.structures[name]['key']
                         elif symbol['kind'] in ('result','theorem'): symbol['leanName']=re.sub(r'[_\s]+','_',name)
                     status='Translated · Lean not checked by this browser'
                     error=None

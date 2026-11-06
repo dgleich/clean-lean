@@ -475,7 +475,7 @@ ordered value parameters, such as `Type Element(X: Type, S: Set(X)):`.
 Previously declared names can supply those indices in theorem binders and
 quantifier domains. See [named value indices](value-indexed-types.md) for the
 neutral parse tree, typing and Lean map, prose normalization, and explicit limits.
-Dependent callable signatures remain pending; no type-checked reinterpretation
+Dependent callable signatures follow the later section below; no type-checked reinterpretation
 of an ambiguous parse is permitted.
 :::
 
@@ -490,4 +490,16 @@ substituted into the result; generated calls explicitly pass all inferred type a
 dimension parameters. Computed indices must first be bound with Let. The first
 checked wrappers expose subtype values, constant/reversed paths, and path composition.
 General expression indices, Pi-valued functions and universes remain pending.
+:::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Authored structures and field references
+
+[Structures](structures.md) specifies `Structure Name(parameters):`, typed Let
+fields, an explicit `Constructor: readable name`, and scoped access `P.field`.
+Fields may depend on earlier fields. Constructor calls pass header parameters and
+fields in order. Field-valued functions support `P.map(x)`. Stable field references
+can be dependent type arguments and natural dimensions. No proof fields, carrier-type
+fields, recursive records, inheritance or implicit coercions are included yet.
 :::

@@ -1,0 +1,145 @@
+# generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+"""Check authored records, generated constructors/projections, and bundle results."""
+from pathlib import Path
+import os, subprocess, sys
+ROOT=Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT))
+from cleanlang.core import Environment,lean,latex
+from cleanlang.modules import load_document
+here=Path(__file__).resolve().parent
+env=Environment();results=load_document(here/'Bundles.clean',env)
+source=lean(results,env,['Lean'])
+(here/'Bundles.lean').write_text(source)
+(here/'Bundles.tex').write_text(latex(results,env))
+keys={n:d['key'] for n,d in env.definitions.items()}
+pkey=env.structures['BasedPath']['key'];ikey=env.structures['Endpoints']['key']
+skey=env.structures['ScalarMap']['key'];vkey=env.structures['SizedVector']['key']
+rkey=env.data['functions']['reverse path']['dependent_signature']['key']
+mapping={'BundleOracle.BasedPath':pkey,'BundleOracle.Endpoints':ikey,
+         'BundleOracle.makePath':keys['based path'],'BundleOracle.endpoints':keys['endpoints'],
+         'BundleOracle.reverse':keys['reversed bundle'],'BundleOracle.shift':keys['shifted endpoints'],
+         'BundleOracle.ordered':keys['ordered endpoints'],'BundleOracle.reversePath':rkey,
+         'BundleOracle.ScalarMap':skey,'BundleOracle.SizedVector':vkey,
+         'BundleOracle.scalarMap':keys['scalar map'],'BundleOracle.sizedVector':keys['sized vector']}
+rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
+comparison='''
+open Lean Elab Command
+private def canonicalName (n : Name) : Name := Id.run do
+'''+rename+'''
+  match n with
+  | .str p s => return .str (canonicalName p) s
+  | .num p i => return .num (canonicalName p) i
+  | .anonymous => return .anonymous
+private def canonical : Expr → Expr
+  | .const n u => .const (canonicalName n) u
+  | .lam _ t b i => .lam Name.anonymous (canonical t) (canonical b) i
+  | .forallE _ t b i => .forallE Name.anonymous (canonical t) (canonical b) i
+  | .letE _ t v b n => .letE Name.anonymous (canonical t) (canonical v) (canonical b) n
+  | .app f a => .app (canonical f) (canonical a)
+  | .mdata _ b => canonical b
+  | .proj n i b => .proj (canonicalName n) i (canonical b)
+  | e => e
+elab "same_target " a:ident b:ident : command => do
+  let env ← getEnv
+  let some x := env.find? a.getId | throwError "Missing actual target"
+  let some y := env.find? b.getId | throwError "Missing expected target"
+  unless x.levelParams == y.levelParams && Expr.equal (canonical x.type) (canonical y.type) do
+    throwError "Canonical type differs: {a} vs {b}"
+  match x,y with
+  | .defnInfo x,.defnInfo y =>
+    unless Expr.equal (canonical x.value) (canonical y.value) do
+      throwError "Canonical body differs: {a} vs {b}"
+  | .ctorInfo x,.ctorInfo y =>
+    unless x.numParams == y.numParams && x.numFields == y.numFields && x.cidx == y.cidx &&
+        canonicalName x.induct == canonicalName y.induct do
+      throwError "Constructor shape differs"
+  | .inductInfo x,.inductInfo y =>
+    unless x.numParams == y.numParams && x.numIndices == y.numIndices &&
+        x.isRec == y.isRec && x.ctors.map canonicalName == y.ctors.map canonicalName do
+      throwError "Structure shape differs"
+  | _,_ => throwError "Unexpected declaration kinds"
+'''
+expected='''
+namespace BundleOracle
+structure BasedPath (X : Type) : Type where
+  topology : TopologicalSpace X
+  start : X
+  finish : X
+  path : @Path X topology start finish
+structure Endpoints : Type where
+  lower : ℝ
+  upper : ℝ
+structure ScalarMap : Type where
+  map : ℝ → ℝ
+structure SizedVector : Type where
+  size : ℕ
+  vector : Fin size → ℝ
+noncomputable def scalarMap (f : ℝ → ℝ) : ScalarMap := @ScalarMap.mk f
+noncomputable def sizedVector (n : ℕ) (v : Fin n → ℝ) : SizedVector := @SizedVector.mk n v
+noncomputable def makePath (X : Type) (t : TopologicalSpace X) (x y : X)
+    (p : @Path X t x y) : BasedPath X := @BasedPath.mk X t x y p
+noncomputable def endpoints (a b : ℝ) : Endpoints := @Endpoints.mk a b
+noncomputable def reversePath {X : Type} (t : TopologicalSpace X) (x y : X)
+    (p : @Path X t x y) : @Path X t y x := @Path.symm X t x y p
+noncomputable def reverse (X : Type) (P : BasedPath X) : BasedPath X :=
+  @makePath X P.topology P.finish P.start
+    (@reversePath X P.topology P.start P.finish P.path)
+noncomputable def ordered (I : Endpoints) : Prop := I.lower < I.upper
+noncomputable def shift (I : Endpoints) (s : ℝ) : Endpoints :=
+  @endpoints (I.lower+s) (I.upper+s)
+def constructorStatement : Prop := ∀ (a b : ℝ),
+  let I : Endpoints := @endpoints a b
+  I.lower=a ∧ I.upper=b
+def shiftStatement : Prop := ∀ (I : Endpoints) (s : ℝ), ordered I → ordered (shift I s)
+def pathStatement : Prop := ∀ (X : Type) (P : BasedPath X),
+  @Exists (@Path X P.topology P.start P.finish) (fun p => p=P.path)
+def reverseStatement : Prop := ∀ (X : Type) (P : BasedPath X), reverse X (reverse X P) = P
+def functionStatement : Prop := ∀ (f : ℝ → ℝ) (x : ℝ),
+  let P : ScalarMap := scalarMap f
+  P.map x = f x
+def dimensionStatement : Prop := ∀ (V : SizedVector),
+  @Exists (Fin V.size → ℝ) (fun v => v=V.vector)
+end BundleOracle
+'''
+checks=[]
+for oracle,key in mapping.items():checks.append(f'same_target {key} {oracle}')
+for oracle,key,fields in [('BundleOracle.BasedPath',pkey,['topology','start','finish','path']),
+                          ('BundleOracle.Endpoints',ikey,['lower','upper']),
+                          ('BundleOracle.ScalarMap',skey,['map']),
+                          ('BundleOracle.SizedVector',vkey,['size','vector'])]:
+    for field in ['mk',*fields]:checks.append(f'same_target {key}.{field} {oracle}.{field}')
+for actual,expected_name in [('endpoint_constructor','constructorStatement'),
+    ('shifting_endpoints_preserves_order','shiftStatement'),
+    ('bundled_path_has_its_declared_endpoints','pathStatement'),
+    ('reversing_a_bundled_path_twice','reverseStatement'),
+    ('function_field_application','functionStatement'),('vector_field_dimensions','dimensionStatement')]:
+    checks.append(f'same_target CleanStatements.{actual} BundleOracle.{expected_name}')
+proofs=f'''
+namespace BundleProofs
+theorem endpoint_constructor : CleanStatements.endpoint_constructor := by
+  intro a b
+  exact ⟨rfl,rfl⟩
+theorem shifting_endpoints_preserves_order : CleanStatements.shifting_endpoints_preserves_order := by
+  intro I s h
+  change I.lower+s < I.upper+s
+  exact add_lt_add_right h s
+theorem bundled_path_has_its_declared_endpoints : CleanStatements.bundled_path_has_its_declared_endpoints := by
+  intro X P
+  exact ⟨P.path,rfl⟩
+theorem reversing_a_bundled_path_twice : CleanStatements.reversing_a_bundled_path_twice := by
+  intro X P
+  cases P
+  simp [{keys['reversed bundle']}, {keys['based path']}, {rkey}, Path.symm_symm]
+theorem function_field_application : CleanStatements.function_field_application := by
+  intro f x
+  rfl
+theorem vector_field_dimensions : CleanStatements.vector_field_dimensions := by
+  intro V
+  exact ⟨V.vector,rfl⟩
+end BundleProofs
+'''
+path=here/'BundlesVerified.lean';path.write_text(source+comparison+expected+'\n'.join(checks)+'\n'+proofs)
+subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
+print(f'{len(checks)} canonical record/constructor/projection/definition/statement checks and six proofs passed.')
+
+# generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

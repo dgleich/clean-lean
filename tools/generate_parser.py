@@ -7,7 +7,7 @@ import os
 import subprocess
 import sys
 ROOT=Path(__file__).resolve().parents[1]
-STARTS=['expression','assumptions','type_ref','header','type_header','let_clause',
+STARTS=['expression','assumptions','type_ref','header','type_header','structure_header','let_clause',
         'import_line','alias_line','phrase_line','field','source_header','scope_header','document']
 
 def require_lexical_analysis(regexes):

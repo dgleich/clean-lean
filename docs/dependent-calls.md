@@ -134,3 +134,16 @@ parser, regression tests, old named-index checks, and theorem corpus remain chec
 The acceptance catalog stays partial because the general body/type elaboration
 contract, universe polymorphism, and arbitrary expression indices remain open.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Structure extension
+
+The [structure contract](structures.md) extends the named-index rule to stable
+field references, e.g. `reverse path(P.topology,P.start,P.finish,P.path)`.
+Projected dimensions retain their Lean projection rather than becoming a source
+name. Explicit type-valued parameters also trigger structural substitution; this
+fixes carrier renaming for authored bundle operations. Computed index arguments
+still require a preceding Let. The original Local-only description above records
+the first milestone and is superseded on these points.
+:::

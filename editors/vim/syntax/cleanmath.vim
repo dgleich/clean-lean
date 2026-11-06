@@ -4,14 +4,14 @@ syntax case match
 syntax sync fromstart
 syntax match cleanMathNumber '\<\d\+\>'
 syntax match cleanMathOperator '[+*/^=<>−-]\|[↔→≤≥≠∧∨¬∈⊆∪∩∣]'
-syntax match cleanMathDelimiter '[(),:;]'
+syntax match cleanMathDelimiter '[().,:;]'
 syntax match cleanMathLogic '\c\<\%(and\|or\|not\|function\|for\|every\|there\|exists\)\>'
 syntax match cleanMathSignature '(.*\ze:\s*$' contained
-syntax match cleanMathKeyword '\c^ *\%(Condition\|Holds when\|Let\|Define\|Assume\|Conclude\|Returns\|Equals\|Alias\|Phrase\|Result\|Theorem\|Context\|Notation\|Condition\|Type\|Source\)\>' containedin=ALLBUT,cleanMathComment,cleanMathOpaque,cleanMathLean,cleanMathImport,cleanMathText,cleanMathTriple,cleanMathDoc
-syntax match cleanMathDeclaration '\c^ *\%(Result\|Theorem\|Context\|Define\|Notation\|Condition\|Type\|Source\)\>.*:$' contains=cleanMathKeyword,cleanMathDelimiter,cleanMathSignature
+syntax match cleanMathKeyword '\c^ *\%(Condition\|Holds when\|Let\|Define\|Assume\|Conclude\|Returns\|Equals\|Alias\|Phrase\|Result\|Theorem\|Context\|Notation\|Condition\|Structure\|Type\|Source\)\>' containedin=ALLBUT,cleanMathComment,cleanMathOpaque,cleanMathLean,cleanMathImport,cleanMathText,cleanMathTriple,cleanMathDoc
+syntax match cleanMathDeclaration '\c^ *\%(Result\|Theorem\|Context\|Define\|Notation\|Condition\|Structure\|Type\|Source\)\>.*:$' contains=cleanMathKeyword,cleanMathDelimiter,cleanMathSignature
 syntax match cleanMathTypedLet '\c^ *Let\>.*\%(:\|\<be\>\).*' contains=cleanMathKeyword,cleanMathDelimiter
-syntax match cleanMathMetadataKey '\c^ *\%(Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:' contained
-syntax match cleanMathOpaque '\c^ *\%(Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:.*$' contains=cleanMathMetadataKey
+syntax match cleanMathMetadataKey '\c^ *\%(Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:' contained
+syntax match cleanMathOpaque '\c^ *\%(Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:.*$' contains=cleanMathMetadataKey
 syntax match cleanMathLean '\c^ *\%(Means\|From Lean\)\s*:.*$'
 syntax match cleanMathImport '\c^ *Import\>.*$'
 syntax region cleanMathQuote start='"' end='"' oneline containedin=ALLBUT,cleanMathComment,cleanMathBlock,cleanMathLean,cleanMathOpaque,cleanMathText,cleanMathTriple,cleanMathDoc

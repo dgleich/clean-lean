@@ -504,6 +504,59 @@
         "Pi-valued functions",
         "Universe-polymorphic APIs"
       ]
+    },
+    {
+      "id": "authored_structures_and_projections",
+      "status": "partial",
+      "specification": "docs/structures.md",
+      "grammar": "grammar/clean.lark (structure_header, projection, field_arguments, index_reference)",
+      "source_fragment": "Structure BasedPath(X: Type):\n  Let topology: Topology(X)\n  Let start,finish: X\n  Let path: Path(X,topology,start,finish)\n  Constructor: based path",
+      "expected_tree": [
+        "Structure",
+        "BasedPath",
+        [
+          [
+            "X",
+            "Type"
+          ]
+        ],
+        [
+          [
+            "topology",
+            "Topology(X)"
+          ],
+          [
+            "start",
+            "X"
+          ],
+          [
+            "finish",
+            "X"
+          ],
+          [
+            "path",
+            "Path(X,topology,start,finish)"
+          ]
+        ],
+        "based path"
+      ],
+      "environment": "Explicit topology bundle module; Lean and Mathlib v4.24.0; fixed Type 0 carriers",
+      "expected_lean": "structure BasedPathRecord (X : Type) : Type where\n  topology : TopologicalSpace X\n  start : X\n  finish : X\n  path : @Path X topology start finish",
+      "expected_lean_type": "Type → Type",
+      "checks": [
+        "tests/test_structures.py",
+        "studies/topology/verify_bundles.py",
+        "tools/generate_parser.py --check",
+        "tools/check_textmate.cjs",
+        "tools/check_vim.vim"
+      ],
+      "pending": [
+        "Inherited opaque Lean/body elaboration contract",
+        "Proof fields and carrier-type fields",
+        "General universes",
+        "Definitional equality or transport for aliases",
+        "Emacs runtime check (not installed)"
+      ]
     }
   ]
 }

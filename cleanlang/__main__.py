@@ -17,6 +17,10 @@ def combine(environments):
             if name in merged.sources.entries and merged.sources.entries[name]!=value:
                 raise CleanError('Conflicting sources across documents: '+name)
             merged.sources.entries[name]=value
+        for name,value in env.structures.items():
+            if name in merged.structures and merged.structures[name]!=value:
+                raise CleanError('Conflicting structures across documents: '+name)
+            merged.structures[name]=value
         merged.sources.references.update(env.sources.references)
         merged.notation_definitions.update(env.notation_definitions)
         merged.declaration_docs.update(env.declaration_docs)
