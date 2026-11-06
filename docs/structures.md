@@ -209,3 +209,15 @@ oracles are not a claim of whole-language conformance or universe generality.
 
 The acceptance catalog records the inherited and deliberately unimplemented boundaries.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Explicit computed indices
+
+[Computed indices](computed-indices.md) extends a value/dimension argument with
+an explicitly parenthesized, binder-free expression. It also permits compound
+actual value arguments in dependent calls. Substitution works on expression trees;
+matching remains structural, with no local-alias unfolding or inversion of
+computations. This supersedes the earlier requirement to name every computed
+index first. Type-valued arguments remain named carriers.
+:::

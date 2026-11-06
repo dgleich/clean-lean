@@ -134,3 +134,13 @@ The current native action remains linear in Lean, but its Clean-authored lambda
 exposes only an ordinary function. Relative homology and excision are mathematical
 construction gaps, distinct from this source-type interoperability problem.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+The computed-index extension now resolves generic module-map/range composition:
+HomologyClass is a transparent Clean alias, and homology image is authored as the
+range of the native induced linear map. The earlier carrier-interoperability gap
+no longer blocks explicit computations. General local-alias conversion is still
+unsupported. Relative homology, exactness/excision and paper constructions remain
+open; the range-membership proof is not a well-group characterization.
+:::

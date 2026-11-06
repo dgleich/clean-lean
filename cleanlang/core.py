@@ -193,19 +193,21 @@ class Environment:
         for a,k in zip(args,kinds):
             if k=='type': out.append(self.type(a,env)); continue
             if isinstance(k,dict):
-                if not re.fullmatch(ID+r'(?:\.'+ID+r')*',a):
-                    raise CleanError('Value index must be a previously declared name or field reference: '+a)
+                if not (a.startswith('(') or re.fullmatch(ID+r'(?:\.'+ID+r')*',a)):
+                    raise CleanError('Value index must be a previously declared name, field reference or parenthesized computation: '+a)
                 if env is None:raise CleanError('Unknown value index: '+a)
                 actual=Expressions(self,env).parse(a)
                 expected=self.type(k['value'].format(*map(str,out)),env,False)
                 if actual.type!=expected:
                     raise CleanError(f'Value index {a} requires {expected}, got {actual.type}')
-                out.append(ValueIndex(a,actual.lean,actual.tex));continue
-            if '.' in a:
+                from .indices import index_value
+                out.append(index_value(actual));continue
+            if '.' in a or a.startswith('('):
                 if env is None:raise CleanError('Unknown dimension reference: '+a)
                 actual=Expressions(self,env).parse(a)
                 if actual.type!=NAT:raise CleanError('Dimension reference must be Natural: '+a)
-                out.append(ValueIndex(a,actual.lean,actual.tex));continue
+                from .indices import index_value
+                out.append(actual.tree[1] if actual.tree[0]=='Local' else index_value(actual));continue
             if not re.fullmatch(r'\d+|'+ID,a): raise CleanError('Dimension must be a numeral or natural parameter')
             if env is not None and not a.isdigit() and (a not in env or env[a].type!=NAT): raise CleanError('Declare dimension '+a+' as Natural first')
             out.append(a)
@@ -269,26 +271,27 @@ class Environment:
             substitutions[n]=value
 
         def index(n):
-            a=actuals[n]
-            from .structures import reference_name
-            ref=reference_name(a.tree)
-            if ref is None:
-                raise CleanError('Dependent index argument must be a named local or field reference; bind the expression with Let first: '+n)
-            return ValueIndex(ref,a.lean,a.tex)
+            from .indices import index_value, substitute_index
+            if n in actuals:return index_value(actuals[n])
+            return substitute_index(ValueIndex(n,'',''),{**substitutions,**actuals},self,locals)
 
         def replace(t):
+            from .indices import ComputedIndex, substitute_index
+            if isinstance(t,ComputedIndex):
+                return substitute_index(t,{**substitutions,**actuals},self,locals)
             if isinstance(t,ValueIndex):return index(t.name)
             if isinstance(t,Type):
                 if not t.args and t.name in substitutions:return substitutions[t.name]
                 return Type(t.name,tuple(replace(a) for a in t.args))
             if t in actuals and dict(parameters)[t]==NAT:
                 ref=index(t)
-                return ref if actuals[t].tree[0]=='Projection' else ref.name
+                from .indices import ComputedIndex
+                return ref if isinstance(ref,ComputedIndex) or actuals[t].tree[0]=='Projection' else ref.name
             return substitutions.get(t,t)
 
         def match(pattern,actual):
             if isinstance(pattern,ValueIndex):
-                if index(pattern.name)!=actual:
+                if replace(pattern)!=actual:
                     raise CleanError('Dependent index mismatch: '+pattern.name)
             elif isinstance(pattern,Type):
                 if pattern.name in implicit and not pattern.args:
@@ -311,7 +314,10 @@ class Environment:
         for n,t in parameters:
             match(t,actuals[n].type)
             if t==Type('Type'):
-                bind(n,Type(index(n).name))
+                from .structures import reference_name
+                ref=reference_name(actuals[n].tree)
+                if ref is None:raise CleanError('Type argument must be a named local')
+                bind(n,Type(ref))
         for n in implicit:
             if n not in substitutions:raise CleanError('Cannot infer implicit parameter: '+n)
         targets=[]

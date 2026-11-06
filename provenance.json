@@ -2072,6 +2072,34 @@
         "# ",
         ""
       ]
+    },
+    "cleanlang/indices.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_computed_indices.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/check_computed_targets.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "docs/computed-indices.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

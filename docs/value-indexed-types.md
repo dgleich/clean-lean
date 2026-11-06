@@ -10,7 +10,7 @@ means. Parsing does not guess whether an argument is a type or a value.
 theorem/context binders and quantifier domains using earlier named values; type
 aliases; module-declared prose phrases; Lean and LaTeX output. Dependent callable signatures are now supported under the
 [named-argument rules](dependent-calls.md); stable field references are also supported by [structures](structures.md).
-Arbitrary expression indices remain unsupported.
+[Explicit computed indices](computed-indices.md) now support parenthesized binder-free expressions; arbitrary binder-bearing indices remain unsupported.
 
 ## Syntax: one constructor tree
 
@@ -198,4 +198,16 @@ Validation consists of:
 - Strict generated-parser checks, full regression tests, and typeset specimens.
 
 These checks do not close the project's general elaboration uniqueness audit.
+:::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Explicit computed indices
+
+[Computed indices](computed-indices.md) extends a value/dimension argument with
+an explicitly parenthesized, binder-free expression. It also permits compound
+actual value arguments in dependent calls. Substitution works on expression trees;
+matching remains structural, with no local-alias unfolding or inversion of
+computations. This supersedes the earlier requirement to name every computed
+index first. Type-valued arguments remain named carriers.
 :::

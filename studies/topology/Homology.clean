@@ -8,6 +8,13 @@ Source mathlib:
   Title: Mathlib v4.24.0
   Url: https://github.com/leanprover-community/mathlib4/tree/v4.24.0
 
+Structure ClassInSpace(K: Type, field: FieldStructure(K), H: HomologyTheory(K,field)):
+  Universe: 1
+  Let space: TopologicalSpace
+  Let element: HomologyClass(K,field,H,space)
+  Constructor: class in space
+  Describe: a space equipped with a homology class
+
 Result homology identity fixes classes:
   Attribution: mathlib; CategoryTheory.Functor.map_id; adapted
   Let K: Type
@@ -42,3 +49,26 @@ Result induced function acts on classes:
   Conclude: h(x) = induced homology value(field,H,X,Y,f,x)
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Result homology image membership:
+  Attribution: mathlib; LinearMap.mem_range; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X,Y: TopologicalSpace
+  Let f: ContinuousMap(X,Y)
+  Let x: HomologyClass(K,field,H,Y)
+  Let h = induced homology map(field,H,X,Y,f)
+  Let U = homology image(field,H,X,Y,f)
+  Conclude:
+    belongs to module subspace(field,homology module(field,H,Y),x,U) ↔
+      there exists (y: HomologyClass(K,field,H,X), h(y) = x)
+
+Result bundled class has its declared space:
+  Attribution: topology; computed dependent record field; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let P: ClassInSpace(K,field,H)
+  Conclude:
+    there exists (x: HomologyClass(K,field,H,P.space), x = P.element)

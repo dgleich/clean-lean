@@ -16,6 +16,7 @@ const tm=require('vscode-textmate'),onig=require('vscode-oniguruma');
  has('Define squared distance(x, y):','squared','entity.name.function.clean');
  has('  Let μ be a Complex','μ','variable.parameter.clean');
  has('  Let μ be a Complex','Complex','entity.name.type.clean');
+ has('  Let x: ModuleElement(K,field,(homology module(field,H,X)))','ModuleElement','entity.name.type.clean');
  has('  Assume nonzero: x ≠ 0','nonzero','entity.name.label.clean');
  has('  Conclude: x ≠ 0 and y = 2','and','keyword.operator.word.clean');
  has('  Attribution: mathlib; Matrix.det_mul; adapted','adapted','string.unquoted.metadata.clean');

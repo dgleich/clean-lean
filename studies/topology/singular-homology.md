@@ -2,7 +2,7 @@
 
 # Actual singular homology interfaces
 
-[`Homology.clean`](Homology.clean) now states three checked results about actual
+[`Homology.clean`](Homology.clean) now states five checked results about actual
 Mathlib singular homology. [`HomologyVerified.lean`](HomologyVerified.lean) contains
 the generated statements, independent native target oracles, and proofs. These
 are functor laws, not the research paper's characterization theorems.
@@ -37,8 +37,10 @@ All imports use Lean/Mathlib v4.24.0, Mathlib revision
 | `coefficient module(K,field,V,L)` | `ModuleCat.of` with exactly `L.addition` and `L.action` |
 | `HomologyTheory(K,field)` | Authored structure with coefficients and degree |
 | `homology module(field,H,X)` | `((singularHomologyFunctor (ModuleCat K) H.degree).obj H.coefficients).obj X` |
-| `HomologyClass(K,field,H,X)` | The actual carrier of that homology module |
-| `induced homology value(field,H,X,Y,g,x)` | The functor's map of `TopCat.ofHom g`, applied to `x` |
+| `HomologyClass(K,field,H,X)` | Transparent Clean alias for `ModuleElement(K,field,(homology module(field,H,X)))` |
+| `homology linear map(field,H,X,Y,g)` | The native functor map of `TopCat.ofHom g`, as a generic ModuleMap |
+| `induced homology value(field,H,X,Y,g,x)` | Clean-authored application of that generic module map |
+| `homology image(field,H,X,Y,g)` | Clean-authored range of that generic module map |
 | `induced homology map(field,H,X,Y,g)` | Clean-authored lambda applying the preceding operation |
 
 The native functor lives in `Mathlib.AlgebraicTopology.SingularHomology.Basic`.
@@ -50,19 +52,20 @@ of the elaborated terms. Independent target checks compare those full terms,
 including universe levels and instances. This is not a general assertion that
 all arbitrary imported Lean bodies have unique elaborations.
 
-The implementation adds no expression syntax. It exercises existing named value
-indices, Type-1 records, dependent fields, constructors, lambdas and explicit
-imports. The syntax and substitution contracts therefore remain those documented
-in `docs/dependent-calls.md`, `docs/structures.md` and `docs/fixed-universes.md`.
+The initial interfaces have now been extended with explicit computed indices.
+See [the syntax contract](../../docs/computed-indices.md). They also exercise
+Type-1 records, dependent fields, constructors, lambdas and explicit imports.
 The new mathematical vocabulary is entirely module-declared.
 
 ## Verified evidence and remaining work
 
-`verify_homology.py` independently compares 17 canonical declarations: imported
+`verify_homology.py` independently compares 31 canonical declarations: imported
 module/class types, the module constructor, theory record/constructor/projections,
 object/action adapters, the authored lambda, continuous-map identity/composition,
-and all three statement types. It proves identity and composition via Mathlib's
-`CategoryTheory.Functor.map_id` and `map_comp`, and lambda application by reduction.
+generic module maps/ranges, computed dependent record fields, and all five
+statement types. It proves identity and composition via Mathlib's
+`CategoryTheory.Functor.map_id` and `map_comp`, and lambda application by reduction. Range membership and the class stored in
+a dependent record also have proofs.
 Tests reject mismatched fields, theories and ambient spaces.
 
 This is absolute, ordinary singular homology, with small spaces and modules and
@@ -70,14 +73,15 @@ natural-number degrees. It does not construct relative homology, reduced homolog
 a connecting map, exactness, excision, a well group, or a basis. No statement here
 settles the closed-cover/excision issue in the interlevel study.
 
-A specific remaining compiler/interface gap is visible now: after
-`Let M = homology module(field,H,X)`, Clean does not identify
-`ModuleElement(K,field,M)` with `HomologyClass(K,field,H,X)`. Its named-index matching
-is structural and does not unfold a local alias or invoke Lean conversion.
-Computed index expressions and/or explicit transparent type/definition aliases
-need a deterministic specification before generic module maps and subspace ranges
-can compose through this interface. Do not hide this by declaring the two source
-types equal or claiming a complete homology algebra API. The current induced map
-exposes an ordinary function; the native construction is linear, but a generic
-Clean linear-map/range interface remains to be added.
+The carrier interoperability gap from the initial milestone is now resolved for
+explicit computations: HomologyClass is a transparent type alias and the induced
+value and homology image are authored through generic module operations. No new
+paper-specific native adapter was needed. A ClassInSpace record additionally
+exercises a field whose homology module is computed from its preceding space field.
+
+Local aliases still remain distinct: after `Let M = homology module(field,H,X)`,
+`ModuleElement(K,field,M)` does not automatically unfold M. Use the transparent
+HomologyClass alias or the same explicit computed index when types must agree.
+Generic module maps and their ranges are now available; relative homology,
+exactness/excision and the research targets remain separate unfinished work.
 :::

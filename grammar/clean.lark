@@ -28,7 +28,8 @@ name: ID+
 arguments: expression ("," expression)*
 type_ref: TYPE_ID ["(" [type_arguments] ")"]
 type_arguments: type_argument ("," type_argument)*
-?type_argument: type_ref | NUMBER | index_reference
+?type_argument: type_ref | NUMBER | index_reference | computed_index
+computed_index: "(" expression ")"
 index_reference: TYPE_ID ("." TYPE_ID)+
 assumptions: assumption ("," assumption)*
 assumption: [name ":"] expression
@@ -48,7 +49,8 @@ let_clause: LET identifiers ":" type_text -> typed_let
           | DEFINE ID "=" expression -> value_let
 identifiers: ID ("," ID)*
 // Prose type phrases are resolved after parsing, using explicit module bindings.
-type_text: TYPE_PART ("(" [type_text ("," type_text)*] ")" TYPE_PART?)*
+type_text: type_piece+
+?type_piece: TYPE_PART | "(" [type_text ("," type_text)*] ")"
 import_line: "Import"i STRING -> clean_import
            | "Import"i "Lean"i MODULE -> lean_import
            | "Import"i "BibTeX"i STRING -> bib_import

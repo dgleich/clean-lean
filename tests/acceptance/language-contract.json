@@ -595,6 +595,61 @@
         "Inherited opaque Lean elaboration contract",
         "Emacs runtime unavailable"
       ]
+    },
+    {
+      "id": "computed_homology_module_index",
+      "status": "implemented-slice",
+      "source": "ModuleElement(K,field,(homology module(field,H,X)))",
+      "expected_tree": [
+        "Apply",
+        "ModuleElement",
+        [
+          [
+            "Name",
+            "K"
+          ],
+          [
+            "Name",
+            "field"
+          ],
+          [
+            "ComputedIndex",
+            [
+              "Call",
+              "homology module",
+              [
+                [
+                  "Local",
+                  "field"
+                ],
+                [
+                  "Local",
+                  "H"
+                ],
+                [
+                  "Local",
+                  "X"
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "environment": "Explicit homology module; declared K, field, H, X; pinned Lean/Mathlib v4.24.0",
+      "expected_lean": "@ModuleCat.carrier K field.toRing (@homologyModuleWrapper K field H X)",
+      "expected_lean_type": "Type",
+      "checks": [
+        "tests/test_computed_indices.py",
+        "studies/topology/verify_homology.py",
+        "tools/check_computed_targets.py",
+        "tools/generate_parser.py --check"
+      ],
+      "pending": [
+        "Local-alias conversion and general definitional equality",
+        "Binder-bearing indices",
+        "Inherited opaque native/operator elaboration obligations",
+        "Emacs runtime unavailable"
+      ]
     }
   ]
 }

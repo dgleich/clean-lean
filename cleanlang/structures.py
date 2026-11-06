@@ -14,7 +14,9 @@ def reference_name(tree):
     return None
 
 
-def substitute_type(t, bindings):
+def substitute_type(t, bindings, env=None, locals=None):
+    from .indices import ComputedIndex, substitute_index
+    if isinstance(t,ComputedIndex):return substitute_index(t,bindings,env,locals)
     if isinstance(t,ValueIndex):
         if t.name not in bindings:raise CleanError('Unresolved structure index: '+t.name)
         return bindings[t.name]
@@ -23,7 +25,7 @@ def substitute_type(t, bindings):
             value=bindings[t.name]
             if not isinstance(value,Type):raise CleanError('Expected type parameter: '+t.name)
             return value
-        return Type(t.name,tuple(substitute_type(a,bindings) for a in t.args))
+        return Type(t.name,tuple(substitute_type(a,bindings,env,locals) for a in t.args))
     return bindings.get(t,t)
 
 
@@ -38,7 +40,7 @@ def project(env, base, field, locals):
              a.lean if isinstance(a,ValueIndex) else locals[a].lean if a in locals else a
              for a in base.type.args]
     for name,typ in spec['fields']:
-        result_type=substitute_type(typ,bindings)
+        result_type=substitute_type(typ,bindings,env,locals)
         target='(@'+spec['key']+'.«'+name+'»'+''.join(' ('+v+')' for v in targets)+' ('+base.lean+'))'
         tex=base.tex+r'.\mathrm{'+textext(name)+'}'
         value=Expr(target,tex,result_type,tree=['Projection',base.tree,name])

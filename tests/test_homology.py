@@ -37,7 +37,7 @@ class HomologyInterfaces(unittest.TestCase):
     def test_specimen_has_no_placeholder_proof(self):
         e=Environment();results=load_document(ROOT/'studies/topology/Homology.clean',e)
         source=lean(results,e,[])
-        self.assertEqual(len(results),3)
+        self.assertEqual(len(results),5)
         self.assertNotIn('CleanPapers',source)
         self.assertNotIn('sorry',source)
 

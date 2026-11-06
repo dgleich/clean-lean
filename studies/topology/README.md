@@ -199,10 +199,10 @@ actual TopCat spaces and bundled continuous maps. [Homology.clean](Homology.clea
 and [HomologyVerified.lean](HomologyVerified.lean) add actual singular homology
 classes, an authored coefficient/degree bundle and an authored induced map.
 [The interface note](singular-homology.md) explains precise native meanings and
-remaining carrier-interoperability, linear-range and relative-homology gaps.
+computed-index integration and the remaining relative-homology gaps.
 
-Run `LAKE=lake python3 studies/topology/verify_homology.py` for 17 independent
-canonical comparisons and three proofs. [Homology.pdf](Homology.pdf) is generated
+Run `LAKE=lake python3 studies/topology/verify_homology.py` for 31 independent
+canonical comparisons and five proofs. [Homology.pdf](Homology.pdf) is generated
 from `latex_homology.tex`, compiled twice. These results do not prove any of the
 five research targets.
 :::

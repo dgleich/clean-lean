@@ -23,3 +23,50 @@ Notation coefficient module(K,field,V,L):
   Render latex: {V}
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Type ModuleMap(K: Type, field: FieldStructure(K), M: CoefficientModule(K,field), N: CoefficientModule(K,field)):
+  Means: (@ModuleCat.Hom K field.toRing M N)
+  Render latex: \operatorname{{Hom}}_{{{K}}}({M},{N})
+  Describe: a linear map from ${M}$ to ${N}$
+
+Type ModuleSubspace(K: Type, field: FieldStructure(K), M: CoefficientModule(K,field)):
+  Means: (@Submodule K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule)
+  Render latex: \operatorname{{Subspace}}({M})
+  Describe: a subspace of ${M}$
+
+Notation module map value(field,M,N,f,x):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: CoefficientModule(K,field)
+  Let f: ModuleMap(K,field,M,N)
+  Let x: ModuleElement(K,field,M)
+  Returns: ModuleElement(K,field,N)
+  Means: (@ModuleCat.Hom.hom K field.toRing M N f) x
+  Render latex: {f}({x})
+
+Notation module map range(field,M,N,f):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: CoefficientModule(K,field)
+  Let f: ModuleMap(K,field,M,N)
+  Returns: ModuleSubspace(K,field,N)
+  Means: LinearMap.range (@ModuleCat.Hom.hom K field.toRing M N f)
+  Render latex: \operatorname{{range}}({f})
+
+Notation module subspace carrier(field,M,U):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let U: ModuleSubspace(K,field,M)
+  Returns: Set(ModuleElement(K,field,M))
+  Means: U.carrier
+  Render latex: {U}
+
+Condition belongs to module subspace(field,M,x,U):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let x: ModuleElement(K,field,M)
+  Let U: ModuleSubspace(K,field,M)
+  Holds when: x ∈ module subspace carrier(field,M,U)
+  Render: {x} belongs to {U}

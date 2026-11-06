@@ -4,7 +4,7 @@ Let $K$ be a type.
 Let $\mathit{field}$ be a field structure on $K$.
 Let $H$ be a choice of coefficients and homology degree over $K$.
 Let $X$ be a topological space.
-Let $x$ be a homology class in $H(X)$.
+Let $x$ be an element of $H(X)$.
 Then \[{\operatorname{id}_{X}}_*(x) = x.\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
@@ -16,7 +16,7 @@ Let $H$ be a choice of coefficients and homology degree over $K$.
 Let $X$, $Y$ and $Z$ be topological spaces.
 Let $f$ be a continuous map from $X$ to $Y$.
 Let $g$ be a continuous map from $Y$ to $Z$.
-Let $x$ be a homology class in $H(X)$.
+Let $x$ be an element of $H(X)$.
 Then \[{\left(g \circ f\right)}_*(x) = {g}_*({f}_*(x)).\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
@@ -27,9 +27,30 @@ Let $\mathit{field}$ be a field structure on $K$.
 Let $H$ be a choice of coefficients and homology degree over $K$.
 Let $X$ and $Y$ be topological spaces.
 Let $f$ be a continuous map from $X$ to $Y$.
-Let $x$ be a homology class in $H(X)$.
+Let $x$ be an element of $H(X)$.
 Let $h = {f}_*$.
 Then \[h(x) = {f}_*(x).\]
+\end{cleanresult}
+
+\begin{cleanresult}{homology image membership}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, LinearMap.mem\_range]}}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $X$ and $Y$ be topological spaces.
+Let $f$ be a continuous map from $X$ to $Y$.
+Let $x$ be an element of $H(Y)$.
+Let $h = {f}_*$.
+Let $U = \operatorname{range}({f}_*)$.
+Then \[x\text{ belongs to }U \text{ if and only if } \left(\text{there exists }y : H(X),\; h(y) = x\right).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{bundled class has its declared space}\cleanattribution{[Topology foundations, computed dependent record field]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $P$ be a space equipped with a homology class.
+Then \[\left(\text{there exists }x : H(P.\mathrm{space}),\; x = P.\mathrm{element}\right).\]
 \end{cleanresult}
 
 % generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

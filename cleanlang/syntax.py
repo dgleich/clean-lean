@@ -31,6 +31,7 @@ def name(tree):return ' '.join(map(str,tree.children))
 
 def type_spelling(tree):
     if isinstance(tree,generated.Token):return str(tree)
+    if tree.data=='computed_index':return '('+expression_spelling(expression_tree(tree.children[0]))+')'
     if tree.data=='index_reference':return '.'.join(map(str,tree.children))
     if tree.data=='type_ref':
         head=str(tree.children[0])
@@ -41,6 +42,7 @@ def type_spelling(tree):
 def type_tree(tree):
     """Neutral constructor syntax: names are not classified as types or values here."""
     if isinstance(tree,generated.Token):return ['Numeral',str(tree)]
+    if tree.data=='computed_index':return ['ComputedIndex',expression_tree(tree.children[0])]
     if tree.data=='index_reference':
         result=['Name',str(tree.children[0])]
         for field in tree.children[1:]:result=['Projection',result,str(field)]
@@ -48,6 +50,22 @@ def type_tree(tree):
     head=str(tree.children[0])
     if len(tree.children)==1:return ['Name',head]
     return ['Apply',head,[type_tree(x) for x in tree.children[1].children]]
+
+
+def expression_spelling(tree):
+    """Canonical, fully grouped source for binder-free index expressions."""
+    from .core import CleanError
+    kind=tree[0]
+    if kind in ('Local','Decimal'):return tree[1]
+    if kind=='Call':return tree[1]+'('+','.join(map(expression_spelling,tree[2]))+')'
+    if kind=='Projection':return expression_spelling(tree[1])+'.'+tree[2]
+    if kind=='Apply':
+        from .structures import reference_name
+        if reference_name(tree[1]) is None:raise CleanError('Computed index application requires a named function or field')
+        return expression_spelling(tree[1])+'('+','.join(map(expression_spelling,tree[2]))+')'
+    if kind=='Operator':return '('+expression_spelling(tree[2])+' '+tree[1]+' '+expression_spelling(tree[3])+')'
+    if kind=='Unary':return '('+tree[1]+' '+expression_spelling(tree[2])+')'
+    raise CleanError('Computed indices do not introduce binders')
 
 
 def expression_tree(tree):

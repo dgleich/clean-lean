@@ -1,0 +1,62 @@
+# generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+"""Explicit expression indices; structural substitution, no conversion search."""
+import json
+from dataclasses import dataclass
+from .core import ValueIndex, Type, CleanError
+
+@dataclass(frozen=True)
+class ComputedIndex(ValueIndex):
+    syntax: str
+
+
+def index_value(expression):
+    from .structures import reference_name
+    from .syntax import expression_spelling
+    tree=expression.tree
+    def check(node):
+        if not isinstance(node,list):return
+        if node and node[0] in ('Lambda','Forall','Exists'):
+            raise CleanError('Computed indices do not introduce binders')
+        for child in node:check(child)
+    check(tree)
+    ref=reference_name(tree)
+    if ref is not None:return ValueIndex(ref,expression.lean,expression.tex)
+    return ComputedIndex('('+expression_spelling(tree)+')',expression.lean,expression.tex,
+                         json.dumps(tree,ensure_ascii=False,separators=(',',':')))
+
+
+def substitute_index(index,bindings,env,locals):
+    from .core import Expressions,Expr
+    from .syntax import parse,expression_tree
+    tree=json.loads(index.syntax) if isinstance(index,ComputedIndex) else expression_tree(parse(index.name,'expression'))
+    def reference(value):
+        if isinstance(value,Expr):return value.tree
+        if isinstance(value,ComputedIndex):return json.loads(value.syntax)
+        if isinstance(value,ValueIndex):return expression_tree(parse(value.name,'expression'))
+        if isinstance(value,Type):
+            if value.args or value.name not in locals:
+                raise CleanError('Computed index needs a named type argument: '+str(value))
+            return ['Local',value.name]
+        return expression_tree(parse(str(value),'expression'))
+    def replace(node):
+        if node[0]=='Local' and node[1] in bindings:return reference(bindings[node[1]])
+        if node[0]=='Call':
+            args=[replace(a) for a in node[2]]
+            value=bindings.get(node[1])
+            # Call heads resolve to a local only when that local has Function type.
+            # A same-named nonfunction parameter does not shadow a module callable.
+            if isinstance(value,(Expr,ValueIndex)):
+                callee=reference(value)
+                actual=Expressions(env,locals).elaborate(callee)
+                if env.is_function_type(actual.type):
+                    if callee[0]=='Local':return ['Call',callee[1],args]
+                    return ['Apply',callee,args]
+            return ['Call',node[1],args]
+        if node[0]=='Projection':return ['Projection',replace(node[1]),node[2]]
+        if node[0]=='Apply':return ['Apply',replace(node[1]),[replace(a) for a in node[2]]]
+        if node[0]=='Operator':return ['Operator',node[1],replace(node[2]),replace(node[3])]
+        if node[0]=='Unary':return ['Unary',node[1],replace(node[2])]
+        return node
+    return index_value(Expressions(env,locals).elaborate(replace(tree)))
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -147,3 +147,29 @@ typed-bridge policy before a generic linear-map/range interface can be used here
 Relative homology, exactness/excision, proof-bearing records and paper constructions
 remain open; the overall goal remains active.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Sixth implemented slice
+
+[Computed indices](computed-indices.md) add explicitly parenthesized binder-free
+expressions in value/dimension slots and structural expression-tree substitution
+through dependent calls and record fields. HomologyClass is now a transparent
+Clean alias. Generic module maps, application, subspaces and ranges are exposed;
+induced homology values and homology images are authored in Clean. The previous
+carrier-interoperability problem is resolved for these explicit computations.
+Local aliases still do not unfold automatically.
+
+Validation: 323 Python tests; 31 canonical homology/record targets and five proofs;
+three independent computed-dimension targets; existing path, record, subspace and
+space target/proof suites; and the 92-proof corpus. Strict parser generation,
+TextMate/Vim and offline review checks pass. The PDF compiles without overflow and
+was inspected. No new lexical keyword was needed; existing editor scopes cover the
+new nested type form. Emacs runtime remains unavailable.
+
+The next mathematical interface work is intersections of images in a fixed ambient
+module and explicit interlevel problem data. Relative homology, cover/excision
+hypotheses, proof-bearing authored records and the paper-specific constructions
+remain open. General local-alias conversion, binder-bearing indices and full
+opaque Lean elaboration conformance are not claimed. The goal remains active.
+:::

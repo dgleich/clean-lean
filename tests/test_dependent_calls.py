@@ -41,11 +41,11 @@ class DependentCalls(unittest.TestCase):
     def test_authored_definition(self):
         self.assertEqual(self.expr('reverse twice(t,x,y,p)').type,self.local['p'].type)
         self.assertEqual(self.e.definitions['reverse twice']['implementation'],'equals')
-    def test_computed_index_must_be_named(self):
+    def test_computed_index_is_preserved(self):
         notation('Notation same point(x):',['Let X: Type','Let x: X','Returns: X',
                  'Means: x','Render latex: {x}'],self.e)
-        with self.assertRaisesRegex(CleanError,'named local'):
-            self.expr('constant path(t,same point(x))')
+        self.assertEqual(self.expr('constant path(t,same point(x))').type,
+            self.e.type('Path(X,t,(same point(x)),(same point(x)))',self.local))
     def test_naming_computed_index_is_supported(self):
         self.local['w']=Expr('w','w',Type('X'))
         self.assertEqual(self.expr('constant path(t,w)').type,

@@ -23,11 +23,19 @@ Notation homology module(field,H,X):
   Render latex: {H}({X})
 
 Type HomologyClass(K: Type, field: FieldStructure(K), H: HomologyTheory(K,field), X: TopologicalSpace):
-  Means: (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))
-  Render latex: {H}({X})
-  Describe: a homology class in ${H}({X})$
+  Equals: ModuleElement(K,field,(homology module(field,H,X)))
 
-Notation induced homology value(field,H,X,Y,g,x):
+Notation homology linear map(field,H,X,Y,g):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X,Y: TopologicalSpace
+  Let g: ContinuousMap(X,Y)
+  Returns: ModuleMap(K,field,(homology module(field,H,X)),(homology module(field,H,Y)))
+  Means: (letI : Field K := field; ((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).map (TopCat.ofHom g))
+  Render latex: {{{g}}}_*
+
+Define induced homology value(field,H,X,Y,g,x):
   Let K: Type
   Let field: FieldStructure(K)
   Let H: HomologyTheory(K,field)
@@ -35,7 +43,9 @@ Notation induced homology value(field,H,X,Y,g,x):
   Let g: ContinuousMap(X,Y)
   Let x: HomologyClass(K,field,H,X)
   Returns: HomologyClass(K,field,H,Y)
-  Means: (letI : Field K := field; (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).map (TopCat.ofHom g)).hom x)
+  Equals:
+    module map value(field,homology module(field,H,X),homology module(field,H,Y),
+      homology linear map(field,H,X,Y,g),x)
   Render latex: {{{g}}}_*({x})
 
 Define induced homology map(field,H,X,Y,g):
@@ -50,3 +60,15 @@ Define induced homology map(field,H,X,Y,g):
   Render latex: {{{g}}}_*
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Define homology image(field,H,X,Y,g):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X,Y: TopologicalSpace
+  Let g: ContinuousMap(X,Y)
+  Returns: ModuleSubspace(K,field,(homology module(field,H,Y)))
+  Equals:
+    module map range(field,homology module(field,H,X),homology module(field,H,Y),
+      homology linear map(field,H,X,Y,g))
+  Render latex: \operatorname{{range}}({{{g}}}_*)

@@ -168,6 +168,24 @@ noncomputable def cleanType_ModuleElement_b836832e231addafdcde (K : Type) (field
 noncomputable def cleanNotation_coefficient_module_1a0755937bb2a62d769c  (K : Type) (field : Field K) (V : Type) (L : cleanStructure_LinearSpace_5642406e6e2374eb8d06 (K) (field) (V)) : (@ModuleCat.{0,0} K field.toRing) :=
   @ModuleCat.of K field.toRing V L.addition L.action
 
+noncomputable def cleanType_ModuleMap_5397c112671d325e4f70 (K : Type) (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) (N : (@ModuleCat.{0,0} K field.toRing)) : Type :=
+  (@ModuleCat.Hom K field.toRing M N)
+
+noncomputable def cleanType_ModuleSubspace_1d5cec6119106efdc1bf (K : Type) (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) : Type :=
+  (@Submodule K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule)
+
+noncomputable def cleanNotation_module_map_value_f0835c4f7a36db98a213 {K : Type} (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) (N : (@ModuleCat.{0,0} K field.toRing)) (f : (@ModuleCat.Hom K field.toRing M N)) (x : (@ModuleCat.carrier K field.toRing M)) : (@ModuleCat.carrier K field.toRing N) :=
+  (@ModuleCat.Hom.hom K field.toRing M N f) x
+
+noncomputable def cleanNotation_module_map_range_3ddb83929271b74045bc {K : Type} (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) (N : (@ModuleCat.{0,0} K field.toRing)) (f : (@ModuleCat.Hom K field.toRing M N)) : (@Submodule K N.carrier field.toSemiring N.isAddCommGroup.toAddCommMonoid N.isModule) :=
+  LinearMap.range (@ModuleCat.Hom.hom K field.toRing M N f)
+
+noncomputable def cleanNotation_module_subspace_carrier_dfe8594175e35b27e6cd {K : Type} (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) (U : (@Submodule K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule)) : Set ((@ModuleCat.carrier K field.toRing M)) :=
+  U.carrier
+
+noncomputable def cleanDefine_belongs_to_module_subspace_678dcb75741602fad2b5 {K : Type} (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) (x : (@ModuleCat.carrier K field.toRing M)) (U : (@Submodule K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule)) : Prop :=
+  (x ∈ (@cleanNotation_module_subspace_carrier_dfe8594175e35b27e6cd (K) (field) (M) (U)))
+
 structure cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b («K» : Type) («field» : Field «K») : Type 1 where
   «coefficients» : (@ModuleCat.{0,0} «K» «field».toRing)
   «degree» : ℕ
@@ -178,14 +196,24 @@ noncomputable def cleanConstructor_homology_theory_129259f7d0cacb19c802 («K» :
 noncomputable def cleanNotation_homology_module_637b1330364c9c74b547 {K : Type} (field : Field K) (H : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b (K) (field)) (X : TopCat.{0}) : (@ModuleCat.{0,0} K field.toRing) :=
   (letI : Field K := field; ((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X)
 
-noncomputable def cleanType_HomologyClass_c1a43063d1b9cf7153ca (K : Type) (field : Field K) (H : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b (K) (field)) (X : TopCat.{0}) : Type :=
-  (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))
+noncomputable def cleanNotation_homology_linear_map_0ae4bf1851a01e2f8191 {K : Type} (field : Field K) (H : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b (K) (field)) (X : TopCat.{0}) (Y : TopCat.{0}) (g : (@ContinuousMap X.carrier Y.carrier X.str Y.str)) : (@ModuleCat.Hom K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (X)) (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y))) :=
+  (letI : Field K := field; ((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).map (TopCat.ofHom g))
 
-noncomputable def cleanNotation_induced_homology_value_162fdcf2178b03c48637 {K : Type} (field : Field K) (H : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b (K) (field)) (X : TopCat.{0}) (Y : TopCat.{0}) (g : (@ContinuousMap X.carrier Y.carrier X.str Y.str)) (x : (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))) : (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj Y)) :=
-  (letI : Field K := field; (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).map (TopCat.ofHom g)).hom x)
+noncomputable def cleanDefine_induced_homology_value_6fc3a0538148f753cdd6 {K : Type} (field : Field K) (H : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b (K) (field)) (X : TopCat.{0}) (Y : TopCat.{0}) (g : (@ContinuousMap X.carrier Y.carrier X.str Y.str)) (x : (@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (X)))) : (@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y))) :=
+  (@cleanNotation_module_map_value_f0835c4f7a36db98a213 (K) (field) ((@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (X))) ((@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y))) ((@cleanNotation_homology_linear_map_0ae4bf1851a01e2f8191 (K) (field) (H) (X) (Y) (g))) (x))
 
-noncomputable def cleanDefine_induced_homology_map_76fe16958664a8a9ab12 {K : Type} (field : Field K) (H : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b (K) (field)) (X : TopCat.{0}) (Y : TopCat.{0}) (g : (@ContinuousMap X.carrier Y.carrier X.str Y.str)) : ((letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))) → ((letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj Y))) :=
-  (fun (clean_bound_0 : (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))) => (@cleanNotation_induced_homology_value_162fdcf2178b03c48637 (K) (field) (H) (X) (Y) (g) (clean_bound_0)))
+noncomputable def cleanDefine_induced_homology_map_40473061c52055c41391 {K : Type} (field : Field K) (H : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b (K) (field)) (X : TopCat.{0}) (Y : TopCat.{0}) (g : (@ContinuousMap X.carrier Y.carrier X.str Y.str)) : ((@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (X)))) → ((@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y)))) :=
+  (fun (clean_bound_0 : (@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (X)))) => (@cleanDefine_induced_homology_value_6fc3a0538148f753cdd6 (K) (field) (H) (X) (Y) (g) (clean_bound_0)))
+
+noncomputable def cleanDefine_homology_image_80867dd2d2b603b209e7 {K : Type} (field : Field K) (H : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b (K) (field)) (X : TopCat.{0}) (Y : TopCat.{0}) (g : (@ContinuousMap X.carrier Y.carrier X.str Y.str)) : (@Submodule K (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y)).carrier field.toSemiring (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y)).isAddCommGroup.toAddCommMonoid (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y)).isModule) :=
+  (@cleanNotation_module_map_range_3ddb83929271b74045bc (K) (field) ((@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (X))) ((@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y))) ((@cleanNotation_homology_linear_map_0ae4bf1851a01e2f8191 (K) (field) (H) (X) (Y) (g))))
+
+structure cleanStructure_ClassInSpace_81686981eac997d7df62 («K» : Type) («field» : Field «K») («H» : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b («K») («field»)) : Type 1 where
+  «space» : TopCat.{0}
+  «element» : (@ModuleCat.carrier «K» «field».toRing (@cleanNotation_homology_module_637b1330364c9c74b547 («K») («field») («H») («space»)))
+
+noncomputable def cleanConstructor_class_in_space_660a74fa9b1c0e66aa40 («K» : Type) («field» : Field «K») («H» : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b («K») («field»)) («space» : TopCat.{0}) («element» : (@ModuleCat.carrier «K» «field».toRing (@cleanNotation_homology_module_637b1330364c9c74b547 («K») («field») («H») («space»)))) : cleanStructure_ClassInSpace_81686981eac997d7df62 («K») («field») («H») :=
+  @cleanStructure_ClassInSpace_81686981eac997d7df62.mk «K» «field» «H» «space» «element»
 
 
 open scoped Matrix
@@ -205,8 +233,8 @@ def homology_identity_fixes_classes : Prop :=
   ∀ (field : Field K),
   ∀ (H : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b (K) (field)),
   ∀ (X : TopCat.{0}),
-  ∀ (x : (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))),
-  ((@cleanNotation_induced_homology_value_162fdcf2178b03c48637 (K) (field) (H) (X) (X) ((@cleanNotation_identity_continuous_map_315ac9c43278079f1ecf (X))) (x)) = x)
+  ∀ (x : (@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (X)))),
+  ((@cleanDefine_induced_homology_value_6fc3a0538148f753cdd6 (K) (field) (H) (X) (X) ((@cleanNotation_identity_continuous_map_315ac9c43278079f1ecf (X))) (x)) = x)
 
 /--
 source: mathlib
@@ -220,8 +248,8 @@ def homology_respects_composition : Prop :=
   ∀ (X Y Z : TopCat.{0}),
   ∀ (f : (@ContinuousMap X.carrier Y.carrier X.str Y.str)),
   ∀ (g : (@ContinuousMap Y.carrier Z.carrier Y.str Z.str)),
-  ∀ (x : (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))),
-  ((@cleanNotation_induced_homology_value_162fdcf2178b03c48637 (K) (field) (H) (X) (Z) ((@cleanNotation_compose_continuous_maps_5b97f65ef52a877965dc (X) (Y) (Z) (g) (f))) (x)) = (@cleanNotation_induced_homology_value_162fdcf2178b03c48637 (K) (field) (H) (Y) (Z) (g) ((@cleanNotation_induced_homology_value_162fdcf2178b03c48637 (K) (field) (H) (X) (Y) (f) (x)))))
+  ∀ (x : (@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (X)))),
+  ((@cleanDefine_induced_homology_value_6fc3a0538148f753cdd6 (K) (field) (H) (X) (Z) ((@cleanNotation_compose_continuous_maps_5b97f65ef52a877965dc (X) (Y) (Z) (g) (f))) (x)) = (@cleanDefine_induced_homology_value_6fc3a0538148f753cdd6 (K) (field) (H) (Y) (Z) (g) ((@cleanDefine_induced_homology_value_6fc3a0538148f753cdd6 (K) (field) (H) (X) (Y) (f) (x)))))
 
 /--
 source: topology
@@ -234,23 +262,60 @@ def induced_function_acts_on_classes : Prop :=
   ∀ (H : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b (K) (field)),
   ∀ (X Y : TopCat.{0}),
   ∀ (f : (@ContinuousMap X.carrier Y.carrier X.str Y.str)),
-  ∀ (x : (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))),
-  let h : ((letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))) → ((letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj Y))) := (@cleanDefine_induced_homology_map_76fe16958664a8a9ab12 (K) (field) (H) (X) (Y) (f));
-  ((h x) = (@cleanNotation_induced_homology_value_162fdcf2178b03c48637 (K) (field) (H) (X) (Y) (f) (x)))
+  ∀ (x : (@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (X)))),
+  let h : ((@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (X)))) → ((@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y)))) := (@cleanDefine_induced_homology_map_40473061c52055c41391 (K) (field) (H) (X) (Y) (f));
+  ((h x) = (@cleanDefine_induced_homology_value_6fc3a0538148f753cdd6 (K) (field) (H) (X) (Y) (f) (x)))
+
+/--
+source: mathlib
+reference: LinearMap.mem_range
+relationship: adapted
+-/
+def homology_image_membership : Prop :=
+  ∀ (K : Type),
+  ∀ (field : Field K),
+  ∀ (H : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b (K) (field)),
+  ∀ (X Y : TopCat.{0}),
+  ∀ (f : (@ContinuousMap X.carrier Y.carrier X.str Y.str)),
+  ∀ (x : (@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y)))),
+  let h : ((@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (X)))) → ((@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y)))) := (@cleanDefine_induced_homology_map_40473061c52055c41391 (K) (field) (H) (X) (Y) (f));
+  let U : (@Submodule K (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y)).carrier field.toSemiring (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y)).isAddCommGroup.toAddCommMonoid (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y)).isModule) := (@cleanDefine_homology_image_80867dd2d2b603b209e7 (K) (field) (H) (X) (Y) (f));
+  ((@cleanDefine_belongs_to_module_subspace_678dcb75741602fad2b5 (K) (field) ((@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (Y))) (x) (U)) ↔ (@Exists ((@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (X)))) (fun (clean_bound_0 : (@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) (X)))) => ((h clean_bound_0) = x))))
+
+/--
+source: topology
+reference: computed dependent record field
+relationship: original
+-/
+def bundled_class_has_its_declared_space : Prop :=
+  ∀ (K : Type),
+  ∀ (field : Field K),
+  ∀ (H : cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b (K) (field)),
+  ∀ (P : cleanStructure_ClassInSpace_81686981eac997d7df62 (K) (field) (H)),
+  (@Exists ((@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) ((@cleanStructure_ClassInSpace_81686981eac997d7df62.«space» (K) (field) (H) (P)))))) (fun (clean_bound_0 : (@ModuleCat.carrier K field.toRing (@cleanNotation_homology_module_637b1330364c9c74b547 (K) (field) (H) ((@cleanStructure_ClassInSpace_81686981eac997d7df62.«space» (K) (field) (H) (P)))))) => (clean_bound_0 = (@cleanStructure_ClassInSpace_81686981eac997d7df62.«element» (K) (field) (H) (P)))))
 
 end CleanStatements
 
 open Lean Elab Command
 private def canonicalName (n : Name) : Name := Id.run do
   if n == `HomologyOracle.Theory then return `cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b
+  if n == `HomologyOracle.ClassInSpace then return `cleanStructure_ClassInSpace_81686981eac997d7df62
   if n == `HomologyOracle.coefficientType then return `cleanType_CoefficientModule_51152214c957ecc84ea1
   if n == `HomologyOracle.elementType then return `cleanType_ModuleElement_b836832e231addafdcde
-  if n == `HomologyOracle.classType then return `cleanType_HomologyClass_c1a43063d1b9cf7153ca
+  if n == `HomologyOracle.mapType then return `cleanType_ModuleMap_5397c112671d325e4f70
+  if n == `HomologyOracle.subspaceType then return `cleanType_ModuleSubspace_1d5cec6119106efdc1bf
   if n == `HomologyOracle.bundle then return `cleanNotation_coefficient_module_1a0755937bb2a62d769c
   if n == `HomologyOracle.theory then return `cleanConstructor_homology_theory_129259f7d0cacb19c802
   if n == `HomologyOracle.homology then return `cleanNotation_homology_module_637b1330364c9c74b547
-  if n == `HomologyOracle.value then return `cleanNotation_induced_homology_value_162fdcf2178b03c48637
-  if n == `HomologyOracle.induced then return `cleanDefine_induced_homology_map_76fe16958664a8a9ab12
+  if n == `HomologyOracle.value then return `cleanDefine_induced_homology_value_6fc3a0538148f753cdd6
+  if n == `HomologyOracle.induced then return `cleanDefine_induced_homology_map_40473061c52055c41391
+  if n == `HomologyOracle.classInSpace then return `cleanConstructor_class_in_space_660a74fa9b1c0e66aa40
+  if n == `HomologyOracle.mapValue then return `cleanNotation_module_map_value_f0835c4f7a36db98a213
+  if n == `HomologyOracle.mapRange then return `cleanNotation_module_map_range_3ddb83929271b74045bc
+  if n == `HomologyOracle.carrier then return `cleanNotation_module_subspace_carrier_dfe8594175e35b27e6cd
+  if n == `HomologyOracle.belongs then return `cleanDefine_belongs_to_module_subspace_678dcb75741602fad2b5
+  if n == `HomologyOracle.linear then return `cleanNotation_homology_linear_map_0ae4bf1851a01e2f8191
+  if n == `HomologyOracle.image then return `cleanDefine_homology_image_80867dd2d2b603b209e7
   if n == `HomologyOracle.identity then return `cleanNotation_identity_continuous_map_315ac9c43278079f1ecf
   if n == `HomologyOracle.compose then return `cleanNotation_compose_continuous_maps_5b97f65ef52a877965dc
   match n with
@@ -301,14 +366,38 @@ noncomputable def homology {K : Type} (field : Field K) (H : Theory K field) (X 
   @ModuleCat.{0,0} K field.toRing :=
   letI : Field K := field
   ((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X
-noncomputable def classType (K : Type) (field : Field K) (H : Theory K field) (X : TopCat.{0}) : Type := (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))
-noncomputable def value {K : Type} (field : Field K) (H : Theory K field) (X Y : TopCat.{0})
-  (g : @ContinuousMap X.carrier Y.carrier X.str Y.str) (x : (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))) : (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj Y)) :=
+noncomputable def mapType (K : Type) (field : Field K)
+  (M N : @ModuleCat.{0,0} K field.toRing) : Type := @ModuleCat.Hom K field.toRing M N
+noncomputable def subspaceType (K : Type) (field : Field K) (M : @ModuleCat.{0,0} K field.toRing) : Type :=
+  @Submodule K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule
+noncomputable def mapValue {K : Type} (field : Field K) (M N : @ModuleCat.{0,0} K field.toRing)
+  (f : @ModuleCat.Hom K field.toRing M N) (x : @ModuleCat.carrier K field.toRing M) :
+  @ModuleCat.carrier K field.toRing N := (@ModuleCat.Hom.hom K field.toRing M N f) x
+noncomputable def mapRange {K : Type} (field : Field K) (M N : @ModuleCat.{0,0} K field.toRing)
+  (f : @ModuleCat.Hom K field.toRing M N) :
+  @Submodule K N.carrier field.toSemiring N.isAddCommGroup.toAddCommMonoid N.isModule :=
+  LinearMap.range (@ModuleCat.Hom.hom K field.toRing M N f)
+noncomputable def carrier {K : Type} (field : Field K) (M : @ModuleCat.{0,0} K field.toRing)
+  (U : @Submodule K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule) :
+  Set (@ModuleCat.carrier K field.toRing M) := U.carrier
+noncomputable def belongs {K : Type} (field : Field K) (M : @ModuleCat.{0,0} K field.toRing)
+  (x : @ModuleCat.carrier K field.toRing M)
+  (U : @Submodule K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule) : Prop :=
+  x ∈ @carrier K field M U
+noncomputable def linear {K : Type} (field : Field K) (H : Theory K field) (X Y : TopCat.{0})
+  (g : @ContinuousMap X.carrier Y.carrier X.str Y.str) : @ModuleCat.Hom K field.toRing (@homology K field H X) (@homology K field H Y) :=
   letI : Field K := field
-  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).map (TopCat.ofHom g)).hom x
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).map (TopCat.ofHom g)
+noncomputable def value {K : Type} (field : Field K) (H : Theory K field) (X Y : TopCat.{0})
+  (g : @ContinuousMap X.carrier Y.carrier X.str Y.str) (x : (@ModuleCat.carrier K field.toRing (@homology K field H X))) : (@ModuleCat.carrier K field.toRing (@homology K field H Y)) :=
+  @mapValue K field (@homology K field H X) (@homology K field H Y) (@linear K field H X Y g) x
+noncomputable def image {K : Type} (field : Field K) (H : Theory K field) (X Y : TopCat.{0})
+  (g : @ContinuousMap X.carrier Y.carrier X.str Y.str) :
+  @Submodule K (@homology K field H Y).carrier field.toSemiring (@homology K field H Y).isAddCommGroup.toAddCommMonoid (@homology K field H Y).isModule :=
+  @mapRange K field (@homology K field H X) (@homology K field H Y) (@linear K field H X Y g)
 noncomputable def induced {K : Type} (field : Field K) (H : Theory K field) (X Y : TopCat.{0})
-  (g : @ContinuousMap X.carrier Y.carrier X.str Y.str) : (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X)) → (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj Y)) :=
-  fun (x : (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))) => @value K field H X Y g x
+  (g : @ContinuousMap X.carrier Y.carrier X.str Y.str) : (@ModuleCat.carrier K field.toRing (@homology K field H X)) → (@ModuleCat.carrier K field.toRing (@homology K field H Y)) :=
+  fun (x : (@ModuleCat.carrier K field.toRing (@homology K field H X))) => @value K field H X Y g x
 noncomputable def identity (X : TopCat.{0}) : @ContinuousMap X.carrier X.carrier X.str X.str :=
   @ContinuousMap.id X.carrier X.str
 noncomputable def compose (X Y Z : TopCat.{0})
@@ -317,34 +406,64 @@ noncomputable def compose (X Y Z : TopCat.{0})
   @ContinuousMap X.carrier Z.carrier X.str Z.str :=
   @ContinuousMap.comp X.carrier Y.carrier Z.carrier X.str Y.str Z.str g f
 
+structure ClassInSpace (K : Type) (field : Field K) (H : Theory K field) : Type 1 where
+  space : TopCat.{0}
+  element : @ModuleCat.carrier K field.toRing (@homology K field H space)
+noncomputable def classInSpace (K : Type) (field : Field K) (H : Theory K field)
+  (space : TopCat.{0}) (element : @ModuleCat.carrier K field.toRing (@homology K field H space)) :
+  ClassInSpace K field H := @ClassInSpace.mk K field H space element
+
 def identityStatement : Prop := ∀ (K : Type) (field : Field K) (H : Theory K field)
-  (X : TopCat.{0}) (x : (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))), @value K field H X X (@identity X) x=x
+  (X : TopCat.{0}) (x : (@ModuleCat.carrier K field.toRing (@homology K field H X))), @value K field H X X (@identity X) x=x
 def compositionStatement : Prop := ∀ (K : Type) (field : Field K) (H : Theory K field)
   (X Y Z : TopCat.{0}) (f : @ContinuousMap X.carrier Y.carrier X.str Y.str)
-  (g : @ContinuousMap Y.carrier Z.carrier Y.str Z.str) (x : (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))),
+  (g : @ContinuousMap Y.carrier Z.carrier Y.str Z.str) (x : (@ModuleCat.carrier K field.toRing (@homology K field H X))),
   @value K field H X Z (@compose X Y Z g f) x = @value K field H Y Z g (@value K field H X Y f x)
 def applicationStatement : Prop := ∀ (K : Type) (field : Field K) (H : Theory K field)
-  (X Y : TopCat.{0}) (f : @ContinuousMap X.carrier Y.carrier X.str Y.str) (x : (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))),
-  let h : (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X)) → (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj Y)) := @induced K field H X Y f;
+  (X Y : TopCat.{0}) (f : @ContinuousMap X.carrier Y.carrier X.str Y.str) (x : (@ModuleCat.carrier K field.toRing (@homology K field H X))),
+  let h : (@ModuleCat.carrier K field.toRing (@homology K field H X)) → (@ModuleCat.carrier K field.toRing (@homology K field H Y)) := @induced K field H X Y f;
   h x = @value K field H X Y f x
+def rangeStatement : Prop := ∀ (K : Type) (field : Field K) (H : Theory K field)
+  (X Y : TopCat.{0}) (f : @ContinuousMap X.carrier Y.carrier X.str Y.str) (x : (@ModuleCat.carrier K field.toRing (@homology K field H Y))),
+  let h : (@ModuleCat.carrier K field.toRing (@homology K field H X)) → (@ModuleCat.carrier K field.toRing (@homology K field H Y)) := @induced K field H X Y f;
+  let U : @Submodule K (@homology K field H Y).carrier field.toSemiring (@homology K field H Y).isAddCommGroup.toAddCommMonoid (@homology K field H Y).isModule := @image K field H X Y f;
+  @belongs K field (@homology K field H Y) x U ↔ @Exists (@ModuleCat.carrier K field.toRing (@homology K field H X)) (fun y => h y = x)
+def fieldStatement : Prop := ∀ (K : Type) (field : Field K) (H : Theory K field)
+  (P : ClassInSpace K field H),
+  @Exists (@ModuleCat.carrier K field.toRing (@homology K field H (@ClassInSpace.space K field H P)))
+    (fun x => x = @ClassInSpace.element K field H P)
 end HomologyOracle
 same_target cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b HomologyOracle.Theory
+same_target cleanStructure_ClassInSpace_81686981eac997d7df62 HomologyOracle.ClassInSpace
 same_target cleanType_CoefficientModule_51152214c957ecc84ea1 HomologyOracle.coefficientType
 same_target cleanType_ModuleElement_b836832e231addafdcde HomologyOracle.elementType
-same_target cleanType_HomologyClass_c1a43063d1b9cf7153ca HomologyOracle.classType
+same_target cleanType_ModuleMap_5397c112671d325e4f70 HomologyOracle.mapType
+same_target cleanType_ModuleSubspace_1d5cec6119106efdc1bf HomologyOracle.subspaceType
 same_target cleanNotation_coefficient_module_1a0755937bb2a62d769c HomologyOracle.bundle
 same_target cleanConstructor_homology_theory_129259f7d0cacb19c802 HomologyOracle.theory
 same_target cleanNotation_homology_module_637b1330364c9c74b547 HomologyOracle.homology
-same_target cleanNotation_induced_homology_value_162fdcf2178b03c48637 HomologyOracle.value
-same_target cleanDefine_induced_homology_map_76fe16958664a8a9ab12 HomologyOracle.induced
+same_target cleanDefine_induced_homology_value_6fc3a0538148f753cdd6 HomologyOracle.value
+same_target cleanDefine_induced_homology_map_40473061c52055c41391 HomologyOracle.induced
+same_target cleanConstructor_class_in_space_660a74fa9b1c0e66aa40 HomologyOracle.classInSpace
+same_target cleanNotation_module_map_value_f0835c4f7a36db98a213 HomologyOracle.mapValue
+same_target cleanNotation_module_map_range_3ddb83929271b74045bc HomologyOracle.mapRange
+same_target cleanNotation_module_subspace_carrier_dfe8594175e35b27e6cd HomologyOracle.carrier
+same_target cleanDefine_belongs_to_module_subspace_678dcb75741602fad2b5 HomologyOracle.belongs
+same_target cleanNotation_homology_linear_map_0ae4bf1851a01e2f8191 HomologyOracle.linear
+same_target cleanDefine_homology_image_80867dd2d2b603b209e7 HomologyOracle.image
 same_target cleanNotation_identity_continuous_map_315ac9c43278079f1ecf HomologyOracle.identity
 same_target cleanNotation_compose_continuous_maps_5b97f65ef52a877965dc HomologyOracle.compose
 same_target cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b.mk HomologyOracle.Theory.mk
 same_target cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b.coefficients HomologyOracle.Theory.coefficients
 same_target cleanStructure_HomologyTheory_1b7d0a2aa40eb3e6062b.degree HomologyOracle.Theory.degree
+same_target cleanStructure_ClassInSpace_81686981eac997d7df62.mk HomologyOracle.ClassInSpace.mk
+same_target cleanStructure_ClassInSpace_81686981eac997d7df62.space HomologyOracle.ClassInSpace.space
+same_target cleanStructure_ClassInSpace_81686981eac997d7df62.element HomologyOracle.ClassInSpace.element
 same_target CleanStatements.homology_identity_fixes_classes HomologyOracle.identityStatement
 same_target CleanStatements.homology_respects_composition HomologyOracle.compositionStatement
 same_target CleanStatements.induced_function_acts_on_classes HomologyOracle.applicationStatement
+same_target CleanStatements.homology_image_membership HomologyOracle.rangeStatement
+same_target CleanStatements.bundled_class_has_its_declared_space HomologyOracle.fieldStatement
 
 open CategoryTheory
 namespace HomologyProofs
@@ -366,6 +485,12 @@ theorem homology_respects_composition : CleanStatements.homology_respects_compos
 theorem induced_function_acts_on_classes : CleanStatements.induced_function_acts_on_classes := by
   intro K field H X Y f x
   rfl
+theorem homology_image_membership : CleanStatements.homology_image_membership := by
+  intro K field H X Y f x
+  rfl
+theorem bundled_class_has_its_declared_space : CleanStatements.bundled_class_has_its_declared_space := by
+  intro K field H P
+  exact ⟨P.element,rfl⟩
 end HomologyProofs
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

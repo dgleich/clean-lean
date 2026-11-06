@@ -471,13 +471,32 @@ let F := (AlgebraicTopology.singularHomologyFunctor
 -- Homology classes are elements of (F.obj X).carrier.
 -- The induced value is:
 (F.map (TopCat.ofHom f)).hom x</code></pre></section></div>
-<p>The coefficient module and degree are authored record fields. The induced
-ordinary function is authored in Clean; its value adapter invokes Mathlib's actual
-singular homology functor. Identity and composition have proofs and independent
-canonical target checks. Relative homology and generic linear-map ranges are
-pending. Named local aliases do not yet identify a homology module's carrier with
-HomologyClass. <a href="../studies/topology/singular-homology.md">Exact meanings,
+<p>The coefficient module and degree are authored record fields. The induced ordinary function, its value and homology image are authored in
+Clean using generic module-map operations. The foundational linear-map adapter
+invokes Mathlib's singular homology functor. HomologyClass is a transparent Clean
+type alias. Identity, composition and range membership have proofs and independent
+canonical target checks. Relative homology is pending. Named local aliases remain
+distinct. <a href="../studies/topology/singular-homology.md">Exact meanings,
 validation and limitations</a>.</p>
+</article>
+
+<article id="computed-indices" data-status="implemented" class="mapping">
+<h2>Computed type indices and transparent aliases</h2>
+<div class="pair"><section><h3>Clean</h3><pre><code>Type HomologyClass(K: Type, field: FieldStructure(K),
+                   H: HomologyTheory(K,field), X: TopologicalSpace):
+  Equals: ModuleElement(K,field,(homology module(field,H,X)))
+
+Let x: HomologyClass(K,field,H,X)</code></pre></section>
+<section><h3>Readable Lean equivalent</h3><pre><code>-- The generated wrapper name is shortened here.
+-- No native HomologyClass declaration is required.
+(x : @ModuleCat.carrier K field.toRing
+       (@homologyModule K field H X))</code></pre></section></div>
+<p>The extra parentheses mark a binder-free expression in a value/dimension slot.
+Parsing precedes typing. Substitute formal locals through the expression tree,
+then compare indices structurally. Compound actual value arguments now work in
+dependent calls, including generic module-map ranges. This adds no conversion
+search, local-alias unfolding or inference by inverting computations. Computed type-valued arguments remain unsupported. <a href="computed-indices.md">Grammar, scope,
+constructive translation and acceptance evidence</a>.</p>
 </article>
 </main>
 <script>

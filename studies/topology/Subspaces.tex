@@ -5,7 +5,7 @@ This file does not assert the two-extreme-perturbation characterization.
 \par
 
 \ifcleanreferenced
-\begin{cleancontext}{indexed subspaces}{e026f949c376-16}
+\begin{cleancontext}{indexed subspaces}{3af6a3d0d733-16}
 Let $K$, $V$ and $I$ be types.
 Let $f$ be a field structure on $K$.
 Let $L$ be a vector space structure on $V$ over $f$.
@@ -13,7 +13,7 @@ Let $A$ be a subset of $I$.
 Let $S$ be a function from $I$ to $\operatorname{Subspace}(L)$.
 \end{cleancontext}
 \begin{cleanresult}{indexed intersection membership}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, Submodule.mem\_sInf]}}
-Using Context (\cleancontextref{e026f949c376-16}).
+Using Context (\cleancontextref{3af6a3d0d733-16}).
 Let $x$ be an element of $V$.
 Then \[x\text{ belongs to }\bigcap_{i \in A} S(i) \text{ if and only if } \left(\text{for every }i : I,\; i \text{ belongs to } A \text{ implies } x\text{ belongs to }S(i)\right).\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
@@ -34,7 +34,7 @@ Then \[x\text{ belongs to }\bigcap_{i \in A} S(i) \text{ if and only if } \left(
 \fi
 \ifcleanreferenced
 \begin{cleanresult}{intersection is included in each member}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, Submodule.mem\_sInf]}}
-Using Context (\cleancontextref{e026f949c376-16}).
+Using Context (\cleancontextref{3af6a3d0d733-16}).
 Let $i$ be an element of $I$.
 Assume $i \text{ belongs to } A$ (\texttt{admissible index}).
 Then \[\bigcap_{i \in A} S(i)\text{ is a subspace of }S(i).\]
@@ -57,7 +57,7 @@ Then \[\bigcap_{i \in A} S(i)\text{ is a subspace of }S(i).\]
 \fi
 \ifcleanreferenced
 \begin{cleanresult}{more indices give a smaller intersection}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, Submodule.mem\_sInf]}}
-Using Context (\cleancontextref{e026f949c376-16}).
+Using Context (\cleancontextref{3af6a3d0d733-16}).
 Let $B$ be a subset of $I$.
 Assume $A \text{ is a subset of } B$ (\texttt{more indices}).
 Then \[\bigcap_{i \in B} S(i)\text{ is a subspace of }\bigcap_{i \in A} S(i).\]
@@ -80,7 +80,7 @@ Then \[\bigcap_{i \in B} S(i)\text{ is a subspace of }\bigcap_{i \in A} S(i).\]
 \fi
 \ifcleanreferenced
 \begin{cleanresult}{empty family contains every vector}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, Submodule.mem\_sInf]}}
-Using Context (\cleancontextref{e026f949c376-16}).
+Using Context (\cleancontextref{3af6a3d0d733-16}).
 Let $x$ be an element of $V$.
 Assume $\left(\text{for every }i : I,\; \text{not }(i \text{ belongs to } A)\right)$ (\texttt{no admissible indices}).
 Then \[x\text{ belongs to }\bigcap_{i \in A} S(i).\]

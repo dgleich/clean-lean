@@ -4,7 +4,7 @@
 
 This implements the next bounded slice of [named value indices](value-indexed-types.md).
 Notations, authored definitions, and conditions can accept and return types that
-contain named value indices. General expression indices, dependent function-valued
+contain named value indices. This original bounded profile is extended by [explicit computed indices](computed-indices.md). Binder-bearing expression indices, dependent function-valued
 results (Pi types), implicit value indices, and universe-polymorphic APIs are still
 outside this slice. Existing nondependent call translation remains unchanged.
 
@@ -146,4 +146,16 @@ name. Explicit type-valued parameters also trigger structural substitution; this
 fixes carrier renaming for authored bundle operations. Computed index arguments
 still require a preceding Let. The original Local-only description above records
 the first milestone and is superseded on these points.
+:::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Explicit computed indices
+
+[Computed indices](computed-indices.md) extends a value/dimension argument with
+an explicitly parenthesized, binder-free expression. It also permits compound
+actual value arguments in dependent calls. Substitution works on expression trees;
+matching remains structural, with no local-alias unfolding or inversion of
+computations. This supersedes the earlier requirement to name every computed
+index first. Type-valued arguments remain named carriers.
 :::

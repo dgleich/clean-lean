@@ -14,11 +14,16 @@ source=lean(results,env,['Lean'])
 record=env.structures['HomologyTheory']['key']
 function=lambda n:env.data['functions'][n]['lean'].split()[0]
 typekey=lambda n:next(k for k in env.notation_definitions if k.startswith('cleanType_'+n+'_'))
-mapping={'HomologyOracle.Theory':record}
-for n,t in [('coefficientType','CoefficientModule'),('elementType','ModuleElement'),('classType','HomologyClass')]:
+mapping={'HomologyOracle.Theory':record,
+         'HomologyOracle.ClassInSpace':env.structures['ClassInSpace']['key']}
+for n,t in [('coefficientType','CoefficientModule'),('elementType','ModuleElement'),('mapType','ModuleMap'),('subspaceType','ModuleSubspace')]:
     mapping['HomologyOracle.'+n]=typekey(t)
 for n,t in [('bundle','coefficient module'),('theory','homology theory'),
  ('homology','homology module'),('value','induced homology value'),('induced','induced homology map'),
+ ('classInSpace','class in space'),
+ ('mapValue','module map value'),('mapRange','module map range'),
+ ('carrier','module subspace carrier'),('belongs','belongs to module subspace'),
+ ('linear','homology linear map'),('image','homology image'),
  ('identity','identity continuous map'),('compose','compose continuous maps')]:
     mapping['HomologyOracle.'+n]=function(t)
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
@@ -75,11 +80,35 @@ noncomputable def homology {K : Type} (field : Field K) (H : Theory K field) (X 
   @ModuleCat.{0,0} K field.toRing :=
   letI : Field K := field
   ((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X
-noncomputable def classType (K : Type) (field : Field K) (H : Theory K field) (X : TopCat.{0}) : Type := CX
+noncomputable def mapType (K : Type) (field : Field K)
+  (M N : @ModuleCat.{0,0} K field.toRing) : Type := @ModuleCat.Hom K field.toRing M N
+noncomputable def subspaceType (K : Type) (field : Field K) (M : @ModuleCat.{0,0} K field.toRing) : Type :=
+  @Submodule K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule
+noncomputable def mapValue {K : Type} (field : Field K) (M N : @ModuleCat.{0,0} K field.toRing)
+  (f : @ModuleCat.Hom K field.toRing M N) (x : @ModuleCat.carrier K field.toRing M) :
+  @ModuleCat.carrier K field.toRing N := (@ModuleCat.Hom.hom K field.toRing M N f) x
+noncomputable def mapRange {K : Type} (field : Field K) (M N : @ModuleCat.{0,0} K field.toRing)
+  (f : @ModuleCat.Hom K field.toRing M N) :
+  @Submodule K N.carrier field.toSemiring N.isAddCommGroup.toAddCommMonoid N.isModule :=
+  LinearMap.range (@ModuleCat.Hom.hom K field.toRing M N f)
+noncomputable def carrier {K : Type} (field : Field K) (M : @ModuleCat.{0,0} K field.toRing)
+  (U : @Submodule K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule) :
+  Set (@ModuleCat.carrier K field.toRing M) := U.carrier
+noncomputable def belongs {K : Type} (field : Field K) (M : @ModuleCat.{0,0} K field.toRing)
+  (x : @ModuleCat.carrier K field.toRing M)
+  (U : @Submodule K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule) : Prop :=
+  x ∈ @carrier K field M U
+noncomputable def linear {K : Type} (field : Field K) (H : Theory K field) (X Y : TopCat.{0})
+  (g : @ContinuousMap X.carrier Y.carrier X.str Y.str) : @ModuleCat.Hom K field.toRing MX MY :=
+  letI : Field K := field
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).map (TopCat.ofHom g)
 noncomputable def value {K : Type} (field : Field K) (H : Theory K field) (X Y : TopCat.{0})
   (g : @ContinuousMap X.carrier Y.carrier X.str Y.str) (x : CX) : CY :=
-  letI : Field K := field
-  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).map (TopCat.ofHom g)).hom x
+  @mapValue K field MX MY (@linear K field H X Y g) x
+noncomputable def image {K : Type} (field : Field K) (H : Theory K field) (X Y : TopCat.{0})
+  (g : @ContinuousMap X.carrier Y.carrier X.str Y.str) :
+  @Submodule K MY.carrier field.toSemiring MY.isAddCommGroup.toAddCommMonoid MY.isModule :=
+  @mapRange K field MX MY (@linear K field H X Y g)
 noncomputable def induced {K : Type} (field : Field K) (H : Theory K field) (X Y : TopCat.{0})
   (g : @ContinuousMap X.carrier Y.carrier X.str Y.str) : CX → CY :=
   fun (x : CX) => @value K field H X Y g x
@@ -91,6 +120,13 @@ noncomputable def compose (X Y Z : TopCat.{0})
   @ContinuousMap X.carrier Z.carrier X.str Z.str :=
   @ContinuousMap.comp X.carrier Y.carrier Z.carrier X.str Y.str Z.str g f
 
+structure ClassInSpace (K : Type) (field : Field K) (H : Theory K field) : Type 1 where
+  space : TopCat.{0}
+  element : @ModuleCat.carrier K field.toRing (@homology K field H space)
+noncomputable def classInSpace (K : Type) (field : Field K) (H : Theory K field)
+  (space : TopCat.{0}) (element : @ModuleCat.carrier K field.toRing (@homology K field H space)) :
+  ClassInSpace K field H := @ClassInSpace.mk K field H space element
+
 def identityStatement : Prop := ∀ (K : Type) (field : Field K) (H : Theory K field)
   (X : TopCat.{0}) (x : CX), @value K field H X X (@identity X) x=x
 def compositionStatement : Prop := ∀ (K : Type) (field : Field K) (H : Theory K field)
@@ -101,20 +137,33 @@ def applicationStatement : Prop := ∀ (K : Type) (field : Field K) (H : Theory 
   (X Y : TopCat.{0}) (f : @ContinuousMap X.carrier Y.carrier X.str Y.str) (x : CX),
   let h : CX → CY := @induced K field H X Y f;
   h x = @value K field H X Y f x
+def rangeStatement : Prop := ∀ (K : Type) (field : Field K) (H : Theory K field)
+  (X Y : TopCat.{0}) (f : @ContinuousMap X.carrier Y.carrier X.str Y.str) (x : CY),
+  let h : CX → CY := @induced K field H X Y f;
+  let U : @Submodule K MY.carrier field.toSemiring MY.isAddCommGroup.toAddCommMonoid MY.isModule := @image K field H X Y f;
+  @belongs K field MY x U ↔ @Exists CX (fun y => h y = x)
+def fieldStatement : Prop := ∀ (K : Type) (field : Field K) (H : Theory K field)
+  (P : ClassInSpace K field H),
+  @Exists (@ModuleCat.carrier K field.toRing (@homology K field H (@ClassInSpace.space K field H P)))
+    (fun x => x = @ClassInSpace.element K field H P)
 end HomologyOracle
 '''
 # Independently authored native class type; textual expansion only avoids repeating
 # this long expression in the oracle. It does not consult the Clean translator.
 for name in ['X','Y']:
-    native='(letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj '+name+'))'
+    native='(@ModuleCat.carrier K field.toRing (@homology K field H '+name+'))'
     expected=expected.replace('C'+name,native)
+    expected=expected.replace('M'+name,'(@homology K field H '+name+')')
 expected=expected.replace('LINEARSPACE',env.structures['LinearSpace']['key'])
 checks=[f'same_target {target} {oracle}' for oracle,target in mapping.items()]
 checks += [f'same_target {record}.{n} HomologyOracle.Theory.{n}' for n in ['mk','coefficients','degree']]
+checks += [f"same_target {env.structures['ClassInSpace']['key']}.{n} HomologyOracle.ClassInSpace.{n}" for n in ['mk','space','element']]
 checks += [f'same_target CleanStatements.{n} HomologyOracle.{oracle}' for n,oracle in [
  ('homology_identity_fixes_classes','identityStatement'),
  ('homology_respects_composition','compositionStatement'),
- ('induced_function_acts_on_classes','applicationStatement')]]
+ ('induced_function_acts_on_classes','applicationStatement'),
+ ('homology_image_membership','rangeStatement'),
+ ('bundled_class_has_its_declared_space','fieldStatement')]]
 proofs=r'''
 open CategoryTheory
 namespace HomologyProofs
@@ -136,10 +185,16 @@ theorem homology_respects_composition : CleanStatements.homology_respects_compos
 theorem induced_function_acts_on_classes : CleanStatements.induced_function_acts_on_classes := by
   intro K field H X Y f x
   rfl
+theorem homology_image_membership : CleanStatements.homology_image_membership := by
+  intro K field H X Y f x
+  rfl
+theorem bundled_class_has_its_declared_space : CleanStatements.bundled_class_has_its_declared_space := by
+  intro K field H P
+  exact ⟨P.element,rfl⟩
 end HomologyProofs
 '''
 path=here/'HomologyVerified.lean';path.write_text(source+comparison+expected+'\n'.join(checks)+'\n'+proofs)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print(f'{len(checks)} canonical homology targets and three proofs passed.')
+print(f'{len(checks)} canonical homology targets and five proofs passed.')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
