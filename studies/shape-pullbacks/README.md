@@ -94,6 +94,8 @@ zigzag-basis and diagram-map studies also pass after the shared display metadata
 update (another 61 exact targets and twelve proofs). All 60 focused Python tests,
 92 corpus proof fixtures and the strict generated-parser check pass. The three
 updated specimens compile twice without overflow or unresolved references and
-were visually checked. A fresh full Python run and review snapshot are pending;
-the previously completed 100-file snapshot remains available in Git history.
+were visually checked. The full Python suite passes: 551 tests in 1335.236 seconds.
+The refreshed review snapshot contains 105 files with zero translation errors;
+source hashes, inventory, search/navigation, notes export/reload, responsive layout
+and no-JavaScript behavior were checked.
 :::
