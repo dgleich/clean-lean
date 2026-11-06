@@ -26,7 +26,8 @@ Parsing is completed without type information. This rule changes the admissible
 elaborated indices, not the unique parse tree. It does not add a new direct
 lambda-application surface spelling.
 
-The source binder must obey the existing fresh-name and nondependent-result rules.
+The source binder must obey the existing fresh-name and determined-result rules;
+dependent result types follow the dependent-function contract.
 The lambda body and its actual argument must contain no Lambda, Forall or Exists
 nodes after recursive contraction outside binders. This restriction makes
 substitution capture-free: there is no binder in the body that could capture an

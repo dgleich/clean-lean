@@ -88,9 +88,12 @@ trees only for explicit parameters.
    object passed as a type index retains its authored wrapper; only its selected,
    applied component can expose the homology expression.
 4. A binder-free local definition retains its frozen comparison value. Re-enter
-   that value for further projection/application comparison only when there are
-   no shadowed module names. A normalized result containing a binder is not cached
-   as an expanded local value. Lambda-authored local definitions remain opaque.
+   that value for further projection/application comparison only if its initial
+   normalization exposed residual binders and there are no shadowed module names.
+   In that case store the original checked value with an explicit deferred-expansion
+   flag; otherwise retain the completed comparison value without reprocessing it.
+   A normalized result containing a binder is never cached as an expanded local
+   value. Lambda-authored local definitions remain opaque.
 5. If a caller local function shadows a module callable, or a caller type variable
    shadows a module type/alias, do not expand authored bodies. Do not reinterpret a
    frozen local comparison value under those new bindings either. This conservative

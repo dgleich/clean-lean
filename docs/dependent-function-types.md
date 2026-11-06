@@ -179,7 +179,8 @@ containing that binder are rejected before it leaves scope.
 
 Pending acceptance work includes broader proof-domain/codomain, empty/singleton
 native family, universe, and automatic-label collision oracles. Type-valued binders
-remain explicitly unsupported. Lambda-bearing authored producers remain opaque in
-index comparison. Neither this feature nor the graded-map laws prove the topology
+remain explicitly unsupported. Applied fields of explicit authored producers now use the
+[hygienic conversion extension](hygienic-producer-conversion.md); unapplied
+binder-bearing families remain opaque in index comparison. Neither this feature nor the graded-map laws prove the topology
 paper theorems.
 :::

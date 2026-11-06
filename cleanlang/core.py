@@ -142,6 +142,7 @@ class Expr:
     tree: object = None
     # Checked comparison value for a local definition; never used for emission.
     local_normal: object = None
+    local_expand: bool = False
 @dataclass
 class Clause:
     kind: str

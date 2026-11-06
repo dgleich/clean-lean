@@ -27,7 +27,7 @@ def _normal_form(expression,environment,locals):
     if kind=='Local':
         local=locals.get(tree[1])
         if local is None or local.local_normal is None:return expression
-        return local.local_normal if shadowed_globals(env,locals) else _normal_form(local.local_normal,env,locals)
+        return _normal_form(local.local_normal,env,locals) if local.local_expand and not shadowed_globals(env,locals) else local.local_normal
     if kind in ('Decimal','Lambda','Forall','Exists'):return expression
     if kind=='Operator':return binary(tree[1],normal(tree[2]),normal(tree[3]))
     if kind=='Unary':
@@ -82,6 +82,8 @@ def local_definition(name,value,environment,locals):
         return any(has_binder(child) for child in node)
     result=Expr(name,texid(name),value.type)
     if not has_binder(value.tree):
-        normal=comparison_normal_form(value,environment,locals)
-        if normal.type==value.type and not has_binder(normal.tree):result.local_normal=normal
+        normal=_normal_form(value,environment,locals)
+        if normal.type==value.type:
+            result.local_expand=has_binder(normal.tree)
+            result.local_normal=value if result.local_expand else normal
     return result
