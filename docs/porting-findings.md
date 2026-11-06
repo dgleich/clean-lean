@@ -120,3 +120,17 @@ The current Type binding wrapper's fixed Type-0 result is therefore insufficient
 Explicit universe metadata/type-field semantics are the next language requirement;
 substituting an unstructured Type-0 name would not be a valid implementation.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Singular homology carrier interoperability
+
+Actual Mathlib homology objects/maps now compile and satisfy identity/composition
+laws through explicit Clean modules. [The study note](../studies/topology/singular-homology.md)
+records an actionable gap: a named computed module's ModuleElement type is not
+structurally equal to the HomologyClass wrapper. Generic linear-map ranges require
+a deterministic computed-index/transparent-alias rule or an explicit typed bridge.
+The current native action remains linear in Lean, but its Clean-authored lambda
+exposes only an ordinary function. Relative homology and excision are mathematical
+construction gaps, distinct from this source-type interoperability problem.
+:::

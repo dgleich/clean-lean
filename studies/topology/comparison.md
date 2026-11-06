@@ -8,7 +8,7 @@
 
 [Read this report as Markdown on GitHub](comparison.md).
 
-**Update:** this original comparison preserves proposed interfaces. See the [working study](README.md) and [current syntax decisions and blockers](requirements.md). Scoped quantifiers, dependent calls, fixed-carrier authored structures with field references, and an authored topology foundation are now implemented; the five target theorems remain pending.
+**Update:** this original comparison preserves proposed interfaces. See the [working study](README.md) and [current syntax decisions and blockers](requirements.md). Scoped quantifiers, dependent calls, fixed-carrier authored structures with field references, and an authored topology foundation are now implemented; the five target theorems remain pending. Actual bundled spaces and absolute singular homology now have [checked interfaces and functor-law proofs](singular-homology.md).
 
 Design report · 5 November 2026 · Clean baseline: commit 460014e
 
@@ -18,7 +18,7 @@ Five theorem comparisons, the definitions behind their notation, and a plan for 
 
 These are proposed mathematical interfaces and statement shapes, not compiled ports. All five Lean panels use proposed `TopologyStudy` vocabulary that is **not in Mathlib or this repository**. No proof, axiom, or `sorry` is added. The displayed `def … : Prop` follows Clean’s actual statement-only output model; proving it later requires a separate Lean theorem.
 
-Clean panels show the authored form we want. Their standard declaration layout exists, but the paper-specific topology types and functions remain missing. In particular, binder phrases, dependent mathematical types, generic fields, and indexed families below require work. Each source abbreviation in an Attribution line denotes a proposed explicitly imported Source declaration: `bigsteps`, `interlevel`, and `hatcher`. Proposed imports would be `topology/basic.clean`, `topology/homology.clean`, and study-specific persistence modules. The basic topology module now exists; the homology and persistence modules remain pending.
+Clean panels show the authored form we want. Their standard declaration layout exists, but the paper-specific topology types and functions remain missing. In particular, binder phrases, dependent mathematical types, generic fields, and indexed families below require work. Each source abbreviation in an Attribution line denotes a proposed explicitly imported Source declaration: `bigsteps`, `interlevel`, and `hatcher`. Proposed imports would be `topology/basic.clean`, `topology/homology.clean`, and study-specific persistence modules. The basic topology module and an initial absolute singular homology module now exist. The relative homology and persistence interfaces used in these proposed panels remain pending.
 
 The comparisons target field coefficients, unreduced homology unless stated otherwise, and continuous real-valued functions. Fix the coefficient field and homological degree explicitly; do not identify vector spaces merely because their dimensions agree.
 

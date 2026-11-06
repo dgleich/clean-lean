@@ -1,0 +1,44 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/homology.clean"
+
+Source mathlib:
+  Kind: other
+  Label: Mathlib
+  Title: Mathlib v4.24.0
+  Url: https://github.com/leanprover-community/mathlib4/tree/v4.24.0
+
+Result homology identity fixes classes:
+  Attribution: mathlib; CategoryTheory.Functor.map_id; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let x: HomologyClass(K,field,H,X)
+  Conclude: induced homology value(field,H,X,X,identity continuous map(X),x) = x
+
+Result homology respects composition:
+  Attribution: mathlib; CategoryTheory.Functor.map_comp; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X,Y,Z: TopologicalSpace
+  Let f: ContinuousMap(X,Y)
+  Let g: ContinuousMap(Y,Z)
+  Let x: HomologyClass(K,field,H,X)
+  Conclude:
+    induced homology value(field,H,X,Z,compose continuous maps(X,Y,Z,g,f),x) =
+      induced homology value(field,H,Y,Z,g,induced homology value(field,H,X,Y,f,x))
+
+Result induced function acts on classes:
+  Attribution: topology; induced homology map definition; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X,Y: TopologicalSpace
+  Let f: ContinuousMap(X,Y)
+  Let x: HomologyClass(K,field,H,X)
+  Let h = induced homology map(field,H,X,Y,f)
+  Conclude: h(x) = induced homology value(field,H,X,Y,f,x)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

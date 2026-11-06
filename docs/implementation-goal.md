@@ -126,3 +126,24 @@ space indices is also a readability gap: the present explicit interfaces repeat
 spaces in calls. Fixed levels do not implement universe polymorphism. The overall
 goal remains active, and none of the research theorem proofs is claimed complete.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Fifth implemented slice
+
+[Actual singular homology](../studies/topology/singular-homology.md) now has explicit
+Mathlib wrappers for coefficient modules, homology objects and class actions.
+The coefficient/degree structure and induced ordinary function are authored in
+Clean. Seventeen independent canonical comparisons and three Lean proofs pass,
+as do all 306 Python tests and the 92-proof corpus. The review page was rebuilt
+with zero translation errors; browser and reference checks pass, and the PDF
+compiles without overflow and was inspected. The native coefficients, categorical instances and
+universe levels are preserved in the target comparisons.
+
+The next concrete integration issue is the relationship between a computed module's
+carrier and a dependent HomologyClass source type. Named-index matching currently
+does not unfold local definitions. This needs an explicit alias/computed-index or
+typed-bridge policy before a generic linear-map/range interface can be used here.
+Relative homology, exactness/excision, proof-bearing records and paper constructions
+remain open; the overall goal remains active.
+:::

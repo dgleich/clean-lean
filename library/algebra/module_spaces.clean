@@ -1,0 +1,25 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "linear_spaces.clean"
+Import Lean Mathlib.Algebra.Category.ModuleCat.Basic
+
+Type CoefficientModule(K: Type, field: FieldStructure(K)):
+  Universe: 1
+  Means: (@ModuleCat.{0,0} K field.toRing)
+  Render latex: \operatorname{{Mod}}_{{{K}}}
+  Describe: a module over ${K}$
+
+Type ModuleElement(K: Type, field: FieldStructure(K), M: CoefficientModule(K,field)):
+  Means: (@ModuleCat.carrier K field.toRing M)
+  Render latex: {M}
+  Describe: an element of ${M}$
+
+Notation coefficient module(K,field,V,L):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V: Type
+  Let L: LinearSpace(K,field,V)
+  Returns: CoefficientModule(K,field)
+  Means: @ModuleCat.of K field.toRing V L.addition L.action
+  Render latex: {V}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

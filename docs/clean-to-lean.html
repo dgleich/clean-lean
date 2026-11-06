@@ -456,6 +456,29 @@ structure Diagram : Type 1 where
  Lean kernel validation. <a href="fixed-universes.md">Normative rules and limits</a>;
  <a href="../studies/topology/Spaces.clean">five statement examples</a>.</p>
 </article>
+
+<article id="singular-homology" data-status="implemented" class="mapping">
+<h2>Singular homology: native objects, authored action</h2>
+<div class="pair"><section><h3>Clean — homology module imported</h3><pre><code>Let H: HomologyTheory(K,field)
+Let X,Y: TopologicalSpace
+Let f: ContinuousMap(X,Y)
+Let x: HomologyClass(K,field,H,X)
+Let h = induced homology map(field,H,X,Y,f)
+Conclude: h(x) = induced homology value(field,H,X,Y,f,x)</code></pre></section>
+<section><h3>Native construction, schematic surrounding context</h3><pre><code>letI : Field K := field
+let F := (AlgebraicTopology.singularHomologyFunctor
+  (ModuleCat.{0} K) H.degree).obj H.coefficients
+-- Homology classes are elements of (F.obj X).carrier.
+-- The induced value is:
+(F.map (TopCat.ofHom f)).hom x</code></pre></section></div>
+<p>The coefficient module and degree are authored record fields. The induced
+ordinary function is authored in Clean; its value adapter invokes Mathlib's actual
+singular homology functor. Identity and composition have proofs and independent
+canonical target checks. Relative homology and generic linear-map ranges are
+pending. Named local aliases do not yet identify a homology module's carrier with
+HomologyClass. <a href="../studies/topology/singular-homology.md">Exact meanings,
+validation and limitations</a>.</p>
+</article>
 </main>
 <script>
 (() => {

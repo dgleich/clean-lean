@@ -1,0 +1,52 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "spaces.clean"
+Import "../algebra/module_spaces.clean"
+Import Lean Mathlib.AlgebraicTopology.SingularHomology.Basic
+Import Lean Mathlib.Algebra.Category.ModuleCat.Abelian
+Import Lean Mathlib.Algebra.Category.ModuleCat.Colimits
+
+Structure HomologyTheory(K: Type, field: FieldStructure(K)):
+  Universe: 1
+  Let coefficients: CoefficientModule(K,field)
+  Let degree: Natural
+  Constructor: homology theory
+  Render latex: \mathcal{{H}}
+  Describe: a choice of coefficients and homology degree over ${K}$
+
+Notation homology module(field,H,X):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Returns: CoefficientModule(K,field)
+  Means: (letI : Field K := field; ((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X)
+  Render latex: {H}({X})
+
+Type HomologyClass(K: Type, field: FieldStructure(K), H: HomologyTheory(K,field), X: TopologicalSpace):
+  Means: (letI : Field K := field; ModuleCat.carrier (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))
+  Render latex: {H}({X})
+  Describe: a homology class in ${H}({X})$
+
+Notation induced homology value(field,H,X,Y,g,x):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X,Y: TopologicalSpace
+  Let g: ContinuousMap(X,Y)
+  Let x: HomologyClass(K,field,H,X)
+  Returns: HomologyClass(K,field,H,Y)
+  Means: (letI : Field K := field; (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).map (TopCat.ofHom g)).hom x)
+  Render latex: {{{g}}}_*({x})
+
+Define induced homology map(field,H,X,Y,g):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X,Y: TopologicalSpace
+  Let g: ContinuousMap(X,Y)
+  Returns: Function(HomologyClass(K,field,H,X),HomologyClass(K,field,H,Y))
+  Equals:
+    function(x: HomologyClass(K,field,H,X), induced homology value(field,H,X,Y,g,x))
+  Render latex: {{{g}}}_*
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

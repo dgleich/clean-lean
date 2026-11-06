@@ -194,3 +194,16 @@ see the [foundation inventory](mathlib-foundations.md). This discharges the basi
 subspace/intersection interface requirement, but not linear image maps, homology,
 relative pairs, perturbations, excision or the five target theorem proofs.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Actual absolute homology interface
+
+[Singular homology](singular-homology.md) now wraps the pinned native functor on
+bundled spaces with bundled module coefficients. Identity and composition of its
+class action are proved. This replaces the absolute homology availability question
+with actual checked interfaces. Relative homology, linear ranges in a shared
+ambient module, exactness/excision and the five research targets remain open.
+A recorded source-type alias/index gap must be resolved before composing generic
+module algebra with the current HomologyClass interface.
+:::

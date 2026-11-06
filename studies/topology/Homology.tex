@@ -1,0 +1,35 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{homology identity fixes classes}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, CategoryTheory.Functor.map\_id]}}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $X$ be a topological space.
+Let $x$ be a homology class in $H(X)$.
+Then \[{\operatorname{id}_{X}}_*(x) = x.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{homology respects composition}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, CategoryTheory.Functor.map\_comp]}}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $X$, $Y$ and $Z$ be topological spaces.
+Let $f$ be a continuous map from $X$ to $Y$.
+Let $g$ be a continuous map from $Y$ to $Z$.
+Let $x$ be a homology class in $H(X)$.
+Then \[{\left(g \circ f\right)}_*(x) = {g}_*({f}_*(x)).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{induced function acts on classes}\cleanattribution{[Topology foundations, induced homology map definition]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $X$ and $Y$ be topological spaces.
+Let $f$ be a continuous map from $X$ to $Y$.
+Let $x$ be a homology class in $H(X)$.
+Let $h = {f}_*$.
+Then \[h(x) = {f}_*(x).\]
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
