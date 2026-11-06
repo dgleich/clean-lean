@@ -1,0 +1,56 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../algebra/module_diagrams.clean"
+Import "../logic/booleans.clean"
+
+Notation select value(b,x,y):
+  Let T: Type
+  Let b: Boolean
+  Let x,y: T
+  Returns: T
+  Means: if b then x else y
+  Render latex: \operatorname{{select}}({b},{x},{y})
+
+Notation left vertex(n,e):
+  Let n: Natural
+  Let e: Vertex(n)
+  Returns: Vertex((n+1))
+  Means: e.castSucc
+  Render latex: {e}
+
+Notation right vertex(n,e):
+  Let n: Natural
+  Let e: Vertex(n)
+  Returns: Vertex((n+1))
+  Means: e.succ
+  Render latex: {e}+1
+
+Notation vertex number(n,v):
+  Let n: Natural
+  Let v: Vertex(n)
+  Returns: Natural
+  Means: v.val
+  Render latex: {v}
+
+Define zigzag shape(n,d):
+  Let n: Natural
+  Let d: Function(Vertex(n),Boolean)
+  Returns: DiagramShape(Vertex((n+1)),Vertex(n))
+  Equals: shape(
+    function(e: Vertex(n),select value(d(e),left vertex(n,e),right vertex(n,e))),
+    function(e: Vertex(n),select value(d(e),right vertex(n,e),left vertex(n,e))))
+  Render latex: Q_{{{d}}}
+
+Type Zigzag(K: Type,field: FieldStructure(K),n: Natural,d: Function(Vertex(n),Boolean)):
+  Equals: ModuleDiagram(K,field,Vertex((n+1)),Vertex(n),(zigzag shape(n,d)))
+
+Define constant zigzag(K,field,n,d,M):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let n: Natural
+  Let d: Function(Vertex(n),Boolean)
+  Let M: CoefficientModule(K,field)
+  Returns: Zigzag(K,field,n,d)
+  Equals: constant diagram(field,zigzag shape(n,d),M)
+  Render latex: \operatorname{{const}}_{{{d}}}({M})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

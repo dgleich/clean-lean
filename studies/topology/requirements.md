@@ -338,3 +338,14 @@ proposition comparisons and two proofs check the specimen; [PDF](LocalNames.pdf)
 Binder-bearing local definitions and the previously listed research obligations
 remain open.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Concrete zigzag data
+
+The [zigzag-bases study](../zigzag-bases/README.md) now defines module diagrams,
+oriented finite zigzags and actual interval-basis records in Clean. Its native
+checks construct a constant-zigzag basis from a supplied module basis. The pyramid,
+diamonds, compatible restrictions/extensions and their existence proofs are still
+pending; this example does not establish the paper's Theorem 1.
+:::

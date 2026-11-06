@@ -1,0 +1,125 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "zigzags.clean"
+Import "../algebra/module_bases.clean"
+Import "../topology/indexed.clean"
+Import "../logic/functions.clean"
+Import "../logic/evidence.clean"
+
+Notation selected value(S,x):
+  Let I: Type
+  Let S: Set(I)
+  Let x: Element(I,S)
+  Returns: I
+  Means: x.val
+  Render latex: {x}
+
+Condition ordered interval endpoints(I,n,lower,upper):
+  Let I: Type
+  Let n: Natural
+  Let lower,upper: Function(I,Vertex((n+1)))
+  Holds when: for every (i: I,lower(i) ≤ upper(i))
+  Render: the interval endpoints are ordered
+
+Structure IntervalLabels(I: Type,n: Natural):
+  Let lower,upper: Function(I,Vertex((n+1)))
+  Let ordered: Evidence((ordered interval endpoints(I,n,lower,upper)))
+  Constructor: interval labels
+  Render latex: \mathcal{{I}}
+
+Define interval labels at(I,n,L,v):
+  Let I: Type
+  Let n: Natural
+  Let L: IntervalLabels(I,n)
+  Let v: Vertex((n+1))
+  Returns: Set(I)
+  Equals: set of(function(i: I,L.lower(i) ≤ v and v ≤ L.upper(i)))
+  Render latex: {L}_{{{v}}}
+
+Define zigzag source(n,d,e):
+  Let n: Natural
+  Let d: Function(Vertex(n),Boolean)
+  Let e: Vertex(n)
+  Returns: Vertex((n+1))
+  Equals: zigzag shape(n,d).source(e)
+  Render latex: s({e})
+
+Define zigzag target(n,d,e):
+  Let n: Natural
+  Let d: Function(Vertex(n),Boolean)
+  Let e: Vertex(n)
+  Returns: Vertex((n+1))
+  Equals: zigzag shape(n,d).target(e)
+  Render latex: t({e})
+
+Condition interval vectors realize bases(K,field,n,d,Z,I,L,vectors,basis):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let n: Natural
+  Let d: Function(Vertex(n),Boolean)
+  Let Z: Zigzag(K,field,n,d)
+  Let I: Type
+  Let L: IntervalLabels(I,n)
+  Let vectors: Function(v: Vertex((n+1)),Function(I,ModuleElement(K,field,(Z.object(v)))))
+  Let basis: Function(v: Vertex((n+1)),ModuleBasis(K,field,(Z.object(v)),Element(I,(interval labels at(I,n,L,v)))))
+  Holds when: for every (v: Vertex((n+1)),
+    for every (j: Element(I,(interval labels at(I,n,L,v))),
+      module basis vector(field,Z.object(v),basis(v),j) =
+        evaluate map(vectors(v),selected value(interval labels at(I,n,L,v),j))))
+  Render: the vectors realize the vertex bases
+
+Condition interval vectors vanish(K,field,n,d,Z,I,L,vectors):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let n: Natural
+  Let d: Function(Vertex(n),Boolean)
+  Let Z: Zigzag(K,field,n,d)
+  Let I: Type
+  Let L: IntervalLabels(I,n)
+  Let vectors: Function(v: Vertex((n+1)),Function(I,ModuleElement(K,field,(Z.object(v)))))
+  Holds when: for every (v: Vertex((n+1)),for every (i: I,
+    not (i ∈ interval labels at(I,n,L,v)) →
+      evaluate map(vectors(v),i) = module zero(field,Z.object(v))))
+  Render: the vectors vanish outside their intervals
+
+Condition interval vectors compatible(K,field,n,d,Z,I,L,vectors):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let n: Natural
+  Let d: Function(Vertex(n),Boolean)
+  Let Z: Zigzag(K,field,n,d)
+  Let I: Type
+  Let L: IntervalLabels(I,n)
+  Let vectors: Function(v: Vertex((n+1)),Function(I,ModuleElement(K,field,(Z.object(v)))))
+  Holds when: for every (e: Vertex(n),for every (i: I,
+    i ∈ interval labels at(I,n,L,zigzag source(n,d,e)) →
+      module map value(field,Z.object(zigzag source(n,d,e)),Z.object(zigzag target(n,d,e)),
+        Z.arrow(e),evaluate map(vectors(zigzag source(n,d,e)),i)) =
+          evaluate map(vectors(zigzag target(n,d,e)),i)))
+  Render: the vectors respect the directed edges on their source support
+
+Structure IntervalBasis(K: Type,field: FieldStructure(K),n: Natural,d: Function(Vertex(n),Boolean),Z: Zigzag(K,field,n,d),I: Type,L: IntervalLabels(I,n)):
+  Let vectors: Function(v: Vertex((n+1)),Function(I,ModuleElement(K,field,(Z.object(v)))))
+  Let basis: Function(v: Vertex((n+1)),ModuleBasis(K,field,(Z.object(v)),Element(I,(interval labels at(I,n,L,v)))))
+  Let realizes: Evidence((interval vectors realize bases(K,field,n,d,Z,I,L,vectors,basis)))
+  Let vanishes: Evidence((interval vectors vanish(K,field,n,d,Z,I,L,vectors)))
+  Let compatible: Evidence((interval vectors compatible(K,field,n,d,Z,I,L,vectors)))
+  Constructor: interval basis
+  Render latex: \operatorname{{IBasis}}({Z},{L})
+  Describe: an interval basis of ${Z}$ with labels ${L}$
+
+Define interval basis vector(field,n,d,Z,I,L,B,v,i):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let n: Natural
+  Let d: Function(Vertex(n),Boolean)
+  Let Z: Zigzag(K,field,n,d)
+  Let I: Type
+  Let L: IntervalLabels(I,n)
+  Let B: IntervalBasis(K,field,n,d,Z,I,L)
+  Let v: Vertex((n+1))
+  Let i: I
+  Returns: ModuleElement(K,field,(Z.object(v)))
+  Equals: evaluate map(B.vectors(v),i)
+  Render latex: {B}_{{{v},{i}}}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

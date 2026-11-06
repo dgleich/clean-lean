@@ -66,8 +66,13 @@ def _normal_form(expression,environment,locals):
         reduced=contract_index(result,env,locals)
         return _normal_form(reduced,env,locals) if reduced.tree!=result.tree else result
     if kind=='Projection':
-        from .structures import project
+        from .structures import project,projection_reduction
+        from .beta_indices import has_binder
         base=normal(tree[1])
+        if has_binder(base.tree):
+            selected=projection_reduction(env,base,tree[2],locals)
+            # An opaque producer cannot publish its hidden binders as field indices.
+            return expression if selected is None else _normal_form(selected,env,locals)
         result=project(env,base,tree[2],locals)
         # project may reduce a constructor field; its result is already normalized
         # if it is a stable projection, otherwise normalize its selected expression.

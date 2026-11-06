@@ -1,0 +1,28 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "module_spaces.clean"
+Import Lean Mathlib.LinearAlgebra.Basis.Basic
+
+Type ModuleBasis(K: Type,field: FieldStructure(K),M: CoefficientModule(K,field),I: Type):
+  Means: @Module.Basis I K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule
+  Render latex: \operatorname{{Basis}}_{{{K}}}({M},{I})
+  Describe: a basis of ${M}$ indexed by ${I}$
+
+Notation module basis vector(field,M,b,i):
+  Let K,I: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let b: ModuleBasis(K,field,M,I)
+  Let i: I
+  Returns: ModuleElement(K,field,M)
+  Means: (letI : Field K := field; b i)
+  Render latex: {b}_{{{i}}}
+
+Notation module zero(field,M):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Returns: ModuleElement(K,field,M)
+  Means: @Zero.zero M.carrier M.isAddCommGroup.toZero
+  Render latex: 0
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

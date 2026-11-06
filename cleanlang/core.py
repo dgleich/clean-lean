@@ -360,18 +360,23 @@ class Environment:
             if actual==NUM and pattern in (NAT,Type('Real'),Type('Complex')):return
             from .indices import DimensionIndex
             from .dependent_functions import DependentFunctionType,substitute,fresh_source,fresh_bound
-            if isinstance(pattern,DependentFunctionType):
-                if not isinstance(actual,DependentFunctionType) or pattern.constructor!=actual.constructor:
+            if isinstance(pattern,DependentFunctionType) or isinstance(actual,DependentFunctionType) and self.is_function_type(pattern):
+                if not self.is_function_type(pattern) or not self.is_function_type(actual):
                     raise CleanError('Dependent function type mismatch')
-                match(pattern.domain,actual.domain)
+                pconstructor=pattern.constructor if isinstance(pattern,DependentFunctionType) else pattern.name
+                aconstructor=actual.constructor if isinstance(actual,DependentFunctionType) else actual.name
+                if pconstructor!=aconstructor:raise CleanError('Dependent function type mismatch')
+                match(pattern.args[0],actual.args[0])
                 shared=fresh_source('clean_comparison_binder',self,locals,
                                     {**substitutions,**actuals,'__pattern':pattern,'__actual':actual})
                 identity=fresh_bound(self,locals)
-                value=Expr(identity,texid(shared),actual.domain,tree=['Local',shared])
+                value=Expr(identity,texid(shared),actual.args[0],tree=['Local',shared])
                 locals[shared]=value
                 try:
-                    p=substitute(pattern.codomain,{**substitutions,**actuals,pattern.binder:value},self,locals)
-                    a=substitute(actual.codomain,{actual.binder:value},self,locals)
+                    p=(substitute(pattern.codomain,{**substitutions,**actuals,pattern.binder:value},self,locals)
+                       if isinstance(pattern,DependentFunctionType) else replace(pattern.args[1]))
+                    a=(substitute(actual.codomain,{actual.binder:value},self,locals)
+                       if isinstance(actual,DependentFunctionType) else actual.args[1])
                     match(p,a)
                     from .dependent_functions import occurs
                     if any(occurs(v,shared) for v in substitutions.values()):

@@ -1,0 +1,70 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{forward edge}\cleanattribution{[Topology foundations, forward orientation convention]}
+Let $n$ be a natural number.
+Let $d$ be a function from $\{0,\ldots,n-1\}$ to $\{\mathrm{false},\mathrm{true}\}$.
+Let $e$ be a vertex in $\{0,\ldots,n-1\}$.
+Assume $d(e) = \mathrm{true}$ (\texttt{forward}).
+Then \[s(e) = e \text{ and } t(e) = e+1.\]
+\end{cleanresult}
+
+\begin{cleanresult}{backward edge}\cleanattribution{[Topology foundations, backward orientation convention]}
+Let $n$ be a natural number.
+Let $d$ be a function from $\{0,\ldots,n-1\}$ to $\{\mathrm{false},\mathrm{true}\}$.
+Let $e$ be a vertex in $\{0,\ldots,n-1\}$.
+Assume $d(e) = \mathrm{false}$ (\texttt{backward}).
+Then \[s(e) = e+1 \text{ and } t(e) = e.\]
+\end{cleanresult}
+
+\begin{cleanresult}{constant diagram arrow}\cleanattribution{[Topology foundations, constant diagram component]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $V$ and $E$ be types.
+Let $Q$ be an element of $Q$.
+Let $M$ be a module over $K$.
+Let $e$ be an element of $E$.
+Then \[\operatorname{const}(M).\mathrm{arrow}(e) = \operatorname{id}_{M}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{interval vector support}\cleanattribution{\href{https://mrzv.org/publications/robustness-interlevelsets/manuscript/}{[Bendich, Edelsbrunner, Morozov, and Patel, section 2.2, labelled interval basis]}}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $n$ be a natural number.
+Let $d$ be a function from $\{0,\ldots,n-1\}$ to $\{\mathrm{false},\mathrm{true}\}$.
+Let $Z$ be a module diagram on $Q_{d}$.
+Let $I$ be a type.
+Let $L$ be an element of $\mathcal{I}$.
+Let $B$ be an interval basis of $Z$ with labels $L$.
+Let $v$ be a vertex in $\{0,\ldots,n + 1-1\}$.
+Let $i$ be an element of $I$.
+Then \[B_{v,i} \ne 0 \text{ if and only if } i \text{ belongs to } L_{v}.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{interval edge action}\cleanattribution{\href{https://mrzv.org/publications/robustness-interlevelsets/manuscript/}{[Bendich, Edelsbrunner, Morozov, and Patel, section 2.2, maps on labelled intervals]}}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $n$ be a natural number.
+Let $d$ be a function from $\{0,\ldots,n-1\}$ to $\{\mathrm{false},\mathrm{true}\}$.
+Let $Z$ be a module diagram on $Q_{d}$.
+Let $I$ be a type.
+Let $L$ be an element of $\mathcal{I}$.
+Let $B$ be an interval basis of $Z$ with labels $L$.
+Let $e$ be a vertex in $\{0,\ldots,n-1\}$.
+Let $i$ be an element of $I$.
+Assume $i \text{ belongs to } L_{s(e)}$ (\texttt{active}).
+Then \[Z.\mathrm{arrow}(e)(B_{s(e),i}) = B_{t(e),i}.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{constant zigzag has interval basis}\cleanattribution{[Topology foundations, constant zigzag construction]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $n$ be a natural number.
+Let $d$ be a function from $\{0,\ldots,n-1\}$ to $\{\mathrm{false},\mathrm{true}\}$.
+Let $M$ be a module over $K$.
+Let $I$ be a type.
+Let $b$ be a basis of $M$ indexed by $I$.
+Then \[\left(\text{there exists }L : \mathcal{I},\; \left(\text{there exists }B : \operatorname{IBasis}(\operatorname{const}_{d}(M),L),\; \left(\text{for every }v : \{0,\ldots,n + 1-1\},\; \left(\text{for every }i : I,\; i \text{ belongs to } L_{v}\right)\right)\right)\right).\]
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

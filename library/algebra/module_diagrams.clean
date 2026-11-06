@@ -1,0 +1,44 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "graded_maps.clean"
+
+Structure DiagramShape(V: Type,E: Type):
+  Let source,target: Function(E,V)
+  Constructor: diagram shape
+  Render latex: Q
+
+Define shape(source,target):
+  Let V,E: Type
+  Let source,target: Function(E,V)
+  Returns: DiagramShape(V,E)
+  Equals: diagram shape(V,E,source,target)
+  Render latex: Q
+
+Structure ModuleDiagram(K: Type,field: FieldStructure(K),V: Type,E: Type,Q: DiagramShape(V,E)):
+  Universe: 1
+  Let object: Function(V,CoefficientModule(K,field))
+  Let arrow: Function(e: E,ModuleMap(K,field,(object(Q.source(e))),(object(Q.target(e)))))
+  Constructor: module diagram
+  Render latex: \operatorname{{Rep}}_{{{K}}}({Q})
+  Describe: a module diagram on ${Q}$
+
+Define constant module diagram(K,field,V,E,Q,M):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let M: CoefficientModule(K,field)
+  Returns: ModuleDiagram(K,field,V,E,Q)
+  Equals: module diagram(K,field,V,E,Q,
+    function(v: V,M),function(e: E,module identity(field,M)))
+  Render latex: \operatorname{{const}}({M})
+
+Define constant diagram(field,Q,M):
+  Let K,V,E: Type
+  Let field: FieldStructure(K)
+  Let Q: DiagramShape(V,E)
+  Let M: CoefficientModule(K,field)
+  Returns: ModuleDiagram(K,field,V,E,Q)
+  Equals: constant module diagram(K,field,V,E,Q,M)
+  Render latex: \operatorname{{const}}({M})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

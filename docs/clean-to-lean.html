@@ -842,6 +842,18 @@ it cannot be confused with a binder owned by comparison.</p>
 <a href="../studies/dependent-functions/ScopedFamiliesVerified.lean">Two exact targets and proofs</a>.</p>
 <p>General higher-order conversion and resolved identities for all module bindings remain open.</p>
 </section>
+<section class="mapping" id="constant-dependent-arrows" data-status="implemented">
+<h2>Constant dependent arrows and zigzag bases</h2>
+<p><strong>Implemented slice.</strong> A checked dependent codomain that becomes constant compares with an ordinary function type. The declared binder is preserved in Lean emission.</p>
+<pre><code>Function(p: Natural,Vertex((fixed(n,p))))
+-- when the authored definition fixed(n,p) equals n
+Function(Natural,Vertex(n))</code></pre>
+<p>Schematic Lean equivalents are <code>(p : ℕ) → Fin (fixed n p)</code> and <code>ℕ → Fin n</code>. The first declaration retains its Pi binder; comparison uses the checked codomain's free binding identities. Matching works in either direction and cannot infer a type parameter that escapes its scope.</p>
+<pre><code>constant diagram(field,Q,M)
+constant zigzag(K,field,n,d,M)</code></pre>
+<p>These are Clean-authored constructions over explicit Mathlib ModuleCat and Module.Basis wrappers. The first helper infers carrier types from its typed arguments. A zigzag has n edges and n+1 vertices; its interval basis stores actual vertex bases and compatibility evidence. An opaque producer containing lambdas is not exposed as a dependent index merely to normalize a projection.</p>
+<p>See the <a href="constant-dependent-arrows.md">normative rules</a> and <a href="../studies/zigzag-bases/README.md">checked study</a>. The verifier compares 44 native targets and checks six proofs. General pyramid basis extension is still pending.</p>
+</section>
 </main>
 <script>
 (() => {

@@ -1165,6 +1165,39 @@
         "General higher-order and binder-body conversion",
         "Resolved identities for all module bindings"
       ]
+    },
+    {
+      "id": "constant_dependent_arrows",
+      "status": "implemented-slice",
+      "specification": "docs/constant-dependent-arrows.md",
+      "source_fragment": "constant diagram(field,Q,M)",
+      "expected_tree": [
+        "Call",
+        "constant diagram",
+        [
+          [
+            "Local",
+            "field"
+          ],
+          [
+            "Local",
+            "Q"
+          ],
+          [
+            "Local",
+            "M"
+          ]
+        ]
+      ],
+      "checks": [
+        "tests/test_constant_pi.py",
+        "studies/zigzag-bases/verify.py"
+      ],
+      "pending": [
+        "General higher-order conversion",
+        "Compound type expressions as explicit value arguments",
+        "Pyramid basis extension"
+      ]
     }
   ]
 }

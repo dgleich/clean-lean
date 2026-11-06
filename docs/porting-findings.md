@@ -384,3 +384,17 @@ Unrelated later locals no longer invalidate saved family indices. Emitted Lean a
 existing conversion boundaries remain unchanged. Two exact saved-map propositions
 and two proofs cover graded chain and relative homology.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Constant dependent arrows and zigzag bases
+
+[Constant dependent arrows](constant-dependent-arrows.md) specifies symmetric
+comparison and callable matching when a checked dependent codomain becomes
+constant, while retaining the declared Lean Pi binder. Opaque binder-bearing
+producer projections retain their checked form unless a field can be selected.
+The [zigzag study](../studies/zigzag-bases/README.md) supplies actual module
+diagrams and interval-basis data, with a constructed constant-zigzag example.
+Inferred type-parameter helpers avoid new type-as-value syntax. General pyramid
+basis extension, higher-order conversion and universe polymorphism remain pending.
+:::

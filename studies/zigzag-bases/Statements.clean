@@ -1,0 +1,79 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../topology/Common.clean"
+Import "../../library/diagrams/interval_bases.clean"
+
+Result forward edge:
+  Attribution: topology; forward orientation convention; original
+  Let n: Natural
+  Let d: Function(Vertex(n),Boolean)
+  Let e: Vertex(n)
+  Assume forward: d(e) = true value()
+  Conclude: zigzag source(n,d,e) = left vertex(n,e) and zigzag target(n,d,e) = right vertex(n,e)
+
+Result backward edge:
+  Attribution: topology; backward orientation convention; original
+  Let n: Natural
+  Let d: Function(Vertex(n),Boolean)
+  Let e: Vertex(n)
+  Assume backward: d(e) = false value()
+  Conclude: zigzag source(n,d,e) = right vertex(n,e) and zigzag target(n,d,e) = left vertex(n,e)
+
+Result constant diagram arrow:
+  Attribution: topology; constant diagram component; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let M: CoefficientModule(K,field)
+  Let e: E
+  Conclude: constant module diagram(K,field,V,E,Q,M).arrow(e) = module identity(field,M)
+
+Result interval vector support:
+  Attribution: interlevel; section 2.2, labelled interval basis; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let n: Natural
+  Let d: Function(Vertex(n),Boolean)
+  Let Z: Zigzag(K,field,n,d)
+  Let I: Type
+  Let L: IntervalLabels(I,n)
+  Let B: IntervalBasis(K,field,n,d,Z,I,L)
+  Let v: Vertex((n+1))
+  Let i: I
+  Conclude:
+    interval basis vector(field,n,d,Z,I,L,B,v,i) ≠ module zero(field,Z.object(v)) ↔
+      i ∈ interval labels at(I,n,L,v)
+
+Result interval edge action:
+  Attribution: interlevel; section 2.2, maps on labelled intervals; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let n: Natural
+  Let d: Function(Vertex(n),Boolean)
+  Let Z: Zigzag(K,field,n,d)
+  Let I: Type
+  Let L: IntervalLabels(I,n)
+  Let B: IntervalBasis(K,field,n,d,Z,I,L)
+  Let e: Vertex(n)
+  Let i: I
+  Assume active: i ∈ interval labels at(I,n,L,zigzag source(n,d,e))
+  Conclude:
+    module map value(field,Z.object(zigzag source(n,d,e)),Z.object(zigzag target(n,d,e)),
+      Z.arrow(e),interval basis vector(field,n,d,Z,I,L,B,zigzag source(n,d,e),i)) =
+        interval basis vector(field,n,d,Z,I,L,B,zigzag target(n,d,e),i)
+
+Result constant zigzag has interval basis:
+  Attribution: topology; constant zigzag construction; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let n: Natural
+  Let d: Function(Vertex(n),Boolean)
+  Let M: CoefficientModule(K,field)
+  Let I: Type
+  Let b: ModuleBasis(K,field,M,I)
+  Conclude:
+    there exists (L: IntervalLabels(I,n),
+      there exists (B: IntervalBasis(K,field,n,d,(constant zigzag(K,field,n,d,M)),I,L),
+        for every (v: Vertex((n+1)),for every (i: I,i ∈ interval labels at(I,n,L,v)))))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

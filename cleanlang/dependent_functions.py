@@ -76,8 +76,16 @@ def abstract_template(term,bound):
     out.append(term[pos:]);return tuple(out)
 
 
+def contains_free(key,name):
+    if key==('free',name):return True
+    return isinstance(key,tuple) and any(contains_free(part,name) for part in key)
+
+
 def type_key(typ,bound=()):
     if isinstance(typ,DependentFunctionType):
+        codomain=type_key(typ.codomain,bound)
+        if not contains_free(codomain,typ.bound):
+            return ('type',typ.constructor,(type_key(typ.domain,bound),codomain))
         return ('Pi',typ.constructor,type_key(typ.domain,bound),type_key(typ.codomain,bound+(typ.bound,)))
     if isinstance(typ,ValueIndex):return ('index',abstract_template(typ.comparison_key(),bound))
     if isinstance(typ,Type):return ('type',typ.name,tuple(type_key(a,bound) for a in typ.args))
@@ -100,8 +108,10 @@ class DependentFunctionType(Type):
     @property
     def codomain(self):return self.args[1]
     def __str__(self):return self.constructor+'('+self.binder+': '+str(self.domain)+','+str(self.codomain)+')'
-    def __eq__(self,other):return isinstance(other,DependentFunctionType) and type_key(self)==type_key(other)
-    def __hash__(self):return hash(type_key(self))
+    def __eq__(self,other):return isinstance(other,Type) and type_key(self)==type_key(other)
+    def __hash__(self):
+        key=type_key(self)
+        return hash((self.constructor,(self.domain,self.codomain))) if key[0]=='type' else hash(key)
 
 
 def make(constructor,binder,bound,domain,codomain):
