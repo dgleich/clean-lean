@@ -339,8 +339,22 @@ inference and Type-valued binders remain outside the current profile.
 :::llm gpt-6 2026-11-06 role=assisted
 
 A negative [universe-boundary probe](proof-valued-functions.md#confirmed-remaining-universe-boundary)
-now confirms that a Type 1 CoefficientModule carrier can still be inferred for a
-native wrapper requiring Type 0. Clean accepts this input; Lean rejects the emitted
-application. This is a source-checking gap, not a proved mathematical statement.
-The proof-family sort checks above do not discharge this remaining closed-level gate.
+originally confirmed that a Type 1 CoefficientModule carrier could be inferred for a
+native wrapper requiring Type 0. Clean accepted that input while Lean rejected the
+emitted application. The closed-universe checks below now reject this case in Clean;
+the earlier proof-family sort checks alone did not enforce that bound.
+:::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Closed universe parameter and field bounds
+
+[Closed-universe checking](closed-universe-checking.md) now enforces the declared
+Type 0 carrier bounds in constructor arguments and both callable inference paths.
+It computes closed imax levels for ordinary/dependent arrows from declared metadata.
+Structures check their fields against the stated result universe before publication.
+No target, lift or universe is chosen implicitly. The formerly accepted module-carrier
+counterexample is rejected by Clean. Fourteen exact native targets, four sort checks
+and three proofs cover supported higher-universe values, arrows and proof fields.
+General universe polymorphism and Type-valued binders remain separate work.
 :::

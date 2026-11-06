@@ -653,3 +653,17 @@ Ten exact targets, five native sort assertions and five proofs cover finite,
 empty/singleton, proof-domain and higher-universe domain examples. General universe
 inference and Type-valued binders remain outside the current profile.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Closed universe parameter and field bounds
+
+[Closed-universe checking](closed-universe-checking.md) now enforces the declared
+Type 0 carrier bounds in constructor arguments and both callable inference paths.
+It computes closed imax levels for ordinary/dependent arrows from declared metadata.
+Structures check their fields against the stated result universe before publication.
+No target, lift or universe is chosen implicitly. The formerly accepted module-carrier
+counterexample is rejected by Clean. Fourteen exact native targets, four sort checks
+and three proofs cover supported higher-universe values, arrows and proof fields.
+General universe polymorphism and Type-valued binders remain separate work.
+:::

@@ -95,7 +95,7 @@ def type_declaration(header, fields, env):
     default_level=1 if values['means']=='Type' else 0
     level=universe_level(values,default_level)
     spec={'args': kinds, 'lean': substitute(values['means'], names), 'latex': template(values['render latex'], names)}
-    if level!=default_level:spec['universe']=level
+    spec['universe']=level
     for src,dst in [('describe','prose'),('describe plural','prose_plural')]:
         if src in values: spec[dst] = template(values[src], names)
     env.data['types'][name] = spec

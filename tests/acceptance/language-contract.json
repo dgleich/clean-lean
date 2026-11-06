@@ -1047,9 +1047,48 @@
         "studies/dependent-functions/verify_proof_families.py"
       ],
       "pending": [
-        "Confirmed: reject Type 1 CoefficientModule inference for equality reflexivity carrier X : Type 0",
         "General universe inference and Type-valued binders",
         "Further automatic label collision cases"
+      ]
+    },
+    {
+      "id": "closed_universe_bounds",
+      "status": "implemented-slice",
+      "specification": "docs/closed-universe-checking.md",
+      "source_fragment": "Function(CoefficientModule(K,field),Natural)",
+      "expected_tree": [
+        "Apply",
+        "Function",
+        [
+          [
+            "Apply",
+            "CoefficientModule",
+            [
+              [
+                "Name",
+                "K"
+              ],
+              [
+                "Name",
+                "field"
+              ]
+            ]
+          ],
+          [
+            "Name",
+            "Natural"
+          ]
+        ]
+      ],
+      "expected_sort_level": 2,
+      "checks": [
+        "tests/test_closed_universes.py",
+        "tests/test_universes.py",
+        "studies/dependent-functions/verify_closed_universes.py"
+      ],
+      "pending": [
+        "General universe-polymorphic source parameters",
+        "Type-valued dependent binders and carrier fields"
       ]
     }
   ]

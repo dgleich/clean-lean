@@ -66,6 +66,17 @@ returning proofs is rejected by an ordinary Type parameter, while a function tak
 a proof and returning a natural number is allowed. No new author-facing keyword is
 needed. General universe inference and Type-valued dependent binders remain open.
 
+## Closed universes
+
+[ClosedUniverses.clean](ClosedUniverses.clean) demonstrates a Type 1 module holder,
+a Type 0 holder of a proof over modules, and authored operations on higher-universe
+values and functions. [ClosedUniversesVerified.lean](ClosedUniversesVerified.lean)
+checks fourteen exact targets, four native sorts and three theorem proofs. Run
+`LAKE=lake python3 studies/dependent-functions/verify_closed_universes.py`.
+The [closed-level contract](../../docs/closed-universe-checking.md) now rejects the
+previously accepted Type 1-to-Type 0 carrier mismatch in Clean. General universe
+parameters and Type-valued dependent binders remain open.
+
 ## Initial dependent-arrow validation checkpoint
 
 The initial dependent-map implementation checks eleven canonical Lean targets and
@@ -114,6 +125,6 @@ page passes search, links and mobile-width checks. The rebuilt review browser ha
 88 files and zero translation errors; its UI and no-JavaScript checks pass.
 
 The separate [closed-universe negative probe](../../docs/proof-valued-functions.md#confirmed-remaining-universe-boundary)
-is still accepted by Clean and rejected by Lean. Enforcing Type 0 versus Type 1
-parameter bounds is the next source-checking task, not a completed acceptance case.
+was accepted by Clean and rejected by Lean at this earlier checkpoint. The
+closed-universe implementation above now rejects it in Clean before emission.
 :::

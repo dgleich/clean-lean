@@ -112,11 +112,13 @@ Type-argument rejection, and a renamed/rebound arrow interface. This completes
 these selected proof/empty/singleton/higher-universe acceptance cases, not a claim
 that all dependent-function or universe interactions have been audited. Broader
 naming collisions, general universe parameters and Type-valued binders remain open.
-## Confirmed remaining universe boundary
+<a name="confirmed-remaining-universe-boundary"></a>
+
+## Closed-universe boundary regression
 
 With `library/logic/equalities.clean` and `library/algebra/module_spaces.clean`
-explicitly imported, the following negative probe is accepted by the current Clean
-checker but rejected by the Lean kernel:
+explicitly imported, the following definition formerly passed Clean and failed
+Lean's Type 0 carrier check:
 
 ```clean
 Define universe boundary(K,field,M):
@@ -127,12 +129,9 @@ Define universe boundary(K,field,M):
   Equals: equality reflexivity(M)
 ```
 
-The equality-reflexivity wrapper declares its inferred carrier as `X : Type`
-(Lean Type 0). CoefficientModule is declared in Type 1. The emitted application
-therefore fails with a native application-type mismatch. The new proof-sort gate
-correctly excludes Prop carriers but does not yet enforce all closed Type levels.
-This probe is not a verified example or a proof. The next implementation needs to
-propagate declared closed universe levels through ordinary/dependent arrows and
-check them against explicit Type-parameter bounds, with the arrow's documented
-Sort grant kept separate. General universe polymorphism remains a further task.
+[Closed-universe checking](closed-universe-checking.md) now rejects this definition
+before publishing it: the equality-reflexivity wrapper requires `X: Type` (Type 0),
+whereas CoefficientModule is declared in Type 1. The arrow's explicit Sort grant
+remains separate from generic Type parameters. This negative case is not a theorem
+or proof. General universe polymorphism remains a further task.
 :::

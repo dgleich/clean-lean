@@ -1,0 +1,66 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../topology/Common.clean"
+Import "../../library/algebra/module_spaces.clean"
+
+Structure ModuleHolder(K: Type,field: FieldStructure(K)):
+  Universe: 1
+  Let object: CoefficientModule(K,field)
+  Constructor: module holder
+  Render latex: \operatorname{{Holder}}_{{{K}}}
+
+Structure ModuleLaw(K: Type,field: FieldStructure(K)):
+  Let law: Function(M: CoefficientModule(K,field),(M = M))
+  Constructor: module law
+  Render latex: \operatorname{{Law}}_{{{K}}}
+
+Define module echo(field,M):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Returns: CoefficientModule(K,field)
+  Equals: M
+  Render latex: {M}
+
+Define module identity operator(field):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Returns: Function(CoefficientModule(K,field),CoefficientModule(K,field))
+  Equals: function(M: CoefficientModule(K,field),M)
+  Render latex: \operatorname{{id}}
+
+Define constant module value(field,n):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let n: Natural
+  Returns: Function(CoefficientModule(K,field),Natural)
+  Equals: function(M: CoefficientModule(K,field),n)
+  Render latex: {n}
+
+Result higher universe holder:
+  Attribution: topology; module holder projection; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let H = module holder(K,field,M)
+  Conclude: module echo(field,H.object) = M
+
+Result higher universe function:
+  Attribution: topology; module identity application; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let f = module identity operator(field)
+  Let N = f(M)
+  Conclude: N = M
+
+Result small proof field:
+  Attribution: topology; impredicative proof field application; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let law: Function(N: CoefficientModule(K,field),(N = N))
+  Let L = module law(K,field,law)
+  Let h = L.law(M)
+  Conclude: M = M
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -224,8 +224,7 @@ class Environment:
         for a,k in zip(args,kinds):
             if k=='type':
                 value=self.type(a,env,trail=trail)
-                if self.is_proof_type(value) and not self.is_function_type(Type(name)):
-                    raise CleanError('Proof types cannot instantiate Type parameters')
+                if not self.is_function_type(Type(name)):self.require_type_argument(value)
                 out.append(value);continue
             if isinstance(k,dict):
                 if not (a.startswith('(') or re.fullmatch(ID+r'(?:\.'+ID+r')*',a)):
@@ -274,6 +273,22 @@ class Environment:
     def is_proof_type(self,t):
         if isinstance(t,ProofType):return True
         return isinstance(t,Type) and self.is_function_type(t) and len(t.args)==2 and self.is_proof_type(t.args[1])
+    def sort_level(self,t):
+        """Closed Lean Sort level; checked local carrier variables inhabit Type 0."""
+        if not isinstance(t,Type) or t==NUM:
+            raise CleanError('Cannot determine a closed universe for an unresolved type')
+        if isinstance(t,ProofType):return 0
+        if self.is_function_type(t) and len(t.args)==2:
+            codomain=self.sort_level(t.args[1])
+            return 0 if codomain==0 else max(self.sort_level(t.args[0]),codomain)
+        spec=self.data['types'].get(t.name)
+        if spec is None:return 1
+        if 'canonical' in spec:raise CleanError('Universe checking requires a resolved type alias')
+        return spec.get('universe',0)+1
+    def require_type_argument(self,t):
+        level=self.sort_level(t)
+        if level==0:raise CleanError('Proof types cannot instantiate Type parameters')
+        if level!=1:raise CleanError('Type parameter requires Lean Type 0; got Type '+str(level-1))
     def function_type(self,domain,codomain):
         names=[name for name in self.data['types'] if self.is_function_type(Type(name))]
         if len(names)!=1:
@@ -293,7 +308,7 @@ class Environment:
         return ('elements of $' if plural else 'an element of $')+self.render_type(t,'latex')+'$'
     def match(self,p,a,bind):
         if p.startswith('$'):
-            if self.is_proof_type(a):raise CleanError('Proof types cannot instantiate Type parameters')
+            if isinstance(a,Type):self.require_type_argument(a)
             if p in bind and bind[p]!=a: raise CleanError('Type or dimension mismatch: '+p)
             bind[p]=a; return
         m=re.fullmatch(r'(\w+)(?:\((.*)\))?',p)
@@ -374,6 +389,7 @@ class Environment:
                 if pattern.name in implicit and not pattern.args:
                     if implicit[pattern.name]!=Type('Type') or not isinstance(actual,Type) or self.is_proof_type(actual):
                         raise CleanError('Expected a type argument: '+pattern.name)
+                    self.require_type_argument(actual)
                     bind(pattern.name,actual)
                 elif not pattern.args and pattern.name in substitutions:
                     if substitutions[pattern.name]!=actual:raise CleanError('Dependent type mismatch: '+pattern.name)

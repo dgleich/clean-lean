@@ -693,6 +693,24 @@ check the definition and its component, identity and composition statements.</p>
 bodies under shadowed module bindings. No general extensionality or implicit proof
 search is added. See the <a href="hygienic-producer-conversion.md">normative conversion contract</a>.</p>
 </section>
+<section class="mapping" id="closed-universe-checking" data-status="implemented">
+<h2>Closed universe bounds</h2>
+<p><span class="status implemented">Declared levels checked</span> A Clean parameter
+<code>T: Type</code> requires a carrier in Lean Type 0. Passing a module category
+object to the generic equality-reflexivity wrapper now fails in Clean, because its
+inferred carrier would be ModuleCat, a Type 1 type. No lift or larger universe is
+silently selected.</p>
+<p>Ordinary/dependent arrows compute the closed Lean imax: a proof codomain gives
+Prop; otherwise take the maximum domain/codomain sort level. Thus a function from
+modules to natural numbers lives in Type 1, while a proof family over modules lives
+in Prop. Structure fields are checked against the declared Universe without changing
+that annotation.</p>
+<p><a href="../studies/dependent-functions/ClosedUniverses.clean">Authored records and operations</a>
+have <a href="../studies/dependent-functions/ClosedUniversesVerified.lean">fourteen exact targets,
+four sort checks and three proofs</a>. Native interfaces retain their declared
+levels and kernel-validation obligations. See the <a href="closed-universe-checking.md">closed-level contract</a>;
+general universe-polymorphic parameters remain open.</p>
+</section>
 <section class="mapping" id="proof-valued-functions" data-status="implemented">
 <h2>Functions returning proofs</h2>
 <p><span class="status implemented">Selected proof-family profile checked</span>

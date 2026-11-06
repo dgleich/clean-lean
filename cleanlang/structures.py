@@ -129,6 +129,9 @@ def declare(header, fields, env):
     if 'constructor' not in values or values.keys()-{'constructor','render latex','describe','describe plural','universe'}:
         raise CleanError('Structure requires Constructor; optional Render latex, Describe, Describe plural and Universe')
     level=universe_level(values)
+    for field_name,field_type in members:
+        if env.sort_level(field_type)>level+1:
+            raise CleanError('Structure field '+field_name+' exceeds declared Universe '+str(level))
     constructor=values['constructor']
     ctree=parse(constructor+'()','expression')
     # The same generated call grammar governs constructor names.
@@ -146,7 +149,7 @@ def declare(header, fields, env):
     if key in env.notation_definitions:raise CleanError('Generated structure identifier collision')
     spec={'args':kinds,'lean':key+''.join(' ({'+str(i)+'})' for i in range(len(params))),
           'latex':template(values.get('render latex',r'\operatorname{{'+name+'}}'),pnames)}
-    if level:spec['universe']=level
+    spec['universe']=level
     for source,dest in [('describe','prose'),('describe plural','prose_plural')]:
         if source in values:spec[dest]=template(values[source],pnames)
     # Publish only after source-side signature validation. Lean checks the record's fixed sort.
