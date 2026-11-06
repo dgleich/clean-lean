@@ -327,6 +327,9 @@ noncomputable def cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b  (X : TopCa
 noncomputable def cleanDefine_has_pair_data_c2317928d500c075653a  (X : TopCat.{0}) (Q : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 (X)) (S : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)) : Prop :=
   (((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) (Q)) = (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S))) ∧ ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) (Q)) = (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S))))
 
+noncomputable def cleanDefine_certify_pair_inclusion_48466e95544d6e5f997e  (X : TopCat.{0}) (S : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)) (T : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)) (s : (((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S))))) (t : (((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (T)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (T))))) (a : (((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (T))))) (b : (((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (T))))) : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 (X) :=
+  (@cleanConstructor_pair_inclusion_4f04d1794c02e12be8a7 (X) ((@cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b (X) (S) (s))) ((@cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b (X) (T) (t))) (a) (b))
+
 
 open scoped Matrix
 
@@ -483,6 +486,32 @@ def bounded_perturbation_has_a_certified_inclusion : Prop :=
   let T : cleanStructure_SpacePairData_f4912a1b453369bfb75e ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) := (@cleanDefine_expanded_pair_66873557049e4375bc60 (P) (r));
   (@Exists (cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)))) (fun (clean_bound_0 : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)))) => ((@cleanDefine_has_pair_data_c2317928d500c075653a ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) (clean_bound_0))) (S)) ∧ (@cleanDefine_has_pair_data_c2317928d500c075653a ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) (clean_bound_0))) (T)))))
 
+/--
+source: topology
+reference: certified pair constructor
+relationship: original
+-/
+def certification_preserves_pair_data : Prop :=
+  ∀ (X : TopCat.{0}),
+  ∀ (S : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)),
+  ∀ («nesting» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S)))),
+  (@cleanDefine_has_pair_data_c2317928d500c075653a (X) ((@cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b (X) (S) («nesting»))) (S))
+
+/--
+source: topology
+reference: certified inclusion constructor
+relationship: original
+-/
+def certification_preserves_inclusion_data : Prop :=
+  ∀ (X : TopCat.{0}),
+  ∀ (S T : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)),
+  ∀ («source» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S)))),
+  ∀ («target» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (T)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (T)))),
+  ∀ («ambient» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (T)))),
+  ∀ («relative» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (T)))),
+  let Q : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 (X) := (@cleanDefine_certify_pair_inclusion_48466e95544d6e5f997e (X) (S) (T) («source») («target») («ambient») («relative»));
+  ((@cleanDefine_has_pair_data_c2317928d500c075653a (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q))) (S)) ∧ (@cleanDefine_has_pair_data_c2317928d500c075653a (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q))) (T)))
+
 end CleanStatements
 
 open Lean Elab Command
@@ -521,6 +550,7 @@ private def canonicalName (n : Name) : Name := Id.run do
   if n == `InterlevelOracle.perturbed then return `cleanDefine_perturbed_pair_8a139afee8bcd7a01090
   if n == `InterlevelOracle.certify then return `cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b
   if n == `InterlevelOracle.represents then return `cleanDefine_has_pair_data_c2317928d500c075653a
+  if n == `InterlevelOracle.certifyInclusion then return `cleanDefine_certify_pair_inclusion_48466e95544d6e5f997e
   match n with
   | .str p s => return .str (canonicalName p) s
   | .num p i => return .num (canonicalName p) i
@@ -636,6 +666,10 @@ def boundedStatement : Prop := ∀ (P : Problem)
   r ≥ 0 → @bounded P h r → @included P.space (@perturbed P h) (@expandedPair P r)
 noncomputable def certify (X : TopCat.{0}) (Q : Pair X) (h : Q.relative ⊆ Q.ambient) : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 X :=
   @cleanConstructor_topological_pair_d2eb62bc922cb0af9e3c X Q.ambient Q.relative h
+noncomputable def certifyInclusion (X : TopCat.{0}) (S T : Pair X)
+  (s : S.relative ⊆ S.ambient) (t : T.relative ⊆ T.ambient)
+  (a : S.ambient ⊆ T.ambient) (b : S.relative ⊆ T.relative) : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 X :=
+  @cleanConstructor_pair_inclusion_4f04d1794c02e12be8a7 X (@certify X S s) (@certify X T t) a b
 noncomputable def represents (X : TopCat.{0}) (Q : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 X) (S : Pair X) : Prop :=
   Q.ambient=S.ambient ∧ Q.relative=S.relative
 def certifiedExpandedStatement : Prop := ∀ (P : Problem) (r : ℝ),
@@ -656,6 +690,13 @@ def certifiedPerturbationStatement : Prop := ∀ (P : Problem)
   ∃ Q : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 P.space,
     @represents P.space Q.source S ∧ @represents P.space Q.target T
 
+def certifyStatement : Prop := ∀ (X : TopCat.{0}) (S : Pair X) (h : S.relative ⊆ S.ambient),
+  @represents X (@certify X S h) S
+def certifyInclusionStatement : Prop := ∀ (X : TopCat.{0}) (S T : Pair X)
+  (s : S.relative ⊆ S.ambient) (t : T.relative ⊆ T.ambient)
+  (a : S.ambient ⊆ T.ambient) (b : S.relative ⊆ T.relative),
+  let Q : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 X := @certifyInclusion X S T s t a b;
+  @represents X Q.source S ∧ @represents X Q.target T
 end InterlevelOracle
 same_target cleanStructure_Endpoints_2512a023e0474ce195ac InterlevelOracle.Ends
 same_target cleanStructure_EndpointSelection_b1d52148908811c63f1d InterlevelOracle.Selection
@@ -691,6 +732,7 @@ same_target cleanDefine_bounded_perturbation_f5d5b63290c0e028ea34 InterlevelOrac
 same_target cleanDefine_perturbed_pair_8a139afee8bcd7a01090 InterlevelOracle.perturbed
 same_target cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b InterlevelOracle.certify
 same_target cleanDefine_has_pair_data_c2317928d500c075653a InterlevelOracle.represents
+same_target cleanDefine_certify_pair_inclusion_48466e95544d6e5f997e InterlevelOracle.certifyInclusion
 same_target cleanStructure_Endpoints_2512a023e0474ce195ac.mk InterlevelOracle.Ends.mk
 same_target cleanStructure_Endpoints_2512a023e0474ce195ac.lower InterlevelOracle.Ends.lower
 same_target cleanStructure_Endpoints_2512a023e0474ce195ac.upper InterlevelOracle.Ends.upper
@@ -715,6 +757,8 @@ same_target CleanStatements.bounded_perturbation_lies_in_expanded_pair Interleve
 same_target CleanStatements.expanded_pair_has_a_certificate InterlevelOracle.certifiedExpandedStatement
 same_target CleanStatements.bounded_shift_has_a_certified_inclusion InterlevelOracle.certifiedShiftStatement
 same_target CleanStatements.bounded_perturbation_has_a_certified_inclusion InterlevelOracle.certifiedPerturbationStatement
+same_target CleanStatements.certification_preserves_pair_data InterlevelOracle.certifyStatement
+same_target CleanStatements.certification_preserves_inclusion_data InterlevelOracle.certifyInclusionStatement
 
 namespace InterlevelProofs
 theorem endpoint_choices_are_exhaustive : CleanStatements.endpoint_choices_are_exhaustive := by
@@ -820,6 +864,12 @@ theorem bounded_perturbation_has_a_certified_inclusion : CleanStatements.bounded
   refine ⟨⟨⟨S.ambient,S.relative,hs⟩,⟨T.ambient,T.relative,ht⟩,hi.1,hi.2⟩,?_⟩
   exact ⟨⟨rfl,rfl⟩,⟨rfl,rfl⟩⟩
 
+theorem certification_preserves_pair_data : CleanStatements.certification_preserves_pair_data := by
+  intro X S h
+  exact ⟨rfl,rfl⟩
+theorem certification_preserves_inclusion_data : CleanStatements.certification_preserves_inclusion_data := by
+  intro X S T s t a b
+  exact ⟨⟨rfl,rfl⟩,⟨rfl,rfl⟩⟩
 end InterlevelProofs
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

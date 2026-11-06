@@ -21,6 +21,7 @@ mapping={'BundleOracle.BasedPath':pkey,'BundleOracle.Endpoints':ikey,
          'BundleOracle.ordered':keys['ordered endpoints'],'BundleOracle.reversePath':rkey,
          'BundleOracle.ScalarMap':skey,'BundleOracle.SizedVector':vkey,
          'BundleOracle.scalarMap':keys['scalar map'],'BundleOracle.sizedVector':keys['sized vector']}
+mapping['BundleOracle.nativeIdentity']=env.data['functions']['opaque endpoints']['lean'].split()[0]
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
 open Lean Elab Command
@@ -99,6 +100,11 @@ def functionStatement : Prop := ∀ (f : ℝ → ℝ) (x : ℝ),
   P.map x = f x
 def dimensionStatement : Prop := ∀ (V : SizedVector),
   @Exists (Fin V.size → ℝ) (fun v => v=V.vector)
+noncomputable def nativeIdentity (I : Endpoints) : Endpoints := I
+def computedStatement : Prop := ∀ (a b : ℝ), a=a
+def authoredProjectionStatement : Prop := ∀ (I : Endpoints) (s : ℝ), I.lower+s=I.lower+s
+def opaqueStatement : Prop := ∀ (I : Endpoints), (@nativeIdentity I).lower=I.lower
+def computedDependentStatement : Prop := ∀ (X : Type) (P : BasedPath X), P.path=P.path
 end BundleOracle
 '''
 checks=[]
@@ -112,7 +118,9 @@ for actual,expected_name in [('endpoint_constructor','constructorStatement'),
     ('shifting_endpoints_preserves_order','shiftStatement'),
     ('bundled_path_has_its_declared_endpoints','pathStatement'),
     ('reversing_a_bundled_path_twice','reverseStatement'),
-    ('function_field_application','functionStatement'),('vector_field_dimensions','dimensionStatement')]:
+    ('function_field_application','functionStatement'),('vector_field_dimensions','dimensionStatement'),
+    ('computed_constructor_projection','computedStatement'),('authored_record_projection','authoredProjectionStatement'),
+    ('opaque_record_projection','opaqueStatement'),('computed_dependent_field','computedDependentStatement')]:
     checks.append(f'same_target CleanStatements.{actual} BundleOracle.{expected_name}')
 proofs=f'''
 namespace BundleProofs
@@ -136,10 +144,22 @@ theorem function_field_application : CleanStatements.function_field_application 
 theorem vector_field_dimensions : CleanStatements.vector_field_dimensions := by
   intro V
   exact ⟨V.vector,rfl⟩
+theorem computed_constructor_projection : CleanStatements.computed_constructor_projection := by
+  intro a b
+  rfl
+theorem authored_record_projection : CleanStatements.authored_record_projection := by
+  intro I s
+  rfl
+theorem opaque_record_projection : CleanStatements.opaque_record_projection := by
+  intro I
+  rfl
+theorem computed_dependent_field : CleanStatements.computed_dependent_field := by
+  intro X P
+  rfl
 end BundleProofs
 '''
 path=here/'BundlesVerified.lean';path.write_text(source+comparison+expected+'\n'.join(checks)+'\n'+proofs)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print(f'{len(checks)} canonical record/constructor/projection/definition/statement checks and six proofs passed.')
+print(f'{len(checks)} canonical record/constructor/projection/definition/statement checks and ten proofs passed.')
 
 # generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -104,7 +104,7 @@ class Type:
 class ValueIndex:
     name: str
     lean: str
-    tex: str
+    tex: str = field(compare=False)
     def __str__(self): return self.name
 
 
@@ -388,7 +388,7 @@ class Expressions:
             function=self._elaborate(tree[1]);args=[self._elaborate(a) for a in tree[2]]
             if not self.reg.is_function_type(function.type) or len(args)!=1 or not compatible(args[0].type,function.type.args[0]):
                 raise CleanError('Function field argument mismatch')
-            return Expr('('+function.lean+' '+args[0].lean+')',function.tex+'('+args[0].tex+')',function.type.args[1],tree=tree)
+            return Expr('('+function.lean+' '+args[0].lean+')',function.tex+'('+args[0].tex+')',function.type.args[1],tree=['Apply',function.tree,[a.tree for a in args]])
         if kind=='Projection':
             from .structures import project
             return project(self.reg,self._elaborate(tree[1]),tree[2],self.env)
@@ -398,13 +398,13 @@ class Expressions:
             if tok!='-' and a.type!=PROP:raise CleanError('Not requires a proposition')
             inner=('('+a.tex+')') if a.precedence < 8 else a.tex
             tx=('-'+inner) if tok=='-' else (r'\text{not }('+a.tex+')')
-            return Expr('('+('-' if tok=='-' else '¬')+a.lean+')',tx,a.type,7 if tok=='-' else 5,tree)
+            return Expr('('+('-' if tok=='-' else '¬')+a.lean+')',tx,a.type,7 if tok=='-' else 5,['Unary',tok,a.tree])
         if kind=='Call':
             tok=tree[1];args=[self._elaborate(a) for a in tree[2]]
             if tok in self.env and self.reg.is_function_type(self.env[tok].type):
                 t=self.env[tok].type
                 if len(args)!=1 or not compatible(args[0].type,t.args[0]): raise CleanError('Function argument mismatch')
-                return Expr('('+self.env[tok].lean+' '+args[0].lean+')',texid(tok)+'('+args[0].tex+')',t.args[1],tree=tree)
+                return Expr('('+self.env[tok].lean+' '+args[0].lean+')',texid(tok)+'('+args[0].tex+')',t.args[1],tree=['Call',tok,[a.tree for a in args]])
             return self.reg.call(tok,args,self.env)
         if kind in ('Lambda','Forall','Exists'):
             name=tree[1]

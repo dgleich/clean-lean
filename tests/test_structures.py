@@ -87,9 +87,9 @@ class Structures(unittest.TestCase):
     def test_unknown_fields_and_nonrecords(self):
         for source in ['I.missing','a.lower','P.Start']:
             with self.subTest(source=source),self.assertRaises(CleanError):self.expr(source)
-    def test_projection_of_computation_requires_name(self):
-        with self.assertRaisesRegex(CleanError,'named local'):
-            self.expr('endpoints(a,b).lower')
+    def test_constructor_projection_reduces(self):
+        self.assertEqual(self.expr('endpoints(a,b).lower').lean,self.expr('a').lean)
+        self.assertEqual(self.expr('shifted endpoints(I,a).lower').lean,self.expr('I.lower+a').lean)
     def test_no_recursive_self_reference(self):
         with self.assertRaises(CleanError):
             declare('Structure Loop():',['Let next: Loop','Constructor: loop'],self.e)
@@ -129,7 +129,7 @@ class Structures(unittest.TestCase):
         self.assertIn('/--\nA topology',lean([],self.e,[]))
     def test_real_study(self):
         e=Environment();rs=load_document(ROOT/'studies/topology/Bundles.clean',e)
-        self.assertEqual(len(rs),6)
+        self.assertEqual(len(rs),10)
     def test_bad_dots_are_syntax_errors(self):
         for source in ['I..lower','I.','I.(lower)','I.lower.other(a).next']:
             with self.subTest(source=source),self.assertRaises(CleanError):syntax.parse(source,'expression')
@@ -137,3 +137,59 @@ class Structures(unittest.TestCase):
         with self.assertRaises(CleanError):syntax.parse('Path(X,f(x).t,x,x)','type_ref')
 
 # generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+    def test_computed_projection_tree(self):
+        self.assertEqual(syntax.expression_tree(syntax.parse('endpoints(a,b).lower','expression')),
+            ['Projection',['Call','endpoints',[['Local','a'],['Local','b']]],'lower'])
+    def test_dependent_constructor_projection(self):
+        value=self.expr('based path(X,P.topology,P.start,P.finish,P.path).path')
+        self.assertEqual((value.lean,value.type,value.tree),
+                         (self.expr('P.path').lean,self.expr('P.path').type,self.expr('P.path').tree))
+        self.assertEqual(self.expr('reversed bundle(X,P).start').lean,self.expr('P.finish').lean)
+    def test_opaque_producer_keeps_projection(self):
+        from cleanlang.modules import notation
+        notation('Notation opaque endpoints(I: Endpoints): Endpoints:',
+                 ['Means: I','Render latex: {I}'],self.e)
+        value=self.expr('opaque endpoints(I).lower')
+        self.assertEqual(value.tree,['Projection',['Call','opaque endpoints',[['Local','I']]],'lower'])
+        self.assertIn(self.e.structures['Endpoints']['key']+'.«lower»',value.lean)
+        self.assertNotEqual(value,self.expr('I.lower'))
+    def test_computed_function_field(self):
+        declare('Structure Evaluation():',['Let map: Function(Real,Real)','Constructor: evaluation'],self.e)
+        self.local['f']=Expr('f','f',self.e.type('Function(Real,Real)'))
+        self.assertEqual(self.expr('evaluation(f).map(a)').lean,'(f a)')
+    def test_bad_constructor_arguments_are_not_erased(self):
+        with self.assertRaises(CleanError):self.expr('endpoints(a,P).lower')
+    def test_local_alias_stays_opaque(self):
+        self.local['J']=Expr('J','J',Type('Endpoints'))
+        self.assertEqual(self.expr('J.lower').tree,['Projection',['Local','J'],'lower'])
+
+    def test_implicit_producer_is_not_unfolded(self):
+        from cleanlang.modules import notation
+        notation('Define retain endpoints(x,I):',
+          ['Let X: Type','Let x: X','Let I: Endpoints','Returns: Endpoints','Equals: I'],self.e,authored=True)
+        value=self.expr('retain endpoints(a,I).lower')
+        self.assertEqual(value.tree[0],'Projection')
+        self.assertIn('retain_endpoints',value.lean)
+    def test_binder_bearing_producer_is_not_unfolded(self):
+        from cleanlang.modules import notation
+        declare('Structure ScalarMap():',['Let map: Function(Real,Real)','Constructor: scalar map'],self.e)
+        notation('Define identity bundle(): ScalarMap:',
+                 ['Equals: scalar map(function(z: Real,z))'],self.e,authored=True)
+        value=self.expr('identity bundle().map')
+        self.assertEqual(value.tree,['Projection',['Call','identity bundle',[]],'map'])
+    def test_index_rendering_does_not_choose_identity(self):
+        self.assertEqual(ValueIndex('x','x','first spelling'),ValueIndex('x','x','second spelling'))
+        self.assertNotEqual(ValueIndex('x','x','same spelling'),ValueIndex('y','y','same spelling'))
+    def test_projection_keeps_authored_rendering(self):
+        value=self.expr('endpoints(a,b).lower')
+        self.assertEqual(value.lean,'a')
+        self.assertIn('endpoints',value.tex)
+        self.assertIn('lower',value.tex)
+
+    def test_normal_form_propagates_through_local_calls(self):
+        self.local['f']=Expr('f','f',self.e.type('Function(Real,Real)'))
+        self.assertEqual(self.expr('f(endpoints(a,b).lower)').tree,
+                         ['Call','f',[['Local','a']]])
+        self.assertEqual(self.expr('-endpoints(a,b).lower').tree,
+                         ['Unary','-',['Local','a']])

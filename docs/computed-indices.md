@@ -132,3 +132,15 @@ instances, universes, argument order and projection indices; reduction proofs do
 not replace those comparisons. These are scoped acceptance checks, not a claim
 that the whole compiler satisfies every open elaboration obligation.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Computed record projection
+
+[Computed records](computed-records.md) supersedes the named-base-only restriction.
+It specifies constructor-field reduction and explicit, binder-free authored
+producer unfolding; other computations retain nominal projections. LaTeX preserves
+the authored expression and is excluded from semantic index identity. The interlevel
+certificate composition now works in Clean. Implicit/binder-bearing producer
+reduction and local-alias conversion remain separate extensions.
+:::

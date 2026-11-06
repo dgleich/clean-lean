@@ -683,6 +683,43 @@
         "General Sort-polymorphic parameters",
         "Inherited opaque native/operator elaboration obligations"
       ]
+    },
+    {
+      "id": "computed_record_projection",
+      "status": "implemented-slice",
+      "source": "endpoints(a,b).lower",
+      "expected_tree": [
+        "Projection",
+        [
+          "Call",
+          "endpoints",
+          [
+            [
+              "Local",
+              "a"
+            ],
+            [
+              "Local",
+              "b"
+            ]
+          ]
+        ],
+        "lower"
+      ],
+      "environment": "Explicit bundles module and a,b : Real; pinned repository Lean/Mathlib",
+      "expected_lean": "a",
+      "expected_lean_type": "Real",
+      "checks": [
+        "tests/test_structures.py",
+        "tests/test_interlevel.py",
+        "studies/topology/verify_bundles.py",
+        "studies/topology/verify_interlevel.py"
+      ],
+      "pending": [
+        "Implicit-parameter and binder-bearing producer unfolding",
+        "Local-alias conversion",
+        "Inherited native adapter elaboration obligations"
+      ]
     }
   ]
 }

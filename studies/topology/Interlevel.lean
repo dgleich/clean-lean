@@ -325,6 +325,9 @@ noncomputable def cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b  (X : TopCa
 noncomputable def cleanDefine_has_pair_data_c2317928d500c075653a  (X : TopCat.{0}) (Q : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 (X)) (S : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)) : Prop :=
   (((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) (Q)) = (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S))) ∧ ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) (Q)) = (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S))))
 
+noncomputable def cleanDefine_certify_pair_inclusion_48466e95544d6e5f997e  (X : TopCat.{0}) (S : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)) (T : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)) (s : (((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S))))) (t : (((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (T)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (T))))) (a : (((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (T))))) (b : (((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (T))))) : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 (X) :=
+  (@cleanConstructor_pair_inclusion_4f04d1794c02e12be8a7 (X) ((@cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b (X) (S) (s))) ((@cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b (X) (T) (t))) (a) (b))
+
 
 open scoped Matrix
 
@@ -480,6 +483,32 @@ def bounded_perturbation_has_a_certified_inclusion : Prop :=
   let S : cleanStructure_SpacePairData_f4912a1b453369bfb75e ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) := (@cleanDefine_perturbed_pair_8a139afee8bcd7a01090 (P) (h));
   let T : cleanStructure_SpacePairData_f4912a1b453369bfb75e ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) := (@cleanDefine_expanded_pair_66873557049e4375bc60 (P) (r));
   (@Exists (cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)))) (fun (clean_bound_0 : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)))) => ((@cleanDefine_has_pair_data_c2317928d500c075653a ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) (clean_bound_0))) (S)) ∧ (@cleanDefine_has_pair_data_c2317928d500c075653a ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) (clean_bound_0))) (T)))))
+
+/--
+source: topology
+reference: certified pair constructor
+relationship: original
+-/
+def certification_preserves_pair_data : Prop :=
+  ∀ (X : TopCat.{0}),
+  ∀ (S : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)),
+  ∀ («nesting» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S)))),
+  (@cleanDefine_has_pair_data_c2317928d500c075653a (X) ((@cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b (X) (S) («nesting»))) (S))
+
+/--
+source: topology
+reference: certified inclusion constructor
+relationship: original
+-/
+def certification_preserves_inclusion_data : Prop :=
+  ∀ (X : TopCat.{0}),
+  ∀ (S T : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)),
+  ∀ («source» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S)))),
+  ∀ («target» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (T)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (T)))),
+  ∀ («ambient» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (T)))),
+  ∀ («relative» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (T)))),
+  let Q : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 (X) := (@cleanDefine_certify_pair_inclusion_48466e95544d6e5f997e (X) (S) (T) («source») («target») («ambient») («relative»));
+  ((@cleanDefine_has_pair_data_c2317928d500c075653a (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q))) (S)) ∧ (@cleanDefine_has_pair_data_c2317928d500c075653a (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q))) (T)))
 
 end CleanStatements
 

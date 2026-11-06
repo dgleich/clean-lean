@@ -290,3 +290,15 @@ exclusion of proof fields. Matching is structural; direct binder-bearing evidenc
 requires a named Condition. No implicit proof search or general Sort parameters
 are introduced. Certified subset and continuous pair inclusions exercise this map.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Computed record projection
+
+[Computed records](computed-records.md) supersedes the named-base-only restriction.
+It specifies constructor-field reduction and explicit, binder-free authored
+producer unfolding; other computations retain nominal projections. LaTeX preserves
+the authored expression and is excluded from semantic index identity. The interlevel
+certificate composition now works in Clean. Implicit/binder-bearing producer
+reduction and local-alias conversion remain separate extensions.
+:::

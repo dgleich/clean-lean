@@ -544,12 +544,26 @@ a named Condition wrapper. Multiword labels do not expose encoded source names.<
 <p>The <a href="../studies/topology/Interlevel.clean">interlevel specimens</a>
 now prove that bounded shifts and perturbations admit certified inclusions.
 These are existential statements with actual constructed Lean witnesses.
-Direct composition of computed certificate records remains rejected: projection
-and reduction of those records need a separate specified extension.</p>
+Direct composition of computed certificate records is now supported by the
+<a href="computed-records.md">computed-record reduction rules</a>.</p>
 <p>See the <a href="evidence.md">normative contract</a> and
 <a href="../studies/topology/Evidence.clean">checked specimens</a>.
 Native Set.inclusion and ContinuousMap.inclusion wrappers support a proved
 commuting square of certified pair inclusions. Relative homology remains pending.</p>
+</section>
+<section class="mapping" id="computed-records" data-status="implemented">
+<h2>Computed record fields</h2>
+<p><strong>Implemented, bounded.</strong> The existing projection grammar accepts
+computed bases. Constructor fields reduce; explicit, binder-free authored Equals
+producers unfold under a projection. Named locals and native adapters stay opaque.</p>
+<pre><code>shifted endpoints(I,s).lower = I.lower+s</code></pre>
+<p>The Lean proposition uses the specified reduced expression (readable fragment):</p>
+<pre><code>I.lower + s = I.lower + s</code></pre>
+<p>LaTeX retains the authored left-hand side. Rendered text is excluded from
+semantic index identity. Native adapters retain their nominal Lean projections;
+no implicit proof search or general conversion is added. This enables the
+<a href="../library/topology/certified_interlevel.clean">authored certificate composition</a>.
+See the <a href="computed-records.md">contract and remaining limits</a>.</p>
 </section>
 </main>
 <script>

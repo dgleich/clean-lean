@@ -2288,6 +2288,10 @@
         "-- ",
         ""
       ]
+    },
+    "docs/computed-records.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

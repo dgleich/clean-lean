@@ -108,3 +108,21 @@ Result bounded perturbation has a certified inclusion:
   Conclude:
     there exists (Q: PairInclusion(P.space),
       has pair data(P.space,Q.source,S) and has pair data(P.space,Q.target,T))
+
+Result certification preserves pair data:
+  Attribution: topology; certified pair constructor; original
+  Let X: TopologicalSpace
+  Let S: SpacePairData(X)
+  Assume nesting: S.relative ⊆ S.ambient
+  Conclude: has pair data(X,certify pair data(X,S,nesting),S)
+
+Result certification preserves inclusion data:
+  Attribution: topology; certified inclusion constructor; original
+  Let X: TopologicalSpace
+  Let S,T: SpacePairData(X)
+  Assume source: S.relative ⊆ S.ambient
+  Assume target: T.relative ⊆ T.ambient
+  Assume ambient: S.ambient ⊆ T.ambient
+  Assume relative: S.relative ⊆ T.relative
+  Let Q = certify pair inclusion(X,S,T,source,target,ambient,relative)
+  Conclude: has pair data(X,Q.source,S) and has pair data(X,Q.target,T)

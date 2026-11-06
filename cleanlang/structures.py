@@ -30,12 +30,54 @@ def substitute_type(t, bindings, env=None, locals=None):
     return bindings.get(t,t)
 
 
+def projection_reduction(env, base, field, locals):
+    """Reduce constructor fields and explicit, binder-free authored producers only."""
+    from .core import Expressions
+    tree=base.tree
+    if not tree or tree[0]!='Call':return None
+    # A local function wins over a module callable, even if names coincide.
+    if tree[1] in locals and env.is_function_type(locals[tree[1]].type):return None
+    spec=env.structures[base.type.name]
+    if tree[1]==spec['constructor']:
+        position=len(spec['parameters'])+[n for n,_ in spec['fields']].index(field)
+        return Expressions(env,locals).elaborate(tree[2][position])
+    definition=env.definitions.get(tree[1])
+    if not definition or definition['implementation']!='equals':return None
+    signature=env.data['functions'][tree[1]]['signature_tree']
+    parameters=signature[2]
+    if any(p[3]=='implicit' for p in parameters):return None
+    body=definition['tree']
+    def has_binder(node):
+        return isinstance(node,list) and (bool(node) and node[0] in ('Lambda','Forall','Exists')
+            or any(has_binder(child) for child in node))
+    if has_binder(body):return None
+    bindings=dict(zip((p[1] for p in parameters),tree[2]))
+    def replace(node):
+        if node[0]=='Local':return bindings.get(node[1],node)
+        if node[0]=='Call':
+            args=[replace(a) for a in node[2]]
+            if node[1] in bindings:
+                callee=bindings[node[1]]
+                if env.is_function_type(Expressions(env,locals).elaborate(callee).type):
+                    return ['Call',callee[1],args] if callee[0]=='Local' else ['Apply',callee,args]
+            return ['Call',node[1],args]
+        if node[0]=='Projection':return ['Projection',replace(node[1]),node[2]]
+        if node[0]=='Apply':return ['Apply',replace(node[1]),[replace(a) for a in node[2]]]
+        if node[0]=='Operator':return ['Operator',node[1],replace(node[2]),replace(node[3])]
+        if node[0]=='Unary':return ['Unary',node[1],replace(node[2])]
+        return node
+    return Expressions(env,locals).elaborate(['Projection',replace(body),field])
+
+
 def project(env, base, field, locals):
     spec=env.structures.get(base.type.name)
     if spec is None:raise CleanError('Field access requires an authored structure; got '+str(base.type))
     ref=reference_name(base.tree)
-    if ref is None:raise CleanError('Field access requires a named local or field reference; bind the expression with Let first')
     if field not in dict(spec['fields']):raise CleanError('Unknown field '+field+' of '+base.type.name)
+    if ref is None:
+        reduced=projection_reduction(env,base,field,locals)
+        if reduced is not None:
+            return Expr(reduced.lean,base.tex+r'.\mathrm{'+textext(field)+'}',reduced.type,tree=reduced.tree)
     bindings=dict(zip(spec['parameters'],base.type.args))
     targets=[env.render_type(a,'lean',locals) if isinstance(a,Type) else
              a.lean if isinstance(a,ValueIndex) else locals[a].lean if a in locals else a
@@ -46,7 +88,8 @@ def project(env, base, field, locals):
         tex=base.tex+r'.\mathrm{'+textext(name)+'}'
         value=Expr(target,tex,result_type,tree=['Projection',base.tree,name])
         if name==field:return value
-        bindings[name]=ValueIndex(ref+'.'+name,target,tex)
+        from .indices import index_value
+        bindings[name]=index_value(value)
     raise CleanError('Missing field: '+field)
 
 

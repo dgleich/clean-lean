@@ -103,4 +103,22 @@ Then \[\left(\text{there exists }Q : \operatorname{PairInclusion},\; Q.\mathrm{s
 \par\smallskip{\footnotesize Adapted from the cited source. Scope: certified inclusion.}
 \end{cleanresult}
 
+\begin{cleanresult}{certification preserves pair data}\cleanattribution{[Topology foundations, certified pair constructor]}
+Let $X$ be a topological space.
+Let $S$ be two subsets of $X$.
+Assume $S.\mathrm{relative} \text{ is a subset of } S.\mathrm{ambient}$ (\texttt{nesting}).
+Then \[\widehat{S}\text{ represents }S.\]
+\end{cleanresult}
+
+\begin{cleanresult}{certification preserves inclusion data}\cleanattribution{[Topology foundations, certified inclusion constructor]}
+Let $X$ be a topological space.
+Let $S$ and $T$ be elements of $\operatorname{SpacePairData}$.
+Assume $S.\mathrm{relative} \text{ is a subset of } S.\mathrm{ambient}$ (\texttt{source}).
+Assume $T.\mathrm{relative} \text{ is a subset of } T.\mathrm{ambient}$ (\texttt{target}).
+Assume $S.\mathrm{ambient} \text{ is a subset of } T.\mathrm{ambient}$ (\texttt{ambient}).
+Assume $S.\mathrm{relative} \text{ is a subset of } T.\mathrm{relative}$ (\texttt{relative}).
+Let $Q = \widehat{S\hookrightarrow T}$.
+Then \[Q.\mathrm{source}\text{ represents }S \text{ and } Q.\mathrm{target}\text{ represents }T.\]
+\end{cleanresult}
+
 % generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

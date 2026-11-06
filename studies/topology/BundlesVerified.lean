@@ -144,6 +144,9 @@ structure cleanStructure_SizedVector_e3bb6d8f3a27db756907  : Type where
 noncomputable def cleanConstructor_sized_vector_236d49ac38f05d98affb («size» : ℕ) («vector» : Fin «size» → ℝ) : cleanStructure_SizedVector_e3bb6d8f3a27db756907 :=
   @cleanStructure_SizedVector_e3bb6d8f3a27db756907.mk «size» «vector»
 
+noncomputable def cleanNotation_opaque_endpoints_d1fd4290aaef6a02d3f2  (I : cleanStructure_Endpoints_2512a023e0474ce195ac) : cleanStructure_Endpoints_2512a023e0474ce195ac :=
+  I
+
 
 open scoped Matrix
 
@@ -213,6 +216,44 @@ def vector_field_dimensions : Prop :=
   ∀ (V : cleanStructure_SizedVector_e3bb6d8f3a27db756907),
   (@Exists (Fin (@cleanStructure_SizedVector_e3bb6d8f3a27db756907.«size» (V)) → ℝ) (fun (clean_bound_0 : Fin (@cleanStructure_SizedVector_e3bb6d8f3a27db756907.«size» (V)) → ℝ) => (clean_bound_0 = (@cleanStructure_SizedVector_e3bb6d8f3a27db756907.«vector» (V)))))
 
+/--
+source: topology
+reference: constructor field computation
+relationship: original
+-/
+def computed_constructor_projection : Prop :=
+  ∀ (a b : ℝ),
+  (a = a)
+
+/--
+source: topology
+reference: translated endpoints
+relationship: original
+-/
+def authored_record_projection : Prop :=
+  ∀ (I : cleanStructure_Endpoints_2512a023e0474ce195ac),
+  ∀ (s : ℝ),
+  (((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) + s) = ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) + s))
+
+/--
+source: topology
+reference: native identity adapter
+relationship: original
+-/
+def opaque_record_projection : Prop :=
+  ∀ (I : cleanStructure_Endpoints_2512a023e0474ce195ac),
+  ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» ((cleanNotation_opaque_endpoints_d1fd4290aaef6a02d3f2 (I)))) = (@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)))
+
+/--
+source: topology
+reference: dependent constructor projection
+relationship: original
+-/
+def computed_dependent_field : Prop :=
+  ∀ (X : Type),
+  ∀ (P : cleanStructure_BasedPath_af4022cf2eeed1e2d1ab (X)),
+  ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«path» (X) (P)) = (@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«path» (X) (P)))
+
 end CleanStatements
 
 open Lean Elab Command
@@ -229,6 +270,7 @@ private def canonicalName (n : Name) : Name := Id.run do
   if n == `BundleOracle.SizedVector then return `cleanStructure_SizedVector_e3bb6d8f3a27db756907
   if n == `BundleOracle.scalarMap then return `cleanConstructor_scalar_map_f78247db9d7c5f5369a0
   if n == `BundleOracle.sizedVector then return `cleanConstructor_sized_vector_236d49ac38f05d98affb
+  if n == `BundleOracle.nativeIdentity then return `cleanNotation_opaque_endpoints_d1fd4290aaef6a02d3f2
   match n with
   | .str p s => return .str (canonicalName p) s
   | .num p i => return .num (canonicalName p) i
@@ -301,6 +343,11 @@ def functionStatement : Prop := ∀ (f : ℝ → ℝ) (x : ℝ),
   P.map x = f x
 def dimensionStatement : Prop := ∀ (V : SizedVector),
   @Exists (Fin V.size → ℝ) (fun v => v=V.vector)
+noncomputable def nativeIdentity (I : Endpoints) : Endpoints := I
+def computedStatement : Prop := ∀ (a b : ℝ), a=a
+def authoredProjectionStatement : Prop := ∀ (I : Endpoints) (s : ℝ), I.lower+s=I.lower+s
+def opaqueStatement : Prop := ∀ (I : Endpoints), (@nativeIdentity I).lower=I.lower
+def computedDependentStatement : Prop := ∀ (X : Type) (P : BasedPath X), P.path=P.path
 end BundleOracle
 same_target cleanStructure_BasedPath_af4022cf2eeed1e2d1ab BundleOracle.BasedPath
 same_target cleanStructure_Endpoints_2512a023e0474ce195ac BundleOracle.Endpoints
@@ -314,6 +361,7 @@ same_target cleanStructure_ScalarMap_b571a474391ee4a1048f BundleOracle.ScalarMap
 same_target cleanStructure_SizedVector_e3bb6d8f3a27db756907 BundleOracle.SizedVector
 same_target cleanConstructor_scalar_map_f78247db9d7c5f5369a0 BundleOracle.scalarMap
 same_target cleanConstructor_sized_vector_236d49ac38f05d98affb BundleOracle.sizedVector
+same_target cleanNotation_opaque_endpoints_d1fd4290aaef6a02d3f2 BundleOracle.nativeIdentity
 same_target cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.mk BundleOracle.BasedPath.mk
 same_target cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.topology BundleOracle.BasedPath.topology
 same_target cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.start BundleOracle.BasedPath.start
@@ -333,6 +381,10 @@ same_target CleanStatements.bundled_path_has_its_declared_endpoints BundleOracle
 same_target CleanStatements.reversing_a_bundled_path_twice BundleOracle.reverseStatement
 same_target CleanStatements.function_field_application BundleOracle.functionStatement
 same_target CleanStatements.vector_field_dimensions BundleOracle.dimensionStatement
+same_target CleanStatements.computed_constructor_projection BundleOracle.computedStatement
+same_target CleanStatements.authored_record_projection BundleOracle.authoredProjectionStatement
+same_target CleanStatements.opaque_record_projection BundleOracle.opaqueStatement
+same_target CleanStatements.computed_dependent_field BundleOracle.computedDependentStatement
 
 namespace BundleProofs
 theorem endpoint_constructor : CleanStatements.endpoint_constructor := by
@@ -355,6 +407,18 @@ theorem function_field_application : CleanStatements.function_field_application 
 theorem vector_field_dimensions : CleanStatements.vector_field_dimensions := by
   intro V
   exact ⟨V.vector,rfl⟩
+theorem computed_constructor_projection : CleanStatements.computed_constructor_projection := by
+  intro a b
+  rfl
+theorem authored_record_projection : CleanStatements.authored_record_projection := by
+  intro I s
+  rfl
+theorem opaque_record_projection : CleanStatements.opaque_record_projection := by
+  intro I
+  rfl
+theorem computed_dependent_field : CleanStatements.computed_dependent_field := by
+  intro X P
+  rfl
 end BundleProofs
 
 -- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

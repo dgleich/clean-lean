@@ -36,4 +36,26 @@ Let $V$ be an element of $\operatorname{SizedVector}$.
 Then \[\left(\text{there exists }v : \mathbb{R}^{V.\mathrm{size}},\; v = V.\mathrm{vector}\right).\]
 \end{cleanresult}
 
+\begin{cleanresult}{computed constructor projection}\cleanattribution{[Topology foundations, constructor field computation]}
+Let $a$ and $b$ be real numbers.
+Then \[\operatorname{endpoints}(a, b).\mathrm{lower} = a.\]
+\end{cleanresult}
+
+\begin{cleanresult}{authored record projection}\cleanattribution{[Topology foundations, translated endpoints]}
+Let $I$ be a pair of real endpoints.
+Let $s$ be a real number.
+Then \[\operatorname{shifted\ endpoints}(I, s).\mathrm{lower} = I.\mathrm{lower} + s.\]
+\end{cleanresult}
+
+\begin{cleanresult}{opaque record projection}\cleanattribution{[Topology foundations, native identity adapter]}
+Let $I$ be a pair of real endpoints.
+Then \[I.\mathrm{lower} = I.\mathrm{lower}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{computed dependent field}\cleanattribution{[Topology foundations, dependent constructor projection]}
+Let $X$ be a type.
+Let $P$ be a path with its topology and endpoints on $X$.
+Then \[\operatorname{based\ path}(X, P.\mathrm{topology}, P.\mathrm{start}, P.\mathrm{finish}, P.\mathrm{path}).\mathrm{path} = P.\mathrm{path}.\]
+\end{cleanresult}
+
 % generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

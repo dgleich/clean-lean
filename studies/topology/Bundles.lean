@@ -144,6 +144,9 @@ structure cleanStructure_SizedVector_e3bb6d8f3a27db756907  : Type where
 noncomputable def cleanConstructor_sized_vector_236d49ac38f05d98affb («size» : ℕ) («vector» : Fin «size» → ℝ) : cleanStructure_SizedVector_e3bb6d8f3a27db756907 :=
   @cleanStructure_SizedVector_e3bb6d8f3a27db756907.mk «size» «vector»
 
+noncomputable def cleanNotation_opaque_endpoints_d1fd4290aaef6a02d3f2  (I : cleanStructure_Endpoints_2512a023e0474ce195ac) : cleanStructure_Endpoints_2512a023e0474ce195ac :=
+  I
+
 
 open scoped Matrix
 
@@ -212,6 +215,44 @@ relationship: original
 def vector_field_dimensions : Prop :=
   ∀ (V : cleanStructure_SizedVector_e3bb6d8f3a27db756907),
   (@Exists (Fin (@cleanStructure_SizedVector_e3bb6d8f3a27db756907.«size» (V)) → ℝ) (fun (clean_bound_0 : Fin (@cleanStructure_SizedVector_e3bb6d8f3a27db756907.«size» (V)) → ℝ) => (clean_bound_0 = (@cleanStructure_SizedVector_e3bb6d8f3a27db756907.«vector» (V)))))
+
+/--
+source: topology
+reference: constructor field computation
+relationship: original
+-/
+def computed_constructor_projection : Prop :=
+  ∀ (a b : ℝ),
+  (a = a)
+
+/--
+source: topology
+reference: translated endpoints
+relationship: original
+-/
+def authored_record_projection : Prop :=
+  ∀ (I : cleanStructure_Endpoints_2512a023e0474ce195ac),
+  ∀ (s : ℝ),
+  (((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) + s) = ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) + s))
+
+/--
+source: topology
+reference: native identity adapter
+relationship: original
+-/
+def opaque_record_projection : Prop :=
+  ∀ (I : cleanStructure_Endpoints_2512a023e0474ce195ac),
+  ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» ((cleanNotation_opaque_endpoints_d1fd4290aaef6a02d3f2 (I)))) = (@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)))
+
+/--
+source: topology
+reference: dependent constructor projection
+relationship: original
+-/
+def computed_dependent_field : Prop :=
+  ∀ (X : Type),
+  ∀ (P : cleanStructure_BasedPath_af4022cf2eeed1e2d1ab (X)),
+  ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«path» (X) (P)) = (@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«path» (X) (P)))
 
 end CleanStatements
 

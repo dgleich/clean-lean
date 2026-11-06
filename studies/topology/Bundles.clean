@@ -11,6 +11,11 @@ Structure SizedVector():
   Let vector: Vector(size,Real)
   Constructor: sized vector
 
+-- A native adapter is deliberately opaque to Clean reduction.
+Notation opaque endpoints(I: Endpoints): Endpoints:
+  Means: I
+  Render latex: {I}
+
 Result endpoint constructor:
   Attribution: topology; endpoint constructor; original
   Let a,b: Real
@@ -51,3 +56,25 @@ Result vector field dimensions:
     there exists (v: Vector(V.size,Real), v = V.vector)
 
 -- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Result computed constructor projection:
+  Attribution: topology; constructor field computation; original
+  Let a,b: Real
+  Conclude: endpoints(a,b).lower = a
+
+Result authored record projection:
+  Attribution: topology; translated endpoints; original
+  Let I: Endpoints
+  Let s: Real
+  Conclude: shifted endpoints(I,s).lower = I.lower+s
+
+Result opaque record projection:
+  Attribution: topology; native identity adapter; original
+  Let I: Endpoints
+  Conclude: opaque endpoints(I).lower = I.lower
+
+Result computed dependent field:
+  Attribution: topology; dependent constructor projection; original
+  Let X: Type
+  Let P: BasedPath(X)
+  Conclude: based path(X,P.topology,P.start,P.finish,P.path).path = P.path

@@ -18,3 +18,14 @@ Condition has pair data(X,Q,S):
   Let S: SpacePairData(X)
   Holds when: Q.ambient = S.ambient and Q.relative = S.relative
   Render: {Q} represents {S}
+
+Define certify pair inclusion(X,S,T,s,t,a,b):
+  Let X: TopologicalSpace
+  Let S,T: SpacePairData(X)
+  Let s: Evidence((S.relative ⊆ S.ambient))
+  Let t: Evidence((T.relative ⊆ T.ambient))
+  Let a: Evidence((S.ambient ⊆ T.ambient))
+  Let b: Evidence((S.relative ⊆ T.relative))
+  Returns: PairInclusion(X)
+  Equals: pair inclusion(X,certify pair data(X,S,s),certify pair data(X,T,t),a,b)
+  Render latex: \widehat{{{S}\hookrightarrow {T}}}

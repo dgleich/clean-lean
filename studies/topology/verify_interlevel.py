@@ -24,7 +24,7 @@ for oracle,actual in [('yes','true value'),('no','false value'),('ends','endpoin
  ('expanded','expanded interval'),('boundary','expanded endpoints'),('problem','interlevel problem'),
  ('pair','space pair data'),('nested','nested pair'),('expandedPair','expanded pair'),
  ('shiftedPair','shifted pair'),('included','pair included in'),('evaluate','evaluate map'),
- ('value','real map value'),('bounded','bounded perturbation'),('perturbed','perturbed pair'),('certify','certify pair data'),('represents','has pair data')]:mapping['InterlevelOracle.'+oracle]=function(actual)
+ ('value','real map value'),('bounded','bounded perturbation'),('perturbed','perturbed pair'),('certify','certify pair data'),('represents','has pair data'),('certifyInclusion','certify pair inclusion')]:mapping['InterlevelOracle.'+oracle]=function(actual)
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
 open Lean Elab Command
@@ -146,6 +146,10 @@ def boundedStatement : Prop := ∀ (P : Problem)
   r ≥ 0 → @bounded P h r → @included P.space (@perturbed P h) (@expandedPair P r)
 noncomputable def certify (X : TopCat.{0}) (Q : Pair X) (h : Q.relative ⊆ Q.ambient) : CERTPAIR X :=
   @CERTCONSTRUCTOR X Q.ambient Q.relative h
+noncomputable def certifyInclusion (X : TopCat.{0}) (S T : Pair X)
+  (s : S.relative ⊆ S.ambient) (t : T.relative ⊆ T.ambient)
+  (a : S.ambient ⊆ T.ambient) (b : S.relative ⊆ T.relative) : CERTINCLUSION X :=
+  @INCLUSIONCONSTRUCTOR X (@certify X S s) (@certify X T t) a b
 noncomputable def represents (X : TopCat.{0}) (Q : CERTPAIR X) (S : Pair X) : Prop :=
   Q.ambient=S.ambient ∧ Q.relative=S.relative
 def certifiedExpandedStatement : Prop := ∀ (P : Problem) (r : ℝ),
@@ -166,9 +170,16 @@ def certifiedPerturbationStatement : Prop := ∀ (P : Problem)
   ∃ Q : CERTINCLUSION P.space,
     @represents P.space Q.source S ∧ @represents P.space Q.target T
 
+def certifyStatement : Prop := ∀ (X : TopCat.{0}) (S : Pair X) (h : S.relative ⊆ S.ambient),
+  @represents X (@certify X S h) S
+def certifyInclusionStatement : Prop := ∀ (X : TopCat.{0}) (S T : Pair X)
+  (s : S.relative ⊆ S.ambient) (t : T.relative ⊆ T.ambient)
+  (a : S.ambient ⊆ T.ambient) (b : S.relative ⊆ T.relative),
+  let Q : CERTINCLUSION X := @certifyInclusion X S T s t a b;
+  @represents X Q.source S ∧ @represents X Q.target T
 end InterlevelOracle
 '''
-expected=expected.replace('CERTPAIR',env.structures['TopologicalPair']['key']).replace('CERTINCLUSION',env.structures['PairInclusion']['key']).replace('CERTCONSTRUCTOR',function('topological pair'))
+expected=expected.replace('CERTPAIR',env.structures['TopologicalPair']['key']).replace('CERTINCLUSION',env.structures['PairInclusion']['key']).replace('CERTCONSTRUCTOR',function('topological pair')).replace('INCLUSIONCONSTRUCTOR',function('pair inclusion'))
 checks=[f'same_target {target} {oracle}' for oracle,target in mapping.items()]
 for name,fields in [('Ends',['mk','lower','upper']),('Selection',['mk','lower','upper']),
                     ('Problem',['mk','space','map','interval','selection']),('Pair',['mk','ambient','relative'])]:
@@ -180,7 +191,9 @@ checks += [f'same_target CleanStatements.{name} InterlevelOracle.{oracle}' for n
  ('perturbed_pair_is_nested','perturbedStatement'),('bounded_perturbation_lies_in_expanded_pair','boundedStatement'),
  ('expanded_pair_has_a_certificate','certifiedExpandedStatement'),
  ('bounded_shift_has_a_certified_inclusion','certifiedShiftStatement'),
- ('bounded_perturbation_has_a_certified_inclusion','certifiedPerturbationStatement')]]
+ ('bounded_perturbation_has_a_certified_inclusion','certifiedPerturbationStatement'),
+ ('certification_preserves_pair_data','certifyStatement'),
+ ('certification_preserves_inclusion_data','certifyInclusionStatement')]]
 proofs=r'''
 namespace InterlevelProofs
 theorem endpoint_choices_are_exhaustive : CleanStatements.endpoint_choices_are_exhaustive := by
@@ -286,11 +299,17 @@ theorem bounded_perturbation_has_a_certified_inclusion : CleanStatements.bounded
   refine ⟨⟨⟨S.ambient,S.relative,hs⟩,⟨T.ambient,T.relative,ht⟩,hi.1,hi.2⟩,?_⟩
   exact ⟨⟨rfl,rfl⟩,⟨rfl,rfl⟩⟩
 
+theorem certification_preserves_pair_data : CleanStatements.certification_preserves_pair_data := by
+  intro X S h
+  exact ⟨rfl,rfl⟩
+theorem certification_preserves_inclusion_data : CleanStatements.certification_preserves_inclusion_data := by
+  intro X S T s t a b
+  exact ⟨⟨rfl,rfl⟩,⟨rfl,rfl⟩⟩
 end InterlevelProofs
 '''
 proofs=proofs.replace('EXPANDED',function('expanded pair')).replace('SHIFTED',function('shifted pair')).replace('PERTURBED',function('perturbed pair'))
 path=here/'InterlevelVerified.lean';path.write_text(source+comparison+expected+'\n'.join(checks)+'\n'+proofs)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print(f'{len(checks)} canonical interlevel targets and ten proofs passed.')
+print(f'{len(checks)} canonical interlevel targets and twelve proofs passed.')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

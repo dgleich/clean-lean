@@ -62,9 +62,9 @@ conversion and equality transport remain separate language work.
 
 ## Evidence and remaining work
 
-`verify_interlevel.py` compares 58 independent canonical native declarations,
+`verify_interlevel.py` compares 61 independent canonical native declarations,
 including all new imported types, record constructors/projections, authored
-formulas, the explicit real topology, and all ten statement types. It proves:
+formulas, the explicit real topology, and all twelve statement types. It proves:
 
 - Exhaustiveness of the four endpoint choices.
 - Inclusion of selected endpoints in an ordered interval.
@@ -122,4 +122,14 @@ which constructor/definition reductions are allowed, their scope and termination
 and canonical Lean targets. No silent fallback to Lean definitional equality has
 been added. The verified existential bridge is usable now; that authored direct
 composition remains an explicit language gap.
+:::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+The computed-record extension now implements the previously rejected certificate
+composition above. `certify pair inclusion` is authored in Clean, with four explicit
+proof parameters. Two more statements verify that certification preserves the
+pair data. See [the precise reduction contract](../../docs/computed-records.md).
+The earlier gap report records the trigger; implicit/binder-bearing producer
+reduction and local-alias conversion are still unsupported.
 :::

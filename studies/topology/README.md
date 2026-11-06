@@ -244,3 +244,16 @@ pair maps are available through `pairs.clean`. This does not yet construct relat
 homology. Direct Clean composition of certificate constructors exposes a remaining
 computed-record projection/reduction gap, recorded in that same report.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Computed record milestone
+
+The [computed-record contract](../../docs/computed-records.md) now permits the
+previously rejected certificate composition in Clean. The bundle verifier checks
+36 canonical targets and ten proofs; the interlevel verifier checks 61 targets and
+twelve proofs. The new examples distinguish reduced authored constructor fields
+from opaque native-adapter fields. PDFs retain the authored expressions.
+Implicit-parameter/binder-bearing producer unfolding, local-alias conversion,
+relative homology and the research theorem proofs remain unfinished.
+:::

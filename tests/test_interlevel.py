@@ -42,7 +42,7 @@ class InterlevelInterfaces(unittest.TestCase):
         self.assertEqual(e.data['types']['Boolean'],self.e.data['types']['Boolean'])
     def test_study_statements_translate(self):
         e=Environment();r=load_document(ROOT/'studies/topology/Interlevel.clean',e)
-        self.assertEqual(len(r),10)
+        self.assertEqual(len(r),12)
         target=lean(r,e,[])
         self.assertNotIn('CleanPapers',target)
         self.assertNotIn('sorry',target)
@@ -64,3 +64,15 @@ class InterlevelInterfaces(unittest.TestCase):
         self.local['wrong']=Expr('wrong','wrong',self.e.type('(Q.ambient ⊆ Q.relative)',self.local))
         with self.assertRaises(CleanError):self.expr('certify pair data(X,Q,wrong)')
         with self.assertRaises(CleanError):self.expr('certify pair data(Y,Q,h)')
+
+    def test_composed_certificate_checks_each_proof(self):
+        load_module(ROOT/'library/topology/certified_interlevel.clean',self.e)
+        for n,t in [('S','SpacePairData(X)'),('T','SpacePairData(X)'),
+                    ('s','(S.relative ⊆ S.ambient)'),('t','(T.relative ⊆ T.ambient)'),
+                    ('a','(S.ambient ⊆ T.ambient)'),('b','(S.relative ⊆ T.relative)')]:
+            self.local[n]=Expr(n,n,self.e.type(t,self.local))
+        self.assertEqual(self.expr('certify pair inclusion(X,S,T,s,t,a,b)').type,
+                         self.e.type('PairInclusion(X)',self.local))
+        self.assertEqual(self.expr('certify pair inclusion(X,S,T,s,t,a,b).source.ambient').lean,
+                         self.expr('S.ambient').lean)
+        with self.assertRaises(CleanError):self.expr('certify pair inclusion(X,S,T,s,t,b,a)')
