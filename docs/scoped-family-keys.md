@@ -68,7 +68,7 @@ local lets, explicit evidence or later ordinary binder allocation.
 
 `tests/test_scoped_family_keys.py` independently checks token structure, saved-scope
 stability, deliberate free-name collisions, dependent domains, outer abstraction,
-hash consistency and context restoration after an error. Existing family tests
+nested materialization in a dependent domain, hash consistency and context restoration after an error. Existing family tests
 check nested bound-versus-free occurrences, quantifier kinds, aliases, opaque native
 bindings and shadowing. The old template rule rejects the new specimen; the current
 rule accepts it. Two independent canonical Lean proposition targets retain every
@@ -79,4 +79,35 @@ higher-order normalization, conversion inside function bodies, extensionality,
 family congruence through opaque outer calls, or a resolved-name representation for
 all module bindings. Those remain separate language obligations. Exhaustion still
 means incomplete analysis rather than an equality or inequality result.
+:::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Validation checkpoint
+
+The new specimen passes two exact canonical proposition comparisons and two proofs.
+The previous template rule rejects the same authored file with a dependent-index
+mismatch. The final focused run passes 67 tests, including error cleanup and nested
+materialization under a dependent domain. No implementation change followed these
+checks; later additions were tests and documentation only.
+
+The existing 92-proof corpus, ten graded-relative targets/five proofs, four induced
+homology targets/three proofs, and ten proof-family targets/five sort checks/five
+proofs also pass. The strict generated-parser check and independent syntax-tree
+fixture pass. The PDF compiled twice without overfull boxes and was visually checked;
+reference search, links and mobile width checks pass. The first browser build was
+terminated with exit 143, and its process was confirmed stopped before retrying.
+The retry produced a 93-file browser snapshot with zero translation errors. Its
+search, declaration navigation, imports, notes/export, reload, responsive layout
+and no-JavaScript fallback checks pass.
+:::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+The full regression suite passed all 519 tests in 1305 seconds. Three additional
+scope-interaction tests were added after that run began; all are included in the
+67 passing focused tests. No implementation changes followed the start of the
+full run. The requirements inventory now records dependent function fields and
+graded interfaces as implemented while retaining the actual pyramid/basis,
+algorithm, relative-functor and exactness/excision obligations separately.
 :::

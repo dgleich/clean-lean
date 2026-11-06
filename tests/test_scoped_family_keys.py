@@ -63,3 +63,20 @@ class ScopedFamilies(unittest.TestCase):
         after=c.e.type('Function(q: Natural,At((second(q))))',c.local)
         self.assertEqual(before,after);self.assertEqual(hash(before),hash(after))
         self.assertNotEqual(before,c.e.type('Function(q: Natural,At((first(n))))',c.local))
+
+    def test_nested_materialization_does_not_own_outer_reference(self):
+        from cleanlang.modules import type_declaration,notation
+        from cleanlang.structures import declare
+        c=self.case
+        type_declaration('Type At(F: Family):',['Means: Nat','Render latex: A({F})'],c.e)
+        declare('Structure DependentFamily():',[
+            'Let component: Function(n: Natural,Function(At((first(n))),Natural))',
+            'Constructor: dependent family'],c.e)
+        for name,p,v in [('nested first','p','v'),('nested second','q','w')]:
+            notation('Define '+name+'(): DependentFamily:',[
+                'Equals: dependent family(function('+p+': Natural,function('+v+': At((first('+p+'))),'+p+')))'],
+                c.e,authored=True)
+        before=c.index('nested first()')
+        c.local['clean_comparison_identity_0']=Expr('clean_comparison_identity_0','a',Type('Natural'))
+        self.assertEqual(before,c.index('nested second()'))
+        self.assertFalse(hasattr(c.e,'_comparison_pool'))

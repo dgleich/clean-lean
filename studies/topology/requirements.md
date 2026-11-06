@@ -18,9 +18,12 @@ completeness and [pair composition](pair-composition.md) for explicit identities
 and composition. Immediate binder-free lambda contraction now permits generic
 congruArg to produce field-equality evidence entirely through Clean expressions.
 
-Still open are general dependent functions and universe polymorphism, the actual
-pyramid/basis and algorithm constructions, relative functor laws, connecting maps,
-exactness/excision and the five research theorem proofs. These mathematical
+Dependent function fields, proof-valued functions, and graded homology objects/maps
+are now checked in the [dependent-function study](../dependent-functions/README.md).
+Saved graded-family indices are stable under later locals. Still open are general
+universe polymorphism, the actual pyramid/basis and algorithm constructions,
+relative functor laws, connecting maps, exactness/excision and the five research
+theorem proofs. These mathematical
 obligations must not be conflated with merely parsing their proposed signatures.
 
 ## Working foundation

@@ -78,7 +78,7 @@ fallback checks pass.
 The full regression suite passed all 513 tests in 994 seconds. The additional
 quantifier-kind test, added after that run began, is included in the 59 passing
 focused tests above. No implementation changes followed those checks. A separate
-negative probe confirms the saved-scope freshness limitation documented in the
-[comparison contract](../../docs/family-index-comparison.md#confirmed-remaining-scope-boundary);
-this milestone does not claim scope-independent alpha keys.
+negative probe at this checkpoint confirmed the saved-scope freshness limitation.
+The later [scoped-key implementation](../../docs/scoped-family-keys.md) closes that
+regression and verifies saved-map reuse in both the chain and relative interfaces.
 :::
