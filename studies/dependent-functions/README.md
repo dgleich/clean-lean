@@ -65,6 +65,8 @@ follow-ups. An earlier attempt terminated with exit 143 during review-data colle
 without a test failure; the completed run above was its serial retry.
 
 The rendered map specimen compiles without overfull boxes; reference-page search,
-local links and mobile width checks pass. Broader dependent-family acceptance work
+local links and mobile width checks pass. The rebuilt review browser contains 85
+files with zero translation errors; navigation, search, notes/export, responsive
+layout and no-JavaScript fallback checks pass. Broader dependent-family acceptance work
 remains listed in the contract, separately from this regression evidence.
 :::
