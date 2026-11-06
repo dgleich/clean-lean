@@ -54,7 +54,7 @@ The native probe exposed a practical adapter requirement: composition and its la
 need the module category supplied explicitly, because Lean cannot always recover
 it from the bundled Hom values alone. The Clean wrappers retain
 that category, its named Mathlib instance and coefficient choice explicitly.
-## Validation checkpoint
+## Initial dependent-arrow validation checkpoint
 
 The initial dependent-map implementation checks eleven canonical Lean targets and
 three generated theorem proofs; the existing 92-proof corpus and strict generated
@@ -71,4 +71,20 @@ local links and mobile width checks pass. The rebuilt review browser contains 85
 files with zero translation errors; navigation, search, notes/export, responsive
 layout and no-JavaScript fallback checks pass. Broader dependent-family acceptance work
 remains listed in the contract, separately from this regression evidence.
+## Applied producer validation checkpoint
+
+The full regression run for the producer-conversion implementation passed all 484
+tests in 904 seconds. The subsequent cache adjustment passed the 69 focused
+conversion/dependent-function tests; its four induced-map canonical targets and
+three proofs, plus two local-name targets and two proofs, were checked again.
+The full suite was not repeated after that cache-only follow-up.
+
+The 92-proof corpus, strict generated grammar, eleven graded-map targets/three
+proofs, eight relative-map targets/three proofs and fifteen pair-composition
+targets/six proofs pass. The new PDF compiles twice without overfull boxes; the
+reference-page search, links and mobile layout pass. Native composition initially
+exhausted the default heartbeat budget; the documented finite larger budget then
+completed successfully. No proof placeholder was introduced. The refreshed review
+browser contains 87 files with zero translation errors; search, target navigation,
+imports, notes/export, responsive layout and no-JavaScript fallback checks pass.
 :::
