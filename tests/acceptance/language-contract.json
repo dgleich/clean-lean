@@ -548,7 +548,9 @@
         "studies/topology/verify_bundles.py",
         "tools/generate_parser.py --check",
         "tools/check_textmate.cjs",
-        "tools/check_vim.vim"
+        "tools/check_vim.vim",
+        "tests/test_well_groups.py",
+        "studies/topology/verify_well_groups.py"
       ],
       "pending": [
         "Inherited opaque Lean/body elaboration contract",

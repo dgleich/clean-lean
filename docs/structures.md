@@ -233,3 +233,15 @@ the authored expression and is excluded from semantic index identity. The interl
 certificate composition now works in Clean. Implicit/binder-bearing producer
 reduction and local-alias conversion remain separate extensions.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Projected header parameters
+
+Header substitution also traverses a field reference rooted at a header parameter.
+For example, a field declared ContinuousRealMap(P.space) in a record parameterized
+by P has type ContinuousRealMap(Q.space) when the record is instantiated at Q.
+The implementation now applies the existing structural index-substitution rule
+instead of treating P.space as an unresolved standalone binder. The well-group
+study checks the resulting record and projection signatures against native Lean.
+:::

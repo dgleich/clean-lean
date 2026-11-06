@@ -19,8 +19,10 @@ def substitute_type(t, bindings, env=None, locals=None):
     if isinstance(t,ProofType):return ProofType(substitute_index(t.args[0],bindings,env,locals))
     if isinstance(t,ComputedIndex):return substitute_index(t,bindings,env,locals)
     if isinstance(t,ValueIndex):
-        if t.name not in bindings:raise CleanError('Unresolved structure index: '+t.name)
-        return bindings[t.name]
+        if t.name in bindings:return bindings[t.name]
+        if '.' in t.name and t.name.split('.',1)[0] in bindings:
+            return substitute_index(t,bindings,env,locals)
+        raise CleanError('Unresolved structure index: '+t.name)
     if isinstance(t,Type):
         if not t.args and t.name in bindings:
             value=bindings[t.name]

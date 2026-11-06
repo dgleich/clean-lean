@@ -219,3 +219,15 @@ Native adapters, local aliases and the documented ineligible bodies stay opaque.
 The relative-map study exercises this rule with named source/target objects and
 explicit commutativity evidence, checked against independent native targets.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Well-group intersections
+
+[Well groups](../studies/topology/well-groups.md) now defines the bounded-perturbation image intersection
+in Clean, with a single fixed target module. Twenty-four canonical targets and
+five new proofs check the definitions, completeness and soundness of certificates,
+certificate independence and membership. The study rechecks 15 supporting proofs.
+Projected header indices now substitute correctly in dependent record fields.
+The extreme-image theorem, exactness/excision and a Clean proof language remain open.
+:::

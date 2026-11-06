@@ -1,0 +1,66 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "certified_interlevel.clean"
+Import "relative_maps.clean"
+Import "../algebra/module_intersections.clean"
+
+Structure PerturbationCertificate(P: InterlevelProblem,r: Real):
+  Let map: ContinuousRealMap(P.space)
+  Let bounded: Evidence((bounded perturbation(P,map,r)))
+  Let nesting: Evidence((nested pair(P.space,perturbed pair(P,map))))
+  Let ambient: Evidence((perturbed pair(P,map).ambient ⊆ expanded pair(P,r).ambient))
+  Let relative: Evidence((perturbed pair(P,map).relative ⊆ expanded pair(P,r).relative))
+  Constructor: perturbation certificate
+  Describe: a bounded perturbation with pair inclusion evidence
+
+Define perturbation target(P,r,nesting):
+  Let P: InterlevelProblem
+  Let r: Real
+  Let nesting: Evidence((nested pair(P.space,expanded pair(P,r))))
+  Returns: TopologicalPair(P.space)
+  Equals: certify pair data(P.space,expanded pair(P,r),nesting)
+  Render latex: X_{{{r}}}({P})
+
+Define perturbation pair inclusion(P,r,nesting,D):
+  Let P: InterlevelProblem
+  Let r: Real
+  Let nesting: Evidence((nested pair(P.space,expanded pair(P,r))))
+  Let D: PerturbationCertificate(P,r)
+  Returns: PairInclusion(P.space)
+  Equals:
+    certify pair inclusion(P.space,perturbed pair(P,D.map),expanded pair(P,r),
+      D.nesting,nesting,D.ambient,D.relative)
+  Render latex: \iota_{{{D}}}
+
+Structure CertifiedPerturbation(K: Type,field: FieldStructure(K),H: HomologyTheory(K,field),P: InterlevelProblem,r: Real,nesting: Evidence((nested pair(P.space,expanded pair(P,r))))):
+  Let data: PerturbationCertificate(P,r)
+  Let commutes: Evidence((pair chain commutes(field,H,P.space,perturbation pair inclusion(P,r,nesting,data))))
+  Constructor: certified perturbation
+  Describe: a bounded perturbation with a certified chain square
+
+Define perturbation homology image(field,H,P,r,nesting,C):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let P: InterlevelProblem
+  Let r: Real
+  Let nesting: Evidence((nested pair(P.space,expanded pair(P,r))))
+  Let C: CertifiedPerturbation(K,field,H,P,r,nesting)
+  Returns: ModuleSubspace(K,field,(relative homology(field,H,P.space,perturbation target(P,r,nesting))))
+  Equals:
+    relative homology image(field,H,P.space,perturbation pair inclusion(P,r,nesting,C.data),C.commutes)
+  Render latex: \operatorname{{image}}({C})
+
+Define relative well group(field,H,P,r,nesting):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let P: InterlevelProblem
+  Let r: Real
+  Let nesting: Evidence((nested pair(P.space,expanded pair(P,r))))
+  Returns: ModuleSubspace(K,field,(relative homology(field,H,P.space,perturbation target(P,r,nesting))))
+  Equals:
+    intersection of module family(field,relative homology(field,H,P.space,perturbation target(P,r,nesting)),
+      function(C: CertifiedPerturbation(K,field,H,P,r,nesting),perturbation homology image(field,H,P,r,nesting,C)))
+  Render latex: U_{{{r}}}({P};{H})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

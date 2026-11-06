@@ -613,6 +613,24 @@ no tactic or proof search is inserted.</p>
 <a href="../studies/topology/relative-maps.md">relative-map construction</a>, and
 <a href="../studies/topology/RelativeMapsVerified.lean">exact native targets and proofs</a>.</p>
 </section>
+<section class="mapping" id="well-group-intersections" data-status="implemented">
+<h2>Well-group intersections</h2>
+<p><strong>Implemented definition and certificate checks; extreme-image theorem pending.</strong>
+The Clean definition intersects perturbation images in one fixed relative-homology
+module. The problem and homology bundles replace repeated scalar arguments.</p>
+<pre><code>relative well group(field,H,P,r,nesting)
+perturbation homology image(field,H,P,r,nesting,C)</code></pre>
+<p>The generic family intersection maps to the infimum of the set of submodules
+occurring in the family. Its native mathematical equivalent is schematic:</p>
+<pre><code>sInf { U : Submodule K M | ∃ i : I, U = spaces i }</code></pre>
+<p>Evidence remains explicit. Checked proofs establish that every bounded perturbation
+has a certificate under ordered-endpoint and nonnegative-radius hypotheses, and
+that certificate choice does not change its image. A record field indexed by P.space
+substitutes to Q.space when its header parameter P is instantiated at Q.</p>
+<p>See <a href="../studies/topology/well-groups.md">definitions and limitations</a> and
+<a href="../studies/topology/WellGroupsVerified.lean">24 exact targets and proofs</a>.
+This is not a proof of the two-extreme-image characterization.</p>
+</section>
 </main>
 <script>
 (() => {

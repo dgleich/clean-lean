@@ -46,8 +46,8 @@ relative-object wrappers in expected signatures; acceptance does not substitute
 expanded types merely because they compile.
 
 Functor identity/composition laws for these relative maps, a category-of-pairs
-interface, connecting morphisms, exactness, excision, perturbation-family
-intersections and the paper results remain unfinished. Distinct named target
+interface, connecting morphisms, exactness, excision and the paper results remain unfinished. Perturbation-family
+intersections are now implemented in the [well-group study](well-groups.md). Distinct named target
 pairs still have distinct indices unless the bounded conversion rule identifies
 their authored expressions. No arbitrary equality transport or closed-cover
 excision is silently supplied.

@@ -1,0 +1,25 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "module_spaces.clean"
+
+Notation module subspace infimum(field,M,spaces):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let spaces: Set(ModuleSubspace(K,field,M))
+  Returns: ModuleSubspace(K,field,M)
+  Means: (letI : Field K := field; sInf spaces)
+  Render latex: \bigcap {spaces}
+
+Define intersection of module family(field,M,spaces):
+  Let K,I: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let spaces: Function(I,ModuleSubspace(K,field,M))
+  Returns: ModuleSubspace(K,field,M)
+  Equals:
+    module subspace infimum(field,M,
+      set of(function(U: ModuleSubspace(K,field,M),
+        there exists (i: I,U = spaces(i)))))
+  Render latex: \bigcap_i {spaces}(i)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
