@@ -1,0 +1,13 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "homology.clean"
+Import "../algebra/scalar_coefficients.clean"
+
+Define scalar homology(K,field,p):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let p: Natural
+  Returns: HomologyTheory(K,field)
+  Equals: homology theory(K,field,scalar coefficient module(field),p)
+  Render latex: H_{{{p}}}(-;{K})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

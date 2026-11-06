@@ -1,0 +1,55 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/extreme_images.clean"
+
+Result binary module intersection membership:
+  Attribution: topology; submodule intersection; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let U,V: ModuleSubspace(K,field,M)
+  Let x: ModuleElement(K,field,M)
+  Conclude:
+    belongs to module subspace(field,M,x,intersection of module subspaces(field,M,U,V)) ↔
+      (belongs to module subspace(field,M,x,U) and belongs to module subspace(field,M,x,V))
+
+Result extreme perturbations have certificates:
+  Attribution: interlevel; Theorem 4 extreme perturbations; adapted; scope: existence of certificates
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let P: InterlevelProblem
+  Let r: Real
+  Assume order: P.interval.lower ≤ P.interval.upper
+  Assume radius: r ≥ 0
+  Assume nesting: nested pair(P.space,expanded pair(P,r))
+  Conclude:
+    there exists (E: ExtremePerturbations(K,field,H,P,r,nesting),
+      E.top.data.map = shifted perturbation(P,r) and
+      E.bottom.data.map = shifted perturbation(P,-r))
+
+Result extreme image certificate independence:
+  Attribution: topology; two-image certificate independence; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let P: InterlevelProblem
+  Let r: Real
+  Assume nesting: nested pair(P.space,expanded pair(P,r))
+  Let E,F: ExtremePerturbations(K,field,H,P,r,nesting)
+  Conclude: extreme pair image(field,H,P,r,nesting,E) = extreme pair image(field,H,P,r,nesting,F)
+
+Result well group lies in both extreme images:
+  Attribution: interlevel; Theorem 4; adapted; scope: forward inclusion only
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let P: InterlevelProblem
+  Let r: Real
+  Assume nesting: nested pair(P.space,expanded pair(P,r))
+  Let E: ExtremePerturbations(K,field,H,P,r,nesting)
+  Conclude:
+    module subspace included(field,relative homology(field,H,P.space,perturbation target(P,r,nesting)),
+      relative well group(field,H,P,r,nesting),extreme pair image(field,H,P,r,nesting,E))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

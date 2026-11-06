@@ -8,7 +8,7 @@ Define shifted perturbation(P,t):
   Let t: Real
   Returns: ContinuousRealMap(P.space)
   Equals: translate real map(P.space,P.map,-t)
-  Render latex: \left({P}.map-{t}\right)
+  Render latex: \left({P}.map-\left({t}\right)\right)
 
 Define shifted pair image(field,H,P,r,nesting,t,C,represents):
   Let K: Type

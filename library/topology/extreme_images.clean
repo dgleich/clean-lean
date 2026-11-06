@@ -1,0 +1,28 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "shifted_perturbations.clean"
+Import "../algebra/module_pairs.clean"
+
+Structure ExtremePerturbations(K: Type,field: FieldStructure(K),H: HomologyTheory(K,field),P: InterlevelProblem,r: Real,nesting: Evidence((nested pair(P.space,expanded pair(P,r))))):
+  Let top,bottom: CertifiedPerturbation(K,field,H,P,r,nesting)
+  Let topShift: Evidence((top.data.map = shifted perturbation(P,r)))
+  Let bottomShift: Evidence((bottom.data.map = shifted perturbation(P,-r)))
+  Constructor: extreme perturbations
+  Render latex: \operatorname{{Ext}}_{{{H}}}({P},{r})
+  Describe: certificates for the two extreme perturbations
+
+Define extreme pair image(field,H,P,r,nesting,E):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let P: InterlevelProblem
+  Let r: Real
+  Let nesting: Evidence((nested pair(P.space,expanded pair(P,r))))
+  Let E: ExtremePerturbations(K,field,H,P,r,nesting)
+  Returns: ModuleSubspace(K,field,(relative homology(field,H,P.space,perturbation target(P,r,nesting))))
+  Equals:
+    intersection of module subspaces(field,relative homology(field,H,P.space,perturbation target(P,r,nesting)),
+      shifted pair image(field,H,P,r,nesting,r,E.top,E.topShift),
+      shifted pair image(field,H,P,r,nesting,-r,E.bottom,E.bottomShift))
+  Render latex: I^+_{{{r}}}({P};{H},{E})\cap I^-_{{{r}}}({P};{H},{E})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

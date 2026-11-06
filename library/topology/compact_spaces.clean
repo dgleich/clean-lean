@@ -1,0 +1,11 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "spaces.clean"
+Import Lean Mathlib.Topology.Compactness.Compact
+
+Condition compact space(X):
+  Let X: TopologicalSpace
+  From Lean: @CompactSpace X.carrier X.str
+  Assumption name: compactness of {X}
+  Render: {X} is compact
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

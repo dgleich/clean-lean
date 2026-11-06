@@ -1,0 +1,27 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/compact_spaces.clean"
+Import "../../library/topology/scalar_homology.clean"
+Import "../../library/topology/extreme_images.clean"
+
+Text:
+  Unproved candidate in the ordinary singular-homology model.
+  This statement translates to a Lean proposition; it is not a proof of the paper's theorem.
+  The reverse inclusion and the closed-cover homology audit remain open.
+
+Result interlevel two image candidate:
+  Attribution: interlevel; Theorem 4; adapted; scope: unproved singular-homology candidate
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let p: Natural
+  Let H = scalar homology(K,field,p)
+  Let P: InterlevelProblem
+  Let r: Real
+  Assume compact space(P.space)
+  Assume endpoints: P.interval.lower < P.interval.upper
+  Assume radius: r ≥ 0
+  Assume nesting: nested pair(P.space,expanded pair(P,r))
+  Let E: ExtremePerturbations(K,field,H,P,r,nesting)
+  Conclude: relative well group(field,H,P,r,nesting) = extreme pair image(field,H,P,r,nesting,E)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

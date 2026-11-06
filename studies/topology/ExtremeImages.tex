@@ -1,0 +1,47 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{binary module intersection membership}\cleanattribution{[Topology foundations, submodule intersection]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $M$ be a module over $K$.
+Let $U$ and $V$ be elements of $\operatorname{Subspace}(M)$.
+Let $x$ be an element of $M$.
+Then \[x\text{ belongs to }\left(U\cap V\right) \text{ if and only if } x\text{ belongs to }U \text{ and } x\text{ belongs to }V.\]
+\end{cleanresult}
+
+\begin{cleanresult}{extreme perturbations have certificates}\cleanattribution{\href{https://mrzv.org/publications/robustness-interlevelsets/manuscript/}{[Bendich, Edelsbrunner, Morozov, and Patel, Theorem 4 extreme perturbations]}}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $P$ be interlevel problem data.
+Let $r$ be a real number.
+Assume $P.\mathrm{interval}.\mathrm{lower} \le P.\mathrm{interval}.\mathrm{upper}$ (\texttt{order}).
+Assume $r \ge 0$ (\texttt{radius}).
+Assume $X_{r}(P)\text{ is a nested pair}$ (\texttt{nesting}).
+Then \[\left(\text{there exists }E : \operatorname{Ext}_{H}(P,r),\; E.\mathrm{top}.\mathrm{data}.\mathrm{map} = \left(P.map-\left(r\right)\right) \text{ and } E.\mathrm{bottom}.\mathrm{data}.\mathrm{map} = \left(P.map-\left(-r\right)\right)\right).\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: existence of certificates.}
+\end{cleanresult}
+
+\begin{cleanresult}{extreme image certificate independence}\cleanattribution{[Topology foundations, two-image certificate independence]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $P$ be interlevel problem data.
+Let $r$ be a real number.
+Assume $X_{r}(P)\text{ is a nested pair}$ (\texttt{nesting}).
+Let $E$ and $F$ be elements of $\operatorname{Ext}_{H}(P,r)$.
+Then \[I^+_{r}(P;H,E)\cap I^-_{r}(P;H,E) = I^+_{r}(P;H,F)\cap I^-_{r}(P;H,F).\]
+\end{cleanresult}
+
+\begin{cleanresult}{well group lies in both extreme images}\cleanattribution{\href{https://mrzv.org/publications/robustness-interlevelsets/manuscript/}{[Bendich, Edelsbrunner, Morozov, and Patel, Theorem 4]}}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $P$ be interlevel problem data.
+Let $r$ be a real number.
+Assume $X_{r}(P)\text{ is a nested pair}$ (\texttt{nesting}).
+Let $E$ be certificates for the two extreme perturbations.
+Then \[U_{r}(P;H)\text{ is contained in }I^+_{r}(P;H,E)\cap I^-_{r}(P;H,E).\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: forward inclusion only.}
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

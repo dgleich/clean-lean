@@ -84,11 +84,16 @@ is the declared name followed by its explicit argument placeholders in parenthes
 separated by comma-space. There is no grammatical guessing of “symmetry” from
 “symmetric.” Templates are expanded without executing code.
 
-Argument display strings are constructed from the parsed AST, not original source,
-LaTeX, or Lean text:
+Argument display strings are constructed from the elaborated expression’s normalized
+source tree, not original source spacing, LaTeX, or Lean text. In particular, the
+specified computed-record projection reductions have already occurred:
 
 - Local: its identifier; decimal: remove leading zeroes, leaving `0` for zero.
 - Call: `name(arg1, arg2)` recursively.
+- Projection: `base.field`, recursively spelling the base; field application:
+  `head(arg1, arg2)`, recursively spelling the head and arguments.
+- Quantifiers inside arguments: `for every (name: CanonicalType, body)` and
+  `there exists (name: CanonicalType, body)`, recursively spelling the body.
 - Unary: `(operator argument)`; binary: `(left operator right)` using normalized AST
   operators, including their existing logical-symbol normalization.
 - Lambda: `function(name: CanonicalType, body)`; canonical types use constructor names
@@ -171,4 +176,29 @@ lake env lean generated/Conditions.lean
 pdflatex -interaction=nonstopmode -halt-on-error -output-directory generated latex/conditions.tex
 pdflatex -interaction=nonstopmode -halt-on-error -output-directory generated latex/conditions.tex
 ```
+:::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Structural arguments in automatic labels
+
+`Assume compact space(P.space)` now expands the declared template to
+`compactness of P.space` and emits `«compactness_of_P_u2e_space»`. Field-valued
+function applications and quantifiers nested inside arguments are also covered by
+the canonical spelling rules above. This repairs the integration gap left when
+records and quantified expressions were added; no grammar production changes.
+The condition call is still elaborated first, and its stored source tree determines
+one label. Parentheses already removed by parsing and field projections reduced by
+the specified expression rules do not create alternative labels.
+
+This does not admit unlabeled arbitrary comparisons or quantifiers: the outermost
+expression must still be a declared Condition call. Encoded-name collisions remain
+errors, including collisions between a dot and a literal `_u2e_` in an explicit
+label. No suffixes, English-word inference or Lean-expression parsing is added.
+
+`tests/test_condition_projections.py` checks independent labels, quoted Lean binders,
+field applications, quantified lambda arguments and collisions. The compactness
+hypothesis in `studies/topology/TwoImageCandidate.clean` also exercises the rule in
+an independently checked native proposition target. That proposition remains
+unproved; checking its type does not prove its conclusion.
 :::

@@ -308,3 +308,17 @@ well-group containment in every shifted image. Twenty supporting proofs are
 rechecked. Certificates remain explicit; the reverse extreme-image inclusion and
 the closed-cover/excision audit remain open. No new syntax is needed for this slice.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Actual two-image expression and candidate statement
+
+[Extreme images](extreme-images.md) now authors the two certified extreme images and their
+binary intersection. The full equality translates using scalar-field coefficients
+in a chosen degree, but is explicitly an unproved singular-homology candidate.
+Eighteen exact targets and four new proofs cover the interfaces, existence,
+certificate independence and forward inclusion; twenty-six supporting proofs are
+rechecked. The source's relative Mayer–Vietoris argument still needs a justified
+cover/excision theorem in this model. Automatic assumption naming now handles
+record fields such as P.space, with unchanged collision rejection.
+:::

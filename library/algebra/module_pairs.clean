@@ -1,0 +1,21 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "module_intersections.clean"
+
+Define intersection of module subspaces(field,M,U,V):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let U,V: ModuleSubspace(K,field,M)
+  Returns: ModuleSubspace(K,field,M)
+  Equals: module subspace infimum(field,M,set of(function(W: ModuleSubspace(K,field,M),W = U or W = V)))
+  Render latex: \left({U}\cap {V}\right)
+
+Condition module subspace included(field,M,U,V):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let U,V: ModuleSubspace(K,field,M)
+  Holds when: module subspace carrier(field,M,U) ⊆ module subspace carrier(field,M,V)
+  Render: {U} is contained in {V}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

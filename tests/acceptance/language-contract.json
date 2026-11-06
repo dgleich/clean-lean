@@ -835,6 +835,40 @@
         "Local-alias conversion",
         "Inherited opaque Lean-adapter elaboration contract"
       ]
+    },
+    {
+      "id": "automatic_condition_names_for_structural_arguments",
+      "status": "partial",
+      "specification": "docs/conditions.md#structural-arguments-in-automatic-labels",
+      "grammar": "Existing Condition calls, projections, field applications and quantified arguments; no new grammar",
+      "source_fragment": "Assume compact space(P.space)",
+      "expected_tree": [
+        "Call",
+        "compact space",
+        [
+          [
+            "Projection",
+            [
+              "Local",
+              "P"
+            ],
+            "space"
+          ]
+        ]
+      ],
+      "expected_label": "compactness of P.space",
+      "expected_lean_name": "compactness_of_P_u2e_space",
+      "environment": "Explicit compact_spaces and interlevel modules; P : InterlevelProblem; pinned Lean/Mathlib",
+      "expected_lean": "∀ («compactness_of_P_u2e_space» : compactSpace P.space), ...",
+      "comparison_rule": "Name template on the elaborated normalized source tree, followed by existing punctuation encoding; reject collisions",
+      "checks": [
+        "tests/test_condition_projections.py",
+        "studies/topology/verify_extreme_images.py"
+      ],
+      "pending": [
+        "Inherited opaque Lean-adapter target contract",
+        "Proof of the separately labelled two-image candidate"
+      ]
     }
   ]
 }

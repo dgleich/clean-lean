@@ -1,16 +1,22 @@
 # generated: gpt-6 2026-10-30 role=assisted; LLM-authored portions; see PROVENANCE.md
 """Condition naming and depth-aware assumption lists; no mathematical name dispatch."""
+# generated: gpt-6 2026-11-06 role=assisted; structural argument naming.
 import re
 import string
 from .core import CleanError, ID, PROP, Expressions
 
 
 def source_expression(tree):
-    """Canonical source spelling for every current expression AST constructor."""
+    """Canonical label spelling from normalized expression trees; no target-text parsing."""
     kind=tree[0]
     if kind=='Local': return tree[1]
     if kind=='Decimal': return tree[1].lstrip('0') or '0'
     if kind=='Call': return tree[1]+'('+', '.join(map(source_expression,tree[2]))+')'
+    if kind=='Projection': return source_expression(tree[1])+'.'+tree[2]
+    if kind=='Apply': return source_expression(tree[1])+'('+', '.join(map(source_expression,tree[2]))+')'
+    if kind in ('Forall','Exists'):
+        keyword='for every' if kind=='Forall' else 'there exists'
+        return keyword+' ('+tree[1]+': '+tree[2]+', '+source_expression(tree[3])+')'
     if kind=='Unary': return '('+tree[1]+' '+source_expression(tree[2])+')'
     if kind=='Operator': return '('+source_expression(tree[2])+' '+tree[1]+' '+source_expression(tree[3])+')'
     if kind=='Lambda': return 'function('+tree[1]+': '+tree[2]+', '+source_expression(tree[3])+')'

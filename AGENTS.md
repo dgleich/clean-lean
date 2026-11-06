@@ -79,3 +79,15 @@ Follow [PROVENANCE.md](PROVENANCE.md) and the linked LLM tagging skill for all a
   does not discharge the unique Lean-target acceptance contract.
 - Preserve upstream Lark runtime licensing and provenance in the generated artifact.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Expression-consumer coverage
+
+When extending expression ASTs, audit every consumer, including automatic Condition
+assumption names, dependent-index substitution/comparison, Lean emission and LaTeX.
+Specify a deterministic spelling or an explicit rejection boundary for each new
+constructor. Include naming and encoded-identifier collision tests; a supported
+record or quantified argument must not fail merely because its automatic label
+serializer was left behind.
+:::

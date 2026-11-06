@@ -676,6 +676,36 @@ Checked proofs establish certificate independence and well-group containment in
 every shifted image. No implicit certificate choice or two-image equality is supplied.</p>
 <p>See <a href="../studies/topology/shifted-perturbations.md">sign convention, proofs and limits</a>.</p>
 </section>
+<section class="mapping" id="structural-assumption-names" data-status="implemented">
+<h2>Assumption names from record fields</h2>
+<pre><code>Assume compact space(P.space)
+-- Human label: compactness of P.space
+-- Lean binder: «compactness_of_P_u2e_space»</code></pre>
+<p><strong>Implemented.</strong> Template arguments use the normalized source tree,
+including projections, field applications and quantified lambda bodies. Punctuation
+is encoded by the existing identifier rule. Collisions are rejected; there is no
+suffix generation or inference of English names. The outer expression must still
+be a declared Condition call.</p>
+<p>See <a href="conditions.md#structural-arguments-in-automatic-labels">the naming contract</a>.</p>
+</section>
+<section class="mapping" id="extreme-image-candidate" data-status="implemented">
+<h2>Two-image expression and unproved candidate</h2>
+<p><strong>Implemented definitions and statement translation; equality unproved.</strong></p>
+<pre><code>Let H = scalar homology(K,field,p)
+Let E: ExtremePerturbations(K,field,H,P,r,nesting)
+Conclude:
+  relative well group(field,H,P,r,nesting) =
+    extreme pair image(field,H,P,r,nesting,E)</code></pre>
+<p>This fragment requires the explicit field, problem, radius and nesting context
+shown in the study. H uses the scalar field itself as coefficients. E stores both
+extreme certificates and their identifying equalities. The intersection is authored
+in Clean via a submodule infimum; all images share one target module.</p>
+<p>The generated candidate is a Lean <code>def ... : Prop := ...</code>.
+Its target comparison does not produce a proof. Only the forward inclusion,
+certificate existence/independence and intersection membership are proved here.</p>
+<p>See <a href="../studies/topology/extreme-images.md">the study and homology-model audit</a>
+and <a href="../studies/topology/TwoImageCandidate.clean">the complete candidate</a>.</p>
+</section>
 </main>
 <script>
 (() => {

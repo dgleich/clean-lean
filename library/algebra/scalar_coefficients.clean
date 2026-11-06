@@ -1,0 +1,11 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "module_spaces.clean"
+
+Notation scalar coefficient module(field):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Returns: CoefficientModule(K,field)
+  Means: (letI : Field K := field; ModuleCat.of K K)
+  Render latex: \operatorname{{scalars}}({field})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

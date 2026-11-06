@@ -327,3 +327,15 @@ use the prescribed contraction. This resolves generic congrArg on record-field
 functions without admitting bare lambdas, quantifiers or general local-alias conversion.
 There is no grammar change or implicit proof search.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Automatic names for structural condition arguments
+
+[Condition naming](conditions.md#structural-arguments-in-automatic-labels) now
+covers projections, field applications and nested quantified arguments. The label
+is a deterministic spelling of the elaborated expression's normalized source tree;
+existing punctuation encoding and collision rejection are unchanged. No new syntax
+or implicit hypothesis is introduced. Native statement checks and independent
+binder-name tests cover compactness of P.space.
+:::
