@@ -22,9 +22,14 @@ pending; they are not included in the verified theorem count.
 
 The implemented syntax is specified in [quantifiers](../../docs/quantifiers.md).
 Named value-indexed types now work in constructor declarations and theorem
-binders; see [their contract](../../docs/value-indexed-types.md). Dependent callable
-signatures and the broader design in requirements.md remain pending. Paper-specific structures and algorithms still need
-real definitions; the proposed files do not manufacture those definitions.
+binders; see [their contract](../../docs/value-indexed-types.md). Named-field
+structures and dependent callable signatures are now implemented in bounded slices;
+the [Clean-to-Lean reference](../../docs/clean-to-lean.html) records their current
+scope. The [zigzag-bases study](../zigzag-bases/README.md) supplies actual diagrams,
+interval bases, six proved statements and a constructed constant example. The
+broader design in requirements.md remains incomplete: in particular, the pyramid
+and its basis-extension theorem still need constructions and proofs. Historical
+proposed files do not manufacture those definitions.
 
 From the repository root:
 

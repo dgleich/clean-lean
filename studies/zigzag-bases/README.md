@@ -34,8 +34,8 @@ oracles and proofs. Regenerate and kernel-check with:
 LAKE=lake python3 studies/zigzag-bases/verify.py
 ```
 
-The verifier checks 44 canonical elaborated targets: four structures, their
-constructors and fields, eighteen constructions/wrappers and six propositions.
+The verifier checks 46 canonical elaborated targets: four structures, their
+constructors and fields, twenty constructions/wrappers and six propositions.
 Only generated-name linkage and binder metadata are normalized for comparison.
 Native oracle bodies are separately authored. No theorem is discharged by an axiom
 or placeholder proof.
@@ -43,4 +43,39 @@ or placeholder proof.
 Definitions of the pyramid, its diamonds, restrictions and compatible extensions
 remain future work. Connecting maps, exactness and the geometric hypotheses also
 remain necessary before a proof of the paper's basis-extension theorem.
+:::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Reading the Clean definitions
+
+The core diagram interface stores the dependency explicitly:
+
+```clean
+Structure ModuleDiagram(K: Type,field: FieldStructure(K),V: Type,E: Type,Q: DiagramShape(V,E)):
+  Universe: 1
+  Let object: Function(V,CoefficientModule(K,field))
+  Let arrow: Function(e: E,ModuleMap(K,field,(object(Q.source(e))),(object(Q.target(e)))))
+  Constructor: module diagram
+```
+
+For an edge `e`, its map's domain and codomain come from the modules at that
+edge's endpoints. They are not separate arguments for the author to keep aligned.
+The full module includes display metadata and imports. Its constant construction
+uses existing lambda syntax:
+
+```clean
+Equals: module diagram(K,field,V,E,Q,
+  function(v: V,M),function(e: E,module identity(field,M)))
+```
+
+The interval-basis record similarly makes its vertex bases depend on the active
+label set. This is why dependent functions are needed here. The support and
+compatibility declarations are named `Condition`s; evidence fields assert those
+conditions for this particular record.
+
+The [typeset specimen](Statements.pdf) uses landscape pages because the current
+renderer does not automatically wrap long nested quantified displays. It uses
+English quantifiers and conjunctions. Automatic mathematical line breaking is a
+remaining presentation improvement, not a change to the theorem statements.
 :::

@@ -60,6 +60,8 @@ noncomputable def constantShort {K V E : Type} (field : Field K)
 noncomputable def select {T : Type} (b : Bool) (x y : T) : T := if b then x else y
 noncomputable def left (n : ℕ) (a : Fin n) : Fin (n+1) := a.castSucc
 noncomputable def right (n : ℕ) (a : Fin n) : Fin (n+1) := a.succ
+noncomputable def vertexNumber (n : ℕ) (v : Fin n) : ℕ := v.val
+noncomputable def selectedValue {I : Type} (S : Set I) (x : {i : I // i ∈ S}) : I := x.val
 noncomputable def shapeZ (n : ℕ) (d : Fin n → Bool) : SHAPE (Fin (n+1)) (Fin n) :=
  @SHAPEFN (Fin (n+1)) (Fin n)
   (fun a : Fin n => @SELECT (Fin (n+1)) (d a) (@LEFT n a) (@RIGHT n a))
@@ -141,6 +143,7 @@ for actual,oracle,fields in [
  ('IntervalBasis','Basis',['vectors','basis','realizes','vanishes','compatible'])]:
  for field in fields:checks.append((e.structures[actual]['key']+'.'+field,'ZigzagOracle.'+oracle+'.'+field))
 for name,oracle in [('shape','shape'),('constant module diagram','constant'),('constant diagram','constantShort'),
+ ('vertex number','vertexNumber'),('selected value','selectedValue'),
  ('select value','select'),('left vertex','left'),('right vertex','right'),('zigzag shape','shapeZ'),
  ('constant zigzag','constantZ'),('ordered interval endpoints','ordered'),('interval labels at','activeLabels'),
  ('zigzag source','source'),('zigzag target','target'),('module basis vector','basisVector'),('module zero','zero'),

@@ -419,6 +419,8 @@ noncomputable def constantShort {K V E : Type} (field : Field K)
 noncomputable def select {T : Type} (b : Bool) (x y : T) : T := if b then x else y
 noncomputable def left (n : ℕ) (a : Fin n) : Fin (n+1) := a.castSucc
 noncomputable def right (n : ℕ) (a : Fin n) : Fin (n+1) := a.succ
+noncomputable def vertexNumber (n : ℕ) (v : Fin n) : ℕ := v.val
+noncomputable def selectedValue {I : Type} (S : Set I) (x : {i : I // i ∈ S}) : I := x.val
 noncomputable def shapeZ (n : ℕ) (d : Fin n → Bool) : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (Fin (n+1)) (Fin n) :=
  @cleanDefine_shape_ab2900d9a72e571d2eb8 (Fin (n+1)) (Fin n)
   (fun a : Fin n => @cleanNotation_select_value_c11801da606ce7eb1515 (Fin (n+1)) (d a) (@cleanNotation_left_vertex_11cc62d804acf6603303 n a) (@cleanNotation_right_vertex_5c0c0fa990cf02dd2676 n a))
@@ -543,6 +545,8 @@ same_target cleanStructure_IntervalBasis_d65eb8127efa954ca5fb.compatible ZigzagO
 same_target cleanDefine_shape_ab2900d9a72e571d2eb8 ZigzagOracle.shape
 same_target cleanDefine_constant_module_diagram_97d37ecd434f2512260b ZigzagOracle.constant
 same_target cleanDefine_constant_diagram_e9c37c47e521ce184399 ZigzagOracle.constantShort
+same_target cleanNotation_vertex_number_64138f6f46dd27172356 ZigzagOracle.vertexNumber
+same_target cleanNotation_selected_value_df54a12138d36423a390 ZigzagOracle.selectedValue
 same_target cleanNotation_select_value_c11801da606ce7eb1515 ZigzagOracle.select
 same_target cleanNotation_left_vertex_11cc62d804acf6603303 ZigzagOracle.left
 same_target cleanNotation_right_vertex_5c0c0fa990cf02dd2676 ZigzagOracle.right
