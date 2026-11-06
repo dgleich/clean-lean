@@ -218,3 +218,16 @@ proofs, with 53 independent canonical targets. [The interface note](interlevel-d
 explains the distinction between raw pair data and a certified map of pairs.
 The relative homology and well-group characterization remain unfinished.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Certified inclusions
+
+[Evidence.clean](Evidence.clean) exercises explicit assumption proofs, proof-bearing
+records, native subset inclusion and continuous maps between subspaces. Run
+`LAKE=/path/to/lake python3 studies/topology/verify_evidence.py` for canonical target
+checks and four kernel-checked proofs. [Evidence.lean](Evidence.lean) contains generated
+statements; [EvidenceVerified.lean](EvidenceVerified.lean) adds native oracles and
+proofs. The inclusion square commutes; relative homology itself is still pending.
+See [the syntax contract](../../docs/evidence.md) for the bounded evidence rules.
+:::

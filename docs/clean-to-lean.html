@@ -523,6 +523,29 @@ has no implicit inclusion proof. Relative homology and the well-group theorem
 remain unfinished. <a href="../studies/topology/interlevel-data.md">Definitions,
 source conventions, exact interfaces and validation</a>.</p>
 </article>
+<section class="mapping" id="explicit-evidence" data-status="implemented">
+<h2>Explicit evidence and certified records</h2>
+<p><strong>Implemented, bounded.</strong> A parenthesized condition in type position
+is its Lean proof type. The imported Evidence alias is ordinary module vocabulary.</p>
+<pre><code>Let h: (S ⊆ T)
+-- equivalently, with the evidence module:
+Let h: Evidence((S ⊆ T))
+Assume inclusion: S ⊆ T
+Let Q = certified inclusion(X,S,T,inclusion)</code></pre>
+<p>Lean fragments (readable wrapper name, not canonical acceptance evidence):</p>
+<pre><code>(h : S ⊆ T)
+∀ (inclusion : S ⊆ T),
+  let Q := certifiedInclusion X S T inclusion
+  -- subsequent conclusion</code></pre>
+<p>Single-identifier assumption labels expose their existing proof binder to later
+clauses. Record fields can carry evidence; constructors require it explicitly.
+Matching is structural, with no proof search. Direct quantified evidence requires
+a named Condition wrapper. Multiword labels do not expose encoded source names.</p>
+<p>See the <a href="evidence.md">normative contract</a> and
+<a href="../studies/topology/Evidence.clean">checked specimens</a>.
+Native Set.inclusion and ContinuousMap.inclusion wrappers support a proved
+commuting square of certified pair inclusions. Relative homology remains pending.</p>
+</section>
 </main>
 <script>
 (() => {

@@ -650,6 +650,39 @@
         "Inherited opaque native/operator elaboration obligations",
         "Emacs runtime unavailable"
       ]
+    },
+    {
+      "id": "explicit_evidence",
+      "status": "implemented-slice",
+      "source": "(S ⊆ T)",
+      "expected_tree": [
+        "ComputedIndex",
+        [
+          "Operator",
+          "⊆",
+          [
+            "Local",
+            "S"
+          ],
+          [
+            "Local",
+            "T"
+          ]
+        ]
+      ],
+      "environment": "Explicit topology/pairs module; X : Type; S,T : Set(X); repository pinned Lean/Mathlib",
+      "expected_lean": "S ⊆ T",
+      "expected_lean_type": "Prop",
+      "checks": [
+        "tests/test_evidence.py",
+        "studies/topology/verify_evidence.py",
+        "tools/generate_parser.py --check"
+      ],
+      "pending": [
+        "Direct binder-bearing evidence types",
+        "General Sort-polymorphic parameters",
+        "Inherited opaque native/operator elaboration obligations"
+      ]
     }
   ]
 }

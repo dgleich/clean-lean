@@ -1,0 +1,9 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../types.clean"
+
+/-! Evidence is an ordinary transparent alias. A parenthesized condition used
+    as a type denotes proofs of that condition. This module supplies no proofs. -/
+Type Evidence(condition: Proposition):
+  Equals: (condition)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

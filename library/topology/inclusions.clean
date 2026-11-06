@@ -1,0 +1,34 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "paths.clean"
+Import "../logic/evidence.clean"
+
+Structure SubsetInclusion(X: Type):
+  Let source,target: Set(X)
+  Let containment: Evidence((source ⊆ target))
+  Constructor: certified inclusion
+  Describe: a certified inclusion between subsets of ${X}$
+
+Notation subset inclusion map(X,S,T,h):
+  Let X: Type
+  Let S,T: Set(X)
+  Let h: Evidence((S ⊆ T))
+  Returns: Function(Element(X,S),Element(X,T))
+  Means: Set.inclusion h
+  Render latex: \iota_{{{S},{T}}}
+
+Define certified inclusion map(X,Q):
+  Let X: Type
+  Let Q: SubsetInclusion(X)
+  Returns: Function(Element(X,Q.source),Element(X,Q.target))
+  Equals: subset inclusion map(X,Q.source,Q.target,Q.containment)
+  Render latex: \iota_{{{Q}}}
+
+Define subset certificate(S,T,h):
+  Let X: Type
+  Let S,T: Set(X)
+  Let h: Evidence((S ⊆ T))
+  Returns: SubsetInclusion(X)
+  Equals: certified inclusion(X,S,T,h)
+  Render latex: \iota_{{{S},{T}}}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

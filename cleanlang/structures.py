@@ -2,7 +2,7 @@
 """Finite authored records and explicit field references; no structural subtyping."""
 import hashlib
 import re
-from .core import CleanError, Type, ValueIndex, Expr, NAT, ID, texid, textext
+from .core import CleanError, Type, ProofType, ValueIndex, Expr, NAT, ID, texid, textext
 
 
 def reference_name(tree):
@@ -16,6 +16,7 @@ def reference_name(tree):
 
 def substitute_type(t, bindings, env=None, locals=None):
     from .indices import ComputedIndex, substitute_index
+    if isinstance(t,ProofType):return ProofType(substitute_index(t.args[0],bindings,env,locals))
     if isinstance(t,ComputedIndex):return substitute_index(t,bindings,env,locals)
     if isinstance(t,ValueIndex):
         if t.name not in bindings:raise CleanError('Unresolved structure index: '+t.name)

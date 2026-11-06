@@ -26,9 +26,10 @@ field_arguments: "(" [arguments] ")"
      | THERE EXISTS "(" ID ":" type_ref "," expression ")" -> existential
 name: ID+
 arguments: expression ("," expression)*
-type_ref: TYPE_ID ["(" [type_arguments] ")"]
+?type_ref: named_type_ref | computed_index
+named_type_ref: TYPE_ID ["(" [type_arguments] ")"] -> type_ref
 type_arguments: type_argument ("," type_argument)*
-?type_argument: type_ref | NUMBER | index_reference | computed_index
+?type_argument: type_ref | NUMBER | index_reference
 computed_index: "(" expression ")"
 index_reference: TYPE_ID ("." TYPE_ID)+
 assumptions: assumption ("," assumption)*

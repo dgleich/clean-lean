@@ -108,6 +108,22 @@ class ValueIndex:
     def __str__(self): return self.name
 
 
+@dataclass(frozen=True, init=False)
+class ProofType(Type):
+    """The proposition itself is the Lean type; no choice of proof is made."""
+    def __init__(self,index):
+        object.__setattr__(self,'name','$proof')
+        object.__setattr__(self,'args',(index,))
+    def __str__(self):return '('+str(self.args[0])+')'
+
+
+def proof_type(condition):
+    from .indices import index_value
+    if condition.type!=PROP:raise CleanError('A computed proof type must be a condition')
+    return ProofType(index_value(condition))
+
+
+
 def has_value_indices(t):
     return isinstance(t,Type) and any(isinstance(a,ValueIndex) or has_value_indices(a) for a in t.args)
 
@@ -175,13 +191,16 @@ class Environment:
     def type(self,s,env=None,phrases=True,trail=()):
         s=re.sub(r'^(a|an)\s+','',s.strip(),flags=re.I)
         # Constructor applications have reserved structural syntax, never prose dispatch.
-        if phrases and not re.match(ID+r'\s*\(',s):
+        if phrases and not s.startswith('(') and not re.match(ID+r'\s*\(',s):
             matches=[p['type'].format(**m.groupdict()) for p in self.data['phrases'] if (m:=re.fullmatch(p['pattern'],s,re.I))]
             if len(matches)>1: raise CleanError('Ambiguous type phrase: '+s)
             if matches: return self.type(matches[0],env,False)
         from .syntax import parse as syntax_parse, type_spelling
         try:syntax=syntax_parse(s,'type_ref')
         except CleanError as e:raise CleanError('Unknown type phrase: '+s) from e
+        if syntax.data=='computed_index':
+            from .syntax import expression_tree
+            return proof_type(Expressions(self,env or {}).elaborate(expression_tree(syntax.children[0])))
         source_name=str(syntax.children[0])
         name=self.data.get('aliases',{}).get(source_name,source_name)
         args=[type_spelling(x) for x in syntax.children[1].children] if len(syntax.children)>1 else []
@@ -191,7 +210,10 @@ class Environment:
         if len(args)!=len(kinds): raise CleanError(f'{name} expects {len(kinds)} parameters')
         out=[]
         for a,k in zip(args,kinds):
-            if k=='type': out.append(self.type(a,env)); continue
+            if k=='type':
+                value=self.type(a,env)
+                if isinstance(value,ProofType):raise CleanError('Proof types cannot instantiate Type parameters')
+                out.append(value);continue
             if isinstance(k,dict):
                 if not (a.startswith('(') or re.fullmatch(ID+r'(?:\.'+ID+r')*',a)):
                     raise CleanError('Value index must be a previously declared name, field reference or parenthesized computation: '+a)
@@ -218,6 +240,8 @@ class Environment:
         return Type(name,tuple(out))
     def render_type(self,t,target,bindings=None):
         bindings=bindings or {}
+        if isinstance(t,ProofType):
+            return '('+t.args[0].lean+')' if target=='lean' else t.args[0].tex
         args=[self.render_type(a,target,bindings) if isinstance(a,Type) else
               (a.lean if target=='lean' else a.tex) if isinstance(a,ValueIndex) else
               bindings[a].lean if target=='lean' and a in bindings else
@@ -235,6 +259,7 @@ class Environment:
             raise CleanError('Function expressions require one explicit Lean arrow type binding')
         return Type(names[0],(domain,codomain))
     def describe_type(self,t,plural=False):
+        if isinstance(t,ProofType):return 'evidence that $'+self.render_type(t,'latex')+'$'
         spec=self.data['types'].get(t.name,{})
         template=spec.get('prose_plural' if plural else 'prose')
         if template:
@@ -243,6 +268,7 @@ class Environment:
         return ('elements of $' if plural else 'an element of $')+self.render_type(t,'latex')+'$'
     def match(self,p,a,bind):
         if p.startswith('$'):
+            if isinstance(a,ProofType):raise CleanError('Proof types cannot instantiate Type parameters')
             if p in bind and bind[p]!=a: raise CleanError('Type or dimension mismatch: '+p)
             bind[p]=a; return
         m=re.fullmatch(r'(\w+)(?:\((.*)\))?',p)
@@ -277,6 +303,7 @@ class Environment:
 
         def replace(t):
             from .indices import ComputedIndex, substitute_index
+            if isinstance(t,ProofType):return ProofType(replace(t.args[0]))
             if isinstance(t,ComputedIndex):
                 return substitute_index(t,{**substitutions,**actuals},self,locals)
             if isinstance(t,ValueIndex):return index(t.name)
@@ -295,7 +322,7 @@ class Environment:
                     raise CleanError('Dependent index mismatch: '+pattern.name)
             elif isinstance(pattern,Type):
                 if pattern.name in implicit and not pattern.args:
-                    if implicit[pattern.name]!=Type('Type') or not isinstance(actual,Type):
+                    if implicit[pattern.name]!=Type('Type') or not isinstance(actual,Type) or isinstance(actual,ProofType):
                         raise CleanError('Expected a type argument: '+pattern.name)
                     bind(pattern.name,actual)
                 elif not pattern.args and pattern.name in substitutions:
@@ -354,6 +381,8 @@ class Expressions:
         if kind=='Local':
             if tree[1] not in self.env:raise CleanError('Unknown name: '+tree[1])
             value=self.env[tree[1]]
+            if value.type==Type('$unavailableProof'):
+                raise CleanError('Evidence for binder-bearing assumptions requires a named Condition declaration')
             return Expr(value.lean,value.tex,value.type,value.precedence,tree)
         if kind=='Apply':
             function=self._elaborate(tree[1]);args=[self._elaborate(a) for a in tree[2]]
@@ -505,6 +534,13 @@ def _parse_flat(text,reg):
                     if name in env or label in env or name in labels or label in labels: raise CleanError('Duplicate assumption/local name: '+label)
                     labels.update((name,label))
                     r.clauses.append(Clause('assume',[name],value,num,label))
+                    if re.fullmatch(ID,label):
+                        try:evidence=proof_type(value)
+                        except CleanError as error:
+                            if str(error)!='Computed indices do not introduce binders':raise
+                            evidence=Type('$unavailableProof')
+                        env[label]=Expr('«'+name+'»',texid(label),evidence)
+
                 continue
             from .syntax import let_clause
             kind,names,payload=let_clause(s)

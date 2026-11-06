@@ -1,0 +1,36 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/pairs.clean"
+
+Result assumed inclusion constructs certified data:
+  Attribution: topology; certified inclusion constructor; original
+  Let X: Type
+  Let S,T: Set(X)
+  Assume inclusion: S ⊆ T
+  Let Q = certified inclusion(X,S,T,inclusion)
+  Conclude: Q.source = S and Q.target = T
+
+Result inclusion preserves the underlying element:
+  Attribution: topology; Set.inclusion underlying value; adapted
+  Let X: Type
+  Let S,T: Set(X)
+  Assume inclusion: S ⊆ T
+  Let x: Element(X,S)
+  Let f = subset inclusion map(X,S,T,inclusion)
+  Conclude: underlying point(T,f(x)) = underlying point(S,x)
+
+Result certified map preserves the underlying element:
+  Attribution: topology; Set.inclusion underlying value; adapted
+  Let X: Type
+  Let Q: SubsetInclusion(X)
+  Let x: Element(X,Q.source)
+  Let f = certified inclusion map(X,Q)
+  Conclude: underlying point(Q.target,f(x)) = underlying point(Q.source,x)
+
+Result pair inclusion square commutes:
+  Attribution: topology; commuting square of subtype inclusions; original
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Conclude: ambient composite(X,Q) = relative composite(X,Q)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

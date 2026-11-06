@@ -46,7 +46,10 @@ def assumption_items(text,reg,env):
         if value.type!=PROP: raise CleanError('Assume requires a condition')
         if label is None:
             tree=value.tree
-            if tree[0]!='Call' or tree[1] in env or 'condition' not in reg.data['functions'].get(tree[1],{}):
+            from .core import ProofType, Type
+            local=env.get(tree[1]) if tree[0]=='Call' else None
+            shadows=local is not None and not isinstance(local.type,ProofType) and local.type!=Type('$unavailableProof')
+            if tree[0]!='Call' or shadows or 'condition' not in reg.data['functions'].get(tree[1],{}):
                 raise CleanError('Automatic assumption naming requires a declared Condition call; supply a label')
             condition=reg.data['functions'][tree[1]]['condition']
             args={p:source_expression(arg) for p,arg in zip(condition['parameters'],tree[2])}

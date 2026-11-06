@@ -526,3 +526,15 @@ matching remains structural, with no local-alias unfolding or inversion of
 computations. This supersedes the earlier requirement to name every computed
 index first. Type-valued arguments remain named carriers.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Explicit evidence and certified records
+
+[Evidence](evidence.md) specifies parenthesized conditions in type position,
+ordinary `Evidence` aliases, proof-bearing record fields, and single-identifier
+assumption labels usable as explicit proof arguments. This supersedes the earlier
+exclusion of proof fields. Matching is structural; direct binder-bearing evidence
+requires a named Condition. No implicit proof search or general Sort parameters
+are introduced. Certified subset and continuous pair inclusions exercise this map.
+:::

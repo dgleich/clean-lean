@@ -1,0 +1,73 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "spaces.clean"
+Import "inclusions.clean"
+
+Structure TopologicalPair(X: TopologicalSpace):
+  Let ambient,relative: Set(Point(X))
+  Let nesting: Evidence((relative ⊆ ambient))
+  Constructor: topological pair
+  Describe: two nested subsets of ${X}$ with inclusion evidence
+
+Structure PairInclusion(X: TopologicalSpace):
+  Let source,target: TopologicalPair(X)
+  Let ambient: Evidence((source.ambient ⊆ target.ambient))
+  Let relative: Evidence((source.relative ⊆ target.relative))
+  Constructor: pair inclusion
+  Describe: a certified inclusion between pairs in ${X}$
+
+Define ambient inclusion(X,Q):
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Returns: SubsetInclusion(Point(X))
+  Equals: subset certificate(Q.source.ambient,Q.target.ambient,Q.ambient)
+
+Define relative inclusion(X,Q):
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Returns: SubsetInclusion(Point(X))
+  Equals: subset certificate(Q.source.relative,Q.target.relative,Q.relative)
+
+Notation subspace(X,S):
+  Let X: TopologicalSpace
+  Let S: Set(Point(X))
+  Returns: TopologicalSpace
+  Means: (letI : TopologicalSpace X.carrier := X.str; TopCat.of S)
+  Render latex: {S}
+
+Notation subspace inclusion(X,S,T,h):
+  Let X: TopologicalSpace
+  Let S,T: Set(Point(X))
+  Let h: Evidence((S ⊆ T))
+  Returns: ContinuousMap((subspace(X,S)),(subspace(X,T)))
+  Means: (letI : TopologicalSpace X.carrier := X.str; ContinuousMap.inclusion h)
+  Render latex: \iota_{{{S},{T}}}
+
+Define ambient continuous map(X,Q):
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Returns: ContinuousMap((subspace(X,Q.source.ambient)),(subspace(X,Q.target.ambient)))
+  Equals: subspace inclusion(X,Q.source.ambient,Q.target.ambient,Q.ambient)
+
+Define relative continuous map(X,Q):
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Returns: ContinuousMap((subspace(X,Q.source.relative)),(subspace(X,Q.target.relative)))
+  Equals: subspace inclusion(X,Q.source.relative,Q.target.relative,Q.relative)
+
+Define ambient composite(X,Q):
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Returns: ContinuousMap((subspace(X,Q.source.relative)),(subspace(X,Q.target.ambient)))
+  Equals:
+    compose continuous maps(subspace(X,Q.source.relative),subspace(X,Q.source.ambient),subspace(X,Q.target.ambient),
+      ambient continuous map(X,Q),subspace inclusion(X,Q.source.relative,Q.source.ambient,Q.source.nesting))
+
+Define relative composite(X,Q):
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Returns: ContinuousMap((subspace(X,Q.source.relative)),(subspace(X,Q.target.ambient)))
+  Equals:
+    compose continuous maps(subspace(X,Q.source.relative),subspace(X,Q.target.relative),subspace(X,Q.target.ambient),
+      subspace inclusion(X,Q.target.relative,Q.target.ambient,Q.target.nesting),relative continuous map(X,Q))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

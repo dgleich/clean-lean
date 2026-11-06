@@ -194,3 +194,12 @@ matching remains structural, with no local-alias unfolding or inversion of
 computations. This supersedes the earlier requirement to name every computed
 index first. Type-valued arguments remain named carriers.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+Root type annotations now admit the existing parenthesized expression production,
+with `named_type_ref` factored out to avoid duplicate derivations in type arguments.
+The neutral tree remains `ComputedIndex`; its root interpretation is evidence for
+a condition. Strict LALR generation and lexer collision checks remain enabled.
+See [evidence](evidence.md) for the contextual semantic rule and restrictions.
+:::
