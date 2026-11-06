@@ -1,0 +1,97 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../../library/diagrams/pullbacks.clean"
+Import "../topology/Common.clean"
+
+Result identity shape vertex:
+  Attribution: topology; shape maps and diagram pullbacks; original
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let v: V
+  Conclude: shape identity(Q).vertices(v) = v
+
+Result composite shape vertex:
+  Attribution: topology; shape maps and diagram pullbacks; original
+  Let V,E,W,F: Type
+  Let Q: DiagramShape(V,E)
+  Let R: DiagramShape(W,F)
+  Let f: DiagramShapeMap(V,E,W,F,Q,R)
+  Let U,J: Type
+  Let S: DiagramShape(U,J)
+  Let g: DiagramShapeMap(W,F,U,J,R,S)
+  Let v: V
+  Conclude: compose shapes(Q,R,S,f,g).vertices(v) = g.vertices(f.vertices(v))
+
+Result composite shape edge:
+  Attribution: topology; shape maps and diagram pullbacks; original
+  Let V,E,W,F: Type
+  Let Q: DiagramShape(V,E)
+  Let R: DiagramShape(W,F)
+  Let f: DiagramShapeMap(V,E,W,F,Q,R)
+  Let U,J: Type
+  Let S: DiagramShape(U,J)
+  Let g: DiagramShapeMap(W,F,U,J,R,S)
+  Let e: E
+  Conclude: compose shapes(Q,R,S,f,g).edges(e) = g.edges(f.edges(e))
+
+Result shape left identity:
+  Attribution: topology; shape maps and diagram pullbacks; original
+  Let V,E,W,F: Type
+  Let Q: DiagramShape(V,E)
+  Let R: DiagramShape(W,F)
+  Let f: DiagramShapeMap(V,E,W,F,Q,R)
+  Conclude: compose shapes(Q,Q,R,shape identity(Q),f) = f
+
+Result shape right identity:
+  Attribution: topology; shape maps and diagram pullbacks; original
+  Let V,E,W,F: Type
+  Let Q: DiagramShape(V,E)
+  Let R: DiagramShape(W,F)
+  Let f: DiagramShapeMap(V,E,W,F,Q,R)
+  Conclude: compose shapes(Q,R,R,f,shape identity(R)) = f
+
+Result module transport reflexivity:
+  Attribution: topology; shape maps and diagram pullbacks; original
+  Let K,T: Type
+  Let field: FieldStructure(K)
+  Let M: Function(T,CoefficientModule(K,field))
+  Let x: T
+  Conclude: module family transport(field,M,x,x,equality reflexivity(x)) = module identity(field,M(x))
+
+Result pullback vertex module:
+  Attribution: topology; shape maps and diagram pullbacks; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E,W,F: Type
+  Let Q: DiagramShape(V,E)
+  Let R: DiagramShape(W,F)
+  Let f: DiagramShapeMap(V,E,W,F,Q,R)
+  Let M: ModuleDiagram(K,field,W,F,R)
+  Let v: V
+  Conclude: pull back diagram(field,Q,R,f,M).object(v) = M.object(f.vertices(v))
+
+Result identity pullback:
+  Attribution: topology; shape maps and diagram pullbacks; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let M: ModuleDiagram(K,field,V,E,Q)
+  Conclude: pull back diagram(field,Q,Q,shape identity(Q),M) = M
+
+
+Result composite pullback:
+  Attribution: topology; composition of diagram pullbacks; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E,W,F,U,J: Type
+  Let Q: DiagramShape(V,E)
+  Let R: DiagramShape(W,F)
+  Let S: DiagramShape(U,J)
+  Let f: DiagramShapeMap(V,E,W,F,Q,R)
+  Let g: DiagramShapeMap(W,F,U,J,R,S)
+  Let M: ModuleDiagram(K,field,U,J,S)
+  Conclude:
+    pull back diagram(field,Q,S,compose shapes(Q,R,S,f,g),M) =
+      pull back diagram(field,Q,R,f,pull back diagram(field,R,S,g,M))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

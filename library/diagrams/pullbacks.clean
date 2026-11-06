@@ -1,0 +1,36 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "shape_maps.clean"
+Import "../algebra/module_transport.clean"
+
+Define diagram pullback(K,field,V,E,W,F,Q,R,f,M):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E,W,F: Type
+  Let Q: DiagramShape(V,E)
+  Let R: DiagramShape(W,F)
+  Let f: DiagramShapeMap(V,E,W,F,Q,R)
+  Let M: ModuleDiagram(K,field,W,F,R)
+  Returns: ModuleDiagram(K,field,V,E,Q)
+  Equals: module diagram(K,field,V,E,Q,
+    function(v: V,M.object(f.vertices(v))),
+    function(e: E,module composition(field,
+      M.object(f.vertices(Q.source(e))),M.object(R.target(f.edges(e))),M.object(f.vertices(Q.target(e))),
+      module composition(field,
+        M.object(f.vertices(Q.source(e))),M.object(R.source(f.edges(e))),M.object(R.target(f.edges(e))),
+        module family transport(field,M.object,f.vertices(Q.source(e)),R.source(f.edges(e)),f.sources(e)),M.arrow(f.edges(e))),
+      module family transport(field,M.object,R.target(f.edges(e)),f.vertices(Q.target(e)),
+        equality symmetry(f.vertices(Q.target(e)),R.target(f.edges(e)),f.targets(e))))))
+  Render latex: {f}^{{*}}({M})
+
+Define pull back diagram(field,Q,R,f,M):
+  Let K,V,E,W,F: Type
+  Let field: FieldStructure(K)
+  Let Q: DiagramShape(V,E)
+  Let R: DiagramShape(W,F)
+  Let f: DiagramShapeMap(V,E,W,F,Q,R)
+  Let M: ModuleDiagram(K,field,W,F,R)
+  Returns: ModuleDiagram(K,field,V,E,Q)
+  Equals: diagram pullback(K,field,V,E,W,F,Q,R,f,M)
+  Render latex: {f}^{{*}}({M})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

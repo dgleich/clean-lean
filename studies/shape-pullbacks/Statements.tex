@@ -1,0 +1,91 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{identity shape vertex}\cleanattribution{[Topology foundations, shape maps and diagram pullbacks]}
+Let $V$ and $E$ be types.
+Let $Q$ be a directed shape with vertices in $V$ and edges in $E$.
+Let $v$ be an element of $V$.
+Then \[\operatorname{id}(Q).\mathrm{vertices}(v) = v.\]
+\end{cleanresult}
+
+\begin{cleanresult}{composite shape vertex}\cleanattribution{[Topology foundations, shape maps and diagram pullbacks]}
+Let $V$, $E$, $W$ and $F$ be types.
+Let $Q$ be a directed shape with vertices in $V$ and edges in $E$.
+Let $R$ be a directed shape with vertices in $W$ and edges in $F$.
+Let $f$ be a map of directed shapes from $Q$ to $R$.
+Let $U$ and $J$ be types.
+Let $S$ be a directed shape with vertices in $U$ and edges in $J$.
+Let $g$ be a map of directed shapes from $R$ to $S$.
+Let $v$ be an element of $V$.
+Then \[(g \circ f).\mathrm{vertices}(v) = g.\mathrm{vertices}(f.\mathrm{vertices}(v)).\]
+\end{cleanresult}
+
+\begin{cleanresult}{composite shape edge}\cleanattribution{[Topology foundations, shape maps and diagram pullbacks]}
+Let $V$, $E$, $W$ and $F$ be types.
+Let $Q$ be a directed shape with vertices in $V$ and edges in $E$.
+Let $R$ be a directed shape with vertices in $W$ and edges in $F$.
+Let $f$ be a map of directed shapes from $Q$ to $R$.
+Let $U$ and $J$ be types.
+Let $S$ be a directed shape with vertices in $U$ and edges in $J$.
+Let $g$ be a map of directed shapes from $R$ to $S$.
+Let $e$ be an element of $E$.
+Then \[(g \circ f).\mathrm{edges}(e) = g.\mathrm{edges}(f.\mathrm{edges}(e)).\]
+\end{cleanresult}
+
+\begin{cleanresult}{shape left identity}\cleanattribution{[Topology foundations, shape maps and diagram pullbacks]}
+Let $V$, $E$, $W$ and $F$ be types.
+Let $Q$ be a directed shape with vertices in $V$ and edges in $E$.
+Let $R$ be a directed shape with vertices in $W$ and edges in $F$.
+Let $f$ be a map of directed shapes from $Q$ to $R$.
+Then \[(f \circ \operatorname{id}(Q)) = f.\]
+\end{cleanresult}
+
+\begin{cleanresult}{shape right identity}\cleanattribution{[Topology foundations, shape maps and diagram pullbacks]}
+Let $V$, $E$, $W$ and $F$ be types.
+Let $Q$ be a directed shape with vertices in $V$ and edges in $E$.
+Let $R$ be a directed shape with vertices in $W$ and edges in $F$.
+Let $f$ be a map of directed shapes from $Q$ to $R$.
+Then \[(\operatorname{id}(R) \circ f) = f.\]
+\end{cleanresult}
+
+\begin{cleanresult}{module transport reflexivity}\cleanattribution{[Topology foundations, shape maps and diagram pullbacks]}
+Let $K$ and $T$ be types.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $M$ be a function from $T$ to $\operatorname{Mod}_{K}$.
+Let $x$ be an element of $T$.
+Then \[\operatorname{transport}_{M}(\operatorname{refl}_{x}) = \operatorname{id}_{M(x)}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{pullback vertex module}\cleanattribution{[Topology foundations, shape maps and diagram pullbacks]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $V$, $E$, $W$ and $F$ be types.
+Let $Q$ be a directed shape with vertices in $V$ and edges in $E$.
+Let $R$ be a directed shape with vertices in $W$ and edges in $F$.
+Let $f$ be a map of directed shapes from $Q$ to $R$.
+Let $M$ be a module diagram on $R$.
+Let $v$ be an element of $V$.
+Then \[f^{*}(M).\mathrm{object}(v) = M.\mathrm{object}(f.\mathrm{vertices}(v)).\]
+\end{cleanresult}
+
+\begin{cleanresult}{identity pullback}\cleanattribution{[Topology foundations, shape maps and diagram pullbacks]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $V$ and $E$ be types.
+Let $Q$ be a directed shape with vertices in $V$ and edges in $E$.
+Let $M$ be a module diagram on $Q$.
+Then \[\operatorname{id}(Q)^{*}(M) = M.\]
+\end{cleanresult}
+
+\begin{cleanresult}{composite pullback}\cleanattribution{[Topology foundations, composition of diagram pullbacks]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $V$, $E$, $W$, $F$, $U$ and $J$ be types.
+Let $Q$ be a directed shape with vertices in $V$ and edges in $E$.
+Let $R$ be a directed shape with vertices in $W$ and edges in $F$.
+Let $S$ be a directed shape with vertices in $U$ and edges in $J$.
+Let $f$ be a map of directed shapes from $Q$ to $R$.
+Let $g$ be a map of directed shapes from $R$ to $S$.
+Let $M$ be a module diagram on $S$.
+Then \[(g \circ f)^{*}(M) = f^{*}(g^{*}(M)).\]
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

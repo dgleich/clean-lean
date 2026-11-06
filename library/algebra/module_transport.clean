@@ -1,0 +1,16 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "module_spaces.clean"
+Import "../logic/evidence.clean"
+Import Lean Mathlib.CategoryTheory.EqToHom
+
+Notation module family transport(field,M,x,y,h):
+  Let K,T: Type
+  Let field: FieldStructure(K)
+  Let M: Function(T,CoefficientModule(K,field))
+  Let x,y: T
+  Let h: Evidence((x = y))
+  Returns: ModuleMap(K,field,(M(x)),(M(y)))
+  Means: @CategoryTheory.eqToHom (@ModuleCat.{0,0} K field.toRing) (@ModuleCat.moduleCategory.{0,0} K field.toRing).toCategoryStruct (M x) (M y) (congrArg M h)
+  Render latex: \operatorname{{transport}}_{{{M}}}({h})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

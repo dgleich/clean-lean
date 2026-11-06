@@ -867,6 +867,16 @@ Let commutes: Evidence((diagram maps commute(K,field,V,E,Q,X,Y,component)))</cod
 <p>Identity and composite component families and their certified records are authored in Clean. Evidence remains an explicit argument; native proofs establish both conditions universally. The interface uses the existing ordered dependent fields, named conditions and producer-projection rule. It adds no proof synthesis or automatic category instance.</p>
 <p><a href="../studies/diagram-maps/README.md">Study</a> · <a href="../library/algebra/diagram_maps.clean">Definitions</a> · <a href="../studies/diagram-maps/Statements.clean">Six statements</a>. Fifteen independent exact targets and six proofs check the interface. Pyramid and basis-restriction constructions remain pending.</p>
 </section>
+<section class="mapping" id="shape-pullbacks" data-status="implemented">
+<h2>Shape maps and diagram pullback</h2>
+<p><strong>Implemented library interface; existing syntax.</strong> A shape map stores vertex and edge functions together with dependent proof families preserving their endpoints.</p>
+<pre><code>Let sources: Function(e: E,Evidence((vertices(Q.source(e)) = R.source(edges(e)))))
+Let N = pull back diagram(field,Q,R,f,M)</code></pre>
+<p>The proof field is a Lean Pi type <code>(e : E) → vertices (Q.source e) = R.source (edges e)</code>. The short call infers carrier types and retains explicit field and shape values. Its native target is the declared wrapper applied to those uniquely inferred types.</p>
+<p>At each edge, the authored definition transports to the selected source module, applies the original edge map, and transports back to the selected target module. The foundational transport is Mathlib <code>eqToHom (congrArg M h)</code> with explicit module-category instances and fixed universes. Shape identity/composition, including endpoint evidence, are authored in Clean.</p>
+<p>Twenty-four exact native targets and nine proofs cover the record, adapters, constructions, short forms and statements, including full identity and composite pullback equations. <a href="../studies/shape-pullbacks/README.md">Study and conversion boundary</a> · <a href="../studies/shape-pullbacks/Statements.clean">Readable statements</a>.</p>
+<p>Bodies using inferred type parameters remain opaque to computed-index conversion; use the explicit forms where that conversion is required. Arbitrary shape maps need not preserve interval support. Subpath restrictions, label reindexing and the pyramid extension are still separate obligations.</p>
+</section>
 </main>
 <script>
 (() => {

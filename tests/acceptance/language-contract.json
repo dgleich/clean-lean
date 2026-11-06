@@ -1284,6 +1284,47 @@
         "Pyramid and basis restrictions",
         "Automatic proof synthesis is not part of the interface"
       ]
+    },
+    {
+      "id": "shape_pullbacks",
+      "status": "implemented-slice",
+      "specification": "studies/shape-pullbacks/README.md",
+      "source_fragment": "pull back diagram(field,Q,R,f,M)",
+      "expected_tree": [
+        "Call",
+        "pull back diagram",
+        [
+          [
+            "Local",
+            "field"
+          ],
+          [
+            "Local",
+            "Q"
+          ],
+          [
+            "Local",
+            "R"
+          ],
+          [
+            "Local",
+            "f"
+          ],
+          [
+            "Local",
+            "M"
+          ]
+        ]
+      ],
+      "checks": [
+        "tests/test_shape_pullbacks.py",
+        "studies/shape-pullbacks/verify.py"
+      ],
+      "pending": [
+        "Conversion through inferred-body parameters",
+        "Subpath interval clipping and basis reindexing",
+        "Pyramid construction and extension proof"
+      ]
     }
   ]
 }

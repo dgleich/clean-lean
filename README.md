@@ -40,7 +40,8 @@ See the [typeset examples](generated/specimen.pdf),
 [Clean and Dafny comparison](docs/clean-and-dafny.html),
 [topology study and theorem comparisons](studies/topology/README.md),
 [checked zigzag bases](studies/zigzag-bases/README.md),
-[maps of diagrams](studies/diagram-maps/README.md), or
+[maps of diagrams](studies/diagram-maps/README.md),
+[changes of diagram shape](studies/shape-pullbacks/README.md), or
 [language specification](docs/spec.md). For the direction of the design, see
 [aspirational syntax](docs/aspirational-syntax.md).
 

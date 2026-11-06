@@ -1,0 +1,21 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "equalities.clean"
+
+Notation equality symmetry(x,y,h):
+  Let T: Type
+  Let x,y: T
+  Let h: Evidence((x = y))
+  Returns: Evidence((y = x))
+  Means: Eq.symm h
+  Render latex: {h}^{{-1}}
+
+Notation equality transitivity(x,y,z,h,k):
+  Let T: Type
+  Let x,y,z: T
+  Let h: Evidence((x = y))
+  Let k: Evidence((y = z))
+  Returns: Evidence((x = z))
+  Means: Eq.trans h k
+  Render latex: {h} \cdot {k}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

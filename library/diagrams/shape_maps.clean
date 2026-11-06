@@ -1,0 +1,63 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../algebra/module_diagrams.clean"
+Import "../logic/equality_chains.clean"
+
+Structure DiagramShapeMap(V: Type,E: Type,W: Type,F: Type,Q: DiagramShape(V,E),R: DiagramShape(W,F)):
+  Let vertices: Function(V,W)
+  Let edges: Function(E,F)
+  Let sources: Function(e: E,Evidence((vertices(Q.source(e)) = R.source(edges(e)))))
+  Let targets: Function(e: E,Evidence((vertices(Q.target(e)) = R.target(edges(e)))))
+  Constructor: shape map
+  Render latex: \operatorname{{ShapeMap}}({Q},{R})
+  Describe: a map of directed shapes from ${Q}$ to ${R}$
+  Describe plural: maps of directed shapes from ${Q}$ to ${R}$
+
+Define identity shape map(V,E,Q):
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Returns: DiagramShapeMap(V,E,V,E,Q,Q)
+  Equals: shape map(V,E,V,E,Q,Q,
+    function(v: V,v),function(e: E,e),
+    function(e: E,equality reflexivity(Q.source(e))),
+    function(e: E,equality reflexivity(Q.target(e))))
+  Render latex: \operatorname{{id}}({Q})
+
+Define composite shape map(V,E,W,F,U,J,Q,R,S,f,g):
+  Let V,E,W,F,U,J: Type
+  Let Q: DiagramShape(V,E)
+  Let R: DiagramShape(W,F)
+  Let S: DiagramShape(U,J)
+  Let f: DiagramShapeMap(V,E,W,F,Q,R)
+  Let g: DiagramShapeMap(W,F,U,J,R,S)
+  Returns: DiagramShapeMap(V,E,U,J,Q,S)
+  Equals: shape map(V,E,U,J,Q,S,
+    function(v: V,g.vertices(f.vertices(v))),
+    function(e: E,g.edges(f.edges(e))),
+    function(e: E,equality transitivity(
+      g.vertices(f.vertices(Q.source(e))),g.vertices(R.source(f.edges(e))),S.source(g.edges(f.edges(e))),
+      equality congruence(g.vertices,f.vertices(Q.source(e)),R.source(f.edges(e)),f.sources(e)),g.sources(f.edges(e)))),
+    function(e: E,equality transitivity(
+      g.vertices(f.vertices(Q.target(e))),g.vertices(R.target(f.edges(e))),S.target(g.edges(f.edges(e))),
+      equality congruence(g.vertices,f.vertices(Q.target(e)),R.target(f.edges(e)),f.targets(e)),g.targets(f.edges(e)))))
+  Render latex: ({g} \circ {f})
+
+
+Define shape identity(Q):
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Returns: DiagramShapeMap(V,E,V,E,Q,Q)
+  Equals: identity shape map(V,E,Q)
+  Render latex: \operatorname{{id}}({Q})
+
+Define compose shapes(Q,R,S,f,g):
+  Let V,E,W,F,U,J: Type
+  Let Q: DiagramShape(V,E)
+  Let R: DiagramShape(W,F)
+  Let S: DiagramShape(U,J)
+  Let f: DiagramShapeMap(V,E,W,F,Q,R)
+  Let g: DiagramShapeMap(W,F,U,J,R,S)
+  Returns: DiagramShapeMap(V,E,U,J,Q,S)
+  Equals: composite shape map(V,E,W,F,U,J,Q,R,S,f,g)
+  Render latex: ({g} \circ {f})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

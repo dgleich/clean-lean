@@ -721,3 +721,22 @@ Evidence is explicit, with universal identity/composition conditions proved in
 Lean. Fifteen exact targets and six proofs cover this interface; it is not an
 automatically generated category instance or a pyramid construction.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Shape maps and explicit endpoint transport
+
+The [shape-pullback study](../studies/shape-pullbacks/README.md) uses existing
+dependent proof fields, equality adapters and module-declared calls. Shape identity,
+composition and diagram reindexing are authored in Clean; the only new native
+primitives are Eq.symm, Eq.trans and module-family transport via Mathlib eqToHom.
+No grammar, inference or emission rule changed. Twenty-four independent exact
+targets and nine proofs cover the interface, including pullback composition.
+
+Short calls infer Type parameters but keep field/shape values explicit. They
+retain the existing inferred-body opacity boundary: projected modules from short
+and explicit forms may compare differently as computed Clean indices, even when
+Lean reduces them to the same module. A negative regression records this open
+conversion gap. Arbitrary shape pullbacks do not preserve interval support; actual
+subpath restriction needs a chosen inclusion and explicit label reindexing.
+:::

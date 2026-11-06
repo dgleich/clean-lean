@@ -365,3 +365,18 @@ laws and map extensionality. The shape is fixed explicitly. Pullback along a
 change of shape, pyramid restrictions and interval-basis compatibility under
 such restrictions remain to be constructed.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Changes of diagram shape
+
+[Shape pullbacks](../shape-pullbacks/README.md) now construct a module diagram on
+a new shape using endpoint-preserving vertex/edge maps and explicit equality
+transport. Shape-map identity/composition and diagram identity/composite pullback
+laws are checked. This closes the generic change-of-shape construction gap.
+It does not yet restrict interval bases: arbitrary shape maps can make interval
+preimages disconnected. Subpath inclusion, clipping/removing empty intervals and
+basis reindexing are the next concrete data requirements. The short inferred-type
+interfaces also expose the existing inferred-body comparison limit, recorded in
+the study. No paper theorem is claimed by these construction laws.
+:::
