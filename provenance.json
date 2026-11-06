@@ -4002,6 +4002,10 @@
         "% ",
         ""
       ]
+    },
+    "docs/type-expressions.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

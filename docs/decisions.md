@@ -505,3 +505,15 @@ matcher's selected arguments. Compound types used as values remain opaque; this
 is not a new type-expression syntax. Native acceptance and full regression status
 are recorded in the inferred-conversion study.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Explicit type expressions under development
+
+The [integration draft](type-expressions.md) chooses `type(T)` as an explicit,
+case-insensitive expression atom containing existing type syntax. It addresses
+concrete carrier arguments needed for finite zigzag restrictions. The prototype
+is isolated while the previous compiler snapshot completes validation. The draft
+records the reserved-word change, Type 0 gate, structural substitution and all
+expression-consumer obligations. It is not yet repository-supported syntax.
+:::
