@@ -1,0 +1,45 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{short pullback identity map}\cleanattribution{[Topology foundations, inferred carrier comparison]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $V$, $E$, $W$ and $F$ be types.
+Let $Q$ be a directed shape with vertices in $V$ and edges in $E$.
+Let $R$ be a directed shape with vertices in $W$ and edges in $F$.
+Let $f$ be a map of directed shapes from $Q$ to $R$.
+Let $M$ be a module diagram on $R$.
+Let $N = f^{*}(M)$.
+Let $v$ be an element of $V$.
+Then \[\operatorname{id}_{N.\mathrm{object}(v)} = \operatorname{id}_{M.\mathrm{object}(f.\mathrm{vertices}(v))}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{real constant application}\cleanattribution{[Topology foundations, inferred binder domain]}
+Let $x$ and $y$ be real numbers.
+Then \[\operatorname{const}(x)(y) = x.\]
+\end{cleanresult}
+
+\begin{cleanresult}{function constant application}\cleanattribution{[Topology foundations, inferred compound binder domain]}
+Let $f$ and $g$ be functions from $\mathbb{R}$ to $\mathbb{R}$.
+Then \[\operatorname{const}(f)(g) = f.\]
+\end{cleanresult}
+
+\begin{cleanresult}{dependent constant application}\cleanattribution{[Topology foundations, inferred dependent binder domain]}
+Let $f$ be a function assigning to each $n : \mathbb{N}$ a value of type $\mathbb{R}^{n}$.
+Let $g$ be a function assigning to each $m : \mathbb{N}$ a value of type $\mathbb{R}^{m}$.
+Then \[\operatorname{const}(f)(g) = f.\]
+\end{cleanresult}
+
+\begin{cleanresult}{inferred dimension entry}\cleanattribution{[Topology foundations, inferred dimension comparison]}
+Let $n$ be a natural number.
+Let $A$ be a matrix of size $n\times n$ over $\mathbb{R}$.
+Let $B$ be a matrix of size $\operatorname{size}(A)\times \operatorname{size}(A)$ over $\mathbb{R}$.
+Assume $B = A$ (\texttt{same}).
+Let $i$ and $j$ be vertices in $\{0,\ldots,n-1\}$.
+Then \[B_{i,j} = A_{i,j}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{literal matrix size}\cleanattribution{[Topology foundations, inferred natural literal]}
+Let $A$ be a matrix of size $3\times 3$ over $\mathbb{R}$.
+Then \[\operatorname{size}(A) = 3.\]
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -492,3 +492,16 @@ Lean reduces them to the same module. A negative regression records this open
 conversion gap. Arbitrary shape pullbacks do not preserve interval support; actual
 subpath restriction needs a chosen inclusion and explicit label reindexing.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Checked inferred arguments in authored conversion
+
+[Inferred-argument conversion](inferred-argument-conversion.md) specifies how
+already selected implicit arguments enter hygienic comparison expansion. Named
+Type values, type annotations (including dependent types), and natural dimensions
+have deterministic source reification. Emitted calls retain the signature
+matcher's selected arguments. Compound types used as values remain opaque; this
+is not a new type-expression syntax. Native acceptance and full regression status
+are recorded in the inferred-conversion study.
+:::

@@ -377,6 +377,7 @@ laws are checked. This closes the generic change-of-shape construction gap.
 It does not yet restrict interval bases: arbitrary shape maps can make interval
 preimages disconnected. Subpath inclusion, clipping/removing empty intervals and
 basis reindexing are the next concrete data requirements. The short inferred-type
-interfaces also expose the existing inferred-body comparison limit, recorded in
-the study. No paper theorem is claimed by these construction laws.
+interfaces now compare through named Type parameters under the
+[inferred-argument rule](../../docs/inferred-argument-conversion.md); compound types
+used as values remain an open boundary. No paper theorem is claimed by these laws.
 :::

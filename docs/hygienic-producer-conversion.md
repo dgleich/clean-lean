@@ -68,9 +68,9 @@ under the fixed caller environment.
 If an argument cannot be serialized in a type annotation (for example, an unapplied
 lambda as a computed index), retain the original wrapper. This is an explicit
 representation boundary, not a search for another interpretation. Other elaboration
-errors are not suppressed. Bodies referencing inferred parameters remain opaque,
-including references in binder domains and call heads; this profile has actual
-trees only for explicit parameters.
+errors are not suppressed. The later [inferred-argument conversion rule](inferred-argument-conversion.md)
+reifies checked inferred parameters where their existing source forms permit it;
+it supersedes the original blanket opacity of inferred-parameter references.
 
 ## Ordered comparison and opacity boundaries
 

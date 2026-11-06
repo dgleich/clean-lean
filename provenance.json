@@ -3926,6 +3926,82 @@
     "studies/shape-pullbacks/Statements.pdf": {
       "origin": "derived-from-authored-sources; cited data retains source origin",
       "mode": "sidecar"
+    },
+    "docs/inferred-argument-conversion.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/inferred-conversion/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "cleanlang/inferred_conversion.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_inferred_conversion.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/inferred-conversion/verify.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/inferred-conversion/Statements.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/inferred-conversion/Generated.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/inferred-conversion/Verified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/inferred-conversion/Statements.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/inferred-conversion/Statements.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "studies/inferred-conversion/latex.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
     }
   }
 }

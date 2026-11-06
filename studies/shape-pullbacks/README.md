@@ -65,13 +65,13 @@ call rules. Shapes and the scalar field stay explicit. The fully explicit
 implementations remain available as `identity shape map`, `composite shape map`
 and `diagram pullback`.
 
-These short forms have checked native targets, but the existing conversion engine
-does not unfold authored bodies that refer to inferred type parameters. As a
-result, a projected module from the short pullback and one from its explicit
-implementation may still compare differently as Clean type indices, even though
-Lean reduces them to the same module. A regression test records that boundary.
-This does not introduce any alternative Lean meaning. Supporting that comparison
-requires a later inference/conversion extension; it is not claimed solved here.
+These short forms have checked native targets. The later
+[inferred-argument conversion rule](../../docs/inferred-argument-conversion.md)
+allows their named Type parameters to participate in authored expansion. A projected
+module from the short pullback now compares equally to the explicit implementation
+and its selected underlying object. Compound types used as values still have no
+source expression in this profile and remain opaque. The separate
+[inferred-conversion study](../inferred-conversion/README.md) checks the new rule.
 
 ## What remains for interval-basis restriction
 

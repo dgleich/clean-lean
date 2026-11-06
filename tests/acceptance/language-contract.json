@@ -1321,9 +1321,43 @@
         "studies/shape-pullbacks/verify.py"
       ],
       "pending": [
-        "Conversion through inferred-body parameters",
+        "Compound type values in inferred-body conversion",
         "Subpath interval clipping and basis reindexing",
         "Pyramid construction and extension proof"
+      ]
+    },
+    {
+      "id": "checked_inferred_conversion",
+      "status": "implemented-slice",
+      "specification": "docs/inferred-argument-conversion.md",
+      "source_fragment": "apply endomap(repeat map(x),y)",
+      "expected_tree": [
+        "Call",
+        "apply endomap",
+        [
+          [
+            "Call",
+            "repeat map",
+            [
+              [
+                "Local",
+                "x"
+              ]
+            ]
+          ],
+          [
+            "Local",
+            "y"
+          ]
+        ]
+      ],
+      "checks": [
+        "tests/test_inferred_conversion.py",
+        "studies/inferred-conversion/verify.py"
+      ],
+      "pending": [
+        "Compound types used as values",
+        "General higher-order conversion"
       ]
     }
   ]

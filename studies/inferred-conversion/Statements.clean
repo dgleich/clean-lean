@@ -1,0 +1,77 @@
+Import "../topology/Common.clean"
+Import "../../library/diagrams/pullbacks.clean"
+
+Define repeat map(x):
+  Let T: Type
+  Let x: T
+  Returns: Function(T,T)
+  Equals: function(y: T,x)
+  Render latex: \operatorname{{const}}({x})
+
+Define apply endomap(f,x):
+  Let T: Type
+  Let f: Function(T,T)
+  Let x: T
+  Returns: T
+  Equals: f(x)
+  Render latex: {f}({x})
+
+Define matrix size(A):
+  Let n: Natural
+  Let A: Matrix(n,n,Real)
+  Returns: Natural
+  Equals: n
+  Render latex: \operatorname{{size}}({A})
+
+Notation matrix entry(A,i,j):
+  Let n: Natural
+  Let A: Matrix(n,n,Real)
+  Let i,j: Vertex(n)
+  Returns: Real
+  Means: A i j
+  Render latex: {A}_{{{i},{j}}}
+
+Result short pullback identity map:
+  Attribution: topology; inferred carrier comparison; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E,W,F: Type
+  Let Q: DiagramShape(V,E)
+  Let R: DiagramShape(W,F)
+  Let f: DiagramShapeMap(V,E,W,F,Q,R)
+  Let M: ModuleDiagram(K,field,W,F,R)
+  Let N = pull back diagram(field,Q,R,f,M)
+  Let v: V
+  Conclude: module identity(field,N.object(v)) = module identity(field,M.object(f.vertices(v)))
+
+Result real constant application:
+  Attribution: topology; inferred binder domain; original
+  Let x,y: Real
+  Conclude: apply endomap(repeat map(x),y) = x
+
+Result function constant application:
+  Attribution: topology; inferred compound binder domain; original
+  Let f,g: Function(Real,Real)
+  Conclude: apply endomap(repeat map(f),g) = f
+
+Result dependent constant application:
+  Attribution: topology; inferred dependent binder domain; original
+  Let f: Function(n: Natural,Vector(n,Real))
+  Let g: Function(m: Natural,Vector(m,Real))
+  Conclude: apply endomap(repeat map(f),g) = f
+
+Result inferred dimension entry:
+  Attribution: topology; inferred dimension comparison; original
+  Let n: Natural
+  Let A: Matrix(n,n,Real)
+  Let B: Matrix((matrix size(A)),(matrix size(A)),Real)
+  Assume same: B = A
+  Let i,j: Vertex(n)
+  Conclude: matrix entry(B,i,j) = matrix entry(A,i,j)
+
+Result literal matrix size:
+  Attribution: topology; inferred natural literal; original
+  Let A: Matrix(3,3,Real)
+  Conclude: matrix size(A) = 3
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

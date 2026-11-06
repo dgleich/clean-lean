@@ -84,6 +84,7 @@ def _normal_form(expression,environment,locals):
         head=normal(['Local',name])
         return Expr('('+head.lean+' '+args[0].lean+')',expression.tex,expression.type,
                     tree=['Apply',head.tree,[a.tree for a in args]])
+    checked=env.call(name,args,locals)
     definition=env.definitions.get(name)
     if definition and definition['implementation']=='equals':
         parameters=env.data['functions'][name]['signature_tree'][2]
@@ -91,14 +92,27 @@ def _normal_form(expression,environment,locals):
         body=definition['tree']
         from .dependent_functions import tree_names
         from .hygiene import substitute,UnrepresentableSubstitution
-        # Inferred parameters have no authored argument tree in this profile.
-        if not tree_names(body).intersection(implicit) and not shadowed_globals(env,locals):
+        if not shadowed_globals(env,locals):
             bindings=dict(zip((p[1] for p in parameters if p[3]=='explicit'),args))
-            try:expanded_tree=substitute(body,bindings,env,locals)
-            except UnrepresentableSubstitution:return env.call(name,args,locals)
-            expanded=normal(expanded_tree)
+            required=tree_names(body).intersection(implicit)
+            inferred=dict(checked.inferred_args)
+            from .inferred_conversion import reify,value_names
+            type_bindings={};values=value_names(body)
+            try:
+                for p in parameters:
+                    n=p[1]
+                    if n not in required:continue
+                    actual=inferred[n]
+                    if isinstance(actual,Type):
+                        type_bindings[n]=actual
+                        if n in values:bindings[n]=reify(actual,env,locals)
+                    else:bindings[n]=reify(actual,env,locals)
+                expanded_tree=substitute(body,bindings,env,locals,type_bindings)
+            except UnrepresentableSubstitution:return checked
+            expanded=(comparison_normal_form(bindings[body[1]],env,locals)
+                      if body[0]=='Local' and body[1] in bindings else normal(expanded_tree))
             if expanded.type==expression.type:return expanded
-    return env.call(name,args,locals)
+    return checked
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
 

@@ -9,18 +9,20 @@ class UnrepresentableSubstitution(CleanError):
     """A checked argument has no spelling in a source type annotation."""
 
 
-def substitute(tree,bindings,environment,locals):
+def substitute(tree,bindings,environment,locals,type_bindings=None):
     """bindings map original parameter names to checked Expr values.
 
     Inserted trees are never recursively substituted. Freshen every traversed
     binder, including binders in domain annotations, before inserting arguments.
     """
+    type_bindings=type_bindings or {}
     occupied=set(locals)|set(environment.data['types'])|set(environment.data['aliases'])|set(environment.data['functions'])|tree_names(tree)
     replacements={n:v.tree for n,v in bindings.items()}
     heads={n for n,v in bindings.items() if environment.is_function_type(v.type)}
     for value in bindings.values():
         if value.tree is None:raise UnrepresentableSubstitution('Substitution requires a source tree')
         occupied.update(tree_names(value.tree))
+    for value in type_bindings.values():occupied.update(re.findall(ID,str(value)))
     counter=0
     def fresh():
         nonlocal counter
@@ -36,18 +38,27 @@ def substitute(tree,bindings,environment,locals):
         if node[0]=='Name':return ['Local',node[1]]
         if node[0]=='Projection':return ['Projection',type_expr(node[1]),node[2]]
         raise UnrepresentableSubstitution('Expected an index reference')
-    def typ(node,mapping,callheads):
+    def typ(node,mapping,callheads,type_mapping):
         kind=node[0]
-        if kind=='Name':return index(mapping[node[1]]) if node[1] in mapping else node[1]
+        if kind=='Name':
+            if node[1] in type_mapping:
+                value=type_mapping[node[1]]
+                try:
+                    source=typ(type_tree(parse(str(value),'type_ref')),{},set(),{})
+                    checked=environment.type(source,locals,phrases=False)
+                except CleanError as e:raise UnrepresentableSubstitution(str(e)) from e
+                if checked!=value:raise UnrepresentableSubstitution('Inferred type changed during source reification')
+                return source
+            return index(mapping[node[1]]) if node[1] in mapping else node[1]
         if kind=='Numeral':return node[1]
         if kind=='Projection':return index(expr(type_expr(node),mapping,callheads))
         if kind=='ComputedIndex':
             try:return '('+expression_spelling(expr(node[1],mapping,callheads))+')'
             except CleanError as e:raise UnrepresentableSubstitution(str(e)) from e
-        if kind=='Apply':return node[1]+'('+','.join(typ(a,mapping,callheads) for a in node[2])+')'
+        if kind=='Apply':return node[1]+'('+','.join(typ(a,mapping,callheads,type_mapping) for a in node[2])+')'
         if kind=='BoundTypeApply':
-            domain=typ(node[3],mapping,callheads);name=fresh()
-            codomain=typ(node[4],{**mapping,node[2]:['Local',name]},callheads|{node[2]})
+            domain=typ(node[3],mapping,callheads,type_mapping);name=fresh()
+            codomain=typ(node[4],{**mapping,node[2]:['Local',name]},callheads|{node[2]},type_mapping)
             return node[1]+'('+name+': '+domain+','+codomain+')'
         raise UnrepresentableSubstitution('Unsupported type syntax: '+kind)
     def expr(node,mapping,callheads):
@@ -65,7 +76,7 @@ def substitute(tree,bindings,environment,locals):
         if kind=='Operator':return ['Operator',node[1],expr(node[2],mapping,callheads),expr(node[3],mapping,callheads)]
         if kind=='Unary':return ['Unary',node[1],expr(node[2],mapping,callheads)]
         if kind in ('Lambda','Forall','Exists'):
-            domain=typ(type_tree(parse(node[2],'type_ref')),mapping,callheads);name=fresh()
+            domain=typ(type_tree(parse(node[2],'type_ref')),mapping,callheads,type_bindings);name=fresh()
             body=expr(node[3],{**mapping,node[1]:['Local',name]},callheads|{node[1]})
             return [kind,name,domain,body]
         raise UnrepresentableSubstitution('Unsupported expression syntax: '+kind)

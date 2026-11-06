@@ -42,11 +42,11 @@ class ShapePullbacks(unittest.TestCase):
    ['Call','pull back diagram',[['Local',n] for n in ['field','Q','R','f','M']]])
   self.assertEqual(self.expr('pull back diagram(field,Q,R,f,M)').type,
    self.expr('diagram pullback(K,field,V,E,W,F,Q,R,f,M)').type)
- def test_inferred_body_conversion_boundary(self):
+ def test_inferred_body_conversion(self):
   from cleanlang.indices import index_value
   short=self.expr('pull back diagram(field,Q,R,f,M).object(v)')
   explicit=self.expr('diagram pullback(K,field,V,E,W,F,Q,R,f,M).object(v)')
-  self.assertNotEqual(index_value(short,self.e,self.local),index_value(explicit,self.e,self.local))
+  self.assertEqual(index_value(short,self.e,self.local),index_value(explicit,self.e,self.local))
 if __name__=='__main__':unittest.main(verbosity=2)
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

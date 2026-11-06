@@ -875,7 +875,21 @@ Let N = pull back diagram(field,Q,R,f,M)</code></pre>
 <p>The proof field is a Lean Pi type <code>(e : E) → vertices (Q.source e) = R.source (edges e)</code>. The short call infers carrier types and retains explicit field and shape values. Its native target is the declared wrapper applied to those uniquely inferred types.</p>
 <p>At each edge, the authored definition transports to the selected source module, applies the original edge map, and transports back to the selected target module. The foundational transport is Mathlib <code>eqToHom (congrArg M h)</code> with explicit module-category instances and fixed universes. Shape identity/composition, including endpoint evidence, are authored in Clean.</p>
 <p>Twenty-four exact native targets and nine proofs cover the record, adapters, constructions, short forms and statements, including full identity and composite pullback equations. <a href="../studies/shape-pullbacks/README.md">Study and conversion boundary</a> · <a href="../studies/shape-pullbacks/Statements.clean">Readable statements</a>.</p>
-<p>Bodies using inferred type parameters remain opaque to computed-index conversion; use the explicit forms where that conversion is required. Arbitrary shape maps need not preserve interval support. Subpath restrictions, label reindexing and the pyramid extension are still separate obligations.</p>
+<p>Named inferred type parameters now participate in computed-index conversion under the <a href="#inferred-conversion">checked inference rule</a>. Arbitrary shape maps need not preserve interval support. Subpath restrictions, label reindexing and the pyramid extension are still separate obligations.</p>
+</section>
+<section class="mapping" id="inferred-conversion" data-status="implemented">
+<h2>Inferred arguments in authored definitions</h2>
+<p><strong>Implemented comparison rule; existing syntax.</strong> Already checked inferred arguments can be substituted into authored Equals bodies. The emitted Lean call keeps the original wrapper and the signature matcher's selected arguments.</p>
+<pre><code>Define repeat map(x):
+  Let T: Type
+  Let x: T
+  Returns: Function(T,T)
+  Equals: function(y: T,x)
+
+Conclude: apply endomap(repeat map(x),y) = x</code></pre>
+<p>The schematic Lean definition is <code>def repeatMap {T : Type} (x : T) : T → T := fun _ => x</code>. For real x,y the proposition retains <code>@applyMap ℝ (@repeatMap ℝ x) y = x</code>. The generated study records actual wrapper names and exact targets.</p>
+<p>Type annotations accept checked primitive, compound and dependent types, with fresh binders and simultaneous substitution. Type-valued expression positions require a named Type local; compound type values still leave the wrapper opaque. Inferred natural dimensions retain their checked source trees and literal types. No equality-assumption rewriting or proof search is added.</p>
+<p><a href="inferred-argument-conversion.md">Normative comparison rule</a> · <a href="../studies/inferred-conversion/README.md">Acceptance study and validation status</a>. Ten exact targets and six proofs exercise the rule; full regression validation is recorded separately.</p>
 </section>
 </main>
 <script>
