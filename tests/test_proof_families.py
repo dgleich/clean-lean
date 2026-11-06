@@ -18,7 +18,8 @@ class ProofFamilies(unittest.TestCase):
         for s in ['Function(n: Natural,(n = n))','Function(Natural,(0 = 0))',
                   'Function(n: Natural,Function((n = n),(n = n)))']:
             with self.subTest(s=s):self.assertTrue(self.e.is_proof_type(self.typ(s)))
-        for s in ['Function((0 = 0),Natural)','Function(n: Natural,Function((n = n),Natural))']:
+        for s in ['Function((0 = 0),Natural)','Function(n: Natural,Function((n = n),Natural))',
+                  'Function(Natural,Proposition)']:
             with self.subTest(s=s):self.assertFalse(self.e.is_proof_type(self.typ(s)))
     def test_constant_bound_arrow_roundtrip(self):
         a=self.typ('Function(h: (0 = 0),Natural)')
@@ -29,6 +30,14 @@ class ProofFamilies(unittest.TestCase):
                   'Set(Function(Natural,(0 = 0)))','Set((0 = 0))']:
             with self.subTest(s=s),self.assertRaisesRegex(CleanError,'Proof types'):self.typ(s)
         self.typ('Set(Function((0 = 0),Natural))')
+    def test_alias_parameter_contract_is_preserved(self):
+        type_declaration('Type Mapping(A: Type,B: Type):',['Equals: Function(A,B)'],self.e)
+        with self.assertRaisesRegex(CleanError,'Proof types'):
+            self.typ('Mapping((0 = 0),Natural)')
+        type_declaration('Type ReflexivityFamily():',
+                         ['Equals: Function(n: Natural,(n = n))'],self.e)
+        self.assertTrue(self.e.is_proof_type(self.typ('ReflexivityFamily')))
+        with self.assertRaisesRegex(CleanError,'Proof types'):self.typ('Set(ReflexivityFamily)')
     def test_implicit_type_inference_rejects_proof_family(self):
         local={'h':Expr('h','h',self.typ('Function(n: Natural,(n = n))'))}
         with self.assertRaisesRegex(CleanError,'Expected a type argument'):

@@ -22,13 +22,16 @@ There is no grammar change. The existing ordinary Apply and BoundTypeApply type
 nodes are selected before elaboration. A parenthesized condition in type position
 continues to denote its proof type. Evidence remains a transparent library alias.
 
-After type aliases resolve, the selected declaration must be the existing explicit
-arrow interface: two type arguments with Lean template `({0}) → ({1})` under the
+The selected explicit declaration must be the existing arrow interface: two type arguments with Lean template `({0}) → ({1})` under the
 specified whitespace normalization. That interface already grants native arrow/Pi
 emission instead of application of its demonstration wrapper. Its two operands now
 accept proof types as well as ordinary types in both the ordinary and bound forms.
 A constructor with another template receives no such grant. Names such as Function
-or Mapping have no built-in privilege.
+or Mapping have no built-in privilege. Lexical name aliases select their target
+before this check. An authored Type alias still checks its own declared parameter
+kinds before expanding its body: `Type Mapping(A: Type,B: Type)` does not acquire
+proof operands merely because its Equals body is an arrow. A parameter-free alias
+of a proof family resolves to that proof family and is classified accordingly.
 
 Thus `Function(h: (n = n),Natural)` normalizes to the same ordinary arrow as
 `Function((n = n),Natural)` when h does not occur in the codomain. The normalized
