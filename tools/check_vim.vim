@@ -56,6 +56,8 @@ call setline(24, '  Universe: 1')
 call assert_equal('cleanMathMetadataKey', synIDattr(synID(24,3,1),'name'))
 call setline(25, '  Let x: ModuleElement(K,field,(homology module(field,H,X)))')
 call assert_equal('cleanMathTypedLet', synIDattr(synID(25,10,1),'name'))
+call setline(26, '  Let f: Function(n: Natural,Vector(n,Real))')
+call assert_equal('cleanMathTypedLet', synIDattr(synID(26,10,1),'name'))
 if len(v:errors)
  for error in v:errors | echom error | endfor
  cquit

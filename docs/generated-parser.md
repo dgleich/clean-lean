@@ -203,3 +203,15 @@ The neutral tree remains `ComputedIndex`; its root interpretation is evidence fo
 a condition. Strict LALR generation and lexer collision checks remain enabled.
 See [evidence](evidence.md) for the contextual semantic rule and restrictions.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Bound type-argument grammar
+
+The parser now distinguishes `Head(x: Domain,Codomain)` as BoundTypeApply from
+ordinary type application. The colon is preserved inside parenthesized type-text
+envelopes, then validated by the structural type grammar. Strict LALR and lexer
+checks still pass without conflict defaults. No new keyword or lexical highlighting
+category is required. Semantic elaboration remains explicitly disabled; see the
+[dependent-function contract](dependent-function-types.md).
+:::

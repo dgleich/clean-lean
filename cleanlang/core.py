@@ -209,6 +209,8 @@ class Environment:
         if syntax.data=='computed_index':
             from .syntax import expression_tree
             return proof_type(Expressions(self,env or {}).elaborate(expression_tree(syntax.children[0])),self,env or {})
+        if len(syntax.children)>1 and syntax.children[1].data=='bound_type_arguments':
+            raise CleanError('Dependent function types are parsed but not implemented')
         source_name=str(syntax.children[0])
         name=self.data.get('aliases',{}).get(source_name,source_name)
         args=[type_spelling(x) for x in syntax.children[1].children] if len(syntax.children)>1 else []

@@ -107,3 +107,12 @@ available. No language grammar or compiler behavior changed in this work.
 Compact signatures such as `Notation cos(x: Real): Real:` are highlighted as a
 declaration name followed by a signature region. This coarse lexical region does
 not parse dependent types; compiler checks decide whether the signature is valid.
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+The staged `Function(n: Natural,Vector(n,Real))` spelling needs no new lexical
+category. Representative TextMate and Vim checks pass for the typed declaration;
+an Emacs ERT case is supplied but remains unrun because Emacs is unavailable.
+Highlighting does not imply semantic support: the type checker still rejects the
+bound function-type form while its semantic implementation is pending.
+:::

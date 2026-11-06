@@ -68,6 +68,12 @@
     (should (eq (get-text-property (1- (point)) 'face) 'font-lock-string-face))
     (search-forward "documentation")
     (should (eq (get-text-property (1- (point)) 'face) 'font-lock-doc-face))))
+(ert-deftest clean-math-dependent-function-type ()
+  (with-temp-buffer
+    (insert "Let f: Function(n: Natural,Vector(n,Real))\n")
+    (clean-math-mode) (font-lock-ensure)
+    (goto-char (point-min)) (search-forward "Function")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-type-face))))
 (ert-run-tests-batch-and-exit)
 
 ;; generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

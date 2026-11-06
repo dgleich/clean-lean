@@ -676,6 +676,14 @@ Checked proofs establish certificate independence and well-group containment in
 every shifted image. No implicit certificate choice or two-image equality is supplied.</p>
 <p>See <a href="../studies/topology/shifted-perturbations.md">sign convention, proofs and limits</a>.</p>
 </section>
+<section class="mapping" id="dependent-function-types" data-status="proposed">
+<h2>Dependent function fields</h2>
+<p><span class="status proposed">Grammar only; semantics pending</span> <code>Function(p: Natural,ModuleMap(K,field,(M.component(p)),(N.component(p))))</code> has one generated parse. The type checker explicitly rejects it until binder-aware identity, substitution and application are implemented.</p>
+<p>The intended Lean form is <code>(p : ℕ) → ModuleCat.Hom (M.component p) (N.component p)</code>, with the scalar/category choices explicit in the actual target. This fragment is schematic, not an accepted translation.</p>
+<p>Ordinary function fields already support <a href="../library/algebra/graded_modules.clean">graded modules</a> and <a href="../library/topology/graded_homology.clean">graded singular homology</a>. Their seven exact native targets and component proof are <a href="../studies/dependent-functions/Verified.lean">checked</a>. A separate <a href="../studies/dependent-functions/Native.lean">native graded-map model</a> has four proofs; it is not generated from Clean.</p>
+<p>See the <a href="dependent-function-types.md">grammar and semantic implementation contract</a> and <a href="../studies/dependent-functions/README.md">study status</a>.</p>
+</section>
+
 <section class="mapping" id="dimension-indices" data-status="implemented">
 <h2>Dimensions and their local names</h2>
 <p><span class="status implemented">Implemented</span> Natural dimension slots now use checked value indices. <code>Let m = n</code> allows a matrix over dimension m to match an expected dimension n while preserving both authored names.</p>

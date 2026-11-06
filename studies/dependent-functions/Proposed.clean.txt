@@ -1,0 +1,13 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+-- Proposed extension: this type parses but its semantics are not implemented.
+Import "../../library/algebra/graded_modules.clean"
+
+Structure GradedMap(K: Type,field: FieldStructure(K),M: GradedModule(K,field),N: GradedModule(K,field)):
+  Let component: Function(p: Natural,
+    ModuleMap(K,field,(M.component(p)),(N.component(p))))
+  Constructor: graded map
+
+-- A future authored identity also needs an explicit generic module-identity adapter.
+-- No paper-specific Lean construction should replace this dependent function field.
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -35,6 +35,9 @@ def type_spelling(tree):
     if tree.data=='index_reference':return '.'.join(map(str,tree.children))
     if tree.data=='type_ref':
         head=str(tree.children[0])
+        if len(tree.children)>1 and tree.children[1].data=='bound_type_arguments':
+            binder,domain,codomain=tree.children[1].children
+            return head+'('+str(binder)+': '+type_spelling(domain)+','+type_spelling(codomain)+')'
         return head+('('+','.join(type_spelling(x) for x in tree.children[1].children)+')' if len(tree.children)>1 else '')
     raise ValueError('Expected a type syntax tree')
 
@@ -49,6 +52,9 @@ def type_tree(tree):
         return result
     head=str(tree.children[0])
     if len(tree.children)==1:return ['Name',head]
+    if tree.children[1].data=='bound_type_arguments':
+        binder,domain,codomain=tree.children[1].children
+        return ['BoundTypeApply',head,str(binder),type_tree(domain),type_tree(codomain)]
     return ['Apply',head,[type_tree(x) for x in tree.children[1].children]]
 
 

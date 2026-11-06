@@ -926,6 +926,46 @@
       "pending": [
         "General literal inference and native-adapter target contract"
       ]
+    },
+    {
+      "id": "dependent_function_type_grammar",
+      "status": "partial",
+      "specification": "docs/dependent-function-types.md",
+      "source_fragment": "Function(n: Natural,Vector(n,Real))",
+      "expected_tree": [
+        "BoundTypeApply",
+        "Function",
+        "n",
+        [
+          "Name",
+          "Natural"
+        ],
+        [
+          "Apply",
+          "Vector",
+          [
+            [
+              "Name",
+              "n"
+            ],
+            [
+              "Name",
+              "Real"
+            ]
+          ]
+        ]
+      ],
+      "expected_current_result": "Unique syntax tree followed by explicit semantic unsupported-feature error",
+      "checks": [
+        "tests/test_dependent_type_syntax.py",
+        "tools/generate_parser.py --check"
+      ],
+      "pending": [
+        "Binder-aware type representation and alpha-equivalence",
+        "Capture-free substitution and dependent application",
+        "Dependent lambda result inference and exact Lean-target comparisons",
+        "Automatic labels and LaTeX for bound function types"
+      ]
     }
   ]
 }

@@ -1,0 +1,20 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "module_spaces.clean"
+
+Structure GradedModule(K: Type,field: FieldStructure(K)):
+  Universe: 1
+  Let component: Function(Natural,CoefficientModule(K,field))
+  Constructor: graded module
+  Render latex: \operatorname{{GrMod}}_{{{K}}}
+  Describe: a family of modules indexed by degree
+
+Define component module(field,M,p):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: GradedModule(K,field)
+  Let p: Natural
+  Returns: CoefficientModule(K,field)
+  Equals: M.component(p)
+  Render latex: {M}_{{{p}}}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

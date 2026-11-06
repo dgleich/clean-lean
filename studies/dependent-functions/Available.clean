@@ -1,0 +1,15 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../topology/Common.clean"
+Import "../../library/topology/graded_homology.clean"
+
+Result graded homology component:
+  Attribution: topology; graded singular homology component; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let X: TopologicalSpace
+  Let p: Natural
+  Conclude:
+    component module(field,graded singular homology(K,field,X),p) =
+      homology module(field,scalar homology(K,field,p),X)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

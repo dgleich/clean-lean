@@ -1,0 +1,15 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "scalar_homology.clean"
+Import "../algebra/graded_modules.clean"
+
+Define graded singular homology(K,field,X):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let X: TopologicalSpace
+  Returns: GradedModule(K,field)
+  Equals:
+    graded module(K,field,function(p: Natural,
+      homology module(field,scalar homology(K,field,p),X)))
+  Render latex: H_*({X};{K})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

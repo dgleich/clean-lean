@@ -363,3 +363,16 @@ consistent inference uses the last occurrence in declared traversal order.
 Five canonical targets and four proofs cover readable examples. Generic dependent
 functions, broader literal inference and the topology research obligations remain open.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Dependent function type staging and graded objects
+
+[Dependent function types](dependent-function-types.md) specifies the selected
+bound-domain form and its intended scope, alpha-equivalence and Lean mapping.
+Only its generated grammar and syntax normalization are implemented: semantic
+elaboration explicitly rejects the new form. No translated-Pi claim is made.
+The [working graded-object study](../studies/dependent-functions/README.md) uses
+existing ordinary functions, with seven canonical targets and a component proof.
+Its separate native graded-map model has four proofs, but is not translated Clean.
+:::
