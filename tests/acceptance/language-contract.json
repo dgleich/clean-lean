@@ -720,6 +720,67 @@
         "Local-alias conversion",
         "Inherited native adapter elaboration obligations"
       ]
+    },
+    {
+      "id": "authored_definition_index_conversion",
+      "status": "implemented-slice",
+      "source": "ChainMap(K,field,C,(relative chains(field,H,X,P)))",
+      "expected_tree": [
+        "Apply",
+        "ChainMap",
+        [
+          [
+            "Name",
+            "K"
+          ],
+          [
+            "Name",
+            "field"
+          ],
+          [
+            "Name",
+            "C"
+          ],
+          [
+            "ComputedIndex",
+            [
+              "Call",
+              "relative chains",
+              [
+                [
+                  "Local",
+                  "field"
+                ],
+                [
+                  "Local",
+                  "H"
+                ],
+                [
+                  "Local",
+                  "X"
+                ],
+                [
+                  "Local",
+                  "P"
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "environment": "Explicit relative_maps module; pinned Lean/Mathlib; typed field, theory, space and pair",
+      "expected_lean": "ChainMapWrapper K field C (@relativeChainsWrapper K field H X P)",
+      "comparison_rule": "docs/definition-conversion.md; emitted wrapper retained despite comparison expansion",
+      "checks": [
+        "tests/test_conversion.py",
+        "studies/topology/verify_relative_maps.py"
+      ],
+      "pending": [
+        "Binder-bearing expansions",
+        "Used inferred parameters",
+        "Local-alias and native conversion",
+        "Literal/coercion normalization"
+      ]
     }
   ]
 }

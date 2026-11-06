@@ -1,15 +1,15 @@
 # generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
-"""Explicit expression indices; structural substitution, no conversion search."""
+"""Source-preserving indices with bounded comparison normalization."""
 import json
 from dataclasses import dataclass
 from .core import ValueIndex, Type, CleanError
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, eq=False)
 class ComputedIndex(ValueIndex):
     syntax: str
 
 
-def index_value(expression):
+def index_value(expression,environment=None,locals=None):
     from .structures import reference_name
     from .syntax import expression_spelling
     tree=expression.tree
@@ -19,10 +19,14 @@ def index_value(expression):
             raise CleanError('Computed indices do not introduce binders')
         for child in node:check(child)
     check(tree)
+    comparison=None
+    if environment is not None:
+        from .conversion import comparison_normal_form
+        comparison=comparison_normal_form(expression,environment,locals or {}).lean
     ref=reference_name(tree)
-    if ref is not None:return ValueIndex(ref,expression.lean,expression.tex)
+    if ref is not None:return ValueIndex(ref,expression.lean,expression.tex,comparison=comparison)
     return ComputedIndex('('+expression_spelling(tree)+')',expression.lean,expression.tex,
-                         json.dumps(tree,ensure_ascii=False,separators=(',',':')))
+                         json.dumps(tree,ensure_ascii=False,separators=(',',':')),comparison=comparison)
 
 
 def substitute_index(index,bindings,env,locals):
@@ -57,6 +61,6 @@ def substitute_index(index,bindings,env,locals):
         if node[0]=='Operator':return ['Operator',node[1],replace(node[2]),replace(node[3])]
         if node[0]=='Unary':return ['Unary',node[1],replace(node[2])]
         return node
-    return index_value(Expressions(env,locals).elaborate(replace(tree)))
+    return index_value(Expressions(env,locals).elaborate(replace(tree)),env,locals)
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

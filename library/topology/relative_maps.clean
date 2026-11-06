@@ -1,0 +1,73 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "pair_chain_squares.clean"
+
+Define relative chain projection(field,H,X,Q):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: TopologicalPair(X)
+  Returns: ChainMap(K,field,(singular chains(field,H,subspace(X,Q.ambient))),(relative chains(field,H,X,Q)))
+  Equals:
+    chain cokernel projection(field,singular chains(field,H,subspace(X,Q.relative)),
+      singular chains(field,H,subspace(X,Q.ambient)),pair chain inclusion(field,H,X,Q))
+  Render latex: \pi_{{{Q}}}
+
+Condition pair chain commutes(field,H,X,Q):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Holds when:
+    compose chain maps(field,singular chains(field,H,subspace(X,Q.source.relative)),
+      singular chains(field,H,subspace(X,Q.source.ambient)),singular chains(field,H,subspace(X,Q.target.ambient)),
+      ambient chain map(field,H,X,Q),pair chain inclusion(field,H,X,Q.source)) =
+    compose chain maps(field,singular chains(field,H,subspace(X,Q.source.relative)),
+      singular chains(field,H,subspace(X,Q.target.relative)),singular chains(field,H,subspace(X,Q.target.ambient)),
+      pair chain inclusion(field,H,X,Q.target),relative subset chain map(field,H,X,Q))
+  Render: the chain square of {Q} commutes
+
+Define relative chain map(field,H,X,Q,h):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Let h: Evidence((pair chain commutes(field,H,X,Q)))
+  Returns: ChainMap(K,field,(relative chains(field,H,X,Q.source)),(relative chains(field,H,X,Q.target)))
+  Equals:
+    chain cokernel map(field,singular chains(field,H,subspace(X,Q.source.relative)),
+      singular chains(field,H,subspace(X,Q.source.ambient)),singular chains(field,H,subspace(X,Q.target.relative)),
+      singular chains(field,H,subspace(X,Q.target.ambient)),
+      pair chain inclusion(field,H,X,Q.source),pair chain inclusion(field,H,X,Q.target),
+      relative subset chain map(field,H,X,Q),ambient chain map(field,H,X,Q),h)
+  Render latex: C_*({Q})
+
+Define relative homology map(field,H,X,Q,h):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Let h: Evidence((pair chain commutes(field,H,X,Q)))
+  Returns: ModuleMap(K,field,(relative homology(field,H,X,Q.source)),(relative homology(field,H,X,Q.target)))
+  Equals:
+    induced chain homology map(field,relative chains(field,H,X,Q.source),relative chains(field,H,X,Q.target),
+      relative chain map(field,H,X,Q,h),H.degree)
+  Render latex: {H}({Q})
+
+Define relative homology image(field,H,X,Q,h):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Let h: Evidence((pair chain commutes(field,H,X,Q)))
+  Returns: ModuleSubspace(K,field,(relative homology(field,H,X,Q.target)))
+  Equals:
+    module map range(field,relative homology(field,H,X,Q.source),relative homology(field,H,X,Q.target),
+      relative homology map(field,H,X,Q,h))
+  Render latex: \operatorname{{range}}({H}({Q}))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

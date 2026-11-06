@@ -597,6 +597,22 @@ certified pair inclusion. The witness remains explicit; a packaged relative
 functor, index conversion, exactness and excision remain pending.</p>
 <p>See <a href="../studies/topology/chain-squares.md">orientation, source, and checks</a>.</p>
 </section>
+<section class="mapping" id="definition-conversion" data-status="implemented">
+<h2>Authored definition conversion</h2>
+<p><strong>Implemented, bounded.</strong> Dependent indices may match a binder-free
+authored definition and its expansion. Comparison does not rewrite emitted Lean
+annotations. Local aliases and native adapters remain opaque.</p>
+<pre><code>Returns: ChainMap(K,field,
+  (relative chains(field,H,X,Q.source)),
+  (relative chains(field,H,X,Q.target)))</code></pre>
+<p>A body using the authored cokernel expansion can satisfy this signature.
+The generated Lean signature retains the named relative-chain wrappers and Lean
+checks the prescribed definitional conversion. Evidence is passed explicitly;
+no tactic or proof search is inserted.</p>
+<p>See the <a href="definition-conversion.md">comparison algorithm and limits</a>,
+<a href="../studies/topology/relative-maps.md">relative-map construction</a>, and
+<a href="../studies/topology/RelativeMapsVerified.lean">exact native targets and proofs</a>.</p>
+</section>
 </main>
 <script>
 (() => {

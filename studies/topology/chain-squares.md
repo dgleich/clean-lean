@@ -80,3 +80,16 @@ Regenerate with `LAKE=lake python3 studies/topology/verify_chain_squares.py`.
 Review [Clean statements](ChainSquares.clean), [generated Lean](ChainSquares.lean),
 [checked Lean](ChainSquaresVerified.lean) and [PDF](ChainSquares.pdf).
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Named relative-map interfaces
+
+[Relative maps](relative-maps.md) now authors the relative projections, induced
+chain/homology maps and their images using named relative-object indices. The
+bounded authored-definition conversion rule resolves the previously recorded
+expansion mismatch. Eight canonical targets and three Lean proofs check these
+interfaces. Explicit commutativity evidence is still passed; the study proves
+that condition universally. Relative functor laws, exactness/excision and the
+paper results remain unfinished.
+:::

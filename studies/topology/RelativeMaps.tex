@@ -1,0 +1,36 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{pair chain commutativity}\cleanattribution{[Topology foundations, singular chain functor on pair inclusions]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $X$ be a topological space.
+Let $Q$ be a certified inclusion between pairs in $X$.
+Then \[\text{the chain square of }Q\text{ commutes}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{relative quotient maps commute}\cleanattribution{[Topology foundations, cokernel projection naturality]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $X$ be a topological space.
+Let $Q$ be a certified inclusion between pairs in $X$.
+Assume $\text{the chain square of }Q\text{ commutes}$ (\texttt{h}).
+Then \[C_*(Q)\circ \pi_{Q.\mathrm{source}} = \pi_{Q.\mathrm{target}}\circ C_*(Q.ambient).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{relative homology image membership}\cleanattribution{[Topology foundations, module map range membership]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $X$ be a topological space.
+Let $Q$ be a certified inclusion between pairs in $X$.
+Assume $\text{the chain square of }Q\text{ commutes}$ (\texttt{h}).
+Let $x$ be an element of $H(Q.\mathrm{target})$.
+Let $f = H(Q)$.
+Let $U = \operatorname{range}(H(Q))$.
+Then \[x\text{ belongs to }U \text{ if and only if } \left(\text{there exists }y : H(Q.\mathrm{source}),\; f(y) = x\right).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

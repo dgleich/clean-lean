@@ -89,7 +89,7 @@ def project(env, base, field, locals):
         value=Expr(target,tex,result_type,tree=['Projection',base.tree,name])
         if name==field:return value
         from .indices import index_value
-        bindings[name]=index_value(value)
+        bindings[name]=index_value(value,env,locals)
     raise CleanError('Missing field: '+field)
 
 

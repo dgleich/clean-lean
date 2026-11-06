@@ -100,3 +100,16 @@ types; canonical comparison preserves proof arguments, instances and universes.
 It also kernel-checks four proofs, including commutativity of the pair inclusion
 square. The fixed Lean/Mathlib environment remains the repository lockfile.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Authored definition conversion
+
+[Definition conversion](definition-conversion.md) now permits typed dependent
+indices to match eligible binder-free authored expansions. It supersedes the
+blanket structural-only rule for those indices. Emitted Lean terms and source
+annotations retain their prescribed wrappers; comparison does not rewrite them.
+Native adapters, local aliases and the documented ineligible bodies stay opaque.
+The relative-map study exercises this rule with named source/target objects and
+explicit commutativity evidence, checked against independent native targets.
+:::

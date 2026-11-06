@@ -1,0 +1,46 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/relative_maps.clean"
+
+Result pair chain commutativity:
+  Attribution: topology; singular chain functor on pair inclusions; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Conclude: pair chain commutes(field,H,X,Q)
+
+Result relative quotient maps commute:
+  Attribution: topology; cokernel projection naturality; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Assume h: pair chain commutes(field,H,X,Q)
+  Conclude:
+    compose chain maps(field,singular chains(field,H,subspace(X,Q.source.ambient)),
+      relative chains(field,H,X,Q.source),relative chains(field,H,X,Q.target),
+      relative chain map(field,H,X,Q,h),relative chain projection(field,H,X,Q.source)) =
+    compose chain maps(field,singular chains(field,H,subspace(X,Q.source.ambient)),
+      singular chains(field,H,subspace(X,Q.target.ambient)),relative chains(field,H,X,Q.target),
+      relative chain projection(field,H,X,Q.target),ambient chain map(field,H,X,Q))
+
+Result relative homology image membership:
+  Attribution: topology; module map range membership; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Assume h: pair chain commutes(field,H,X,Q)
+  Let x: ModuleElement(K,field,(relative homology(field,H,X,Q.target)))
+  Let f = relative homology map(field,H,X,Q,h)
+  Let U = relative homology image(field,H,X,Q,h)
+  Conclude:
+    belongs to module subspace(field,relative homology(field,H,X,Q.target),x,U) ↔
+      there exists (y: ModuleElement(K,field,(relative homology(field,H,X,Q.source))),
+        module map value(field,relative homology(field,H,X,Q.source),relative homology(field,H,X,Q.target),f,y) = x)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

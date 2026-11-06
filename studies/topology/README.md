@@ -282,3 +282,16 @@ targets and two kernel-checked proofs cover these interfaces. The square witness
 is explicit; packaging the relative functor and converting its computed indices
 remain open, as do exactness/excision and the research targets.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Named relative-map interfaces
+
+[Relative maps](relative-maps.md) now authors the relative projections, induced
+chain/homology maps and their images using named relative-object indices. The
+bounded authored-definition conversion rule resolves the previously recorded
+expansion mismatch. Eight canonical targets and three Lean proofs check these
+interfaces. Explicit commutativity evidence is still passed; the study proves
+that condition universally. Relative functor laws, exactness/excision and the
+paper results remain unfinished.
+:::

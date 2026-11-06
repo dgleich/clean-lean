@@ -100,12 +100,18 @@ class Type:
     name: str
     args: tuple = ()
     def __str__(self): return self.name + ('(' + ','.join(map(str,self.args)) + ')' if self.args else '')
-@dataclass(frozen=True)
+@dataclass(frozen=True, eq=False)
 class ValueIndex:
     name: str
     lean: str
     tex: str = field(compare=False)
+    comparison: str | None = field(default=None, kw_only=True)
     def __str__(self): return self.name
+    def comparison_key(self):return self.lean if self.comparison is None else self.comparison
+    def __eq__(self,other):
+        if not isinstance(other,ValueIndex):return NotImplemented
+        return self.comparison_key()==other.comparison_key()
+    def __hash__(self):return hash(self.comparison_key())
 
 
 @dataclass(frozen=True, init=False)
@@ -117,10 +123,10 @@ class ProofType(Type):
     def __str__(self):return '('+str(self.args[0])+')'
 
 
-def proof_type(condition):
+def proof_type(condition,environment=None,locals=None):
     from .indices import index_value
     if condition.type!=PROP:raise CleanError('A computed proof type must be a condition')
-    return ProofType(index_value(condition))
+    return ProofType(index_value(condition,environment,locals))
 
 
 
@@ -200,7 +206,7 @@ class Environment:
         except CleanError as e:raise CleanError('Unknown type phrase: '+s) from e
         if syntax.data=='computed_index':
             from .syntax import expression_tree
-            return proof_type(Expressions(self,env or {}).elaborate(expression_tree(syntax.children[0])))
+            return proof_type(Expressions(self,env or {}).elaborate(expression_tree(syntax.children[0])),self,env or {})
         source_name=str(syntax.children[0])
         name=self.data.get('aliases',{}).get(source_name,source_name)
         args=[type_spelling(x) for x in syntax.children[1].children] if len(syntax.children)>1 else []
@@ -223,13 +229,13 @@ class Environment:
                 if actual.type!=expected:
                     raise CleanError(f'Value index {a} requires {expected}, got {actual.type}')
                 from .indices import index_value
-                out.append(index_value(actual));continue
+                out.append(index_value(actual,self,env or {}));continue
             if '.' in a or a.startswith('('):
                 if env is None:raise CleanError('Unknown dimension reference: '+a)
                 actual=Expressions(self,env).parse(a)
                 if actual.type!=NAT:raise CleanError('Dimension reference must be Natural: '+a)
                 from .indices import index_value
-                out.append(actual.tree[1] if actual.tree[0]=='Local' else index_value(actual));continue
+                out.append(actual.tree[1] if actual.tree[0]=='Local' else index_value(actual,self,env or {}));continue
             if not re.fullmatch(r'\d+|'+ID,a): raise CleanError('Dimension must be a numeral or natural parameter')
             if env is not None and not a.isdigit() and (a not in env or env[a].type!=NAT): raise CleanError('Declare dimension '+a+' as Natural first')
             out.append(a)
@@ -298,7 +304,7 @@ class Environment:
 
         def index(n):
             from .indices import index_value, substitute_index
-            if n in actuals:return index_value(actuals[n])
+            if n in actuals:return index_value(actuals[n],self,locals)
             return substitute_index(ValueIndex(n,'',''),{**substitutions,**actuals},self,locals)
 
         def replace(t):
@@ -535,7 +541,7 @@ def _parse_flat(text,reg):
                     labels.update((name,label))
                     r.clauses.append(Clause('assume',[name],value,num,label))
                     if re.fullmatch(ID,label):
-                        try:evidence=proof_type(value)
+                        try:evidence=proof_type(value,reg,env)
                         except CleanError as error:
                             if str(error)!='Computed indices do not introduce binders':raise
                             evidence=Type('$unavailableProof')
