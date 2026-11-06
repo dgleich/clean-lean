@@ -1,0 +1,29 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "equalities.clean"
+
+Notation subset reflexivity(S):
+  Let X: Type
+  Let S: Set(X)
+  Returns: Evidence((S ⊆ S))
+  Means: Set.Subset.refl S
+  Render latex: \operatorname{{refl}}_{{{S}}}
+
+Notation subset transitivity(S,T,U,h,k):
+  Let X: Type
+  Let S,T,U: Set(X)
+  Let h: Evidence((S ⊆ T))
+  Let k: Evidence((T ⊆ U))
+  Returns: Evidence((S ⊆ U))
+  Means: Set.Subset.trans h k
+  Render latex: \operatorname{{trans}}({h},{k})
+
+Notation replace subset target(S,T,U,h,e):
+  Let X: Type
+  Let S,T,U: Set(X)
+  Let h: Evidence((S ⊆ T))
+  Let e: Evidence((T = U))
+  Returns: Evidence((S ⊆ U))
+  Means: @Eq.rec (Set X) T (fun V _ => S ⊆ V) h U e
+  Render latex: \operatorname{{transport}}({h},{e})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

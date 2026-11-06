@@ -307,3 +307,14 @@ certificate independence and membership. The study rechecks 15 supporting proofs
 Projected header indices now substitute correctly in dependent record fields.
 The extreme-image theorem, exactness/excision and a Clean proof language remain open.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Composing certified pairs
+
+[Pair composition](pair-composition.md) now supplies Clean-authored identities and composition
+with an explicit middle-pair equality. Generic congrArg on field-access lambdas
+exposed an index-substitution gap, resolved by checked immediate lambda contraction.
+Fifteen exact native targets and six proofs cover the new interfaces. This does not
+supply a category instance or the relative-homology functor laws.
+:::

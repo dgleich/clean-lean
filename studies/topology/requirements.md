@@ -7,6 +7,22 @@ files are review inputs, not successful translations. No theorem is discharged b
 assuming its conclusion, postulating its supporting interface, or renaming a Lean
 paper-specific implementation.
 
+## Current implementation boundary
+
+The chronological notes below record earlier milestones and their then-open gaps.
+The current checked modules now include named/computed indices, dependent calls,
+proof-bearing records, fixed universes, bounded definition conversion, ordinary
+and relative singular homology, inclusion-induced relative maps, and fixed-target
+well-group intersections. See [well groups](well-groups.md) for certificate
+completeness and [pair composition](pair-composition.md) for explicit identities
+and composition. Immediate binder-free lambda contraction now permits generic
+congruArg to produce field-equality evidence entirely through Clean expressions.
+
+Still open are general dependent functions and universe polymorphism, the actual
+pyramid/basis and algorithm constructions, relative functor laws, connecting maps,
+exactness/excision and the five research theorem proofs. These mathematical
+obligations must not be conflated with merely parsing their proposed signatures.
+
 ## Working foundation
 
 `library/topology/basic.clean` defines inverse image, image, selection,

@@ -631,6 +631,30 @@ substitutes to Q.space when its header parameter P is instantiated at Q.</p>
 <a href="../studies/topology/WellGroupsVerified.lean">24 exact targets and proofs</a>.
 This is not a proof of the two-extreme-image characterization.</p>
 </section>
+<section class="mapping" id="applied-function-indices" data-status="implemented">
+<h2>Applied functions in dependent indices</h2>
+<p><strong>Implemented, bounded.</strong> An immediately applied lambda with a
+binder-free body and argument contracts when forming a dependent type index.
+The complete original application is checked first. There is no new grammar.</p>
+<pre><code>equality congruence(function(T: TopologicalPair(X),T.ambient),P,Q,h)
+-- Result type: Evidence((P.ambient = Q.ambient))</code></pre>
+<p>The generated call retains its lambda argument. Its native equivalent,
+with schematic record identifiers, is:</p>
+<pre><code>@congrArg (TopologicalPair X) (Set X.carrier)
+  (fun T =&gt; T.ambient) P Q h</code></pre>
+<p>The prescribed type index contracts the lambda; it does not rewrite the proof
+call or infer h. Bare lambdas, quantified bodies, nested lambdas and local-alias
+unfolding remain outside this rule.</p>
+<pre><code>identity pair inclusion(X,P)
+compose pair inclusions(X,Q,R,middle)
+-- middle proves Q.target = R.source; result goes from Q.source to R.target.</code></pre>
+<p>Both operations are authored Clean definitions. Generic equality congruence,
+reflexivity, subset transitivity and explicit equality transport are foundational
+Lean adapters. Identity and associativity are checked; no category instance or
+relative-homology functor law is supplied implicitly.</p>
+<p>See the <a href="applied-function-indices.md">precise contraction rule</a> and
+<a href="../studies/topology/pair-composition.md">pair composition study</a>.</p>
+</section>
 </main>
 <script>
 (() => {

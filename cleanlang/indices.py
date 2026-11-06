@@ -12,6 +12,9 @@ class ComputedIndex(ValueIndex):
 def index_value(expression,environment=None,locals=None):
     from .structures import reference_name
     from .syntax import expression_spelling
+    if environment is not None:
+        from .beta_indices import contract_index
+        expression=contract_index(expression,environment,locals or {})
     tree=expression.tree
     def check(node):
         if not isinstance(node,list):return

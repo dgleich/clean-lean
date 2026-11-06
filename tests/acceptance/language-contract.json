@@ -783,6 +783,58 @@
         "Local-alias and native conversion",
         "Literal/coercion normalization"
       ]
+    },
+    {
+      "id": "immediately_applied_function_indices",
+      "status": "partial",
+      "specification": "docs/applied-function-indices.md",
+      "grammar": "Existing expression Lambda/Call syntax; Apply introduced by specified dependent substitution",
+      "source_fragment": "equality congruence(function(T: TopologicalPair(X),T.ambient),P,Q,h)",
+      "expected_tree": [
+        "Call",
+        "equality congruence",
+        [
+          [
+            "Lambda",
+            "T",
+            "TopologicalPair(X)",
+            [
+              "Projection",
+              [
+                "Local",
+                "T"
+              ],
+              "ambient"
+            ]
+          ],
+          [
+            "Local",
+            "P"
+          ],
+          [
+            "Local",
+            "Q"
+          ],
+          [
+            "Local",
+            "h"
+          ]
+        ]
+      ],
+      "environment": "Explicit equality/pair modules; P,Q : TopologicalPair(X); h : Evidence((P=Q)); pinned Lean/Mathlib",
+      "expected_lean": "@equalityCongruence (TopologicalPair X) (Set X.carrier) (fun T => T.ambient) P Q h",
+      "expected_lean_type": "P.ambient = Q.ambient",
+      "comparison_rule": "Contract checked immediate binder-free lambda applications in indices, retaining the original call arguments; no implicit proof search",
+      "checks": [
+        "tests/test_applied_indices.py",
+        "studies/topology/verify_pair_composition.py"
+      ],
+      "pending": [
+        "Unapplied and binder-bearing indices",
+        "General dependent function types",
+        "Local-alias conversion",
+        "Inherited opaque Lean-adapter elaboration contract"
+      ]
     }
   ]
 }

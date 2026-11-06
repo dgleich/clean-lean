@@ -105,3 +105,15 @@ against unintended changes to prior targets. The repository pins the Lean/Mathli
 build; this is an implemented bounded contract, not a claim about arbitrary Lean
 elaboration environments.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Applied-function preprocessing
+
+[Immediate lambda contraction](applied-function-indices.md) is a separate index
+construction step, before comparison normalization. It can contract a checked
+application when storing an index and emitting its type annotation. The enclosing
+call still contains the original lambda argument. The comparison-only expansions
+described here continue to preserve emitted annotations; the two rules must not
+be conflated.
+:::

@@ -1,0 +1,50 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/pair_composition.clean"
+
+Result identity pair endpoints:
+  Attribution: topology; identity inclusion of pairs; original
+  Let X: TopologicalSpace
+  Let P: TopologicalPair(X)
+  Conclude: identity pair inclusion(X,P).source = P and identity pair inclusion(X,P).target = P
+
+Result composed pair endpoints:
+  Attribution: topology; composition of inclusions of pairs; original
+  Let X: TopologicalSpace
+  Let Q,R: PairInclusion(X)
+  Assume middle: Q.target = R.source
+  Conclude:
+    compose pair inclusions(X,Q,R,middle).source = Q.source and
+    compose pair inclusions(X,Q,R,middle).target = R.target
+
+Result pair source identity:
+  Attribution: topology; source identity law for inclusions; original
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Conclude: compose pair inclusions(X,identity pair inclusion(X,Q.source),Q,equality reflexivity(Q.source)) = Q
+
+Result pair target identity:
+  Attribution: topology; target identity law for inclusions; original
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Conclude: compose pair inclusions(X,Q,identity pair inclusion(X,Q.target),equality reflexivity(Q.target)) = Q
+
+Result pair composition associativity:
+  Attribution: topology; associativity of inclusions; original
+  Let X: TopologicalSpace
+  Let Q,R,S: PairInclusion(X)
+  Assume first: Q.target = R.source
+  Assume second: R.target = S.source
+  Conclude:
+    compose pair inclusions(X,compose pair inclusions(X,Q,R,first),S,second) =
+    compose pair inclusions(X,Q,compose pair inclusions(X,R,S,second),first)
+
+Result identity pair continuous maps:
+  Attribution: topology; underlying maps of identity inclusions; original
+  Let X: TopologicalSpace
+  Let P: TopologicalPair(X)
+  Conclude:
+    ambient continuous map(X,identity pair inclusion(X,P)) = identity continuous map(subspace(X,P.ambient)) and
+    relative continuous map(X,identity pair inclusion(X,P)) = identity continuous map(subspace(X,P.relative))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

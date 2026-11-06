@@ -315,3 +315,15 @@ Native adapters, local aliases and the documented ineligible bodies stay opaque.
 The relative-map study exercises this rule with named source/target objects and
 explicit commutativity evidence, checked against independent native targets.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Immediately applied functions in indices
+
+[Applied-function indices](applied-function-indices.md) permits checked immediate
+lambda contraction during dependent index construction when body and argument
+are binder-free. Original call arguments remain in emitted Lean; index annotations
+use the prescribed contraction. This resolves generic congrArg on record-field
+functions without admitting bare lambdas, quantifiers or general local-alias conversion.
+There is no grammar change or implicit proof search.
+:::

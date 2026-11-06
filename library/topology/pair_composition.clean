@@ -1,0 +1,41 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "pairs.clean"
+Import "../logic/subset_evidence.clean"
+
+Define pair ambient equality(X,P,Q,h):
+  Let X: TopologicalSpace
+  Let P,Q: TopologicalPair(X)
+  Let h: Evidence((P = Q))
+  Returns: Evidence((P.ambient = Q.ambient))
+  Equals: equality congruence(function(T: TopologicalPair(X),T.ambient),P,Q,h)
+
+Define pair relative equality(X,P,Q,h):
+  Let X: TopologicalSpace
+  Let P,Q: TopologicalPair(X)
+  Let h: Evidence((P = Q))
+  Returns: Evidence((P.relative = Q.relative))
+  Equals: equality congruence(function(T: TopologicalPair(X),T.relative),P,Q,h)
+
+Define identity pair inclusion(X,P):
+  Let X: TopologicalSpace
+  Let P: TopologicalPair(X)
+  Returns: PairInclusion(X)
+  Equals: pair inclusion(X,P,P,subset reflexivity(P.ambient),subset reflexivity(P.relative))
+  Render latex: \operatorname{{id}}_{{{P}}}
+
+Define compose pair inclusions(X,Q,R,middle):
+  Let X: TopologicalSpace
+  Let Q,R: PairInclusion(X)
+  Let middle: Evidence((Q.target = R.source))
+  Returns: PairInclusion(X)
+  Equals:
+    pair inclusion(X,Q.source,R.target,
+      subset transitivity(Q.source.ambient,R.source.ambient,R.target.ambient,
+        replace subset target(Q.source.ambient,Q.target.ambient,R.source.ambient,Q.ambient,
+          pair ambient equality(X,Q.target,R.source,middle)),R.ambient),
+      subset transitivity(Q.source.relative,R.source.relative,R.target.relative,
+        replace subset target(Q.source.relative,Q.target.relative,R.source.relative,Q.relative,
+          pair relative equality(X,Q.target,R.source,middle)),R.relative))
+  Render latex: \left({R}\circ {Q}\right)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
