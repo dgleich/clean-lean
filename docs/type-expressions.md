@@ -104,12 +104,15 @@ definitional equality: the independently authored oracle must select that x.
 The isolated generated parser passes strict LALR and lexer checks. Eight focused
 prototype tests cover the independent tree, universe checks, constructor typing,
 inferred compound expansion, nested dimension substitution, dependent comparison
-keys and label serialization. A broad focused run passes 67 of 68 existing tests;
-the remaining test asserts the intentionally superseded opacity of a zigzag shape
-projection. It must be replaced by a positive independent comparison test.
+keys and label serialization. The focused regression run passes all 68 tests after
+replacing the old zigzag-opacity assertion with an independent expected target
+function. The authored projection and its ordinary comparison form are still
+checked separately; whole-index comparison now materializes that function.
 
-Native exact-target and proof experiments are being checked separately. Integration
-requires preserving those as repository acceptance artifacts, completing this audit,
+The native prototype passes five exact targets and two proofs: explicit packing,
+inferred packing, a concrete Real constructor, its reduced field equation and an
+inferred dependent-carrier equality. These are isolated experiments, not yet
+repository acceptance artifacts. Integration requires preserving them, completing this audit,
 updating the normative references and acceptance catalog, running the full suite
 and corpus, inspecting the rendered specimens, and refreshing the review browser.
 No integration or general conformance claim is made by this draft.
