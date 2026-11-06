@@ -398,3 +398,17 @@ diagrams and interval-basis data, with a constructed constant-zigzag example.
 Inferred type-parameter helpers avoid new type-as-value syntax. General pyramid
 basis extension, higher-order conversion and universe polymorphism remain pending.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Diagram maps use existing syntax
+
+The [diagram-map study](../studies/diagram-maps/README.md) authors a dependent
+vertex-map family, its edge-square commutation condition, and certified identity
+and composition records. No grammar, inference or emission rule changed. The
+existing constructor/projection reduction rule selects component families from
+explicit certified producers; exact native oracles preserve that target choice.
+Evidence is explicit, with universal identity/composition conditions proved in
+Lean. Fifteen exact targets and six proofs cover this interface; it is not an
+automatically generated category instance or a pyramid construction.
+:::

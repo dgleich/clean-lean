@@ -353,3 +353,15 @@ checks construct a constant-zigzag basis from a supplied module basis. The pyram
 diamonds, compatible restrictions/extensions and their existence proofs are still
 pending; this example does not establish the paper's Theorem 1.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Compatible maps of diagrams
+
+[Diagram maps](../diagram-maps/README.md) now records actual vertex maps and
+commuting edge squares in Clean. Identity and composite component families and
+certified records are authored, and native proofs establish their commutation
+laws and map extensionality. The shape is fixed explicitly. Pullback along a
+change of shape, pyramid restrictions and interval-basis compatibility under
+such restrictions remain to be constructed.
+:::

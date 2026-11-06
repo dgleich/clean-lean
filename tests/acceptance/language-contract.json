@@ -1223,6 +1223,67 @@
         "tests/test_dependent_functions.py::DependentAssumptionNames"
       ],
       "obligation": "Names follow normalized source spelling, not alpha-equivalence of dependent types. Reject repeated and explicitly encoded name collisions before Lean emission."
+    },
+    {
+      "id": "diagram_maps",
+      "status": "implemented-slice",
+      "specification": "studies/diagram-maps/README.md",
+      "source_fragment": "diagram composite components(K,field,V,E,Q,X,Y,Z,f,g)",
+      "expected_tree": [
+        "Call",
+        "diagram composite components",
+        [
+          [
+            "Local",
+            "K"
+          ],
+          [
+            "Local",
+            "field"
+          ],
+          [
+            "Local",
+            "V"
+          ],
+          [
+            "Local",
+            "E"
+          ],
+          [
+            "Local",
+            "Q"
+          ],
+          [
+            "Local",
+            "X"
+          ],
+          [
+            "Local",
+            "Y"
+          ],
+          [
+            "Local",
+            "Z"
+          ],
+          [
+            "Local",
+            "f"
+          ],
+          [
+            "Local",
+            "g"
+          ]
+        ]
+      ],
+      "checks": [
+        "tests/test_diagram_maps.py",
+        "studies/diagram-maps/verify.py"
+      ],
+      "pending": [
+        "Maps changing diagram shape",
+        "Pyramid and basis restrictions",
+        "Automatic proof synthesis is not part of the interface"
+      ]
     }
   ]
 }

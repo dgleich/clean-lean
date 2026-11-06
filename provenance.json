@@ -3758,6 +3758,78 @@
     "studies/zigzag-bases/Statements.pdf": {
       "origin": "derived-from-authored-sources; cited data retains source origin",
       "mode": "sidecar"
+    },
+    "library/algebra/diagram_maps.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "tests/test_diagram_maps.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/diagram-maps/Statements.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/diagram-maps/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/diagram-maps/Verified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/diagram-maps/latex.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/diagram-maps/Statements.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/diagram-maps/Generated.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/diagram-maps/verify.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/diagram-maps/Statements.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
     }
   }
 }

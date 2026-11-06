@@ -1,0 +1,72 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "module_diagrams.clean"
+Import "../logic/evidence.clean"
+
+Condition diagram maps commute(K,field,V,E,Q,X,Y,component):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let X,Y: ModuleDiagram(K,field,V,E,Q)
+  Let component: Function(v: V,ModuleMap(K,field,(X.object(v)),(Y.object(v))))
+  Holds when: for every (e: E,
+    module composition(field,X.object(Q.source(e)),X.object(Q.target(e)),Y.object(Q.target(e)),
+      X.arrow(e),component(Q.target(e))) =
+    module composition(field,X.object(Q.source(e)),Y.object(Q.source(e)),Y.object(Q.target(e)),
+      component(Q.source(e)),Y.arrow(e)))
+  Render: {component} commutes with every edge from {X} to {Y}
+
+Structure ModuleDiagramMap(K: Type,field: FieldStructure(K),V: Type,E: Type,Q: DiagramShape(V,E),X: ModuleDiagram(K,field,V,E,Q),Y: ModuleDiagram(K,field,V,E,Q)):
+  Let component: Function(v: V,ModuleMap(K,field,(X.object(v)),(Y.object(v))))
+  Let commutes: Evidence((diagram maps commute(K,field,V,E,Q,X,Y,component)))
+  Constructor: diagram map
+  Render latex: \operatorname{{Hom}}({X},{Y})
+  Describe: a map of module diagrams from ${X}$ to ${Y}$
+
+Define diagram identity components(K,field,V,E,Q,X):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let X: ModuleDiagram(K,field,V,E,Q)
+  Returns: Function(v: V,ModuleMap(K,field,(X.object(v)),(X.object(v))))
+  Equals: function(v: V,module identity(field,X.object(v)))
+  Render latex: \operatorname{{id}}({X})
+
+Define diagram composite components(K,field,V,E,Q,X,Y,Z,f,g):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let X,Y,Z: ModuleDiagram(K,field,V,E,Q)
+  Let f: ModuleDiagramMap(K,field,V,E,Q,X,Y)
+  Let g: ModuleDiagramMap(K,field,V,E,Q,Y,Z)
+  Returns: Function(v: V,ModuleMap(K,field,(X.object(v)),(Z.object(v))))
+  Equals: function(v: V,module composition(field,X.object(v),Y.object(v),Z.object(v),f.component(v),g.component(v)))
+  Render latex: ({g} \circ {f})
+
+Define certified diagram identity(K,field,V,E,Q,X,h):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let X: ModuleDiagram(K,field,V,E,Q)
+  Let h: Evidence((diagram maps commute(K,field,V,E,Q,X,X,diagram identity components(K,field,V,E,Q,X))))
+  Returns: ModuleDiagramMap(K,field,V,E,Q,X,X)
+  Equals: diagram map(K,field,V,E,Q,X,X,diagram identity components(K,field,V,E,Q,X),h)
+  Render latex: \operatorname{{id}}({X})
+
+Define certified diagram composition(K,field,V,E,Q,X,Y,Z,f,g,h):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let X,Y,Z: ModuleDiagram(K,field,V,E,Q)
+  Let f: ModuleDiagramMap(K,field,V,E,Q,X,Y)
+  Let g: ModuleDiagramMap(K,field,V,E,Q,Y,Z)
+  Let h: Evidence((diagram maps commute(K,field,V,E,Q,X,Z,diagram composite components(K,field,V,E,Q,X,Y,Z,f,g))))
+  Returns: ModuleDiagramMap(K,field,V,E,Q,X,Z)
+  Equals: diagram map(K,field,V,E,Q,X,Z,diagram composite components(K,field,V,E,Q,X,Y,Z,f,g),h)
+  Render latex: ({g} \circ {f})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

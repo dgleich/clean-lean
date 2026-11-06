@@ -1,0 +1,71 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../../library/algebra/diagram_maps.clean"
+Import "../topology/Common.clean"
+
+Result identity components commute:
+  Attribution: topology; diagram map laws; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let X: ModuleDiagram(K,field,V,E,Q)
+  Conclude: diagram maps commute(K,field,V,E,Q,X,X,diagram identity components(K,field,V,E,Q,X))
+
+Result composite components commute:
+  Attribution: topology; diagram map laws; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let X,Y,Z: ModuleDiagram(K,field,V,E,Q)
+  Let f: ModuleDiagramMap(K,field,V,E,Q,X,Y)
+  Let g: ModuleDiagramMap(K,field,V,E,Q,Y,Z)
+  Conclude: diagram maps commute(K,field,V,E,Q,X,Z,diagram composite components(K,field,V,E,Q,X,Y,Z,f,g))
+
+Result identity diagram component:
+  Attribution: topology; diagram map laws; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let X: ModuleDiagram(K,field,V,E,Q)
+  Let h: Evidence((diagram maps commute(K,field,V,E,Q,X,X,diagram identity components(K,field,V,E,Q,X))))
+  Let v: V
+  Conclude: certified diagram identity(K,field,V,E,Q,X,h).component(v) = module identity(field,X.object(v))
+
+Result composite diagram component:
+  Attribution: topology; diagram map laws; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let X,Y,Z: ModuleDiagram(K,field,V,E,Q)
+  Let f: ModuleDiagramMap(K,field,V,E,Q,X,Y)
+  Let g: ModuleDiagramMap(K,field,V,E,Q,Y,Z)
+  Let h: Evidence((diagram maps commute(K,field,V,E,Q,X,Z,diagram composite components(K,field,V,E,Q,X,Y,Z,f,g))))
+  Let v: V
+  Conclude: certified diagram composition(K,field,V,E,Q,X,Y,Z,f,g,h).component(v) =
+    module composition(field,X.object(v),Y.object(v),Z.object(v),f.component(v),g.component(v))
+
+Result diagram map extensionality:
+  Attribution: topology; diagram map laws; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let X,Y: ModuleDiagram(K,field,V,E,Q)
+  Let f,g: ModuleDiagramMap(K,field,V,E,Q,X,Y)
+  Assume components: for every (v: V,f.component(v) = g.component(v))
+  Conclude: f = g
+
+Result identity diagram exists:
+  Attribution: topology; diagram map laws; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let V,E: Type
+  Let Q: DiagramShape(V,E)
+  Let X: ModuleDiagram(K,field,V,E,Q)
+  Conclude: there exists (f: ModuleDiagramMap(K,field,V,E,Q,X,X),
+    for every (v: V,f.component(v) = module identity(field,X.object(v))))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -858,6 +858,15 @@ constant zigzag(K,field,n,d,M)</code></pre>
 <p>These are Clean-authored constructions over explicit Mathlib ModuleCat and Module.Basis wrappers. The first helper infers carrier types from its typed arguments. A zigzag has n edges and n+1 vertices; its interval basis stores actual vertex bases and compatibility evidence. An opaque producer containing lambdas is not exposed as a dependent index merely to normalize a projection.</p>
 <p>See the <a href="constant-dependent-arrows.md">normative rules</a> and <a href="../studies/zigzag-bases/README.md">checked study</a>. The verifier compares 46 native targets and checks six proofs. General pyramid basis extension is still pending.</p>
 </section>
+<section class="mapping" id="diagram-maps" data-status="implemented">
+<h2>Maps of module diagrams</h2>
+<p><strong>Implemented library interface; no new syntax.</strong> A diagram map stores a dependent component family and evidence that every edge square commutes.</p>
+<pre><code>Let component: Function(v: V,ModuleMap(K,field,(X.object(v)),(Y.object(v))))
+Let commutes: Evidence((diagram maps commute(K,field,V,E,Q,X,Y,component)))</code></pre>
+<p>Schematic Lean fields are <code>component : (v : V) → X.object v ⟶ Y.object v</code> and <code>commutes : ∀ e, X.arrow e ≫ component (Q.target e) = component (Q.source e) ≫ Y.arrow e</code>. The native targets retain the explicit field and module-category instances.</p>
+<p>Identity and composite component families and their certified records are authored in Clean. Evidence remains an explicit argument; native proofs establish both conditions universally. The interface uses the existing ordered dependent fields, named conditions and producer-projection rule. It adds no proof synthesis or automatic category instance.</p>
+<p><a href="../studies/diagram-maps/README.md">Study</a> · <a href="../library/algebra/diagram_maps.clean">Definitions</a> · <a href="../studies/diagram-maps/Statements.clean">Six statements</a>. Fifteen independent exact targets and six proofs check the interface. Pyramid and basis-restriction constructions remain pending.</p>
+</section>
 </main>
 <script>
 (() => {

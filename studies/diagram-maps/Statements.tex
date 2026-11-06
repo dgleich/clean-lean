@@ -1,0 +1,66 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{identity components commute}\cleanattribution{[Topology foundations, diagram map laws]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $V$ and $E$ be types.
+Let $Q$ be an element of $Q$.
+Let $X$ be a module diagram on $Q$.
+Then \[\operatorname{id}(X)\text{ commutes with every edge from }X\text{ to }X.\]
+\end{cleanresult}
+
+\begin{cleanresult}{composite components commute}\cleanattribution{[Topology foundations, diagram map laws]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $V$ and $E$ be types.
+Let $Q$ be an element of $Q$.
+Let $X$, $Y$ and $Z$ be elements of $\operatorname{Rep}_{K}(Q)$.
+Let $f$ be a map of module diagrams from $X$ to $Y$.
+Let $g$ be a map of module diagrams from $Y$ to $Z$.
+Then \[(g \circ f)\text{ commutes with every edge from }X\text{ to }Z.\]
+\end{cleanresult}
+
+\begin{cleanresult}{identity diagram component}\cleanattribution{[Topology foundations, diagram map laws]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $V$ and $E$ be types.
+Let $Q$ be an element of $Q$.
+Let $X$ be a module diagram on $Q$.
+Let $h$ be evidence that $\operatorname{id}(X)\text{ commutes with every edge from }X\text{ to }X$.
+Let $v$ be an element of $V$.
+Then \[\operatorname{id}(X).\mathrm{component}(v) = \operatorname{id}_{X.\mathrm{object}(v)}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{composite diagram component}\cleanattribution{[Topology foundations, diagram map laws]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $V$ and $E$ be types.
+Let $Q$ be an element of $Q$.
+Let $X$, $Y$ and $Z$ be elements of $\operatorname{Rep}_{K}(Q)$.
+Let $f$ be a map of module diagrams from $X$ to $Y$.
+Let $g$ be a map of module diagrams from $Y$ to $Z$.
+Let $h$ be evidence that $(g \circ f)\text{ commutes with every edge from }X\text{ to }Z$.
+Let $v$ be an element of $V$.
+Then \[(g \circ f).\mathrm{component}(v) = g.\mathrm{component}(v) \circ f.\mathrm{component}(v).\]
+\end{cleanresult}
+
+\begin{cleanresult}{diagram map extensionality}\cleanattribution{[Topology foundations, diagram map laws]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $V$ and $E$ be types.
+Let $Q$ be an element of $Q$.
+Let $X$ and $Y$ be elements of $\operatorname{Rep}_{K}(Q)$.
+Let $f$ and $g$ be elements of $\operatorname{Hom}(X,Y)$.
+Assume $\left(\text{for every }v : V,\; f.\mathrm{component}(v) = g.\mathrm{component}(v)\right)$ (\texttt{components}).
+Then \[f = g.\]
+\end{cleanresult}
+
+\begin{cleanresult}{identity diagram exists}\cleanattribution{[Topology foundations, diagram map laws]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $V$ and $E$ be types.
+Let $Q$ be an element of $Q$.
+Let $X$ be a module diagram on $Q$.
+Then \[\left(\text{there exists }f : \operatorname{Hom}(X,X),\; \left(\text{for every }v : V,\; f.\mathrm{component}(v) = \operatorname{id}_{X.\mathrm{object}(v)}\right)\right).\]
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
