@@ -34,6 +34,8 @@ def occurs(typ,name):
 
 
 def fresh_bound(env,locals):
+    pool=getattr(env,'_comparison_pool',None)
+    if pool is not None:return pool.fresh(locals)
     # A compiler binding identity cannot coincide with an opaque declaration's
     # constants, labels, local terms or already constructed type binders.
     occupied=set(locals)
@@ -61,6 +63,8 @@ def fresh_source(preferred,env,locals,bindings):
 
 
 def abstract_template(term,bound):
+    from .binder_keys import ScopedKey
+    if isinstance(term,ScopedKey):return term.abstract(bound)
     # This is the compiler's selected index template, not pretty-printed native
     # Lean. Fresh allocation makes these tokens unforgeable binding references
     # within the stored scope; punctuation and every free identifier are retained.

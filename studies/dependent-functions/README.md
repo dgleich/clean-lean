@@ -161,3 +161,14 @@ and resolved authored family-alias comparison in dependent indices. Native check
 cover ten exact targets and five proofs; relative functor laws on pairs and the
 research-paper theorems remain separate obligations.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Saved family indices
+
+[ScopedFamilies.clean](ScopedFamilies.clean) stores graded-map types before adding
+locals whose names resemble compiler identities, then reuses the maps through
+new local names for the same family. Two exact native propositions and two proofs
+check these examples. [Scoped family keys](../../docs/scoped-family-keys.md) closes
+the previously documented false rejection without changing emitted Lean lets.
+:::

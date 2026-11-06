@@ -1,0 +1,32 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../topology/Common.clean"
+Import "../../library/topology/graded_relative_homology.clean"
+
+-- Deliberately use compiler-like local names after the map type has been stored.
+Result saved graded map:
+  Attribution: topology; graded map right identity across local scopes; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C: ModuleChainComplex(K,field)
+  Let M = graded chain homology(K,field,C)
+  Let f: GradedMap(K,field,M,M)
+  Let clean_bound_0,clean_comparison_identity_0: Natural
+  Let N = graded chain homology(K,field,C)
+  Let g = graded composition(field,N,N,N,f,graded identity(field,N))
+  Conclude: g = f
+
+Result saved relative graded map:
+  Attribution: topology; relative graded map right identity across local scopes; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let P: TopologicalPair(X)
+  Let M = graded relative homology(K,field,H,X,P)
+  Let f: GradedMap(K,field,M,M)
+  Let clean_bound_0,clean_pi_bound_0,clean_comparison_identity_0: Natural
+  Let N = graded relative homology(K,field,H,X,P)
+  Let g = graded composition(field,N,N,N,f,graded identity(field,N))
+  Conclude: g = f
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

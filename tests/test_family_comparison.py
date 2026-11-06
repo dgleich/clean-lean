@@ -25,7 +25,7 @@ class FamilyComparison(unittest.TestCase):
         a,b,c=[self.index(s) for s in ['first(n)','second(n)','renamed(n)']]
         self.assertEqual(a,b);self.assertEqual(b,c)
         self.assertEqual(hash(a),hash(c))
-        self.assertIn('fun (clean_bound_0',a.comparison_key())
+        self.assertIn(('owned',0),a.comparison_key().parts)
         self.assertIn('cleanDefine_renamed',c.lean)
     def test_bound_free_and_argument_differences(self):
         self.assertNotEqual(self.index('first(n)'),self.index('different(n)'))
@@ -33,7 +33,7 @@ class FamilyComparison(unittest.TestCase):
     def test_caller_compiler_names_remain_free(self):
         self.local['clean_bound_0']=Expr('clean_bound_0','a',Type('Natural'))
         a=self.index('first(clean_bound_0)')
-        self.assertIn('fun (clean_bound_1',a.comparison_key())
+        self.assertIn(('free','clean_bound_0'),a.comparison_key().parts)
         self.assertEqual(a,self.index('second(clean_bound_0)'))
     def test_direct_binder_index_still_rejected(self):
         with self.assertRaisesRegex(CleanError,'do not introduce binders'):

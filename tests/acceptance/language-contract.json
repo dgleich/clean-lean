@@ -1130,8 +1130,40 @@
       "pending": [
         "Normalization inside binder bodies",
         "Family congruence through opaque outer calls",
-        "General higher-order conversion and resolved module identities",
-        "Scope-independent alpha keys: a later caller name can change fresh compiler binder allocation and cause a false negative against a stored family key"
+        "General higher-order conversion and resolved module identities"
+      ]
+    },
+    {
+      "id": "scoped_family_keys",
+      "status": "implemented-slice",
+      "specification": "docs/scoped-family-keys.md",
+      "source_fragment": "graded chain homology(K,field,C)",
+      "expected_tree": [
+        "Call",
+        "graded chain homology",
+        [
+          [
+            "Local",
+            "K"
+          ],
+          [
+            "Local",
+            "field"
+          ],
+          [
+            "Local",
+            "C"
+          ]
+        ]
+      ],
+      "checks": [
+        "tests/test_scoped_family_keys.py",
+        "tests/test_family_comparison.py",
+        "studies/dependent-functions/verify_scoped_families.py"
+      ],
+      "pending": [
+        "General higher-order and binder-body conversion",
+        "Resolved identities for all module bindings"
       ]
     }
   ]

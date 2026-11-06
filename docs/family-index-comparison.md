@@ -82,11 +82,9 @@ Clean definitions; the only new native binding is the generic chain identity map
 
 ## Confirmed remaining scope boundary
 
-A separate negative probe stores a key for an authored family, then adds a caller
-local named `clean_bound_0` and computes the same family's key again. The two keys
-differ because the ordinary compiler allocator now selects a different fresh bound
-identity. This is a conservative false negative across saved scopes, not a different
-accepted Lean target. Same-scope alias/alpha comparisons above pass. Fully scoped
-alpha keys independent of later freshness choices remain required for broader
-local-family conversion; the current template-based rule does not claim them.
+The original negative probe stored a family key, added a caller local named
+`clean_bound_0`, and obtained a different key for the same family. This is now a
+regression covered by [scoped family keys](scoped-family-keys.md), which supersedes
+the plain-template representation for residual binder-bearing indices. Existing
+bounded-normalization and callable reconstruction limits above remain unchanged.
 :::

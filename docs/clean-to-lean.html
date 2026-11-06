@@ -819,9 +819,28 @@ of degree-indexed module maps. Canonical checks preserve the named wrappers in t
 <a href="../studies/dependent-functions/RelativeGradedVerified.lean">Exact targets and proofs</a> ·
 <a href="../studies/dependent-functions/relative-graded.md">Scope and limitations</a>.</p>
 <p>Ten target comparisons and five proofs cover chain-level functor laws and selected-degree
-relative components. Binder-body normalization, scope-independent keys across later caller
-bindings, general higher-order conversion, relative functor laws on pairs, and research-paper
-proofs remain unfinished.</p>
+relative components. The later <a href="#scoped-family-keys">scoped key rule</a> stabilizes
+keys across later caller bindings. Binder-body normalization, general higher-order conversion,
+relative functor laws on pairs, and research-paper proofs remain unfinished.</p>
+</section>
+<section class="mapping" id="scoped-family-keys" data-status="implemented">
+<h2>Saved family indices across local scopes</h2>
+<p><strong>Implemented slice.</strong> A typed local can keep using its authored family after
+unrelated locals are introduced. Comparison now distinguishes owned compiler identities from
+free identifiers; its immutable keys ignore fresh compiler spellings. Ordinary Lean emission
+and explicit local lets are unchanged.</p>
+<pre><code>Let M = graded chain homology(K,field,C)
+Let f: GradedMap(K,field,M,M)
+Let clean_bound_0: Natural
+Let N = graded chain homology(K,field,C)
+Let g = graded composition(field,N,N,N,f,graded identity(field,N))</code></pre>
+<p>The Lean target keeps M and N as local definitions. Their family indices agree by the
+specified authored expansion. The deliberately compiler-like user name stays a free local;
+it cannot be confused with a binder owned by comparison.</p>
+<p><a href="scoped-family-keys.md">Allocation and key contract</a> ·
+<a href="../studies/dependent-functions/ScopedFamilies.clean">Clean specimen</a> ·
+<a href="../studies/dependent-functions/ScopedFamiliesVerified.lean">Two exact targets and proofs</a>.</p>
+<p>General higher-order conversion and resolved identities for all module bindings remain open.</p>
 </section>
 </main>
 <script>

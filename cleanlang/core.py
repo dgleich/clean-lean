@@ -105,7 +105,7 @@ class ValueIndex:
     name: str
     lean: str
     tex: str = field(compare=False)
-    comparison: str | None = field(default=None, kw_only=True)
+    comparison: object = field(default=None, kw_only=True)
     def __str__(self): return self.name
     def comparison_key(self):return self.lean if self.comparison is None else self.comparison
     def __eq__(self,other):
@@ -476,6 +476,8 @@ class Expressions:
             for value in self.env.values():occupied.update(re.findall(ID,value.lean))
             while f'clean_bound_{self.bound_counter}' in occupied:self.bound_counter+=1
             bound=f'clean_bound_{self.bound_counter}';self.bound_counter+=1
+            pool=getattr(self.reg,'_comparison_pool',None)
+            if pool is not None:bound=pool.fresh(self.env)
             previous=self.env;self.env={**previous,name:Expr(bound,texid(name),domain)}
             try:body=self._elaborate(tree[3])
             finally:self.env=previous

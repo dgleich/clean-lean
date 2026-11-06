@@ -680,3 +680,16 @@ higher-order conversion remain outside this rule. The graded relative-homology
 study checks ten exact targets and five proofs; its constructions are authored in
 Clean over generic chain-homology adapters.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Stable saved family keys
+
+[Scoped family keys](scoped-family-keys.md) replaces residual binder-template
+comparison with immutable owned/free identity tokens. A private, globally fresh
+comparison pool covers expression and dependent type binders; nested comparisons
+preserve external binding references and restore allocation context on failure.
+Unrelated later locals no longer invalidate saved family indices. Emitted Lean and
+existing conversion boundaries remain unchanged. Two exact saved-map propositions
+and two proofs cover graded chain and relative homology.
+:::
