@@ -82,9 +82,9 @@ targets and ten proofs. All 92 corpus proof fixtures pass. The strict generated
 parser matches its grammar. The two-page landscape TeX specimen compiles twice
 without overfull boxes or unresolved references, and both pages were inspected.
 
-The first refreshed browser translated 98 files without errors and passed search,
-navigation, notes/export, responsive-layout and no-JavaScript checks. Four embedded
-sources preceded final provenance comment insertion; a comparison confirmed that
-only comments/blank lines differ. A fresh build is running to obtain exact current
-source hashes. Do not treat that final snapshot check as complete yet.
+The final combined browser snapshot translates 100 files without errors. Its
+complete file inventory and every embedded source hash match the committed Clean
+files. Search, navigation, notes/export, responsive layout and no-JavaScript
+fallback checks pass. The earlier snapshot's comment-only discrepancies are
+resolved; the final build also includes the diagram-map study.
 :::

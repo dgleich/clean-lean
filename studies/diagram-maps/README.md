@@ -64,5 +64,7 @@ constant-arrow and Condition behavior; all seven diagram-map tests pass again
 after the display-template correction. The 92 corpus proof fixtures pass. The
 PDF compiles twice without overfull boxes and was inspected. The compiler is
 unchanged from the preceding 529-test full regression run. The combined review
-browser snapshot is being rebuilt; its final freshness check remains pending.
+browser snapshot covers 100 files without translation errors. All source hashes
+and the file inventory match; navigation, search, notes/export, responsive layout
+and no-JavaScript checks pass.
 :::
