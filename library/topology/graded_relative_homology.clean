@@ -1,0 +1,30 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "relative_maps.clean"
+Import "../algebra/graded_chain_homology.clean"
+
+Define graded relative homology(K,field,H,X,P):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let P: TopologicalPair(X)
+  Returns: GradedModule(K,field)
+  Equals: graded chain homology(K,field,relative chains(field,H,X,P))
+  Render latex: H_*({P};{H})
+
+Define graded relative homology map(K,field,H,X,Q,h):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Let h: Evidence((pair chain commutes(field,H,X,Q)))
+  Returns: GradedMap(K,field,
+    (graded relative homology(K,field,H,X,Q.source)),
+    (graded relative homology(K,field,H,X,Q.target)))
+  Equals:
+    graded chain homology map(K,field,relative chains(field,H,X,Q.source),
+      relative chains(field,H,X,Q.target),relative chain map(field,H,X,Q,h))
+  Render latex: H_*({Q};{H})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

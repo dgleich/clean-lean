@@ -131,3 +131,10 @@ uses a finite one-million-heartbeat budget after the default budget exhausted du
 composition; that earlier attempt was incomplete, not a proof. These are functor
 laws for existing Mathlib singular homology, not proofs of the research-paper targets.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+The later [family-index comparison rule](family-index-comparison.md) supersedes
+only the blanket opacity of residual binders at the final index-key boundary.
+Internal callable reconstruction and local caching retain the boundaries above.
+:::

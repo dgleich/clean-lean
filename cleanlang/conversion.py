@@ -12,9 +12,25 @@ def shadowed_globals(environment,locals):
 def comparison_normal_form(expression,environment,locals):
     from .beta_indices import has_binder
     result=_normal_form(expression,environment,locals)
-    # Only fully eliminated binders enter the existing string-key comparison.
-    # Unapplied function families need a separate alpha-canonical key contract.
+    # Call reconstruction must not turn hidden binders into authored actuals.
+    # Final index keys use the separate whole-tree materialization below.
     return expression if has_binder(result.tree) else result
+
+
+def index_comparison(expression,environment,locals):
+    """Materialize one checked normal tree for comparison, including binders.
+
+    Whole-tree elaboration assigns fresh compiler binder identities in one scope.
+    The resulting template is never fed back as an authored actual argument.
+    """
+    result=_normal_form(expression,environment,locals)
+    from .beta_indices import has_binder
+    if has_binder(result.tree):
+        result=Expressions(environment,locals).elaborate(result.tree)
+        if result.type!=expression.type:
+            from .core import CleanError
+            raise CleanError('Index comparison requires an unchanged determined type')
+    return result.lean
 
 
 def _normal_form(expression,environment,locals):

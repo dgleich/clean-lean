@@ -1090,6 +1090,48 @@
         "General universe-polymorphic source parameters",
         "Type-valued dependent binders and carrier fields"
       ]
+    },
+    {
+      "id": "authored_family_index_comparison",
+      "status": "implemented-slice",
+      "specification": "docs/family-index-comparison.md",
+      "source_fragment": "graded relative homology(K,field,H,X,P)",
+      "expected_tree": [
+        "Call",
+        "graded relative homology",
+        [
+          [
+            "Local",
+            "K"
+          ],
+          [
+            "Local",
+            "field"
+          ],
+          [
+            "Local",
+            "H"
+          ],
+          [
+            "Local",
+            "X"
+          ],
+          [
+            "Local",
+            "P"
+          ]
+        ]
+      ],
+      "checks": [
+        "tests/test_family_comparison.py",
+        "tests/test_hygienic_conversion.py",
+        "studies/dependent-functions/verify_relative_graded.py"
+      ],
+      "pending": [
+        "Normalization inside binder bodies",
+        "Family congruence through opaque outer calls",
+        "General higher-order conversion and resolved module identities"
+      ]
     }
   ]
 }

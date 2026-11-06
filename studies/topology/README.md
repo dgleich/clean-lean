@@ -357,3 +357,14 @@ proposition comparisons and two proofs check the specimen; [PDF](LocalNames.pdf)
 Binder-bearing local definitions and the previously listed research obligations
 remain open.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## All-degree relative interface
+
+[Graded relative homology](../dependent-functions/relative-graded.md) now packages
+relative homology and its induced map in all natural degrees, using Clean-authored
+definitions over relative chains. The selected-degree components agree with the
+existing interfaces. Ten exact targets and five proofs cover the definitions and
+graded chain-homology laws; pair-functor laws and exactness/excision remain open.
+:::

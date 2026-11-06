@@ -24,8 +24,8 @@ def index_value(expression,environment=None,locals=None):
     check(tree)
     comparison=None
     if environment is not None:
-        from .conversion import comparison_normal_form
-        comparison=comparison_normal_form(expression,environment,locals or {}).lean
+        from .conversion import index_comparison
+        comparison=index_comparison(expression,environment,locals or {})
     ref=reference_name(tree)
     if ref is not None:return ValueIndex(ref,expression.lean,expression.tex,comparison=comparison)
     return ComputedIndex('('+expression_spelling(tree)+')',expression.lean,expression.tex,

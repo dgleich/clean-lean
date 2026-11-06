@@ -667,3 +667,16 @@ counterexample is rejected by Clean. Fourteen exact native targets, four sort ch
 and three proofs cover supported higher-universe values, arrows and proof fields.
 General universe polymorphism and Type-valued binders remain separate work.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Authored families in dependent indices
+
+[Family index comparison](family-index-comparison.md) now materializes a residual
+binder-bearing normal tree in one checked scope for its comparison key. Authored
+family aliases can agree without changing emitted names or introducing direct
+binder syntax in indices. Native bodies, binder-body normalization and general
+higher-order conversion remain outside this rule. The graded relative-homology
+study checks ten exact targets and five proofs; its constructions are authored in
+Clean over generic chain-homology adapters.
+:::

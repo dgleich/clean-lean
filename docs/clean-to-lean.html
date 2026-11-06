@@ -803,6 +803,25 @@ certificate existence/independence and intersection membership are proved here.<
 <p>See <a href="../studies/topology/extreme-images.md">the study and homology-model audit</a>
 and <a href="../studies/topology/TwoImageCandidate.clean">the complete candidate</a>.</p>
 </section>
+<section class="mapping" id="family-index-comparison" data-status="implemented">
+<h2>Authored family indices and graded relative homology</h2>
+<p><strong>Implemented slice.</strong> Named authored families can now agree as dependent indices
+when their checked expansion contains functions. The comparison key elaborates the complete
+normal tree in one scope, assigning fresh bound identities. Emitted calls and signatures retain
+their authored names; directly writing binders in computed indices is still rejected.</p>
+<pre><code>Equals: graded chain homology(K,field,relative chains(field,H,X,P))</code></pre>
+<p>This defines a graded relative object in Clean. Its induced map calls graded chain homology
+on the relative chain map, with one explicit chain-square certificate for all degrees.
+The Lean equivalent is a record of degree-indexed module objects and a dependent function
+of degree-indexed module maps. Canonical checks preserve the named wrappers in the map's type.</p>
+<p><a href="family-index-comparison.md">Comparison contract</a> ·
+<a href="../studies/dependent-functions/RelativeGraded.clean">Clean specimen</a> ·
+<a href="../studies/dependent-functions/RelativeGradedVerified.lean">Exact targets and proofs</a> ·
+<a href="../studies/dependent-functions/relative-graded.md">Scope and limitations</a>.</p>
+<p>Ten target comparisons and five proofs cover chain-level functor laws and selected-degree
+relative components. Binder-body normalization, general higher-order conversion, relative
+functor laws on pairs, and research-paper proofs remain unfinished.</p>
+</section>
 </main>
 <script>
 (() => {

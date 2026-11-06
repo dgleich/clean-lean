@@ -1,0 +1,48 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{graded chain component}\cleanattribution{[Topology foundations, graded chain homology component]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $C$ and $D$ be elements of $\operatorname{Ch}_{K}$.
+Let $f$ be a chain map from $C$ to $D$.
+Let $p$ be a natural number.
+Then \[H_*(f).\mathrm{component}(p) = H_{p}(f).\]
+\end{cleanresult}
+
+\begin{cleanresult}{graded chain identity}\cleanattribution{[Topology foundations, homology functor identity]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $C$ be a chain complex of modules over $K$ in natural degrees.
+Then \[H_*(\operatorname{id}_{C}) = \operatorname{id}_{H_*(C)}.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{graded chain composition}\cleanattribution{[Topology foundations, homology functor composition]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $C$, $D$ and $E$ be elements of $\operatorname{Ch}_{K}$.
+Let $f$ be a chain map from $C$ to $D$.
+Let $g$ be a chain map from $D$ to $E$.
+Then \[H_*(g\circ f) = (H_*(g) \circ H_*(f)).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{graded relative component}\cleanattribution{[Topology foundations, relative homology in the selected degree]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $X$ be a topological space.
+Let $P$ be two nested subsets of $X$ with inclusion evidence.
+Then \[H_*(P;H).\mathrm{component}(H.\mathrm{degree}) = H(P).\]
+\end{cleanresult}
+
+\begin{cleanresult}{graded relative map component}\cleanattribution{[Topology foundations, relative homology map in the selected degree]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $X$ be a topological space.
+Let $Q$ be a certified inclusion between pairs in $X$.
+Assume $\text{the chain square of }Q\text{ commutes}$ (\texttt{h}).
+Then \[H_*(Q;H).\mathrm{component}(H.\mathrm{degree}) = H(Q).\]
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

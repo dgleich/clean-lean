@@ -1,0 +1,60 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../topology/Common.clean"
+Import "../../library/topology/graded_relative_homology.clean"
+
+Result graded chain component:
+  Attribution: topology; graded chain homology component; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Let p: Natural
+  Conclude:
+    graded chain homology map(K,field,C,D,f).component(p) =
+      induced chain homology map(field,C,D,f,p)
+
+Result graded chain identity:
+  Attribution: topology; homology functor identity; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C: ModuleChainComplex(K,field)
+  Conclude:
+    graded chain homology map(K,field,C,C,identity chain map(field,C)) =
+      graded identity(field,graded chain homology(K,field,C))
+
+Result graded chain composition:
+  Attribution: topology; homology functor composition; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D,E: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Let g: ChainMap(K,field,D,E)
+  Conclude:
+    graded chain homology map(K,field,C,E,compose chain maps(field,C,D,E,g,f)) =
+      graded composition(field,graded chain homology(K,field,C),
+        graded chain homology(K,field,D),graded chain homology(K,field,E),
+        graded chain homology map(K,field,C,D,f),graded chain homology map(K,field,D,E,g))
+
+Result graded relative component:
+  Attribution: topology; relative homology in the selected degree; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let P: TopologicalPair(X)
+  Conclude:
+    graded relative homology(K,field,H,X,P).component(H.degree) = relative homology(field,H,X,P)
+
+Result graded relative map component:
+  Attribution: topology; relative homology map in the selected degree; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Assume h: pair chain commutes(field,H,X,Q)
+  Conclude:
+    graded relative homology map(K,field,H,X,Q,h).component(H.degree) =
+      relative homology map(field,H,X,Q,h)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

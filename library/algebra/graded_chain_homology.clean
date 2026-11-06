@@ -1,0 +1,32 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "chains.clean"
+Import "graded_maps.clean"
+
+Notation identity chain map(field,C):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C: ModuleChainComplex(K,field)
+  Returns: ChainMap(K,field,C,C)
+  Means: (letI : Field K := field; CategoryTheory.CategoryStruct.id C)
+  Render latex: \operatorname{{id}}_{{{C}}}
+
+Define graded chain homology(K,field,C):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C: ModuleChainComplex(K,field)
+  Returns: GradedModule(K,field)
+  Equals: graded module(K,field,function(p: Natural,chain homology(field,C,p)))
+  Render latex: H_*({C})
+
+Define graded chain homology map(K,field,C,D,f):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Returns: GradedMap(K,field,(graded chain homology(K,field,C)),(graded chain homology(K,field,D)))
+  Equals:
+    graded map(K,field,graded chain homology(K,field,C),graded chain homology(K,field,D),
+      function(p: Natural,induced chain homology map(field,C,D,f,p)))
+  Render latex: H_*({f})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

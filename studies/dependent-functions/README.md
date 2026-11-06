@@ -150,3 +150,14 @@ The refreshed review browser contains 89 files and zero translation errors; sear
 declarations, target navigation, imports, notes/export, reload, responsive layout
 and no-JavaScript fallback checks pass.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Graded relative homology
+
+[Graded relative homology](relative-graded.md) now connects all-degree chain
+homology and its maps to the existing relative chain construction. The port exposed
+and resolved authored family-alias comparison in dependent indices. Native checks
+cover ten exact targets and five proofs; relative functor laws on pairs and the
+research-paper theorems remain separate obligations.
+:::
