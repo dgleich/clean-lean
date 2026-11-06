@@ -181,3 +181,16 @@ the authored expression and is excluded from semantic index identity. The interl
 certificate composition now works in Clean. Implicit/binder-bearing producer
 reduction and local-alias conversion remain separate extensions.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Relative object construction
+
+[Relative singular chains and homology](../studies/topology/relative-homology.md) now constructs the
+relative chain complex as the cokernel of the inclusion-induced singular chain
+map, and applies the homology functor in the selected degree. The definitions are
+authored in Clean over generic native chain adapters. Sixteen exact target checks
+and four kernel checks pass. Relative induced maps, exactness/excision and the
+research theorem proofs remain unfinished; the report distinguishes definition
+checks from mathematical theorems and records the computed-index conversion gap.
+:::

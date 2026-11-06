@@ -1,0 +1,59 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "homology.clean"
+Import "pairs.clean"
+Import "../algebra/chains.clean"
+
+Notation singular chains(field,H,X):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Returns: ModuleChainComplex(K,field)
+  Means: (letI : Field K := field; ((AlgebraicTopology.singularChainComplexFunctor (ModuleCat.{0} K)).obj H.coefficients).obj X)
+  Render latex: C_*({X};{H})
+
+Notation induced chain map(field,H,X,Y,f):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X,Y: TopologicalSpace
+  Let f: ContinuousMap(X,Y)
+  Returns: ChainMap(K,field,(singular chains(field,H,X)),(singular chains(field,H,Y)))
+  Means: (letI : Field K := field; ((AlgebraicTopology.singularChainComplexFunctor (ModuleCat.{0} K)).obj H.coefficients).map (TopCat.ofHom f))
+  Render latex: C_*({f})
+
+Define pair chain inclusion(field,H,X,Q):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: TopologicalPair(X)
+  Returns: ChainMap(K,field,(singular chains(field,H,subspace(X,Q.relative))),(singular chains(field,H,subspace(X,Q.ambient))))
+  Equals:
+    induced chain map(field,H,subspace(X,Q.relative),subspace(X,Q.ambient),
+      subspace inclusion(X,Q.relative,Q.ambient,Q.nesting))
+  Render latex: C_*({Q}.relative\hookrightarrow {Q}.ambient)
+
+Define relative chains(field,H,X,Q):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: TopologicalPair(X)
+  Returns: ModuleChainComplex(K,field)
+  Equals:
+    chain cokernel(field,singular chains(field,H,subspace(X,Q.relative)),
+      singular chains(field,H,subspace(X,Q.ambient)),pair chain inclusion(field,H,X,Q))
+  Render latex: C_*({Q};{H})
+
+Define relative homology(field,H,X,Q):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: TopologicalPair(X)
+  Returns: CoefficientModule(K,field)
+  Equals: chain homology(field,relative chains(field,H,X,Q),H.degree)
+  Render latex: {H}({Q})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

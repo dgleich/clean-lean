@@ -1,0 +1,64 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "module_spaces.clean"
+Import Lean Mathlib.Algebra.Category.ModuleCat.Abelian
+Import Lean Mathlib.Algebra.Category.ModuleCat.Colimits
+Import Lean Mathlib.Algebra.Homology.HomologicalComplexAbelian
+Import Lean Mathlib.Algebra.Homology.ShortComplex.HomologicalComplex
+
+Type ModuleChainComplex(K: Type, field: FieldStructure(K)):
+  Universe: 1
+  Means: (letI : Field K := field; ChainComplex (ModuleCat.{0} K) ℕ)
+  Render latex: \operatorname{{Ch}}_{{{K}}}
+  Describe: a chain complex of modules over ${K}$ in natural degrees
+
+Type ChainMap(K: Type, field: FieldStructure(K), C: ModuleChainComplex(K,field), D: ModuleChainComplex(K,field)):
+  Means: (letI : Field K := field; @Quiver.Hom (ChainComplex (ModuleCat.{0} K) ℕ) inferInstance C D)
+  Render latex: \operatorname{{Hom}}({C},{D})
+  Describe: a chain map from ${C}$ to ${D}$
+
+Notation chain cokernel(field,C,D,f):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Returns: ModuleChainComplex(K,field)
+  Means: (letI : Field K := field; CategoryTheory.Limits.cokernel f)
+  Render latex: \operatorname{{coker}}({f})
+
+Notation chain cokernel projection(field,C,D,f):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Returns: ChainMap(K,field,D,(chain cokernel(field,C,D,f)))
+  Means: (letI : Field K := field; CategoryTheory.Limits.cokernel.π f)
+  Render latex: \pi_{{{f}}}
+
+Notation compose chain maps(field,C,D,E,g,f):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D,E: ModuleChainComplex(K,field)
+  Let g: ChainMap(K,field,D,E)
+  Let f: ChainMap(K,field,C,D)
+  Returns: ChainMap(K,field,C,E)
+  Means: (letI : Field K := field; CategoryTheory.CategoryStruct.comp f g)
+  Render latex: {g}\circ {f}
+
+Notation zero chain map(field,C,D):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Returns: ChainMap(K,field,C,D)
+  Means: (letI : Field K := field; 0)
+  Render latex: 0
+
+Notation chain homology(field,C,n):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C: ModuleChainComplex(K,field)
+  Let n: Natural
+  Returns: CoefficientModule(K,field)
+  Means: (letI : Field K := field; (HomologicalComplex.homologyFunctor (ModuleCat.{0} K) (ComplexShape.down ℕ) n).obj C)
+  Render latex: H_{{{n}}}({C})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -1,0 +1,52 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/relative_homology.clean"
+
+Text latex:
+  Relative chains are defined as the cokernel of the singular-chain map induced
+  by the inclusion of the relative subset into the ambient subset.
+  Relative homology is the homology of this complex in the selected degree.
+  These constructions do not yet supply the relative maps, connecting morphisms,
+  excision, or the well-group theorem.
+
+Result chain cokernel kills its defining map:
+  Attribution: topology; CategoryTheory.Limits.cokernel.condition; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Conclude:
+    compose chain maps(field,C,D,chain cokernel(field,C,D,f),
+      chain cokernel projection(field,C,D,f),f) =
+        zero chain map(field,C,chain cokernel(field,C,D,f))
+
+Result singular chain homology agrees:
+  Attribution: topology; AlgebraicTopology.singularHomologyFunctor; direct
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Conclude: chain homology(field,singular chains(field,H,X),H.degree) = homology module(field,H,X)
+
+Result relative chains are the inclusion cokernel:
+  Attribution: topology; relative singular chain definition; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: TopologicalPair(X)
+  Conclude:
+    relative chains(field,H,X,Q) =
+      chain cokernel(field,singular chains(field,H,subspace(X,Q.relative)),
+        singular chains(field,H,subspace(X,Q.ambient)),pair chain inclusion(field,H,X,Q))
+
+Result relative homology uses the selected degree:
+  Attribution: topology; relative singular homology definition; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: TopologicalPair(X)
+  Conclude: relative homology(field,H,X,Q) = chain homology(field,relative chains(field,H,X,Q),H.degree)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

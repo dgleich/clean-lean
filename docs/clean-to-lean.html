@@ -565,6 +565,24 @@ no implicit proof search or general conversion is added. This enables the
 <a href="../library/topology/certified_interlevel.clean">authored certificate composition</a>.
 See the <a href="computed-records.md">contract and remaining limits</a>.</p>
 </section>
+<section class="mapping" id="relative-chains" data-status="implemented">
+<h2>Relative chains and homology</h2>
+<p><strong>Implemented objects; relative maps and exactness pending.</strong>
+Generic chain adapters expose native cokernels and the homology functor. The
+pair inclusion and relative constructions are authored in Clean.</p>
+<pre><code>relative chains(field,H,X,Q)
+relative homology(field,H,X,Q)</code></pre>
+<p>Mathematical Lean outline (schematic names; not the canonical oracle):</p>
+<pre><code>cokernel (singularChains.map (inclusion Q.relative Q.ambient))
+(homologyFunctor _ (ComplexShape.down ℕ) H.degree).obj relativeChains</code></pre>
+<p>The actual wrappers fix the module category, coefficient object, topology,
+field instance and universes. Degrees are natural numbers. The checked cokernel
+law annihilates the defining map; the other checks establish agreement and the
+selected definitions. None proves excision or a well-group characterization.</p>
+<p>See the <a href="../studies/topology/relative-homology.md">construction and limits</a>,
+<a href="../studies/topology/Relative.clean">Clean statements</a>, and
+<a href="../studies/topology/RelativeVerified.lean">native target comparisons and proofs</a>.</p>
+</section>
 </main>
 <script>
 (() => {

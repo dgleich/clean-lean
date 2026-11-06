@@ -104,3 +104,16 @@ a theorem, not the definition of the intersection. The paper targets remain pend
 
 No library version has been upgraded and no research theorem has been postulated.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Relative object construction
+
+[Relative singular chains and homology](relative-homology.md) now constructs the
+relative chain complex as the cokernel of the inclusion-induced singular chain
+map, and applies the homology functor in the selected degree. The definitions are
+authored in Clean over generic native chain adapters. Sixteen exact target checks
+and four kernel checks pass. Relative induced maps, exactness/excision and the
+research theorem proofs remain unfinished; the report distinguishes definition
+checks from mathematical theorems and records the computed-index conversion gap.
+:::
