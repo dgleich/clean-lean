@@ -99,4 +99,21 @@ exhausted the default heartbeat budget; the documented finite larger budget then
 completed successfully. No proof placeholder was introduced. The refreshed review
 browser contains 87 files with zero translation errors; search, target navigation,
 imports, notes/export, responsive layout and no-JavaScript fallback checks pass.
+## Proof-family validation checkpoint
+
+The full regression run passed all 492 tests in 913 seconds. The later proof-family
+prose adjustment passed 55 focused tests; the completed alias/sort cases passed
+nine focused tests. The native verifier was rerun after the prose change and passed
+ten exact targets, five declaration-sort checks and five theorem proofs. The unused
+proof binder in the proof-to-natural definition produces an expected Lean warning.
+The full suite was not repeated after those rendering/test-only follow-ups.
+
+The 92-proof corpus, existing induced-homology targets and strict generated parser
+check pass. The PDF compiles twice and has been visually checked. The reference
+page passes search, links and mobile-width checks. The rebuilt review browser has
+88 files and zero translation errors; its UI and no-JavaScript checks pass.
+
+The separate [closed-universe negative probe](../../docs/proof-valued-functions.md#confirmed-remaining-universe-boundary)
+is still accepted by Clean and rejected by Lean. Enforcing Type 0 versus Type 1
+parameter bounds is the next source-checking task, not a completed acceptance case.
 :::

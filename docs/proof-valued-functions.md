@@ -114,8 +114,9 @@ that all dependent-function or universe interactions have been audited. Broader
 naming collisions, general universe parameters and Type-valued binders remain open.
 ## Confirmed remaining universe boundary
 
-A separate negative probe is accepted by the current Clean checker but rejected
-by the Lean kernel:
+With `library/logic/equalities.clean` and `library/algebra/module_spaces.clean`
+explicitly imported, the following negative probe is accepted by the current Clean
+checker but rejected by the Lean kernel:
 
 ```clean
 Define universe boundary(K,field,M):
