@@ -128,3 +128,25 @@ The separate [closed-universe negative probe](../../docs/proof-valued-functions.
 was accepted by Clean and rejected by Lean at this earlier checkpoint. The
 closed-universe implementation above now rejects it in Clean before emission.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Closed-universe validation checkpoint
+
+The full regression run completed 503 tests in 915 seconds with one error: an
+older computed-index test declared a record containing a topological space at the
+default Type 0. The corresponding native study already uses Universe 1. Correcting
+that test fixture to declare Universe 1 passed 77 focused tests; no implementation
+change was needed. The full suite was not repeated after this fixture-only fix.
+The final closed-universe, proof-family, structure and module checks separately
+passed 100 focused tests, including one added after the full run started.
+
+The new study passes fourteen exact targets, four native sort assertions and three
+proofs. The 92-proof corpus, ten proof-family targets/five sorts/five proofs, four
+induced-homology targets/three proofs, and 31 homology targets/five proofs pass.
+Strict parser generation also passes. The new PDF compiled twice and was visually
+checked; reference-page search, local links and mobile width checks pass.
+The refreshed review browser contains 89 files and zero translation errors; search,
+declarations, target navigation, imports, notes/export, reload, responsive layout
+and no-JavaScript fallback checks pass.
+:::

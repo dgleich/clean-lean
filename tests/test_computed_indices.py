@@ -56,7 +56,7 @@ class ComputedIndices(unittest.TestCase):
             self.expr('module map value(field,homology module(field,H,Y),homology module(field,H,X),homology linear map(field,H,X,Y,f),x)')
     def test_computed_dependent_record_field(self):
         declare('Structure HomologyPoint(K: Type, field: FieldStructure(K), H: HomologyTheory(K,field)):',
-          ['Let space: TopologicalSpace','Let point: HomologyClass(K,field,H,space)',
+          ['Universe: 1','Let space: TopologicalSpace','Let point: HomologyClass(K,field,H,space)',
            'Constructor: homology point'],self.e)
         self.local['P']=Expr('P','P',self.e.type('HomologyPoint(K,field,H)',self.local))
         self.assertEqual(self.expr('P.point').type,
