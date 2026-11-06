@@ -1,0 +1,68 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{shifted perturbation value}\cleanattribution{[Topology foundations, constant real translation]}
+Let $P$ be interlevel problem data.
+Let $t$ be a real number.
+Let $x$ be a point of $P.\mathrm{space}$.
+Then \[\left(P.map-t\right)(x) = P.\mathrm{map}(x) - t.\]
+\end{cleanresult}
+
+\begin{cleanresult}{shifted perturbation bound}\cleanattribution{\href{https://mrzv.org/publications/robustness-interlevelsets/manuscript/}{[Bendich, Edelsbrunner, Morozov, and Patel, extreme perturbations]}}
+Let $P$ be interlevel problem data.
+Let $t$ and $r$ be real numbers.
+Assume $-r \le t$ (\texttt{lower}).
+Assume $t \le r$ (\texttt{upper}).
+Then \[\left(P.map-t\right)\text{ is a perturbation of }P\text{ bounded by }r.\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: uniform bound.}
+\end{cleanresult}
+
+\begin{cleanresult}{shifted perturbation pair}\cleanattribution{\href{https://mrzv.org/publications/robustness-interlevelsets/manuscript/}{[Bendich, Edelsbrunner, Morozov, and Patel, shifted interlevel pairs]}}
+Let $P$ be interlevel problem data.
+Let $t$ be a real number.
+Then \[A(P,\left(P.map-t\right)) = T_{t}(P).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{shifted perturbations have certificates}\cleanattribution{\href{https://mrzv.org/publications/robustness-interlevelsets/manuscript/}{[Bendich, Edelsbrunner, Morozov, and Patel, shifted perturbation family]}}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $P$ be interlevel problem data.
+Let $t$ and $r$ be real numbers.
+Assume $P.\mathrm{interval}.\mathrm{lower} \le P.\mathrm{interval}.\mathrm{upper}$ (\texttt{order}).
+Assume $r \ge 0$ (\texttt{radius}).
+Assume $-r \le t$ (\texttt{lower}).
+Assume $t \le r$ (\texttt{upper}).
+Assume $X_{r}(P)\text{ is a nested pair}$ (\texttt{nesting}).
+Then \[\left(\text{there exists }C : \operatorname{CertifiedPerturbation},\; C.\mathrm{data}.\mathrm{map} = \left(P.map-t\right)\right).\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: certificate completeness.}
+\end{cleanresult}
+
+\begin{cleanresult}{shifted image certificate independence}\cleanattribution{[Topology foundations, shifted image well-definedness]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $P$ be interlevel problem data.
+Let $t$ and $r$ be real numbers.
+Assume $X_{r}(P)\text{ is a nested pair}$ (\texttt{nesting}).
+Let $C$ and $D$ be elements of $\operatorname{CertifiedPerturbation}$.
+Assume $C.\mathrm{data}.\mathrm{map} = \left(P.map-t\right)$ (\texttt{first}).
+Assume $D.\mathrm{data}.\mathrm{map} = \left(P.map-t\right)$ (\texttt{second}).
+Then \[I_{t}(P;H,r,C) = I_{t}(P;H,r,D).\]
+\end{cleanresult}
+
+\begin{cleanresult}{well group lies in every shifted image}\cleanattribution{\href{https://mrzv.org/publications/robustness-interlevelsets/manuscript/}{[Bendich, Edelsbrunner, Morozov, and Patel, well-group intersection definition]}}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $H$ be a choice of coefficients and homology degree over $K$.
+Let $P$ be interlevel problem data.
+Let $t$ and $r$ be real numbers.
+Assume $X_{r}(P)\text{ is a nested pair}$ (\texttt{nesting}).
+Let $C$ be a bounded perturbation with a certified chain square.
+Assume $C.\mathrm{data}.\mathrm{map} = \left(P.map-t\right)$ (\texttt{represents}).
+Let $x$ be an element of $H(X_{r}(P))$.
+Assume $x\text{ belongs to }U_{r}(P;H)$ (\texttt{member}).
+Then \[x\text{ belongs to }I_{t}(P;H,r,C).\]
+\par\smallskip{\footnotesize Adapted from the cited source. Scope: one inclusion only.}
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -6,10 +6,11 @@ from cleanlang.modules import load_module, load_document
 ROOT = Path(__file__).resolve().parents[1]
 
 class WellGroups(unittest.TestCase):
-    def setUp(self):
-        self.e = Environment()
-        load_module(ROOT/'library/topology/well_groups.clean', self.e)
-        self.local = {}
+    @classmethod
+    def setUpClass(cls):
+        cls.e = Environment()
+        load_module(ROOT/'library/topology/well_groups.clean', cls.e)
+        cls.local = {}
         for name, typ in [
             ('K','Type'), ('field','FieldStructure(K)'), ('other','FieldStructure(K)'),
             ('H','HomologyTheory(K,field)'), ('Q','InterlevelProblem'),
@@ -18,7 +19,7 @@ class WellGroups(unittest.TestCase):
             ('data','PerturbationCertificate(Q,r)'),
             ('C','CertifiedPerturbation(K,field,H,Q,r,nesting)'),
             ('D','CertifiedPerturbation(K,field,H,Q,r,nesting)')]:
-            self.local[name] = Expr(name,name,self.e.type(typ,self.local))
+            cls.local[name] = Expr(name,name,cls.e.type(typ,cls.local))
     def expr(self, source):
         return Expressions(self.e,self.local).parse(source)
     def test_header_projection_substitution(self):

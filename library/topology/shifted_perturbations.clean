@@ -1,0 +1,27 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "real_maps.clean"
+Import "well_groups.clean"
+
+-- The interval moves by +t, so the map moves by -t.
+Define shifted perturbation(P,t):
+  Let P: InterlevelProblem
+  Let t: Real
+  Returns: ContinuousRealMap(P.space)
+  Equals: translate real map(P.space,P.map,-t)
+  Render latex: \left({P}.map-{t}\right)
+
+Define shifted pair image(field,H,P,r,nesting,t,C,represents):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let P: InterlevelProblem
+  Let r: Real
+  Let nesting: Evidence((nested pair(P.space,expanded pair(P,r))))
+  Let t: Real
+  Let C: CertifiedPerturbation(K,field,H,P,r,nesting)
+  Let represents: Evidence((C.data.map = shifted perturbation(P,t)))
+  Returns: ModuleSubspace(K,field,(relative homology(field,H,P.space,perturbation target(P,r,nesting))))
+  Equals: perturbation homology image(field,H,P,r,nesting,C)
+  Render latex: I_{{{t}}}({P};{H},{r},{C})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

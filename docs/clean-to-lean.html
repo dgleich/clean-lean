@@ -655,6 +655,27 @@ relative-homology functor law is supplied implicitly.</p>
 <p>See the <a href="applied-function-indices.md">precise contraction rule</a> and
 <a href="../studies/topology/pair-composition.md">pair composition study</a>.</p>
 </section>
+<section class="mapping" id="shifted-perturbations" data-status="implemented">
+<h2>Shifted perturbations and images</h2>
+<p><strong>Implemented definitions and one inclusion; characterization pending.</strong>
+A shift of the interval by t corresponds to a shift of the continuous map by −t.</p>
+<pre><code>Define shifted perturbation(P,t):
+  Let P: InterlevelProblem
+  Let t: Real
+  Returns: ContinuousRealMap(P.space)
+  Equals: translate real map(P.space,P.map,-t)</code></pre>
+<p>The generic constant and addition adapters use Mathlib's ContinuousMap.const
+and its pointwise addition, with the source topology fixed explicitly. Translation
+and shifted perturbation are Clean Equals bodies. The native mathematical equivalent,
+with schematic type names and ambient instances understood, is:</p>
+<pre><code>P.map + ContinuousMap.const (-t)</code></pre>
+<pre><code>shifted pair image(field,H,P,r,nesting,t,C,represents)</code></pre>
+<p>C is a certified perturbation and represents proves its map equals the shift.
+The result is its perturbation homology image in the same target as the well group.
+Checked proofs establish certificate independence and well-group containment in
+every shifted image. No implicit certificate choice or two-image equality is supplied.</p>
+<p>See <a href="../studies/topology/shifted-perturbations.md">sign convention, proofs and limits</a>.</p>
+</section>
 </main>
 <script>
 (() => {

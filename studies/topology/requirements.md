@@ -296,3 +296,15 @@ interfaces. Explicit commutativity evidence is still passed; the study proves
 that condition universally. Relative functor laws, exactness/excision and the
 paper results remain unfinished.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Shifted perturbations and images
+
+[Shifted perturbations](shifted-perturbations.md) now defines the maps f−t and their certified
+homology images in Clean. Eleven canonical targets and six proofs check the sign
+convention, pair equality, uniform bound, certificate existence/independence and
+well-group containment in every shifted image. Twenty supporting proofs are
+rechecked. Certificates remain explicit; the reverse extreme-image inclusion and
+the closed-cover/excision audit remain open. No new syntax is needed for this slice.
+:::

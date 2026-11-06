@@ -1,0 +1,68 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/topology/shifted_perturbations.clean"
+
+Result shifted perturbation value:
+  Attribution: topology; constant real translation; original
+  Let P: InterlevelProblem
+  Let t: Real
+  Let x: Point(P.space)
+  Conclude: real map value(P.space,shifted perturbation(P,t),x) = real map value(P.space,P.map,x)-t
+
+Result shifted perturbation bound:
+  Attribution: interlevel; extreme perturbations; adapted; scope: uniform bound
+  Let P: InterlevelProblem
+  Let t,r: Real
+  Assume lower: -r ≤ t
+  Assume upper: t ≤ r
+  Conclude: bounded perturbation(P,shifted perturbation(P,t),r)
+
+Result shifted perturbation pair:
+  Attribution: interlevel; shifted interlevel pairs; adapted
+  Let P: InterlevelProblem
+  Let t: Real
+  Conclude: perturbed pair(P,shifted perturbation(P,t)) = shifted pair(P,t)
+
+Result shifted perturbations have certificates:
+  Attribution: interlevel; shifted perturbation family; adapted; scope: certificate completeness
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let P: InterlevelProblem
+  Let t,r: Real
+  Assume order: P.interval.lower ≤ P.interval.upper
+  Assume radius: r ≥ 0
+  Assume lower: -r ≤ t
+  Assume upper: t ≤ r
+  Assume nesting: nested pair(P.space,expanded pair(P,r))
+  Conclude:
+    there exists (C: CertifiedPerturbation(K,field,H,P,r,nesting),C.data.map = shifted perturbation(P,t))
+
+Result shifted image certificate independence:
+  Attribution: topology; shifted image well-definedness; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let P: InterlevelProblem
+  Let t,r: Real
+  Assume nesting: nested pair(P.space,expanded pair(P,r))
+  Let C,D: CertifiedPerturbation(K,field,H,P,r,nesting)
+  Assume first: C.data.map = shifted perturbation(P,t)
+  Assume second: D.data.map = shifted perturbation(P,t)
+  Conclude: shifted pair image(field,H,P,r,nesting,t,C,first) = shifted pair image(field,H,P,r,nesting,t,D,second)
+
+Result well group lies in every shifted image:
+  Attribution: interlevel; well-group intersection definition; adapted; scope: one inclusion only
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let P: InterlevelProblem
+  Let t,r: Real
+  Assume nesting: nested pair(P.space,expanded pair(P,r))
+  Let C: CertifiedPerturbation(K,field,H,P,r,nesting)
+  Assume represents: C.data.map = shifted perturbation(P,t)
+  Let x: ModuleElement(K,field,(relative homology(field,H,P.space,perturbation target(P,r,nesting))))
+  Assume member: belongs to module subspace(field,relative homology(field,H,P.space,perturbation target(P,r,nesting)),x,relative well group(field,H,P,r,nesting))
+  Conclude: belongs to module subspace(field,relative homology(field,H,P.space,perturbation target(P,r,nesting)),x,shifted pair image(field,H,P,r,nesting,t,C,represents))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

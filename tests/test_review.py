@@ -1,4 +1,6 @@
+# generated: gpt-6 2026-11-06 role=assisted; cached shared review fixture; see PROVENANCE.md
 import importlib.util
+from functools import cache
 import re
 import unittest
 from pathlib import Path
@@ -7,6 +9,12 @@ spec=importlib.util.spec_from_file_location('build_review',ROOT/'tools/build_rev
 review=importlib.util.module_from_spec(spec);spec.loader.exec_module(review)
 
 class ReviewTests(unittest.TestCase):
+    @classmethod
+    @cache
+    def collected_files(cls):
+        # Both navigation tests inspect the same immutable repository snapshot.
+        return {f['path']:f for f in review.collect()}
+
     def test_source_markup_is_escaped(self):
         rendered=review.highlight('-- </script><img src=x onerror=alert(1)>')
         self.assertNotIn('</script>',rendered)
@@ -50,7 +58,7 @@ class ReviewTests(unittest.TestCase):
         self.assertNotIn('class="keyword"',lines[3])
 
     def test_import_navigation_and_fresh_targets(self):
-        files={f['path']:f for f in review.collect()}
+        files=self.collected_files()
         sample=files['library/analysis.clean']
         self.assertIsNone(sample['error'])
         self.assertIn('cleanDefine_',sample['lean'])
@@ -62,7 +70,7 @@ class ReviewTests(unittest.TestCase):
                 self.assertIn(imported['path'],files)
 
     def test_proposed_algorithms_are_not_claimed_translated(self):
-        files={f['path']:f for f in review.collect()}
+        files=self.collected_files()
         for name in ('insertion-sort', 'heap-sort'):
             sample=files[f'examples/proposed/{name}.clean']
             self.assertEqual(sample['lean'], '')

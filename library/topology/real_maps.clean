@@ -1,0 +1,27 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "interlevel.clean"
+Import Lean Mathlib.Topology.ContinuousMap.Algebra
+
+Notation constant real map(X,c):
+  Let X: TopologicalSpace
+  Let c: Real
+  Returns: ContinuousRealMap(X)
+  Means: @ContinuousMap.const X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace c
+  Render latex: \operatorname{{const}}_{{{X}}}({c})
+
+Notation add real maps(X,f,g):
+  Let X: TopologicalSpace
+  Let f,g: ContinuousRealMap(X)
+  Returns: ContinuousRealMap(X)
+  Means: (letI : TopologicalSpace X.carrier := X.str; f + g)
+  Render latex: \left({f}+{g}\right)
+
+Define translate real map(X,f,t):
+  Let X: TopologicalSpace
+  Let f: ContinuousRealMap(X)
+  Let t: Real
+  Returns: ContinuousRealMap(X)
+  Equals: add real maps(X,f,constant real map(X,t))
+  Render latex: \left({f}+{t}\right)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
