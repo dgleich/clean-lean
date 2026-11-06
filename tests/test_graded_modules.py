@@ -27,7 +27,7 @@ class GradedModules(unittest.TestCase):
         with self.assertRaises(CleanError):Expressions(self.e,local).parse('M.component(M)')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
-    def test_lambda_bearing_producer_comparison_is_still_opaque(self):
+    def test_applied_producer_field_compares_with_its_definition(self):
         from cleanlang.conversion import comparison_normal_form
         local={}
         for n,t in [('K','Type'),('field','FieldStructure(K)'),('X','TopologicalSpace'),('p','Natural')]:
@@ -36,5 +36,5 @@ class GradedModules(unittest.TestCase):
         a=expr('graded singular homology(K,field,X).component(p)')
         b=expr('homology module(field,scalar homology(K,field,p),X)')
         self.assertEqual(a.type,b.type)
-        self.assertNotEqual(comparison_normal_form(a,self.e,local).lean,
+        self.assertEqual(comparison_normal_form(a,self.e,local).lean,
                             comparison_normal_form(b,self.e,local).lean)

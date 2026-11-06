@@ -1,0 +1,38 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../topology/Common.clean"
+Import "../../library/topology/graded_homology_maps.clean"
+
+Result graded induced component:
+  Attribution: topology; graded induced map component; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let X,Y: TopologicalSpace
+  Let g: ContinuousMap(X,Y)
+  Let p: Natural
+  Conclude:
+    graded homology map(K,field,X,Y,g).component(p) =
+      homology linear map(field,scalar homology(K,field,p),X,Y,g)
+
+Result graded induced identity:
+  Attribution: topology; singular homology functor identity; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let X: TopologicalSpace
+  Conclude:
+    graded homology map(K,field,X,X,identity continuous map(X)) =
+      graded identity(field,graded singular homology(K,field,X))
+
+Result graded induced composition:
+  Attribution: topology; singular homology functor composition; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let X,Y,Z: TopologicalSpace
+  Let f: ContinuousMap(X,Y)
+  Let g: ContinuousMap(Y,Z)
+  Conclude:
+    graded homology map(K,field,X,Z,compose continuous maps(X,Y,Z,g,f)) =
+      graded composition(field,graded singular homology(K,field,X),
+        graded singular homology(K,field,Y),graded singular homology(K,field,Z),
+        graded homology map(K,field,X,Y,f),graded homology map(K,field,Y,Z,g))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

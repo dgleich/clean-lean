@@ -1,18 +1,33 @@
 # generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
 """Bounded, deterministic comparison normalization; never rewrite emitted terms."""
-from .core import Expr,Expressions,binary
+from .core import Expr,Expressions,binary,Type
+
+
+def shadowed_globals(environment,locals):
+    return any((name in environment.data['functions'] and environment.is_function_type(value.type)) or
+               (name in environment.data['types'] or name in environment.data['aliases']) and value.type==Type('Type')
+               for name,value in locals.items())
 
 
 def comparison_normal_form(expression,environment,locals):
+    from .beta_indices import has_binder
+    result=_normal_form(expression,environment,locals)
+    # Only fully eliminated binders enter the existing string-key comparison.
+    # Unapplied function families need a separate alpha-canonical key contract.
+    return expression if has_binder(result.tree) else result
+
+
+def _normal_form(expression,environment,locals):
     env=environment
     elaborate=lambda tree:Expressions(env,locals).elaborate(tree)
-    def normal(tree):return comparison_normal_form(elaborate(tree),env,locals)
+    def normal(tree):return _normal_form(elaborate(tree),env,locals)
     tree=expression.tree
     if not tree:return expression
     kind=tree[0]
     if kind=='Local':
         local=locals.get(tree[1])
-        return local.local_normal if local is not None and local.local_normal is not None else expression
+        if local is None or local.local_normal is None:return expression
+        return local.local_normal if shadowed_globals(env,locals) else _normal_form(local.local_normal,env,locals)
     if kind in ('Decimal','Lambda','Forall','Exists'):return expression
     if kind=='Operator':return binary(tree[1],normal(tree[2]),normal(tree[3]))
     if kind=='Unary':
@@ -20,8 +35,11 @@ def comparison_normal_form(expression,environment,locals):
         return Expr('('+op+a.lean+')',expression.tex,expression.type,tree=['Unary',tree[1],a.tree])
     if kind=='Apply':
         f=normal(tree[1]);args=[normal(a) for a in tree[2]]
-        return Expr('('+f.lean+' '+args[0].lean+')',expression.tex,expression.type,
+        result=Expr('('+f.lean+' '+args[0].lean+')',expression.tex,expression.type,
                     tree=['Apply',f.tree,[a.tree for a in args]])
+        from .beta_indices import contract_index
+        reduced=contract_index(result,env,locals)
+        return _normal_form(reduced,env,locals) if reduced.tree!=result.tree else result
     if kind=='Projection':
         from .structures import project
         base=normal(tree[1])
@@ -29,9 +47,9 @@ def comparison_normal_form(expression,environment,locals):
         # project may reduce a constructor field; its result is already normalized
         # if it is a stable projection, otherwise normalize its selected expression.
         if result.tree==['Projection',base.tree,tree[2]]:return result
-        return comparison_normal_form(result,env,locals)
+        return _normal_form(result,env,locals)
     if kind!='Call':return expression
-    name=tree[1];args=[normal(a) for a in tree[2]]
+    name=tree[1];args=[comparison_normal_form(elaborate(a),env,locals) for a in tree[2]]
     if name in locals and env.is_function_type(locals[name].type):
         head=normal(['Local',name])
         return Expr('('+head.lean+' '+args[0].lean+')',expression.tex,expression.type,
@@ -41,27 +59,14 @@ def comparison_normal_form(expression,environment,locals):
         parameters=env.data['functions'][name]['signature_tree'][2]
         implicit={p[1] for p in parameters if p[3]=='implicit'}
         body=definition['tree']
-        def blocked(node):
-            if not isinstance(node,list):return False
-            if node and node[0] in ('Lambda','Forall','Exists'):return True
-            if node and node[0]=='Local' and node[1] in implicit:return True
-            return any(blocked(child) for child in node)
-        if not blocked(body):
+        from .dependent_functions import tree_names
+        from .hygiene import substitute,UnrepresentableSubstitution
+        # Inferred parameters have no authored argument tree in this profile.
+        if not tree_names(body).intersection(implicit) and not shadowed_globals(env,locals):
             bindings=dict(zip((p[1] for p in parameters if p[3]=='explicit'),args))
-            def replace(node):
-                if node[0]=='Local':return bindings[node[1]].tree if node[1] in bindings else node
-                if node[0]=='Call':
-                    arguments=[replace(a) for a in node[2]]
-                    value=bindings.get(node[1])
-                    if value is not None and env.is_function_type(value.type):
-                        return ['Call',value.tree[1],arguments] if value.tree[0]=='Local' else ['Apply',value.tree,arguments]
-                    return ['Call',node[1],arguments]
-                if node[0]=='Projection':return ['Projection',replace(node[1]),node[2]]
-                if node[0]=='Apply':return ['Apply',replace(node[1]),[replace(a) for a in node[2]]]
-                if node[0]=='Operator':return ['Operator',node[1],replace(node[2]),replace(node[3])]
-                if node[0]=='Unary':return ['Unary',node[1],replace(node[2])]
-                return node
-            expanded=normal(replace(body))
+            try:expanded_tree=substitute(body,bindings,env,locals)
+            except UnrepresentableSubstitution:return env.call(name,args,locals)
+            expanded=normal(expanded_tree)
             if expanded.type==expression.type:return expanded
     return env.call(name,args,locals)
 
@@ -78,5 +83,5 @@ def local_definition(name,value,environment,locals):
     result=Expr(name,texid(name),value.type)
     if not has_binder(value.tree):
         normal=comparison_normal_form(value,environment,locals)
-        if normal.type==value.type:result.local_normal=normal
+        if normal.type==value.type and not has_binder(normal.tree):result.local_normal=normal
     return result

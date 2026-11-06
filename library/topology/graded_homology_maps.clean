@@ -1,0 +1,18 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "graded_homology.clean"
+Import "../algebra/graded_maps.clean"
+
+Define graded homology map(K,field,X,Y,g):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let X,Y: TopologicalSpace
+  Let g: ContinuousMap(X,Y)
+  Returns: GradedMap(K,field,
+    (graded singular homology(K,field,X)),
+    (graded singular homology(K,field,Y)))
+  Equals: graded map(K,field,
+    graded singular homology(K,field,X),graded singular homology(K,field,Y),
+    function(p: Natural,homology linear map(field,scalar homology(K,field,p),X,Y,g)))
+  Render latex: H_*({g};{K})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

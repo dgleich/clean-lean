@@ -967,6 +967,45 @@
         "Additional universe and automatic-label collision cases",
         "Type-valued binders remain unsupported"
       ]
+    },
+    {
+      "id": "hygienic_applied_producer_fields",
+      "status": "implemented-bounded",
+      "specification": "docs/hygienic-producer-conversion.md",
+      "source_fragment": "build(x).component(p)",
+      "expected_tree": [
+        "Apply",
+        [
+          "Projection",
+          [
+            "Call",
+            "build",
+            [
+              [
+                "Local",
+                "x"
+              ]
+            ]
+          ],
+          "component"
+        ],
+        [
+          [
+            "Local",
+            "p"
+          ]
+        ]
+      ],
+      "comparison_rule": "Simultaneous capture-free source substitution; selected projection and binder-free immediate beta contraction; residual binders and shadowed global bindings stay opaque; emitted terms preserved",
+      "checks": [
+        "tests/test_hygienic_conversion.py",
+        "tests/test_graded_modules.py",
+        "studies/dependent-functions/verify_homology_maps.py"
+      ],
+      "pending": [
+        "General higher-order family keys and inferred-parameter body expansion",
+        "Resolved module identities through all comparison ASTs"
+      ]
     }
   ]
 }

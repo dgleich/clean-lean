@@ -118,3 +118,12 @@ call still contains the original lambda argument. The comparison-only expansions
 described here continue to preserve emitted annotations; the two rules must not
 be conflated.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+The later [hygienic producer extension](hygienic-producer-conversion.md) supersedes
+the blanket binder-bearing-producer exclusion for selected, applied fields. It
+preserves comparison-only emission and the stated native-adapter opacity; residual
+binders, lambda-authored locals and unrepresentable substitutions remain bounded.
+Dependent function types have their own [implemented initial contract](dependent-function-types.md).
+:::

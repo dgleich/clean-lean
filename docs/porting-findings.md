@@ -308,3 +308,17 @@ additional proof/universe acceptance cases, and lambda-bearing producer conversi
 remain separate work. The ordinary graded-object study retains its seven targets
 and component proof; neither study proves a paper theorem.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Applied producer fields and induced graded homology
+
+[Hygienic producer conversion](hygienic-producer-conversion.md) extends comparison
+through explicit authored function-producing definitions and applied fields.
+Capture-free substitution includes type annotations and nested binders. Residual
+binder-bearing comparison values and shadowed module bindings stay opaque.
+Computed-object field calls now serialize using the existing grammar.
+The induced graded-homology map is authored in Clean, with four exact native targets
+and three functor-law/component proofs. General higher-order conversion, inferred
+body parameters, and unapplied family comparison remain outside this profile.
+:::

@@ -676,6 +676,23 @@ Checked proofs establish certificate independence and well-group containment in
 every shifted image. No implicit certificate choice or two-image equality is supplied.</p>
 <p>See <a href="../studies/topology/shifted-perturbations.md">sign convention, proofs and limits</a>.</p>
 </section>
+<section class="mapping" id="hygienic-producer-conversion" data-status="implemented">
+<h2>Applied fields of authored producers</h2>
+<p><span class="status implemented">Bounded comparison extension</span>
+<code>graded singular homology(K,field,X).component(p)</code> now compares with
+<code>homology module(field,scalar homology(K,field,p),X)</code>.
+The emitted Lean keeps the original graded-homology call and projection; only the
+comparison key reduces the selected function field. Capture-free substitution
+includes binder domains and nested dependent function types.</p>
+<p>This enables an authored <a href="../library/topology/graded_homology_maps.clean">graded homology map</a>:
+the Lean body is a graded-map constructor applied to a lambda of degree p, whose
+body calls the existing homology-map adapter. The signature retains the named
+graded objects. <a href="../studies/dependent-functions/HomologyMapsVerified.lean">Four exact native targets and three proofs</a>
+check the definition and its component, identity and composition statements.</p>
+<p>Unapplied binder-bearing results stay opaque, as do native adapters and authored
+bodies under shadowed module bindings. No general extensionality or implicit proof
+search is added. See the <a href="hygienic-producer-conversion.md">normative conversion contract</a>.</p>
+</section>
 <section class="mapping" id="dependent-function-types" data-status="implemented">
 <h2>Dependent function fields</h2>
 <p><span class="status implemented">Initial implementation; broader acceptance pending</span>

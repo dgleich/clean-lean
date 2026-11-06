@@ -75,3 +75,12 @@ Clean-authored identity/composition operations. Native oracles retain the origin
 lambda arguments, proof arguments, equality transport and wrapper identities.
 The accompanying statement proofs check source/target and continuous-map behavior.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+The later [hygienic producer extension](hygienic-producer-conversion.md) supersedes
+the blanket binder-bearing-producer exclusion for selected, applied fields. It
+preserves comparison-only emission and the stated native-adapter opacity; residual
+binders, lambda-authored locals and unrepresentable substitutions remain bounded.
+Dependent function types have their own [implemented initial contract](dependent-function-types.md).
+:::

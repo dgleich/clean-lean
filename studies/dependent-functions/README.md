@@ -39,14 +39,16 @@ small dependent-vector identity. Run `lake env lean studies/dependent-functions/
 Those four proofs validate the intended target mathematics; they are not proofs of
 translated Clean statements and do not discharge any of the research-paper targets.
 
-One further boundary is now reproduced by a test: the computed component
-`graded singular homology(K,field,X).component(p)` and its native homology expression
-have the same declared type and are definitionally equal in Lean (the component
-proof checks this), but Clean's comparison keys still differ. The authored producer
-contains a lambda and is deliberately opaque under the current conversion rules.
-Building induced maps between these particular graded families will also need
-capture-free conversion of such producer fields; dependent function syntax alone
-will not resolve that mismatch.
+The applied-component comparison gap is now resolved by
+[hygienic producer conversion](../../docs/hygienic-producer-conversion.md).
+[graded_homology_maps.clean](../../library/topology/graded_homology_maps.clean)
+authors the induced graded map in Clean. [HomologyMaps.clean](HomologyMaps.clean)
+states its component formula and identity/composition laws;
+[HomologyMapsVerified.lean](HomologyMapsVerified.lean) checks four exact native targets
+and proves all three statements. Run
+`LAKE=lake python3 studies/dependent-functions/verify_homology_maps.py`.
+Unapplied binder-bearing families, inferred body parameters and broader higher-order
+conversion remain outside this bounded extension.
 
 The native probe exposed a practical adapter requirement: composition and its laws
 need the module category supplied explicitly, because Lean cannot always recover

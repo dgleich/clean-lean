@@ -64,10 +64,12 @@ def expression_spelling(tree):
     kind=tree[0]
     if kind in ('Local','Decimal'):return tree[1]
     if kind=='Call':return tree[1]+'('+','.join(map(expression_spelling,tree[2]))+')'
-    if kind=='Projection':return expression_spelling(tree[1])+'.'+tree[2]
+    if kind=='Projection':
+        base=expression_spelling(tree[1])
+        if tree[1][0]=='Apply':base='('+base+')'
+        return base+'.'+tree[2]
     if kind=='Apply':
-        from .structures import reference_name
-        if reference_name(tree[1]) is None:raise CleanError('Computed index application requires a named function or field')
+        if tree[1][0] not in ('Local','Projection'):raise CleanError('Computed index application requires a named function or field')
         return expression_spelling(tree[1])+'('+','.join(map(expression_spelling,tree[2]))+')'
     if kind=='Operator':return '('+expression_spelling(tree[2])+' '+tree[1]+' '+expression_spelling(tree[3])+')'
     if kind=='Unary':return '('+tree[1]+' '+expression_spelling(tree[2])+')'
