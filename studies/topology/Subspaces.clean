@@ -1,0 +1,53 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/algebra/linear_spaces.clean"
+
+Source mathlib:
+  Kind: other
+  Label: Mathlib
+  Title: Mathlib v4.24.0
+  Url: https://github.com/leanprover-community/mathlib4/tree/v4.24.0
+
+Text:
+  These are algebraic ingredients for perturbation-indexed well groups.
+  The ambient space and scalar structure are fixed explicitly.
+  This file does not assert the two-extreme-perturbation characterization.
+
+Context indexed subspaces:
+  Let K,V,I: Type
+  Let f: FieldStructure(K)
+  Let L: LinearSpace(K,f,V)
+  Let A: Set(I)
+  Let S: Function(I,Subspace(K,f,V,L))
+
+  Result indexed intersection membership:
+    Attribution: mathlib; Submodule.mem_sInf; adapted
+    Let x: V
+    Conclude:
+      belongs to subspace(f,L,x,intersection of subspaces(f,L,A,S)) ↔
+        for every (i: I, i ∈ A → belongs to subspace(f,L,x,S(i)))
+
+  Result intersection is included in each member:
+    Attribution: mathlib; Submodule.mem_sInf; adapted
+    Let i: I
+    Assume admissible index: i ∈ A
+    Conclude:
+      subspace included in(f,L,intersection of subspaces(f,L,A,S),S(i))
+
+  Result more indices give a smaller intersection:
+    Attribution: mathlib; Submodule.mem_sInf; adapted
+    Let B: Set(I)
+    Assume more indices: A ⊆ B
+    Conclude:
+      subspace included in(f,L,
+        intersection of subspaces(f,L,B,S),
+        intersection of subspaces(f,L,A,S))
+
+  Result empty family contains every vector:
+    Attribution: mathlib; Submodule.mem_sInf; adapted
+    Let x: V
+    Assume no admissible indices: for every (i: I, not i ∈ A)
+    Conclude:
+      belongs to subspace(f,L,x,intersection of subspaces(f,L,A,S))
+
+-- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

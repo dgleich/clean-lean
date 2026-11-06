@@ -1824,6 +1824,98 @@
       "model": "gpt-6",
       "date": "2026-11-06",
       "mode": "sidecar"
+    },
+    "library/algebra/linear_spaces.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/Subspaces.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/Subspaces.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/SubspacesVerified.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/Subspaces.tex": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/topology/latex_subspaces.tex": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/topology/verify_subspaces.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_linear_spaces.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/topology/mathlib-foundations.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "markdown"
+    },
+    "studies/topology/Subspaces.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "model": "gpt-6",
+      "date": "2026-11-06",
+      "mode": "sidecar"
     }
   }
 }

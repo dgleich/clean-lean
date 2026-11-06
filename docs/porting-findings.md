@@ -103,3 +103,20 @@ fields. Projected values are stable indices; equating a separately named alias t
 its projection still needs a future definitional-equality/transport policy. None of
 these gaps justifies importing a paper-specific mathematical construction wholesale.
 :::
+
+:::llm gpt-6 2026-11-06 role=assisted
+
+## Subspaces and a concrete universe requirement
+
+The explicit algebra module can define arbitrary admissible indexed intersections
+as actual Submodules in Clean. Carrier projection needed an explicit `Submodule.setLike`
+instance: a bare `U.carrier` attempted ambient typeclass synthesis and was replaced
+with the fully specified projection. Infimum similarly supplies `Submodule.instInfSet`
+explicitly. Canonical target comparisons retain these choices.
+
+The pinned native singular-homology API takes bundled TopCat and coefficient-category
+objects. Direct Lean checks confirm TopCat.{0} and ModuleCat.{0,0} K are Type 1.
+The current Type binding wrapper's fixed Type-0 result is therefore insufficient.
+Explicit universe metadata/type-field semantics are the next language requirement;
+substituting an unstructured Type-0 name would not be a valid implementation.
+:::

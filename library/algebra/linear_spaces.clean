@@ -1,0 +1,82 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "../topology/basic.clean"
+Import Lean Mathlib.LinearAlgebra.Span.Basic
+
+Type FieldStructure(K: Type):
+  Means: Field K
+  Render latex: \operatorname{{Field}}({K})
+  Describe: a field structure on ${K}$
+
+Type AdditiveGroup(V: Type):
+  Means: AddCommGroup V
+  Render latex: \operatorname{{AddCommGroup}}({V})
+  Describe: an additive commutative group structure on ${V}$
+
+Type ModuleStructure(K: Type, f: FieldStructure(K), V: Type, a: AdditiveGroup(V)):
+  Means: @Module K V f.toSemiring a.toAddCommMonoid
+  Render latex: \operatorname{{Module}}_{{{f}}}({V},{a})
+
+Structure LinearSpace(K: Type, f: FieldStructure(K), V: Type):
+  Let addition: AdditiveGroup(V)
+  Let action: ModuleStructure(K,f,V,addition)
+  Constructor: linear space
+  Render latex: \operatorname{{LinearSpace}}_{{{f}}}({V})
+  Describe: a vector space structure on ${V}$ over ${f}$
+
+Type Subspace(K: Type, f: FieldStructure(K), V: Type, L: LinearSpace(K,f,V)):
+  Means: @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action
+  Render latex: \operatorname{{Subspace}}({L})
+  Describe: a subspace of ${L}$
+  Describe plural: subspaces of ${L}$
+
+Notation subspace carrier(f,L,U):
+  Let K,V: Type
+  Let f: FieldStructure(K)
+  Let L: LinearSpace(K,f,V)
+  Let U: Subspace(K,f,V,L)
+  Returns: Set(V)
+  Means: @SetLike.coe (@Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) V (@Submodule.setLike K V f.toSemiring L.addition.toAddCommMonoid L.action) U
+  Render latex: {U}
+
+Condition belongs to subspace(f,L,x,U):
+  Let K,V: Type
+  Let f: FieldStructure(K)
+  Let L: LinearSpace(K,f,V)
+  Let x: V
+  Let U: Subspace(K,f,V,L)
+  Holds when: x ∈ subspace carrier(f,L,U)
+  Render: {x} belongs to {U}
+
+Condition subspace included in(f,L,U,W):
+  Let K,V: Type
+  Let f: FieldStructure(K)
+  Let L: LinearSpace(K,f,V)
+  Let U,W: Subspace(K,f,V,L)
+  Holds when:
+    for every (x: V,
+      belongs to subspace(f,L,x,U) → belongs to subspace(f,L,x,W))
+  Render: {U} is a subspace of {W}
+
+Notation subspace infimum(f,L,spaces):
+  Let K,V: Type
+  Let f: FieldStructure(K)
+  Let L: LinearSpace(K,f,V)
+  Let spaces: Set(Subspace(K,f,V,L))
+  Returns: Subspace(K,f,V,L)
+  Means: @sInf (@Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) (@Submodule.instInfSet K V f.toSemiring L.addition.toAddCommMonoid L.action) spaces
+  Render latex: \bigcap {spaces}
+
+Define intersection of subspaces(f,L,A,spaces):
+  Let K,V,I: Type
+  Let f: FieldStructure(K)
+  Let L: LinearSpace(K,f,V)
+  Let A: Set(I)
+  Let spaces: Function(I,Subspace(K,f,V,L))
+  Returns: Subspace(K,f,V,L)
+  Equals:
+    subspace infimum(f,L,
+      set of(function(U: Subspace(K,f,V,L),
+        there exists (i: I, i ∈ A and U = spaces(i)))))
+  Render latex: \bigcap_{{i \in {A}}} {spaces}(i)
+
+-- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

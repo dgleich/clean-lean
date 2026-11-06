@@ -31,6 +31,27 @@ main{max-width:1200px;margin:auto;padding:40px 28px 70px}h1{font-size:clamp(2rem
 <div class="controls" hidden id="controls"><label>Find a mapping<input id="search" type="search" placeholder="Try lambda, context, coercion, or sum"></label><label>Status<select id="status"><option value="all">All statuses</option><option value="implemented">Implemented</option><option value="accepted">Accepted design</option><option value="proposed">Proposed</option></select></label></div>
 <p id="count" role="status" aria-live="polite"></p>
 <div id="mappings">
+<article id="subspace-interface" data-status="implemented" class="mapping">
+<header><h2><a href="#subspace-interface">Explicit Mathlib subspaces and indexed intersections</a></h2><span class="badge implemented">Implemented library</span></header>
+<llm model="gpt-6" date="2026-11-06" role="assisted">
+<div class="pair"><section><h3>Clean — algebra module imported</h3><pre><code>Let K,V: Type
+Let f: FieldStructure(K)
+Let L: LinearSpace(K,f,V)
+Let U: Subspace(K,f,V,L)</code></pre></section>
+<section><h3>Lean binder shape</h3><pre><code>(K V : Type) (f : Field K)
+(L : LinearSpaceRecord K f V)
+(U : @Submodule K V f.toSemiring
+  L.addition.toAddCommMonoid L.action)</code></pre></section></div>
+<p>The record identifier is schematic. Field/module structures are explicit values;
+subspaces retain their scalar and ambient-space identities. The Clean-authored
+<code>intersection of subspaces(f,L,A,spaces)</code> forms the infimum of subspaces
+indexed by A. Its result is a submodule in the same space, including for an empty
+index set. Membership, inclusion and antitonicity have checked proofs.</p>
+<p>See <a href="../library/algebra/linear_spaces.clean">the module</a> and
+<a href="../studies/topology/mathlib-foundations.md">interface inventory and remaining
+homology obligations</a>. This adds library definitions, not new parser syntax.</p>
+</llm></article>
+
 <article id="structures" data-status="implemented" class="mapping">
 <header><h2><a href="#structures">Authored structures and scoped fields</a></h2><span class="badge implemented">Implemented subset</span></header>
 <llm model="gpt-6" date="2026-11-06" role="assisted">
