@@ -131,8 +131,11 @@ class Structures(unittest.TestCase):
         e=Environment();rs=load_document(ROOT/'studies/topology/Bundles.clean',e)
         self.assertEqual(len(rs),10)
     def test_bad_dots_are_syntax_errors(self):
-        for source in ['I..lower','I.','I.(lower)','I.lower.other(a).next']:
+        for source in ['I..lower','I.','I.(lower)']:
             with self.subTest(source=source),self.assertRaises(CleanError):syntax.parse(source,'expression')
+    def test_field_after_application_has_one_tree(self):
+        self.assertEqual(syntax.expression_tree(syntax.parse('I.lower.other(a).next','expression')),
+            ['Projection',['Apply',['Projection',['Projection',['Local','I'],'lower'],'other'],[['Local','a']]],'next'])
     def test_type_reference_does_not_allow_computation(self):
         with self.assertRaises(CleanError):syntax.parse('Path(X,f(x).t,x,x)','type_ref')
 
