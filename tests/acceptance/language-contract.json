@@ -2150,7 +2150,7 @@
     },
     {
       "id": "module_owned_explicit_numerals",
-      "status": "proposed",
+      "status": "partial",
       "environment": "Explicit closed Type-0 Real declaration with Numerals attachment; no implicit mathematical prelude or default type. See docs/module-numerals.md.",
       "source": "(001: Real)",
       "expected_tree": [
@@ -2163,10 +2163,11 @@
       ],
       "expected_lean": "Root-qualified declaration-owned numeral adapter applied to Lean.Expr.lit (.natVal 1); result is the selected Real type wrapper. Adapter payload is checked at Nat → that wrapper.",
       "checks": [
-        "studies/operator-integration/NumeralPayloadProbe.lean (native payload mechanism only)"
+        "studies/operator-integration/NumeralPayloadProbe.lean (native payload mechanism only)",
+        "studies/module-numerals/verify_prototype.py (isolated parser-only extension; no numeral binding)"
       ],
       "pending": [
-        "Generated-parser production and ASCII spelling validation",
+        "Main compiler integration of the independently checked parser production and ASCII validation",
         "Native adapter ownership, type checking and retained expression bindings",
         "Independent full adapter/application targets and type oracles",
         "Ambiguity, import/alias/shadowing and generated-name collision tests",

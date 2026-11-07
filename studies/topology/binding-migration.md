@@ -145,7 +145,9 @@ proofs are counted in their originating rows only. The extreme-image target coun
 includes the explicitly unproved two-image equality proposition; it is not a
 proof count. Shifted maps and both extreme certificates keep the same fixed target
 module. Their TeX outputs, including the candidate statement, are unchanged after
-provenance restoration. The shifted focused Python run is still pending.
+provenance restoration. All five shifted-perturbation Python tests pass in 130.655 seconds. The ongoing
+full-discovery log also records all four extreme-image tests as passing; this
+does not turn that unfinished suite into a passing full run.
 
 All eighteen verifiers in this topology directory have now completed on the
 working compiler. This is a collection of individual runs during the migration,

@@ -513,3 +513,10 @@ extreme-image exact targets is the unproved equality proposition. This is not a
 new full-suite result. The shifted Python run and full discovery remain active.
 The regenerated TeX sources are unchanged after provenance restoration.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The focused shifted-perturbation run completed with all five tests passing in
+130.655 seconds. All four extreme-image tests are recorded as passing in the
+still-active full-discovery log. Full discovery remains incomplete.
+:::

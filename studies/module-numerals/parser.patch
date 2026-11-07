@@ -1,0 +1,53 @@
+--- a/grammar/clean.lark
++++ b/grammar/clean.lark
+@@ -20,6 +20,7 @@
+ ?atom: NUMBER -> decimal
+      | name -> reference
+      | "(" expression ")" -> group
++     | "(" NUMBER ":" type_ref ")" -> numeral_annotation
+      | TYPE_VALUE "(" type_ref ")" -> type_value
+      | FUNCTION "(" ID ":" type_ref "," expression ")" -> function
+      | FOR EVERY "(" ID ":" type_ref "," expression ")" -> universal
+@@ -85,7 +86,7 @@
+ DECL: /(?i:Notation|Define|Condition)(?!\w)/
+ LET: /(?i:Let)(?!\w)/
+ DEFINE: /(?i:Define)(?!\w)/
+-FIELD: /(?i:Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
++FIELD: /(?i:Numerals|Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
+ IFF: "↔"
+ IMPLIES: "→"
+ OR: /(?i:or)(?=\W)/ | "∨"
+@@ -124,7 +125,7 @@
+ ATTRIBUTION_LINE: /(?i:Attribution)[ ]*:[^\n]*/
+ CONCLUDE_LINE: /(?i:Conclude)(?!\w)[^\n]*/
+ EXPR_FIELD_LINE: /(?i:Equals|Holds when)[ ]*:[^\n]*/
+-FIELD_LINE: /(?i:Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
++FIELD_LINE: /(?i:Numerals|Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
+ EXPR_LINE: /\S[^\n]*/
+ _NL: /\n[ ]*/
+ %declare _INDENT _DEDENT
+--- a/cleanlang/syntax.py
++++ b/cleanlang/syntax.py
+@@ -113,6 +113,12 @@
+     if kind=='group':return expression_tree(c[0])
+     if kind=='local':return ['Local',str(c[0])]
+     if kind=='type_value':return ['TypeValue',type_spelling(c[1])]
++    if kind=='numeral_annotation':
++        digits=str(c[0])
++        if not digits or any(ch not in '0123456789' for ch in digits):
++            from .core import CleanError
++            raise CleanError('Explicit numeral annotations require ASCII digits')
++        return ['NumeralAnnotation',digits,type_tree(c[1])]
+     if kind=='decimal':return ['Decimal',str(c[0])]
+     if kind=='call':return ['Call',name(c[0]),[expression_tree(x) for x in c[1].children] if len(c)>1 else []]
+     if kind=='unary':return ['Unary','-' if str(c[0])=='-' else 'not',expression_tree(c[1])]
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -540,6 +540,7 @@
+             value=self.reg.type(tree[1],self.env,phrases=False)
+             self.reg.require_type_argument(value)
+             return Expr(self.reg.render_type(value,'lean',self.env),self.reg.render_type(value,'latex',self.env),Type('Type'),tree=['TypeValue',tree[1] if isinstance(tree[1],Annotation) else str(value)])
++        if kind=='NumeralAnnotation':raise CleanError('Explicit numeral binding is not implemented in this parser prototype')
+         if kind=='Decimal':return Expr(tree[1],tree[1],NUM,tree=tree)
+         if kind=='Local':
+             if tree[1] not in self.env:raise CleanError('Unknown name: '+tree[1])

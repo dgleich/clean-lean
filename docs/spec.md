@@ -956,8 +956,9 @@ regression/study validation and general identity/import isolation remain open.
 
 The [module numeral draft](module-numerals.md) proposes a carrier-owned Numerals
 adapter and explicitly typed integer atoms as a first migration step. It is not
-implemented or accepted as conforming. Parser implementation and exact native
-literal acceptance oracles remain pending, as do the subsequent expected-type/default rules
+accepted as conforming. Its isolated parser-only study now checks the grammar
+and ASCII validation; native adapter binding and full literal target acceptance
+remain pending, as do the subsequent expected-type/default rules
 needed for ordinary unannotated numerals. The historical display-name-based
 Natural default is not the final architecture.
 :::

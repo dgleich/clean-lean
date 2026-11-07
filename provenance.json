@@ -6128,6 +6128,30 @@
         "-- ",
         ""
       ]
+    },
+    "studies/module-numerals/parser.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/module-numerals/verify_parser.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/module-numerals/verify_prototype.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/module-numerals/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }
