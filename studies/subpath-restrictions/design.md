@@ -136,39 +136,55 @@ interlevel extension and paper theorem remain separate unfinished mathematics.
 ## Isolated implementation checkpoint
 
 The [prototype patch](callable-evidence-prototype.patch) records the experimental
-compiler and ten focused tests without changing the compiler being validated in
-the main repository. It applies to the compiler at commit 6ca37dd. This is a
-reviewable intermediate implementation, not an accepted or integrated language
-change. Apply it only to an isolated copy when reproducing the experiment.
+compiler, tests and a reproducible native study without changing the compiler
+being validated in the main repository. It applies to the compiler at commit
+6ca37dd. This is an intermediate implementation, not an accepted or integrated
+language change. Apply it only to an isolated copy when reproducing the experiment.
 
 The experiment stores a checked condition tree, captured local expressions and
 an owned comparison key in a scoped proof index. A source-derived callable view
-exposes an authored universal condition as a dependent function type. Emission
-retains the original proof type and uses the original evidence term. The ten
-focused tests pass, as do twenty existing dependent-function tests. Independent
-native checks of four definitions and three propositions pass, with three proofs.
-Those native fixtures remain in the isolated working study and must be packaged
-with the eventual integration; the patch alone is not their reproducible verifier.
+exposes authored universal quantification and implication as function types.
+Emission retains the original proof type and uses the original evidence term.
+No proof search, replacement proof, eta expansion or native cast is introduced.
+Negation does not yet receive a callable view, and opaque native conditions are
+not inspected. Existing immediate-lambda contraction is retained; substitution
+renames binders in inserted actual expressions before checking the result.
 
-The initial evidence regression run passes nine of ten tests. Its remaining test
-asserts the old rule that a quantified assumption cannot be used as a value.
-That assertion must be replaced with independent positive and negative oracles;
-it is not a passing regression result.
+The patch includes studies/callable-evidence/Statements.clean and its standalone
+verify.py. With the patch applied, run
+`LAKE=lake python3 studies/callable-evidence/verify.py` from the isolated checkout.
+Fourteen independent exact native comparisons and ten proofs pass. Cases include
+direct and named universal evidence, generic projected proof fields, proof-family
+arguments, nested quantification, captured free variables and type scopes,
+implication application and saving an assumption as a local value. The verifier
+regenerates Lean and TeX artifacts; these will be tracked directly on integration.
+
+The generated parser matches its unchanged grammar under strict LALR and lexer
+checks. The combined focused/regression run passes 186 tests. Sixteen focused callable
+cases, including an additional syntax-only serializer round-trip test, also pass.
+The old assertion that quantified assumptions cannot be saved as values has been
+replaced; a separate exact native target now covers that operation. Three older
+negative tests exposed changed diagnostic precedence. The revised non-condition
+index test supplies a correctly typed lambda and still requires binder rejection.
+Higher-order lambda applications whose bodies contain binders remain rejected;
+their tests now check the specific application-boundary diagnostic.
+
+The specimen compiles twice and its two-page rendering was inspected. The proof
+field's prose description explicitly includes its carrier; the initial generic
+fallback omitted that information and was corrected in the specimen.
 
 One necessary extension surfaced during the experiment: Evidence is a transparent
 alias taking a condition as a value argument. Supporting a direct universal
 condition therefore requires scoped condition-valued type indices as well as
 proof types. The prototype permits these only when the argument's checked type
 is Proposition. Other computed indices still reject binders. Type syntax spelling
-must preserve these binders without deciding whether an argument is a condition.
-This boundary needs to enter the formal specification and acceptance catalog
-before integration.
+preserves these binders without consulting an environment; the semantic check
+selects the permitted index representation. This boundary needs to enter the
+formal specification and acceptance catalog before integration.
 
-Remaining work includes a full substitution and expression-consumer audit, exact
-targets for projected proof fields and captured scopes, implication/condition-head
-policy, local/module call-name collisions, more negative domain and equation tests,
-canonical comparison under binder renaming, packageable native fixtures, LaTeX
-inspection and full regression validation. The experiment has not established
-conformance. In particular, general captured-scope substitution must not be
-inferred safe merely from the ten passing examples.
+Remaining work includes the full substitution and expression-consumer audit,
+local/module call-name collision tests, further canonical comparison under binder
+renaming, formal acceptance documentation, full-suite validation and integration.
+The experiment has not established conformance. General captured-scope
+substitution must not be inferred safe merely from the passing examples.
 :::
