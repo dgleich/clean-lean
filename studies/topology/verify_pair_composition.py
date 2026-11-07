@@ -10,13 +10,19 @@ env=Environment();results=load_document(here/'PairComposition.clean',env)
 source=lean(results,env,['Lean'])
 (here/'PairComposition.lean').write_text(source)
 (here/'PairComposition.tex').write_text(latex(results,env))
-function=lambda n:env.data['functions'][n]['lean'].split()[0]
+function=lambda n:env.data['functions'][n]['native_binding']
 mapping={}
+for oracle,name in [('setType','Set'),('spaceType','TopologicalSpace'),('pointType','Point')]:
+    mapping['PairCompositionOracle.'+oracle]=env.data['types'][name]['native_binding']
 for oracle,name in [('congruence','equality congruence'),('reflexivity','equality reflexivity'),
  ('subsetRefl','subset reflexivity'),('subsetTrans','subset transitivity'),('replaceTarget','replace subset target'),
  ('ambientEq','pair ambient equality'),('relativeEq','pair relative equality'),
  ('identity','identity pair inclusion'),('compose','compose pair inclusions')]:
     mapping['PairCompositionOracle.'+oracle]=function(name)
+# Lean extracts these explicit proof arguments into auxiliary theorems. Map the
+# independently authored auxiliaries and compare their types and bodies too.
+for oracle,actual in [('sourceIdentity','pair_source_identity'),('targetIdentity','pair_target_identity')]:
+    mapping['PairCompositionOracle.'+oracle+'._proof_1']='CleanStatements.'+actual+'._proof_1'
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
 open Lean Elab Command
@@ -60,37 +66,40 @@ elab "same_target " a:ident b:ident : command => do
 '''
 expected=r'''
 namespace PairCompositionOracle
+noncomputable abbrev setType (X : Type) : Type := Set X
+noncomputable abbrev spaceType : Type 1 := TopCat.{0}
+noncomputable abbrev pointType (X : spaceType) : Type := TopCat.carrier X
 noncomputable def congruence {X Y : Type} (f : X → Y) (x y : X) (h : x=y) : f x=f y := congrArg f h
 noncomputable def reflexivity {X : Type} (x : X) : x=x := Eq.refl x
-noncomputable def subsetRefl {X : Type} (S : Set X) : S ⊆ S := Set.Subset.refl S
-noncomputable def subsetTrans {X : Type} (S T U : Set X) (h : S ⊆ T) (k : T ⊆ U) : S ⊆ U := Set.Subset.trans h k
-noncomputable def replaceTarget {X : Type} (S T U : Set X) (h : S ⊆ T) (e : T=U) : S ⊆ U :=
+noncomputable def subsetRefl {X : Type} (S : setType X) : S ⊆ S := Set.Subset.refl S
+noncomputable def subsetTrans {X : Type} (S T U : setType X) (h : S ⊆ T) (k : T ⊆ U) : S ⊆ U := Set.Subset.trans h k
+noncomputable def replaceTarget {X : Type} (S T U : setType X) (h : S ⊆ T) (e : T=U) : S ⊆ U :=
   @Eq.rec (Set X) T (fun V _ => S ⊆ V) h U e
-noncomputable def ambientEq (X : TopCat.{0}) (P Q : PAIR X) (h : P=Q) : P.ambient=Q.ambient :=
-  @congruence (PAIR X) (Set X.carrier) (fun T : PAIR X => T.ambient) P Q h
-noncomputable def relativeEq (X : TopCat.{0}) (P Q : PAIR X) (h : P=Q) : P.relative=Q.relative :=
-  @congruence (PAIR X) (Set X.carrier) (fun T : PAIR X => T.relative) P Q h
-noncomputable def identity (X : TopCat.{0}) (P : PAIR X) : INCLUSION X :=
-  @PAIRINCLUSION X P P (@subsetRefl X.carrier P.ambient) (@subsetRefl X.carrier P.relative)
-noncomputable def compose (X : TopCat.{0}) (Q R : INCLUSION X) (middle : Q.target=R.source) : INCLUSION X :=
+noncomputable def ambientEq (X : spaceType) (P Q : PAIR X) (h : P=Q) : P.ambient=Q.ambient :=
+  @congruence (PAIR X) (setType (pointType X)) (fun T : PAIR X => T.ambient) P Q h
+noncomputable def relativeEq (X : spaceType) (P Q : PAIR X) (h : P=Q) : P.relative=Q.relative :=
+  @congruence (PAIR X) (setType (pointType X)) (fun T : PAIR X => T.relative) P Q h
+noncomputable def identity (X : spaceType) (P : PAIR X) : INCLUSION X :=
+  @PAIRINCLUSION X P P (@subsetRefl (pointType X) P.ambient) (@subsetRefl (pointType X) P.relative)
+noncomputable def compose (X : spaceType) (Q R : INCLUSION X) (middle : Q.target=R.source) : INCLUSION X :=
   @PAIRINCLUSION X Q.source R.target
-    (@subsetTrans X.carrier Q.source.ambient R.source.ambient R.target.ambient
-      (@replaceTarget X.carrier Q.source.ambient Q.target.ambient R.source.ambient Q.ambient
+    (@subsetTrans (pointType X) Q.source.ambient R.source.ambient R.target.ambient
+      (@replaceTarget (pointType X) Q.source.ambient Q.target.ambient R.source.ambient Q.ambient
         (@ambientEq X Q.target R.source middle)) R.ambient)
-    (@subsetTrans X.carrier Q.source.relative R.source.relative R.target.relative
-      (@replaceTarget X.carrier Q.source.relative Q.target.relative R.source.relative Q.relative
+    (@subsetTrans (pointType X) Q.source.relative R.source.relative R.target.relative
+      (@replaceTarget (pointType X) Q.source.relative Q.target.relative R.source.relative Q.relative
         (@relativeEq X Q.target R.source middle)) R.relative)
-def identityEndpoints : Prop := ∀ (X : TopCat.{0}) (P : PAIR X), P=P ∧ P=P
-def compositionEndpoints : Prop := ∀ (X : TopCat.{0}) (Q R : INCLUSION X), Q.target=R.source →
+def identityEndpoints : Prop := ∀ (X : spaceType) (P : PAIR X), P=P ∧ P=P
+def compositionEndpoints : Prop := ∀ (X : spaceType) (Q R : INCLUSION X), Q.target=R.source →
   Q.source=Q.source ∧ R.target=R.target
-def sourceIdentity : Prop := ∀ (X : TopCat.{0}) (Q : INCLUSION X),
+def sourceIdentity : Prop := ∀ (X : spaceType) (Q : INCLUSION X),
   @compose X (@identity X Q.source) Q (@reflexivity (PAIR X) Q.source) = Q
-def targetIdentity : Prop := ∀ (X : TopCat.{0}) (Q : INCLUSION X),
+def targetIdentity : Prop := ∀ (X : spaceType) (Q : INCLUSION X),
   @compose X Q (@identity X Q.target) (@reflexivity (PAIR X) Q.target) = Q
-def associativity : Prop := ∀ (X : TopCat.{0}) (Q R S : INCLUSION X)
+def associativity : Prop := ∀ (X : spaceType) (Q R S : INCLUSION X)
   (first : Q.target=R.source) (second : R.target=S.source),
   @compose X (@compose X Q R first) S second = @compose X Q (@compose X R S second) first
-def continuousIdentity : Prop := ∀ (X : TopCat.{0}) (P : PAIR X),
+def continuousIdentity : Prop := ∀ (X : spaceType) (P : PAIR X),
   @AMBIENT X (@identity X P) = @CONTID (@SUBSPACE X P.ambient) ∧
   @RELATIVE X (@identity X P) = @CONTID (@SUBSPACE X P.relative)
 end PairCompositionOracle

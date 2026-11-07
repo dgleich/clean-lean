@@ -16,7 +16,9 @@ directly against the repository compiler, without applying historical patches.
 | `studies/topology/verify_compact_image.py` | 2 | 2 |
 | `studies/topology/verify_paths.py` | 14 | 4 |
 | `studies/topology/verify_evidence.py` | 42 | 4 |
-| Total | 213 | 45 |
+| `studies/topology/verify_local_names.py` | 4 | 2 |
+| `studies/topology/verify_pair_composition.py` | 20 | 6 |
+| Total | 237 | 53 |
 
 Run each with the repository Python environment and `LAKE` set to the pinned Lake
 executable. Each verifier generates its artifacts and invokes Lean. The foundation
@@ -81,6 +83,18 @@ proof fields, maps and statements. Both keep the original canonical comparators
 and proofs. Thirty-two focused `test_evidence` and `test_dependent_calls` tests
 pass, including wrong endpoint/topology and proof-argument rejection cases.
 Their TeX outputs are unchanged after provenance restoration.
+
+The local-name study checks its two statements and independently authored chain
+complex/map type bodies. Its statement expectations retain each local `let` and
+the original inferred indices of maps and subspaces. The pair-composition study
+checks three additional type bodies and the two proof auxiliaries Lean extracts
+from the identity statements. Those auxiliaries have explicit declaration-name
+mappings and separate exact type/body checks; proof terms are not erased or
+accepted by proof irrelevance. Twenty pair-composition targets and six proofs
+pass. Twenty-two focused `test_local_conversion` and `test_applied_indices`
+tests pass. An initial command used the nonexistent module name
+`test_beta_indices`; the corrected command above completed successfully. Both
+TeX outputs are unchanged after provenance restoration.
 
 The main compiler still uses the existing built-in operators. The separate
 [declared-operator experiment](../operator-integration/topology-migration.md)

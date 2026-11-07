@@ -444,3 +444,13 @@ dependent-call Python tests pass. Their TeX outputs are unchanged after
 provenance restoration. Nine migrated topology verifiers total 213 exact targets
 and 45 proofs. Full discovery is still running; these counts do not complete it.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+Local-name and pair-composition migration adds four and twenty exact targets,
+respectively, with two and six proofs. The pair identity statements require an
+explicit mapping of Lean's extracted proof auxiliaries; their types and bodies
+are compared separately. The exact matcher was not weakened. Eleven migrated
+topology verifiers total 237 exact targets and 53 proofs. TeX outputs for these
+two studies are unchanged after provenance restoration.
+:::

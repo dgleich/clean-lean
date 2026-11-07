@@ -12,17 +12,16 @@ source=lean(rs,e,['Lean'])
 (here/'LocalNames.tex').write_text(latex(rs,e))
 expected=r'''
 namespace LocalNamesOracle
-def imageStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field)
-  (X : TopCat.{0}) (Q : PAIR X) (h : @COMMUTES K field H X Q),
-  let M : @ModuleCat.{0,0} K field.toRing := @HOMOLOGY K field H X Q.source
-  let N : @ModuleCat.{0,0} K field.toRing := @HOMOLOGY K field H X Q.target
-  let f : @ModuleCat.Hom K field.toRing (@HOMOLOGY K field H X Q.source) (@HOMOLOGY K field H X Q.target) := @HMAP K field H X Q h
-  let U : @Submodule K (@HOMOLOGY K field H X Q.target).carrier field.toSemiring
-    (@HOMOLOGY K field H X Q.target).isAddCommGroup.toAddCommMonoid (@HOMOLOGY K field H X Q.target).isModule := @IMAGE K field H X Q h
-  ∀ (x : @ModuleCat.carrier K field.toRing N), @BELONGS K field N x U ↔
-    Exists (fun (y : @ModuleCat.carrier K field.toRing M) => @VALUE K field M N f y = x)
-def quotientStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field)
-  (X : TopCat.{0}) (Q : PAIR X) (h : @COMMUTES K field H X Q),
+def imageStatement : Prop := ∀ (K : CARRIER) (field : FIELD K) (H : THEORY K field)
+  (X : SPACE) (Q : PAIR X) (h : @COMMUTES K field H X Q),
+  let M : COEFFICIENT K field := @HOMOLOGY K field H X Q.source
+  let N : COEFFICIENT K field := @HOMOLOGY K field H X Q.target
+  let f : MODULEMAP K field (@HOMOLOGY K field H X Q.source) (@HOMOLOGY K field H X Q.target) := @HMAP K field H X Q h
+  let U : SUBMODULE K field (@HOMOLOGY K field H X Q.target) := @IMAGE K field H X Q h
+  ∀ (x : ELEMENT K field N), @BELONGS K field N x U ↔
+    Exists (fun (y : ELEMENT K field M) => @VALUE K field M N f y = x)
+def quotientStatement : Prop := ∀ (K : CARRIER) (field : FIELD K) (H : THEORY K field)
+  (X : SPACE) (Q : PAIR X) (h : @COMMUTES K field H X Q),
   let A : CHAINTYPE := ASOURCE
   let B : CHAINTYPE := ATARGET
   let C : CHAINTYPE := CSOURCE
@@ -34,14 +33,10 @@ def quotientStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K f
   @COMPOSE K field A C D f p = @COMPOSE K field A B D q g
 end LocalNamesOracle
 '''
-# Native types and original inferred annotations are deliberate: local names are
-# retained in authored arguments; they do not rewrite the inferred type of f/U.
-expected=expected.replace('MAPTYPE','(fun A B : CHAINTYPE => (letI : Field K := field; A ⟶ B))')
-# A beta-redex here would violate the exact-target oracle; write native type applications directly.
-import re
-expected=re.sub(r'\(fun A B : CHAINTYPE => \(letI : Field K := field; A ⟶ B\)\) (\w+) (\w+)',
- lambda m:'(letI : Field K := field; @Quiver.Hom (ChainComplex (ModuleCat.{0} K) ℕ) inferInstance '+m[1]+' '+m[2]+')',expected)
-expected=expected.replace('CHAINTYPE','(letI : Field K := field; ChainComplex (ModuleCat.{0} K) ℕ)')
+# Local names remain in authored arguments; inferred map types retain their
+# original source expressions. Type wrappers are explicit declaration references.
+expected=expected.replace('MAPTYPE', 'CHAINMAP K field')
+expected=expected.replace('CHAINTYPE', 'CHAINCOMPLEX K field')
 for token,term in [('ASOURCE','(@SINGULAR K field H (@SUBSPACE X Q.source.ambient))'),
  ('ATARGET','(@SINGULAR K field H (@SUBSPACE X Q.target.ambient))'),
  ('CSOURCE','(@CHAINS K field H X Q.source)'),('CTARGET','(@CHAINS K field H X Q.target)')]:expected=expected.replace(token,term)
@@ -49,8 +44,25 @@ subs={'THEORY':e.structures['HomologyTheory']['key'],'PAIR':e.structures['PairIn
 for token,name in [('COMMUTES','pair chain commutes'),('HOMOLOGY','relative homology'),('HMAP','relative homology map'),
  ('IMAGE','relative homology image'),('BELONGS','belongs to module subspace'),('VALUE','module map value'),
  ('CMAP','relative chain map'),('PROJECTION','relative chain projection'),('AMBIENT','ambient chain map'),
- ('COMPOSE','compose chain maps'),('SINGULAR','singular chains'),('SUBSPACE','subspace'),('CHAINS','relative chains')]:subs[token]=e.data['functions'][name]['lean'].split()[0]
+ ('COMPOSE','compose chain maps'),('SINGULAR','singular chains'),('SUBSPACE','subspace'),('CHAINS','relative chains')]:subs[token]='_root_.'+e.data['functions'][name]['native_binding']
+for token,name in [('CARRIER','Type'),('FIELD','FieldStructure'),('SPACE','TopologicalSpace'),
+                   ('COEFFICIENT','CoefficientModule'),('MODULEMAP','ModuleMap'),
+                   ('ELEMENT','ModuleElement'),('SUBMODULE','ModuleSubspace'),
+                   ('CHAINMAP','ChainMap'),('CHAINCOMPLEX','ModuleChainComplex')]:
+    subs[token]='_root_.'+e.data['types'][name]['native_binding']
 for token in sorted(subs,key=len,reverse=True):expected=expected.replace(token,subs[token])
+field_type=e.data['types']['FieldStructure']['native_binding']
+chain_type=e.data['types']['ModuleChainComplex']['native_binding']
+map_type=e.data['types']['ChainMap']['native_binding']
+expected+=f"""
+noncomputable def expected_local_chain_type (K : Type) (field : _root_.{field_type} K) : Type 1 :=
+  letI : Field K := field
+  ChainComplex (ModuleCat.{{0}} K) ℕ
+noncomputable def expected_local_chain_map (K : Type) (field : _root_.{field_type} K)
+    (C D : _root_.{chain_type} K field) : Type :=
+  letI : Field K := field
+  @Quiver.Hom (ChainComplex (ModuleCat.{{0}} K) ℕ) inferInstance C D
+"""
 comparison=r'''
 open Lean Elab Command
 private def canonical : Expr → Expr
@@ -82,8 +94,9 @@ theorem quotient_commutation : CleanStatements.named_relative_quotient_maps_comm
   exact CategoryTheory.Limits.cokernel.π_desc _ _ _
 end LocalNamesProofs
 '''
+comparison+=f'\nsame_target {chain_type} expected_local_chain_type\nsame_target {map_type} expected_local_chain_map\n'
 p=here/'LocalNamesVerified.lean';p.write_text(source+expected+comparison)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(p)],cwd=ROOT,check=True)
-print('Two exact local-name statement targets and two proofs passed')
+print('Four exact local-name/chain-type targets and two proofs passed')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
