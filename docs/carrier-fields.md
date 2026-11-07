@@ -87,7 +87,9 @@ rejects its generated type. An isolated [bound-call repair](../studies/carrier-f
 counterexample and preserves genuine local callable parameters. Subsequent
 [proof-binding](../studies/carrier-fields/ProofBindings.md) and
 [checked-annotation](../studies/carrier-fields/AnnotatedTypes.md) extensions preserve
-saved conditions and nested annotation calls. Operator composition, the wider identity
+saved conditions and nested annotation calls. The
+[composed operator study](../studies/carrier-fields/BoundOperators.md) retains selected
+operator adapters across these paths. Foundation/literal migration, the wider identity
 and closure audit, and corpus/study validation remain required before integration.
 
 Bare local Type substitutions retain syntax-only renaming; nonlocal checked Type

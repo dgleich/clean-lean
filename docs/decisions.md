@@ -813,3 +813,16 @@ authoritative resolved tree. Source JSON alone is not a semantic serialization. 
 removes the earlier nested-call rejection in the isolated stack, while module/type-head
 identity, operator composition and full conformance remain open.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Freeze operator selection before declaration publication
+
+In the [composed operator prototype](../studies/carrier-fields/BoundOperators.md),
+retain the selected adapter/template in saved expressions and keep source fixity/token
+as presentation metadata. Check and bind an authored body before adding its own
+operator candidate. Condition uses the same optional Infix/Prefix fields and arity
+validation as other callables. Callable proof views follow authored mathematical
+meaning, not the operator token: implication is a Clean forall definition. This remains
+isolated pending foundation/literal migration and declaration-identity conformance.
+:::

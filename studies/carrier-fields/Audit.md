@@ -54,6 +54,7 @@ needed by the call arguments and is insufficient.
 
 This report records the base prototype failure. The separate repair is not yet
 integrated: integration of the [proof-binding](ProofBindings.md) and
-[checked-annotation](AnnotatedTypes.md) extensions, operator composition and the
-wider identity/closure audit remain required.
+[checked-annotation](AnnotatedTypes.md) extensions, foundation migration and the
+wider identity/closure audit remain required. The subsequent
+[operator composition](BoundOperators.md) preserves selected adapters in this stack.
 :::

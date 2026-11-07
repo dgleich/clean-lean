@@ -5584,6 +5584,58 @@
         "-- ",
         ""
       ]
+    },
+    "studies/carrier-fields/composed-operators.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/carrier-fields/verify_bound_operators.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/BoundOperators.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/carrier-fields/BoundOperatorsVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/BoundOperators.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/BoundOperators.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/operators-latex.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/BoundOperators.pdf": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
     }
   }
 }

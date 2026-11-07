@@ -244,3 +244,19 @@ the unary fallback only inside the prototype. The module-isolation limitation
 still applies to both tables, and numeral/default interpretation, declared fixity,
 foundational sort coupling and full corpus migration remain integration gates.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Composed binding-aware prototype
+
+The [bound-operator study](../studies/carrier-fields/BoundOperators.md) combines the
+operator metadata with carrier fields, saved callable identities and checked type
+annotations. In that isolated stack, Condition also accepts Infix/Prefix metadata
+through the existing shared field grammar and operator validator. Body binding occurs
+before publishing the declaration's own operator candidate. Saved operators retain
+the selected adapter/template and a separate source-rendering tag; substitution does
+not re-run overload selection. The study specifies preserved grouping, callable
+implication authored with a forall, negative checks, and remaining migration gates.
+Main syntax remains unchanged. The earlier standalone patch keeps its conservative
+scope guard; the composed stack can reduce stored module calls through resolved bodies.
+:::

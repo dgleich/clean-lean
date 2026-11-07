@@ -81,8 +81,8 @@ fixture (21 targets/six proofs), 221 selected regressions, 40 proof/evidence tes
 
 This removes the nested-call annotation rejection in this isolated stack. It does not
 establish the complete native declaration-identity contract: generic type-head identity,
-module-owned exports, and universe polymorphism remain separate requirements. Compose
-with module operators and audit all remaining annotation reification paths, including
+module-owned exports, and universe polymorphism remain separate requirements. The subsequent [composed operator study](BoundOperators.md) preserves operator
+adapters in these annotations. Audit all remaining annotation reification paths, including
 source-only inferred-type recovery, before integration. Full corpus/study validation
 is also required. The complete isolated compiler run passed all 34 exact targets,
 17 proofs and 274 regression tests. The marker fixture was then changed from a diagnostic native adapter to an authored

@@ -1895,13 +1895,44 @@
         "studies/carrier-fields/check_capture.py",
         "studies/carrier-fields/verify_bound_calls.py",
         "studies/carrier-fields/verify_proof_bindings.py",
-        "studies/carrier-fields/verify_annotations.py"
+        "studies/carrier-fields/verify_annotations.py",
+        "studies/carrier-fields/verify_bound_operators.py"
       ],
       "pending": [
-        "Binding and nested annotations repaired in isolated patch stack; operator composition, complete identity/closure audit and integration remain open",
+        "Bound operator composition isolated; foundation/literal migration, complete identity/closure audit and integration remain open",
         "Main integration and complete carrier-consumer audit",
         "Full corpus and study validation",
         "Universe polymorphism and native module-scope policy"
+      ]
+    },
+    {
+      "id": "bound_operator_composition",
+      "status": "partial",
+      "environment": "Isolated carrier, bound-call, proof-binding, annotation and composed-operator patches; strict generated parser; explicit Mathlib foundations in BoundOperators.clean.proposed.",
+      "source_fragment": "Condition implication(p: Proposition,q: Proposition):\n  Infix: →\n  Holds when: for every (h: (p), q)\n",
+      "expected_tree": [
+        "Operator",
+        "→",
+        [
+          "Local",
+          "P"
+        ],
+        [
+          "Local",
+          "Q"
+        ]
+      ],
+      "expected_lean": "The selected implication adapter P Q; its independently checked body is fun p q => forall (_ : p), q. Saved operators retain this adapter through later overload additions.",
+      "obligation": "Resolve Condition operator metadata with the same arity checks as other callables. Bind an authored body before publishing its operator candidate. Preserve selected adapter identities and original prefix/infix grouping in saved conditions and annotations. Determine callable proof views from authored meaning, not tokens. Named and operator presentations must preserve equivalent grouping.",
+      "checks": [
+        "studies/carrier-fields/verify_bound_operators.py",
+        "studies/carrier-fields/BoundOperatorsVerified.lean"
+      ],
+      "pending": [
+        "Foundation and literal/default migration",
+        "Declaration-owned type identity and import scope",
+        "Declared fixity, editor support and full corpus/study checks",
+        "Main integration and broad conformance"
       ]
     }
   ]
