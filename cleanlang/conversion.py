@@ -147,8 +147,13 @@ def _normal_form(expression,environment,locals,*,fresh=False):
            len(args)==len(expression.checked_args) and
            all(unchanged(a,b) for a,b in zip(args,expression.checked_args)))
     if kind=='ModuleCall':
-        from .bound_calls import elaborate as bound_elaborate
-        checked=bound_elaborate(tree,env,locals,args)
+        from .bound_calls import elaborate as bound_elaborate,identity
+        from .core import CleanError
+        # Retained calls have the same traversal-local freshness witness as
+        # ordinary calls. Always validate the retained declaration identity,
+        # even when the already checked call's arguments are unchanged.
+        if tree[3]!=identity(env,name):raise CleanError('Changed bound module callable: '+name)
+        checked=expression if reuse else bound_elaborate(tree,env,locals,args)
     else:checked=expression if reuse else env.call(name,args,locals)
     definition=env.definitions.get(name)
     if definition and definition['implementation']=='equals':

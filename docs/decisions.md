@@ -910,3 +910,15 @@ Canonical target changes require explicit oracle migration. Declared operators
 and numeric-literal policy remain separate, unfinished integration work. Full
 regression/study validation and general identity/import isolation remain open.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Use the existing freshness witness for retained module calls
+
+[Retained-call comparison](fresh-bound-call-comparison.md) now uses the same
+unchanged-argument guard as ordinary calls. Validate retained declaration identity
+on both paths. Public inputs do not gain freshness from stored metadata, and
+incomplete analysis still propagates. This is an implementation correction under
+the existing parse and Lean-target rules, not permission for broader semantic
+memoization or first-success inference. Full stress validation remains pending.
+:::

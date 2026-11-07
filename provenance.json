@@ -6088,6 +6088,26 @@
     "docs/binding-integration.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "tests/test_bound_comparison_reuse.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/profile_active_labels.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "docs/fresh-bound-call-comparison.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }
