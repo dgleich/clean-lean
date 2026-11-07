@@ -6,6 +6,11 @@ The study now has a working Clean foundation, generated Lean statements, and
 kernel-checked foundation proofs. The five paper/classical theorem targets remain
 pending; they are not included in the verified theorem count.
 
+See the [implementation and acceptance audit](implementation-status.md) for the
+current interface inventory, failed and pending validation, and the separate
+mathematical construction obligations. Historical counts below describe their
+individual milestones.
+
 | File | Purpose |
 |---|---|
 | [comparison.md](comparison.md) | GitHub-readable theorem comparisons; historical proposed interfaces |

@@ -5,8 +5,8 @@
   "cases": [
     {
       "id": "identity_proposition",
-      "status": "pending",
-      "environment": "Explicit Real -> Lean Real binding, Proposition -> Lean Prop binding, and equality -> Lean Eq; synthetic source local with reference identity; no other candidates",
+      "status": "implemented-slice",
+      "environment": "Explicit library/types.clean module and a local Source declaration; Real maps to Lean Real and Proposition maps to Prop. Equality uses the current fixed built-in Eq rule; a module-declared equality mechanism is not claimed.",
       "source": "Result identity:\n  Attribution: local; identity; original\n  Let x: Real\n  Conclude: x = x\n",
       "expected_tree": [
         "Result",
@@ -43,7 +43,15 @@
       ],
       "expected_lean": "∀ (x : Real), @Eq.{1} Real x x",
       "expected_lean_type": "Prop",
-      "obligation": "Supply executable environment and canonical elaborated-target comparison; compare local-renaming and legal layout variants"
+      "obligation": "Check the independent normalized statement tree and canonical native declaration type/body for renamed locals, case-insensitive keywords, prose type spelling, 2/3/4-space indentation, multiline conclusion, grouping and a trailing comment. Reject a definitionally equal alias as a different canonical target.",
+      "checks": [
+        "tools/check_basic_targets.py",
+        "generated/BasicAcceptance.lean"
+      ],
+      "pending": [
+        "General module-declared operator/native-adapter elaboration contract",
+        "Full language conformance audit"
+      ]
     },
     {
       "id": "postfix_completes_inline_expression",
@@ -500,9 +508,18 @@
       ],
       "pending": [
         "Inherited general Lean body/type elaboration uniqueness",
+        "Universe-polymorphic APIs",
+        "Expression indices and dependent arrows beyond the linked bounded profiles remain unsupported"
+      ],
+      "historical_pending": [
+        "Inherited general Lean body/type elaboration uniqueness",
         "General expression indices",
         "Pi-valued functions",
         "Universe-polymorphic APIs"
+      ],
+      "follow_up_cases": [
+        "immediately_applied_function_indices",
+        "dependent_function_type_grammar"
       ]
     },
     {
@@ -554,10 +571,21 @@
       ],
       "pending": [
         "Inherited opaque Lean/body elaboration contract",
+        "General universes",
+        "Definitional equality or transport for aliases",
+        "Emacs runtime check (not installed)",
+        "Carrier-type fields remain unsupported"
+      ],
+      "historical_pending": [
+        "Inherited opaque Lean/body elaboration contract",
         "Proof fields and carrier-type fields",
         "General universes",
         "Definitional equality or transport for aliases",
         "Emacs runtime check (not installed)"
+      ],
+      "follow_up_cases": [
+        "explicit_evidence",
+        "proof_valued_function_sorts"
       ]
     },
     {
@@ -778,10 +806,19 @@
         "studies/topology/verify_relative_maps.py"
       ],
       "pending": [
+        "Literal/coercion normalization",
+        "Native-body conversion remains opaque; general conversion beyond the linked bounded follow-up rules is not claimed"
+      ],
+      "historical_pending": [
         "Binder-bearing expansions",
         "Used inferred parameters",
         "Local-alias and native conversion",
         "Literal/coercion normalization"
+      ],
+      "follow_up_cases": [
+        "hygienic_applied_producer_fields",
+        "checked_inferred_conversion",
+        "local_definition_comparison_values"
       ]
     },
     {
@@ -1195,8 +1232,15 @@
       ],
       "pending": [
         "General higher-order conversion",
+        "Pyramid basis extension"
+      ],
+      "historical_pending": [
+        "General higher-order conversion",
         "Compound type expressions as explicit value arguments",
         "Pyramid basis extension"
+      ],
+      "follow_up_cases": [
+        "explicit_type_expressions"
       ]
     },
     {
@@ -1383,8 +1427,15 @@
       ],
       "pending": [
         "General universe polymorphism",
+        "Type-valued local definitions"
+      ],
+      "historical_pending": [
+        "General universe polymorphism",
         "Type-valued local definitions",
         "Callable named universal evidence"
+      ],
+      "follow_up_cases": [
+        "scoped_callable_evidence"
       ]
     },
     {

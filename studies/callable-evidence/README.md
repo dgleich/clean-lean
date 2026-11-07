@@ -33,3 +33,18 @@ Build the LaTeX specimen twice from the repository root with
 after creating that output directory. The three-page specimen was inspected; the
 proof-field description explicitly displays its carrier.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Broader validation result
+
+The first frozen callable-evidence snapshot completed its native portfolio with
+32 of 33 studies passing. Diagram maps failed when eager callable classification
+attempted to serialize an internal application. The same snapshot's full test
+run records a diagram-map setup error and remains in progress. The newer compiler
+uses demand-driven call-head classification and selected producer fields; its
+native diagram-map check passes all 15 exact targets and six proofs. Its full
+regression and portfolio remain pending. See the
+[topology acceptance audit](../topology/implementation-status.md); neither run is
+being reported as a completed all-green validation.
+:::

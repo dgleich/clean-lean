@@ -4328,6 +4328,26 @@
     "studies/interval-clipping/Statements.pdf": {
       "origin": "derived-from-authored-sources; cited data retains source origin",
       "mode": "sidecar"
+    },
+    "tools/check_basic_targets.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "generated/BasicAcceptance.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/implementation-status.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

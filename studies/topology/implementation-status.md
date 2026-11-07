@@ -1,0 +1,69 @@
+:::llm gpt-6 2026-11-07 role=assisted
+
+# Topology implementation and acceptance audit
+
+This is an audit checkpoint, not a completion claim. The maintained specification
+and executable fixtures are authoritative; historical milestone paragraphs and
+catalog entries must not be read as a current all-green report.
+
+## Implemented language and module interfaces
+
+| Requirement | Concrete implementation and acceptance evidence | Remaining boundary |
+|---|---|---|
+| Named fields and constructors | `library/algebra/module_diagrams.clean`, `library/diagrams/interval_bases.clean`; structure, diagram-map and zigzag studies | Carrier-type fields and general universe polymorphism remain unsupported |
+| Dependent callable signatures and indices | Dependent-function, computed-index and inferred-conversion studies; explicit stored implicit arguments | General higher-order conversion and normalization inside binder bodies are not claimed |
+| Named conditions usable as evidence | Callable-evidence study: 21 exact targets and 15 proofs; captured scopes and local/module resolution have negative tests | Opaque native conditions do not acquire callable views; broader validation is pending |
+| Definition bodies authored in Clean | Topology images/preimages/continuity, relative quotient constructions, well-group intersections, diagram pullbacks, subpaths and clipping | Imported foundations remain explicit; mathematical constructions listed below are still missing |
+| Deterministic parsing | Generated grammar with strict LALR/lexer checks, independent source trees, explicit layout and metadata interpreters | Module-declared arbitrary operator syntax is not implemented; handwritten layout and metadata rules still need their own tests |
+| Precise selected Lean targets | Canonical native declaration comparisons retain arguments, universes, instances and proof terms; the new basic-identity checker tests four legal source variants | General operator/literal/native-adapter contract and resource-outcome integration remain open acceptance obligations |
+| Readable statements and LaTeX | Local names, explicit contexts, conditions and descriptive type metadata; subpath and clipping PDFs compiled twice and inspected | The offline browser refresh and its inventory/UI checks are pending |
+
+The basic identity checker is `LAKE=lake python3 tools/check_basic_targets.py`.
+It verifies the normalized statement tree, including attribution, binding and
+conclusion, then compares generated declaration types and bodies with independently
+written `∀ (x : ℝ), @Eq.{1} ℝ x x`. Local renaming, keyword case, prose type spelling,
+indentation, continuation, grouping and comments cannot change that target.
+A definitionally equal alias is deliberately rejected by the canonical comparator.
+This is a concrete acceptance slice, not a proof of general elaboration uniqueness.
+
+The acceptance catalog retains historical pending lists where follow-up cases now
+implement part of an older obligation. Follow-up links do not erase the newer
+case's own limitations or substitute for its outstanding validation.
+
+## Current validation evidence
+
+- The pre-callable compiler passed 584 Python tests. That count does not validate
+  later compiler changes.
+- The first callable-evidence snapshot finished its 33-study native run with 32
+  passes and one failure: `studies/diagram-maps/verify.py`. Unnecessary callable
+  classification reached an internal application that lacked a supported source
+  spelling. Its full Python run also recorded a diagram-map setup error and is
+  still running; it must not be reported as passing.
+- The newer selected-field snapshot has passed the diagram-map study's 15 exact
+  targets and six proofs. Its full Python run and complete native portfolio are
+  still running. Completion and all failures must be inspected before updating
+  that status.
+- Current main passes the subpath study's 19 exact targets and six proofs, and
+  the clipping study's eight exact targets, three proofs and five Python checks.
+  The corrected label-rendering regeneration passes the zigzag study's 46 exact
+  targets and six proofs. The 92-proof corpus was checked after the compiler change.
+- The older browser build was superseded when clipping sources were added. The
+  current build must be checked against all source hashes, including the later
+  IntervalLabels prose correction, before it is called current.
+
+## Mathematical constructions still missing
+
+| Requested theorem | What is real now | What is still missing |
+|---|---|---|
+| Big Steps, Theorem 9 | Indexed records and ordinary set/function definitions can express its inputs and support predicates | Filtered complex, lazy reduction, the actual algorithm run and its invariants; the two sides must be computed independently |
+| Interlevel, Theorem 1 | Explicit diagrams, interval bases, subpath restrictions, endpoint clipping and surviving-label support | Restricted label records, basis reindexing and compatibility, pyramid construction, exact-diamond basis flips and extension proof |
+| Interlevel, Theorem 3 | Actual singular-homology, submodule, perturbation and shifted-image foundations | Assemble the level-set specialization and prove the two-extreme-perturbation formula with justified cover hypotheses |
+| Interlevel, Theorem 4 | A translated two-image candidate over actual relative objects; checked supporting inclusion maps | Reverse inclusion and the cover/excision audit; no proof is claimed by translating the candidate |
+| Mayer–Vietoris | Graded objects, maps and ordinary/relative chain foundations | Connecting maps, sequence/exactness interface, excision and the long-exact-sequence construction |
+
+These missing mathematical objects are not supplied by opaque names or assumptions
+of the desired conclusion. Conversely, a missing paper proof does not establish a
+parser defect. Each new construction should first be attempted with the existing
+Clean definitions, conditions, structures and explicit foundation modules; a
+failure to express it must be recorded as a language gap with a concrete specimen.
+:::
