@@ -43,7 +43,9 @@ The [contract](../../docs/carrier-fields.md) gives the parse and translation rul
 Main integration and full corpus/study validation remain required. The expanded
 [consumer audit](Audit.md) records a confirmed callable-capture failure that blocks
 integration. A subsequent [bound-call repair](BoundCalls.md) fixes the counterexample
-in isolation; structural annotations and proof-index binding remain open.
+in isolation. The [proof-binding extension](ProofBindings.md) also preserves module
+conditions in saved and quantified proof types. Structural annotations and integration
+remain open.
 Composition with module operators passes five additional exact targets
 and three proofs; run `python3 studies/carrier-fields/verify_operators.py`. This is fixed Type-0 carriers in
 an explicitly higher-universe record; it is not general universe polymorphism,

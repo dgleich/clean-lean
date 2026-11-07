@@ -5520,6 +5520,38 @@
         "-- ",
         ""
       ]
+    },
+    "studies/carrier-fields/proof-bindings.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/carrier-fields/verify_proof_bindings.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/ProofBindings.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/carrier-fields/ProofBindingsVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/ProofBindings.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

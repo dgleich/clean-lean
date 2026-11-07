@@ -788,3 +788,15 @@ rule, consumer changes and remaining structural type/proof-index gaps. No new so
 syntax is introduced. This experiment does not replace the broader module-owned
 identity requirement or authorize dropping unsupported annotations from the final language.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Resolve callable heads in saved proof conditions
+
+Extend the isolated bound-call representation to ProofIndex storage. Resolve bodies
+of quantified conditions in lexical scopes extended by checked binder types. Preserve
+module targets through proof substitution and callable views; retain local function
+parameters as substitutable references. The [proof-binding study](../studies/carrier-fields/ProofBindings.md)
+specifies the rule and native evidence. Structural annotation storage remains required
+before integration; unsupported annotation calls are not an approved final limitation.
+:::

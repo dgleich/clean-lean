@@ -85,7 +85,8 @@ callable-capture failure**: reparsing a computed carrier in caller locals can ch
 a module call head into a local function. Clean accepts the counterexample, but Lean
 rejects its generated type. An isolated [bound-call repair](../studies/carrier-fields/BoundCalls.md) fixes that
 counterexample and preserves genuine local callable parameters. Structural annotations,
-proof-index binding and the wider closure audit remain required before integration.
+integration of the [proof-binding extension](../studies/carrier-fields/ProofBindings.md)
+and the wider closure audit remain required before integration.
 
 Bare local Type substitutions retain syntax-only renaming; nonlocal checked Type
 expressions enter carrier reification. This preserves the earlier hygiene contract

@@ -1,0 +1,63 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated binding prototype
+Import "../../library/types.clean"
+Source local:
+  Kind: other
+  Label: Proof binding study
+  Title: Module and local callable binding in proof types
+
+Condition c(x: Real):
+  Holds when: x = x
+
+Define retain proof(x,h):
+  Let x: Real
+  Let h: (c(x))
+  Returns: (c(x))
+  Equals: h
+
+Define retain local(F,x,h):
+  Let F: Function(Real,Proposition)
+  Let x: Real
+  Let h: (F(x))
+  Returns: (F(x))
+  Equals: h
+
+Define retain universal(h):
+  Let h: (for every (z: Real, c(z)))
+  Returns: (for every (z: Real, c(z)))
+  Equals: h
+
+Define specialize(h,x):
+  Let h: (for every (z: Real, c(z)))
+  Let x: Real
+  Returns: (c(x))
+  Equals: h(x)
+
+-- The local c below must not change a previously declared proof type.
+Result module proof retained:
+  Attribution: local; module condition under shadowing; original
+  Let x: Real
+  Assume k: x = x
+  Let c: Function(Real,Proposition)
+  Conclude: retain proof(x,k) = k
+
+Result local proof retained:
+  Attribution: local; callable parameter substitution; original
+  Let x: Real
+  Let c: Function(Real,Proposition)
+  Assume h: c(x)
+  Conclude: retain local(c,x,h) = h
+
+Result universal proof retained:
+  Attribution: local; quantified module condition; original
+  Assume q: for every (z: Real, c(z))
+  Let c: Function(Real,Proposition)
+  Conclude: retain universal(q) = q
+
+Result universal proof specialized:
+  Attribution: local; callable view of a quantified proof; original
+  Let x: Real
+  Assume q: for every (z: Real, c(z))
+  Let c: Function(Real,Proposition)
+  Conclude: specialize(q,x) = q(x)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

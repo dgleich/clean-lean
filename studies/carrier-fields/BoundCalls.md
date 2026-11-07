@@ -40,8 +40,9 @@ The patch updates expression elaboration, computed-index substitution, native co
 source spelling, automatic argument-label spelling, occurrence analysis, hygienic
 substitution, and immediate/quantified beta traversals to preserve the internal head.
 Local calls become applications, so their parameters remain substitutable. Repeated
-substitution must preserve the stored identity. Proof-index storage has its own path
-and is **not migrated** by this patch.
+substitution must preserve the stored identity. Proof-index storage has its own path and is not migrated by this patch alone.
+The subsequent [proof-binding extension](ProofBindings.md) covers saved conditions
+and quantified proof bodies.
 
 Type expressions embedded as source strings remain a structural gap. Plain TypeValue
 annotations without call heads retain their current handling; a computed call nested
@@ -70,7 +71,7 @@ source, applies both patches, regenerates/checks the grammar, and runs:
 The first fixture attempt omitted `noncomputable` on six expected/actual definitions;
 Lean rejected code generation. The fixture was corrected without changing proofs.
 
-This repair remains isolated pending structural annotations, proof indices, operator
-composition, a complete consumer audit and full corpus/study validation. It does not
+This repair remains isolated pending structural annotations, integration of the
+proof-binding extension, operator composition, a complete consumer audit and full corpus/study validation. It does not
 establish complete language conformance.
 :::
