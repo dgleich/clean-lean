@@ -9,7 +9,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 class Quantifiers(unittest.TestCase):
     def setUp(self):
-        self.env=Environment();load_module(ROOT/'library/types.clean',self.env)
+        self.env=Environment();load_module(ROOT/'library/operators.clean',self.env)
     def parse(self,s,locals=None):
         return Expressions(self.env,locals or {}).parse(s)
     def test_independent_tree(self):

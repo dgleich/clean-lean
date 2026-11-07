@@ -159,3 +159,40 @@ The main compiler still uses the existing built-in operators. The separate
 remains isolated. Other repository studies still need native-verifier migration. These checks establish neither the missing paper proofs nor
 general universe polymorphism or the complete language acceptance contract.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Revalidation after declared operators entered the working compiler
+
+The preceding eighteen-verifier totals describe the pre-operator compiler. They
+are not current validation of the whole topology portfolio. Operators now resolve
+through explicit imports, including `library/topology/basic.clean` importing
+`library/operators.clean`.
+
+Two verifiers have been migrated and rerun against this compiler:
+
+| Verifier | Exact targets | Proofs |
+| --- | ---: | ---: |
+| `verify.py` | 23 | 7 |
+| `verify_indices.py` | 10 | 4 |
+
+The first checks the six imported equality, membership, intersection, conjunction,
+equivalence and implication adapters independently, then checks Clean-authored
+set constructions and statements using their native identities. The second adds
+an equality-adapter oracle and retains that identity in indexed reflexivity
+statements. Native `Element` type bodies still use native set membership, as
+specified by their `Means` payloads. A native adapter body and an authored Clean
+expression must not be conflated in the canonical oracle.
+
+The equality adapter's result type is the declared Proposition wrapper; an oracle
+using bare Prop is definitionally equivalent but structurally wrong. The strict
+comparison rejected it until the independently authored expectation was corrected.
+Both verifiers compare complete canonical native type and value structures; no
+comparison was weakened to definitional equality. The eleven proofs include
+three agreement proofs with Mathlib constructions and eight statement proofs.
+
+The regenerated one-page foundation and indexed-type specimens compiled twice
+and were visually inspected. The foundation specimen retains a 0.12149pt
+paragraph overfull warning; no clipping was visible. The other sixteen topology
+verifiers and the paper theorem proofs remain outside this revalidation claim.
+:::

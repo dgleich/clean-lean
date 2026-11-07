@@ -59,11 +59,32 @@ Neither was counted as passing. The fresh full run finished: 641 tests, 48 failu
 unmigrated fixtures and modules; no full-suite pass is claimed. After that run,
 `library/topology/basic.clean` was changed to explicitly import the operator module.
 The separate `Common.clean`, downstream topology exact-target oracles and older
-fixtures still need migration. A module-load survey is running after the topology
-import correction; loading alone does not certify its Lean targets.
+fixtures still need migration. The module-load survey after the topology import correction terminated with
+status 143 before buffered per-module output was returned. It provides no
+module-loading success evidence; targeted native verifiers are tracked separately.
 
 Type-position numeral semantics, parameterized numeral carriers, complete native
 instance/import isolation and inference scalability remain open. These limits do
 not justify implicit compatibility behavior. Unproved research theorems remain
 separate from translated statements and verified Mathlib wrappers.
+:::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Common module and first topology revalidation
+
+`library/Common.clean` now explicitly imports `operators.clean` and reuses its
+carrier declarations instead of maintaining duplicate types without numeral
+constructors. Its finite operations and mathematical conditions remain separate
+named declarations. All 15 condition tests and 11 quantifier tests pass; the
+condition AST oracle now specifies the retained Real numeral constructor, and
+the quantifier fixture explicitly imports the mathematical operators it uses.
+The six magnetic-study statements parse again; their native proof checks have
+not yet been migrated or claimed as passing.
+
+The [topology revalidation report](../studies/topology/binding-migration.md)
+records 33 exact targets and 11 proofs across the foundation and named-index
+studies after the operator migration. The remaining topology verifiers still
+need revalidation. A fresh full regression run follows the Common migration;
+its outcome is pending, independently of the earlier failed run.
 :::

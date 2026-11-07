@@ -35,7 +35,13 @@ class Conditions(unittest.TestCase):
 
     def test_independent_ast_and_binders(self):
         env,rs=self.load();r=rs[0]
-        self.assertEqual(env.definitions['positive']['tree'],['Operator','>',['Local','x'],['Decimal','0']])
+        carrier=env.data['types']['Real']['native_binding']
+        constructor=env.data['types']['Real']['numerals']['native_binding']
+        snapshot=[carrier,f'noncomputable abbrev {carrier}  : Type :=\n  ℝ\n','ℝ',
+                  constructor,f'noncomputable def {constructor} (digits : Nat) : _root_.{carrier} :=\n  (fun n : Nat => (n : Real)) digits\n',
+                  'fun n : Nat => (n : Real)']
+        self.assertEqual(env.definitions['positive']['tree'],
+                         ['Operator','>',['Local','x'],['BoundNumeral','0','Real',snapshot,'inferred']])
         self.assertEqual([(c.label,c.names,c.value.tree) for c in r.clauses if c.kind=='assume'],[
             ('positivity of x',['positivity_of_x'],['Call','positive',[['Local','x']]]),
             ('positivity of y',['positivity_of_y'],['Call','positive',[['Local','y']]])])

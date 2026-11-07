@@ -4,53 +4,7 @@ Import "logic/booleans.clean"
 Import Lean Mathlib.LinearAlgebra.Matrix.PosDef
 Import Lean Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 
-Type Natural():
-    Means: ℕ
-    Render latex: \mathbb{{N}}
-    Describe: a natural number
-    Describe plural: natural numbers
-
-Type Real():
-    Means: ℝ
-    Render latex: \mathbb{{R}}
-    Describe: a real number
-    Describe plural: real numbers
-
-Type Complex():
-    Means: ℂ
-    Render latex: \mathbb{{C}}
-    Describe: a complex number
-    Describe plural: complex numbers
-
-Type Proposition():
-    Means: Prop
-    Render latex: \mathrm{{Prop}}
-    Describe: a proposition
-    Describe plural: propositions
-
-Type Matrix(p0: Natural, p1: Natural, p2: Type):
-    Means: Matrix (Fin p0) (Fin p1) p2
-    Render latex: {p2}^{{{p0}\times {p1}}}
-    Describe: a matrix of size ${p0}\times {p1}$ over ${p2}$
-    Describe plural: ${p0}\times {p1}$ matrices over ${p2}$
-
-Type Vertex(p0: Natural):
-    Means: Fin p0
-    Render latex: \{{0,\ldots,{p0}-1\}}
-    Describe: a vertex in $\{{0,\ldots,{p0}-1\}}$
-    Describe plural: vertices in $\{{0,\ldots,{p0}-1\}}$
-
-Type List(p0: Type):
-    Means: List (p0)
-    Render latex: \operatorname{{List}}({p0})
-    Describe: a list with entries in ${p0}$
-    Describe plural: lists with entries in ${p0}$
-
-Type Function(p0: Type, p1: Type):
-    Means: (p0) → (p1)
-    Render latex: ({p0}\to {p1})
-    Describe: a function from ${p0}$ to ${p1}$
-    Describe plural: functions from ${p0}$ to ${p1}$
+Import "operators.clean"
 
 -- Generic finite operations. There are no magnetic or paper-specific Lean definitions here.
 
