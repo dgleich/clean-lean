@@ -1872,6 +1872,32 @@
         "Module-owned identity, explicit exports and qualified lookup",
         "Full-suite validation"
       ]
+    },
+    {
+      "id": "carrier_fields_prototype",
+      "status": "partial",
+      "environment": "Isolated carrier-fields patch and strict regenerated parser; fixed Type-0 carriers in an explicit Universe-1 record.",
+      "source_fragment": "Structure PointedSpace():\n  Universe: 1\n  Let carrier: Type\n  Let topology: Topology(carrier)\n  Let point: carrier\n  Constructor: pointed space\n",
+      "expected_tree": [
+        "Projection",
+        [
+          "Name",
+          "P"
+        ],
+        "carrier"
+      ],
+      "expected_lean": "A dependent record in Type 1 with carrier : Type, topology : TopologicalSpace carrier, and point : carrier; P.carrier selects its explicit native projection.",
+      "obligation": "One neutral parse for a type-position path; field telescope substitution retains selected carrier identities, universe levels and proof arguments. Reject wrong carriers, nontype projections, insufficient universes and forward fields.",
+      "checks": [
+        "studies/carrier-fields/verify_prototype.py",
+        "studies/carrier-fields/PrototypeVerified.lean"
+      ],
+      "pending": [
+        "Main integration and complete carrier-consumer audit",
+        "Composition with module-operator migration",
+        "Full corpus and study validation",
+        "Universe polymorphism and native module-scope policy"
+      ]
     }
   ]
 }

@@ -963,6 +963,20 @@ let c : Module.Basis J K M := b.reindex e
 <p>The <a href="../studies/declaration-identities/README.md">declaration-identity acceptance study</a> checks a dependent callable and record before and after an unrelated import. Eleven exact comparisons validate types and bodies under an explicit record/constructor identity map, and reject a changed kernel-valid proof body. Generated hash names differ; this bounded check does not establish general module isolation or portable generated identifiers.</p>
 <p>Import <code>library/<wbr>logic/<wbr>equivalence_operations.clean</code> for authored inverse and composition constructions. Given <code>e: Equivalence(A,B)</code> and <code>f: Equivalence(B,C)</code>, <code>compose equivalences(e,f)</code> has type <code>Equivalence(A,C)</code> and applies <code>e</code> first. Its Lean forward function is <code>fun x =&gt; f (e x)</code> (expanded schematic form); the emitted constructor retains explicit inverse-law proof functions assembled using congruence and transitivity. <code>inverse equivalence(e)</code> reverses the carriers and exchanges the two inverse laws. These use existing syntax and Type 0 carriers, with no proof search. The <a href="../studies/equivalence-operations/README.md">equivalence-operations study</a> passes eight exact target comparisons, three proofs and seven focused Python checks.</p>
 </section>
+<section class="mapping" id="carrier-fields" data-status="proposed">
+<h2>Structures with carrier fields</h2>
+<p><strong>Isolated prototype; not enabled in main.</strong> An ordered <code>Let carrier: Type</code> field with <code>Universe: 1</code> allows later fields to use that carrier. <code>P.carrier</code> in a type annotation selects the checked record projection; it does not insert a coercion.</p>
+<div class="pair"><section><h3>Proposed Clean</h3><pre><code>Structure PointedSpace():
+  Universe: 1
+  Let carrier: Type
+  Let topology: Topology(carrier)
+  Let point: carrier
+  Constructor: pointed space</code></pre></section><section><h3>Readable Lean equivalent</h3><pre><code>structure PointedSpace : Type 1 where
+  carrier : Type
+  topology : TopologicalSpace carrier
+  point : carrier</code></pre></section></div>
+<p>The <a href="carrier-fields.md">contract</a> and <a href="../studies/carrier-fields/README.md">pointed-space study</a> include fifteen exact targets, five proofs, and 221 isolated regression tests. Constant-map continuity is stated using Clean-authored helpers. Projected carriers, parenthesized carrier computations and dependent return types are checked. Main integration, operator composition and general universe polymorphism remain open.</p>
+</section>
 <section class="mapping" id="sequential-scope" data-status="implemented">
 <h2>Statements between declarations and imports</h2>
 <p>A top-level result or Context retains its preceding Clean environment. A later import can supply vocabulary to a later theorem, but cannot repair an earlier unknown Clean name or source. An earlier <code>Let T: Type</code> still renders as a local Lean carrier after a later global <code>Type T()</code> declaration.</p>

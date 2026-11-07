@@ -5378,6 +5378,80 @@
       "origin": "llm-assisted",
       "mode": "manifest",
       "model": "gpt-6"
+    },
+    "docs/carrier-fields.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown",
+      "model": "gpt-6"
+    },
+    "studies/carrier-fields/PrototypeVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/carrier-fields/Statements.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/carrier-fields/Bundle.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/carrier-fields/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown",
+      "model": "gpt-6"
+    },
+    "studies/carrier-fields/verify_prototype.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/carrier-fields/latex.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/carrier-fields/prototype.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest",
+      "model": "gpt-6"
+    },
+    "studies/carrier-fields/Statements.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/carrier-fields/Statements.pdf": {
+      "origin": "llm-assisted",
+      "mode": "manifest",
+      "model": "gpt-6"
     }
   }
 }

@@ -1,0 +1,37 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated prototype
+Import "Bundle.clean.proposed"
+Source local:
+  Kind: other
+  Label: Carrier bundle study
+  Title: Explicit carrier fields and topology
+
+Result point equality:
+  Attribution: local; equality reflexivity; original
+  Let P: PointedSpace
+  Let x: P.carrier
+  Conclude: x = x
+
+Result constant map continuous:
+  Attribution: local; Mathlib continuous_const; specialized
+  Let P: PointedSpace
+  Conclude: bundle continuous(P,P,constant map(P))
+
+Result carrier alias:
+  Attribution: local; authored carrier reduction; original
+  Let P: PointedSpace
+  Let x: (carrier of(P))
+  Conclude: evaluate map(function(y: P.carrier,y),x) = x
+
+Result constructor point:
+  Attribution: local; constructor projection; original
+  Let T: Type
+  Let t: Topology(T)
+  Let x: T
+  Conclude: pointed space(T,t,x).point = x
+
+Result selected point projection:
+  Attribution: local; dependent return substitution; original
+  Let Q: PointedSpace
+  Conclude: selected point(Q) = Q.point
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

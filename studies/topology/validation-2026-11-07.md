@@ -382,3 +382,26 @@ verifier remains live in the earlier fresh-condition checkout; it is retained as
 diagnostic, not claimed as current sequential-scope conformance. Neither broad run
 has completed. The full goal remains open.
 :::
+
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Isolated carrier-field prototype
+
+The [pointed-space study](../carrier-fields/README.md) authors carrier, topology
+and point fields with Universe 1. It supports projected type annotations, a
+Clean-authored carrier alias, dependent return substitution and constant-map
+continuity through the existing authored topology vocabulary. Fifteen exact native
+targets and five proofs pass both in the patched checkout and through the fresh-copy,
+apply-patch, strict-parser driver. The wider isolated regression run passes 221 tests.
+Its first broader run caught a local type-renaming hygiene regression; retaining
+the syntax-only local route fixed it without weakening the test. Two older policy
+tests are intentionally updated only inside the patch: computed carriers are now
+accepted and too-small carrier bundles use the general universe diagnostic.
+
+The one-page PDF was compiled twice and visually inspected. Main compiler code is
+unchanged. Carrier-consumer/closure audits, operator-patch composition, main integration
+and full corpus/study validation remain gates. The current sequential-scope full
+suite and earlier specialized active-label diagnostic remain live without completion;
+this prototype does not claim to settle either run or the full goal.
+:::

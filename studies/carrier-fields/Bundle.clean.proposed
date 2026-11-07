@@ -1,0 +1,34 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated prototype
+Import "../../library/topology/basic.clean"
+Import "../../library/logic/functions.clean"
+Import "../../library/logic/evidence.clean"
+
+Structure PointedSpace():
+  Universe: 1
+  Let carrier: Type
+  Let topology: Topology(carrier)
+  Let point: carrier
+  Constructor: pointed space
+  Describe: a pointed topological space
+  Render latex: \mathsf{{PointedSpace}}
+
+Define carrier of(P: PointedSpace): Type:
+  Equals: P.carrier
+  Render latex: \lvert {P}\rvert
+
+Define constant map(P: PointedSpace): Function(P.carrier,P.carrier):
+  Equals: function(x: P.carrier,P.point)
+  Render latex: c_{{{P}}}
+
+Condition bundle continuous(P,Q,f):
+  Let P,Q: PointedSpace
+  Let f: Function(P.carrier,Q.carrier)
+  Holds when: continuous between(f,P.topology,Q.topology)
+  Assumption name: continuity of {f}
+  Render: {f} is continuous from {P} to {Q}
+
+Define selected point(P: PointedSpace): P.carrier:
+  Equals: P.point
+  Render latex: p_{{{P}}}
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

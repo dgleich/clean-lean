@@ -254,3 +254,13 @@ and substituted structurally, including dependent arrows and computed dimensions
 The original named-carrier-only rule is superseded on this point; no arbitrary
 computed type or universe inference is added.
 :::
+
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The separate [carrier-field prototype](carrier-fields.md) now tests ordered
+`Let carrier: Type` fields in an explicitly higher-universe structure, plus projected
+types such as `P.carrier`. Its pointed-topology study passes fifteen exact native
+targets and five proofs. It remains isolated; the main carrier-field rejection and
+this document's implemented profile have not been silently broadened.
+:::

@@ -1,0 +1,191 @@
+--- a/grammar/clean.lark
++++ b/grammar/clean.lark
+@@ -26,11 +26,11 @@
+      | THERE EXISTS "(" ID ":" type_ref "," expression ")" -> existential
+ name: ID+
+ arguments: expression ("," expression)*
+-?type_ref: named_type_ref | computed_index
++?type_ref: named_type_ref | computed_index | index_reference
+ named_type_ref: TYPE_ID ["(" [type_arguments | bound_type_arguments] ")"] -> type_ref
+ bound_type_arguments: TYPE_ID ":" type_ref "," type_ref
+ type_arguments: type_argument ("," type_argument)*
+-?type_argument: type_ref | NUMBER | index_reference
++?type_argument: type_ref | NUMBER
+ computed_index: "(" expression ")"
+ index_reference: TYPE_ID ("." TYPE_ID)+
+ assumptions: assumption ("," assumption)*
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -99,7 +99,9 @@
+ class Type:
+     name: str
+     args: tuple = ()
+-    def __str__(self): return self.name + ('(' + ','.join(map(str,self.args)) + ')' if self.args else '')
++    def __str__(self):
++        if self.name=='$carrier':return self.args[0].name
++        return self.name + ('(' + ','.join(map(str,self.args)) + ')' if self.args else '')
+ @dataclass(frozen=True, eq=False)
+ class ValueIndex:
+     name: str
+@@ -215,9 +217,16 @@
+         from .syntax import parse as syntax_parse, type_spelling
+         try:syntax=syntax_parse(s,'type_ref')
+         except CleanError as e:raise CleanError('Unknown type phrase: '+s) from e
+-        if syntax.data=='computed_index':
+-            from .syntax import expression_tree
+-            return proof_type(Expressions(self,env or {}).elaborate(expression_tree(syntax.children[0])),self,env or {},_fresh=True)
++        if syntax.data in ('computed_index','index_reference'):
++            from .syntax import expression_tree, type_spelling, parse
++            tree=(expression_tree(syntax.children[0]) if syntax.data=='computed_index'
++                  else expression_tree(parse(type_spelling(syntax),'expression')))
++            value=Expressions(self,env or {}).elaborate(tree)
++            if value.type==Type('Type'):
++                from .carrier_types import carrier
++                return carrier(value,self,env or {})
++            if syntax.data=='index_reference':raise CleanError('Type projection must have type Type')
++            return proof_type(value,self,env or {},_fresh=True)
+         if len(syntax.children)>1 and syntax.children[1].data=='bound_type_arguments':
+             from .dependent_functions import parse_type
+             return parse_type(syntax,self,env or {},trail)
+@@ -269,6 +278,7 @@
+     def render_type(self,t,target,bindings=None):
+         from .dependent_functions import DependentFunctionType
+         bindings=bindings or {}
++        if t.name=='$carrier':return '('+t.args[0].lean+')' if target=='lean' else t.args[0].tex
+         if isinstance(t,DependentFunctionType):
+             domain=self.render_type(t.domain,target,bindings);codomain=self.render_type(t.codomain,target,bindings)
+             if target=='lean':return '('+t.bound+' : '+domain+') → ('+codomain+')'
+@@ -438,15 +448,10 @@
+         for n,t in parameters:
+             match(t,actuals[n].type)
+             if t==Type('Type'):
+-                from .structures import reference_name
+-                if actuals[n].tree[0]=='TypeValue':
+-                    value=self.type(actuals[n].tree[1],locals,phrases=False)
+-                    self.require_type_argument(value)
+-                    bind(n,value)
+-                else:
+-                    ref=reference_name(actuals[n].tree)
+-                    if ref is None:raise CleanError('Type argument must be a named local or type expression')
+-                    bind(n,Type(ref))
++                from .carrier_types import carrier
++                value=carrier(actuals[n],self,locals)
++                self.require_type_argument(value)
++                bind(n,value)
+         for n in implicit:
+             if n not in substitutions:raise CleanError('Cannot infer implicit parameter: '+n)
+         targets=[]
+--- a/cleanlang/structures.py
++++ b/cleanlang/structures.py
+@@ -94,7 +94,10 @@
+         value=Expr(target,tex,result_type,tree=['Projection',base.tree,name])
+         if name==field:return value
+         from .indices import index_value
+-        bindings[name]=index_value(value,env,locals)
++        if result_type==Type('Type'):
++            from .carrier_types import carrier
++            bindings[name]=carrier(value,env,locals)
++        else:bindings[name]=index_value(value,env,locals)
+     raise CleanError('Missing field: '+field)
+
+
+@@ -120,7 +123,6 @@
+         kind,names,spelling=let_clause(line)
+         if kind!='let':raise CleanError('Structure fields require typed Let; defaults are not supported')
+         t=env.type(spelling,local)
+-        if t==Type('Type'):raise CleanError('Carrier-type fields require higher-universe structures; use an explicit Type parameter for now')
+         for n in names:
+             if n in local or n in env.data['types'] or n in env.data['aliases'] or n in ('mk','rec','recOn','casesOn'):
+                 raise CleanError('Structure field must be fresh: '+n)
+--- a/cleanlang/dependent_functions.py
++++ b/cleanlang/dependent_functions.py
+@@ -166,8 +166,8 @@
+             value=bindings[typ.name]
+             if isinstance(value,Type):return value
+             if isinstance(value,Expr) and value.type==Type('Type'):
+-                if value.tree[0]=='Local':return Type(value.tree[1])
+-                if value.tree[0]=='TypeValue':return env.type(value.tree[1],locals,phrases=False)
++                from .carrier_types import carrier
++                return carrier(value,env,locals)
+             raise CleanError('Expected a named type argument: '+typ.name)
+         return Type(typ.name,tuple(substitute(a,bindings,env,locals) for a in typ.args))
+     return bindings.get(typ,typ)
+--- a/cleanlang/hygiene.py
++++ b/cleanlang/hygiene.py
+@@ -17,8 +17,9 @@
+     """
+     type_bindings=dict(type_bindings or {})
+     for n,value in bindings.items():
+-        if value.type==Type('Type') and value.tree[0]=='TypeValue':
+-            type_bindings[n]=environment.type(value.tree[1],locals,phrases=False)
++        if value.type==Type('Type') and value.tree[0]!='Local':
++            from .carrier_types import carrier
++            type_bindings[n]=carrier(value,environment,locals)
+     occupied=set(locals)|set(environment.data['types'])|set(environment.data['aliases'])|set(environment.data['functions'])|tree_names(tree)
+     replacements={n:v.tree for n,v in bindings.items()}
+     heads=set()
+@@ -59,7 +60,10 @@
+                 return source
+             return index(mapping[node[1]]) if node[1] in mapping else node[1]
+         if kind=='Numeral':return node[1]
+-        if kind=='Projection':return index(expr(type_expr(node),mapping,callheads))
++        if kind=='Projection':
++            result=expr(type_expr(node),mapping,callheads)
++            from .structures import reference_name
++            return reference_name(result) or index(result)
+         if kind=='ComputedIndex':
+             try:return '('+condition_spelling(expr(node[1],mapping,callheads))+')'
+             except CleanError as e:raise UnrepresentableSubstitution(str(e)) from e
+--- a/cleanlang/inferred_conversion.py
++++ b/cleanlang/inferred_conversion.py
+@@ -29,6 +29,7 @@
+     from .syntax import parse,type_tree
+     def type_values(node):
+         if node[0]=='ComputedIndex':return value_names(node[1])
++        if node[0]=='Projection':return {node[1][1]} if node[1][0]=='Name' else type_values(node[1])
+         if node[0]=='Apply':return set().union(*(type_values(a) for a in node[2]))
+         if node[0]=='BoundTypeApply':return type_values(node[3])|type_values(node[4])
+         return set()
+--- /dev/null
++++ b/cleanlang/carrier_types.py
+@@ -0,0 +1,12 @@
++# generated: gpt-6 2026-11-07 role=assisted; isolated prototype
++"""Type-0 carriers obtained from checked type-valued expressions."""
++from .core import Type,CleanError
++
++def carrier(expression,env,locals):
++    if expression.type!=Type('Type'):raise CleanError('Carrier expression must have type Type')
++    from .conversion import comparison_normal_form
++    normal=comparison_normal_form(expression,env,locals)
++    if normal.tree[0]=='TypeValue':return env.type(normal.tree[1],locals,phrases=False)
++    if normal.tree[0]=='Local':return Type(normal.tree[1])
++    from .indices import index_value
++    return Type('$carrier',(index_value(expression,env,locals),))
+--- a/tests/test_structures.py
++++ b/tests/test_structures.py
+@@ -111,7 +111,7 @@
+         for fields in [['Let x = a','Constructor: bad'],['Let x: Real','Constructor: bad','Means: Unit']]:
+             with self.subTest(fields=fields),self.assertRaises(CleanError):declare('Structure Bad():',fields,self.e)
+     def test_universe_boundary_is_explicit(self):
+-        with self.assertRaisesRegex(CleanError,'higher-universe'):
++        with self.assertRaisesRegex(CleanError,'exceeds declared Universe 0'):
+             declare('Structure Space():',['Let carrier: Type','Constructor: space'],self.e)
+     def test_metadata_reordering_preserves_target(self):
+         other=Environment();load_module(ROOT/'library/topology/bundles.clean',other)
+--- a/tests/test_type_expressions.py
++++ b/tests/test_type_expressions.py
+@@ -104,12 +104,11 @@
+   with self.assertRaisesRegex(CleanError,'Type-valued operands'):self.expr('U+U')
+   self.assertEqual(self.expr('type(Real)=type(Complex)').lean,'(ℝ = ℂ)')
+   self.assertEqual(self.expr('type(Real)!=type(Complex)').lean,'(ℝ ≠ ℂ)')
+- def test_computed_type_is_not_an_explicit_carrier(self):
++ def test_computed_type_is_an_explicit_carrier(self):
+   declare('Structure Box(T: Type):',['Let value: T','Constructor: box value'],self.e)
+   notation('Define real carrier(): Type:', ['Equals: type(Real)'],self.e,authored=True)
+   self.local['x']=Expr('x','x',Type('Real'),tree=['Local','x'])
+-  with self.assertRaisesRegex(CleanError,'named local or type expression'):
+-   self.expr('box value(real carrier(),x)')
++  self.assertEqual(self.expr('box value(real carrier(),x)').type,self.e.type('Box(Real)',self.local))
+   self.assertEqual(self.expr('real carrier() = type(Real)').type,Type('Proposition'))
+  def test_local_value_with_dependent_carrier_does_not_rebind(self):
+   from cleanlang.conversion import local_definition

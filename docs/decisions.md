@@ -763,3 +763,16 @@ existing final native-import/declaration collection; do not claim native isolati
 from these snapshots. The full constructive rule and remaining boundary are in
 [sequential-scope.md](sequential-scope.md).
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Prototype closed-universe carrier fields before wider universe inference
+
+Use ordinary ordered `Let carrier: Type` fields with explicit `Universe: 1` (or
+another sufficient declared closed universe). Admit existing field-reference syntax
+in type positions through one neutral parse. Retain checked projected carriers as
+scoped dependent type indices and keep explicit carrier access. The isolated
+prototype and exact targets are linked from [carrier-fields.md](carrier-fields.md).
+Main integration and full consumer/universe audits remain open; no automatic carrier
+coercion or general universe inference is introduced.
+:::
