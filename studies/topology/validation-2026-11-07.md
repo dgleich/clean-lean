@@ -474,3 +474,21 @@ provenance restoration. Fourteen migrated topology verifiers total 286 targets
 and 62 proofs. The well-group migration and full-discovery validation processes
 remain active; no passing result is claimed for either run.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The interlevel verifier now passes 66 exact targets and twelve proofs, with
+independent adapter-body checks and eleven focused Python tests. Its TeX is
+unchanged after provenance restoration. Fifteen migrated topology verifiers total
+352 targets and 74 proofs. The well-group focused tests and full-discovery run remain active.
+:::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The well-group native run subsequently passed 24 exact targets, five study
+proofs and fifteen supporting proofs. Sixteen migrated topology verifiers total
+376 exact targets and 79 proofs, counting those fifteen reused supporting proofs
+only in their original studies. The well-group TeX is unchanged. Its focused
+Python run remains active, as does full discovery. The two-image characterization
+remains an unproved candidate.
+:::

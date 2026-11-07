@@ -27,308 +27,308 @@ Evidence is an ordinary transparent alias. A parenthesized condition used
    as a type denotes proofs of that condition. This module supplies no proofs.
 -/
 
-noncomputable def cleanType_Type_c1fed1af64ab6f12e0ed  : Type 1 :=
+noncomputable abbrev cleanType_Type_c1fed1af64ab6f12e0ed  : Type 1 :=
   Type
 
-noncomputable def cleanType_Natural_469c53b6dafb7a218246  : Type :=
+noncomputable abbrev cleanType_Natural_469c53b6dafb7a218246  : Type :=
   ℕ
 
-noncomputable def cleanType_Real_107b6641a486642ad8e1  : Type :=
+noncomputable abbrev cleanType_Real_107b6641a486642ad8e1  : Type :=
   ℝ
 
-noncomputable def cleanType_Complex_2d7f06a08f8ab1e3f46d  : Type :=
+noncomputable abbrev cleanType_Complex_2d7f06a08f8ab1e3f46d  : Type :=
   ℂ
 
-noncomputable def cleanType_Proposition_ae4a13d2f060407bce35  : Sort 1 :=
+noncomputable abbrev cleanType_Proposition_ae4a13d2f060407bce35  : Sort 1 :=
   Prop
 
-noncomputable def cleanType_Matrix_61d617e3f5143c327dd3 (p0 : Nat) (p1 : Nat) (p2 : Type) : Type :=
+noncomputable abbrev cleanType_Matrix_61d617e3f5143c327dd3 (p0 : Nat) (p1 : Nat) (p2 : Type) : Type :=
   Matrix (Fin p0) (Fin p1) p2
 
-noncomputable def cleanType_Vector_b5a130b68abf7f0646e8 (p0 : Nat) (p1 : Type) : Type :=
+noncomputable abbrev cleanType_Vector_b5a130b68abf7f0646e8 (p0 : Nat) (p1 : Type) : Type :=
   Fin p0 → p1
 
-noncomputable def cleanType_Vertex_460956e39f5b9ffca091 (p0 : Nat) : Type :=
+noncomputable abbrev cleanType_Vertex_460956e39f5b9ffca091 (p0 : Nat) : Type :=
   Fin p0
 
-noncomputable def cleanType_Graph_7bde0ce024ce143f369b (p0 : Nat) : Type :=
+noncomputable abbrev cleanType_Graph_7bde0ce024ce143f369b (p0 : Nat) : Type :=
   SimpleGraph (Fin p0)
 
-noncomputable def cleanType_List_530f2b2df99696550311 (p0 : Type) : Type :=
+noncomputable abbrev cleanType_List_530f2b2df99696550311 (p0 : Type) : Type :=
   List (p0)
 
-noncomputable def cleanType_Set_6e300741358eee425e81 (p0 : Type) : Type :=
+noncomputable abbrev cleanType_Set_6e300741358eee425e81 (p0 : Type) : Type :=
   Set (p0)
 
-noncomputable def cleanType_Function_9d746dbeb0e035328deb (p0 : Type) (p1 : Type) : Type :=
+noncomputable abbrev cleanType_Function_9d746dbeb0e035328deb (p0 : Type) (p1 : Type) : Type :=
   (p0) → (p1)
 
-noncomputable def cleanType_Topology_2eca621ea710e87cf174 (X : Type) : Type :=
+noncomputable abbrev cleanType_Topology_2eca621ea710e87cf174 (X : Type) : Type :=
   TopologicalSpace X
 
-noncomputable def cleanNotation_set_of_25534029a1fdae044ce8 {X : Type} (condition : (X) → (Prop)) : Set (X) :=
+noncomputable def cleanNotation_set_of_2c71fd475f49a65bd03e {X : Type} (condition : (X) → ((_root_.cleanType_Proposition_ae4a13d2f060407bce35))) : (_root_.cleanType_Set_6e300741358eee425e81 (X)) :=
   setOf condition
 
-noncomputable def cleanDefine_open_in_04a39275b76e933d604a {X : Type} (S : Set (X)) (t : TopologicalSpace X) : Prop :=
+noncomputable def cleanDefine_open_in_2f000176928f8b3f5fc4 {X : Type} (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))) (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   @IsOpen X t S
 
-noncomputable def cleanDefine_inverse_image_b2385c49c1629ae08495 {X : Type} {Y : Type} (f : (X) → (Y)) (S : Set (Y)) : Set (X) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : X) => ((f clean_bound_0) ∈ S))))
+noncomputable def cleanDefine_inverse_image_eb657a3c1d0219ea719b {X : Type} {Y : Type} (f : (X) → (Y)) (S : (_root_.cleanType_Set_6e300741358eee425e81 (Y))) : (_root_.cleanType_Set_6e300741358eee425e81 (X)) :=
+  (_root_.cleanNotation_set_of_2c71fd475f49a65bd03e ((fun (clean_bound_0 : X) => ((f clean_bound_0) ∈ S))))
 
-noncomputable def cleanDefine_image_3f2870b8ed865dc98807 {X : Type} {Y : Type} (f : (X) → (Y)) (S : Set (X)) : Set (Y) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : Y) => (@Exists (X) (fun (clean_bound_1 : X) => ((clean_bound_1 ∈ S) ∧ ((f clean_bound_1) = clean_bound_0)))))))
+noncomputable def cleanDefine_image_869a575587985294ee29 {X : Type} {Y : Type} (f : (X) → (Y)) (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))) : (_root_.cleanType_Set_6e300741358eee425e81 (Y)) :=
+  (_root_.cleanNotation_set_of_2c71fd475f49a65bd03e ((fun (clean_bound_0 : Y) => (@Exists (X) (fun (clean_bound_1 : X) => ((clean_bound_1 ∈ S) ∧ ((f clean_bound_1) = clean_bound_0)))))))
 
 noncomputable def cleanDefine_compose_maps_b7e7219a131a4bb5245c {X : Type} {Y : Type} {Z : Type} (g : (Y) → (Z)) (f : (X) → (Y)) : (X) → (Z) :=
   (fun (clean_bound_0 : X) => (g (f clean_bound_0)))
 
-noncomputable def cleanDefine_continuous_between_fee422b0843f4b1d9573 {X : Type} {Y : Type} (f : (X) → (Y)) (t : TopologicalSpace X) (u : TopologicalSpace Y) : Prop :=
-  (∀ (clean_bound_0 : Set (Y)), ((cleanDefine_open_in_04a39275b76e933d604a (clean_bound_0) (u)) → (cleanDefine_open_in_04a39275b76e933d604a ((cleanDefine_inverse_image_b2385c49c1629ae08495 (f) (clean_bound_0))) (t))))
+noncomputable def cleanDefine_continuous_between_3b927933ead621e0bfe9 {X : Type} {Y : Type} (f : (X) → (Y)) (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (u : (_root_.cleanType_Topology_2eca621ea710e87cf174 (Y))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (∀ (clean_bound_0 : (_root_.cleanType_Set_6e300741358eee425e81 (Y))), ((_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 (clean_bound_0) (u)) → (_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 ((_root_.cleanDefine_inverse_image_eb657a3c1d0219ea719b (f) (clean_bound_0))) (t))))
 
-noncomputable def cleanDefine_selected_elements_be59cb3b891978bdf75e {X : Type} (S : Set (X)) (condition : (X) → (Prop)) : Set (X) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : X) => ((clean_bound_0 ∈ S) ∧ (condition clean_bound_0)))))
+noncomputable def cleanDefine_selected_elements_b4d39602cd1cf697afb5 {X : Type} (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))) (condition : (X) → ((_root_.cleanType_Proposition_ae4a13d2f060407bce35))) : (_root_.cleanType_Set_6e300741358eee425e81 (X)) :=
+  (_root_.cleanNotation_set_of_2c71fd475f49a65bd03e ((fun (clean_bound_0 : X) => ((clean_bound_0 ∈ S) ∧ (condition clean_bound_0)))))
 
-noncomputable def cleanDefine_intersection_family_21668a57bd46a5fc2395 {I : Type} {X : Type} (sets : (I) → (Set (X))) : Set (X) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : X) => (∀ (clean_bound_1 : I), (clean_bound_0 ∈ (sets clean_bound_1))))))
+noncomputable def cleanDefine_intersection_family_7482d46b5fb61bd1ecae {I : Type} {X : Type} (sets : (I) → ((_root_.cleanType_Set_6e300741358eee425e81 (X)))) : (_root_.cleanType_Set_6e300741358eee425e81 (X)) :=
+  (_root_.cleanNotation_set_of_2c71fd475f49a65bd03e ((fun (clean_bound_0 : X) => (∀ (clean_bound_1 : I), (clean_bound_0 ∈ (sets clean_bound_1))))))
 
-noncomputable def cleanType_TopologicalSpace_d66be29262ccb5d89e3b  : Type 1 :=
+noncomputable abbrev cleanType_TopologicalSpace_d66be29262ccb5d89e3b  : Type 1 :=
   TopCat.{0}
 
-noncomputable def cleanType_Point_9d395db6c3916b4d8815 (X : TopCat.{0}) : Type :=
+noncomputable abbrev cleanType_Point_f8a65e23875fb9a2c125 (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) : Type :=
   (TopCat.carrier X)
 
-noncomputable def cleanType_ContinuousMap_1146b39bc8bc0eb23b61 (X : TopCat.{0}) (Y : TopCat.{0}) : Type :=
+noncomputable abbrev cleanType_ContinuousMap_05cf8501fbb474169b7a (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Y : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) : Type :=
   (@ContinuousMap X.carrier Y.carrier X.str Y.str)
 
-noncomputable def cleanNotation_topological_space_f914ed39b3c4b34a458d  (X : Type) (t : TopologicalSpace X) : TopCat.{0} :=
+noncomputable def cleanNotation_topological_space_dc14231c2f4f1a05c1eb  (X : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)) (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b) :=
   @TopCat.of.{0} X t
 
-noncomputable def cleanNotation_space_topology_b2730f9844c3dbcbb1b2  (X : TopCat.{0}) : TopologicalSpace (TopCat.carrier X) :=
+noncomputable def cleanNotation_space_topology_d65bd6911832f73ca5e3  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) : (_root_.cleanType_Topology_2eca621ea710e87cf174 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 (X)))) :=
   TopCat.str X
 
-noncomputable def cleanNotation_underlying_continuous_map_46ba25e3bbb7fb81de27  (X : TopCat.{0}) (Y : TopCat.{0}) (f : (@ContinuousMap X.carrier Y.carrier X.str Y.str)) : ((TopCat.carrier X)) → ((TopCat.carrier Y)) :=
+noncomputable def cleanNotation_underlying_continuous_map_4c98c5280d9a83caf5c3  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Y : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (f : (_root_.cleanType_ContinuousMap_05cf8501fbb474169b7a (X) (Y))) : ((_root_.cleanType_Point_f8a65e23875fb9a2c125 (X))) → ((_root_.cleanType_Point_f8a65e23875fb9a2c125 (Y))) :=
   @ContinuousMap.toFun X.carrier Y.carrier X.str Y.str f
 
-noncomputable def cleanNotation_continuous_value_e0e5252f52b24d976ca2  (X : TopCat.{0}) (Y : TopCat.{0}) (f : (@ContinuousMap X.carrier Y.carrier X.str Y.str)) (x : (TopCat.carrier X)) : (TopCat.carrier Y) :=
+noncomputable def cleanNotation_continuous_value_e3b2704dc348962834fc  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Y : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (f : (_root_.cleanType_ContinuousMap_05cf8501fbb474169b7a (X) (Y))) (x : (_root_.cleanType_Point_f8a65e23875fb9a2c125 (X))) : (_root_.cleanType_Point_f8a65e23875fb9a2c125 (Y)) :=
   @ContinuousMap.toFun X.carrier Y.carrier X.str Y.str f x
 
-noncomputable def cleanNotation_identity_continuous_map_315ac9c43278079f1ecf  (X : TopCat.{0}) : (@ContinuousMap X.carrier X.carrier X.str X.str) :=
+noncomputable def cleanNotation_identity_continuous_map_3328841a46298311ee43  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) : (_root_.cleanType_ContinuousMap_05cf8501fbb474169b7a (X) (X)) :=
   @ContinuousMap.id X.carrier X.str
 
-noncomputable def cleanNotation_compose_continuous_maps_5b97f65ef52a877965dc  (X : TopCat.{0}) (Y : TopCat.{0}) (Z : TopCat.{0}) (g : (@ContinuousMap Y.carrier Z.carrier Y.str Z.str)) (f : (@ContinuousMap X.carrier Y.carrier X.str Y.str)) : (@ContinuousMap X.carrier Z.carrier X.str Z.str) :=
+noncomputable def cleanNotation_compose_continuous_maps_f3da5f5645c1a654d6b9  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Y : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Z : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (g : (_root_.cleanType_ContinuousMap_05cf8501fbb474169b7a (Y) (Z))) (f : (_root_.cleanType_ContinuousMap_05cf8501fbb474169b7a (X) (Y))) : (_root_.cleanType_ContinuousMap_05cf8501fbb474169b7a (X) (Z)) :=
   @ContinuousMap.comp X.carrier Y.carrier Z.carrier X.str Y.str Z.str g f
 
-structure cleanStructure_TopologicalDiagram_5f4137d1fa5370857d75  : Type 1 where
-  «source» : TopCat.{0}
-  «target» : TopCat.{0}
-  «arrow» : (@ContinuousMap «source».carrier «target».carrier «source».str «target».str)
+structure cleanStructure_TopologicalDiagram_e9430f3a193ee28421c1  : Type 1 where
+  «source» : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)
+  «target» : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)
+  «arrow» : (_root_.cleanType_ContinuousMap_05cf8501fbb474169b7a («source») («target»))
 
-noncomputable def cleanConstructor_topological_diagram_3fd3e4e646daf54240f0 («source» : TopCat.{0}) («target» : TopCat.{0}) («arrow» : (@ContinuousMap «source».carrier «target».carrier «source».str «target».str)) : cleanStructure_TopologicalDiagram_5f4137d1fa5370857d75 :=
-  @cleanStructure_TopologicalDiagram_5f4137d1fa5370857d75.mk «source» «target» «arrow»
+noncomputable def cleanConstructor_topological_diagram_ccce48ab8336c31ce6a9 («source» : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) («target» : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) («arrow» : (_root_.cleanType_ContinuousMap_05cf8501fbb474169b7a («source») («target»))) : _root_.cleanStructure_TopologicalDiagram_e9430f3a193ee28421c1 :=
+  @_root_.cleanStructure_TopologicalDiagram_e9430f3a193ee28421c1.mk «source» «target» «arrow»
 
-noncomputable def cleanDefine_identity_diagram_d9f548f51d6a44697707  (X : TopCat.{0}) : cleanStructure_TopologicalDiagram_5f4137d1fa5370857d75 :=
-  (@cleanConstructor_topological_diagram_3fd3e4e646daf54240f0 (X) (X) ((@cleanNotation_identity_continuous_map_315ac9c43278079f1ecf (X))))
+noncomputable def cleanDefine_identity_diagram_4eaea8dd61f4669fc3a0  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) : _root_.cleanStructure_TopologicalDiagram_e9430f3a193ee28421c1 :=
+  (@_root_.cleanConstructor_topological_diagram_ccce48ab8336c31ce6a9 (X) (X) ((@_root_.cleanNotation_identity_continuous_map_3328841a46298311ee43 (X))))
 
-noncomputable def cleanType_Element_f6cf8dd1e8f2bae54be4 (X : Type) (S : Set (X)) : Type :=
+noncomputable abbrev cleanType_Element_4fb2f1b669ed36f80886 (X : Type) (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))) : Type :=
   {x : X // x ∈ S}
 
-noncomputable def cleanType_Path_3fdd593c9b34e872c4b4 (X : Type) (t : TopologicalSpace X) (x : X) (y : X) : Type :=
+noncomputable abbrev cleanType_Path_2e5bf3c806cfad5a1ae9 (X : Type) (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (x : X) (y : X) : Type :=
   @Path X t x y
 
-noncomputable def cleanNotation_underlying_point_158884de113671a93ba6 {X : Type} (S : Set (X)) (x : {x : X // x ∈ S}) : X :=
+noncomputable def cleanNotation_underlying_point_5fc735e8b58c86463a25 {X : Type} (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))) (x : (_root_.cleanType_Element_4fb2f1b669ed36f80886 (X) (S))) : X :=
   x.val
 
-noncomputable def cleanNotation_constant_path_79f5a6b7ce858e190d0b {X : Type} (t : TopologicalSpace X) (x : X) : @Path X t x x :=
+noncomputable def cleanNotation_constant_path_e6a080b4f4baea9e3c6a {X : Type} (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (x : X) : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (x) (x)) :=
   @Path.refl X t x
 
-noncomputable def cleanNotation_reverse_path_43d430a43539939bcf2c {X : Type} (t : TopologicalSpace X) (x : X) (y : X) (p : @Path X t x y) : @Path X t y x :=
+noncomputable def cleanNotation_reverse_path_bccacbe82db41fbe7c6d {X : Type} (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (x : X) (y : X) (p : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (x) (y))) : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (y) (x)) :=
   @Path.symm X t x y p
 
-noncomputable def cleanNotation_join_paths_32898d58a46eb9c632f2 {X : Type} (t : TopologicalSpace X) (x : X) (y : X) (z : X) (p : @Path X t x y) (q : @Path X t y z) : @Path X t x z :=
+noncomputable def cleanNotation_join_paths_413579dc3782617ff91d {X : Type} (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (x : X) (y : X) (z : X) (p : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (x) (y))) (q : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (y) (z))) : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (x) (z)) :=
   @Path.trans X t x y z p q
 
-noncomputable def cleanDefine_reverse_twice_70df96ff552a5e9ef886 {X : Type} (t : TopologicalSpace X) (x : X) (y : X) (p : @Path X t x y) : @Path X t x y :=
-  (@cleanNotation_reverse_path_43d430a43539939bcf2c (X) (t) (y) (x) ((@cleanNotation_reverse_path_43d430a43539939bcf2c (X) (t) (x) (y) (p))))
+noncomputable def cleanDefine_reverse_twice_19c7d7336839bf577a5b {X : Type} (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (x : X) (y : X) (p : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (x) (y))) : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (x) (y)) :=
+  (@_root_.cleanNotation_reverse_path_bccacbe82db41fbe7c6d (X) (t) (y) (x) ((@_root_.cleanNotation_reverse_path_bccacbe82db41fbe7c6d (X) (t) (x) (y) (p))))
 
 /--
 A topology, two points, and a path between them, on a fixed carrier.
 -/
-structure cleanStructure_BasedPath_af4022cf2eeed1e2d1ab («X» : Type) : Type where
-  «topology» : TopologicalSpace «X»
+structure cleanStructure_BasedPath_70f574d7589934963ee1 («X» : Type) : Type where
+  «topology» : (_root_.cleanType_Topology_2eca621ea710e87cf174 («X»))
   «start» : «X»
   «finish» : «X»
-  «path» : @Path «X» «topology» «start» «finish»
+  «path» : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 («X») («topology») («start») («finish»))
 
-noncomputable def cleanConstructor_based_path_68c2fc8490e4ebc630bb («X» : Type) («topology» : TopologicalSpace «X») («start» : «X») («finish» : «X») («path» : @Path «X» «topology» «start» «finish») : cleanStructure_BasedPath_af4022cf2eeed1e2d1ab («X») :=
-  @cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.mk «X» «topology» «start» «finish» «path»
+noncomputable def cleanConstructor_based_path_2b5edffd368145e026ec («X» : Type) («topology» : (_root_.cleanType_Topology_2eca621ea710e87cf174 («X»))) («start» : «X») («finish» : «X») («path» : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 («X») («topology») («start») («finish»))) : _root_.cleanStructure_BasedPath_70f574d7589934963ee1 («X») :=
+  @_root_.cleanStructure_BasedPath_70f574d7589934963ee1.mk «X» «topology» «start» «finish» «path»
 
-noncomputable def cleanDefine_reversed_bundle_9779f436492a7430ddec  (X : Type) (P : cleanStructure_BasedPath_af4022cf2eeed1e2d1ab (X)) : cleanStructure_BasedPath_af4022cf2eeed1e2d1ab (X) :=
-  (@cleanConstructor_based_path_68c2fc8490e4ebc630bb (X) ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«topology» (X) (P))) ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«finish» (X) (P))) ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«start» (X) (P))) ((@cleanNotation_reverse_path_43d430a43539939bcf2c (X) ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«topology» (X) (P))) ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«start» (X) (P))) ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«finish» (X) (P))) ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«path» (X) (P))))))
+noncomputable def cleanDefine_reversed_bundle_89d7b5d246c5c673d41c  (X : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)) (P : _root_.cleanStructure_BasedPath_70f574d7589934963ee1 (X)) : _root_.cleanStructure_BasedPath_70f574d7589934963ee1 (X) :=
+  (@_root_.cleanConstructor_based_path_2b5edffd368145e026ec (X) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«topology» (X) (P))) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«finish» (X) (P))) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«start» (X) (P))) ((@_root_.cleanNotation_reverse_path_bccacbe82db41fbe7c6d (X) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«topology» (X) (P))) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«start» (X) (P))) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«finish» (X) (P))) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«path» (X) (P))))))
 
-structure cleanStructure_Endpoints_2512a023e0474ce195ac  : Type where
-  «lower» : ℝ
-  «upper» : ℝ
+structure cleanStructure_Endpoints_7a6ba0b879274641120c  : Type where
+  «lower» : (_root_.cleanType_Real_107b6641a486642ad8e1)
+  «upper» : (_root_.cleanType_Real_107b6641a486642ad8e1)
 
-noncomputable def cleanConstructor_endpoints_ae57156441e5057814f6 («lower» : ℝ) («upper» : ℝ) : cleanStructure_Endpoints_2512a023e0474ce195ac :=
-  @cleanStructure_Endpoints_2512a023e0474ce195ac.mk «lower» «upper»
+noncomputable def cleanConstructor_endpoints_3622a2317e61075ae5a0 («lower» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («upper» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c :=
+  @_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.mk «lower» «upper»
 
-noncomputable def cleanDefine_ordered_endpoints_867d201d7c772f8385d6  (I : cleanStructure_Endpoints_2512a023e0474ce195ac) : Prop :=
-  ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) < (@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» (I)))
+noncomputable def cleanDefine_ordered_endpoints_e18d07991fd919237102  (I : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» (I)) < (@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» (I)))
 
-noncomputable def cleanDefine_shifted_endpoints_0341e7d28e14c6ec5711  (I : cleanStructure_Endpoints_2512a023e0474ce195ac) (s : ℝ) : cleanStructure_Endpoints_2512a023e0474ce195ac :=
-  (@cleanConstructor_endpoints_ae57156441e5057814f6 (((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) + s)) (((@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» (I)) + s)))
+noncomputable def cleanDefine_shifted_endpoints_ea3398852390cb480b6d  (I : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c) (s : (_root_.cleanType_Real_107b6641a486642ad8e1)) : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c :=
+  (@_root_.cleanConstructor_endpoints_3622a2317e61075ae5a0 (((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» (I)) + s)) (((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» (I)) + s)))
 
-noncomputable def cleanType_Boolean_b98a4c98fcdb0f46359e  : Type :=
+noncomputable abbrev cleanType_Boolean_b98a4c98fcdb0f46359e  : Type :=
   Bool
 
-noncomputable def cleanNotation_true_value_2fd5fc223c8905693b89   : Bool :=
+noncomputable def cleanNotation_true_value_9ca9e49e1312ca23ac23   : (_root_.cleanType_Boolean_b98a4c98fcdb0f46359e) :=
   true
 
-noncomputable def cleanNotation_false_value_d4e3155033dd79d1d53f   : Bool :=
+noncomputable def cleanNotation_false_value_30a63b75654d87153a83   : (_root_.cleanType_Boolean_b98a4c98fcdb0f46359e) :=
   false
 
 noncomputable def cleanNotation_evaluate_map_fc8e4f20170606ffe807 {X : Type} {Y : Type} (f : (X) → (Y)) (x : X) : Y :=
   f x
 
-noncomputable def cleanType_ContinuousRealMap_61be08a900d37dad3fed (X : TopCat.{0}) : Type :=
+noncomputable abbrev cleanType_ContinuousRealMap_c65fa65fdfc171714c32 (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) : Type :=
   (@ContinuousMap X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)
 
-noncomputable def cleanNotation_underlying_real_map_a2d4907a882247d2b335  (X : TopCat.{0}) (f : (@ContinuousMap X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)) : ((TopCat.carrier X)) → (ℝ) :=
+noncomputable def cleanNotation_underlying_real_map_0b69f7fea7146ae09669  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (f : (_root_.cleanType_ContinuousRealMap_c65fa65fdfc171714c32 (X))) : ((_root_.cleanType_Point_f8a65e23875fb9a2c125 (X))) → ((_root_.cleanType_Real_107b6641a486642ad8e1)) :=
   @ContinuousMap.toFun X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace f
 
-structure cleanStructure_EndpointSelection_b1d52148908811c63f1d  : Type where
-  «lower» : Bool
-  «upper» : Bool
+structure cleanStructure_EndpointSelection_417d89980a2c354c2182  : Type where
+  «lower» : (_root_.cleanType_Boolean_b98a4c98fcdb0f46359e)
+  «upper» : (_root_.cleanType_Boolean_b98a4c98fcdb0f46359e)
 
-noncomputable def cleanConstructor_endpoint_selection_e2c76e8a24faf36bd69d («lower» : Bool) («upper» : Bool) : cleanStructure_EndpointSelection_b1d52148908811c63f1d :=
-  @cleanStructure_EndpointSelection_b1d52148908811c63f1d.mk «lower» «upper»
+noncomputable def cleanConstructor_endpoint_selection_f2c54850f699491deae8 («lower» : (_root_.cleanType_Boolean_b98a4c98fcdb0f46359e)) («upper» : (_root_.cleanType_Boolean_b98a4c98fcdb0f46359e)) : _root_.cleanStructure_EndpointSelection_417d89980a2c354c2182 :=
+  @_root_.cleanStructure_EndpointSelection_417d89980a2c354c2182.mk «lower» «upper»
 
-noncomputable def cleanDefine_no_endpoints_3d2c151be5ddaaa6461f   : cleanStructure_EndpointSelection_b1d52148908811c63f1d :=
-  (@cleanConstructor_endpoint_selection_e2c76e8a24faf36bd69d ((cleanNotation_false_value_d4e3155033dd79d1d53f)) ((cleanNotation_false_value_d4e3155033dd79d1d53f)))
+noncomputable def cleanDefine_no_endpoints_3aad239e18f86ce44c68   : _root_.cleanStructure_EndpointSelection_417d89980a2c354c2182 :=
+  (@_root_.cleanConstructor_endpoint_selection_f2c54850f699491deae8 ((_root_.cleanNotation_false_value_30a63b75654d87153a83)) ((_root_.cleanNotation_false_value_30a63b75654d87153a83)))
 
-noncomputable def cleanDefine_lower_endpoint_55a3912dc3794b7cc0b5   : cleanStructure_EndpointSelection_b1d52148908811c63f1d :=
-  (@cleanConstructor_endpoint_selection_e2c76e8a24faf36bd69d ((cleanNotation_true_value_2fd5fc223c8905693b89)) ((cleanNotation_false_value_d4e3155033dd79d1d53f)))
+noncomputable def cleanDefine_lower_endpoint_c404a3843e685ffaf059   : _root_.cleanStructure_EndpointSelection_417d89980a2c354c2182 :=
+  (@_root_.cleanConstructor_endpoint_selection_f2c54850f699491deae8 ((_root_.cleanNotation_true_value_9ca9e49e1312ca23ac23)) ((_root_.cleanNotation_false_value_30a63b75654d87153a83)))
 
-noncomputable def cleanDefine_upper_endpoint_17aeb6bb1ab98f7ac7e2   : cleanStructure_EndpointSelection_b1d52148908811c63f1d :=
-  (@cleanConstructor_endpoint_selection_e2c76e8a24faf36bd69d ((cleanNotation_false_value_d4e3155033dd79d1d53f)) ((cleanNotation_true_value_2fd5fc223c8905693b89)))
+noncomputable def cleanDefine_upper_endpoint_06a0ff0e6593640bb148   : _root_.cleanStructure_EndpointSelection_417d89980a2c354c2182 :=
+  (@_root_.cleanConstructor_endpoint_selection_f2c54850f699491deae8 ((_root_.cleanNotation_false_value_30a63b75654d87153a83)) ((_root_.cleanNotation_true_value_9ca9e49e1312ca23ac23)))
 
-noncomputable def cleanDefine_both_endpoints_9ceafa3c3eae62095b71   : cleanStructure_EndpointSelection_b1d52148908811c63f1d :=
-  (@cleanConstructor_endpoint_selection_e2c76e8a24faf36bd69d ((cleanNotation_true_value_2fd5fc223c8905693b89)) ((cleanNotation_true_value_2fd5fc223c8905693b89)))
+noncomputable def cleanDefine_both_endpoints_5b72385d3bc820377d4f   : _root_.cleanStructure_EndpointSelection_417d89980a2c354c2182 :=
+  (@_root_.cleanConstructor_endpoint_selection_f2c54850f699491deae8 ((_root_.cleanNotation_true_value_9ca9e49e1312ca23ac23)) ((_root_.cleanNotation_true_value_9ca9e49e1312ca23ac23)))
 
-noncomputable def cleanDefine_closed_interval_02a80046a44a2fbda8de  (I : cleanStructure_Endpoints_2512a023e0474ce195ac) : Set (ℝ) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : ℝ) => (((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) ≤ clean_bound_0) ∧ (clean_bound_0 ≤ (@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» (I)))))))
+noncomputable def cleanDefine_closed_interval_3ef09f064d8b2f7a4e2e  (I : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c) : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  (_root_.cleanNotation_set_of_2c71fd475f49a65bd03e ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» (I)) ≤ clean_bound_0) ∧ (clean_bound_0 ≤ (@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» (I)))))))
 
-noncomputable def cleanDefine_selected_endpoints_5b3e2429768ac206a5ae  (I : cleanStructure_Endpoints_2512a023e0474ce195ac) (E : cleanStructure_EndpointSelection_b1d52148908811c63f1d) : Set (ℝ) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : ℝ) => ((((@cleanStructure_EndpointSelection_b1d52148908811c63f1d.«lower» (E)) = (cleanNotation_true_value_2fd5fc223c8905693b89)) ∧ (clean_bound_0 = (@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)))) ∨ (((@cleanStructure_EndpointSelection_b1d52148908811c63f1d.«upper» (E)) = (cleanNotation_true_value_2fd5fc223c8905693b89)) ∧ (clean_bound_0 = (@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» (I))))))))
+noncomputable def cleanDefine_selected_endpoints_bcf18dafd1a2219f7cb4  (I : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c) (E : _root_.cleanStructure_EndpointSelection_417d89980a2c354c2182) : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  (_root_.cleanNotation_set_of_2c71fd475f49a65bd03e ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => ((((@_root_.cleanStructure_EndpointSelection_417d89980a2c354c2182.«lower» (E)) = (_root_.cleanNotation_true_value_9ca9e49e1312ca23ac23)) ∧ (clean_bound_0 = (@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» (I)))) ∨ (((@_root_.cleanStructure_EndpointSelection_417d89980a2c354c2182.«upper» (E)) = (_root_.cleanNotation_true_value_9ca9e49e1312ca23ac23)) ∧ (clean_bound_0 = (@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» (I))))))))
 
-noncomputable def cleanDefine_expanded_interval_c25cb2a7d138e802a0ed  (I : cleanStructure_Endpoints_2512a023e0474ce195ac) (r : ℝ) : Set (ℝ) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : ℝ) => ((((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) - r) ≤ clean_bound_0) ∧ (clean_bound_0 ≤ ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» (I)) + r))))))
+noncomputable def cleanDefine_expanded_interval_750fd6e1dc6c8362900d  (I : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c) (r : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  (_root_.cleanNotation_set_of_2c71fd475f49a65bd03e ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => ((((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» (I)) - r) ≤ clean_bound_0) ∧ (clean_bound_0 ≤ ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» (I)) + r))))))
 
-noncomputable def cleanDefine_expanded_endpoints_246c1c1637936ba4cace  (I : cleanStructure_Endpoints_2512a023e0474ce195ac) (E : cleanStructure_EndpointSelection_b1d52148908811c63f1d) (r : ℝ) : Set (ℝ) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : ℝ) => (((((@cleanStructure_EndpointSelection_b1d52148908811c63f1d.«lower» (E)) = (cleanNotation_true_value_2fd5fc223c8905693b89)) ∧ (((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) - r) ≤ clean_bound_0)) ∧ (clean_bound_0 ≤ ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) + r))) ∨ ((((@cleanStructure_EndpointSelection_b1d52148908811c63f1d.«upper» (E)) = (cleanNotation_true_value_2fd5fc223c8905693b89)) ∧ (((@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» (I)) - r) ≤ clean_bound_0)) ∧ (clean_bound_0 ≤ ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» (I)) + r)))))))
+noncomputable def cleanDefine_expanded_endpoints_5a08e40c8090703620e2  (I : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c) (E : _root_.cleanStructure_EndpointSelection_417d89980a2c354c2182) (r : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  (_root_.cleanNotation_set_of_2c71fd475f49a65bd03e ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (((((@_root_.cleanStructure_EndpointSelection_417d89980a2c354c2182.«lower» (E)) = (_root_.cleanNotation_true_value_9ca9e49e1312ca23ac23)) ∧ (((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» (I)) - r) ≤ clean_bound_0)) ∧ (clean_bound_0 ≤ ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» (I)) + r))) ∨ ((((@_root_.cleanStructure_EndpointSelection_417d89980a2c354c2182.«upper» (E)) = (_root_.cleanNotation_true_value_9ca9e49e1312ca23ac23)) ∧ (((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» (I)) - r) ≤ clean_bound_0)) ∧ (clean_bound_0 ≤ ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» (I)) + r)))))))
 
-structure cleanStructure_InterlevelProblem_006185c6b0da68de0867  : Type 1 where
-  «space» : TopCat.{0}
-  «map» : (@ContinuousMap «space».carrier ℝ «space».str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)
-  «interval» : cleanStructure_Endpoints_2512a023e0474ce195ac
-  «selection» : cleanStructure_EndpointSelection_b1d52148908811c63f1d
+structure cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc  : Type 1 where
+  «space» : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)
+  «map» : (_root_.cleanType_ContinuousRealMap_c65fa65fdfc171714c32 («space»))
+  «interval» : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c
+  «selection» : _root_.cleanStructure_EndpointSelection_417d89980a2c354c2182
 
-noncomputable def cleanConstructor_interlevel_problem_42723c03a4cce7c0a1ff («space» : TopCat.{0}) («map» : (@ContinuousMap «space».carrier ℝ «space».str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)) («interval» : cleanStructure_Endpoints_2512a023e0474ce195ac) («selection» : cleanStructure_EndpointSelection_b1d52148908811c63f1d) : cleanStructure_InterlevelProblem_006185c6b0da68de0867 :=
-  @cleanStructure_InterlevelProblem_006185c6b0da68de0867.mk «space» «map» «interval» «selection»
+noncomputable def cleanConstructor_interlevel_problem_53885bc5547eca082a8b («space» : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) («map» : (_root_.cleanType_ContinuousRealMap_c65fa65fdfc171714c32 («space»))) («interval» : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c) («selection» : _root_.cleanStructure_EndpointSelection_417d89980a2c354c2182) : _root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc :=
+  @_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.mk «space» «map» «interval» «selection»
 
-structure cleanStructure_SpacePairData_f4912a1b453369bfb75e («X» : TopCat.{0}) : Type where
-  «ambient» : Set ((TopCat.carrier «X»))
-  «relative» : Set ((TopCat.carrier «X»))
+structure cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 («X» : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) : Type where
+  «ambient» : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 («X»))))
+  «relative» : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 («X»))))
 
-noncomputable def cleanConstructor_space_pair_data_d4663b2e361ad8703041 («X» : TopCat.{0}) («ambient» : Set ((TopCat.carrier «X»))) («relative» : Set ((TopCat.carrier «X»))) : cleanStructure_SpacePairData_f4912a1b453369bfb75e («X») :=
-  @cleanStructure_SpacePairData_f4912a1b453369bfb75e.mk «X» «ambient» «relative»
+noncomputable def cleanConstructor_space_pair_data_497bb4c3d9a06e9c8bf4 («X» : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) («ambient» : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 («X»))))) («relative» : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 («X»))))) : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 («X») :=
+  @_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.mk «X» «ambient» «relative»
 
-noncomputable def cleanDefine_nested_pair_203f27c03de1e4f128ad  (X : TopCat.{0}) (Q : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)) : Prop :=
-  ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (Q)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (Q)))
+noncomputable def cleanDefine_nested_pair_6ea1594b4c58dd66c0ce  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Q : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 (X)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  ((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (Q)) ⊆ (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (Q)))
 
-noncomputable def cleanDefine_expanded_pair_66873557049e4375bc60  (P : cleanStructure_InterlevelProblem_006185c6b0da68de0867) (r : ℝ) : cleanStructure_SpacePairData_f4912a1b453369bfb75e ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) :=
-  (@cleanConstructor_space_pair_data_d4663b2e361ad8703041 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((cleanDefine_inverse_image_b2385c49c1629ae08495 ((@cleanNotation_underlying_real_map_a2d4907a882247d2b335 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«map» (P))))) ((cleanDefine_expanded_interval_c25cb2a7d138e802a0ed ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P))) (r))))) ((cleanDefine_inverse_image_b2385c49c1629ae08495 ((@cleanNotation_underlying_real_map_a2d4907a882247d2b335 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«map» (P))))) ((cleanDefine_expanded_endpoints_246c1c1637936ba4cace ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P))) ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«selection» (P))) (r))))))
+noncomputable def cleanDefine_expanded_pair_cb6ac7c55e8055c38f73  (P : _root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc) (r : (_root_.cleanType_Real_107b6641a486642ad8e1)) : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) :=
+  (@_root_.cleanConstructor_space_pair_data_497bb4c3d9a06e9c8bf4 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((_root_.cleanDefine_inverse_image_eb657a3c1d0219ea719b ((@_root_.cleanNotation_underlying_real_map_0b69f7fea7146ae09669 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«map» (P))))) ((_root_.cleanDefine_expanded_interval_750fd6e1dc6c8362900d ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P))) (r))))) ((_root_.cleanDefine_inverse_image_eb657a3c1d0219ea719b ((@_root_.cleanNotation_underlying_real_map_0b69f7fea7146ae09669 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«map» (P))))) ((_root_.cleanDefine_expanded_endpoints_5a08e40c8090703620e2 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P))) ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«selection» (P))) (r))))))
 
-noncomputable def cleanDefine_shifted_pair_acef58e9c1318b5833c8  (P : cleanStructure_InterlevelProblem_006185c6b0da68de0867) (t : ℝ) : cleanStructure_SpacePairData_f4912a1b453369bfb75e ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) :=
-  (@cleanConstructor_space_pair_data_d4663b2e361ad8703041 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((cleanDefine_inverse_image_b2385c49c1629ae08495 ((@cleanNotation_underlying_real_map_a2d4907a882247d2b335 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«map» (P))))) ((cleanDefine_closed_interval_02a80046a44a2fbda8de ((cleanDefine_shifted_endpoints_0341e7d28e14c6ec5711 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P))) (t))))))) ((cleanDefine_inverse_image_b2385c49c1629ae08495 ((@cleanNotation_underlying_real_map_a2d4907a882247d2b335 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«map» (P))))) ((cleanDefine_selected_endpoints_5b3e2429768ac206a5ae ((cleanDefine_shifted_endpoints_0341e7d28e14c6ec5711 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P))) (t))) ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«selection» (P))))))))
+noncomputable def cleanDefine_shifted_pair_50c0b1d200edca0505cb  (P : _root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc) (t : (_root_.cleanType_Real_107b6641a486642ad8e1)) : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) :=
+  (@_root_.cleanConstructor_space_pair_data_497bb4c3d9a06e9c8bf4 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((_root_.cleanDefine_inverse_image_eb657a3c1d0219ea719b ((@_root_.cleanNotation_underlying_real_map_0b69f7fea7146ae09669 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«map» (P))))) ((_root_.cleanDefine_closed_interval_3ef09f064d8b2f7a4e2e ((_root_.cleanDefine_shifted_endpoints_ea3398852390cb480b6d ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P))) (t))))))) ((_root_.cleanDefine_inverse_image_eb657a3c1d0219ea719b ((@_root_.cleanNotation_underlying_real_map_0b69f7fea7146ae09669 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«map» (P))))) ((_root_.cleanDefine_selected_endpoints_bcf18dafd1a2219f7cb4 ((_root_.cleanDefine_shifted_endpoints_ea3398852390cb480b6d ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P))) (t))) ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«selection» (P))))))))
 
-noncomputable def cleanDefine_pair_included_in_93a3c208a27e390549af  (X : TopCat.{0}) (Q : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)) (R : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)) : Prop :=
-  (((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (Q)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (R))) ∧ ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (Q)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (R))))
+noncomputable def cleanDefine_pair_included_in_4a73f638127387b9d365  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Q : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 (X)) (R : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 (X)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (Q)) ⊆ (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (R))) ∧ ((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (Q)) ⊆ (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (R))))
 
-noncomputable def cleanDefine_real_map_value_1c81a8738f0927d4f859  (X : TopCat.{0}) (f : (@ContinuousMap X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)) (x : (TopCat.carrier X)) : ℝ :=
-  (cleanNotation_evaluate_map_fc8e4f20170606ffe807 ((@cleanNotation_underlying_real_map_a2d4907a882247d2b335 (X) (f))) (x))
+noncomputable def cleanDefine_real_map_value_829bba0c597453819c48  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (f : (_root_.cleanType_ContinuousRealMap_c65fa65fdfc171714c32 (X))) (x : (_root_.cleanType_Point_f8a65e23875fb9a2c125 (X))) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  (_root_.cleanNotation_evaluate_map_fc8e4f20170606ffe807 ((@_root_.cleanNotation_underlying_real_map_0b69f7fea7146ae09669 (X) (f))) (x))
 
-noncomputable def cleanDefine_bounded_perturbation_f5d5b63290c0e028ea34  (P : cleanStructure_InterlevelProblem_006185c6b0da68de0867) (h : (@ContinuousMap (@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)).carrier ℝ (@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)).str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)) (r : ℝ) : Prop :=
-  (∀ (clean_bound_0 : (TopCat.carrier (@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)))), (((-r) ≤ ((@cleanDefine_real_map_value_1c81a8738f0927d4f859 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) (h) (clean_bound_0)) - (@cleanDefine_real_map_value_1c81a8738f0927d4f859 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«map» (P))) (clean_bound_0)))) ∧ (((@cleanDefine_real_map_value_1c81a8738f0927d4f859 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) (h) (clean_bound_0)) - (@cleanDefine_real_map_value_1c81a8738f0927d4f859 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«map» (P))) (clean_bound_0))) ≤ r)))
+noncomputable def cleanDefine_bounded_perturbation_cc3ccaca9b62051112ab  (P : _root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc) (h : (_root_.cleanType_ContinuousRealMap_c65fa65fdfc171714c32 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))))) (r : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (∀ (clean_bound_0 : (_root_.cleanType_Point_f8a65e23875fb9a2c125 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))))), (((-r) ≤ ((@_root_.cleanDefine_real_map_value_829bba0c597453819c48 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) (h) (clean_bound_0)) - (@_root_.cleanDefine_real_map_value_829bba0c597453819c48 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«map» (P))) (clean_bound_0)))) ∧ (((@_root_.cleanDefine_real_map_value_829bba0c597453819c48 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) (h) (clean_bound_0)) - (@_root_.cleanDefine_real_map_value_829bba0c597453819c48 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«map» (P))) (clean_bound_0))) ≤ r)))
 
-noncomputable def cleanDefine_perturbed_pair_8a139afee8bcd7a01090  (P : cleanStructure_InterlevelProblem_006185c6b0da68de0867) (h : (@ContinuousMap (@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)).carrier ℝ (@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)).str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)) : cleanStructure_SpacePairData_f4912a1b453369bfb75e ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) :=
-  (@cleanConstructor_space_pair_data_d4663b2e361ad8703041 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((cleanDefine_inverse_image_b2385c49c1629ae08495 ((@cleanNotation_underlying_real_map_a2d4907a882247d2b335 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) (h))) ((cleanDefine_closed_interval_02a80046a44a2fbda8de ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P))))))) ((cleanDefine_inverse_image_b2385c49c1629ae08495 ((@cleanNotation_underlying_real_map_a2d4907a882247d2b335 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) (h))) ((cleanDefine_selected_endpoints_5b3e2429768ac206a5ae ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P))) ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«selection» (P))))))))
+noncomputable def cleanDefine_perturbed_pair_8cc4c2f45ef4c0e4a653  (P : _root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc) (h : (_root_.cleanType_ContinuousRealMap_c65fa65fdfc171714c32 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))))) : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) :=
+  (@_root_.cleanConstructor_space_pair_data_497bb4c3d9a06e9c8bf4 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((_root_.cleanDefine_inverse_image_eb657a3c1d0219ea719b ((@_root_.cleanNotation_underlying_real_map_0b69f7fea7146ae09669 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) (h))) ((_root_.cleanDefine_closed_interval_3ef09f064d8b2f7a4e2e ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P))))))) ((_root_.cleanDefine_inverse_image_eb657a3c1d0219ea719b ((@_root_.cleanNotation_underlying_real_map_0b69f7fea7146ae09669 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) (h))) ((_root_.cleanDefine_selected_endpoints_bcf18dafd1a2219f7cb4 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P))) ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«selection» (P))))))))
 
-structure cleanStructure_SubsetInclusion_7fc22cecd40f767463de («X» : Type) : Type where
-  «source» : Set («X»)
-  «target» : Set («X»)
+structure cleanStructure_SubsetInclusion_dee5d235a852d3683ca6 («X» : Type) : Type where
+  «source» : (_root_.cleanType_Set_6e300741358eee425e81 («X»))
+  «target» : (_root_.cleanType_Set_6e300741358eee425e81 («X»))
   «containment» : ((«source» ⊆ «target»))
 
-noncomputable def cleanConstructor_certified_inclusion_634925e44d761d47bf70 («X» : Type) («source» : Set («X»)) («target» : Set («X»)) («containment» : ((«source» ⊆ «target»))) : cleanStructure_SubsetInclusion_7fc22cecd40f767463de («X») :=
-  @cleanStructure_SubsetInclusion_7fc22cecd40f767463de.mk «X» «source» «target» «containment»
+noncomputable def cleanConstructor_certified_inclusion_43c70040f5cf64a7c739 («X» : Type) («source» : (_root_.cleanType_Set_6e300741358eee425e81 («X»))) («target» : (_root_.cleanType_Set_6e300741358eee425e81 («X»))) («containment» : ((«source» ⊆ «target»))) : _root_.cleanStructure_SubsetInclusion_dee5d235a852d3683ca6 («X») :=
+  @_root_.cleanStructure_SubsetInclusion_dee5d235a852d3683ca6.mk «X» «source» «target» «containment»
 
-noncomputable def cleanNotation_subset_inclusion_map_12092cff24227ab14783  (X : Type) (S : Set (X)) (T : Set (X)) (h : ((S ⊆ T))) : ({x : X // x ∈ S}) → ({x : X // x ∈ T}) :=
+noncomputable def cleanNotation_subset_inclusion_map_55ca143b65caa5614928  (X : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)) (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))) (T : (_root_.cleanType_Set_6e300741358eee425e81 (X))) (h : ((S ⊆ T))) : ((_root_.cleanType_Element_4fb2f1b669ed36f80886 (X) (S))) → ((_root_.cleanType_Element_4fb2f1b669ed36f80886 (X) (T))) :=
   Set.inclusion h
 
-noncomputable def cleanDefine_certified_inclusion_map_b978ebcdd082c055c359  (X : Type) (Q : cleanStructure_SubsetInclusion_7fc22cecd40f767463de (X)) : ({x : X // x ∈ (@cleanStructure_SubsetInclusion_7fc22cecd40f767463de.«source» (X) (Q))}) → ({x : X // x ∈ (@cleanStructure_SubsetInclusion_7fc22cecd40f767463de.«target» (X) (Q))}) :=
-  (@cleanNotation_subset_inclusion_map_12092cff24227ab14783 (X) ((@cleanStructure_SubsetInclusion_7fc22cecd40f767463de.«source» (X) (Q))) ((@cleanStructure_SubsetInclusion_7fc22cecd40f767463de.«target» (X) (Q))) ((@cleanStructure_SubsetInclusion_7fc22cecd40f767463de.«containment» (X) (Q))))
+noncomputable def cleanDefine_certified_inclusion_map_8e0bdaf9d5f81a8da5ad  (X : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)) (Q : _root_.cleanStructure_SubsetInclusion_dee5d235a852d3683ca6 (X)) : ((_root_.cleanType_Element_4fb2f1b669ed36f80886 (X) ((@_root_.cleanStructure_SubsetInclusion_dee5d235a852d3683ca6.«source» (X) (Q))))) → ((_root_.cleanType_Element_4fb2f1b669ed36f80886 (X) ((@_root_.cleanStructure_SubsetInclusion_dee5d235a852d3683ca6.«target» (X) (Q))))) :=
+  (@_root_.cleanNotation_subset_inclusion_map_55ca143b65caa5614928 (X) ((@_root_.cleanStructure_SubsetInclusion_dee5d235a852d3683ca6.«source» (X) (Q))) ((@_root_.cleanStructure_SubsetInclusion_dee5d235a852d3683ca6.«target» (X) (Q))) ((@_root_.cleanStructure_SubsetInclusion_dee5d235a852d3683ca6.«containment» (X) (Q))))
 
-noncomputable def cleanDefine_subset_certificate_bc4e70535370b0bef261 {X : Type} (S : Set (X)) (T : Set (X)) (h : ((S ⊆ T))) : cleanStructure_SubsetInclusion_7fc22cecd40f767463de (X) :=
-  (@cleanConstructor_certified_inclusion_634925e44d761d47bf70 (X) (S) (T) (h))
+noncomputable def cleanDefine_subset_certificate_e8cfe77b05f324f28162 {X : Type} (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))) (T : (_root_.cleanType_Set_6e300741358eee425e81 (X))) (h : ((S ⊆ T))) : _root_.cleanStructure_SubsetInclusion_dee5d235a852d3683ca6 (X) :=
+  (@_root_.cleanConstructor_certified_inclusion_43c70040f5cf64a7c739 (X) (S) (T) (h))
 
-structure cleanStructure_TopologicalPair_23a951172729bcd7e2a9 («X» : TopCat.{0}) : Type where
-  «ambient» : Set ((TopCat.carrier «X»))
-  «relative» : Set ((TopCat.carrier «X»))
+structure cleanStructure_TopologicalPair_f701031cf43f9f923573 («X» : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) : Type where
+  «ambient» : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 («X»))))
+  «relative» : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 («X»))))
   «nesting» : ((«relative» ⊆ «ambient»))
 
-noncomputable def cleanConstructor_topological_pair_d2eb62bc922cb0af9e3c («X» : TopCat.{0}) («ambient» : Set ((TopCat.carrier «X»))) («relative» : Set ((TopCat.carrier «X»))) («nesting» : ((«relative» ⊆ «ambient»))) : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 («X») :=
-  @cleanStructure_TopologicalPair_23a951172729bcd7e2a9.mk «X» «ambient» «relative» «nesting»
+noncomputable def cleanConstructor_topological_pair_4885b9c6167c75e582cb («X» : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) («ambient» : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 («X»))))) («relative» : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 («X»))))) («nesting» : ((«relative» ⊆ «ambient»))) : _root_.cleanStructure_TopologicalPair_f701031cf43f9f923573 («X») :=
+  @_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.mk «X» «ambient» «relative» «nesting»
 
-structure cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 («X» : TopCat.{0}) : Type where
-  «source» : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 («X»)
-  «target» : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 («X»)
-  «ambient» : (((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» («X») («source»)) ⊆ (@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» («X») («target»))))
-  «relative» : (((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» («X») («source»)) ⊆ (@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» («X») («target»))))
+structure cleanStructure_PairInclusion_2a6b123d94386bb22b2b («X» : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) : Type where
+  «source» : _root_.cleanStructure_TopologicalPair_f701031cf43f9f923573 («X»)
+  «target» : _root_.cleanStructure_TopologicalPair_f701031cf43f9f923573 («X»)
+  «ambient» : (((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» («X») («source»)) ⊆ (@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» («X») («target»))))
+  «relative» : (((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» («X») («source»)) ⊆ (@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» («X») («target»))))
 
-noncomputable def cleanConstructor_pair_inclusion_4f04d1794c02e12be8a7 («X» : TopCat.{0}) («source» : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 («X»)) («target» : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 («X»)) («ambient» : (((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» («X») («source»)) ⊆ (@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» («X») («target»))))) («relative» : (((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» («X») («source»)) ⊆ (@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» («X») («target»))))) : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 («X») :=
-  @cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.mk «X» «source» «target» «ambient» «relative»
+noncomputable def cleanConstructor_pair_inclusion_d00d3a03332707a42c44 («X» : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) («source» : _root_.cleanStructure_TopologicalPair_f701031cf43f9f923573 («X»)) («target» : _root_.cleanStructure_TopologicalPair_f701031cf43f9f923573 («X»)) («ambient» : (((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» («X») («source»)) ⊆ (@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» («X») («target»))))) («relative» : (((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» («X») («source»)) ⊆ (@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» («X») («target»))))) : _root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b («X») :=
+  @_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.mk «X» «source» «target» «ambient» «relative»
 
-noncomputable def cleanDefine_ambient_inclusion_032b049cd73918a6b653  (X : TopCat.{0}) (Q : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 (X)) : cleanStructure_SubsetInclusion_7fc22cecd40f767463de ((TopCat.carrier X)) :=
-  (@cleanDefine_subset_certificate_bc4e70535370b0bef261 ((TopCat.carrier X)) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q))))) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q))))) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«ambient» (X) (Q))))
+noncomputable def cleanDefine_ambient_inclusion_5524c228887f4e0551ae  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Q : _root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b (X)) : _root_.cleanStructure_SubsetInclusion_dee5d235a852d3683ca6 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 (X))) :=
+  (@_root_.cleanDefine_subset_certificate_e8cfe77b05f324f28162 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 (X))) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))))) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q))))) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«ambient» (X) (Q))))
 
-noncomputable def cleanDefine_relative_inclusion_28b943741c4dc665fd30  (X : TopCat.{0}) (Q : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 (X)) : cleanStructure_SubsetInclusion_7fc22cecd40f767463de ((TopCat.carrier X)) :=
-  (@cleanDefine_subset_certificate_bc4e70535370b0bef261 ((TopCat.carrier X)) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q))))) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q))))) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«relative» (X) (Q))))
+noncomputable def cleanDefine_relative_inclusion_42e1f0d0c6d343689238  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Q : _root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b (X)) : _root_.cleanStructure_SubsetInclusion_dee5d235a852d3683ca6 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 (X))) :=
+  (@_root_.cleanDefine_subset_certificate_e8cfe77b05f324f28162 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 (X))) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))))) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q))))) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«relative» (X) (Q))))
 
-noncomputable def cleanNotation_subspace_4d29dc4d5e65a0cd314c  (X : TopCat.{0}) (S : Set ((TopCat.carrier X))) : TopCat.{0} :=
+noncomputable def cleanNotation_subspace_c5a9f0dd775aa465e7fc  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (S : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 (X))))) : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b) :=
   (letI : TopologicalSpace X.carrier := X.str; TopCat.of S)
 
-noncomputable def cleanNotation_subspace_inclusion_ec403bdf245f64be6ba9  (X : TopCat.{0}) (S : Set ((TopCat.carrier X))) (T : Set ((TopCat.carrier X))) (h : ((S ⊆ T))) : (@ContinuousMap (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) (S)).carrier (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) (T)).carrier (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) (S)).str (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) (T)).str) :=
+noncomputable def cleanNotation_subspace_inclusion_0024be0a72eb4292b055  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (S : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 (X))))) (T : (_root_.cleanType_Set_6e300741358eee425e81 ((_root_.cleanType_Point_f8a65e23875fb9a2c125 (X))))) (h : ((S ⊆ T))) : (_root_.cleanType_ContinuousMap_05cf8501fbb474169b7a ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) (S))) ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) (T)))) :=
   (letI : TopologicalSpace X.carrier := X.str; ContinuousMap.inclusion h)
 
-noncomputable def cleanDefine_ambient_continuous_map_8847accc2cf96844c6cb  (X : TopCat.{0}) (Q : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 (X)) : (@ContinuousMap (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q)))))).carrier (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q)))))).carrier (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q)))))).str (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q)))))).str) :=
-  (@cleanNotation_subspace_inclusion_ec403bdf245f64be6ba9 (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q))))) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q))))) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«ambient» (X) (Q))))
+noncomputable def cleanDefine_ambient_continuous_map_9e18751f172667d7bde2  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Q : _root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b (X)) : (_root_.cleanType_ContinuousMap_05cf8501fbb474169b7a ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))))))) ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q)))))))) :=
+  (@_root_.cleanNotation_subspace_inclusion_0024be0a72eb4292b055 (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))))) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q))))) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«ambient» (X) (Q))))
 
-noncomputable def cleanDefine_relative_continuous_map_9ee2cb50fac73bd8824e  (X : TopCat.{0}) (Q : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 (X)) : (@ContinuousMap (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q)))))).carrier (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q)))))).carrier (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q)))))).str (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q)))))).str) :=
-  (@cleanNotation_subspace_inclusion_ec403bdf245f64be6ba9 (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q))))) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q))))) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«relative» (X) (Q))))
+noncomputable def cleanDefine_relative_continuous_map_3c81881ebcda9c1a81bc  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Q : _root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b (X)) : (_root_.cleanType_ContinuousMap_05cf8501fbb474169b7a ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))))))) ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q)))))))) :=
+  (@_root_.cleanNotation_subspace_inclusion_0024be0a72eb4292b055 (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))))) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q))))) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«relative» (X) (Q))))
 
-noncomputable def cleanDefine_ambient_composite_563210341a2f39435865  (X : TopCat.{0}) (Q : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 (X)) : (@ContinuousMap (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q)))))).carrier (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q)))))).carrier (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q)))))).str (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q)))))).str) :=
-  (@cleanNotation_compose_continuous_maps_5b97f65ef52a877965dc ((@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q))))))) ((@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q))))))) ((@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q))))))) ((@cleanDefine_ambient_continuous_map_8847accc2cf96844c6cb (X) (Q))) ((@cleanNotation_subspace_inclusion_ec403bdf245f64be6ba9 (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q))))) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q))))) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«nesting» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q))))))))
+noncomputable def cleanDefine_ambient_composite_08f3c93e58fe21bfaf93  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Q : _root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b (X)) : (_root_.cleanType_ContinuousMap_05cf8501fbb474169b7a ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))))))) ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q)))))))) :=
+  (@_root_.cleanNotation_compose_continuous_maps_f3da5f5645c1a654d6b9 ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))))))) ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))))))) ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q))))))) ((@_root_.cleanDefine_ambient_continuous_map_9e18751f172667d7bde2 (X) (Q))) ((@_root_.cleanNotation_subspace_inclusion_0024be0a72eb4292b055 (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))))) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))))) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«nesting» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))))))))
 
-noncomputable def cleanDefine_relative_composite_65d097960ba7f9f6872c  (X : TopCat.{0}) (Q : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 (X)) : (@ContinuousMap (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q)))))).carrier (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q)))))).carrier (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q)))))).str (@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q)))))).str) :=
-  (@cleanNotation_compose_continuous_maps_5b97f65ef52a877965dc ((@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q))))))) ((@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q))))))) ((@cleanNotation_subspace_4d29dc4d5e65a0cd314c (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q))))))) ((@cleanNotation_subspace_inclusion_ec403bdf245f64be6ba9 (X) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q))))) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q))))) ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«nesting» (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q))))))) ((@cleanDefine_relative_continuous_map_9ee2cb50fac73bd8824e (X) (Q))))
+noncomputable def cleanDefine_relative_composite_93e163bb814449733361  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Q : _root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b (X)) : (_root_.cleanType_ContinuousMap_05cf8501fbb474169b7a ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))))))) ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q)))))))) :=
+  (@_root_.cleanNotation_compose_continuous_maps_f3da5f5645c1a654d6b9 ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))))))) ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q))))))) ((@_root_.cleanNotation_subspace_c5a9f0dd775aa465e7fc (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q))))))) ((@_root_.cleanNotation_subspace_inclusion_0024be0a72eb4292b055 (X) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q))))) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q))))) ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«nesting» (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q))))))) ((@_root_.cleanDefine_relative_continuous_map_3c81881ebcda9c1a81bc (X) (Q))))
 
-noncomputable def cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b  (X : TopCat.{0}) (Q : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)) (h : (((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (Q)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (Q))))) : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 (X) :=
-  (@cleanConstructor_topological_pair_d2eb62bc922cb0af9e3c (X) ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (Q))) ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (Q))) (h))
+noncomputable def cleanDefine_certify_pair_data_cdf76f9608063262c4c7  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Q : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 (X)) (h : (((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (Q)) ⊆ (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (Q))))) : _root_.cleanStructure_TopologicalPair_f701031cf43f9f923573 (X) :=
+  (@_root_.cleanConstructor_topological_pair_4885b9c6167c75e582cb (X) ((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (Q))) ((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (Q))) (h))
 
-noncomputable def cleanDefine_has_pair_data_c2317928d500c075653a  (X : TopCat.{0}) (Q : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 (X)) (S : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)) : Prop :=
-  (((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«ambient» (X) (Q)) = (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S))) ∧ ((@cleanStructure_TopologicalPair_23a951172729bcd7e2a9.«relative» (X) (Q)) = (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S))))
+noncomputable def cleanDefine_has_pair_data_6f33fdbc4ebfe2f6829b  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (Q : _root_.cleanStructure_TopologicalPair_f701031cf43f9f923573 (X)) (S : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 (X)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«ambient» (X) (Q)) = (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (S))) ∧ ((@_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573.«relative» (X) (Q)) = (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (S))))
 
-noncomputable def cleanDefine_certify_pair_inclusion_48466e95544d6e5f997e  (X : TopCat.{0}) (S : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)) (T : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)) (s : (((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S))))) (t : (((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (T)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (T))))) (a : (((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (T))))) (b : (((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (T))))) : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 (X) :=
-  (@cleanConstructor_pair_inclusion_4f04d1794c02e12be8a7 (X) ((@cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b (X) (S) (s))) ((@cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b (X) (T) (t))) (a) (b))
+noncomputable def cleanDefine_certify_pair_inclusion_681b193e2d00940bf5cb  (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (S : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 (X)) (T : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 (X)) (s : (((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (S)) ⊆ (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (S))))) (t : (((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (T)) ⊆ (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (T))))) (a : (((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (S)) ⊆ (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (T))))) (b : (((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (S)) ⊆ (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (T))))) : _root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b (X) :=
+  (@_root_.cleanConstructor_pair_inclusion_d00d3a03332707a42c44 (X) ((@_root_.cleanDefine_certify_pair_data_cdf76f9608063262c4c7 (X) (S) (s))) ((@_root_.cleanDefine_certify_pair_data_cdf76f9608063262c4c7 (X) (T) (t))) (a) (b))
 
 
 open scoped Matrix
@@ -361,8 +361,8 @@ reference: two Boolean endpoint flags
 relationship: original
 -/
 def endpoint_choices_are_exhaustive : Prop :=
-  ∀ (E : cleanStructure_EndpointSelection_b1d52148908811c63f1d),
-  ((((E = (cleanDefine_no_endpoints_3d2c151be5ddaaa6461f)) ∨ (E = (cleanDefine_lower_endpoint_55a3912dc3794b7cc0b5))) ∨ (E = (cleanDefine_upper_endpoint_17aeb6bb1ab98f7ac7e2))) ∨ (E = (cleanDefine_both_endpoints_9ceafa3c3eae62095b71)))
+  ∀ (E : _root_.cleanStructure_EndpointSelection_417d89980a2c354c2182),
+  ((((E = (_root_.cleanDefine_no_endpoints_3aad239e18f86ce44c68)) ∨ (E = (_root_.cleanDefine_lower_endpoint_c404a3843e685ffaf059))) ∨ (E = (_root_.cleanDefine_upper_endpoint_06a0ff0e6593640bb148))) ∨ (E = (_root_.cleanDefine_both_endpoints_5b72385d3bc820377d4f)))
 
 /--
 source: interlevel
@@ -371,10 +371,10 @@ relationship: adapted
 scope: endpoint inclusion
 -/
 def selected_endpoints_lie_in_the_interval : Prop :=
-  ∀ (I : cleanStructure_Endpoints_2512a023e0474ce195ac),
-  ∀ (E : cleanStructure_EndpointSelection_b1d52148908811c63f1d),
-  ∀ («order» : ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) ≤ (@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» (I)))),
-  ((cleanDefine_selected_endpoints_5b3e2429768ac206a5ae (I) (E)) ⊆ (cleanDefine_closed_interval_02a80046a44a2fbda8de (I)))
+  ∀ (I : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c),
+  ∀ (E : _root_.cleanStructure_EndpointSelection_417d89980a2c354c2182),
+  ∀ («order» : ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» (I)) ≤ (@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» (I)))),
+  ((_root_.cleanDefine_selected_endpoints_bcf18dafd1a2219f7cb4 (I) (E)) ⊆ (_root_.cleanDefine_closed_interval_3ef09f064d8b2f7a4e2e (I)))
 
 /--
 source: interlevel
@@ -383,11 +383,11 @@ relationship: adapted
 scope: pair inclusion
 -/
 def expanded_pair_is_nested : Prop :=
-  ∀ (P : cleanStructure_InterlevelProblem_006185c6b0da68de0867),
-  ∀ (r : ℝ),
-  ∀ («order» : ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P)))) ≤ (@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P)))))),
+  ∀ (P : _root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc),
+  ∀ (r : (_root_.cleanType_Real_107b6641a486642ad8e1)),
+  ∀ («order» : ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P)))) ≤ (@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P)))))),
   ∀ («radius» : (r ≥ 0)),
-  (@cleanDefine_nested_pair_203f27c03de1e4f128ad ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanDefine_expanded_pair_66873557049e4375bc60 (P) (r))))
+  (@_root_.cleanDefine_nested_pair_6ea1594b4c58dd66c0ce ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanDefine_expanded_pair_cb6ac7c55e8055c38f73 (P) (r))))
 
 /--
 source: interlevel
@@ -396,10 +396,10 @@ relationship: adapted
 scope: pair inclusion
 -/
 def shifted_pair_is_nested : Prop :=
-  ∀ (P : cleanStructure_InterlevelProblem_006185c6b0da68de0867),
-  ∀ (t : ℝ),
-  ∀ («order» : ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P)))) ≤ (@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P)))))),
-  (@cleanDefine_nested_pair_203f27c03de1e4f128ad ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanDefine_shifted_pair_acef58e9c1318b5833c8 (P) (t))))
+  ∀ (P : _root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc),
+  ∀ (t : (_root_.cleanType_Real_107b6641a486642ad8e1)),
+  ∀ («order» : ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P)))) ≤ (@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P)))))),
+  (@_root_.cleanDefine_nested_pair_6ea1594b4c58dd66c0ce ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanDefine_shifted_pair_50c0b1d200edca0505cb (P) (t))))
 
 /--
 source: interlevel
@@ -408,11 +408,11 @@ relationship: adapted
 scope: all bounded shifts
 -/
 def shifted_pair_lies_in_expanded_pair : Prop :=
-  ∀ (P : cleanStructure_InterlevelProblem_006185c6b0da68de0867),
-  ∀ (r t : ℝ),
+  ∀ (P : _root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc),
+  ∀ (r t : (_root_.cleanType_Real_107b6641a486642ad8e1)),
   ∀ («radius» : (r ≥ 0)),
   ∀ («shift» : (((-r) ≤ t) ∧ (t ≤ r))),
-  (@cleanDefine_pair_included_in_93a3c208a27e390549af ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanDefine_shifted_pair_acef58e9c1318b5833c8 (P) (t))) ((@cleanDefine_expanded_pair_66873557049e4375bc60 (P) (r))))
+  (@_root_.cleanDefine_pair_included_in_4a73f638127387b9d365 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanDefine_shifted_pair_50c0b1d200edca0505cb (P) (t))) ((@_root_.cleanDefine_expanded_pair_cb6ac7c55e8055c38f73 (P) (r))))
 
 /--
 source: interlevel
@@ -421,10 +421,10 @@ relationship: adapted
 scope: pair inclusion
 -/
 def perturbed_pair_is_nested : Prop :=
-  ∀ (P : cleanStructure_InterlevelProblem_006185c6b0da68de0867),
-  ∀ (h : (@ContinuousMap (@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)).carrier ℝ (@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)).str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)),
-  ∀ («order» : ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P)))) ≤ (@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P)))))),
-  (@cleanDefine_nested_pair_203f27c03de1e4f128ad ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanDefine_perturbed_pair_8a139afee8bcd7a01090 (P) (h))))
+  ∀ (P : _root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc),
+  ∀ (h : (_root_.cleanType_ContinuousRealMap_c65fa65fdfc171714c32 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))))),
+  ∀ («order» : ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P)))) ≤ (@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P)))))),
+  (@_root_.cleanDefine_nested_pair_6ea1594b4c58dd66c0ce ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanDefine_perturbed_pair_8cc4c2f45ef4c0e4a653 (P) (h))))
 
 /--
 source: interlevel
@@ -433,12 +433,12 @@ relationship: adapted
 scope: pair inclusion
 -/
 def bounded_perturbation_lies_in_expanded_pair : Prop :=
-  ∀ (P : cleanStructure_InterlevelProblem_006185c6b0da68de0867),
-  ∀ (h : (@ContinuousMap (@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)).carrier ℝ (@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)).str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)),
-  ∀ (r : ℝ),
+  ∀ (P : _root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc),
+  ∀ (h : (_root_.cleanType_ContinuousRealMap_c65fa65fdfc171714c32 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))))),
+  ∀ (r : (_root_.cleanType_Real_107b6641a486642ad8e1)),
   ∀ («radius» : (r ≥ 0)),
-  ∀ («bounded_perturbation_u28_P_u2c__h_u2c__r_u29_» : (@cleanDefine_bounded_perturbation_f5d5b63290c0e028ea34 (P) (h) (r))),
-  (@cleanDefine_pair_included_in_93a3c208a27e390549af ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanDefine_perturbed_pair_8a139afee8bcd7a01090 (P) (h))) ((@cleanDefine_expanded_pair_66873557049e4375bc60 (P) (r))))
+  ∀ («bounded_perturbation_u28_P_u2c__h_u2c__r_u29_» : (@_root_.cleanDefine_bounded_perturbation_cc3ccaca9b62051112ab (P) (h) (r))),
+  (@_root_.cleanDefine_pair_included_in_4a73f638127387b9d365 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanDefine_perturbed_pair_8cc4c2f45ef4c0e4a653 (P) (h))) ((@_root_.cleanDefine_expanded_pair_cb6ac7c55e8055c38f73 (P) (r))))
 
 /--
 source: topology
@@ -446,12 +446,12 @@ reference: certified expanded pair
 relationship: original
 -/
 def expanded_pair_has_a_certificate : Prop :=
-  ∀ (P : cleanStructure_InterlevelProblem_006185c6b0da68de0867),
-  ∀ (r : ℝ),
-  ∀ («order» : ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P)))) ≤ (@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P)))))),
+  ∀ (P : _root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc),
+  ∀ (r : (_root_.cleanType_Real_107b6641a486642ad8e1)),
+  ∀ («order» : ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P)))) ≤ (@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P)))))),
   ∀ («radius» : (r ≥ 0)),
-  let T : cleanStructure_SpacePairData_f4912a1b453369bfb75e ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) := (@cleanDefine_expanded_pair_66873557049e4375bc60 (P) (r));
-  (@Exists (cleanStructure_TopologicalPair_23a951172729bcd7e2a9 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)))) (fun (clean_bound_0 : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)))) => (@cleanDefine_has_pair_data_c2317928d500c075653a ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) (clean_bound_0) (T))))
+  let T : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) := (@_root_.cleanDefine_expanded_pair_cb6ac7c55e8055c38f73 (P) (r));
+  (@Exists (_root_.cleanStructure_TopologicalPair_f701031cf43f9f923573 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P)))) (fun (clean_bound_0 : _root_.cleanStructure_TopologicalPair_f701031cf43f9f923573 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P)))) => (@_root_.cleanDefine_has_pair_data_6f33fdbc4ebfe2f6829b ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) (clean_bound_0) (T))))
 
 /--
 source: interlevel
@@ -460,14 +460,14 @@ relationship: adapted
 scope: certified inclusion
 -/
 def bounded_shift_has_a_certified_inclusion : Prop :=
-  ∀ (P : cleanStructure_InterlevelProblem_006185c6b0da68de0867),
-  ∀ (r t : ℝ),
-  ∀ («order» : ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P)))) ≤ (@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P)))))),
+  ∀ (P : _root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc),
+  ∀ (r t : (_root_.cleanType_Real_107b6641a486642ad8e1)),
+  ∀ («order» : ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P)))) ≤ (@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P)))))),
   ∀ («radius» : (r ≥ 0)),
   ∀ («shift» : (((-r) ≤ t) ∧ (t ≤ r))),
-  let S : cleanStructure_SpacePairData_f4912a1b453369bfb75e ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) := (@cleanDefine_shifted_pair_acef58e9c1318b5833c8 (P) (t));
-  let T : cleanStructure_SpacePairData_f4912a1b453369bfb75e ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) := (@cleanDefine_expanded_pair_66873557049e4375bc60 (P) (r));
-  (@Exists (cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)))) (fun (clean_bound_0 : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)))) => ((@cleanDefine_has_pair_data_c2317928d500c075653a ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) (clean_bound_0))) (S)) ∧ (@cleanDefine_has_pair_data_c2317928d500c075653a ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) (clean_bound_0))) (T)))))
+  let S : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) := (@_root_.cleanDefine_shifted_pair_50c0b1d200edca0505cb (P) (t));
+  let T : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) := (@_root_.cleanDefine_expanded_pair_cb6ac7c55e8055c38f73 (P) (r));
+  (@Exists (_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P)))) (fun (clean_bound_0 : _root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P)))) => ((@_root_.cleanDefine_has_pair_data_6f33fdbc4ebfe2f6829b ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) (clean_bound_0))) (S)) ∧ (@_root_.cleanDefine_has_pair_data_6f33fdbc4ebfe2f6829b ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) (clean_bound_0))) (T)))))
 
 /--
 source: interlevel
@@ -476,15 +476,15 @@ relationship: adapted
 scope: certified inclusion
 -/
 def bounded_perturbation_has_a_certified_inclusion : Prop :=
-  ∀ (P : cleanStructure_InterlevelProblem_006185c6b0da68de0867),
-  ∀ (h : (@ContinuousMap (@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)).carrier ℝ (@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)).str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)),
-  ∀ (r : ℝ),
-  ∀ («order» : ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P)))) ≤ (@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«interval» (P)))))),
+  ∀ (P : _root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc),
+  ∀ (h : (_root_.cleanType_ContinuousRealMap_c65fa65fdfc171714c32 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))))),
+  ∀ (r : (_root_.cleanType_Real_107b6641a486642ad8e1)),
+  ∀ («order» : ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P)))) ≤ (@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«interval» (P)))))),
   ∀ («radius» : (r ≥ 0)),
-  ∀ («bounded_perturbation_u28_P_u2c__h_u2c__r_u29_» : (@cleanDefine_bounded_perturbation_f5d5b63290c0e028ea34 (P) (h) (r))),
-  let S : cleanStructure_SpacePairData_f4912a1b453369bfb75e ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) := (@cleanDefine_perturbed_pair_8a139afee8bcd7a01090 (P) (h));
-  let T : cleanStructure_SpacePairData_f4912a1b453369bfb75e ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) := (@cleanDefine_expanded_pair_66873557049e4375bc60 (P) (r));
-  (@Exists (cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)))) (fun (clean_bound_0 : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P)))) => ((@cleanDefine_has_pair_data_c2317928d500c075653a ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) (clean_bound_0))) (S)) ∧ (@cleanDefine_has_pair_data_c2317928d500c075653a ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» ((@cleanStructure_InterlevelProblem_006185c6b0da68de0867.«space» (P))) (clean_bound_0))) (T)))))
+  ∀ («bounded_perturbation_u28_P_u2c__h_u2c__r_u29_» : (@_root_.cleanDefine_bounded_perturbation_cc3ccaca9b62051112ab (P) (h) (r))),
+  let S : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) := (@_root_.cleanDefine_perturbed_pair_8cc4c2f45ef4c0e4a653 (P) (h));
+  let T : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) := (@_root_.cleanDefine_expanded_pair_cb6ac7c55e8055c38f73 (P) (r));
+  (@Exists (_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P)))) (fun (clean_bound_0 : _root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P)))) => ((@_root_.cleanDefine_has_pair_data_6f33fdbc4ebfe2f6829b ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) (clean_bound_0))) (S)) ∧ (@_root_.cleanDefine_has_pair_data_6f33fdbc4ebfe2f6829b ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) (clean_bound_0))) (T)))))
 
 /--
 source: topology
@@ -492,10 +492,10 @@ reference: certified pair constructor
 relationship: original
 -/
 def certification_preserves_pair_data : Prop :=
-  ∀ (X : TopCat.{0}),
-  ∀ (S : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)),
-  ∀ («nesting» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S)))),
-  (@cleanDefine_has_pair_data_c2317928d500c075653a (X) ((@cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b (X) (S) («nesting»))) (S))
+  ∀ (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)),
+  ∀ (S : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 (X)),
+  ∀ («nesting» : ((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (S)) ⊆ (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (S)))),
+  (@_root_.cleanDefine_has_pair_data_6f33fdbc4ebfe2f6829b (X) ((@_root_.cleanDefine_certify_pair_data_cdf76f9608063262c4c7 (X) (S) («nesting»))) (S))
 
 /--
 source: topology
@@ -503,54 +503,59 @@ reference: certified inclusion constructor
 relationship: original
 -/
 def certification_preserves_inclusion_data : Prop :=
-  ∀ (X : TopCat.{0}),
-  ∀ (S T : cleanStructure_SpacePairData_f4912a1b453369bfb75e (X)),
-  ∀ («source» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S)))),
-  ∀ («target» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (T)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (T)))),
-  ∀ («ambient» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«ambient» (X) (T)))),
-  ∀ («relative» : ((@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (S)) ⊆ (@cleanStructure_SpacePairData_f4912a1b453369bfb75e.«relative» (X) (T)))),
-  let Q : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 (X) := (@cleanDefine_certify_pair_inclusion_48466e95544d6e5f997e (X) (S) (T) («source») («target») («ambient») («relative»));
-  ((@cleanDefine_has_pair_data_c2317928d500c075653a (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«source» (X) (Q))) (S)) ∧ (@cleanDefine_has_pair_data_c2317928d500c075653a (X) ((@cleanStructure_PairInclusion_c88eb06ea5a6180d62a3.«target» (X) (Q))) (T)))
+  ∀ (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)),
+  ∀ (S T : _root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 (X)),
+  ∀ («source» : ((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (S)) ⊆ (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (S)))),
+  ∀ («target» : ((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (T)) ⊆ (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (T)))),
+  ∀ («ambient» : ((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (S)) ⊆ (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«ambient» (X) (T)))),
+  ∀ («relative» : ((@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (S)) ⊆ (@_root_.cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.«relative» (X) (T)))),
+  let Q : _root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b (X) := (@_root_.cleanDefine_certify_pair_inclusion_681b193e2d00940bf5cb (X) (S) (T) («source») («target») («ambient») («relative»));
+  ((@_root_.cleanDefine_has_pair_data_6f33fdbc4ebfe2f6829b (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«source» (X) (Q))) (S)) ∧ (@_root_.cleanDefine_has_pair_data_6f33fdbc4ebfe2f6829b (X) ((@_root_.cleanStructure_PairInclusion_2a6b123d94386bb22b2b.«target» (X) (Q))) (T)))
 
 end CleanStatements
 
 open Lean Elab Command
 private def canonicalName (n : Name) : Name := Id.run do
-  if n == `InterlevelOracle.Ends then return `cleanStructure_Endpoints_2512a023e0474ce195ac
-  if n == `InterlevelOracle.Selection then return `cleanStructure_EndpointSelection_b1d52148908811c63f1d
-  if n == `InterlevelOracle.Problem then return `cleanStructure_InterlevelProblem_006185c6b0da68de0867
-  if n == `InterlevelOracle.Pair then return `cleanStructure_SpacePairData_f4912a1b453369bfb75e
+  if n == `InterlevelOracle.Ends then return `cleanStructure_Endpoints_7a6ba0b879274641120c
+  if n == `InterlevelOracle.Selection then return `cleanStructure_EndpointSelection_417d89980a2c354c2182
+  if n == `InterlevelOracle.Problem then return `cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc
+  if n == `InterlevelOracle.Pair then return `cleanStructure_SpacePairData_8be8da5fc95a34b54ce7
   if n == `InterlevelOracle.boolType then return `cleanType_Boolean_b98a4c98fcdb0f46359e
-  if n == `InterlevelOracle.realMapType then return `cleanType_ContinuousRealMap_61be08a900d37dad3fed
-  if n == `InterlevelOracle.yes then return `cleanNotation_true_value_2fd5fc223c8905693b89
-  if n == `InterlevelOracle.no then return `cleanNotation_false_value_d4e3155033dd79d1d53f
-  if n == `InterlevelOracle.ends then return `cleanConstructor_endpoints_ae57156441e5057814f6
-  if n == `InterlevelOracle.shift then return `cleanDefine_shifted_endpoints_0341e7d28e14c6ec5711
-  if n == `InterlevelOracle.selection then return `cleanConstructor_endpoint_selection_e2c76e8a24faf36bd69d
-  if n == `InterlevelOracle.neither then return `cleanDefine_no_endpoints_3d2c151be5ddaaa6461f
-  if n == `InterlevelOracle.lowerOnly then return `cleanDefine_lower_endpoint_55a3912dc3794b7cc0b5
-  if n == `InterlevelOracle.upperOnly then return `cleanDefine_upper_endpoint_17aeb6bb1ab98f7ac7e2
-  if n == `InterlevelOracle.both then return `cleanDefine_both_endpoints_9ceafa3c3eae62095b71
-  if n == `InterlevelOracle.setOf then return `cleanNotation_set_of_25534029a1fdae044ce8
-  if n == `InterlevelOracle.preimage then return `cleanDefine_inverse_image_b2385c49c1629ae08495
-  if n == `InterlevelOracle.underlying then return `cleanNotation_underlying_real_map_a2d4907a882247d2b335
-  if n == `InterlevelOracle.closed then return `cleanDefine_closed_interval_02a80046a44a2fbda8de
-  if n == `InterlevelOracle.selected then return `cleanDefine_selected_endpoints_5b3e2429768ac206a5ae
-  if n == `InterlevelOracle.expanded then return `cleanDefine_expanded_interval_c25cb2a7d138e802a0ed
-  if n == `InterlevelOracle.boundary then return `cleanDefine_expanded_endpoints_246c1c1637936ba4cace
-  if n == `InterlevelOracle.problem then return `cleanConstructor_interlevel_problem_42723c03a4cce7c0a1ff
-  if n == `InterlevelOracle.pair then return `cleanConstructor_space_pair_data_d4663b2e361ad8703041
-  if n == `InterlevelOracle.nested then return `cleanDefine_nested_pair_203f27c03de1e4f128ad
-  if n == `InterlevelOracle.expandedPair then return `cleanDefine_expanded_pair_66873557049e4375bc60
-  if n == `InterlevelOracle.shiftedPair then return `cleanDefine_shifted_pair_acef58e9c1318b5833c8
-  if n == `InterlevelOracle.included then return `cleanDefine_pair_included_in_93a3c208a27e390549af
+  if n == `InterlevelOracle.realMapType then return `cleanType_ContinuousRealMap_c65fa65fdfc171714c32
+  if n == `InterlevelOracle.realType then return `cleanType_Real_107b6641a486642ad8e1
+  if n == `InterlevelOracle.setType then return `cleanType_Set_6e300741358eee425e81
+  if n == `InterlevelOracle.conditionType then return `cleanType_Proposition_ae4a13d2f060407bce35
+  if n == `InterlevelOracle.spaceType then return `cleanType_TopologicalSpace_d66be29262ccb5d89e3b
+  if n == `InterlevelOracle.pointType then return `cleanType_Point_f8a65e23875fb9a2c125
+  if n == `InterlevelOracle.yes then return `cleanNotation_true_value_9ca9e49e1312ca23ac23
+  if n == `InterlevelOracle.no then return `cleanNotation_false_value_30a63b75654d87153a83
+  if n == `InterlevelOracle.ends then return `cleanConstructor_endpoints_3622a2317e61075ae5a0
+  if n == `InterlevelOracle.shift then return `cleanDefine_shifted_endpoints_ea3398852390cb480b6d
+  if n == `InterlevelOracle.selection then return `cleanConstructor_endpoint_selection_f2c54850f699491deae8
+  if n == `InterlevelOracle.neither then return `cleanDefine_no_endpoints_3aad239e18f86ce44c68
+  if n == `InterlevelOracle.lowerOnly then return `cleanDefine_lower_endpoint_c404a3843e685ffaf059
+  if n == `InterlevelOracle.upperOnly then return `cleanDefine_upper_endpoint_06a0ff0e6593640bb148
+  if n == `InterlevelOracle.both then return `cleanDefine_both_endpoints_5b72385d3bc820377d4f
+  if n == `InterlevelOracle.setOf then return `cleanNotation_set_of_2c71fd475f49a65bd03e
+  if n == `InterlevelOracle.preimage then return `cleanDefine_inverse_image_eb657a3c1d0219ea719b
+  if n == `InterlevelOracle.underlying then return `cleanNotation_underlying_real_map_0b69f7fea7146ae09669
+  if n == `InterlevelOracle.closed then return `cleanDefine_closed_interval_3ef09f064d8b2f7a4e2e
+  if n == `InterlevelOracle.selected then return `cleanDefine_selected_endpoints_bcf18dafd1a2219f7cb4
+  if n == `InterlevelOracle.expanded then return `cleanDefine_expanded_interval_750fd6e1dc6c8362900d
+  if n == `InterlevelOracle.boundary then return `cleanDefine_expanded_endpoints_5a08e40c8090703620e2
+  if n == `InterlevelOracle.problem then return `cleanConstructor_interlevel_problem_53885bc5547eca082a8b
+  if n == `InterlevelOracle.pair then return `cleanConstructor_space_pair_data_497bb4c3d9a06e9c8bf4
+  if n == `InterlevelOracle.nested then return `cleanDefine_nested_pair_6ea1594b4c58dd66c0ce
+  if n == `InterlevelOracle.expandedPair then return `cleanDefine_expanded_pair_cb6ac7c55e8055c38f73
+  if n == `InterlevelOracle.shiftedPair then return `cleanDefine_shifted_pair_50c0b1d200edca0505cb
+  if n == `InterlevelOracle.included then return `cleanDefine_pair_included_in_4a73f638127387b9d365
   if n == `InterlevelOracle.evaluate then return `cleanNotation_evaluate_map_fc8e4f20170606ffe807
-  if n == `InterlevelOracle.value then return `cleanDefine_real_map_value_1c81a8738f0927d4f859
-  if n == `InterlevelOracle.bounded then return `cleanDefine_bounded_perturbation_f5d5b63290c0e028ea34
-  if n == `InterlevelOracle.perturbed then return `cleanDefine_perturbed_pair_8a139afee8bcd7a01090
-  if n == `InterlevelOracle.certify then return `cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b
-  if n == `InterlevelOracle.represents then return `cleanDefine_has_pair_data_c2317928d500c075653a
-  if n == `InterlevelOracle.certifyInclusion then return `cleanDefine_certify_pair_inclusion_48466e95544d6e5f997e
+  if n == `InterlevelOracle.value then return `cleanDefine_real_map_value_829bba0c597453819c48
+  if n == `InterlevelOracle.bounded then return `cleanDefine_bounded_perturbation_cc3ccaca9b62051112ab
+  if n == `InterlevelOracle.perturbed then return `cleanDefine_perturbed_pair_8cc4c2f45ef4c0e4a653
+  if n == `InterlevelOracle.certify then return `cleanDefine_certify_pair_data_cdf76f9608063262c4c7
+  if n == `InterlevelOracle.represents then return `cleanDefine_has_pair_data_6f33fdbc4ebfe2f6829b
+  if n == `InterlevelOracle.certifyInclusion then return `cleanDefine_certify_pair_inclusion_681b193e2d00940bf5cb
   match n with
   | .str p s => return .str (canonicalName p) s
   | .num p i => return .num (canonicalName p) i
@@ -585,168 +590,178 @@ elab "same_target " a:ident b:ident : command => do
   | _,_ => throwError "Unexpected declaration kinds"
 
 namespace InterlevelOracle
-noncomputable def boolType : Type := Bool
-noncomputable def yes : Bool := true
-noncomputable def no : Bool := false
+noncomputable abbrev realType : Type := ℝ
+noncomputable abbrev setType (X : Type) : Type := Set X
+noncomputable abbrev conditionType : Sort 1 := Prop
+noncomputable abbrev spaceType : Type 1 := TopCat.{0}
+noncomputable abbrev pointType (X : spaceType) : Type := TopCat.carrier X
+noncomputable abbrev boolType : Type := Bool
+noncomputable def yes : boolType := true
+noncomputable def no : boolType := false
 structure Ends : Type where
-  lower : ℝ
-  upper : ℝ
-noncomputable def ends (lower upper : ℝ) : Ends := @Ends.mk lower upper
-noncomputable def shift (I : Ends) (s : ℝ) : Ends := @ends (I.lower+s) (I.upper+s)
+  lower : realType
+  upper : realType
+noncomputable def ends (lower upper : realType) : Ends := @Ends.mk lower upper
+noncomputable def shift (I : Ends) (s : realType) : Ends := @ends (I.lower+s) (I.upper+s)
 structure Selection : Type where
-  lower : Bool
-  upper : Bool
-noncomputable def selection (lower upper : Bool) : Selection := @Selection.mk lower upper
+  lower : boolType
+  upper : boolType
+noncomputable def selection (lower upper : boolType) : Selection := @Selection.mk lower upper
 noncomputable def neither : Selection := @selection no no
 noncomputable def lowerOnly : Selection := @selection yes no
 noncomputable def upperOnly : Selection := @selection no yes
 noncomputable def both : Selection := @selection yes yes
-noncomputable def setOf {X : Type} (condition : X → Prop) : Set X := _root_.setOf condition
-noncomputable def preimage {X Y : Type} (f : X → Y) (S : Set Y) : Set X := setOf (fun x : X => f x ∈ S)
-noncomputable def realMapType (X : TopCat.{0}) : Type :=
+noncomputable def setOf {X : Type} (condition : X → conditionType) : setType X := _root_.setOf condition
+noncomputable def preimage {X Y : Type} (f : X → Y) (S : setType Y) : setType X := setOf (fun x : X => f x ∈ S)
+noncomputable def realMapType (X : spaceType) : Type :=
   @ContinuousMap X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace
-noncomputable def underlying (X : TopCat.{0})
-  (f : @ContinuousMap X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace) : X.carrier → ℝ :=
+noncomputable def underlying (X : spaceType)
+  (f : realMapType X) : pointType X → realType :=
   @ContinuousMap.toFun X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace f
-noncomputable def closed (I : Ends) : Set ℝ := setOf (fun x : ℝ => I.lower ≤ x ∧ x ≤ I.upper)
-noncomputable def selected (I : Ends) (E : Selection) : Set ℝ :=
-  setOf (fun x : ℝ => (E.lower=yes ∧ x=I.lower) ∨ (E.upper=yes ∧ x=I.upper))
-noncomputable def expanded (I : Ends) (r : ℝ) : Set ℝ := setOf (fun x : ℝ => I.lower-r ≤ x ∧ x ≤ I.upper+r)
-noncomputable def boundary (I : Ends) (E : Selection) (r : ℝ) : Set ℝ :=
-  setOf (fun x : ℝ => ((E.lower=yes ∧ I.lower-r ≤ x) ∧ x ≤ I.lower+r) ∨
+noncomputable def closed (I : Ends) : setType realType := setOf (fun x : realType => I.lower ≤ x ∧ x ≤ I.upper)
+noncomputable def selected (I : Ends) (E : Selection) : setType realType :=
+  setOf (fun x : realType => (E.lower=yes ∧ x=I.lower) ∨ (E.upper=yes ∧ x=I.upper))
+noncomputable def expanded (I : Ends) (r : realType) : setType realType := setOf (fun x : realType => I.lower-r ≤ x ∧ x ≤ I.upper+r)
+noncomputable def boundary (I : Ends) (E : Selection) (r : realType) : setType realType :=
+  setOf (fun x : realType => ((E.lower=yes ∧ I.lower-r ≤ x) ∧ x ≤ I.lower+r) ∨
                      ((E.upper=yes ∧ I.upper-r ≤ x) ∧ x ≤ I.upper+r))
 structure Problem : Type 1 where
-  space : TopCat.{0}
-  map : @ContinuousMap space.carrier ℝ space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace
+  space : spaceType
+  map : realMapType space
   interval : Ends
   selection : Selection
-noncomputable def problem (space : TopCat.{0})
-  (map : @ContinuousMap space.carrier ℝ space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)
+noncomputable def problem (space : spaceType)
+  (map : realMapType space)
   (interval : Ends) (selection : Selection) : Problem := @Problem.mk space map interval selection
-structure Pair (X : TopCat.{0}) : Type where
-  ambient : Set X.carrier
-  relative : Set X.carrier
-noncomputable def pair (X : TopCat.{0}) (ambient relative : Set X.carrier) : Pair X := @Pair.mk X ambient relative
-noncomputable def nested (X : TopCat.{0}) (Q : Pair X) : Prop := Q.relative ⊆ Q.ambient
-noncomputable def expandedPair (P : Problem) (r : ℝ) : Pair P.space :=
+structure Pair (X : spaceType) : Type where
+  ambient : setType (pointType X)
+  relative : setType (pointType X)
+noncomputable def pair (X : spaceType) (ambient relative : setType (pointType X)) : Pair X := @Pair.mk X ambient relative
+noncomputable def nested (X : spaceType) (Q : Pair X) : conditionType := Q.relative ⊆ Q.ambient
+noncomputable def expandedPair (P : Problem) (r : realType) : Pair P.space :=
   @pair P.space (preimage (@underlying P.space P.map) (expanded P.interval r))
                (preimage (@underlying P.space P.map) (boundary P.interval P.selection r))
-noncomputable def shiftedPair (P : Problem) (t : ℝ) : Pair P.space :=
+noncomputable def shiftedPair (P : Problem) (t : realType) : Pair P.space :=
   @pair P.space (preimage (@underlying P.space P.map) (closed (shift P.interval t)))
                (preimage (@underlying P.space P.map) (selected (shift P.interval t) P.selection))
-noncomputable def included (X : TopCat.{0}) (Q R : Pair X) : Prop :=
+noncomputable def included (X : spaceType) (Q R : Pair X) : conditionType :=
   Q.ambient ⊆ R.ambient ∧ Q.relative ⊆ R.relative
 
 noncomputable def evaluate {X Y : Type} (f : X → Y) (x : X) : Y := f x
-noncomputable def value (X : TopCat.{0})
-  (f : @ContinuousMap X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace) (x : X.carrier) : ℝ :=
+noncomputable def value (X : spaceType)
+  (f : realMapType X) (x : pointType X) : realType :=
   evaluate (@underlying X f) x
 noncomputable def bounded (P : Problem)
-  (h : @ContinuousMap P.space.carrier ℝ P.space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace) (r : ℝ) : Prop :=
-  ∀ x : P.space.carrier, -r ≤ @value P.space h x - @value P.space P.map x ∧
+  (h : realMapType P.space) (r : realType) : conditionType :=
+  ∀ x : pointType P.space, -r ≤ @value P.space h x - @value P.space P.map x ∧
     @value P.space h x - @value P.space P.map x ≤ r
 noncomputable def perturbed (P : Problem)
-  (h : @ContinuousMap P.space.carrier ℝ P.space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace) : Pair P.space :=
+  (h : realMapType P.space) : Pair P.space :=
   @pair P.space (preimage (@underlying P.space h) (closed P.interval))
                (preimage (@underlying P.space h) (selected P.interval P.selection))
 
 def choicesStatement : Prop := ∀ E : Selection, ((E=neither ∨ E=lowerOnly) ∨ E=upperOnly) ∨ E=both
 def endpointsStatement : Prop := ∀ (I : Ends) (E : Selection), I.lower ≤ I.upper → selected I E ⊆ closed I
-def expandedStatement : Prop := ∀ (P : Problem) (r : ℝ), P.interval.lower ≤ P.interval.upper → r ≥ 0 →
+def expandedStatement : Prop := ∀ (P : Problem) (r : realType), P.interval.lower ≤ P.interval.upper → r ≥ 0 →
   @nested P.space (@expandedPair P r)
-def shiftedStatement : Prop := ∀ (P : Problem) (t : ℝ), P.interval.lower ≤ P.interval.upper →
+def shiftedStatement : Prop := ∀ (P : Problem) (t : realType), P.interval.lower ≤ P.interval.upper →
   @nested P.space (@shiftedPair P t)
-def inclusionStatement : Prop := ∀ (P : Problem) (r t : ℝ), r ≥ 0 → (-r ≤ t ∧ t ≤ r) →
+def inclusionStatement : Prop := ∀ (P : Problem) (r t : realType), r ≥ 0 → (-r ≤ t ∧ t ≤ r) →
   @included P.space (@shiftedPair P t) (@expandedPair P r)
 def perturbedStatement : Prop := ∀ (P : Problem)
-  (h : @ContinuousMap P.space.carrier ℝ P.space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace),
+  (h : realMapType P.space),
   P.interval.lower ≤ P.interval.upper → @nested P.space (@perturbed P h)
 def boundedStatement : Prop := ∀ (P : Problem)
-  (h : @ContinuousMap P.space.carrier ℝ P.space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace) (r : ℝ),
+  (h : realMapType P.space) (r : realType),
   r ≥ 0 → @bounded P h r → @included P.space (@perturbed P h) (@expandedPair P r)
-noncomputable def certify (X : TopCat.{0}) (Q : Pair X) (h : Q.relative ⊆ Q.ambient) : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 X :=
-  @cleanConstructor_topological_pair_d2eb62bc922cb0af9e3c X Q.ambient Q.relative h
-noncomputable def certifyInclusion (X : TopCat.{0}) (S T : Pair X)
+noncomputable def certify (X : spaceType) (Q : Pair X) (h : Q.relative ⊆ Q.ambient) : cleanStructure_TopologicalPair_f701031cf43f9f923573 X :=
+  @cleanConstructor_topological_pair_4885b9c6167c75e582cb X Q.ambient Q.relative h
+noncomputable def certifyInclusion (X : spaceType) (S T : Pair X)
   (s : S.relative ⊆ S.ambient) (t : T.relative ⊆ T.ambient)
-  (a : S.ambient ⊆ T.ambient) (b : S.relative ⊆ T.relative) : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 X :=
-  @cleanConstructor_pair_inclusion_4f04d1794c02e12be8a7 X (@certify X S s) (@certify X T t) a b
-noncomputable def represents (X : TopCat.{0}) (Q : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 X) (S : Pair X) : Prop :=
+  (a : S.ambient ⊆ T.ambient) (b : S.relative ⊆ T.relative) : cleanStructure_PairInclusion_2a6b123d94386bb22b2b X :=
+  @cleanConstructor_pair_inclusion_d00d3a03332707a42c44 X (@certify X S s) (@certify X T t) a b
+noncomputable def represents (X : spaceType) (Q : cleanStructure_TopologicalPair_f701031cf43f9f923573 X) (S : Pair X) : conditionType :=
   Q.ambient=S.ambient ∧ Q.relative=S.relative
-def certifiedExpandedStatement : Prop := ∀ (P : Problem) (r : ℝ),
+def certifiedExpandedStatement : Prop := ∀ (P : Problem) (r : realType),
   P.interval.lower ≤ P.interval.upper → r ≥ 0 →
   let T : Pair P.space := @expandedPair P r;
-  ∃ Q : cleanStructure_TopologicalPair_23a951172729bcd7e2a9 P.space, @represents P.space Q T
-def certifiedShiftStatement : Prop := ∀ (P : Problem) (r t : ℝ),
+  ∃ Q : cleanStructure_TopologicalPair_f701031cf43f9f923573 P.space, @represents P.space Q T
+def certifiedShiftStatement : Prop := ∀ (P : Problem) (r t : realType),
   P.interval.lower ≤ P.interval.upper → r ≥ 0 → (-r ≤ t ∧ t ≤ r) →
   let S : Pair P.space := @shiftedPair P t;
   let T : Pair P.space := @expandedPair P r;
-  ∃ Q : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 P.space,
+  ∃ Q : cleanStructure_PairInclusion_2a6b123d94386bb22b2b P.space,
     @represents P.space Q.source S ∧ @represents P.space Q.target T
 def certifiedPerturbationStatement : Prop := ∀ (P : Problem)
-  (h : @ContinuousMap P.space.carrier ℝ P.space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace) (r : ℝ),
+  (h : realMapType P.space) (r : realType),
   P.interval.lower ≤ P.interval.upper → r ≥ 0 → @bounded P h r →
   let S : Pair P.space := @perturbed P h;
   let T : Pair P.space := @expandedPair P r;
-  ∃ Q : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 P.space,
+  ∃ Q : cleanStructure_PairInclusion_2a6b123d94386bb22b2b P.space,
     @represents P.space Q.source S ∧ @represents P.space Q.target T
 
-def certifyStatement : Prop := ∀ (X : TopCat.{0}) (S : Pair X) (h : S.relative ⊆ S.ambient),
+def certifyStatement : Prop := ∀ (X : spaceType) (S : Pair X) (h : S.relative ⊆ S.ambient),
   @represents X (@certify X S h) S
-def certifyInclusionStatement : Prop := ∀ (X : TopCat.{0}) (S T : Pair X)
+def certifyInclusionStatement : Prop := ∀ (X : spaceType) (S T : Pair X)
   (s : S.relative ⊆ S.ambient) (t : T.relative ⊆ T.ambient)
   (a : S.ambient ⊆ T.ambient) (b : S.relative ⊆ T.relative),
-  let Q : cleanStructure_PairInclusion_c88eb06ea5a6180d62a3 X := @certifyInclusion X S T s t a b;
+  let Q : cleanStructure_PairInclusion_2a6b123d94386bb22b2b X := @certifyInclusion X S T s t a b;
   @represents X Q.source S ∧ @represents X Q.target T
 end InterlevelOracle
-same_target cleanStructure_Endpoints_2512a023e0474ce195ac InterlevelOracle.Ends
-same_target cleanStructure_EndpointSelection_b1d52148908811c63f1d InterlevelOracle.Selection
-same_target cleanStructure_InterlevelProblem_006185c6b0da68de0867 InterlevelOracle.Problem
-same_target cleanStructure_SpacePairData_f4912a1b453369bfb75e InterlevelOracle.Pair
+same_target cleanStructure_Endpoints_7a6ba0b879274641120c InterlevelOracle.Ends
+same_target cleanStructure_EndpointSelection_417d89980a2c354c2182 InterlevelOracle.Selection
+same_target cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc InterlevelOracle.Problem
+same_target cleanStructure_SpacePairData_8be8da5fc95a34b54ce7 InterlevelOracle.Pair
 same_target cleanType_Boolean_b98a4c98fcdb0f46359e InterlevelOracle.boolType
-same_target cleanType_ContinuousRealMap_61be08a900d37dad3fed InterlevelOracle.realMapType
-same_target cleanNotation_true_value_2fd5fc223c8905693b89 InterlevelOracle.yes
-same_target cleanNotation_false_value_d4e3155033dd79d1d53f InterlevelOracle.no
-same_target cleanConstructor_endpoints_ae57156441e5057814f6 InterlevelOracle.ends
-same_target cleanDefine_shifted_endpoints_0341e7d28e14c6ec5711 InterlevelOracle.shift
-same_target cleanConstructor_endpoint_selection_e2c76e8a24faf36bd69d InterlevelOracle.selection
-same_target cleanDefine_no_endpoints_3d2c151be5ddaaa6461f InterlevelOracle.neither
-same_target cleanDefine_lower_endpoint_55a3912dc3794b7cc0b5 InterlevelOracle.lowerOnly
-same_target cleanDefine_upper_endpoint_17aeb6bb1ab98f7ac7e2 InterlevelOracle.upperOnly
-same_target cleanDefine_both_endpoints_9ceafa3c3eae62095b71 InterlevelOracle.both
-same_target cleanNotation_set_of_25534029a1fdae044ce8 InterlevelOracle.setOf
-same_target cleanDefine_inverse_image_b2385c49c1629ae08495 InterlevelOracle.preimage
-same_target cleanNotation_underlying_real_map_a2d4907a882247d2b335 InterlevelOracle.underlying
-same_target cleanDefine_closed_interval_02a80046a44a2fbda8de InterlevelOracle.closed
-same_target cleanDefine_selected_endpoints_5b3e2429768ac206a5ae InterlevelOracle.selected
-same_target cleanDefine_expanded_interval_c25cb2a7d138e802a0ed InterlevelOracle.expanded
-same_target cleanDefine_expanded_endpoints_246c1c1637936ba4cace InterlevelOracle.boundary
-same_target cleanConstructor_interlevel_problem_42723c03a4cce7c0a1ff InterlevelOracle.problem
-same_target cleanConstructor_space_pair_data_d4663b2e361ad8703041 InterlevelOracle.pair
-same_target cleanDefine_nested_pair_203f27c03de1e4f128ad InterlevelOracle.nested
-same_target cleanDefine_expanded_pair_66873557049e4375bc60 InterlevelOracle.expandedPair
-same_target cleanDefine_shifted_pair_acef58e9c1318b5833c8 InterlevelOracle.shiftedPair
-same_target cleanDefine_pair_included_in_93a3c208a27e390549af InterlevelOracle.included
+same_target cleanType_ContinuousRealMap_c65fa65fdfc171714c32 InterlevelOracle.realMapType
+same_target cleanType_Real_107b6641a486642ad8e1 InterlevelOracle.realType
+same_target cleanType_Set_6e300741358eee425e81 InterlevelOracle.setType
+same_target cleanType_Proposition_ae4a13d2f060407bce35 InterlevelOracle.conditionType
+same_target cleanType_TopologicalSpace_d66be29262ccb5d89e3b InterlevelOracle.spaceType
+same_target cleanType_Point_f8a65e23875fb9a2c125 InterlevelOracle.pointType
+same_target cleanNotation_true_value_9ca9e49e1312ca23ac23 InterlevelOracle.yes
+same_target cleanNotation_false_value_30a63b75654d87153a83 InterlevelOracle.no
+same_target cleanConstructor_endpoints_3622a2317e61075ae5a0 InterlevelOracle.ends
+same_target cleanDefine_shifted_endpoints_ea3398852390cb480b6d InterlevelOracle.shift
+same_target cleanConstructor_endpoint_selection_f2c54850f699491deae8 InterlevelOracle.selection
+same_target cleanDefine_no_endpoints_3aad239e18f86ce44c68 InterlevelOracle.neither
+same_target cleanDefine_lower_endpoint_c404a3843e685ffaf059 InterlevelOracle.lowerOnly
+same_target cleanDefine_upper_endpoint_06a0ff0e6593640bb148 InterlevelOracle.upperOnly
+same_target cleanDefine_both_endpoints_5b72385d3bc820377d4f InterlevelOracle.both
+same_target cleanNotation_set_of_2c71fd475f49a65bd03e InterlevelOracle.setOf
+same_target cleanDefine_inverse_image_eb657a3c1d0219ea719b InterlevelOracle.preimage
+same_target cleanNotation_underlying_real_map_0b69f7fea7146ae09669 InterlevelOracle.underlying
+same_target cleanDefine_closed_interval_3ef09f064d8b2f7a4e2e InterlevelOracle.closed
+same_target cleanDefine_selected_endpoints_bcf18dafd1a2219f7cb4 InterlevelOracle.selected
+same_target cleanDefine_expanded_interval_750fd6e1dc6c8362900d InterlevelOracle.expanded
+same_target cleanDefine_expanded_endpoints_5a08e40c8090703620e2 InterlevelOracle.boundary
+same_target cleanConstructor_interlevel_problem_53885bc5547eca082a8b InterlevelOracle.problem
+same_target cleanConstructor_space_pair_data_497bb4c3d9a06e9c8bf4 InterlevelOracle.pair
+same_target cleanDefine_nested_pair_6ea1594b4c58dd66c0ce InterlevelOracle.nested
+same_target cleanDefine_expanded_pair_cb6ac7c55e8055c38f73 InterlevelOracle.expandedPair
+same_target cleanDefine_shifted_pair_50c0b1d200edca0505cb InterlevelOracle.shiftedPair
+same_target cleanDefine_pair_included_in_4a73f638127387b9d365 InterlevelOracle.included
 same_target cleanNotation_evaluate_map_fc8e4f20170606ffe807 InterlevelOracle.evaluate
-same_target cleanDefine_real_map_value_1c81a8738f0927d4f859 InterlevelOracle.value
-same_target cleanDefine_bounded_perturbation_f5d5b63290c0e028ea34 InterlevelOracle.bounded
-same_target cleanDefine_perturbed_pair_8a139afee8bcd7a01090 InterlevelOracle.perturbed
-same_target cleanDefine_certify_pair_data_e3b2e2d1ea91345b889b InterlevelOracle.certify
-same_target cleanDefine_has_pair_data_c2317928d500c075653a InterlevelOracle.represents
-same_target cleanDefine_certify_pair_inclusion_48466e95544d6e5f997e InterlevelOracle.certifyInclusion
-same_target cleanStructure_Endpoints_2512a023e0474ce195ac.mk InterlevelOracle.Ends.mk
-same_target cleanStructure_Endpoints_2512a023e0474ce195ac.lower InterlevelOracle.Ends.lower
-same_target cleanStructure_Endpoints_2512a023e0474ce195ac.upper InterlevelOracle.Ends.upper
-same_target cleanStructure_EndpointSelection_b1d52148908811c63f1d.mk InterlevelOracle.Selection.mk
-same_target cleanStructure_EndpointSelection_b1d52148908811c63f1d.lower InterlevelOracle.Selection.lower
-same_target cleanStructure_EndpointSelection_b1d52148908811c63f1d.upper InterlevelOracle.Selection.upper
-same_target cleanStructure_InterlevelProblem_006185c6b0da68de0867.mk InterlevelOracle.Problem.mk
-same_target cleanStructure_InterlevelProblem_006185c6b0da68de0867.space InterlevelOracle.Problem.space
-same_target cleanStructure_InterlevelProblem_006185c6b0da68de0867.map InterlevelOracle.Problem.map
-same_target cleanStructure_InterlevelProblem_006185c6b0da68de0867.interval InterlevelOracle.Problem.interval
-same_target cleanStructure_InterlevelProblem_006185c6b0da68de0867.selection InterlevelOracle.Problem.selection
-same_target cleanStructure_SpacePairData_f4912a1b453369bfb75e.mk InterlevelOracle.Pair.mk
-same_target cleanStructure_SpacePairData_f4912a1b453369bfb75e.ambient InterlevelOracle.Pair.ambient
-same_target cleanStructure_SpacePairData_f4912a1b453369bfb75e.relative InterlevelOracle.Pair.relative
+same_target cleanDefine_real_map_value_829bba0c597453819c48 InterlevelOracle.value
+same_target cleanDefine_bounded_perturbation_cc3ccaca9b62051112ab InterlevelOracle.bounded
+same_target cleanDefine_perturbed_pair_8cc4c2f45ef4c0e4a653 InterlevelOracle.perturbed
+same_target cleanDefine_certify_pair_data_cdf76f9608063262c4c7 InterlevelOracle.certify
+same_target cleanDefine_has_pair_data_6f33fdbc4ebfe2f6829b InterlevelOracle.represents
+same_target cleanDefine_certify_pair_inclusion_681b193e2d00940bf5cb InterlevelOracle.certifyInclusion
+same_target cleanStructure_Endpoints_7a6ba0b879274641120c.mk InterlevelOracle.Ends.mk
+same_target cleanStructure_Endpoints_7a6ba0b879274641120c.lower InterlevelOracle.Ends.lower
+same_target cleanStructure_Endpoints_7a6ba0b879274641120c.upper InterlevelOracle.Ends.upper
+same_target cleanStructure_EndpointSelection_417d89980a2c354c2182.mk InterlevelOracle.Selection.mk
+same_target cleanStructure_EndpointSelection_417d89980a2c354c2182.lower InterlevelOracle.Selection.lower
+same_target cleanStructure_EndpointSelection_417d89980a2c354c2182.upper InterlevelOracle.Selection.upper
+same_target cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.mk InterlevelOracle.Problem.mk
+same_target cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.space InterlevelOracle.Problem.space
+same_target cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.map InterlevelOracle.Problem.map
+same_target cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.interval InterlevelOracle.Problem.interval
+same_target cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.selection InterlevelOracle.Problem.selection
+same_target cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.mk InterlevelOracle.Pair.mk
+same_target cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.ambient InterlevelOracle.Pair.ambient
+same_target cleanStructure_SpacePairData_8be8da5fc95a34b54ce7.relative InterlevelOracle.Pair.relative
 same_target CleanStatements.endpoint_choices_are_exhaustive InterlevelOracle.choicesStatement
 same_target CleanStatements.selected_endpoints_lie_in_the_interval InterlevelOracle.endpointsStatement
 same_target CleanStatements.expanded_pair_is_nested InterlevelOracle.expandedStatement
@@ -840,14 +855,14 @@ theorem bounded_perturbation_lies_in_expanded_pair : CleanStatements.bounded_per
       exact ⟨⟨he,by linarith [(hb x).1,(hb x).2]⟩,by linarith [(hb x).1,(hb x).2]⟩
 theorem expanded_pair_has_a_certificate : CleanStatements.expanded_pair_has_a_certificate := by
   intro P r ho hr
-  let T := cleanDefine_expanded_pair_66873557049e4375bc60 P r
+  let T := cleanDefine_expanded_pair_cb6ac7c55e8055c38f73 P r
   refine ⟨⟨T.ambient,T.relative,?_⟩,rfl,rfl⟩
   exact expanded_pair_is_nested P r ho hr
 
 theorem bounded_shift_has_a_certified_inclusion : CleanStatements.bounded_shift_has_a_certified_inclusion := by
   intro P r t ho hr ht
-  let S := cleanDefine_shifted_pair_acef58e9c1318b5833c8 P t
-  let T := cleanDefine_expanded_pair_66873557049e4375bc60 P r
+  let S := cleanDefine_shifted_pair_50c0b1d200edca0505cb P t
+  let T := cleanDefine_expanded_pair_cb6ac7c55e8055c38f73 P r
   have hs := shifted_pair_is_nested P t ho
   have ht' := expanded_pair_is_nested P r ho hr
   have hi := shifted_pair_lies_in_expanded_pair P r t hr ht
@@ -856,8 +871,8 @@ theorem bounded_shift_has_a_certified_inclusion : CleanStatements.bounded_shift_
 
 theorem bounded_perturbation_has_a_certified_inclusion : CleanStatements.bounded_perturbation_has_a_certified_inclusion := by
   intro P h r ho hr hb
-  let S := cleanDefine_perturbed_pair_8a139afee8bcd7a01090 P h
-  let T := cleanDefine_expanded_pair_66873557049e4375bc60 P r
+  let S := cleanDefine_perturbed_pair_8cc4c2f45ef4c0e4a653 P h
+  let T := cleanDefine_expanded_pair_cb6ac7c55e8055c38f73 P r
   have hs := perturbed_pair_is_nested P h ho
   have ht := expanded_pair_is_nested P r ho hr
   have hi := bounded_perturbation_lies_in_expanded_pair P h r hr hb

@@ -21,7 +21,9 @@ directly against the repository compiler, without applying historical patches.
 | `studies/topology/verify_relative.py` | 24 | 4 |
 | `studies/topology/verify_relative_maps.py` | 8 | 3 |
 | `studies/topology/verify_chain_squares.py` | 17 | 2 |
-| Total | 286 | 62 |
+| `studies/topology/verify_interlevel.py` | 66 | 12 |
+| `studies/topology/verify_well_groups.py` | 24 | 5 |
+| Total | 376 | 79 |
 
 Run each with the repository Python environment and `LAKE` set to the pinned Lake
 executable. Each verifier generates its artifacts and invokes Lean. The foundation
@@ -115,12 +117,29 @@ map, space, natural-number and condition adapters in its independently authored
 expectations. Seventeen exact structure/projection/definition/statement targets
 and two proofs pass. Ten `test_chain_squares` cases pass, including incorrect
 ambient-pair, commutativity-evidence and homology-degree rejection. Its TeX is
-unchanged after provenance restoration. The well-group verifier migration is
-underway; its current validation processes have not completed.
+unchanged after provenance restoration. The well-group native migration is now checked; its focused Python run is
+still in progress.
+
+The interlevel study adds five independent type-body checks for real numbers,
+sets, conditions, spaces and points. Its existing Boolean and continuous-real-map
+adapters now preserve declared type references, as do interval endpoints,
+selections, pair data and problem records. Sixty-six exact targets and twelve
+proofs pass. All eleven `test_interlevel` tests pass, including dependent-field
+and source-space checks. The rendered TeX is unchanged after provenance
+restoration. This establishes the listed interval and inclusion facts, not the
+unproved two-image characterization.
+
+The well-group verifier passes 24 exact targets and five study proofs, plus
+fifteen reused supporting proofs from the interlevel and relative-map studies.
+The table counts those supporting proofs only in their originating studies.
+The shared target module, certificate fields, indexed intersection and membership
+statement retain their declared type bindings. Its TeX is unchanged after
+provenance restoration. The separate `test_well_groups` run remains live and is
+not claimed as passing yet. None of this proves the two-image characterization.
 
 The main compiler still uses the existing built-in operators. The separate
 [declared-operator experiment](../operator-integration/topology-migration.md)
-remains isolated. The larger interlevel and well-group native verifiers still
+remains isolated. The shifted-perturbation and extreme-image native verifiers still
 need migration. These checks establish neither the missing paper proofs nor
 general universe polymorphism or the complete language acceptance contract.
 :::

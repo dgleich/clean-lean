@@ -10,12 +10,14 @@ env=Environment();results=load_document(here/'Interlevel.clean',env)
 source=lean(results,env,['Lean','Mathlib.Tactic.Linarith'])
 (here/'Interlevel.lean').write_text(lean(results,env,[]))
 (here/'Interlevel.tex').write_text(latex(results,env))
-function=lambda n:env.data['functions'][n]['lean'].split()[0]
-typekey=lambda n:next(k for k in env.notation_definitions if k.startswith('cleanType_'+n+'_'))
+function=lambda n:env.data['functions'][n]['native_binding']
+typekey=lambda n:env.data['types'][n]['native_binding']
 mapping={}
 for oracle,actual in [('Ends','Endpoints'),('Selection','EndpointSelection'),('Problem','InterlevelProblem'),('Pair','SpacePairData')]:
     mapping['InterlevelOracle.'+oracle]=env.structures[actual]['key']
-for oracle,actual in [('boolType','Boolean'),('realMapType','ContinuousRealMap')]:
+for oracle,actual in [('boolType','Boolean'),('realMapType','ContinuousRealMap'),
+                      ('realType','Real'),('setType','Set'),('conditionType','Proposition'),
+                      ('spaceType','TopologicalSpace'),('pointType','Point')]:
     mapping['InterlevelOracle.'+oracle]=typekey(actual)
 for oracle,actual in [('yes','true value'),('no','false value'),('ends','endpoints'),('shift','shifted endpoints'),
  ('selection','endpoint selection'),('neither','no endpoints'),('lowerOnly','lower endpoint'),
@@ -65,114 +67,119 @@ elab "same_target " a:ident b:ident : command => do
 '''
 expected=r'''
 namespace InterlevelOracle
-noncomputable def boolType : Type := Bool
-noncomputable def yes : Bool := true
-noncomputable def no : Bool := false
+noncomputable abbrev realType : Type := ℝ
+noncomputable abbrev setType (X : Type) : Type := Set X
+noncomputable abbrev conditionType : Sort 1 := Prop
+noncomputable abbrev spaceType : Type 1 := TopCat.{0}
+noncomputable abbrev pointType (X : spaceType) : Type := TopCat.carrier X
+noncomputable abbrev boolType : Type := Bool
+noncomputable def yes : boolType := true
+noncomputable def no : boolType := false
 structure Ends : Type where
-  lower : ℝ
-  upper : ℝ
-noncomputable def ends (lower upper : ℝ) : Ends := @Ends.mk lower upper
-noncomputable def shift (I : Ends) (s : ℝ) : Ends := @ends (I.lower+s) (I.upper+s)
+  lower : realType
+  upper : realType
+noncomputable def ends (lower upper : realType) : Ends := @Ends.mk lower upper
+noncomputable def shift (I : Ends) (s : realType) : Ends := @ends (I.lower+s) (I.upper+s)
 structure Selection : Type where
-  lower : Bool
-  upper : Bool
-noncomputable def selection (lower upper : Bool) : Selection := @Selection.mk lower upper
+  lower : boolType
+  upper : boolType
+noncomputable def selection (lower upper : boolType) : Selection := @Selection.mk lower upper
 noncomputable def neither : Selection := @selection no no
 noncomputable def lowerOnly : Selection := @selection yes no
 noncomputable def upperOnly : Selection := @selection no yes
 noncomputable def both : Selection := @selection yes yes
-noncomputable def setOf {X : Type} (condition : X → Prop) : Set X := _root_.setOf condition
-noncomputable def preimage {X Y : Type} (f : X → Y) (S : Set Y) : Set X := setOf (fun x : X => f x ∈ S)
-noncomputable def realMapType (X : TopCat.{0}) : Type :=
+noncomputable def setOf {X : Type} (condition : X → conditionType) : setType X := _root_.setOf condition
+noncomputable def preimage {X Y : Type} (f : X → Y) (S : setType Y) : setType X := setOf (fun x : X => f x ∈ S)
+noncomputable def realMapType (X : spaceType) : Type :=
   @ContinuousMap X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace
-noncomputable def underlying (X : TopCat.{0})
-  (f : @ContinuousMap X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace) : X.carrier → ℝ :=
+noncomputable def underlying (X : spaceType)
+  (f : realMapType X) : pointType X → realType :=
   @ContinuousMap.toFun X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace f
-noncomputable def closed (I : Ends) : Set ℝ := setOf (fun x : ℝ => I.lower ≤ x ∧ x ≤ I.upper)
-noncomputable def selected (I : Ends) (E : Selection) : Set ℝ :=
-  setOf (fun x : ℝ => (E.lower=yes ∧ x=I.lower) ∨ (E.upper=yes ∧ x=I.upper))
-noncomputable def expanded (I : Ends) (r : ℝ) : Set ℝ := setOf (fun x : ℝ => I.lower-r ≤ x ∧ x ≤ I.upper+r)
-noncomputable def boundary (I : Ends) (E : Selection) (r : ℝ) : Set ℝ :=
-  setOf (fun x : ℝ => ((E.lower=yes ∧ I.lower-r ≤ x) ∧ x ≤ I.lower+r) ∨
+noncomputable def closed (I : Ends) : setType realType := setOf (fun x : realType => I.lower ≤ x ∧ x ≤ I.upper)
+noncomputable def selected (I : Ends) (E : Selection) : setType realType :=
+  setOf (fun x : realType => (E.lower=yes ∧ x=I.lower) ∨ (E.upper=yes ∧ x=I.upper))
+noncomputable def expanded (I : Ends) (r : realType) : setType realType := setOf (fun x : realType => I.lower-r ≤ x ∧ x ≤ I.upper+r)
+noncomputable def boundary (I : Ends) (E : Selection) (r : realType) : setType realType :=
+  setOf (fun x : realType => ((E.lower=yes ∧ I.lower-r ≤ x) ∧ x ≤ I.lower+r) ∨
                      ((E.upper=yes ∧ I.upper-r ≤ x) ∧ x ≤ I.upper+r))
 structure Problem : Type 1 where
-  space : TopCat.{0}
-  map : @ContinuousMap space.carrier ℝ space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace
+  space : spaceType
+  map : realMapType space
   interval : Ends
   selection : Selection
-noncomputable def problem (space : TopCat.{0})
-  (map : @ContinuousMap space.carrier ℝ space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)
+noncomputable def problem (space : spaceType)
+  (map : realMapType space)
   (interval : Ends) (selection : Selection) : Problem := @Problem.mk space map interval selection
-structure Pair (X : TopCat.{0}) : Type where
-  ambient : Set X.carrier
-  relative : Set X.carrier
-noncomputable def pair (X : TopCat.{0}) (ambient relative : Set X.carrier) : Pair X := @Pair.mk X ambient relative
-noncomputable def nested (X : TopCat.{0}) (Q : Pair X) : Prop := Q.relative ⊆ Q.ambient
-noncomputable def expandedPair (P : Problem) (r : ℝ) : Pair P.space :=
+structure Pair (X : spaceType) : Type where
+  ambient : setType (pointType X)
+  relative : setType (pointType X)
+noncomputable def pair (X : spaceType) (ambient relative : setType (pointType X)) : Pair X := @Pair.mk X ambient relative
+noncomputable def nested (X : spaceType) (Q : Pair X) : conditionType := Q.relative ⊆ Q.ambient
+noncomputable def expandedPair (P : Problem) (r : realType) : Pair P.space :=
   @pair P.space (preimage (@underlying P.space P.map) (expanded P.interval r))
                (preimage (@underlying P.space P.map) (boundary P.interval P.selection r))
-noncomputable def shiftedPair (P : Problem) (t : ℝ) : Pair P.space :=
+noncomputable def shiftedPair (P : Problem) (t : realType) : Pair P.space :=
   @pair P.space (preimage (@underlying P.space P.map) (closed (shift P.interval t)))
                (preimage (@underlying P.space P.map) (selected (shift P.interval t) P.selection))
-noncomputable def included (X : TopCat.{0}) (Q R : Pair X) : Prop :=
+noncomputable def included (X : spaceType) (Q R : Pair X) : conditionType :=
   Q.ambient ⊆ R.ambient ∧ Q.relative ⊆ R.relative
 
 noncomputable def evaluate {X Y : Type} (f : X → Y) (x : X) : Y := f x
-noncomputable def value (X : TopCat.{0})
-  (f : @ContinuousMap X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace) (x : X.carrier) : ℝ :=
+noncomputable def value (X : spaceType)
+  (f : realMapType X) (x : pointType X) : realType :=
   evaluate (@underlying X f) x
 noncomputable def bounded (P : Problem)
-  (h : @ContinuousMap P.space.carrier ℝ P.space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace) (r : ℝ) : Prop :=
-  ∀ x : P.space.carrier, -r ≤ @value P.space h x - @value P.space P.map x ∧
+  (h : realMapType P.space) (r : realType) : conditionType :=
+  ∀ x : pointType P.space, -r ≤ @value P.space h x - @value P.space P.map x ∧
     @value P.space h x - @value P.space P.map x ≤ r
 noncomputable def perturbed (P : Problem)
-  (h : @ContinuousMap P.space.carrier ℝ P.space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace) : Pair P.space :=
+  (h : realMapType P.space) : Pair P.space :=
   @pair P.space (preimage (@underlying P.space h) (closed P.interval))
                (preimage (@underlying P.space h) (selected P.interval P.selection))
 
 def choicesStatement : Prop := ∀ E : Selection, ((E=neither ∨ E=lowerOnly) ∨ E=upperOnly) ∨ E=both
 def endpointsStatement : Prop := ∀ (I : Ends) (E : Selection), I.lower ≤ I.upper → selected I E ⊆ closed I
-def expandedStatement : Prop := ∀ (P : Problem) (r : ℝ), P.interval.lower ≤ P.interval.upper → r ≥ 0 →
+def expandedStatement : Prop := ∀ (P : Problem) (r : realType), P.interval.lower ≤ P.interval.upper → r ≥ 0 →
   @nested P.space (@expandedPair P r)
-def shiftedStatement : Prop := ∀ (P : Problem) (t : ℝ), P.interval.lower ≤ P.interval.upper →
+def shiftedStatement : Prop := ∀ (P : Problem) (t : realType), P.interval.lower ≤ P.interval.upper →
   @nested P.space (@shiftedPair P t)
-def inclusionStatement : Prop := ∀ (P : Problem) (r t : ℝ), r ≥ 0 → (-r ≤ t ∧ t ≤ r) →
+def inclusionStatement : Prop := ∀ (P : Problem) (r t : realType), r ≥ 0 → (-r ≤ t ∧ t ≤ r) →
   @included P.space (@shiftedPair P t) (@expandedPair P r)
 def perturbedStatement : Prop := ∀ (P : Problem)
-  (h : @ContinuousMap P.space.carrier ℝ P.space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace),
+  (h : realMapType P.space),
   P.interval.lower ≤ P.interval.upper → @nested P.space (@perturbed P h)
 def boundedStatement : Prop := ∀ (P : Problem)
-  (h : @ContinuousMap P.space.carrier ℝ P.space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace) (r : ℝ),
+  (h : realMapType P.space) (r : realType),
   r ≥ 0 → @bounded P h r → @included P.space (@perturbed P h) (@expandedPair P r)
-noncomputable def certify (X : TopCat.{0}) (Q : Pair X) (h : Q.relative ⊆ Q.ambient) : CERTPAIR X :=
+noncomputable def certify (X : spaceType) (Q : Pair X) (h : Q.relative ⊆ Q.ambient) : CERTPAIR X :=
   @CERTCONSTRUCTOR X Q.ambient Q.relative h
-noncomputable def certifyInclusion (X : TopCat.{0}) (S T : Pair X)
+noncomputable def certifyInclusion (X : spaceType) (S T : Pair X)
   (s : S.relative ⊆ S.ambient) (t : T.relative ⊆ T.ambient)
   (a : S.ambient ⊆ T.ambient) (b : S.relative ⊆ T.relative) : CERTINCLUSION X :=
   @INCLUSIONCONSTRUCTOR X (@certify X S s) (@certify X T t) a b
-noncomputable def represents (X : TopCat.{0}) (Q : CERTPAIR X) (S : Pair X) : Prop :=
+noncomputable def represents (X : spaceType) (Q : CERTPAIR X) (S : Pair X) : conditionType :=
   Q.ambient=S.ambient ∧ Q.relative=S.relative
-def certifiedExpandedStatement : Prop := ∀ (P : Problem) (r : ℝ),
+def certifiedExpandedStatement : Prop := ∀ (P : Problem) (r : realType),
   P.interval.lower ≤ P.interval.upper → r ≥ 0 →
   let T : Pair P.space := @expandedPair P r;
   ∃ Q : CERTPAIR P.space, @represents P.space Q T
-def certifiedShiftStatement : Prop := ∀ (P : Problem) (r t : ℝ),
+def certifiedShiftStatement : Prop := ∀ (P : Problem) (r t : realType),
   P.interval.lower ≤ P.interval.upper → r ≥ 0 → (-r ≤ t ∧ t ≤ r) →
   let S : Pair P.space := @shiftedPair P t;
   let T : Pair P.space := @expandedPair P r;
   ∃ Q : CERTINCLUSION P.space,
     @represents P.space Q.source S ∧ @represents P.space Q.target T
 def certifiedPerturbationStatement : Prop := ∀ (P : Problem)
-  (h : @ContinuousMap P.space.carrier ℝ P.space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace) (r : ℝ),
+  (h : realMapType P.space) (r : realType),
   P.interval.lower ≤ P.interval.upper → r ≥ 0 → @bounded P h r →
   let S : Pair P.space := @perturbed P h;
   let T : Pair P.space := @expandedPair P r;
   ∃ Q : CERTINCLUSION P.space,
     @represents P.space Q.source S ∧ @represents P.space Q.target T
 
-def certifyStatement : Prop := ∀ (X : TopCat.{0}) (S : Pair X) (h : S.relative ⊆ S.ambient),
+def certifyStatement : Prop := ∀ (X : spaceType) (S : Pair X) (h : S.relative ⊆ S.ambient),
   @represents X (@certify X S h) S
-def certifyInclusionStatement : Prop := ∀ (X : TopCat.{0}) (S T : Pair X)
+def certifyInclusionStatement : Prop := ∀ (X : spaceType) (S T : Pair X)
   (s : S.relative ⊆ S.ambient) (t : T.relative ⊆ T.ambient)
   (a : S.ambient ⊆ T.ambient) (b : S.relative ⊆ T.relative),
   let Q : CERTINCLUSION X := @certifyInclusion X S T s t a b;

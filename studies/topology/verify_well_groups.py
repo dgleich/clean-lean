@@ -12,7 +12,7 @@ results=load_document(here/'WellGroups.clean',env)
 source=lean(support+results,env,['Lean','Mathlib.Tactic.Linarith'])
 (here/'WellGroups.lean').write_text(lean(results,env,[]))
 (here/'WellGroups.tex').write_text(latex(results,env))
-function=lambda n:env.data['functions'][n]['lean'].split()[0]
+function=lambda n:env.data['functions'][n]['native_binding']
 mapping={'WellOracle.Data':env.structures['PerturbationCertificate']['key'],
          'WellOracle.Certified':env.structures['CertifiedPerturbation']['key']}
 for oracle,name in [('infimum','module subspace infimum'),('intersection','intersection of module family'),
@@ -62,70 +62,70 @@ elab "same_target " a:ident b:ident : command => do
 '''
 expected=r'''
 namespace WellOracle
-noncomputable def infimum {K : Type} (field : Field K) (M : MODULE) (spaces : Set SUB_M) : SUB_M :=
+noncomputable def infimum {K : Type} (field : FIELDTYPE K) (M : MODULE) (spaces : SETTYPE SUB_M) : SUB_M :=
   letI : Field K := field
   sInf spaces
-noncomputable def intersection {K I : Type} (field : Field K) (M : MODULE) (spaces : I → SUB_M) : SUB_M :=
+noncomputable def intersection {K I : Type} (field : FIELDTYPE K) (M : MODULE) (spaces : I → SUB_M) : SUB_M :=
   @infimum K field M (@SETOF SUB_M (fun U => @Exists I (fun i => U=spaces i)))
-structure Data (P : PROBLEM) (r : ℝ) where
+structure Data (P : PROBLEM) (r : REALTYPE) where
   map : REALMAP
   bounded : @BOUNDED P map r
   nesting : @NESTED P.space (@PERTURBED P map)
   ambient : CANDIDATE_AMBIENT ⊆ EXPANDED_AMBIENT
   relative : CANDIDATE_RELATIVE ⊆ EXPANDED_RELATIVE
-noncomputable def data (P : PROBLEM) (r : ℝ) (map : REALMAP)
+noncomputable def data (P : PROBLEM) (r : REALTYPE) (map : REALMAP)
   (bounded : @BOUNDED P map r) (nesting : @NESTED P.space (@PERTURBED P map))
   (ambient : CANDIDATE_AMBIENT ⊆ EXPANDED_AMBIENT)
   (relative : CANDIDATE_RELATIVE ⊆ EXPANDED_RELATIVE) : Data P r :=
   @Data.mk P r map bounded nesting ambient relative
-noncomputable def target (P : PROBLEM) (r : ℝ) (nesting : NESTING) : PAIR P.space :=
+noncomputable def target (P : PROBLEM) (r : REALTYPE) (nesting : NESTING) : PAIR P.space :=
   @CERTIFY P.space (@EXPANDED P r) nesting
-noncomputable def inclusion (P : PROBLEM) (r : ℝ) (nesting : NESTING) (D : Data P r) : INCLUSION P.space :=
+noncomputable def inclusion (P : PROBLEM) (r : REALTYPE) (nesting : NESTING) (D : Data P r) : INCLUSION P.space :=
   @CERTIFYINCLUSION P.space (@PERTURBED P D.map) (@EXPANDED P r) D.nesting nesting D.ambient D.relative
-structure Certified (K : Type) (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ)
+structure Certified (K : Type) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) where
   data : Data P r
   commutes : @COMMUTES K field H P.space (@inclusion P r nesting data)
-noncomputable def certified (K : Type) (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ)
+noncomputable def certified (K : Type) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (data : Data P r)
   (commutes : @COMMUTES K field H P.space (@inclusion P r nesting data)) : Certified K field H P r nesting :=
   @Certified.mk K field H P r nesting data commutes
-noncomputable def image {K : Type} (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ)
+noncomputable def image {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (C : Certified K field H P r nesting) : SUB_TARGET :=
   @IMAGE K field H P.space (@inclusion P r nesting C.data) C.commutes
-noncomputable def well {K : Type} (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ)
+noncomputable def well {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) : SUB_TARGET :=
   @intersection K (Certified K field H P r nesting) field TARGET
     (fun C : Certified K field H P r nesting => @image K field H P r nesting C)
 
-def intersectionStatement : Prop := ∀ (K I : Type) (field : Field K) (M : MODULE) (spaces : I → SUB_M)
-  (x : @ModuleCat.carrier K field.toRing M),
+def intersectionStatement : Prop := ∀ (K I : CARRIERTYPE) (field : FIELDTYPE K) (M : MODULE) (spaces : I → SUB_M)
+  (x : ELEMENTTYPE K field M),
   @BELONGS K field M x (@intersection K I field M spaces) ↔ ∀ i : I, @BELONGS K field M x (spaces i)
-def coverageStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ),
+def coverageStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE),
   P.interval.lower ≤ P.interval.upper → r ≥ 0 → ∀ (nesting : NESTING) (h : REALMAP),
   @BOUNDED P h r → ∃ C : Certified K field H P r nesting, C.data.map=h
-def boundedStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ)
+def boundedStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (C : Certified K field H P r nesting), @BOUNDED P C.data.map r
-def independenceStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ)
+def independenceStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (C D : Certified K field H P r nesting), C.data.map=D.data.map →
   @image K field H P r nesting C = @image K field H P r nesting D
-def membershipStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ)
-  (nesting : NESTING) (x : @ModuleCat.carrier K field.toRing TARGET),
+def membershipStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
+  (nesting : NESTING) (x : ELEMENTTYPE K field TARGET),
   @BELONGS K field TARGET x (@well K field H P r nesting) ↔
     ∀ C : Certified K field H P r nesting, @BELONGS K field TARGET x (@image K field H P r nesting C)
 end WellOracle
 '''
 # Independently specified native expressions; no generated bodies are used as oracles.
-submodule=lambda m:f'(@Submodule K {m}.carrier field.toSemiring {m}.isAddCommGroup.toAddCommMonoid {m}.isModule)'
+submodule=lambda m:f'(SUBSPACETYPE K field {m})'
 expected=expected.replace('SUB_TARGET',submodule('TARGET')).replace('SUB_M',submodule('M'))
 expected=expected.replace('TARGET','(@RELHOMOLOGY K field H P.space (@target P r nesting))')
-expected=expected.replace('MODULE','(@ModuleCat.{0,0} K field.toRing)')
-expected=expected.replace('REALMAP','(@ContinuousMap P.space.carrier ℝ P.space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)')
+expected=expected.replace('MODULE','(MODULETYPE K field)')
+expected=expected.replace('REALMAP','(REALMAPTYPE P.space)')
 expected=expected.replace('NESTING','(@NESTED P.space (@EXPANDED P r))')
-expected=expected.replace('CANDIDATE_AMBIENT','(@PREIMAGE P.space.carrier ℝ (@UNDERLYING P.space map) (@CLOSED P.interval))')
-expected=expected.replace('CANDIDATE_RELATIVE','(@PREIMAGE P.space.carrier ℝ (@UNDERLYING P.space map) (@SELECTED P.interval P.selection))')
-expected=expected.replace('EXPANDED_AMBIENT','(@PREIMAGE P.space.carrier ℝ (@UNDERLYING P.space P.map) (@EXPANDINTERVAL P.interval r))')
-expected=expected.replace('EXPANDED_RELATIVE','(@PREIMAGE P.space.carrier ℝ (@UNDERLYING P.space P.map) (@EXPANDENDPOINTS P.interval P.selection r))')
+expected=expected.replace('CANDIDATE_AMBIENT','(@PREIMAGE (POINTTYPE P.space) REALTYPE (@UNDERLYING P.space map) (@CLOSED P.interval))')
+expected=expected.replace('CANDIDATE_RELATIVE','(@PREIMAGE (POINTTYPE P.space) REALTYPE (@UNDERLYING P.space map) (@SELECTED P.interval P.selection))')
+expected=expected.replace('EXPANDED_AMBIENT','(@PREIMAGE (POINTTYPE P.space) REALTYPE (@UNDERLYING P.space P.map) (@EXPANDINTERVAL P.interval r))')
+expected=expected.replace('EXPANDED_RELATIVE','(@PREIMAGE (POINTTYPE P.space) REALTYPE (@UNDERLYING P.space P.map) (@EXPANDENDPOINTS P.interval P.selection r))')
 substitutions={'PROBLEM':env.structures['InterlevelProblem']['key'],'PAIR':env.structures['TopologicalPair']['key'],
                'INCLUSION':env.structures['PairInclusion']['key'],'THEORY':env.structures['HomologyTheory']['key']}
 for placeholder,name in [('SETOF','set of'),('BOUNDED','bounded perturbation'),('NESTED','nested pair'),
@@ -134,6 +134,10 @@ for placeholder,name in [('SETOF','set of'),('BOUNDED','bounded perturbation'),(
  ('RELHOMOLOGY','relative homology'),('BELONGS','belongs to module subspace'),('PREIMAGE','inverse image'),
  ('UNDERLYING','underlying real map'),('CLOSED','closed interval'),('SELECTED','selected endpoints'),
  ('EXPANDINTERVAL','expanded interval'),('EXPANDENDPOINTS','expanded endpoints')]:substitutions[placeholder]=function(name)
+for placeholder,name in [('FIELDTYPE','FieldStructure'),('REALTYPE','Real'),('SETTYPE','Set'),
+ ('CARRIERTYPE','Type'),('ELEMENTTYPE','ModuleElement'),('SUBSPACETYPE','ModuleSubspace'),
+ ('MODULETYPE','CoefficientModule'),('REALMAPTYPE','ContinuousRealMap'),('POINTTYPE','Point')]:
+    substitutions[placeholder]='_root_.'+env.data['types'][name]['native_binding']
 for key in sorted(substitutions,key=len,reverse=True):expected=expected.replace(key,substitutions[key])
 checks=[f'same_target {target} {oracle}' for oracle,target in mapping.items()]
 for oracle,name,fields in [('Data','PerturbationCertificate',['map','bounded','nesting','ambient','relative']),
