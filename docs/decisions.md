@@ -970,3 +970,16 @@ types or incomplete analysis. Defaulted atoms retain their constructor and rende
 with visible type annotations. This is isolated implementation, with main
 integration and broader native/type-position obligations still pending.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Retain checked numeral children when closing operators
+
+The [current-base integration](../studies/current-operator-integration/README.md)
+combines declared operators and numeral completion with the current binding repairs.
+Operator closure recursively binds checked children, never the raw source digits.
+An unresolved Decimal at the closure boundary is an error; it must be elaborated
+first. This preserves the selected constructor across subsequent default scopes.
+The combined patch is reviewable separately while explicit library migration is
+pending; it does not change the working compiler yet.
+:::

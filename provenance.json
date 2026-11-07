@@ -6312,6 +6312,38 @@
         "# ",
         ""
       ]
+    },
+    "studies/current-operator-integration/README.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-07",
+      "mode": "markdown"
+    },
+    "studies/current-operator-integration/verify.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-07",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/current-operator-integration/check_retained_numerals.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-07",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/current-operator-integration/integration.patch": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-07",
+      "mode": "sidecar"
     }
   }
 }

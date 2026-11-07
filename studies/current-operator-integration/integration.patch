@@ -1,0 +1,1122 @@
+--- a/cleanlang/annotations.py
++++ b/cleanlang/annotations.py
+@@ -22,7 +22,12 @@
+     def tree_names(tree):
+         kind=tree[0]
+         if kind=='Local':return {tree[1]}
+-        if kind=='Decimal':return set()
++        if kind in ('Decimal','BoundNumeral'):return set()
++        if kind=='NumeralAnnotation':
++            from .numerals import type_source
++            from .core import ID
++            import re
++            return set(re.findall(ID,type_source(tree[2]))).intersection(locals)
+         if kind=='TypeValue':
+             if isinstance(tree[1],Annotation):return set(tree[1].names)
+             from .core import ID
+--- a/cleanlang/beta_indices.py
++++ b/cleanlang/beta_indices.py
+@@ -31,7 +31,7 @@
+                         from .type_values import substitute as replace_type
+                         return replace_type(body,{name:Expressions(environment,locals).elaborate(actual)},environment,locals)
+                     if body[0]=='Local':return actual if body[1]==name else body
+-                    if body[0]=='ModuleCall':return [body[0],body[1],[substitute(a) for a in body[2]],body[3]]
++                    if body[0]=='ModuleCall':return [body[0],body[1],[substitute(a) for a in body[2]],*body[3:]]
+                     if body[0]=='Call':
+                         arguments=[substitute(a) for a in body[2]]
+                         if body[1]==name:
+@@ -44,7 +44,7 @@
+                     return body
+                 return reduce(substitute(function[3]))
+             return ['Apply',function,args]
+-        if tree[0]=='ModuleCall':return [tree[0],tree[1],[reduce(a) for a in tree[2]],tree[3]]
++        if tree[0]=='ModuleCall':return [tree[0],tree[1],[reduce(a) for a in tree[2]],*tree[3:]]
+         if tree[0]=='Call':return ['Call',tree[1],[reduce(a) for a in tree[2]]]
+         if tree[0]=='Projection':return ['Projection',reduce(tree[1]),tree[2]]
+         if tree[0]=='Operator':return ['Operator',tree[1],reduce(tree[2]),reduce(tree[3])]
+--- a/cleanlang/bound_calls.py
++++ b/cleanlang/bound_calls.py
+@@ -1,6 +1,6 @@
+ # generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+ """Internal module-call binding for checked computed indices."""
+-from .core import CleanError,Expr,texid
++from .core import CleanError,Expr,texid,Expressions
+
+
+ class UnclosedBinding(CleanError):
+@@ -15,9 +15,12 @@
+
+ def bind(tree,env,locals,*,binders=False):
+     kind=tree[0]
++    if kind in ('NumeralAnnotation','BoundNumeral'):
++        from .numerals import bind as numeral
++        return numeral(tree,env,locals)
+     if kind=='ModuleCall':
+         if tree[3]!=identity(env,tree[1]):raise CleanError('Changed bound module callable: '+tree[1])
+-        return [kind,tree[1],[bind(a,env,locals,binders=binders) for a in tree[2]],tree[3]]
++        return [kind,tree[1],[bind(a,env,locals,binders=binders) for a in tree[2]],*tree[3:]]
+     if kind=='Call':
+         args=[bind(a,env,locals,binders=binders) for a in tree[2]]
+         if tree[1] in locals and env.is_function_type(locals[tree[1]].type):
+@@ -25,8 +28,12 @@
+         return ['ModuleCall',tree[1],args,identity(env,tree[1])]
+     if kind=='Projection':return [kind,bind(tree[1],env,locals,binders=binders),tree[2]]
+     if kind=='Apply':return [kind,bind(tree[1],env,locals,binders=binders),[bind(a,env,locals,binders=binders) for a in tree[2]]]
+-    if kind=='Operator':return [kind,tree[1],bind(tree[2],env,locals,binders=binders),bind(tree[3],env,locals,binders=binders)]
+-    if kind=='Unary':return [kind,tree[1],bind(tree[2],env,locals,binders=binders)]
++    if kind in ('Operator','Unary'):
++        checked=Expressions(env,locals).elaborate(tree)
++        if checked.operator_binding is None:raise CleanError('Missing checked operator binding')
++        name,target,presentation=checked.operator_binding
++        actuals=checked.tree[2:] if kind=='Operator' else [checked.tree[2]]
++        return ['ModuleCall',name,[bind(a,env,locals,binders=binders) for a in actuals],target,presentation]
+     if kind in ('Lambda','Forall','Exists') and binders:
+         # Domain binding remains source-based; reject embedded calls rather than
+         # silently closing a body while leaving its domain's calls unbound.
+@@ -38,15 +45,26 @@
+     if kind=='TypeValue':
+         from .annotations import checked
+         return [kind,checked(tree[1],env,locals)]
+-    if kind in ('Local','Decimal'):return tree
++    if kind=='Decimal':raise UnclosedBinding('Numeral binding requires a checked interpretation')
++    if kind=='Local':return tree
+     # Do not claim binding closure for source strings containing type expressions.
+     raise UnclosedBinding('Bound callable prototype does not close '+kind)
+
+
+ def elaborate(tree,env,locals,arguments):
+     if tree[3]!=identity(env,tree[1]):raise CleanError('Changed bound module callable: '+tree[1])
+-    result=env.call(tree[1],arguments,locals)
+-    result.tree=['ModuleCall',tree[1],[a.tree for a in arguments],tree[3]]
++    if len(tree)>4:
++        from .operator_bindings import apply_bound
++        result=apply_bound(env,tree[1],arguments,locals,tree[4])
++    else:result=env.call(tree[1],arguments,locals)
++    result.tree=['ModuleCall',tree[1],[a.tree for a in arguments],*tree[3:]]
+     return result
+
+ # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
++
++
++def source_operator(tree,spell):
++    fixity,text=tree[4]
++    args=tree[2]
++    if fixity=='prefix':return '('+text+' '+spell(args[0])+')'
++    return '('+spell(args[0])+' '+text+' '+spell(args[1])+')'
+--- a/cleanlang/conditions.py
++++ b/cleanlang/conditions.py
+@@ -9,6 +9,12 @@
+ def source_expression(tree):
+     """Canonical label spelling from normalized expression trees; no target-text parsing."""
+     kind=tree[0]
++    if kind in ('NumeralAnnotation','BoundNumeral'):
++        from .numerals import spelling
++        return spelling(tree,canonical_digits=True)
++    if kind=='ModuleCall' and len(tree)>4:
++        from .bound_calls import source_operator
++        return source_operator(tree,source_expression)
+     if kind=='Local': return tree[1]
+     if kind=='TypeValue': return 'type('+tree[1]+')'
+     if kind=='Decimal': return tree[1].lstrip('0') or '0'
+--- a/cleanlang/conversion.py
++++ b/cleanlang/conversion.py
+@@ -58,6 +58,8 @@
+         return Expressions(env,locals).elaborate(tree[2][pos])
+     definition=env.definitions.get(tree[1])
+     if not definition or definition['implementation']!='equals':return None
++    from .operator_bindings import scope_unchanged
++    if not scope_unchanged(env,definition) and not (tree[0]=='ModuleCall' and definition.get('bound_tree') is not None):return None
+     parameters=env.data['functions'][tree[1]]['signature_tree'][2]
+     body=definition.get('bound_tree') or definition['tree']
+     bindings=dict(zip((p[1] for p in parameters if p[3]=='explicit'),
+@@ -92,15 +94,12 @@
+         local=locals.get(tree[1])
+         if local is None or local.local_normal is None:return expression
+         return _normal_form(local.local_normal,env,locals) if local.local_expand and not shadowed_globals(env,locals) else local.local_normal
++    if kind in ('NumeralAnnotation','BoundNumeral'):return elaborate(tree)
+     if kind in ('Decimal','Lambda','Forall','Exists'):return expression
+-    if kind=='Operator':
+-        if fresh and expression.checked_args is not None:
+-            a,b=expression.checked_args
+-            return binary(tree[1],_normal_form(a,env,locals,fresh=True),_normal_form(b,env,locals,fresh=True))
+-        return binary(tree[1],normal(tree[2]),normal(tree[3]))
++    if kind=='Operator':return env.operator(tree[1],normal(tree[2]),normal(tree[3]),locals)
+     if kind=='Unary':
+-        a=normal(tree[2]);op='-' if tree[1]=='-' else '¬'
+-        return Expr('('+op+a.lean+')',expression.tex,expression.type,tree=['Unary',tree[1],a.tree])
++        from .operator_bindings import apply_prefix
++        return apply_prefix(env,tree[1],normal(tree[2]),locals)
+     if kind=='Apply':
+         f=normal(tree[1]);args=[normal(a) for a in tree[2]]
+         result=Expr('('+f.lean+' '+args[0].lean+')',expression.tex,expression.type,
+@@ -157,6 +156,8 @@
+     else:checked=expression if reuse else env.call(name,args,locals)
+     definition=env.definitions.get(name)
+     if definition and definition['implementation']=='equals':
++        from .operator_bindings import scope_unchanged
++        if not scope_unchanged(env,definition) and not (kind=='ModuleCall' and definition.get('bound_tree') is not None):return checked
+         parameters=env.data['functions'][name]['signature_tree'][2]
+         implicit={p[1] for p in parameters if p[3]=='implicit'}
+         body=definition.get('bound_tree') or definition['tree']
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -5,6 +5,12 @@
+ from .attribution import Sources, compact, normalize
+
+ class CleanError(ValueError): pass
++
++class SignatureMismatch(CleanError):
++    def __init__(self,message,owner=None):
++        super().__init__(message)
++        self.owner=owner
++
+ ID = r'[^\W\d]\w*'
+
+ def comment_lines(text):
+@@ -43,7 +49,7 @@
+                 conclusion_column = column
+                 continue
+             expression = conclusion_column is not None or re.match(
+-                r'(Let|Define|Notation|Condition|Structure|Type|Assume|Conclude|Returns|Equals|Holds when)\b', stripped, re.I)
++                r'(Let|Define|Notation|Condition|Structure|Type|Assume|Conclude|Returns|Equals|Holds when)\b', stripped, re.I) or re.match(r'Default[ ]+numerals[ ]*:',stripped,re.I)
+             if not expression:
+                 continue
+             depth = stripped.count('(') - stripped.count(')')
+@@ -53,7 +59,7 @@
+         else:
+             if depth <= 0 and column < continuation_column:
+                 raise CleanError(f'line {i + 1}: continued expression must be indented at least two spaces beyond its first line')
+-            if re.match(r'(Let|Define|Condition|Structure|Constructor|Assume|Conclude|Result|Theorem|Context|Import|Attribution|Returns|Means|Render|Holds when|Assumption name)(?=\s|:|$)', stripped, re.I):
++            if re.match(r'(Let|Define|Condition|Structure|Constructor|Assume|Conclude|Result|Theorem|Context|Import|Attribution|Returns|Numerals|Means|Render|Holds when|Assumption name)(?=\s|:|$)', stripped, re.I) or re.match(r'Default[ ]+numerals[ ]*:',stripped,re.I):
+                 raise CleanError(f'line {i + 1}: expected a continued expression, not a new clause')
+             output[start] += ' ' + stripped
+             output[i] = ''
+@@ -155,6 +161,7 @@
+     inferred_args: tuple = field(default=(),compare=False,repr=False)
+     # Typed children are reusable only with a traversal-local freshness witness.
+     checked_args: object = field(default=None,compare=False,repr=False)
++    operator_binding: object = field(default=None,compare=False,repr=False)
+ @dataclass
+ class Clause:
+     kind: str
+@@ -198,7 +205,7 @@
+     return g.get(s, s if len(s)==1 and s.isascii() else r'\mathit{'+textext(s)+'}')
+
+ def compatible(a,b):
+-    return a==b or (a==NUM and b.name in ('Natural','Real','Complex','_number','Matrix','Vector')) or (b==NUM and a.name in ('Natural','Real','Complex','Matrix','Vector'))
++    return a==b
+
+ class Environment:
+     """Names introduced by explicit module declarations; initially empty."""
+@@ -370,23 +377,23 @@
+             return template.format(*args)
+         return ('elements of $' if plural else 'an element of $')+self.render_type(t,'latex')+'$'
+     def match(self,p,a,bind):
++        from .numeral_inference import mismatch
+         if p.startswith('$'):
+             if isinstance(a,Type):self.require_type_argument(a)
+-            if p in bind and bind[p]!=a: raise CleanError('Type or dimension mismatch: '+p)
++            if p in bind and bind[p]!=a: mismatch(self,'Type or dimension mismatch: '+p)
+             bind[p]=a; return
+         m=re.fullmatch(r'(\w+)(?:\((.*)\))?',p)
+         if not m: raise CleanError('Invalid notation signature: '+p)
+         ps=split(m[2] or '')
+-        if a==NUM and m[1] in ('Natural','Real','Complex'): return
+-        if not isinstance(a,Type) or isinstance(a,LocalType) or a.name!=m[1] or len(ps)!=len(a.args): raise CleanError(f'Expected {p}, got {a}')
++        if not isinstance(a,Type) or isinstance(a,LocalType) or a.name!=m[1] or len(ps)!=len(a.args): mismatch(self,f'Expected {p}, got {a}')
+         for p2,a2 in zip(ps,a.args):
+             if isinstance(a2,Type) or p2.startswith('$'): self.match(p2,a2,bind)
+-            elif p2!=a2: raise CleanError('Dimension mismatch')
++            elif p2!=a2: mismatch(self,'Dimension mismatch')
+     def instantiate(self,p,bind):
+         if p.startswith('$'): return bind[p]
+         m=re.fullmatch(r'(\w+)(?:\((.*)\))?',p)
+         return Type(m[1],tuple(self.instantiate(a,bind) for a in split(m[2] or '')))
+-    def dependent_call(self, name, spec, args, locals):
++    def dependent_call(self, name, spec, args, locals, mismatch_owner=None):
+         """Ordered structural substitution; never ask Lean to choose an index."""
+         signature=spec['dependent_signature']
+         implicit=dict(signature['implicit'])
+@@ -396,7 +403,7 @@
+
+         def bind(n,value):
+             if n in substitutions and substitutions[n]!=value:
+-                raise CleanError('Inconsistent dependent argument: '+n)
++                raise SignatureMismatch('Inconsistent dependent argument: '+n,mismatch_owner)
+             substitutions[n]=value
+
+         def index(n,scope):
+@@ -426,16 +433,14 @@
+             if isinstance(pattern,ProofType) != isinstance(actual,ProofType):
+                 pattern=callable_view(pattern,self) or pattern
+                 actual=callable_view(actual,self) or actual
+-            # Preserve concrete numeric argument compatibility on migrated dimension signatures.
+-            if actual==NUM and pattern in (NAT,Type('Real'),Type('Complex')):return
+             from .indices import DimensionIndex
+             from .dependent_functions import DependentFunctionType,substitute,fresh_source,fresh_bound
+             if isinstance(pattern,DependentFunctionType) or isinstance(actual,DependentFunctionType) and self.is_function_type(pattern):
+                 if not self.is_function_type(pattern) or not self.is_function_type(actual):
+-                    raise CleanError('Dependent function type mismatch')
++                    raise SignatureMismatch('Dependent function type mismatch',mismatch_owner)
+                 pconstructor=pattern.constructor if isinstance(pattern,DependentFunctionType) else pattern.name
+                 aconstructor=actual.constructor if isinstance(actual,DependentFunctionType) else actual.name
+-                if pconstructor!=aconstructor:raise CleanError('Dependent function type mismatch')
++                if pconstructor!=aconstructor:raise SignatureMismatch('Dependent function type mismatch',mismatch_owner)
+                 match(pattern.args[0],actual.args[0],scope)
+                 shared=fresh_source('clean_comparison_binder',self,locals,
+                                     {**substitutions,**actuals,**scope,'__pattern':pattern,'__actual':actual})
+@@ -457,25 +462,27 @@
+                     del locals[shared]
+             elif isinstance(pattern,DimensionIndex) and pattern.name in implicit:
+                 if implicit[pattern.name]!=NAT or not isinstance(actual,DimensionIndex):
+-                    raise CleanError('Expected a natural dimension: '+pattern.name)
++                    raise SignatureMismatch('Expected a natural dimension: '+pattern.name,mismatch_owner)
+                 bind(pattern.name,actual)
+             elif isinstance(pattern,ValueIndex):
+                 if replace(pattern,scope)!=actual:
+-                    raise CleanError('Dependent index mismatch: '+pattern.name)
++                    raise SignatureMismatch('Dependent index mismatch: '+pattern.name,mismatch_owner)
+             elif isinstance(pattern,Type):
+                 if isinstance(pattern,LocalType) and pattern.name in implicit:
+                     if implicit[pattern.name]!=Type('Type') or not isinstance(actual,Type) or self.is_proof_type(actual):
+-                        raise CleanError('Expected a type argument: '+pattern.name)
+-                    self.require_type_argument(actual)
++                        raise SignatureMismatch('Expected a type argument: '+pattern.name,mismatch_owner)
++                    level=self.sort_level(actual)
++                    if level!=1:
++                        raise SignatureMismatch('Type parameter requires Lean Type 0; got Type '+str(level-1),mismatch_owner)
+                     bind(pattern.name,actual)
+                 elif isinstance(pattern,LocalType) and pattern.name in substitutions:
+-                    if substitutions[pattern.name]!=actual:raise CleanError('Dependent type mismatch: '+pattern.name)
++                    if substitutions[pattern.name]!=actual:raise SignatureMismatch('Dependent type mismatch: '+pattern.name,mismatch_owner)
+                 else:
+                     expected=replace(pattern if isinstance(pattern,LocalType) else Type(pattern.name),scope)
+                     if not isinstance(actual,Type) or isinstance(expected,LocalType)!=isinstance(actual,LocalType) or (isinstance(expected,LocalType) and expected!=actual) or expected.name!=actual.name or len(pattern.args)!=len(actual.args):
+-                        raise CleanError(f'Expected {replace(pattern,scope)}, got {actual}')
++                        raise SignatureMismatch(f'Expected type constructor {expected.name} with {len(pattern.args)} arguments, got {actual}',mismatch_owner)
+                     for p,a in zip(pattern.args,actual.args):match(p,a,scope)
+-            elif replace(pattern,scope)!=actual:raise CleanError('Dimension mismatch')
++            elif replace(pattern,scope)!=actual:raise SignatureMismatch('Dimension mismatch',mismatch_owner)
+
+         for n,t in parameters:
+             match(t,actuals[n].type)
+@@ -493,28 +500,34 @@
+                            v.lean if isinstance(v,ValueIndex) else locals[v].lean if v in locals else v)
+         targets.extend(a.lean for a in args)
+         target='(@_root_.'+signature['key']+''.join(' ('+v+')' for v in targets)+')'
+-        return Expr(target,spec['latex'].format(*(a.tex for a in args)),replace(signature['result']),
++        from .operator_bindings import present
++        return present(self,name,args,Expr(target,spec['latex'].format(*(a.tex for a in args)),replace(signature['result']),
+                     tree=['Call',name,[a.tree for a in args]],
+-                    inferred_args=tuple((n,substitutions[n]) for n in implicit),checked_args=tuple(args))
++                    inferred_args=tuple((n,substitutions[n]) for n in implicit),checked_args=tuple(args)))
++
++    def operator(self,op,a,b,locals):
++        from .operator_bindings import apply
++        return apply(self,op,a,b,locals)
+
+     def call(self,name,args,locals=None):
+         if name not in self.data['functions']: raise CleanError('Unknown function: '+name)
+         s=self.data['functions'][name]; bind={}
+         if len(args)!=len(s['params']): raise CleanError('Wrong number of arguments for '+name)
+-        if 'dependent_signature' in s:return self.dependent_call(name,s,args,locals or {})
++        if 'dependent_signature' in s:return self.dependent_call(name,s,args,locals or {},mismatch_owner=getattr(self,'_numeral_trial_owner',None))
+         for p,a in zip(s['params'],args): self.match(p,a.type,bind)
+-        return Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]],inferred_args=tuple((p[1],bind['$'+p[1]]) for p in s.get('signature_tree',[None,None,[]])[2] if p[3]=='implicit'),checked_args=tuple(args))
++        from .operator_bindings import present
++        return present(self,name,args,Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]],inferred_args=tuple((p[1],bind['$'+p[1]]) for p in s.get('signature_tree',[None,None,[]])[2] if p[3]=='implicit'),checked_args=tuple(args)))
+
+ class Expressions:
+     # Presentation/continuation precedence; syntax precedence lives in grammar/clean.lark.
+     PREC={'↔':1,'→':2,'or':3,'∨':3,'and':4,'∧':4,'=':5,'≠':5,'!=':5,'<':5,'>':5,'≤':5,'≥':5,'<=':5,'>=':5,'∈':5,'⊆':5,'∣':5,'+':6,'-':6,'∪':6,'∩':6,'*':7,'/':7,'^':8}
+     def __init__(self,reg,env): self.reg,self.env=reg,env
+-    def parse(self,s):
++    def parse(self,s,expected=None):
+         from .syntax import parse,expression_tree
+-        return self.elaborate(expression_tree(parse(s,'expression')))
+-    def elaborate(self,tree):
+-        self.bound_counter=0
+-        return self._elaborate(tree)
++        return self.elaborate(expression_tree(parse(s,'expression')),expected)
++    def elaborate(self,tree,expected=None):
++        from .numeral_inference import complete
++        return complete(tree,self.reg,self.env,expected)
+     def _elaborate(self,tree):
+         from .annotations import Annotation
+         kind=tree[0]
+@@ -525,6 +538,9 @@
+             value=self.reg.type(tree[1],self.env,phrases=False)
+             self.reg.require_type_argument(value)
+             return Expr(self.reg.render_type(value,'lean',self.env),self.reg.render_type(value,'latex',self.env),Type('Type'),tree=['TypeValue',tree[1] if isinstance(tree[1],Annotation) else str(value)])
++        if kind in ('NumeralAnnotation','BoundNumeral'):
++            from .numerals import elaborate
++            return elaborate(tree,self.reg,self.env)
+         if kind=='Decimal':return Expr(tree[1],tree[1],NUM,tree=tree)
+         if kind=='Local':
+             if tree[1] not in self.env:raise CleanError('Unknown name: '+tree[1])
+@@ -541,14 +557,10 @@
+         if kind=='Projection':
+             from .structures import project
+             return project(self.reg,self._elaborate(tree[1]),tree[2],self.env)
+-        if kind=='Operator':return binary(tree[1],self._elaborate(tree[2]),self._elaborate(tree[3]))
++        if kind=='Operator':return self.reg.operator(tree[1],self._elaborate(tree[2]),self._elaborate(tree[3]),self.env)
+         if kind=='Unary':
+-            tok=tree[1];a=self._elaborate(tree[2])
+-            if a.type==Type('Type'):raise CleanError('Type-valued operands do not support unary operators')
+-            if tok!='-' and a.type!=PROP:raise CleanError('Not requires a proposition')
+-            inner=('('+a.tex+')') if a.precedence < 8 else a.tex
+-            tx=('-'+inner) if tok=='-' else (r'\text{not }('+a.tex+')')
+-            return Expr('('+('-' if tok=='-' else '¬')+a.lean+')',tx,a.type,7 if tok=='-' else 5,['Unary',tok,a.tree])
++            from .operator_bindings import apply_prefix
++            return apply_prefix(self.reg,tree[1],self._elaborate(tree[2]),self.env)
+         if kind=='ModuleCall':
+             from .bound_calls import elaborate
+             return elaborate(tree,self.reg,self.env,[self._elaborate(a) for a in tree[2]])
+@@ -716,7 +728,7 @@
+                     raise CleanError('Cannot use let x = Type; use let x: Type or let x be Type')
+                 value=Expressions(reg,env).elaborate(payload)
+                 if value.type==Type('Type'):raise CleanError('Type-valued local definitions are not implemented; use a top-level Type declaration')
+-                if value.type==NUM:value.type=NAT
++                if value.type==NUM:raise CleanError('Local definition requires a resolved numeral interpretation')
+                 if value.type==PROP:raise CleanError('Local condition abbreviations are not implemented; use a top-level Condition declaration')
+                 from .conversion import local_definition
+                 env[name]=local_definition(name,value,reg,env)
+--- a/cleanlang/dependent_functions.py
++++ b/cleanlang/dependent_functions.py
+@@ -15,7 +15,12 @@
+ def tree_names(tree):
+     kind=tree[0]
+     if kind=='Local':return {tree[1]}
+-    if kind=='Decimal':return set()
++    if kind in ('Decimal','BoundNumeral'):return set()
++    if kind=='NumeralAnnotation':
++        from .numerals import type_source
++        import re
++        from .core import ID
++        return set(re.findall(ID,type_source(tree[2])))
+     if kind=='TypeValue':
+         from .annotations import Annotation
+         return set(tree[1].names) if isinstance(tree[1],Annotation) else set(re.findall(ID,tree[1]))
+@@ -187,7 +192,8 @@
+     from .proof_types import callable_view,compatible_evidence
+     typ=callable_view(function.type,env)
+     if typ is None or not env.is_function_type(typ) or len(args)!=1 or not compatible_evidence(args[0].type,typ.args[0],env,locals):
+-        raise CleanError('Function field argument mismatch' if tree[0]=='Apply' else 'Function argument mismatch')
++        from .numeral_inference import mismatch
++        mismatch(env,'Function field argument mismatch' if tree[0]=='Apply' else 'Function argument mismatch')
+     result=substitute(typ.codomain,{typ.binder:args[0]},env,locals) if isinstance(typ,DependentFunctionType) else typ.args[1]
+     return Expr('('+function.lean+' '+args[0].lean+')',tex,result,tree=tree)
+
+--- a/cleanlang/hygiene.py
++++ b/cleanlang/hygiene.py
+@@ -96,8 +96,12 @@
+         kind=node[0]
+         if kind=='Local':return mapping.get(node[1],node)
+         if kind=='Decimal':return node
++        if kind=='BoundNumeral':
++            from .numerals import bind
++            return bind(node,environment,locals)
++        if kind=='NumeralAnnotation':raise UnrepresentableSubstitution('Bind numeral annotations before substitution')
+         if kind=='TypeValue':return ['TypeValue',annotation(node[1],mapping,callheads)]
+-        if kind=='ModuleCall':return [kind,node[1],[expr(a,mapping,callheads) for a in node[2]],node[3]]
++        if kind=='ModuleCall':return [kind,node[1],[expr(a,mapping,callheads) for a in node[2]],*node[3:]]
+         if kind=='Call':
+             args=[expr(a,mapping,callheads) for a in node[2]]
+             if node[1] in mapping and (node[1] in callheads or is_call_head(node[1])):
+--- a/cleanlang/indices.py
++++ b/cleanlang/indices.py
+@@ -56,7 +56,7 @@
+             from .type_values import substitute
+             return substitute(node,bindings,env,locals)
+         if node[0]=='Local' and node[1] in bindings:return reference(bindings[node[1]])
+-        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],node[3]]
++        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],*node[3:]]
+         if node[0]=='Call':
+             args=[replace(a) for a in node[2]]
+             value=bindings.get(node[1])
+--- a/cleanlang/inferred_conversion.py
++++ b/cleanlang/inferred_conversion.py
+@@ -34,7 +34,12 @@
+         return set()
+     kind=tree[0]
+     if kind=='Local':return {tree[1]}
+-    if kind=='Decimal':return set()
++    if kind in ('Decimal','BoundNumeral'):return set()
++    if kind=='NumeralAnnotation':
++        from .numerals import type_source
++        import re
++        from .core import ID
++        return set(re.findall(ID,type_source(tree[2])))
+     if kind=='TypeValue':return type_values(type_tree(parse(tree[1],'type_ref')))
+     if kind=='ModuleCall':return set().union(*(value_names(a) for a in tree[2]))
+     if kind=='Call':return {tree[1]}|set().union(*(value_names(a) for a in tree[2]))
+--- a/cleanlang/literate.py
++++ b/cleanlang/literate.py
+@@ -126,7 +126,7 @@
+                         start = None
+                 else: i += 1
+                 continue
+-            if not quoted and not ''.join(masked[:i]).strip() and re.match(r'(?:Means|From Lean|Render(?: latex)?)\s*:', raw[i:], re.I): break
++            if not quoted and not ''.join(masked[:i]).strip() and re.match(r'(?:Numerals|Means|From Lean|Render(?: latex)?)\s*:', raw[i:], re.I): break
+             if raw[i] == '"': quoted = not quoted; i += 1
+             elif not quoted and pair == '--':
+                 regions[row].append((i, len(raw), 'comment'))
+--- a/cleanlang/modules.py
++++ b/cleanlang/modules.py
+@@ -96,10 +96,12 @@
+         env.data['types'][name] = spec
+         env.type(name+'('+','.join(names)+')' if names else name, local)
+         return
+-    if not {'means','render latex'} <= values.keys() or values.keys()-{'means','render latex','describe','describe plural','universe'}:
+-        raise CleanError('Type requires Means and Render latex; optional Describe, Describe plural and Universe')
++    if not {'means','render latex'} <= values.keys() or values.keys()-{'means','render latex','describe','describe plural','universe','numerals'}:
++        raise CleanError('Type requires Means and Render latex; optional Describe, Describe plural, Universe and Numerals')
+     default_level=1 if values['means']=='Type' else 0
+     level=universe_level(values,default_level)
++    if 'numerals' in values and (names or level!=0 or values['means'].strip() in ('Prop','Type')):
++        raise CleanError('Numerals requires a closed Type-0 carrier with Means')
+     spec={'args': kinds, 'lean': substitute(values['means'], names), 'latex': template(values['render latex'], names),
+           'parameter_names':names,'parameter_types':parameter_types}
+     spec['universe']=level
+@@ -113,6 +115,12 @@
+     spec['native_binding']=key
+     spec['native_template']=spec['lean']
+     spec['native_declaration']=env.notation_definitions[key]
++    if 'numerals' in values:
++        constructor=add_definition(env,'cleanNumeral_',name,
++            f'(digits : Nat) : _root_.{key} :=\n  ({values["numerals"]}) digits')
++        spec['numerals']={'native_binding':constructor,
++            'native_declaration':env.notation_definitions[constructor],
++            'payload':values['numerals'],'carrier_binding':key}
+
+
+ def signature_fields(header, fields):
+@@ -156,7 +164,7 @@
+     if list(types)!=params or 'returns' not in values:
+         raise CleanError('Declare parameters in header order and provide Returns')
+     implementations = set(values) & ({'equals', 'from lean'} if authored else {'means'})
+-    allowed = {'returns', 'render', 'render latex'} | ({'equals', 'from lean', 'attribution'} if authored else {'means'})
++    allowed = {'returns', 'render', 'render latex', 'infix', 'prefix'} | ({'equals', 'from lean', 'attribution'} if authored else {'means'})
+     if len(implementations) != 1 or values.keys() - allowed:
+         raise CleanError('Provide exactly one Equals or From Lean' if authored else 'Provide Means')
+     renders = set(values)&{'render','render latex'}
+@@ -164,10 +172,14 @@
+         raise CleanError('Provide exactly one Render or Render latex field')
+     result = env.type(values['returns'],local)
+     dependent=any(has_value_indices(t) for t in [result,*types.values()]) or Type('Type') in types.values()
++    for fixity in ('infix','prefix'):
++        if fixity in values:
++            from .operator_bindings import validate
++            validate(values[fixity],len(params),fixity)
+     implementation = next(iter(implementations))
+     expression = None
+     if implementation == 'equals':
+-        expression = Expressions(env, local).parse(values[implementation])
++        expression = Expressions(env, local).parse(values[implementation],expected=result)
+         if not compatible(expression.type, result):
+             raise CleanError(f'Definition body has type {expression.type}; expected {result}')
+         meaning = expression.lean
+@@ -198,6 +210,11 @@
+         from .dependent_functions import occurs
+         if not any(occurs(t,n) for t in types.values()):
+             raise CleanError('Implicit parameter is absent from argument types: '+n)
++    bound_body=None
++    if authored and expression:
++        from .bound_calls import bind as bind_calls,UnclosedBinding
++        try:bound_body=bind_calls(expression.tree,env,local,binders=True)
++        except UnclosedBinding:pass
+     key=add_definition(env,'cleanDefine_' if authored else 'cleanNotation_',name,body)
+     env.data['functions'][name]={'params':[pattern(types[p]) for p in params], 'returns':pattern(result),
+         'native_binding':key,'lean':'_root_.'+key+''.join(' ({'+str(i)+'})' for i in range(len(params))), 'latex':latex,
+@@ -208,14 +225,16 @@
+         env.data['functions'][name]['dependent_signature']={
+             'implicit':list(implicit.items()),'parameters':list(types.items()),
+             'result':result,'key':key}
+-    bound_body=None
+-    if authored and expression:
+-        from .bound_calls import bind as bind_calls,UnclosedBinding
+-        try:bound_body=bind_calls(expression.tree,env,local,binders=True)
+-        except UnclosedBinding:pass
++    from .operator_bindings import scope_snapshot
++    operator_scope=scope_snapshot(env)
++    for fixity in ('infix','prefix'):
++        if fixity in values:
++            from .operator_bindings import declare
++            declare(env,values[fixity],name,fixity)
+     if authored:
+         env.definitions[name] = {'key': key, 'parameters': list(local), 'implementation': implementation,
+             'tree': expression.tree if expression else None, 'bound_tree':bound_body,
++            'operator_scope':operator_scope,
+             'body': values[implementation], 'returns': str(result), 'attribution': attribution}
+
+
+@@ -233,7 +252,7 @@
+     parameters=', '.join(n+(': '+t if t is not None else '') for n,t in parameter_fields)
+     values = fields_map([f for f in fields if not re.match(r'Let\b',f,re.I)])
+     if 'returns' in values: raise CleanError('Condition already specifies a condition result; omit Returns')
+-    if set(values) - {'holds when','from lean','assumption name','render','render latex','attribution'}:
++    if set(values) - {'holds when','from lean','assumption name','render','render latex','attribution','infix','prefix'}:
+         raise CleanError('Unknown Condition field')
+     if len(set(values) & {'holds when','from lean'}) != 1:
+         raise CleanError('Condition requires exactly one Holds when or From Lean')
+@@ -292,6 +311,10 @@
+                             if value not in env.lean_imports:env.lean_imports.append(value)
+                         elif tree.data=='bib_import':env.sources.import_bibtex(file.parent/value[1:-1])
+                         else:visit(file.parent/value[1:-1])
++                    elif node.kind=='default_numerals_stmt':
++                        from .numeral_inference import declare_default
++                        from .syntax import type_spelling
++                        declare_default(type_spelling(node.payload.children[0]),env)
+                     elif node.kind=='alias_stmt':
+                         alias,target=map(str,syntax_parse(line,'alias_line').children)
+                         if alias in env.data['types'] or alias in env.data['aliases']:raise CleanError('Duplicate type alias')
+--- /dev/null
++++ b/cleanlang/numeral_inference.py
+@@ -0,0 +1,116 @@
++# generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
++"""Finite, exhaustive completion of expression-position numeral holes."""
++from itertools import product
++from .core import CleanError,SignatureMismatch,Expressions,Type
++from .numerals import identity,digits
++
++class IncompleteNumeralAnalysis(CleanError):pass
++
++
++def mismatch(env,message):
++    owner=getattr(env,'_numeral_trial_owner',None)
++    if owner is None:raise CleanError(message)
++    raise SignatureMismatch(message,owner)
++
++
++def holes(tree):
++    found=[]
++    def visit(node,path):
++        kind=node[0]
++        if kind=='Decimal':digits(node[1]);found.append((path,node[1]));return
++        if kind in ('Local','TypeValue','NumeralAnnotation','BoundNumeral'):return
++        if kind in ('Call','ModuleCall'):
++            for i,arg in enumerate(node[2]):visit(arg,path+(2,i))
++        elif kind=='Apply':
++            visit(node[1],path+(1,))
++            for i,arg in enumerate(node[2]):visit(arg,path+(2,i))
++        elif kind=='Projection':visit(node[1],path+(1,))
++        elif kind=='Operator':visit(node[2],path+(2,));visit(node[3],path+(3,))
++        elif kind=='Unary':visit(node[2],path+(2,))
++        elif kind in ('Forall','Exists','Lambda'):visit(node[3],path+(3,))
++        else:raise IncompleteNumeralAnalysis('Uncovered numeral-hole constructor: '+kind)
++    visit(tree,())
++    return found
++
++
++def declare_default(source,env):
++    typ=env.type(source,{},phrases=False)
++    if type(typ) is not Type or typ.args:raise CleanError('Default numerals requires a closed module carrier')
++    selected=(typ.name,tuple(identity(typ.name,env)))
++    previous=getattr(env,'numeral_default',None)
++    if previous is not None and previous!=selected:raise CleanError('Conflicting numeral defaults')
++    env.numeral_default=selected
++
++
++def default_carrier(env):
++    selected=getattr(env,'numeral_default',None)
++    if selected is None:return None
++    name,snapshot=selected
++    if tuple(identity(name,env))!=snapshot:raise CleanError('Changed numeral default binding')
++    return name
++
++
++def complete(tree,env,locals,expected=None,*,limit=4096):
++    if type(limit) is not int or limit<1:raise ValueError('Numeral trial limit must be a positive integer')
++    positions=holes(tree)
++    def evaluate(node):
++        worker=Expressions(env,dict(locals));worker.bound_counter=0
++        return worker._elaborate(node)
++    if not positions:
++        result=evaluate(tree)
++        if expected is not None and result.type!=expected:
++            mismatch(env,f'Expression has type {result.type}; expected {expected}')
++        return result
++    preferred=default_carrier(env)
++    choices=[(name,identity(name,env)) for name,spec in env.data['types'].items() if 'numerals' in spec]
++    choices.sort(key=lambda item:tuple(item[1]))
++    if not choices:raise CleanError('No declared numeral interpretation')
++    count=1
++    for _ in positions:
++        count*=len(choices)
++        if count>limit:raise IncompleteNumeralAnalysis(f'Incomplete numeral analysis: more than {limit} assignments')
++    owner=object();missing=object();previous=getattr(env,'_numeral_trial_owner',missing)
++    successes=[]
++    def rebuild(node,path,replacements):
++        if path in replacements:return replacements[path]
++        if isinstance(node,list):return [rebuild(v,path+(i,),replacements) for i,v in enumerate(node)]
++        return node
++    try:
++        env._numeral_trial_owner=owner
++        for assignment in product(choices,repeat=len(positions)):
++            replacements={path:['BoundNumeral',text,name,snapshot,'inferred']
++                for (path,text),(name,snapshot) in zip(positions,assignment)}
++            candidate=rebuild(tree,(),replacements)
++            try:
++                result=evaluate(candidate)
++                if expected is not None and result.type!=expected:continue
++            except SignatureMismatch as error:
++                if error.owner is not owner:raise
++                continue
++            successes.append((result,tuple(name for name,_ in assignment),candidate))
++    finally:
++        if previous is missing:del env._numeral_trial_owner
++        else:env._numeral_trial_owner=previous
++    if not successes:raise CleanError('No consistent numeral interpretation')
++    restrictions=[]
++    if len(successes)>1 and preferred is not None:
++        # All restrictions are computed from the same complete solution set.
++        # Applying them sequentially would make defaults depend on hole order.
++        restrictions=[i for i in range(len(positions))
++            if len({assignment[i] for _,assignment,_ in successes})>1
++            and any(assignment[i]==preferred for _,assignment,_ in successes)]
++        narrowed=[item for item in successes if all(item[1][i]==preferred for i in restrictions)]
++        if not narrowed:raise CleanError('Numeral default conflicts across ambiguous positions; add annotations')
++        successes=narrowed
++    if len(successes)!=1:raise CleanError(f'Ambiguous numeral interpretation: {len(successes)} assignments')
++    result,_,candidate=successes[0]
++    if restrictions:
++        # Keep defaults visible in standalone mathematical output. Ordinary
++        # inferred numerals retain their unannotated presentation.
++        replacements={}
++        for i in restrictions:
++            path,_=positions[i];node=candidate
++            for step in path:node=node[step]
++            replacements[path]=[*node[:4],'defaulted']
++        result=evaluate(rebuild(candidate,(),replacements))
++    return result
+--- /dev/null
++++ b/cleanlang/numerals.py
+@@ -0,0 +1,60 @@
++# generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
++"""Explicit carrier-owned numeral atoms; never infer a carrier from digits."""
++from .core import CleanError,Type,Expr
++
++
++def digits(text):
++    if not isinstance(text,str) or not text or any(c not in '0123456789' for c in text):
++        raise CleanError('Explicit numeral annotations require ASCII digits')
++    return text.lstrip('0') or '0'
++
++
++def type_source(node):
++    from .syntax import condition_spelling
++    kind=node[0]
++    if kind in ('Name','Numeral'):return node[1]
++    if kind=='Projection':return type_source(node[1])+'.'+node[2]
++    if kind=='Apply':return node[1]+'('+','.join(type_source(a) for a in node[2])+')'
++    if kind=='BoundTypeApply':return node[1]+'('+node[2]+': '+type_source(node[3])+','+type_source(node[4])+')'
++    if kind=='ComputedIndex':return '('+condition_spelling(node[1])+')'
++    raise CleanError('Unsupported numeral carrier syntax: '+kind)
++
++
++def spelling(tree,*,canonical_digits=False):
++    value=digits(tree[1]) if canonical_digits else tree[1]
++    if len(tree)>4 and tree[4] in ('inferred','defaulted'):return value
++    carrier=type_source(tree[2]) if tree[0]=='NumeralAnnotation' else tree[2]
++    return '('+value+': '+carrier+')'
++
++
++def identity(name,env):
++    spec=env.data['types'].get(name)
++    if spec is None or spec.get('args') or spec.get('universe')!=0 or 'canonical' in spec:
++        raise CleanError('Numerals requires a closed module Type-0 carrier')
++    attachment=spec.get('numerals')
++    if attachment is None:raise CleanError('Carrier has no Numerals declaration: '+name)
++    env.render_type(Type(name),'lean')
++    carrier=spec['native_binding'];constructor=attachment['native_binding']
++    expected=f'noncomputable def {constructor} (digits : Nat) : _root_.{carrier} :=\n  ({attachment["payload"]}) digits\n'
++    if attachment['carrier_binding']!=carrier or attachment['native_declaration']!=expected or env.notation_definitions.get(constructor)!=expected:
++        raise CleanError('Changed or missing numeral constructor: '+name)
++    return [carrier,spec['native_declaration'],spec['native_template'],constructor,expected,attachment['payload']]
++
++
++def bind(tree,env,locals):
++    digits(tree[1])
++    if tree[0]=='BoundNumeral':
++        if tree[3]!=identity(tree[2],env):raise CleanError('Changed bound numeral carrier or constructor: '+tree[2])
++        return tree
++    typ=env.type(type_source(tree[2]),locals,phrases=False)
++    if type(typ) is not Type or typ.args:
++        raise CleanError('Numerals requires a closed module Type-0 carrier')
++    return ['BoundNumeral',tree[1],typ.name,identity(typ.name,env)]
++
++
++def elaborate(tree,env,locals):
++    bound=bind(tree,env,locals)
++    typ=Type(bound[2]);constructor=bound[3][3]
++    lean='(_root_.'+constructor+' (nat_lit '+digits(bound[1])+'))'
++    tex=bound[1] if len(bound)>4 and bound[4]=='inferred' else r'\left('+bound[1]+r' \: : \: '+env.render_type(typ,'latex')+r'\right)'
++    return Expr(lean,tex,typ,tree=bound)
+--- /dev/null
++++ b/cleanlang/operator_bindings.py
+@@ -0,0 +1,115 @@
++# generated: gpt-6 2026-11-07 role=assisted; isolated prototype
++import re
++from dataclasses import replace
++from .core import CleanError,SignatureMismatch,NUM,Type,LocalType,split,Expressions
++ALIASES={'!=':'≠','<=':'≤','>=':'≥','and':'∧','or':'∨'}
++TOKENS={'↔','→','∨','∧','=','≠','<','>','≤','≥','∈','⊆','∣','+','-','∪','∩','*','/','^'}
++def token(text,fixity='infix'):
++    if fixity=='prefix':
++        result='¬' if text.lower()=='not' else text
++        if result not in {'-','¬'}:raise CleanError('Prefix requires one supported operator token')
++        return result
++    result=ALIASES.get(text.lower(),text)
++    if result not in TOKENS:raise CleanError('Infix requires one supported operator token')
++    return result
++
++def validate(text,arity,fixity='infix'):
++    token(text,fixity)
++    expected=1 if fixity=='prefix' else 2
++    if arity!=expected:raise CleanError(fixity.title()+' requires exactly '+('one explicit operand' if expected==1 else 'two explicit operands'))
++
++def declare(env,text,name,fixity='infix'):
++    op=token(text,fixity)
++    attribute='prefix_overloads' if fixity=='prefix' else 'operator_overloads'
++    if not hasattr(env,attribute):setattr(env,attribute,{})
++    getattr(env,attribute).setdefault(op,[]).append(name)
++    env.data['functions'][name]['operator_presentation']=[fixity,text]
++
++def match(env,pattern,actual,bindings):
++    if pattern.startswith('$'):
++        if isinstance(actual,Type) and env.sort_level(actual)!=1:return False
++        if pattern in bindings:return bindings[pattern]==actual
++        bindings[pattern]=actual
++        return True
++    parsed=re.fullmatch(r'(\w+)(?:\((.*)\))?',pattern)
++    if parsed is None:raise CleanError('Invalid operator signature: '+pattern)
++    children=split(parsed[2] or '')
++    if not isinstance(actual,Type) or isinstance(actual,LocalType) or actual.name!=parsed[1] or len(actual.args)!=len(children):return False
++    for child,value in zip(children,actual.args):
++        if isinstance(value,Type) or child.startswith('$'):
++            if not match(env,child,value,bindings):return False
++        elif child!=value:return False
++    return True
++
++def apply(env,text,a,b,locals):
++    op=token(text)
++    if NUM in (a.type,b.type):raise CleanError('Operator numeral interpretation is not specified in this prototype')
++    result=select(env,op,[a,b],locals,getattr(env,'operator_overloads',{}))
++    result.operator_binding=(result.tree[1],env.data['functions'][result.tree[1]]['lean'],['infix',op])
++    result.tree=['Operator',op,a.tree,b.tree]
++    return result
++
++def apply_prefix(env,text,a,locals):
++    op=token(text,'prefix')
++    if a.type==NUM:raise CleanError('Operator numeral interpretation is not specified in this prototype')
++    result=select(env,op,[a],locals,getattr(env,'prefix_overloads',{}))
++    result.operator_binding=(result.tree[1],env.data['functions'][result.tree[1]]['lean'],['prefix',text])
++    result.tree=['Unary',text,a.tree]
++    return result
++
++def select(env,op,args,locals,overloads):
++    candidates=[];checked={}
++    for name in overloads.get(op,[]):
++        spec=env.data['functions'][name];bindings={}
++        if 'dependent_signature' in spec:
++            owner=object()
++            try:checked[name]=env.dependent_call(name,spec,args,dict(locals),mismatch_owner=owner)
++            except SignatureMismatch as error:
++                if error.owner is not owner:raise
++                continue
++            candidates.append(name)
++        elif all(match(env,formal,actual.type,bindings) for formal,actual in zip(spec['params'],args)):
++            candidates.append(name)
++    if not candidates:
++        from .numeral_inference import mismatch
++        mismatch(env,'No declared meaning for operator '+op)
++    if len(candidates)>1:raise CleanError('Ambiguous operator '+op+': '+', '.join(sorted(candidates)))
++    selected=candidates[0]
++    return checked[selected] if selected in checked else env.call(selected,args,locals)
++
++def scope_snapshot(env):
++    return tuple((fixity,tuple(sorted((op,tuple(sorted(env.data['functions'][name]['lean'].split()[0]
++                        for name in names))) for op,names in getattr(env,attribute,{}).items())))
++                 for fixity,attribute in [('infix','operator_overloads'),('prefix','prefix_overloads')])
++
++def scope_unchanged(env,definition):
++    return definition.get('operator_scope',scope_snapshot(env))==scope_snapshot(env)
++
++
++def present(env,name,args,result,presentation=None):
++    """One precedence-aware renderer for named, operator and stored adapter calls."""
++    spec=env.data['functions'][name]
++    presentation=presentation or spec.get('operator_presentation')
++    if presentation is None:return result
++    fixity,text=presentation
++    op=token(text,fixity)
++    if fixity=='prefix':
++        if len(args)!=1:raise CleanError('Bound prefix operator requires one operand')
++        precedence=7 if op=='-' else 5
++        rendered=[replace(args[0],tex=r'\left('+args[0].tex+r'\right)') if args[0].precedence<=precedence else args[0]]
++    else:
++        if len(args)!=2:raise CleanError('Bound infix operator requires two operands')
++        precedence=Expressions.PREC.get(op,5)
++        right_associative=op in ('^','→')
++        rendered=[]
++        for right,value in enumerate(args):
++            needs=value.precedence<precedence or value.precedence==precedence and bool(right)!=right_associative
++            rendered.append(replace(value,tex=r'\left('+value.tex+r'\right)') if needs else value)
++    result.tex=spec['latex'].format(*(a.tex for a in rendered))
++    result.precedence=precedence
++    return result
++
++
++def apply_bound(env,name,args,locals,presentation):
++    """Instantiate one retained adapter, preserving its original presentation."""
++    return present(env,name,args,env.call(name,args,locals),presentation)
+--- a/cleanlang/quantified_beta.py
++++ b/cleanlang/quantified_beta.py
+@@ -24,7 +24,7 @@
+             body=walk(tree[3],{**scope,tree[1]:value})
+             return [kind,tree[1],tree[2],body]
+         if kind=='Lambda':return tree
+-        if kind=='ModuleCall':rebuilt=[kind,tree[1],[walk(a,scope) for a in tree[2]],tree[3]]
++        if kind=='ModuleCall':rebuilt=[kind,tree[1],[walk(a,scope) for a in tree[2]],*tree[3:]]
+         elif kind=='Call':rebuilt=[kind,tree[1],[walk(a,scope) for a in tree[2]]]
+         elif kind=='Apply':rebuilt=[kind,walk(tree[1],scope),[walk(a,scope) for a in tree[2]]]
+         elif kind=='Projection':rebuilt=[kind,walk(tree[1],scope),tree[2]]
+--- a/cleanlang/structures.py
++++ b/cleanlang/structures.py
+@@ -48,6 +48,8 @@
+         return Expressions(env,locals).elaborate(tree[2][position])
+     definition=env.definitions.get(tree[1])
+     if not definition or definition['implementation']!='equals':return None
++    from .operator_bindings import scope_unchanged
++    if not scope_unchanged(env,definition) and not (tree[0]=='ModuleCall' and definition.get('bound_tree') is not None):return None
+     signature=env.data['functions'][tree[1]]['signature_tree']
+     parameters=signature[2]
+     if any(p[3]=='implicit' for p in parameters):return None
+@@ -60,7 +62,7 @@
+             from .type_values import substitute
+             return substitute(node,{n:Expressions(env,locals).elaborate(t) for n,t in bindings.items()},env,locals)
+         if node[0]=='Local':return bindings.get(node[1],node)
+-        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],node[3]]
++        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],*node[3:]]
+         if node[0]=='Call':
+             args=[replace(a) for a in node[2]]
+             if node[1] in bindings:
+--- a/cleanlang/syntax.py
++++ b/cleanlang/syntax.py
+@@ -62,6 +62,12 @@
+     """Canonical, fully grouped source for binder-free index expressions."""
+     from .core import CleanError
+     kind=tree[0]
++    if kind in ('NumeralAnnotation','BoundNumeral'):
++        from .numerals import spelling
++        return spelling(tree)
++    if kind=='ModuleCall' and len(tree)>4:
++        from .bound_calls import source_operator
++        return source_operator(tree,expression_spelling)
+     if kind in ('Local','Decimal'):return tree[1]
+     if kind=='TypeValue':return 'type('+tree[1]+')'
+     if kind in ('Call','ModuleCall'):return tree[1]+'('+','.join(map(expression_spelling,tree[2]))+')'
+@@ -110,6 +116,12 @@
+     if kind=='group':return expression_tree(c[0])
+     if kind=='local':return ['Local',str(c[0])]
+     if kind=='type_value':return ['TypeValue',type_spelling(c[1])]
++    if kind=='numeral_annotation':
++        digits=str(c[0])
++        if not digits or any(ch not in '0123456789' for ch in digits):
++            from .core import CleanError
++            raise CleanError('Explicit numeral annotations require ASCII digits')
++        return ['NumeralAnnotation',digits,type_tree(c[1])]
+     if kind=='decimal':return ['Decimal',str(c[0])]
+     if kind=='call':return ['Call',name(c[0]),[expression_tree(x) for x in c[1].children] if len(c)>1 else []]
+     if kind=='unary':return ['Unary','-' if str(c[0])=='-' else 'not',expression_tree(c[1])]
+@@ -203,6 +215,7 @@
+             elif node.kind=='import_stmt':node.payload=parse(text,'import_line')
+             elif node.kind=='alias_stmt':node.payload=parse(text,'alias_line')
+             elif node.kind=='phrase_stmt':node.payload=parse(text,'phrase_line')
++            elif node.kind=='default_numerals_stmt':node.payload=parse(text,'default_numerals_line')
+             elif node.kind.endswith('_let'):node.payload=parse(text,'let_clause')
+             elif node.kind.endswith('_assume'):node.payload=parse(text.split(None,1)[1],'assumptions')
+             elif node.kind in ('expression_field','conclusion'):
+@@ -244,6 +257,12 @@
+     """Canonical source for scoped condition expressions; no environment lookup."""
+     from .core import CleanError
+     kind=tree[0]
++    if kind in ('NumeralAnnotation','BoundNumeral'):
++        from .numerals import spelling
++        return spelling(tree)
++    if kind=='ModuleCall' and len(tree)>4:
++        from .bound_calls import source_operator
++        return source_operator(tree,condition_spelling)
+     if kind in ('Local','Decimal'):return tree[1]
+     if kind=='TypeValue':return 'type('+tree[1]+')'
+     if kind in ('Call','ModuleCall'):return tree[1]+'('+','.join(map(condition_spelling,tree[2]))+')'
+--- a/editors/emacs/clean-math-mode.el
++++ b/editors/emacs/clean-math-mode.el
+@@ -44,7 +44,7 @@
+          ((eq (char-after) ?\") (setq quoted (not quoted)) (forward-char 1))
+          (quoted (forward-char 1))
+          ((and (bolp) (let ((case-fold-search t))
+-                        (looking-at " *\\(?:Means\\|From Lean\\|Render\\(?: latex\\)?\\) *:")))
++                        (looking-at " *\\(?:Numerals\\|Means\\|From Lean\\|Render\\(?: latex\\)?\\) *:")))
+           (end-of-line))
+          ((looking-at "--")
+           (setq face 'font-lock-comment-face start (point)) (end-of-line)
+@@ -72,7 +72,8 @@
+     ("^ *\\(Let\\) +\\(.+?\\)\\(?: *:\\| +be +\\)\\(.+\\)$"
+      (1 font-lock-keyword-face t) (2 font-lock-variable-name-face t) (3 font-lock-type-face t))
+     (,(concat "^ *" clean-math--metadata " *:.*$") (0 font-lock-string-face t) (1 font-lock-keyword-face t))
+-    ("^ *\\(Means\\|From Lean\\) *:.*$" (0 font-lock-preprocessor-face t) (1 font-lock-keyword-face t))
++    ("^ *\\(Numerals\\|Means\\|From Lean\\) *:.*$" (0 font-lock-preprocessor-face t) (1 font-lock-keyword-face t))
++    ("^ *\\(Default +numerals\\) *: *\\(.*\\)$" (1 font-lock-keyword-face t) (2 font-lock-type-face t))
+     ("^ *Import\\b.*$" (0 font-lock-string-face t))
+     (clean-math--comment (0 clean-math--matched-face t))
+     ("\t+" (0 font-lock-warning-face t))))
+--- a/editors/vim/syntax/cleanmath.vim
++++ b/editors/vim/syntax/cleanmath.vim
+@@ -12,7 +12,11 @@
+ syntax match cleanMathTypedLet '\c^ *Let\>.*\%(:\|\<be\>\).*' contains=cleanMathKeyword,cleanMathDelimiter
+ syntax match cleanMathMetadataKey '\c^ *\%(Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:' contained
+ syntax match cleanMathOpaque '\c^ *\%(Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:.*$' contains=cleanMathMetadataKey
+-syntax match cleanMathLean '\c^ *\%(Means\|From Lean\)\s*:.*$'
++syntax match cleanMathLean '\c^ *\%(Numerals\|Means\|From Lean\)\s*:.*$'
++syntax match cleanMathDefaultKeyword '\c^ *Default \+numerals\>' contained
++syntax match cleanMathDefaultNumerals '\c^ *Default \+numerals *:.*$' contains=cleanMathDefaultKeyword,cleanMathDelimiter
++highlight default link cleanMathDefaultKeyword Keyword
++highlight default link cleanMathDefaultNumerals Type
+ syntax match cleanMathImport '\c^ *Import\>.*$'
+ syntax region cleanMathQuote start='"' end='"' oneline containedin=ALLBUT,cleanMathComment,cleanMathBlock,cleanMathLean,cleanMathOpaque,cleanMathText,cleanMathTriple,cleanMathDoc
+ syntax match cleanMathComment '--.*$' containedin=ALLBUT,cleanMathQuote,cleanMathLean,cleanMathRender,cleanMathBlock,cleanMathText,cleanMathTriple,cleanMathDoc
+--- a/editors/vscode/syntaxes/clean.tmLanguage.json
++++ b/editors/vscode/syntaxes/clean.tmLanguage.json
+@@ -27,7 +27,7 @@
+     },
+     {
+       "name": "meta.embedded.line.lean.clean",
+-      "match": "(?i)^ *(?:Means|From Lean)\\s*:.*$"
++      "match": "(?i)^ *(?:Numerals|Means|From Lean)\\s*:.*$"
+     },
+     {
+       "name": "string.unquoted.metadata.clean",
+@@ -57,6 +57,23 @@
+     "code": {
+       "patterns": [
+         {
++          "match": "^ *(?i:(Default) +(numerals))\\s*(:)\\s*([^\\n]*?)(?=--|$)",
++          "captures": {
++            "1": {
++              "name": "keyword.control.clean"
++            },
++            "2": {
++              "name": "keyword.control.clean"
++            },
++            "3": {
++              "name": "punctuation.separator.clean"
++            },
++            "4": {
++              "name": "entity.name.type.clean"
++            }
++          }
++        },
++        {
+           "name": "invalid.illegal.tab.clean",
+           "match": "\\t+"
+         },
+@@ -100,7 +117,7 @@
+           }
+         },
+         {
+-          "match": "^ *(?i:(Means|From Lean))\\s*(:)(.*)$",
++          "match": "^ *(?i:(Numerals|Means|From Lean))\\s*(:)(.*)$",
+           "captures": {
+             "1": {
+               "name": "keyword.control.clean"
+--- a/grammar/clean.lark
++++ b/grammar/clean.lark
+@@ -20,6 +20,7 @@
+ ?atom: NUMBER -> decimal
+      | name -> reference
+      | "(" expression ")" -> group
++     | "(" NUMBER ":" type_ref ")" -> numeral_annotation
+      | TYPE_VALUE "(" type_ref ")" -> type_value
+      | FUNCTION "(" ID ":" type_ref "," expression ")" -> function
+      | FOR EVERY "(" ID ":" type_ref "," expression ")" -> universal
+@@ -56,18 +57,22 @@
+ import_line: "Import"i STRING -> clean_import
+            | "Import"i "Lean"i MODULE -> lean_import
+            | "Import"i "BibTeX"i STRING -> bib_import
++default_numerals_line: _DEFAULT_WORD _NUMERALS_WORD ":" type_ref
++_DEFAULT_WORD: /(?i:Default)(?!\w)/
++_NUMERALS_WORD: /(?i:numerals)(?!\w)/
+ alias_line: "Alias"i TYPE_ID ":" TYPE_ID
+ phrase_line: "Phrase"i PHRASE "=>" OPAQUE
+ field: FIELD ":" OPAQUE
+ // Document blocks are recognized from lexical logical lines, after layout/continuation.
+ document: (_NL | top_level)*
+-?top_level: declaration | result | context | import_stmt | alias_stmt | phrase_stmt | prose | documented
++?top_level: declaration | result | context | import_stmt | alias_stmt | phrase_stmt | default_numerals_stmt | prose | documented
+ prose: PROSE_LINE _NL
+ documented: DOC_LINE _NL (declaration | result)
+ documented_result: DOC_LINE _NL result
+ import_stmt: IMPORT_LINE _NL
+ alias_stmt: ALIAS_LINE _NL
+ phrase_stmt: PHRASE_LINE _NL
++default_numerals_stmt: DEFAULT_NUMERALS_LINE _NL
+ declaration: HEADER_LINE _NL _INDENT declaration_field+ _DEDENT
+ ?declaration_field: LET_LINE _NL -> declaration_let
+                   | FIELD_LINE _NL -> declaration_field
+@@ -85,7 +90,7 @@
+ DECL: /(?i:Notation|Define|Condition)(?!\w)/
+ LET: /(?i:Let)(?!\w)/
+ DEFINE: /(?i:Define)(?!\w)/
+-FIELD: /(?i:Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
++FIELD: /(?i:Numerals|Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
+ IFF: "↔"
+ IMPLIES: "→"
+ OR: /(?i:or)(?=\W)/ | "∨"
+@@ -116,6 +121,7 @@
+ IMPORT_LINE: /(?i:Import)[ ]+[^\n]+/
+ ALIAS_LINE: /(?i:Alias)[ ]+[^\n]+/
+ PHRASE_LINE: /(?i:Phrase)[ ]+[^\n]+/
++DEFAULT_NUMERALS_LINE: /(?i:Default)[ ]+(?i:numerals)[ ]*:[^\n]*/
+ HEADER_LINE: /(?i:Structure|Notation|Condition|Type|Source)[ ]+[^\n]+|(?i:Define)[ ]+[^=\n]+/
+ RESULT_LINE: /(?i:Result|Theorem)[ ]+[^\n]+/
+ CONTEXT_LINE: /(?i:Context)[ ]+[^\n]+/
+@@ -124,7 +130,7 @@
+ ATTRIBUTION_LINE: /(?i:Attribution)[ ]*:[^\n]*/
+ CONCLUDE_LINE: /(?i:Conclude)(?!\w)[^\n]*/
+ EXPR_FIELD_LINE: /(?i:Equals|Holds when)[ ]*:[^\n]*/
+-FIELD_LINE: /(?i:Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
++FIELD_LINE: /(?i:Numerals|Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
+ EXPR_LINE: /\S[^\n]*/
+ _NL: /\n[ ]*/
+ %declare _INDENT _DEDENT
+--- a/tools/generate_parser.py
++++ b/tools/generate_parser.py
+@@ -8,7 +8,7 @@
+ import sys
+ ROOT=Path(__file__).resolve().parents[1]
+ STARTS=['expression','assumptions','type_ref','header','type_header','structure_header','let_clause',
+-        'import_line','alias_line','phrase_line','field','source_header','scope_header','document']
++        'default_numerals_line','import_line','alias_line','phrase_line','field','source_header','scope_header','document']
+
+ def require_lexical_analysis(regexes):
+     # Interegular otherwise treats unsupported patterns as disjoint.
+--- a/tests/test_bound_comparison_reuse.py
++++ b/tests/test_bound_comparison_reuse.py
+@@ -4,7 +4,7 @@
+ import unittest
+ from unittest.mock import patch
+ from cleanlang.core import Environment,Expr,Expressions,CleanError
+-from cleanlang.modules import load_module,notation
++from cleanlang.modules import load_module,notation,condition_declaration
+ from cleanlang.bound_calls import bind
+ from cleanlang.conversion import comparison_normal_form
+ ROOT=Path(__file__).resolve().parents[1]
+@@ -14,5 +14,7 @@
+         self.env=Environment();load_module(ROOT/'library/logic/functions.clean',self.env)
+         notation('Notation retain(x):',['Let A: Type','Let x: A','Returns: A',
+                  'Means: x','Render latex: {x}'],self.env)
++        condition_declaration('Condition equal(x,y):', ['Let T: Type','Let x,y: T',
++                              'Infix: =','From Lean: x=y','Render latex: {x}={y}'],self.env)
+         self.local={n:Expr(n,n,self.env.type('Type')) for n in ['A','B']}
+         self.rebind('first','A')
