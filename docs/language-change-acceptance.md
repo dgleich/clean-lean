@@ -83,4 +83,21 @@ Not every proposal needs every domain-specific example. Every row must either ha
 
 The [acceptance-case catalog](../tests/acceptance/language-contract.json) records initial specification oracles and gaps. `pending` means neither implemented nor passed; the catalog is not an executable conformance runner. Promoting a case to passing requires the actual source/environment fixture, an expected tree, an independent Lean-target oracle, and the checks above. A human-readable Lean target is only the starting oracle; a future runner must elaborate it in the pinned context and compare canonical target structure.
 
-The current 104 Python tests, 80 corpus proofs, and paper statement-shape checks are useful regression evidence. They do not implement the canonical-target comparison or prove either uniqueness guarantee. The compiler still has known syntax/semantic migration debt. These requirements govern new language proposals and conformance claims immediately; they do not retroactively certify the prototype.
+At adoption of this contract, the 104 Python tests, 80 corpus proofs, and paper statement-shape checks were regression evidence rather than canonical-target checks. The catalog now records implemented canonical-target slices alongside partial and pending cases. These checks do not establish either uniqueness guarantee for the whole language. The compiler still has known syntax/semantic migration debt; the contract does not retroactively certify it.
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Executable declaration-identity slice
+
+The [declaration-identity study](../studies/declaration-identities/README.md)
+compares the same dependent callable and record with and without an unrelated
+preceding import. Eleven exact checks cover callable types/bodies, record types,
+raw constructor types, projection types/bodies, and constructor wrapper types/bodies.
+Independent header and dependent-field syntax oracles also pass. Generated spellings
+differ, so the record comparisons use a documented map from the authored record and
+its raw constructor to independent native oracle declarations. Only those constants,
+projection owners, binder display names, and metadata are normalized. The mapped
+declaration types and bodies are themselves checked; a changed kernel-valid proof
+body is rejected. This is evidence for the documented slice, not a general module
+identity or import-isolation implementation.
+:::

@@ -1723,6 +1723,63 @@
         "studies/choice/verify.py"
       ],
       "remaining": "Final-rule full suite pending; 276 focused tests, seven exact choice targets/three proofs and eight postfix targets/five proofs pass. Ordinary computed-index behavior unchanged; general native-binding conformance remains separate."
+    },
+    {
+      "id": "declaration_identity_across_unrelated_imports",
+      "status": "implemented-slice",
+      "environment": "Same explicit Family.clean source loaded into two fresh environments, with and without preceding Unrelated.clean. Both import library/logic/evidence.clean; the unrelated declaration is not a mathematical dependency.",
+      "source_fragment": "Structure FamilyRecord(A: Type):\n  Let witness: Function(x: A,Evidence((x = x)))\n  Constructor: family record\n",
+      "expected_tree": [
+        "StructureHeader",
+        "FamilyRecord",
+        [
+          [
+            "A",
+            "Type"
+          ]
+        ]
+      ],
+      "expected_field_tree": [
+        "BoundTypeApply",
+        "Function",
+        "x",
+        [
+          "Name",
+          "A"
+        ],
+        [
+          "Apply",
+          "Evidence",
+          [
+            [
+              "ComputedIndex",
+              [
+                "Operator",
+                "=",
+                [
+                  "Local",
+                  "x"
+                ],
+                [
+                  "Local",
+                  "x"
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "expected_lean": "structure ExpectedRecord (A : Type) : Type where\n  witness : (x : A) → x = x",
+      "obligation": "Compare independent native types/bodies for the proof-family identity and record type, raw constructor, projection, and constructor wrapper across preceding unrelated imports. Use only the explicitly documented record/mk identity map; reject a changed proof body despite kernel acceptance.",
+      "checks": [
+        "studies/declaration-identities/verify.py",
+        "studies/declaration-identities/Verified.lean"
+      ],
+      "pending": [
+        "General module-owned identity and import scope",
+        "Full canonical declaration-graph and execution-independence audit",
+        "Universe-polymorphic carrier bundles"
+      ]
     }
   ]
 }

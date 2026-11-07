@@ -1,0 +1,14 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "../../library/logic/evidence.clean"
+
+Notation preserve family(f):
+  Let f: Function(x: Natural,Evidence((x = x)))
+  Returns: Function(y: Natural,Evidence((y = y)))
+  Means: f
+  Render latex: {f}
+
+Structure FamilyRecord(A: Type):
+  Let witness: Function(x: A,Evidence((x = x)))
+  Constructor: family record
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

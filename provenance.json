@@ -5125,6 +5125,47 @@
         ""
       ],
       "model": "gpt-6"
+    },
+    "studies/declaration-identities/Family.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/declaration-identities/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown",
+      "model": "gpt-6"
+    },
+    "studies/declaration-identities/Verified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/declaration-identities/verify.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/declaration-identities/Unrelated.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }
