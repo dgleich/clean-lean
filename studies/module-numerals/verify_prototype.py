@@ -23,6 +23,8 @@ with tempfile.TemporaryDirectory(prefix='clean-numeral-parser-') as td:
     subprocess.run([sys.executable,str(HERE/'verify_parser.py'),str(dest),'-v'],cwd=dest,check=True)
     subprocess.run([sys.executable,'-m','unittest','discover','-s','tests',
                     '-p','test_generated_parser.py','-v'],cwd=dest,check=True)
-print('Isolated numeral parser checks passed; numeral binding is explicitly unsupported')
+    subprocess.run(['git','apply',str(HERE/'adapters.patch')],cwd=dest,check=True)
+    subprocess.run([sys.executable,str(HERE/'verify_adapters.py'),str(dest)],cwd=dest,check=True)
+print('Isolated numeral syntax and declaration checks passed; expression binding is explicitly unsupported')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

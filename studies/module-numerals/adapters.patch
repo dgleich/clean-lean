@@ -1,0 +1,30 @@
+--- a/cleanlang/modules.py
++++ b/cleanlang/modules.py
+@@ -96,10 +96,12 @@
+         env.data['types'][name] = spec
+         env.type(name+'('+','.join(names)+')' if names else name, local)
+         return
+-    if not {'means','render latex'} <= values.keys() or values.keys()-{'means','render latex','describe','describe plural','universe'}:
+-        raise CleanError('Type requires Means and Render latex; optional Describe, Describe plural and Universe')
++    if not {'means','render latex'} <= values.keys() or values.keys()-{'means','render latex','describe','describe plural','universe','numerals'}:
++        raise CleanError('Type requires Means and Render latex; optional Describe, Describe plural, Universe and Numerals')
+     default_level=1 if values['means']=='Type' else 0
+     level=universe_level(values,default_level)
++    if 'numerals' in values and (names or level!=0 or values['means'].strip() in ('Prop','Type')):
++        raise CleanError('Numerals requires a closed Type-0 carrier with Means')
+     spec={'args': kinds, 'lean': substitute(values['means'], names), 'latex': template(values['render latex'], names),
+           'parameter_names':names,'parameter_types':parameter_types}
+     spec['universe']=level
+@@ -113,6 +115,12 @@
+     spec['native_binding']=key
+     spec['native_template']=spec['lean']
+     spec['native_declaration']=env.notation_definitions[key]
++    if 'numerals' in values:
++        constructor=add_definition(env,'cleanNumeral_',name,
++            f'(digits : Nat) : _root_.{key} :=\n  ({values["numerals"]}) digits')
++        spec['numerals']={'native_binding':constructor,
++            'native_declaration':env.notation_definitions[constructor],
++            'payload':values['numerals'],'carrier_binding':key}
+ 
+ 
+ def signature_fields(header, fields):

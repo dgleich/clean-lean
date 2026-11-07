@@ -6152,6 +6152,26 @@
     "studies/module-numerals/README.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "studies/module-numerals/adapters.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/module-numerals/verify_adapters.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/module-numerals/AdaptersVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

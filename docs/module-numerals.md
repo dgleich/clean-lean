@@ -2,10 +2,11 @@
 
 # Module-owned numeral interpretation: first migration step
 
-Status: proposed, with an isolated parser-only implementation; not accepted as conforming. The working compiler
+Status: proposed, with an isolated parser and native declaration implementation; not accepted as conforming. The working compiler
 still has display-name-based numeral handling. The [parser study](../studies/module-numerals/README.md)
-checks the annotation grammar, ASCII validation and metadata syntax but explicitly
-rejects numeral binding. The isolated declared-operator
+checks the annotation grammar, ASCII validation and metadata syntax. A subsequent
+patch emits declaration-owned adapters; numeral expression binding is still
+explicitly rejected. The isolated declared-operator
 prototype rejects unresolved numeral operands. This proposal defines an explicit
 first step; it does not settle the implicit/default inference required for the
 broader corpus migration.
@@ -29,8 +30,8 @@ Result adding a specified numeral:
   Conclude: x + (1: Real) = (1: Real) + x
 ```
 
-This is proposed source; the isolated parser can read its syntax, but the
-declaration interpreter still rejects the Numerals field. Equality also needs an explicit imported declaration;
+The isolated adapter stack can read and emit this Type declaration, but cannot
+yet translate the result’s numeral expressions. Equality also needs an explicit imported declaration;
 its availability is not implied by the example. `Nat` in the Numerals payload is
 native Lean syntax, just as identifiers in Means are native Lean syntax. It is
 not an implicit Clean import or a mathematical meaning assigned to a Clean name.
@@ -129,9 +130,9 @@ checks primitive literals for zero, one, 123 and a large integer, and rejects
 ordinary overloaded numeral syntax as a different canonical target. Run it with
 `lake env lean studies/operator-integration/NumeralPayloadProbe.lean`. This only
 checks the proposed payload mechanism. The isolated parser study checks eleven
-syntax cases, including ASCII validation and binding-phase separation. Adapter,
-application, expression-consumer, rendering and main-integration acceptance remain
-pending.
+syntax cases, including ASCII validation and binding-phase separation. The subsequent adapter checks compare independently authored native carrier and
+constructor targets. Application, retained expression identity, expression-consumer,
+rendering and main-integration acceptance remain pending.
 
 ## Still needed for the final architecture
 

@@ -2164,12 +2164,13 @@
       "expected_lean": "Root-qualified declaration-owned numeral adapter applied to Lean.Expr.lit (.natVal 1); result is the selected Real type wrapper. Adapter payload is checked at Nat → that wrapper.",
       "checks": [
         "studies/operator-integration/NumeralPayloadProbe.lean (native payload mechanism only)",
-        "studies/module-numerals/verify_prototype.py (isolated parser-only extension; no numeral binding)"
+        "studies/module-numerals/verify_prototype.py (isolated parser and declaration extension; no numeral expression binding)",
+        "studies/module-numerals/verify_adapters.py (native declaration targets only; no numeral expression binding)"
       ],
       "pending": [
         "Main compiler integration of the independently checked parser production and ASCII validation",
-        "Native adapter ownership, type checking and retained expression bindings",
-        "Independent full adapter/application targets and type oracles",
+        "Retained numeral expression bindings and adversarial native adapter identity validation",
+        "Independent full application targets and type oracles",
         "Ambiguity, import/alias/shadowing and generated-name collision tests",
         "All expression consumers and LaTeX annotation rendering",
         "Subsequent expected-type propagation and module-declared defaults",
