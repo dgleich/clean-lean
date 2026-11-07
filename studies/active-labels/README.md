@@ -82,7 +82,9 @@ the default mode still translates first. The replay path has not yet had a compl
 interval artifact to check. Its binding lookup was checked against `Arithmetic.lean`.
 
 [Comparison experiments](experiments/README.md) preserve two unintegrated compiler
-patches and their limited results. No compiler optimization was adopted. Constructing
+patches and their limited results. Neither comparison optimization was adopted.
+A separate [declaration-token scan cache](../../docs/fresh-bound-name-cache.md)
+preserves the existing fresh-name rule and is now implemented. Constructing
 and reindexing the actual interval bases, then proving vector compatibility and the
 pyramid theorem, remains subsequent mathematical work.
 :::

@@ -250,3 +250,31 @@ The original interval translation, earlier-proof verifier and call-index-only
 experiment remain live. The corrected native interval arithmetic proof is checked,
 but the full generated interval artifact is still unavailable for snapshot replay.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Exact-text declaration token cache
+
+The fresh-bound allocator now reuses only the token union of an exactly equal tuple
+of immutable generated declaration texts. It rescans current locals/types and
+preserves the comparison-pool path. Six targeted tests and 282 wider focused tests
+pass in the isolated candidate. Ten exact generic-subtype targets and three proofs
+also pass. The diagnostic workload made 33,998 allocation calls in each version;
+measured allocation time was 10.75s versus 3.25s. Concurrent total elapsed times
+(56.00s versus 49.89s) are not a controlled performance benchmark.
+
+The alias-era and proof-beta-era full suites were stopped as superseded by this
+compiler revision, both with status 130 and without a unittest summary. One new
+current full suite is running. The older codomain suite previously ended with
+status 143 without a summary. None of those incomplete suites is reported green.
+The existing interval translation, earlier-proof verifier and call-index experiment
+remain live; no interval speedup or completed target comparison is claimed.
+:::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+After integration, main passes seven exact choice targets/three proofs and eight
+postfix targets/five proofs. The 92-statement corpus was regenerated and passes the
+kernel. The isolated generic generated Lean matches the tracked baseline apart
+from provenance comments. The current full suite remains pending.
+:::

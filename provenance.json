@@ -4924,6 +4924,26 @@
     "studies/choice/Statements.pdf": {
       "origin": "derived-from-authored-sources; cited data retains source origin",
       "mode": "sidecar"
+    },
+    "docs/fresh-bound-name-cache.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "tests/test_bound_name_cache.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/profile_scope_allocation.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

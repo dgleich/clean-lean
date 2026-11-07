@@ -34,13 +34,24 @@ def occurs(typ,name):
     return typ==name
 
 
+def declaration_names(env):
+    """Reuse only a pure token scan of an identical immutable text snapshot."""
+    texts=tuple(env.notation_definitions.values())
+    cached=getattr(env,'_bound_declaration_names',None)
+    if cached is None or cached[0]!=texts:
+        names=frozenset(name for text in texts for name in re.findall(ID,text))
+        cached=(texts,names)
+        env._bound_declaration_names=cached
+    return cached[1]
+
+
 def fresh_bound(env,locals):
     pool=getattr(env,'_comparison_pool',None)
     if pool is not None:return pool.fresh(locals)
     # A compiler binding identity cannot coincide with an opaque declaration's
     # constants, labels, local terms or already constructed type binders.
     occupied=set(locals)
-    for text in env.notation_definitions.values():occupied.update(re.findall(ID,text))
+    occupied.update(declaration_names(env))
     for value in locals.values():
         occupied.update(re.findall(ID,value.lean))
         occupied.update(re.findall(ID,env.render_type(value.type,'lean')))
