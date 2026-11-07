@@ -5496,6 +5496,30 @@
     "studies/carrier-fields/Audit.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "studies/carrier-fields/bound-calls.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/carrier-fields/verify_bound_calls.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/BoundCalls.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/carrier-fields/BoundCallsVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

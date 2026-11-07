@@ -776,3 +776,15 @@ prototype and exact targets are linked from [carrier-fields.md](carrier-fields.m
 Main integration and full consumer/universe audits remain open; no automatic carrier
 coercion or general universe inference is introduced.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Preserve resolved callable heads in stored computed indices
+
+Prototype an internal module-call identity distinct from applications of local function
+parameters. Substitution must not resolve a module head again in caller locals. The
+[isolated repair](../studies/carrier-fields/BoundCalls.md) specifies the constructive
+rule, consumer changes and remaining structural type/proof-index gaps. No new source
+syntax is introduced. This experiment does not replace the broader module-owned
+identity requirement or authorize dropping unsupported annotations from the final language.
+:::

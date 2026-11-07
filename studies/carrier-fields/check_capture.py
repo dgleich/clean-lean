@@ -16,7 +16,7 @@ try:
     results=load_document(HERE/'CapturedCarrier.clean.proposed',env)
 except CleanError as error:
     # A parser/import failure is not evidence of the required type rejection.
-    if 'type' not in str(error).lower() or 'mismatch' not in str(error).lower():
+    if str(error)!='Dependent index mismatch: (c(P))':
         raise
     print('Carrier capture rejected:',error)
 else:

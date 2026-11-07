@@ -1892,10 +1892,11 @@
         "studies/carrier-fields/verify_prototype.py",
         "studies/carrier-fields/PrototypeVerified.lean",
         "studies/carrier-fields/verify_operators.py",
-        "studies/carrier-fields/check_capture.py"
+        "studies/carrier-fields/check_capture.py",
+        "studies/carrier-fields/verify_bound_calls.py"
       ],
       "pending": [
-        "FAIL: module callable capture in computed carrier substitution; see studies/carrier-fields/Audit.md",
+        "Base patch callable capture fixed only in isolated bound-calls.patch; structural annotations and proof-index binding remain open",
         "Main integration and complete carrier-consumer audit",
         "Full corpus and study validation",
         "Universe polymorphism and native module-scope policy"

@@ -1,6 +1,6 @@
 :::llm gpt-6 2026-11-07 role=assisted
 
-# Carrier consumer audit: integration blocked by callable capture
+# Carrier consumer audit: callable capture and remaining closure gates
 
 The isolated carrier prototype passes 21 exact native targets, six proofs, and
 221 selected regression tests. The carrier/operator composition passes five exact
@@ -24,7 +24,8 @@ output type `c(P)`. A theorem introduces an unrelated local function also named
 `c`, and `x` of this local `c(P)` type. Its call `retain(P,x)` must be rejected:
 there is no equality between the two carrier functions.
 
-The current prototype accepts it. Native Lean rejects the generated application:
+The base carrier prototype accepts it. The subsequent isolated
+[bound-call repair](BoundCalls.md) rejects it while preserving valid local parameters. Native Lean rejects the generated application:
 `x` has local type `c P`, but `retain` requires the module definition's carrier.
 This is a translator type-checking failure, not a proved false theorem: the Lean
 kernel rejects the output.
@@ -51,5 +52,7 @@ proof indices and authored-body normalization alongside carrier indices, since t
 share substitution machinery. Simply hiding caller locals would also hide locals
 needed by the call arguments and is insufficient.
 
-This report records a failing intermediate step. Main integration remains pending.
+This report records the base prototype failure. The separate repair is not yet
+integrated: structural annotations, proof-index binding and the wider closure audit
+remain required.
 :::

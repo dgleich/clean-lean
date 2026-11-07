@@ -42,7 +42,9 @@ diagnostic. These did not weaken negative checks.
 The [contract](../../docs/carrier-fields.md) gives the parse and translation rules.
 Main integration and full corpus/study validation remain required. The expanded
 [consumer audit](Audit.md) records a confirmed callable-capture failure that blocks
-integration. Composition with module operators passes five additional exact targets
+integration. A subsequent [bound-call repair](BoundCalls.md) fixes the counterexample
+in isolation; structural annotations and proof-index binding remain open.
+Composition with module operators passes five additional exact targets
 and three proofs; run `python3 studies/carrier-fields/verify_operators.py`. This is fixed Type-0 carriers in
 an explicitly higher-universe record; it is not general universe polymorphism,
 implicit carrier coercion or a replacement for all existing TopCat-based interfaces.
