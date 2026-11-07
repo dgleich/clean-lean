@@ -944,7 +944,8 @@ accepted as conforming. Its isolated study now checks the grammar, ASCII validat
 native adapters and explicitly annotated applications. Bound numeral atoms retain
 the selected identity through substitution and comparison; the draft specifies
 the consumer and rendering rules. Full integration and complete native isolation
-remain pending, as do module-owned defaults and type-position numeral inference. The historical display-name-based
+remain pending, as does broader type-position numeral inference; defaults have
+an isolated prototype below. The historical display-name-based
 Natural default is not the final architecture.
 :::
 
@@ -955,6 +956,17 @@ closed-carrier assignment for expression-position numerals. It parses once,
 checks all assignments, accepts exactly one, and propagates incomplete analysis
 and unowned errors. Declared return types constrain definition bodies. Inferred
 numerals retain their selected constructor while rendering without an explicit
-type annotation. This is isolated implementation evidence; defaults, type-position
+type annotation. This is isolated implementation evidence; default integration, type-position
 migration, native isolation and main integration remain open.
+:::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The [explicit numeral default rule](numeral-defaults.md) adds the top-level
+`Default numerals: Counting` declaration. Imports combine equal canonical
+bindings idempotently and reject conflicts. Completion checks every assignment
+before applying simultaneous default restrictions; it never overrides determined
+types or incomplete analysis. Defaulted atoms retain their constructor and render
+with visible type annotations. This is isolated implementation, with main
+integration and broader native/type-position obligations still pending.
 :::

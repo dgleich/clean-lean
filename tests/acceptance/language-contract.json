@@ -2171,7 +2171,7 @@
       "pending": [
         "Main compiler and editor integration",
         "Broad consumer regression and full portfolio validation",
-        "Module-declared defaults and type-position numeral inference",
+        "Default integration and type-position numeral inference",
         "Native import/instance isolation and full identity contract"
       ]
     },
@@ -2200,8 +2200,31 @@
       "pending": [
         "Main compiler integration and broad portfolio validation",
         "Constraint pruning and CLI resource-budget controls",
-        "Module-owned defaults and inference across type-annotation boundaries",
+        "Default integration and inference across type-annotation boundaries",
         "Parameterized carriers and complete native import/identity/instance isolation"
+      ]
+    },
+    {
+      "id": "explicit_module_numeral_default",
+      "status": "partial",
+      "environment": "Explicit imported Common module owning Counting, Real and Twin constructors; default configuration initially empty. See docs/numeral-defaults.md.",
+      "source": "Default numerals: Counting",
+      "expected_tree": [
+        "DefaultNumerals",
+        [
+          "Name",
+          "Counting"
+        ]
+      ],
+      "expected_lean": "No new Lean declaration. Subsequent ambiguous numeral holes are restricted simultaneously using the retained Counting constructor identity, only after complete type analysis. Selected terms use that constructor with a primitive Nat payload; no implicit native coercion is inserted.",
+      "checks": [
+        "studies/module-numerals/verify_defaults.py (eight exact targets, four proofs, strict syntax, import conflicts, sequential scope, presentation and CLI compilation)",
+        "studies/module-numerals/verify_prototype.py (strict parser regeneration and final-stack regressions)"
+      ],
+      "pending": [
+        "Main compiler integration and broad portfolio validation",
+        "Compact presentation with explicit referenced numeral conventions",
+        "Parameterized carriers, type-position inference and native import/identity/instance isolation"
       ]
     }
   ]

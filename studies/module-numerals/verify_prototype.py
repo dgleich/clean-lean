@@ -30,8 +30,15 @@ with tempfile.TemporaryDirectory(prefix='clean-numeral-parser-') as td:
     subprocess.run(['git','apply',str(HERE/'inference.patch')],cwd=dest,check=True)
     subprocess.run([sys.executable,str(HERE/'verify_inference.py'),str(dest)],cwd=dest,check=True)
     subprocess.run([sys.executable,str(HERE/'verify_expressions.py'),str(dest),'--inferred'],cwd=dest,check=True)
+    subprocess.run(['git','apply',str(HERE/'defaults.patch')],cwd=dest,check=True)
+    for args in [[],['--check']]:
+        subprocess.run([sys.executable,str(dest/'tools/generate_parser.py'),*args],cwd=dest,check=True)
+    subprocess.run([sys.executable,'-m','unittest','discover','-s','tests','-p','test_generated_parser.py','-v'],cwd=dest,check=True)
+    subprocess.run([sys.executable,str(HERE/'verify_defaults.py'),str(dest)],cwd=dest,check=True)
+    subprocess.run([sys.executable,str(HERE/'verify_inference.py'),str(dest)],cwd=dest,check=True)
+    subprocess.run([sys.executable,str(HERE/'verify_expressions.py'),str(dest),'--inferred'],cwd=dest,check=True)
     for verifier in ['verify_saved.py','verify_dispatch.py','verify_foundations.py','verify_topology.py']:
         subprocess.run([sys.executable,str(ROOT/'studies/operator-integration'/verifier),str(dest)],cwd=dest,check=True)
-print('Isolated numeral inference, explicit-expression and operator checks passed; main integration and module defaults remain pending')
+print('Isolated numeral inference, explicit-expression and operator checks passed; main integration and broader type-position inference remain pending')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

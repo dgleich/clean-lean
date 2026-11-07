@@ -1,0 +1,224 @@
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -49,7 +49,7 @@
+                 conclusion_column = column
+                 continue
+             expression = conclusion_column is not None or re.match(
+-                r'(Let|Define|Notation|Condition|Structure|Type|Assume|Conclude|Returns|Equals|Holds when)\b', stripped, re.I)
++                r'(Let|Define|Notation|Condition|Structure|Type|Assume|Conclude|Returns|Equals|Holds when)\b', stripped, re.I) or re.match(r'Default[ ]+numerals[ ]*:',stripped,re.I)
+             if not expression:
+                 continue
+             depth = stripped.count('(') - stripped.count(')')
+@@ -59,7 +59,7 @@
+         else:
+             if depth <= 0 and column < continuation_column:
+                 raise CleanError(f'line {i + 1}: continued expression must be indented at least two spaces beyond its first line')
+-            if re.match(r'(Let|Define|Condition|Structure|Constructor|Assume|Conclude|Result|Theorem|Context|Import|Attribution|Returns|Numerals|Means|Render|Holds when|Assumption name)(?=\s|:|$)', stripped, re.I):
++            if re.match(r'(Let|Define|Condition|Structure|Constructor|Assume|Conclude|Result|Theorem|Context|Import|Attribution|Returns|Numerals|Means|Render|Holds when|Assumption name)(?=\s|:|$)', stripped, re.I) or re.match(r'Default[ ]+numerals[ ]*:',stripped,re.I):
+                 raise CleanError(f'line {i + 1}: expected a continued expression, not a new clause')
+             output[start] += ' ' + stripped
+             output[i] = ''
+--- a/cleanlang/modules.py
++++ b/cleanlang/modules.py
+@@ -311,6 +311,10 @@
+                             if value not in env.lean_imports:env.lean_imports.append(value)
+                         elif tree.data=='bib_import':env.sources.import_bibtex(file.parent/value[1:-1])
+                         else:visit(file.parent/value[1:-1])
++                    elif node.kind=='default_numerals_stmt':
++                        from .numeral_inference import declare_default
++                        from .syntax import type_spelling
++                        declare_default(type_spelling(node.payload.children[0]),env)
+                     elif node.kind=='alias_stmt':
+                         alias,target=map(str,syntax_parse(line,'alias_line').children)
+                         if alias in env.data['types'] or alias in env.data['aliases']:raise CleanError('Duplicate type alias')
+--- a/cleanlang/numeral_inference.py
++++ b/cleanlang/numeral_inference.py
+@@ -1,7 +1,7 @@
+ # generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+ """Finite, exhaustive completion of expression-position numeral holes."""
+ from itertools import product
+-from .core import CleanError,SignatureMismatch,Expressions
++from .core import CleanError,SignatureMismatch,Expressions,Type
+ from .numerals import identity,digits
+
+ class IncompleteNumeralAnalysis(CleanError):pass
+@@ -33,6 +33,23 @@
+     return found
+
+
++def declare_default(source,env):
++    typ=env.type(source,{},phrases=False)
++    if type(typ) is not Type or typ.args:raise CleanError('Default numerals requires a closed module carrier')
++    selected=(typ.name,tuple(identity(typ.name,env)))
++    previous=getattr(env,'numeral_default',None)
++    if previous is not None and previous!=selected:raise CleanError('Conflicting numeral defaults')
++    env.numeral_default=selected
++
++
++def default_carrier(env):
++    selected=getattr(env,'numeral_default',None)
++    if selected is None:return None
++    name,snapshot=selected
++    if tuple(identity(name,env))!=snapshot:raise CleanError('Changed numeral default binding')
++    return name
++
++
+ def complete(tree,env,locals,expected=None,*,limit=4096):
+     if type(limit) is not int or limit<1:raise ValueError('Numeral trial limit must be a positive integer')
+     positions=holes(tree)
+@@ -44,6 +61,7 @@
+         if expected is not None and result.type!=expected:
+             mismatch(env,f'Expression has type {result.type}; expected {expected}')
+         return result
++    preferred=default_carrier(env)
+     choices=[(name,identity(name,env)) for name,spec in env.data['types'].items() if 'numerals' in spec]
+     choices.sort(key=lambda item:tuple(item[1]))
+     if not choices:raise CleanError('No declared numeral interpretation')
+@@ -69,10 +87,30 @@
+             except SignatureMismatch as error:
+                 if error.owner is not owner:raise
+                 continue
+-            successes.append(result)
++            successes.append((result,tuple(name for name,_ in assignment),candidate))
+     finally:
+         if previous is missing:del env._numeral_trial_owner
+         else:env._numeral_trial_owner=previous
+     if not successes:raise CleanError('No consistent numeral interpretation')
++    restrictions=[]
++    if len(successes)>1 and preferred is not None:
++        # All restrictions are computed from the same complete solution set.
++        # Applying them sequentially would make defaults depend on hole order.
++        restrictions=[i for i in range(len(positions))
++            if len({assignment[i] for _,assignment,_ in successes})>1
++            and any(assignment[i]==preferred for _,assignment,_ in successes)]
++        narrowed=[item for item in successes if all(item[1][i]==preferred for i in restrictions)]
++        if not narrowed:raise CleanError('Numeral default conflicts across ambiguous positions; add annotations')
++        successes=narrowed
+     if len(successes)!=1:raise CleanError(f'Ambiguous numeral interpretation: {len(successes)} assignments')
+-    return successes[0]
++    result,_,candidate=successes[0]
++    if restrictions:
++        # Keep defaults visible in standalone mathematical output. Ordinary
++        # inferred numerals retain their unannotated presentation.
++        replacements={}
++        for i in restrictions:
++            path,_=positions[i];node=candidate
++            for step in path:node=node[step]
++            replacements[path]=[*node[:4],'defaulted']
++        result=evaluate(rebuild(candidate,(),replacements))
++    return result
+--- a/cleanlang/numerals.py
++++ b/cleanlang/numerals.py
+@@ -22,7 +22,7 @@
+
+ def spelling(tree,*,canonical_digits=False):
+     value=digits(tree[1]) if canonical_digits else tree[1]
+-    if len(tree)>4 and tree[4]=='inferred':return value
++    if len(tree)>4 and tree[4] in ('inferred','defaulted'):return value
+     carrier=type_source(tree[2]) if tree[0]=='NumeralAnnotation' else tree[2]
+     return '('+value+': '+carrier+')'
+
+--- a/cleanlang/syntax.py
++++ b/cleanlang/syntax.py
+@@ -215,6 +215,7 @@
+             elif node.kind=='import_stmt':node.payload=parse(text,'import_line')
+             elif node.kind=='alias_stmt':node.payload=parse(text,'alias_line')
+             elif node.kind=='phrase_stmt':node.payload=parse(text,'phrase_line')
++            elif node.kind=='default_numerals_stmt':node.payload=parse(text,'default_numerals_line')
+             elif node.kind.endswith('_let'):node.payload=parse(text,'let_clause')
+             elif node.kind.endswith('_assume'):node.payload=parse(text.split(None,1)[1],'assumptions')
+             elif node.kind in ('expression_field','conclusion'):
+--- a/grammar/clean.lark
++++ b/grammar/clean.lark
+@@ -57,18 +57,22 @@
+ import_line: "Import"i STRING -> clean_import
+            | "Import"i "Lean"i MODULE -> lean_import
+            | "Import"i "BibTeX"i STRING -> bib_import
++default_numerals_line: _DEFAULT_WORD _NUMERALS_WORD ":" type_ref
++_DEFAULT_WORD: /(?i:Default)(?!\w)/
++_NUMERALS_WORD: /(?i:numerals)(?!\w)/
+ alias_line: "Alias"i TYPE_ID ":" TYPE_ID
+ phrase_line: "Phrase"i PHRASE "=>" OPAQUE
+ field: FIELD ":" OPAQUE
+ // Document blocks are recognized from lexical logical lines, after layout/continuation.
+ document: (_NL | top_level)*
+-?top_level: declaration | result | context | import_stmt | alias_stmt | phrase_stmt | prose | documented
++?top_level: declaration | result | context | import_stmt | alias_stmt | phrase_stmt | default_numerals_stmt | prose | documented
+ prose: PROSE_LINE _NL
+ documented: DOC_LINE _NL (declaration | result)
+ documented_result: DOC_LINE _NL result
+ import_stmt: IMPORT_LINE _NL
+ alias_stmt: ALIAS_LINE _NL
+ phrase_stmt: PHRASE_LINE _NL
++default_numerals_stmt: DEFAULT_NUMERALS_LINE _NL
+ declaration: HEADER_LINE _NL _INDENT declaration_field+ _DEDENT
+ ?declaration_field: LET_LINE _NL -> declaration_let
+                   | FIELD_LINE _NL -> declaration_field
+@@ -117,6 +121,7 @@
+ IMPORT_LINE: /(?i:Import)[ ]+[^\n]+/
+ ALIAS_LINE: /(?i:Alias)[ ]+[^\n]+/
+ PHRASE_LINE: /(?i:Phrase)[ ]+[^\n]+/
++DEFAULT_NUMERALS_LINE: /(?i:Default)[ ]+(?i:numerals)[ ]*:[^\n]*/
+ HEADER_LINE: /(?i:Structure|Notation|Condition|Type|Source)[ ]+[^\n]+|(?i:Define)[ ]+[^=\n]+/
+ RESULT_LINE: /(?i:Result|Theorem)[ ]+[^\n]+/
+ CONTEXT_LINE: /(?i:Context)[ ]+[^\n]+/
+--- a/tools/generate_parser.py
++++ b/tools/generate_parser.py
+@@ -8,7 +8,7 @@
+ import sys
+ ROOT=Path(__file__).resolve().parents[1]
+ STARTS=['expression','assumptions','type_ref','header','type_header','structure_header','let_clause',
+-        'import_line','alias_line','phrase_line','field','source_header','scope_header','document']
++        'default_numerals_line','import_line','alias_line','phrase_line','field','source_header','scope_header','document']
+
+ def require_lexical_analysis(regexes):
+     # Interegular otherwise treats unsupported patterns as disjoint.
+--- a/editors/vscode/syntaxes/clean.tmLanguage.json
++++ b/editors/vscode/syntaxes/clean.tmLanguage.json
+@@ -57,6 +57,23 @@
+     "code": {
+       "patterns": [
+         {
++          "match": "^ *(?i:(Default) +(numerals))\\s*(:)\\s*([^\\n]*?)(?=--|$)",
++          "captures": {
++            "1": {
++              "name": "keyword.control.clean"
++            },
++            "2": {
++              "name": "keyword.control.clean"
++            },
++            "3": {
++              "name": "punctuation.separator.clean"
++            },
++            "4": {
++              "name": "entity.name.type.clean"
++            }
++          }
++        },
++        {
+           "name": "invalid.illegal.tab.clean",
+           "match": "\\t+"
+         },
+--- a/editors/vim/syntax/cleanmath.vim
++++ b/editors/vim/syntax/cleanmath.vim
+@@ -13,6 +13,10 @@
+ syntax match cleanMathMetadataKey '\c^ *\%(Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:' contained
+ syntax match cleanMathOpaque '\c^ *\%(Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:.*$' contains=cleanMathMetadataKey
+ syntax match cleanMathLean '\c^ *\%(Numerals\|Means\|From Lean\)\s*:.*$'
++syntax match cleanMathDefaultKeyword '\c^ *Default \+numerals\>' contained
++syntax match cleanMathDefaultNumerals '\c^ *Default \+numerals *:.*$' contains=cleanMathDefaultKeyword,cleanMathDelimiter
++highlight default link cleanMathDefaultKeyword Keyword
++highlight default link cleanMathDefaultNumerals Type
+ syntax match cleanMathImport '\c^ *Import\>.*$'
+ syntax region cleanMathQuote start='"' end='"' oneline containedin=ALLBUT,cleanMathComment,cleanMathBlock,cleanMathLean,cleanMathOpaque,cleanMathText,cleanMathTriple,cleanMathDoc
+ syntax match cleanMathComment '--.*$' containedin=ALLBUT,cleanMathQuote,cleanMathLean,cleanMathRender,cleanMathBlock,cleanMathText,cleanMathTriple,cleanMathDoc
+--- a/editors/emacs/clean-math-mode.el
++++ b/editors/emacs/clean-math-mode.el
+@@ -73,6 +73,7 @@
+      (1 font-lock-keyword-face t) (2 font-lock-variable-name-face t) (3 font-lock-type-face t))
+     (,(concat "^ *" clean-math--metadata " *:.*$") (0 font-lock-string-face t) (1 font-lock-keyword-face t))
+     ("^ *\\(Numerals\\|Means\\|From Lean\\) *:.*$" (0 font-lock-preprocessor-face t) (1 font-lock-keyword-face t))
++    ("^ *\\(Default +numerals\\) *: *\\(.*\\)$" (1 font-lock-keyword-face t) (2 font-lock-type-face t))
+     ("^ *Import\\b.*$" (0 font-lock-string-face t))
+     (clean-math--comment (0 clean-math--matched-face t))
+     ("\t+" (0 font-lock-warning-face t))))

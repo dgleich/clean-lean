@@ -1,0 +1,23 @@
+-- generated: gpt-6 2026-11-07 role=assisted
+Import "Common.clean.proposed"
+Default numerals: Counting
+
+Result default addition:
+  Attribution: local; default addition; original
+  Conclude: 1 + 2 = 3
+
+Result constrained addition:
+  Attribution: mathlib; add_comm; specialized
+  Let x: Real
+  Conclude: x + 1 = 1 + x
+
+Result explicit annotation constrains inference:
+  Attribution: local; annotated identity; original
+  Conclude: (1: Real) = 1
+
+Result default named assumption:
+  Attribution: local; generic identity; original
+  Assume equal(1,1)
+  Conclude: equal(1,1)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

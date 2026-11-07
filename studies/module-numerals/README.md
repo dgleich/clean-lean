@@ -3,7 +3,7 @@
 # Explicit module-owned numeral prototype
 
 Status: isolated parser, native declaration and explicit expression prototype. The
-working compiler is unchanged. A fourth patch prototypes contextual inference; module-owned defaults remain pending.
+working compiler is unchanged. A fourth patch prototypes contextual inference; a fifth adds explicit defaults.
 The normative proposal and remaining target obligations are in
 [the module numeral draft](../../docs/module-numerals.md).
 
@@ -23,7 +23,7 @@ by the parser-only stack’s declaration interpreter. The driver checks that
 boundary before applying the separate adapter patch.
 
 Reproduce from the pinned historical baseline plus the eight operator/binding
-patches and the four numeral patches:
+patches and the five numeral patches:
 
 ```sh
 python studies/module-numerals/verify_prototype.py
@@ -72,7 +72,7 @@ nineteen/two for expressions, and eighty/seventeen for operator regressions), pl
 two expected native rejection cases. The historical and working-compiler full
 regression processes remain running; neither is claimed to pass here.
 
-`Expressions.pdf` is the one-page rendered specimen. The LaTeX document compiled
+`Expressions.pdf` is the current rendered specimen, including a separate page for defaults. The LaTeX document compiled
 twice and was visually inspected: type annotations remain visible, with no
 clipping, overfull boxes or unresolved references. The existing package-path
 warning is unchanged. Rebuild with:
@@ -96,13 +96,35 @@ explicit-expression targets and two associated proofs are additionally repeated
 after inference is enabled. The fourth layer contributes fifteen exact targets
 and four proofs; all operator regressions pass on the final inference stack.
 
-The updated one-page PDF contains all six statements. It compiled twice and was
+The inference-stage specimen contained six statements on one page. It compiled twice and was
 visually inspected with no clipping, unresolved references or box warnings.
 Inferred numerals print without type annotations; explicit annotations remain
 visible. The leading-zero assumption cases intentionally retain their source digits.
 Native unused-variable and LaTeX package-path warnings are unchanged.
 
-Next steps include broad consumer regression, constraint pruning, main integration,
-module-declared defaults and complete native identity/import/instance isolation.
+The fifth patch, `defaults.patch`, introduces `Default numerals: Counting` as
+an explicit module declaration. [The policy](../../docs/numeral-defaults.md)
+defines idempotent imports, conflict rejection, sequential scope and simultaneous
+restriction of already-valid assignments. `Defaults.clean.proposed` exercises
+plain arithmetic, type constraints and explicit annotations. Direct verification
+passes eight exact native targets, four proofs and a public-CLI Lean compile.
+Fresh full-driver reconstruction passed on 2026-11-07: 128 distinct exact-target
+cases and 30 proofs across the staged stack, with inference and explicit-expression
+cases repeated after enabling defaults. Strict generation/reproducibility and all
+17 generated-parser regressions also pass after the new directive is added.
+The original eleven numeral syntax cases pass at their parser-only boundary.
+The final operator regression leaves all pass. The two earlier full-discovery
+processes remain running and are not counted as passing validation.
+
+The final PDF has two pages and ten statements. Both pages were inspected after
+two LaTeX runs; there are no box warnings, clipped statements or unresolved
+references. The existing package-path warning remains.
+
+Default-selected atoms display type annotations in LaTeX; the convention is not
+silently omitted when a theorem is extracted. Context-based compact presentation
+remains future work.
+
+Next steps include broad consumer regression, constraint pruning, main integration
+and complete native identity/import/instance isolation.
 Type-position dimension-literal migration remains a separate obligation.
 :::

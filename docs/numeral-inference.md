@@ -27,9 +27,9 @@ Counting wraps Nat and Twin independently wraps Real:
 | `1` | Ambiguous: three declared interpretations |
 | `Define one(): Real` with `Equals: 1` | The declared return type selects Real |
 
-There is deliberately no fallback default in this step. The final architecture
-still needs an explicit module-owned default policy for otherwise unconstrained
-numerals. The old special treatment of Natural/Real/Complex, including the broad
+This layer alone has no fallback default. The subsequent
+[explicit default declaration](numeral-defaults.md) can narrow a fully checked
+ambiguous solution set without overriding type constraints. The old special treatment of Natural/Real/Complex, including the broad
 NUM compatibility predicate and local-definition Natural fallback, is removed
 from this experimental expression layer. Dimension literals inside type syntax
 remain a separate migration obligation.

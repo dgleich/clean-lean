@@ -225,3 +225,13 @@ check selects between this node and a Call. Reserving the expression word `type`
 does not reserve TYPE_ID names inside type syntax. See [the mapping and scope
 contract](type-expressions.md).
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The isolated numeral-default patch adds `default_numerals_line` as a fragment
+entry and `default_numerals_stmt` as a top-level document node. Its two keyword
+terminals have word boundaries, preventing fragment-only acceptance of
+`Defaultnumerals`. The core layout pass recognizes the directive's colon form
+without reserving the multiword callable `default numerals(x)` in continuations.
+The working generated parser is unchanged until this patch is integrated.
+:::
