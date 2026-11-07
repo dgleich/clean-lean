@@ -66,6 +66,16 @@ The one-page [PDF specimen](Specimen.pdf) was compiled twice and visually checke
 for grouping, missing symbols and overflow. Rebuild it from the repository root
 with `pdflatex -output-directory=/tmp studies/operator-integration/Specimen.tex`.
 
+## Fresh-call generated-name collisions
+
+The dispatch verifier now additionally checks three exact targets with caller
+locals named after the generated equality wrapper, Natural type wrapper, and
+prefix proof wrapper. Binary equality and prefix application retain root-qualified
+module references. The local operands retain their local identities. These cases
+pass on the isolated composed compiler; the dispatch leaf now has twelve exact
+targets and one proof. The full four-leaf driver was not rerun for this addition,
+so the earlier 77-target driver result remains historical evidence.
+
 ## Remaining integration gates
 
 The old standalone operator targets and the broader existing regression/corpus
@@ -75,7 +85,5 @@ those counts do not validate this compiler. Explicit operator foundation modules
 and literal interpretation must be migrated before integration. Numeral operands
 currently reject with an explicit unsupported-policy error. General universe-
 polymorphic equality, source-binder escaping and native import isolation remain
-open. Dedicated generated-name collision tests for fresh overloaded calls are
-still needed on this stack. The existing saved-expression tests do not replace
-that obligation. No claim of full language conformance is made.
+open. Fresh overloaded-call collisions are now checked separately as described below. No claim of full language conformance is made.
 :::

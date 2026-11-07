@@ -492,3 +492,12 @@ only in their original studies. The well-group TeX is unchanged. Its focused
 Python run remains active, as does full discovery. The two-image characterization
 remains an unproved candidate.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The focused well-group run subsequently completed: all five tests pass in
+290.351 seconds. The full discovery run remains active. The separate active-label
+profiler logged completion of the module in 2191.234 seconds, including 2178.765
+seconds for `active label equivalence`; its tool session returned status 143.
+That diagnostic log is not a completed test-suite result or a clean process exit.
+:::

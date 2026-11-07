@@ -82,10 +82,25 @@ uses=[
  ('-ht',f'(ht : {f("truth")})',f'{f("truth")}',f'@_root_.{f("proof marker")} ht')]
 for i,(source,binders,typ,expected) in enumerate(uses):
     native+=f'\nnoncomputable def actual_use_{i} {binders} : {typ} := {checked[source].lean}\nnoncomputable def expected_use_{i} {binders} : {typ} := {expected}\nsame_basic_target actual_use_{i} expected_use_{i}\n'
+# Fresh operator applications must qualify their wrapper/type constants even
+# when the caller binds a value with exactly that generated Lean spelling.
+for i, (local_name, condition) in enumerate([
+        (f('equal'), False), (k('Natural'), False), (f('proof marker'), True)]):
+    typ=e.type('(truth())',s) if condition else e.type('Natural')
+    local={local_name:Expr(local_name,local_name,typ,tree=['Local',local_name])}
+    query='-'+local_name if condition else local_name+'='+local_name
+    actual=Expressions(e,local).parse(query)
+    if condition:
+        domain=result_type='_root_.'+f('truth')
+        expected=f'@_root_.{f("proof marker")} {local_name}'
+    else:
+        domain=N;result_type=P
+        expected=f'@_root_.{f("equal")} {N} {local_name} {local_name}'
+    native+=f'\nnoncomputable def actual_global_collision_{i} ({local_name} : {domain}) : {result_type} := {actual.lean}\nnoncomputable def expected_global_collision_{i} ({local_name} : {domain}) : {result_type} := {expected}\nsame_basic_target actual_global_collision_{i} expected_global_collision_{i}\n'
 native+=f'\ndef expected_local : Prop := ∀ (Real : {K}) (x : Real), @{f("equal")} Real x x\nsame_basic_target CleanStatements.local_carrier_avoids_concrete_overload expected_local\ntheorem local_checked : CleanStatements.local_carrier_avoids_concrete_overload := by intro Real x; rfl\n'
 p=COMPILER/'DispatchVerified.lean';p.write_text(native)
 subprocess.run([os.environ.get('LAKE','/home/claude/.elan/bin/lake'),'env','lean',str(p)],cwd=COMPILER,check=True)
 (HERE/'DispatchVerified.lean').write_text(native)
-print('Dispatch: nine exact targets and one proof; collision, order, ambiguity and incomplete-analysis checks passed')
+print('Dispatch: twelve exact targets and one proof; collision, order, ambiguity and incomplete-analysis checks passed')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
