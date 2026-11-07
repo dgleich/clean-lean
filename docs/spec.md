@@ -124,7 +124,7 @@ Result similarity preserves eigenvectors:
   ...
 ```
 
-`Import BibTeX` imports bibliography metadata only. Paths resolve relative to the containing Clean file; imports precede results and may also appear in imported definition modules. Keywords are case-insensitive. Each BibTeX citation key becomes an attribution source key with its original spelling, including punctuation such as `Stewart:2001`. Clean attribution lookup remains case-sensitive. Existing `Source` declarations remain available.
+`Import BibTeX` imports bibliography metadata only. Paths resolve relative to the containing Clean file; imports may appear between top-level results and may also appear in imported definition modules. Sources become available only to subsequent statements. Keywords are case-insensitive. Each BibTeX citation key becomes an attribution source key with its original spelling, including punctuation such as `Stewart:2001`. Clean attribution lookup remains case-sensitive. Existing `Source` declarations remain available.
 
 Install the optional parser with `python3 -m pip install -e '.[bibtex]'`. The importer uses [Pybtex](https://docs.pybtex.org/api/parsing.html) rather than approximating BibTeX with regular expressions. Braced and quoted values, string macros, concatenation, numeric years, author lists, and common LaTeX accents are supported. Source labels default to the citation key. Titles and people become plain text for Clean’s escaped LaTeX output; original fields, entry type, people, filename, and a content digest remain in structured metadata. Unknown TeX commands remain text; preambles are not executed or injected into LaTeX output.
 
@@ -865,4 +865,16 @@ patterns retain declaration scope throughout recursive matching; caller argument
 are substituted simultaneously only at comparison leaves. This prevents capture
 while later implicit parameters remain uninferred, without changing grammar or
 ordered Lean argument emission.
+:::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Sequential root declarations and imports
+
+Root imports and declarations may occur between results or Context blocks. Each
+block retains the Clean environment visible at its position; later imports cannot
+supply earlier missing Clean names or attribution sources. Lean/LaTeX statement
+rendering uses that snapshot. The complete rule, native-import limitation and exact
+acceptance evidence are in [sequential-scope.md](sequential-scope.md). No nested
+imports or module-owned native scopes are introduced by this change.
 :::

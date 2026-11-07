@@ -112,8 +112,7 @@ Result reflexivity:
         self.assertNotIn('refs.bib', lean(results, env, []))
         self.assertIn('Paper:1', bibliography(results, env))
         doc.write_text(doc.read_text()+'Import BibTeX "refs.bib"\n')
-        with self.assertRaisesRegex(CleanError, 'precede results'):
-            load_document(doc, Environment())
+        self.assertEqual(len(load_document(doc, Environment())),1)
 
     def test_checked_in_specimen(self):
         env = Environment()

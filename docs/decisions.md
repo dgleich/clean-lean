@@ -56,7 +56,7 @@ These decisions separate requested behavior from provisional implementation choi
 
 | D43 | Continue expressions when incomplete, not merely after an operator token | User selected 1A. The next-language rule uses parser state; postfix applications can be complete. Refines D41; current heuristic implementation is not full conformance |
 | D44 | Reject visible infix/postfix reuse of the same spelling | User selected 2A. Prefix/infix reuse remains legal. Conflicts are declaration/import errors before type checking; postfix parsing rules are specified in the reference |
-| D45 | Allow imports between top-level declarations and results | User selected 3C. Sequential visibility (subsequent items only) is the recorded interpretation; no retroactive parsing or name resolution. Nested imports remain outside this slice. Not implemented |
+| D45 | Allow imports between top-level declarations and results | User selected 3C. Sequential visibility (subsequent items only) is the recorded interpretation; no retroactive parsing or name resolution. Nested imports remain outside this slice. Clean visibility snapshots implemented; native import isolation remains open (sequential-scope.md) |
 | D46 | Definition fields may be reordered while parameters retain their relative order | User selected 4B. Require Returns and exactly one of Equals or From Lean; both allow explicit block bodies. Both implementations enter one semantic space. Optional attribution/presentation on definitions and a named-call rendering fallback are provisional refinements; result attribution remains mandatory. Not implemented |
 
 | D47 | Unique parse and unique Clean-to-Lean translation are hard acceptance requirements | Explicit user requirement. Parsing may be expensive. Every accepted source has one specified tree and one canonical fully elaborated Lean target under a fixed explicit environment; ambiguity rejects, resource exhaustion remains incomplete. Contract in `language-change-acceptance.md`, mandatory workflow in AGENTS.md, initial pending oracles in `tests/acceptance/language-contract.json`. Current prototype is not certified |
@@ -749,4 +749,17 @@ preserves freshness only by retaining checked input or checking its replacement.
 The audited call sites and preservation argument are in
 [fresh-condition-comparison.md](fresh-condition-comparison.md). No source syntax,
 normalization rule, emitted term or cross-invocation cache is added.
+:::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Retain statement environments across later declarations
+
+Implement D45's sequential Clean visibility by retaining an environment snapshot
+at each top-level Result/Context and sharing it until the next declaration/import.
+Use it for statement checking and rendering, including attribution. A later global
+type name must not replace an earlier local carrier during output. Preserve the
+existing final native-import/declaration collection; do not claim native isolation
+from these snapshots. The full constructive rule and remaining boundary are in
+[sequential-scope.md](sequential-scope.md).
 :::

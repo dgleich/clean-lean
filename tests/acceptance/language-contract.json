@@ -1842,6 +1842,36 @@
         "Numeral/default interpretations and declared fixity",
         "Editor and broad conformance migration"
       ]
+    },
+    {
+      "id": "sequential_clean_scope",
+      "status": "partial",
+      "environment": "Ordered root module items; deep Clean environment snapshots at Result/Context boundaries; pinned native imports in the independent study.",
+      "source_fragment": "Result arbitrary equality:\n  Attribution: local; reflexivity; original\n  Let T: Type\n  Let x: T\n  Conclude: x = x\n\nType T():\n  Means: Real\n  Render latex: T\n",
+      "expected_tree": [
+        "Operator",
+        "=",
+        [
+          "Local",
+          "x"
+        ],
+        [
+          "Local",
+          "x"
+        ]
+      ],
+      "expected_lean": "∀ (T : Type) (x : T), x = x; the later global T does not change the binder type",
+      "obligation": "Retain earlier Clean lookup, attribution and type rendering; reject earlier missing names even if later declared. Keep document-wide duplicate-result checks and existing context/prose order.",
+      "checks": [
+        "tests/test_sequential_scope.py",
+        "studies/sequential-scope/verify.py",
+        "studies/sequential-scope/Verified.lean"
+      ],
+      "pending": [
+        "Native import and instance/coercion isolation",
+        "Module-owned identity, explicit exports and qualified lookup",
+        "Full-suite validation"
+      ]
     }
   ]
 }

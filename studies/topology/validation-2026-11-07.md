@@ -355,3 +355,30 @@ or full-suite result is claimed. A finite 60-second profile reached the speciali
 equivalence at 10.78 seconds versus 16.29 in an earlier concurrent run, but neither
 finished it; this is diagnostic evidence only, not a controlled speedup claim.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Sequential Clean statement environments
+
+Root declarations/imports can now follow a Result or Context. Statements retain
+the Clean environment at their position, including for type and attribution
+rendering. A later global type cannot replace an earlier local carrier in output.
+The [scope contract](../../docs/sequential-scope.md) explicitly leaves native
+import/instance isolation and module-owned identities open.
+
+The new study passes four exact targets and two proofs. Its CLI accepts both
+statements; the PDF was compiled twice and its one-page rendering inspected.
+The targeted scope/module/bibliography/context/literate run passes 63 tests, and
+161 dependent-type/structure/alias/evidence regressions pass. Strict parser checking
+passes without a grammar change. The operator patch still applies; its fresh-copy
+run passes strict generation, 32 exact targets and three proofs. The regenerated
+92-proof corpus passes direct Lean checking. The interval-basis study again passes
+four exact targets and both restriction proofs, with unchanged generated artifacts
+after restoring provenance.
+
+The pre-sequential full suite was explicitly interrupted as superseded, with no
+passing summary. A current main full suite is running. The specialized active-label
+verifier remains live in the earlier fresh-condition checkout; it is retained as a
+diagnostic, not claimed as current sequential-scope conformance. Neither broad run
+has completed. The full goal remains open.
+:::

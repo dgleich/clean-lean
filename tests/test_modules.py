@@ -76,9 +76,9 @@ class ModuleTests(unittest.TestCase):
         module = MODULE.replace('Notation', 'NOTATION').replace('Import Lean', 'IMPORT LEAN').replace('Let ', 'let ').replace('Returns:', 'RETURNS:')
         self.load('IMPORT "sorting.clean"\n'+RESULT, module)
 
-    def test_import_after_result_rejected(self):
-        with self.assertRaisesRegex(CleanError, 'precede results'):
-            self.load(MODULE+'\n'+RESULT+'\nImport "sorting.clean"')
+    def test_repeated_import_after_result_is_idempotent(self):
+        results=self.load('Import "sorting.clean"\n'+RESULT+'\nImport "sorting.clean"')
+        self.assertEqual(len(results),1)
 
     def test_imported_results_rejected(self):
         with self.assertRaisesRegex(CleanError, 'only declarations and imports'):

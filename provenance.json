@@ -5282,6 +5282,102 @@
       "origin": "llm-assisted",
       "mode": "markdown",
       "model": "gpt-6"
+    },
+    "docs/sequential-scope.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown",
+      "model": "gpt-6"
+    },
+    "studies/sequential-scope/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown",
+      "model": "gpt-6"
+    },
+    "tests/test_sequential_scope.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/sequential-scope/Statements.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/sequential-scope/Base.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/sequential-scope/Verified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/sequential-scope/latex.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/sequential-scope/Statements.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/sequential-scope/Generated.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/sequential-scope/Operations.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/sequential-scope/verify.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/sequential-scope/Statements.pdf": {
+      "origin": "llm-assisted",
+      "mode": "manifest",
+      "model": "gpt-6"
     }
   }
 }

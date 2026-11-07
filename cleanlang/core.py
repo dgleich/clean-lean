@@ -167,6 +167,7 @@ class Result:
     contexts: list = field(default_factory=list)
     local_clauses: list = field(default_factory=list)
     documentation: object = None
+    environment: object = field(default=None,compare=False,repr=False)
     @property
     def title(self): return self.name.replace('_', ' ')
 PROP, NAT, NUM = Type('Proposition'), Type('Natural'), Type('_number')
@@ -738,8 +739,9 @@ def parse(text,reg):
     nodes=document(normalize_layout(text)) if isinstance(text,str) else text
     results=[];events=[];names=set();context_names=set();cache={}
     file_key=hashlib.sha256((text if isinstance(text,str) else repr(nodes)).encode()).hexdigest()[:12]
-    def walk(nodes,ancestors):
+    def walk(nodes,ancestors,scope_reg):
         for node in nodes:
+            item_reg=getattr(node,'_environment',scope_reg)
             if node.kind=='prose':
                 events.append(node.payload);continue
             if node.kind not in ('context','result'):raise CleanError('Expected Context or Result')
@@ -753,7 +755,7 @@ def parse(text,reg):
                 declarations=[(c.line,c.text) for c in node.children if c.kind.startswith('context_')]
                 children=[c for c in node.children if c.kind in ('context','result','prose')]
                 item={'name':name,'key':file_key+'-'+str(node.line),'line':node.line,'declarations':declarations}
-                walk(children,ancestors+[item]);continue
+                walk(children,ancestors+[item],item_reg);continue
             if name in names:raise CleanError(f'line {node.line}: Duplicate result name')
             names.add(name)
             inherited=[d for a in ancestors for d in a['declarations']]
@@ -763,10 +765,11 @@ def parse(text,reg):
                 flattened.append(' '*indent+n.text);original.append(n.line)
                 for child in n.children:append(child,indent+4)
             for child in node.children:append(child,4)
-            try:r=_parse_flat('\n'.join(flattened),reg)[0]
+            try:r=_parse_flat('\n'.join(flattened),item_reg)[0]
             except CleanError as e:
                 message=re.sub(r'^line (\d+):',lambda m:'line '+str(original[int(m[1])-1])+':',str(e))
                 raise CleanError(message) from e
+            r.environment=item_reg
             r.line=node.line
             r.documentation=node.documentation
             for clause in r.clauses:clause.line=original[clause.line-1]
@@ -779,7 +782,7 @@ def parse(text,reg):
                 contexts.append(cache[a['key']]);offset+=count
             r.contexts=contexts;r.local_clauses=r.clauses[offset:]
             r.clauses=_select_context_parameters(r,offset);results.append(r);events.append(r)
-    walk(nodes,[])
+    walk(nodes,[],reg)
     if not results and not events:raise CleanError('No results found')
     return Document(results,events)
 
@@ -793,12 +796,13 @@ def lean(results,reg,imports):
         if isinstance(r,Prose):
             if not r.attached: out.append(lean_documentation(r))
             continue
+        statement_reg=r.environment or reg
         doc=r.documentation.body.replace('/-','/ -').replace('-/','- /') if r.documentation else ''
         out+=['/--']+([doc,''] if doc else [])+[k+': '+v.replace('/-','/ -').replace('-/','- /') for k,v in r.attribution.items()]+['-/',f'def {r.name} : Prop :=']
         for c in r.clauses:
-            if c.kind=='let': out+=['  ∀ ('+' '.join(c.names)+' : '+reg.render_type(c.value,'lean')+'),']
+            if c.kind=='let': out+=['  ∀ ('+' '.join(c.names)+' : '+statement_reg.render_type(c.value,'lean')+'),']
             elif c.kind=='assume': out+=[f'  ∀ («{c.names[0]}» : {c.value.lean}),']
-            else: out+=[f'  let {c.names[0]} : {reg.render_type(c.value.type,"lean")} := {c.value.lean};']
+            else: out+=[f'  let {c.names[0]} : {statement_reg.render_type(c.value.type,"lean")} := {c.value.lean};']
         out+=['  '+r.conclusion.lean,'']
     return '\n'.join(out+['end CleanStatements',''])
 
@@ -850,6 +854,7 @@ def latex(results,reg):
     for r in getattr(results,'events',results):
         if isinstance(r,Prose):
             out.extend([latex_prose(r),'']);continue
+        statement_reg=r.environment or reg
         if r.contexts:
             out.append(r'\ifcleanreferenced')
             for context in r.contexts:
@@ -857,13 +862,13 @@ def latex(results,reg):
                 seen.add(context.key)
                 out.append(r'\begin{cleancontext}{'+textext(context.title)+'}{'+context.key+'}')
                 if context.parents: out.append(_context_references(context.parents))
-                out+=_latex_clauses(context.clauses,reg)
+                out+=_latex_clauses(context.clauses,statement_reg)
                 out.append(r'\end{cleancontext}')
-            out+=_latex_result(r,reg,True)
+            out+=_latex_result(r,statement_reg,True)
             out.append(r'\else')
-            out+=_latex_result(r,reg)
+            out+=_latex_result(r,statement_reg)
             out.append(r'\fi')
-        else: out+=_latex_result(r,reg)
+        else: out+=_latex_result(r,statement_reg)
     return '\n'.join(out)
 
 

@@ -252,7 +252,7 @@ def load_module(path, env, *, document=False):
                 normalized=normalize_layout(file.read_text())
                 nodes=parse_document(normalized)
             except CleanError as e:raise CleanError(f'{file}: {e}') from e
-            output=[];started=False
+            output=[];snapshot=None
             for node in nodes:
                 try:
                     if node.kind=='prose':
@@ -261,9 +261,12 @@ def load_module(path, env, *, document=False):
                         continue
                     if node.kind in ('result','context'):
                         if not root:raise CleanError('Imported modules may contain only declarations and imports')
-                        started=True
+                        if snapshot is None:
+                            from copy import deepcopy
+                            snapshot=deepcopy(env)
+                        node._environment=snapshot
                         output.append(node);continue
-                    if started:raise CleanError('Imports and declarations must precede results')
+                    snapshot=None
                     line=node.text
                     before=set(env.notation_definitions)
                     if node.kind=='import_stmt':

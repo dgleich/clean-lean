@@ -1,0 +1,27 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "Base.clean"
+
+Source local:
+  Kind: other
+  Label: Sequential scope
+  Title: Clean sequential declaration visibility
+
+Result arbitrary equality:
+  Attribution: local; equality reflexivity; original
+  Let T: Type
+  Let x: T
+  Conclude: x = x
+
+-- This later global spelling must not change the earlier local carrier T.
+Type T():
+  Means: Real
+  Render latex: \mathbb{{R}}
+
+Import "Operations.clean"
+
+Result absolute value nonnegative:
+  Attribution: local; Mathlib abs_nonneg; specialized
+  Let x: Scalar
+  Conclude: absolute value(x) ≥ scalar zero()
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -1,0 +1,12 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import Lean Mathlib.Data.Real.Basic
+
+Type Type():
+  Means: Type
+  Render latex: \mathsf{{Type}}
+
+Type Scalar():
+  Means: Real
+  Render latex: \mathbb{{R}}
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -6,7 +6,7 @@ The earlier compatibility prototype is superseded. The JSON registry, its genera
 
 ## Imports and meanings
 
-Imports are relative to the importing file and precede results. Modules can import other modules. Cycles and duplicate visible definitions fail; repeated imports of the same file are deduplicated. Each CLI input gets an isolated environment. Conflicting definitions across combined CLI outputs fail too.
+Imports are relative to the importing file and may occur between top-level results. Each result retains its preceding Clean environment; see [sequential scope](sequential-scope.md) for the native-import limitation. Modules can import other modules. Cycles and duplicate visible definitions fail; repeated imports of the same file are deduplicated. Each CLI input gets an isolated environment. Conflicting definitions across combined CLI outputs fail too.
 
 ```text
 Import "../../library/types.clean"
