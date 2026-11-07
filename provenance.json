@@ -6400,6 +6400,22 @@
       "model": "gpt-6",
       "date": "2026-11-07",
       "mode": "markdown"
+    },
+    "docs/large-carrier-equality.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-07",
+      "mode": "markdown"
+    },
+    "tests/test_space_equality.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-07",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

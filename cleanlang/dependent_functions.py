@@ -18,8 +18,6 @@ def tree_names(tree):
     if kind in ('Decimal','BoundNumeral'):return set()
     if kind=='NumeralAnnotation':
         from .numerals import type_source
-        import re
-        from .core import ID
         return set(re.findall(ID,type_source(tree[2])))
     if kind=='TypeValue':
         from .annotations import Annotation

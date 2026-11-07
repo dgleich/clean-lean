@@ -9,6 +9,11 @@ Type TopologicalSpace():
   Describe: a topological space
   Describe plural: topological spaces
 
+Condition same space(X: TopologicalSpace, Y: TopologicalSpace):
+  Infix: =
+  From Lean: X = Y
+  Render latex: {X}={Y}
+
 Type Point(X: TopologicalSpace):
   Means: (TopCat.carrier X)
   Render latex: {X}

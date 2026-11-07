@@ -240,3 +240,21 @@ universe-polymorphic operator declarations remain a larger outstanding language
 requirement. The remaining thirteen verifiers are not yet validated on this
 compiler. The five paper theorems remain unproved where previously documented.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The bundled-space gap above is now resolved by the explicit `same space`
+condition attached to `=` in `library/topology/spaces.clean`. Its adapter accepts
+two TopologicalSpace values directly; generic Type-0 equality is unchanged.
+`verify_spaces.py` passes 30 canonical target checks and five proofs on the
+working compiler, and confirms two intentionally invalid native universe
+assignments are rejected. The regenerated one-page specimen compiled twice
+without box or reference warnings and was visually inspected.
+
+Six topology verifiers are now revalidated, summing to 155 per-verifier exact
+target checks and 34 proofs (with repeated adapter checks counted in each verifier).
+The remaining twelve verifiers are pending. General sort/universe-polymorphic
+equality is not implemented: proof equality and other larger carriers still need
+eligible declarations or new carrier-signature support. See
+[the precise scope](../../docs/large-carrier-equality.md).
+:::

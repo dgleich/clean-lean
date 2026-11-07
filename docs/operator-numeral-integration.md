@@ -98,3 +98,27 @@ distinguishes repeated adapter checks and records the next actual failure:
 equality of bundled Type-1 spaces is outside the current Type-0 generic equality
 signature. This requires explicit library/universe support, not a fallback.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Bundled-space equality and name-scanner correction
+
+The Common-migration full run finished: 668 tests in 582.290 seconds, with 40
+failures and 116 errors. Counts differ from the preceding run partly because
+failing class setup skips tests, so these totals are not a like-for-like pass rate.
+
+The next working-tree checkpoint adds the explicitly declared
+[same-space equality adapter](large-carrier-equality.md), validating 30 exact
+native targets and five proofs, plus two incorrect-universe rejection cases.
+It also fixes a real Python scope error introduced during numeral integration:
+imports of `re` and `ID` inside one `tree_names` branch shadowed their module
+bindings throughout the function. Removing those redundant imports restores
+name scanning for raw binder and type annotations. No Clean binding or target
+rule changes. Tests now explicitly import the operators their fixtures use.
+
+All 44 focused family-comparison, hygienic-substitution and space-equality tests
+pass on the working compiler. A direct regression checks the raw annotation,
+lambda, quantified and numeral-annotation branches. A fresh full run after these
+changes is underway; no full-suite pass is claimed. Proof-valued equality remains
+an observed unsupported case, distinct from the now-supported space equality.
+:::

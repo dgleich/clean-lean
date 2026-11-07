@@ -23,6 +23,9 @@ for n,t in [('bundle','topological space'),('topology','space topology'),
  ('identity','identity continuous map'),('compose','compose continuous maps'),
  ('diagram','topological diagram'),('identityDiagram','identity diagram')]:
     mapping['SpaceOracle.'+n]=function(t)
+for n,t in [('equal','equal'),('sameSpace','same space'),('both','conjunction')]:
+    mapping['SpaceOracle.'+n]=function(t)
+mapping['SpaceOracle.conditionType']=typekey('Proposition')
 # Independent closed-sort fixtures exercise levels 0, 1 and 2.
 levels=Environment()
 for n,body,level in [('Zero','Nat',0),('One','Type',1),('Two','Type 1',2)]:
@@ -75,6 +78,10 @@ noncomputable def levelTwo : Type 2 := Type 1
 noncomputable def carrierType : Type 1 := Type
 noncomputable def topologyType (X : Type) : Type := TopologicalSpace X
 noncomputable def spaceType : Type 1 := TopCat.{0}
+noncomputable abbrev conditionType : Sort 1 := Prop
+noncomputable def equal {T : Type} (x y : T) : conditionType := x=y
+noncomputable def sameSpace (X Y : spaceType) : conditionType := X=Y
+noncomputable def both (x y : conditionType) : conditionType := x ∧ y
 noncomputable def pointType (X : spaceType) : Type := TopCat.carrier X
 noncomputable def mapType (X Y : spaceType) : Type :=
   @ContinuousMap X.carrier Y.carrier X.str Y.str
@@ -96,16 +103,16 @@ structure Diagram : Type 1 where
 noncomputable def diagram (source target : spaceType)
   (arrow : mapType source target) : Diagram := @Diagram.mk source target arrow
 noncomputable def identityDiagram (X : spaceType) : Diagram := diagram X X (@identity X)
-def identityStatement : Prop := ∀ (X : spaceType) (x : pointType X), @value X X (@identity X) x=x
+def identityStatement : Prop := ∀ (X : spaceType) (x : pointType X), equal (@value X X (@identity X) x) x
 def composeStatement : Prop := ∀ (X Y Z : spaceType)
   (f : mapType X Y) (g : mapType Y Z) (x : pointType X),
-  @value X Z (@compose X Y Z g f) x = @value Y Z g (@value X Y f x)
+  equal (@value X Z (@compose X Y Z g f) x) (@value Y Z g (@value X Y f x))
 def leftIdentityStatement : Prop := ∀ (X Y : spaceType)
-  (f : mapType X Y), @compose X Y Y (@identity Y) f=f
+  (f : mapType X Y), equal (@compose X Y Y (@identity Y) f) f
 def diagramStatement : Prop := ∀ (X : spaceType), let D : Diagram := identityDiagram X;
-  @Diagram.source D = X ∧ @Diagram.target D = X
+  both (sameSpace (@Diagram.source D) X) (sameSpace (@Diagram.target D) X)
 def arrowStatement : Prop := ∀ (D : Diagram),
-  @Exists (mapType D.source D.target) (fun f => f = @Diagram.arrow D)
+  @Exists (mapType D.source D.target) (fun f => equal f (@Diagram.arrow D))
 end SpaceOracle
 '''
 checks=[f'same_target {target} {oracle}' for oracle,target in mapping.items()]

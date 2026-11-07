@@ -8,8 +8,17 @@ from cleanlang.hygiene import substitute
 from cleanlang.conversion import comparison_normal_form,local_definition
 ROOT=Path(__file__).resolve().parents[1]
 class HygienicSubstitution(unittest.TestCase):
+    def test_name_scanner_raw_annotations_and_binders(self):
+        from cleanlang.dependent_functions import tree_names
+        cases=[(['TypeValue','Natural'],{'Natural'}),
+               (['Lambda','x','Real',['Local','x']],{'x','Real'}),
+               (['Forall','x','Real',['Local','P']],{'x','Real','P'}),
+               (['NumeralAnnotation','1',['Name','Real']],{'Real'})]
+        for tree,expected in cases:
+            with self.subTest(tree=tree):self.assertEqual(tree_names(tree),expected)
+
     def setUp(self):
-        self.e=Environment();load_module(ROOT/'library/types.clean',self.e)
+        self.e=Environment();load_module(ROOT/'library/operators.clean',self.e)
     def tree(self,s):return expression_tree(parse(s,'expression'))
     def test_capture_and_simultaneous_insertion(self):
         t=self.tree('function(y: Real,x + y)')
@@ -109,7 +118,7 @@ class GradedConversion(unittest.TestCase):
 class FrozenResolution(unittest.TestCase):
     def setUp(self):
         from cleanlang.modules import notation
-        self.e=Environment();load_module(ROOT/'library/types.clean',self.e)
+        self.e=Environment();load_module(ROOT/'library/operators.clean',self.e)
         notation('Notation square(x: Real): Real:', ['Means: x*x','Render latex: {x}^2'],self.e)
         notation('Define squared(x: Real): Real:', ['Equals: square(x)'],self.e,authored=True)
     def test_caller_function_cannot_rebind_definition_body(self):
@@ -134,7 +143,7 @@ class SelectedProducerField(unittest.TestCase):
     def setUp(self):
         from cleanlang.structures import declare
         from cleanlang.modules import notation
-        self.e=Environment();load_module(ROOT/'library/types.clean',self.e)
+        self.e=Environment();load_module(ROOT/'library/operators.clean',self.e)
         declare('Structure FieldPair(T: Type):',[
             'Let item: T','Let action: Function(T,T)','Constructor: field pair'],self.e)
         notation('Define field producer(x):',[

@@ -9,7 +9,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 class FamilyComparison(unittest.TestCase):
     def setUp(self):
-        self.e=Environment();load_module(ROOT/'library/types.clean',self.e)
+        self.e=Environment();load_module(ROOT/'library/operators.clean',self.e)
         declare('Structure Family():',['Let component: Function(Natural,Natural)',
                                       'Constructor: family'],self.e)
         for name,binder in [('first','p'),('second','q')]:
@@ -56,7 +56,7 @@ class RelativeGraded(unittest.TestCase):
 
 class NestedFamilies(unittest.TestCase):
     def setUp(self):
-        self.e=Environment();load_module(ROOT/'library/types.clean',self.e)
+        self.e=Environment();load_module(ROOT/'library/operators.clean',self.e)
         declare('Structure Nested():',[
             'Let component: Function(Natural,Function(Natural,Natural))',
             'Constructor: nested'],self.e)
@@ -83,7 +83,7 @@ class NestedFamilies(unittest.TestCase):
 
 class QuantifiedFamilyKeys(unittest.TestCase):
     def test_quantifier_kind_and_bound_identity(self):
-        e=Environment();load_module(ROOT/'library/types.clean',e)
+        e=Environment();load_module(ROOT/'library/operators.clean',e)
         for name,kind,binder in [('universal first','for every','x'),('universal second','for every','y'),
                                  ('existential first','there exists','x')]:
             notation('Define '+name+'(n: Natural): Proposition:',
