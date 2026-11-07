@@ -73,10 +73,11 @@ def highlight_source(source):
 
 DECL = re.compile(r'^ *(Result|Theorem|Context|Define|Notation|Condition|Structure|Type|Source)\s+(.+?):?\s*$',re.I)
 
-def collect(root=ROOT):
+def collect(root=ROOT, progress=None):
     files=[]
     for folder in ('library','corpus','examples','studies'):
         for path in sorted((root/folder).rglob('*.clean')):
+            if progress is not None:progress(str(path.relative_to(root)))
             source=path.read_text(); symbols=[]; imports=[]
             try:
                 masked = comment_lines(source)
@@ -114,8 +115,9 @@ def collect(root=ROOT):
                 'sha256':hashlib.sha256(source.encode()).hexdigest()})
     return files
 
-def build():
-    payload={'files':collect(),'revision':subprocess.check_output(['git','rev-parse','--short','HEAD'],cwd=ROOT,text=True).strip(),
+def build(verbose=True):
+    progress=(lambda path: print('Checking '+path,file=sys.stderr,flush=True)) if verbose else None
+    payload={'files':collect(progress=progress),'revision':subprocess.check_output(['git','rev-parse','--short','HEAD'],cwd=ROOT,text=True).strip(),
              'dirty':bool(subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],cwd=ROOT,text=True).strip())}
     template=(ROOT/'tools/review/index.html').read_text()
     data=json.dumps(payload,ensure_ascii=False).replace('<','\\u003c').replace('>','\\u003e').replace('&','\\u0026')
@@ -123,6 +125,11 @@ def build():
     dest.write_text(template.replace('/* REVIEW_DATA */',data))
     print(f'Built {dest}: {len(payload["files"])} files; '+str(sum(f['error'] is not None for f in payload['files']))+' translation errors')
 
-if __name__=='__main__': build()
+if __name__=='__main__':
+    import argparse
+    parser=argparse.ArgumentParser(description='Build the offline Clean review browser from current sources.')
+    parser.add_argument('--quiet',action='store_true',help='Hide per-file progress; keep the final build summary.')
+    args=parser.parse_args()
+    build(verbose=not args.quiet)
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
