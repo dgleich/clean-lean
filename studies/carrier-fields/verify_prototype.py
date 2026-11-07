@@ -21,7 +21,7 @@ from cleanlang.structures import declare
 from cleanlang.syntax import parse,type_tree
 
 e=Environment();results=load_document(HERE/'Statements.clean.proposed',e)
-assert len(results)==5
+assert len(results)==6
 assert type_tree(parse('P.carrier','type_ref'))==['Projection',['Name','P'],'carrier']
 assert type_tree(parse('Set(P.carrier)','type_ref'))==['Apply','Set',[['Projection',['Name','P'],'carrier']]]
 assert type_tree(parse('(carrier of(P))','type_ref'))==['ComputedIndex',['Call','carrier of',[['Local','P']]]]
@@ -46,6 +46,11 @@ from cleanlang.dependent_functions import substitute as substitute_type
 family=e.type('Function(z: P.carrier,Evidence((z = z)))',scope)
 changed=substitute_type(family,{'P':scope['Q']},e,scope)
 assert changed.args[0]==e.type('Q.carrier',scope)
+higher=e.type('Function(space: PointedSpace,space.carrier)',scope)
+assert higher==e.type('Function(object: PointedSpace,object.carrier)',scope)
+scope['F']=Expr('F','F',e.type('CarrierFamily'),tree=['Local','F'])
+assert Expressions(e,scope).parse('F.value(P)').type==e.type('P.carrier',scope)
+
 
 
 def reject(action,fragment):
@@ -53,6 +58,9 @@ def reject(action,fragment):
  except CleanError as error:assert fragment in str(error),(fragment,str(error));return
  raise AssertionError('Expected rejection: '+fragment)
 reject(lambda:Expressions(e,scope).parse('pointed space(P.carrier,P.topology,y)'), 'mismatch')
+reject(lambda:Expressions(e,scope).parse('F.value(x)'),'Function')
+reject(lambda:e.type('Function(T: Type,T)',scope),'Type-valued dependent function binders')
+reject(lambda:e.require_type_argument(higher),'Type parameter requires')
 reject(lambda:e.type('P.topology',scope),'Type projection must have type Type')
 reject(lambda:e.require_type_argument(e.type('PointedSpace')),'Type parameter requires')
 before=dict(e.notation_definitions)
@@ -67,6 +75,7 @@ f=lambda n:e.data['functions'][n]['lean'].split()[0]
 record=e.structures['PointedSpace']['key'];ctor=f('pointed space')
 carrier,constant,continuous,selected=(f(n) for n in ['carrier of','constant map','bundle continuous','selected point'])
 underlying=f('continuous between');evaluate=f('evaluate map')
+family_record=e.structures['CarrierFamily']['key'];family_ctor=f('carrier family');family_helper=f('point family')
 generated=lean(results,e,['Lean'])
 comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_basic_targets.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))
 native=generated+comparison+f'''
@@ -76,6 +85,19 @@ structure ExpectedPointedSpace : Type 1 where
  point : carrier
 noncomputable def expected_constructor (carrier : Type) (topology : TopologicalSpace carrier) (point : carrier) : ExpectedPointedSpace :=
  @ExpectedPointedSpace.mk carrier topology point
+
+structure ExpectedCarrierFamily : Type 1 where
+ value : (space : ExpectedPointedSpace) → space.carrier
+noncomputable def expected_family_constructor (value : (space : ExpectedPointedSpace) → space.carrier) : ExpectedCarrierFamily :=
+ @ExpectedCarrierFamily.mk value
+noncomputable def expected_point_family : {family_record} :=
+ {family_ctor} (fun space : {record} => space.point)
+same_basic_target {family_helper} expected_point_family
+
+def expected_family_evaluation : Prop := ∀ (P : {record}),
+ @{family_record}.value {family_helper} P = P.point
+same_basic_target CleanStatements.family_evaluation expected_family_evaluation
+theorem family_evaluation_checked : CleanStatements.family_evaluation := by intro P; rfl
 
 noncomputable def expected_carrier (P : {record}) : Type := @{record}.carrier P
 noncomputable def expected_constant (P : {record}) : P.carrier → P.carrier := fun x => @{record}.point P
@@ -122,7 +144,8 @@ private def carrierCanonical (names : List (Name × Name)) : Expr → Expr
  | e => e
 '''
 pairs=[(record,'ExpectedPointedSpace')]+[(record+'.'+n,'ExpectedPointedSpace.'+n) for n in ['mk','carrier','topology','point']]
-checks=pairs+[(ctor,'expected_constructor')]
+pairs += [(family_record,'ExpectedCarrierFamily')]+[(family_record+'.'+n,'ExpectedCarrierFamily.'+n) for n in ['mk','value']]
+checks=pairs+[(ctor,'expected_constructor'),(family_ctor,'expected_family_constructor')]
 native+='\nrun_cmd do\n let env ← getEnv\n let names : List (Name × Name) := ['+', '.join('(`'+a+', `'+b+')' for a,b in pairs)+']\n'
 native+=' let checks : List (Name × Name) := ['+', '.join('(`'+a+', `'+b+')' for a,b in checks)+']\n'
 native+=r'''
@@ -142,7 +165,7 @@ native+=r'''
 p=COMPILER/'CarrierVerified.lean';p.write_text(native)
 (COMPILER/'CarrierStatements.tex').write_text(latex(results,e))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(p)],cwd=COMPILER,check=True)
-print('Carrier prototype: fifteen exact targets, five proofs, and syntax/scope/negative checks passed')
+print('Carrier prototype: twenty-one exact targets, six proofs, and syntax/scope/negative checks passed')
 regression_env=os.environ.copy();regression_env['PYTHONPATH']=str(COMPILER/'tests')
 subprocess.run([sys.executable,'-m','unittest',
  'test_type_expressions','test_structures','test_alias_descriptions','test_dependent_calls',

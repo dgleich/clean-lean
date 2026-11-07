@@ -76,15 +76,14 @@ identity requirements remain unchanged.
 
 ## Evidence and remaining gates
 
-The [pointed-space study](../studies/carrier-fields/README.md) checks fifteen exact
-native targets and five proofs. Its record oracle compares the record sort,
-constructor, three projections and Clean constructor wrapper after an explicit
-one-to-one renaming of their corresponding declaration identities. All other native
-constants, levels, binders and terms remain. Nine additional comparisons cover four
-authored helpers and five theorem statements. Wrong carriers, insufficient universes,
-forward field dependencies and nontype projections are rejected. Type-position paths,
-computed carrier aliases, dependent-function substitution and automatic Condition
-labels have separate source checks. The wider isolated run passes 221 tests.
+The [pointed-space study](../studies/carrier-fields/README.md) checks twenty-one exact
+native targets and six proofs, including a dependent function field. The wider
+isolated run passes 221 tests. Composition with declared operators passes five
+additional exact targets and three proofs. See the
+[consumer audit](../studies/carrier-fields/Audit.md) for coverage and a **confirmed
+callable-capture failure**: reparsing a computed carrier in caller locals can change
+a module call head into a local function. Clean accepts the counterexample, but Lean
+rejects its generated type. Binding-aware substitution is required before integration.
 
 Bare local Type substitutions retain syntax-only renaming; nonlocal checked Type
 expressions enter carrier reification. This preserves the earlier hygiene contract
@@ -92,7 +91,7 @@ when a renamed local is not yet installed in a semantic environment. The initial
 prototype incorrectly reified both, and that regression was corrected.
 
 Before main integration, audit all carrier-type consumers and scoped reification
-paths, compose this patch with the operator migration, and rerun the corpus and
+paths, resolve the recorded callable capture, and rerun the corpus and
 relevant studies. General universe-polymorphic functions/bundles and the native
 module-scope policy remain separate open requirements. The PDF's readable carrier
 alias is authored in Clean and does not introduce an implicit coercion.

@@ -35,3 +35,8 @@ Result selected point projection:
   Conclude: selected point(Q) = Q.point
 
 -- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Result family evaluation:
+  Attribution: local; dependent family evaluation; original
+  Let P: PointedSpace
+  Conclude: point family().value(P) = P.point

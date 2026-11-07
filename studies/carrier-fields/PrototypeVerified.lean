@@ -109,6 +109,15 @@ noncomputable def cleanDefine_bundle_continuous_f264edce70c3d7b32602  (P : clean
 noncomputable def cleanDefine_selected_point_f1237f289da6a1fdd675  (P : cleanStructure_PointedSpace_4b97411f5be9affa2443) : ((@cleanStructure_PointedSpace_4b97411f5be9affa2443.«carrier» (P))) :=
   (@cleanStructure_PointedSpace_4b97411f5be9affa2443.«point» (P))
 
+structure cleanStructure_CarrierFamily_df3bb6cfcbee4f511241  : Type 1 where
+  «value» : (clean_pi_bound_0 : cleanStructure_PointedSpace_4b97411f5be9affa2443) → (((@cleanStructure_PointedSpace_4b97411f5be9affa2443.«carrier» (clean_pi_bound_0))))
+
+noncomputable def cleanConstructor_carrier_family_1a12146f11c7b4597487 («value» : (clean_pi_bound_0 : cleanStructure_PointedSpace_4b97411f5be9affa2443) → (((@cleanStructure_PointedSpace_4b97411f5be9affa2443.«carrier» (clean_pi_bound_0))))) : cleanStructure_CarrierFamily_df3bb6cfcbee4f511241 :=
+  @cleanStructure_CarrierFamily_df3bb6cfcbee4f511241.mk «value»
+
+noncomputable def cleanDefine_point_family_89ba17a6e7248e418efa   : cleanStructure_CarrierFamily_df3bb6cfcbee4f511241 :=
+  (@cleanConstructor_carrier_family_1a12146f11c7b4597487 ((fun (clean_bound_0 : cleanStructure_PointedSpace_4b97411f5be9affa2443) => (@cleanStructure_PointedSpace_4b97411f5be9affa2443.«point» (clean_bound_0)))))
+
 
 open scoped Matrix
 
@@ -166,6 +175,15 @@ def selected_point_projection : Prop :=
   ∀ (Q : cleanStructure_PointedSpace_4b97411f5be9affa2443),
   ((@cleanDefine_selected_point_f1237f289da6a1fdd675 (Q)) = (@cleanStructure_PointedSpace_4b97411f5be9affa2443.«point» (Q)))
 
+/--
+source: local
+reference: dependent family evaluation
+relationship: original
+-/
+def family_evaluation : Prop :=
+  ∀ (P : cleanStructure_PointedSpace_4b97411f5be9affa2443),
+  (((@cleanStructure_CarrierFamily_df3bb6cfcbee4f511241.«value» ((cleanDefine_point_family_89ba17a6e7248e418efa))) P) = (@cleanStructure_PointedSpace_4b97411f5be9affa2443.«point» (P)))
+
 end CleanStatements
 
 open Lean Elab Command
@@ -192,6 +210,19 @@ structure ExpectedPointedSpace : Type 1 where
  point : carrier
 noncomputable def expected_constructor (carrier : Type) (topology : TopologicalSpace carrier) (point : carrier) : ExpectedPointedSpace :=
  @ExpectedPointedSpace.mk carrier topology point
+
+structure ExpectedCarrierFamily : Type 1 where
+ value : (space : ExpectedPointedSpace) → space.carrier
+noncomputable def expected_family_constructor (value : (space : ExpectedPointedSpace) → space.carrier) : ExpectedCarrierFamily :=
+ @ExpectedCarrierFamily.mk value
+noncomputable def expected_point_family : cleanStructure_CarrierFamily_df3bb6cfcbee4f511241 :=
+ cleanConstructor_carrier_family_1a12146f11c7b4597487 (fun space : cleanStructure_PointedSpace_4b97411f5be9affa2443 => space.point)
+same_basic_target cleanDefine_point_family_89ba17a6e7248e418efa expected_point_family
+
+def expected_family_evaluation : Prop := ∀ (P : cleanStructure_PointedSpace_4b97411f5be9affa2443),
+ @cleanStructure_CarrierFamily_df3bb6cfcbee4f511241.value cleanDefine_point_family_89ba17a6e7248e418efa P = P.point
+same_basic_target CleanStatements.family_evaluation expected_family_evaluation
+theorem family_evaluation_checked : CleanStatements.family_evaluation := by intro P; rfl
 
 noncomputable def expected_carrier (P : cleanStructure_PointedSpace_4b97411f5be9affa2443) : Type := @cleanStructure_PointedSpace_4b97411f5be9affa2443.carrier P
 noncomputable def expected_constant (P : cleanStructure_PointedSpace_4b97411f5be9affa2443) : P.carrier → P.carrier := fun x => @cleanStructure_PointedSpace_4b97411f5be9affa2443.point P
@@ -238,8 +269,8 @@ private def carrierCanonical (names : List (Name × Name)) : Expr → Expr
 
 run_cmd do
  let env ← getEnv
- let names : List (Name × Name) := [(`cleanStructure_PointedSpace_4b97411f5be9affa2443, `ExpectedPointedSpace), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.mk, `ExpectedPointedSpace.mk), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.carrier, `ExpectedPointedSpace.carrier), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.topology, `ExpectedPointedSpace.topology), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.point, `ExpectedPointedSpace.point)]
- let checks : List (Name × Name) := [(`cleanStructure_PointedSpace_4b97411f5be9affa2443, `ExpectedPointedSpace), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.mk, `ExpectedPointedSpace.mk), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.carrier, `ExpectedPointedSpace.carrier), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.topology, `ExpectedPointedSpace.topology), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.point, `ExpectedPointedSpace.point), (`cleanConstructor_pointed_space_63873b521438f4b6aaf3, `expected_constructor)]
+ let names : List (Name × Name) := [(`cleanStructure_PointedSpace_4b97411f5be9affa2443, `ExpectedPointedSpace), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.mk, `ExpectedPointedSpace.mk), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.carrier, `ExpectedPointedSpace.carrier), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.topology, `ExpectedPointedSpace.topology), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.point, `ExpectedPointedSpace.point), (`cleanStructure_CarrierFamily_df3bb6cfcbee4f511241, `ExpectedCarrierFamily), (`cleanStructure_CarrierFamily_df3bb6cfcbee4f511241.mk, `ExpectedCarrierFamily.mk), (`cleanStructure_CarrierFamily_df3bb6cfcbee4f511241.value, `ExpectedCarrierFamily.value)]
+ let checks : List (Name × Name) := [(`cleanStructure_PointedSpace_4b97411f5be9affa2443, `ExpectedPointedSpace), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.mk, `ExpectedPointedSpace.mk), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.carrier, `ExpectedPointedSpace.carrier), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.topology, `ExpectedPointedSpace.topology), (`cleanStructure_PointedSpace_4b97411f5be9affa2443.point, `ExpectedPointedSpace.point), (`cleanStructure_CarrierFamily_df3bb6cfcbee4f511241, `ExpectedCarrierFamily), (`cleanStructure_CarrierFamily_df3bb6cfcbee4f511241.mk, `ExpectedCarrierFamily.mk), (`cleanStructure_CarrierFamily_df3bb6cfcbee4f511241.value, `ExpectedCarrierFamily.value), (`cleanConstructor_pointed_space_63873b521438f4b6aaf3, `expected_constructor), (`cleanConstructor_carrier_family_1a12146f11c7b4597487, `expected_family_constructor)]
 
  for (a,b) in checks do
   let some x := env.find? a | throwError "Missing actual {a}"

@@ -1,0 +1,21 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "Bundle.clean.proposed"
+Source local:
+  Kind: other
+  Label: capture
+  Title: Carrier callee capture regression
+Define c(P: PointedSpace): Type:
+  Equals: P.carrier
+Define retain(P,x):
+  Let P: PointedSpace
+  Let x: (c(P))
+  Returns: (c(P))
+  Equals: x
+Result captured carrier:
+  Attribution: local; scope counterexample; original
+  Let P: PointedSpace
+  Let c: Function(PointedSpace,Type)
+  Let x: (c(P))
+  Conclude: retain(P,x) = x
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

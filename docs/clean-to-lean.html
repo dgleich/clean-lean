@@ -975,7 +975,7 @@ let c : Module.Basis J K M := b.reindex e
   carrier : Type
   topology : TopologicalSpace carrier
   point : carrier</code></pre></section></div>
-<p>The <a href="carrier-fields.md">contract</a> and <a href="../studies/carrier-fields/README.md">pointed-space study</a> include fifteen exact targets, five proofs, and 221 isolated regression tests. Constant-map continuity is stated using Clean-authored helpers. Projected carriers, parenthesized carrier computations and dependent return types are checked. Main integration, operator composition and general universe polymorphism remain open.</p>
+<p>The <a href="carrier-fields.md">contract</a> and <a href="../studies/carrier-fields/README.md">pointed-space study</a> include twenty-one exact targets, six proofs, and 221 isolated regression tests. Dependent function fields and carrier aliases are checked. Composition with declared operators adds five exact targets and three proofs. The <a href="../studies/carrier-fields/Audit.md">consumer audit</a> records a failing callable-capture case: a caller local can replace a module call head during carrier substitution. Lean rejects the resulting target. Binding-aware substitution blocks main integration; general universe polymorphism remains open.</p>
 </section>
 <section class="mapping" id="sequential-scope" data-status="implemented">
 <h2>Statements between declarations and imports</h2>

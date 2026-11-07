@@ -1,0 +1,44 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated composition fixture
+Import Lean Mathlib.Topology.Basic
+
+Type Type():
+  Means: Type
+  Render latex: \mathsf{{Type}}
+Type Proposition():
+  Means: Prop
+  Render latex: condition
+Type Topology(X: Type):
+  Means: TopologicalSpace X
+  Render latex: \operatorname{{Topology}}({X})
+Type Counter():
+  Means: Nat
+  Render latex: \mathbb{{N}}
+
+Notation carrier equality(x,y):
+  Let T: Type
+  Let x,y: T
+  Returns: Proposition
+  Infix: =
+  Means: x=y
+  Render latex: {x}={y}
+Notation count equality(x: Counter,y: Counter): Proposition:
+  Infix: =
+  Means: x=y
+  Render latex: {x}={y}
+Notation negate condition(p: Proposition): Proposition:
+  Prefix: not
+  Means: ¬p
+  Render latex: \text{{not }}{p}
+
+Structure PointedSpace():
+  Universe: 1
+  Let carrier: Type
+  Let topology: Topology(carrier)
+  Let point: carrier
+  Constructor: pointed space
+
+Define carrier of(P: PointedSpace): Type:
+  Equals: P.carrier
+  Render latex: \lvert {P}\rvert
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -5452,6 +5452,50 @@
       "origin": "llm-assisted",
       "mode": "manifest",
       "model": "gpt-6"
+    },
+    "studies/carrier-fields/OperatorBundle.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/OperatorVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/verify_operators.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/CapturedCarrier.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/check_capture.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/Audit.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

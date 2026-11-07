@@ -4,7 +4,7 @@
 
 This isolated prototype authors a bundle with its own carrier, topology and point
 in [Bundle.clean.proposed](Bundle.clean.proposed). Subsequent fields depend on the
-carrier field. The five [statements](Statements.clean.proposed) use `P.carrier`,
+carrier field. The six [statements](Statements.clean.proposed) use `P.carrier`,
 a readable authored `carrier of(P)` alias, dependent return types and an explicit
 constructor. Constant-map continuity uses the existing Clean-authored
 `continuous between` definition and its explicit Mathlib foundations.
@@ -21,11 +21,11 @@ regenerates/checks the parser strictly, then runs the native fixture and the
 fixture is [PrototypeVerified.lean](PrototypeVerified.lean); the rendered statements
 are available as [PDF](Statements.pdf) and [TeX](Statements.tex).
 
-Fifteen exact targets cover the record, constructor and three projections, the Clean
-constructor wrapper, four authored helper definitions, and five statement targets.
+Twenty-one exact targets cover the record, constructor and three projections, the Clean
+constructor wrapper, five authored helper definitions, the dependent family record and its projections, and six statement targets.
 The record oracle renames only the explicitly paired record/constructor/projection
 identities; it retains universes, native constants, dependent types and bodies.
-Five proofs include constant-map continuity. Further checks cover parsed type paths,
+Six proofs include constant-map continuity. Further checks cover parsed type paths,
 parenthesized computed carriers, automatic Condition names, Type-value and dependent
 function substitution, different-carrier rejection, insufficient universe, and
 forward field references. The wider isolated suite passes 221 tests with two
@@ -40,8 +40,10 @@ fresh lambda binder, imported Evidence explicitly, and matched the existing univ
 diagnostic. These did not weaken negative checks.
 
 The [contract](../../docs/carrier-fields.md) gives the parse and translation rules.
-Main integration, a broader consumer/closure audit, composition with module operators,
-and full corpus/study validation remain required. This is fixed Type-0 carriers in
+Main integration and full corpus/study validation remain required. The expanded
+[consumer audit](Audit.md) records a confirmed callable-capture failure that blocks
+integration. Composition with module operators passes five additional exact targets
+and three proofs; run `python3 studies/carrier-fields/verify_operators.py`. This is fixed Type-0 carriers in
 an explicitly higher-universe record; it is not general universe polymorphism,
 implicit carrier coercion or a replacement for all existing TopCat-based interfaces.
 :::

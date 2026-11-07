@@ -1890,11 +1890,13 @@
       "obligation": "One neutral parse for a type-position path; field telescope substitution retains selected carrier identities, universe levels and proof arguments. Reject wrong carriers, nontype projections, insufficient universes and forward fields.",
       "checks": [
         "studies/carrier-fields/verify_prototype.py",
-        "studies/carrier-fields/PrototypeVerified.lean"
+        "studies/carrier-fields/PrototypeVerified.lean",
+        "studies/carrier-fields/verify_operators.py",
+        "studies/carrier-fields/check_capture.py"
       ],
       "pending": [
+        "FAIL: module callable capture in computed carrier substitution; see studies/carrier-fields/Audit.md",
         "Main integration and complete carrier-consumer audit",
-        "Composition with module-operator migration",
         "Full corpus and study validation",
         "Universe polymorphism and native module-scope policy"
       ]

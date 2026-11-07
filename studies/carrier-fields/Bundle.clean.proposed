@@ -32,3 +32,12 @@ Define selected point(P: PointedSpace): P.carrier:
   Render latex: p_{{{P}}}
 
 -- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Structure CarrierFamily():
+  Universe: 1
+  Let value: Function(space: PointedSpace,space.carrier)
+  Constructor: carrier family
+
+Define point family(): CarrierFamily:
+  Equals: carrier family(function(space: PointedSpace,space.point))
+  Render latex: p
