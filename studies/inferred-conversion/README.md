@@ -36,7 +36,10 @@ focused Python tests and the strict generated-parser check. The PDF compiles twi
 and was visually inspected; the reference page passes search, local-link and mobile
 width checks. The previous shape-pullback, diagram-map and zigzag studies pass
 85 exact targets and 21 proofs, and all 92 corpus proof fixtures pass. The full
-Python suite is still running. The refreshed browser covers 106 files with zero
+Python suite is still running. It exposed an obsolete opacity assertion for a
+subset certificate instantiated at a named carrier; that assertion now checks
+the exact constructor tree and target instead. All fifteen conversion tests pass
+with the corrected expectation. The refreshed browser covers 106 files with zero
 translation errors; its source hashes, inventory, navigation, notes, responsive
 layout and no-JavaScript fallback have passed validation.
 

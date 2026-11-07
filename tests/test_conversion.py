@@ -58,11 +58,14 @@ class DefinitionConversion(unittest.TestCase):
         notation('Define retain complex(field,C):',['Let K: Type','Let field: FieldStructure(K)',
           'Let C: ModuleChainComplex(K,field)','Returns: ModuleChainComplex(K,field)','Equals: C'],self.e,authored=True)
         self.assertEqual(self.norm('retain complex(field,C)').lean,'C')
-    def test_used_implicit_and_binder_bodies_stay_opaque(self):
+    def test_inferred_certificate_expands_and_binder_body_stays_opaque(self):
         self.local['S']=Expr('S','S',self.e.type('Set(K)',self.local))
         self.local['T']=Expr('T','T',self.e.type('Set(K)',self.local))
         self.local['h']=Expr('h','h',self.e.type('(S ⊆ T)',self.local))
-        self.assertIn('subset_certificate',self.norm('subset certificate(S,T,h)').lean)
+        self.assertIn('subset_certificate',self.expr('subset certificate(S,T,h)').lean)
+        expanded=self.norm('subset certificate(S,T,h)')
+        self.assertEqual(expanded.tree,['Call','certified inclusion',[['Local',n] for n in ['K','S','T','h']]])
+        self.assertEqual(expanded.lean,self.expr('certified inclusion(K,S,T,h)').lean)
         self.assertIn('closed_interval',self.norm('closed interval(I)').lean)
     def test_no_algebraic_rewriting(self):
         self.assertNotEqual(self.norm('a+b').lean,self.norm('b+a').lean)
