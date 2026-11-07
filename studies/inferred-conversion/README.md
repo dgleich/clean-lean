@@ -36,8 +36,9 @@ focused Python tests and the strict generated-parser check. The PDF compiles twi
 and was visually inspected; the reference page passes search, local-link and mobile
 width checks. The previous shape-pullback, diagram-map and zigzag studies pass
 85 exact targets and 21 proofs, and all 92 corpus proof fixtures pass. The full
-Python suite and browser refresh are in progress; their results will be recorded
-when complete.
+Python suite is still running. The refreshed browser covers 106 files with zero
+translation errors; its source hashes, inventory, navigation, notes, responsive
+layout and no-JavaScript fallback have passed validation.
 
 The remaining boundary is explicit: inferred types used as values must be named
 Type locals. Reifying compound types inside annotations is supported; introducing
