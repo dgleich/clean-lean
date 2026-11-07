@@ -607,3 +607,25 @@ can change declaration hashes. The verifier now renders independent proof templa
 against its current environment. This fixes the check, not the broader outstanding
 module-identity design; generated names must not be treated as a portable API.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Restricted vectors and support are expressible in Clean
+
+The [interval-vector study](../studies/interval-vector-restriction/README.md)
+authors the restricted vector family with nested dependent functions. Its return
+type refers to the restricted diagram's module at each vertex, while the body
+reads the original diagram at the embedded vertex. Existing selected-field
+conversion verifies that relationship without a new cast or native definition.
+Three exact targets and two generated-statement proofs cover the definition,
+evaluation formula, and vanishing outside the restricted intervals. The latter
+uses the original vanishing condition and endpoint arithmetic; it does not assume
+restricted support.
+
+A fixed English rendering had made the original vanishing hypothesis and restricted
+conclusion indistinguishable. The condition now renders its vector and interval
+arguments explicitly. The mathematical definition and Lean target are unchanged.
+This is a reminder that readable rendering must preserve which objects a statement
+concerns. Edge compatibility and assembly with the checked pointwise bases remain
+unfinished.
+:::

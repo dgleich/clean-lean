@@ -80,7 +80,7 @@ Condition interval vectors vanish(K,field,n,d,Z,I,L,vectors):
   Holds when: for every (v: Vertex((n+1)),for every (i: I,
     not (i ∈ interval labels at(I,n,L,v)) →
       evaluate map(vectors(v),i) = module zero(field,Z.object(v))))
-  Render: the vectors vanish outside their intervals
+  Render: {vectors} vanish outside the intervals {L}
 
 Condition interval vectors compatible(K,field,n,d,Z,I,L,vectors):
   Let K: Type

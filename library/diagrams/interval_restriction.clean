@@ -1,0 +1,26 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "interval_clipping.clean"
+Import "../logic/elements.clean"
+
+Define restricted interval vectors(field,n,a,m,h,d,hs,ht,Z,I,L,vectors):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let d: Function(Vertex(n),Boolean)
+  Let hs: Evidence((subpath sources preserved(n,a,m,h,d)))
+  Let ht: Evidence((subpath targets preserved(n,a,m,h,d)))
+  Let Z: Zigzag(K,field,n,d)
+  Let I: Type
+  Let L: IntervalLabels(I,n)
+  Let vectors: Function(v: Vertex((n+1)),Function(I,ModuleElement(K,field,(Z.object(v)))))
+  Returns: Function(v: Vertex((m+1)),
+    Function(Element(I,(surviving interval labels(I,n,a,m,L))),
+      ModuleElement(K,field,((restricted zigzag(field,n,a,m,h,d,hs,ht,Z)).object(v)))))
+  Equals: function(v: Vertex((m+1)),
+    function(j: Element(I,(surviving interval labels(I,n,a,m,L))),
+      evaluate map(vectors(subpath vertex(n,a,m,h,v)),
+        element value(surviving interval labels(I,n,a,m,L),j))))
+  Render latex: {vectors}|_{{[{a},{a}+{m}]}}
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

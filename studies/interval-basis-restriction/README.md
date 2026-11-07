@@ -44,5 +44,5 @@ checks its native theorem. Regenerate that foundation with
 `studies/active-labels/verify_arithmetic.py` when necessary. This secondary check
 alone does not check the Clean target; `verify.py` does.
 
-This is a pointwise basis theorem. Constructing the restricted interval-basis record still requires assembling the vertexwise bases and proving vector vanishing and compatibility along edges. It does not establish the paper's pyramid theorem.
+This is a pointwise basis theorem. The [restricted-vector study](../interval-vector-restriction/README.md) now supplies Clean-authored vectors and proves their vanishing outside the restricted intervals. Constructing the full interval-basis record still requires assembling the vertexwise bases and proving compatibility along edges. It does not establish the paper's pyramid theorem.
 :::
