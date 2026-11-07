@@ -1,0 +1,23 @@
+-- generated: gpt-6 2026-11-07 role=assisted; type identity regression fixture
+Import Lean Mathlib.Data.Real.Basic
+
+Type Type():
+  Means: Type
+  Render latex: \mathsf{{Type}}
+Type Real():
+  Means: ℝ
+  Render latex: \mathbb{{R}}
+Type Natural():
+  Means: ℕ
+  Render latex: \mathbb{{N}}
+Alias Scalar: Real
+
+Define real identity(x: Real): Real:
+  Equals: x
+
+Source local:
+  Kind: other
+  Label: Type identity study
+  Title: Distinguishing lexical type parameters from module declarations
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

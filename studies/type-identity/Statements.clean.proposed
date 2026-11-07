@@ -1,0 +1,10 @@
+-- generated: gpt-6 2026-11-07 role=assisted; failing acceptance specimen
+Import "Foundation.clean.proposed"
+
+Result local carrier identity:
+  Attribution: local; lexical type binding; original
+  Let Real: Type
+  Let x: Real
+  Conclude: x = x
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

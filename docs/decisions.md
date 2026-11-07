@@ -826,3 +826,16 @@ validation as other callables. Callable proof views follow authored mathematical
 meaning, not the operator token: implication is a Clean forall definition. This remains
 isolated pending foundation/literal migration and declaration-identity conformance.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Gate integration on local versus module type identity
+
+Record the reproducible [type-identity failure](../studies/type-identity/README.md)
+before modifying the semantic representation. Preserve lexical type parameters
+and declaration-scoped module types as distinct identities through matching,
+substitution and emission. A rendering-only patch or a prohibition on colliding
+display names would not repair stored module references. Exact identity allocation,
+alias-template substitution and serialization remain design work; this decision
+does not claim the full repair is specified or implemented.
+:::

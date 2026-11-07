@@ -963,6 +963,14 @@ let c : Module.Basis J K M := b.reindex e
 <p>The <a href="../studies/declaration-identities/README.md">declaration-identity acceptance study</a> checks a dependent callable and record before and after an unrelated import. Eleven exact comparisons validate types and bodies under an explicit record/constructor identity map, and reject a changed kernel-valid proof body. Generated hash names differ; this bounded check does not establish general module isolation or portable generated identifiers.</p>
 <p>Import <code>library/<wbr>logic/<wbr>equivalence_operations.clean</code> for authored inverse and composition constructions. Given <code>e: Equivalence(A,B)</code> and <code>f: Equivalence(B,C)</code>, <code>compose equivalences(e,f)</code> has type <code>Equivalence(A,C)</code> and applies <code>e</code> first. Its Lean forward function is <code>fun x =&gt; f (e x)</code> (expanded schematic form); the emitted constructor retains explicit inverse-law proof functions assembled using congruence and transitivity. <code>inverse equivalence(e)</code> reverses the carriers and exchanges the two inverse laws. These use existing syntax and Type 0 carriers, with no proof search. The <a href="../studies/equivalence-operations/README.md">equivalence-operations study</a> passes eight exact target comparisons, three proofs and seven focused Python checks.</p>
 </section>
+<section class="mapping" id="local-type-identity" data-status="proposed">
+<h2>Local type parameters and module types</h2>
+<p><strong>Required repair; failing acceptance gate.</strong> A local type parameter must retain its own binding even if its name matches a module type or alias.</p>
+<div class="pair"><section><h3>Clean fragment</h3><pre><code>Let Real: Type
+Let x: Real
+Conclude: x = x</code></pre></section><section><h3>Required Lean target</h3><pre><code>∀ (Real : Type) (x : Real), x = x</code></pre></section></div>
+<p>The current translator instead uses <code>x : ℝ</code>. Both statements compile, but their canonical elaborated targets differ. The <a href="../studies/type-identity/README.md">type-identity study</a> supplies six failing semantic checks and an independent failing native-target check. Local references must be distinguished from module type heads in substitution, alias expansion and rendering; the complete internal identity mechanism remains unfinished.</p>
+</section>
 <section class="mapping" id="carrier-fields" data-status="proposed">
 <h2>Structures with carrier fields</h2>
 <p><strong>Isolated prototype; not enabled in main.</strong> An ordered <code>Let carrier: Type</code> field with <code>Universe: 1</code> allows later fields to use that carrier. <code>P.carrier</code> in a type annotation selects the checked record projection; it does not insert a coercion.</p>

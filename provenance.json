@@ -5636,6 +5636,34 @@
     "studies/carrier-fields/BoundOperators.pdf": {
       "origin": "llm-assisted",
       "mode": "manifest"
+    },
+    "studies/type-identity/check_identity.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/type-identity/Foundation.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/type-identity/Statements.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/type-identity/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

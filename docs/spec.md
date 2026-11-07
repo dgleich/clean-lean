@@ -878,3 +878,16 @@ rendering uses that snapshot. The complete rule, native-import limitation and ex
 acceptance evidence are in [sequential-scope.md](sequential-scope.md). No nested
 imports or module-owned native scopes are introduced by this change.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Outstanding local type identity failure
+
+The [type-identity study](../studies/type-identity/README.md) records a failure
+of the unique-target requirement: a local type named Real currently becomes the
+module's real-number type during rendering. Local references must resolve before
+module aliases, retain their binding identity, and remain distinct from module
+types during substitution. These requirements are not yet implemented throughout
+the compiler. The study's acceptance gates intentionally fail; compiling the
+generated Lean statement does not establish that its meaning was preserved.
+:::
