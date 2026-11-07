@@ -86,8 +86,12 @@ def type_declaration(header, fields, env):
         names.append(p);local[p]=Expr(p,p,t)
     values = fields_map(fields)
     if 'equals' in values:
-        if set(values) != {'equals'}: raise CleanError('Type alias accepts only Equals')
-        env.data['types'][name] = {'args': kinds, 'canonical': substitute(values['equals'], names)}
+        if values.keys()-{'equals','describe','describe plural'}:
+            raise CleanError('Type alias accepts Equals and optional Describe / Describe plural')
+        spec = {'args': kinds, 'canonical': substitute(values['equals'], names)}
+        for src,dst in [('describe','prose'),('describe plural','prose_plural')]:
+            if src in values:spec[dst]=template(values[src],names)
+        env.data['types'][name] = spec
         env.type(name+'('+','.join(names)+')' if names else name, local)
         return
     if not {'means','render latex'} <= values.keys() or values.keys()-{'means','render latex','describe','describe plural','universe'}:

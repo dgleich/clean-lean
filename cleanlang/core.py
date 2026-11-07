@@ -153,6 +153,8 @@ class Clause:
     value: object
     line: int
     label: str = ''
+    # Frozen presentation of the authored outer alias; never a semantic type.
+    descriptions: dict = field(default_factory=dict,compare=False)
 @dataclass
 class Result:
     name: str
@@ -200,13 +202,13 @@ class Environment:
         self.loaded_modules=set()
         self.declaration_docs={}
         self.module_docs=[]
-    def type(self,s,env=None,phrases=True,trail=()):
+    def type(self,s,env=None,phrases=True,trail=(),*,presentation=None):
         s=re.sub(r'^(a|an)\s+','',s.strip(),flags=re.I)
         # Constructor applications have reserved structural syntax, never prose dispatch.
         if phrases and not s.startswith('(') and not re.match(ID+r'\s*\(',s):
             matches=[p['type'].format(**m.groupdict()) for p in self.data['phrases'] if (m:=re.fullmatch(p['pattern'],s,re.I))]
             if len(matches)>1: raise CleanError('Ambiguous type phrase: '+s)
-            if matches: return self.type(matches[0],env,False,trail)
+            if matches: return self.type(matches[0],env,False,trail,presentation=presentation)
         from .syntax import parse as syntax_parse, type_spelling
         try:syntax=syntax_parse(s,'type_ref')
         except CleanError as e:raise CleanError('Unknown type phrase: '+s) from e
@@ -250,7 +252,16 @@ class Environment:
         if 'canonical' in self.data['types'][name]:
             if name in trail: raise CleanError('Cyclic type alias: '+name)
             expanded=self.data['types'][name]['canonical'].format(*map(str,out))
-            return self.type(expanded,env,False,trail+(name,))
+            resolved=self.type(expanded,env,False,trail+(name,))
+            if presentation is not None and any(k in self.data['types'][name] for k in ('prose','prose_plural')):
+                spec=self.data['types'][name]
+                rendered=[self.render_type(a,'latex') if isinstance(a,Type) else a.tex for a in out]
+                for key in ('prose','prose_plural'):
+                    if key in spec:presentation[key]=spec[key].format(*rendered)
+                # Conservative dependencies: every authored actual, even if unused
+                # by the template. Pruning must never retain a Lean binder for prose.
+                presentation['dependencies']=set(re.findall(ID,','.join(args))).intersection(env or {})
+            return resolved
         return Type(name,tuple(out))
     def render_type(self,t,target,bindings=None):
         from .dependent_functions import DependentFunctionType
@@ -650,11 +661,12 @@ def _parse_flat(text,reg):
             from .syntax import let_clause
             kind,names,payload=let_clause(s)
             if kind=='let':
-                t=reg.type(payload,env)
+                descriptions={}
+                t=reg.type(payload,env,presentation=descriptions)
                 for name in names:
                     if name in env or name in labels:raise CleanError('Invalid or duplicate name: '+name)
                     env[name]=Expr(name,texid(name),t)
-                r.clauses.append(Clause('let',names,t,num))
+                r.clauses.append(Clause('let',names,t,num,descriptions=descriptions))
             else:
                 name=names[0]
                 if name in env or name in labels:raise CleanError('Duplicate name: '+name)
@@ -702,10 +714,16 @@ def _select_context_parameters(result,inherited):
         elif clause.kind=='define' and not keep:
             keep=clause.names[0] in used
         if keep:
-            kept.append(Clause(clause.kind,names,clause.value,clause.line,clause.label))
+            kept.append(Clause(clause.kind,names,clause.value,clause.line,clause.label,dict(clause.descriptions)))
             used.difference_update(names)
             used.update(_dependencies(clause.value))
-    return list(reversed(kept))
+    ordered=list(reversed(kept))
+    available=set()
+    for clause in ordered:
+        if not clause.descriptions.get("dependencies",set()) <= available:
+            clause.descriptions={}
+        available.update(clause.names)
+    return ordered
 
 
 class Document(list):
@@ -792,7 +810,8 @@ def _latex_clauses(clauses,reg):
         if c.kind=='let':
             names=[texid(n) for n in c.names]
             subjects=('$'+names[0]+'$') if len(names)==1 else ', '.join('$'+n+'$' for n in names[:-1])+' and $'+names[-1]+'$'
-            out+=['Let '+subjects+' be '+reg.describe_type(c.value,len(names)>1)+'.']
+            description=c.descriptions.get('prose_plural' if len(names)>1 else 'prose')
+            out+=['Let '+subjects+' be '+(description or reg.describe_type(c.value,len(names)>1))+'.']
         elif c.kind=='define': out+=['Let $'+ns+' = '+c.value.tex+'$.']
         else: out+=['Assume $'+c.value.tex+r'$ (\texttt{'+textext(c.label or c.names[0])+'}).']
     return out

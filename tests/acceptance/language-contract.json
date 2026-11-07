@@ -1656,6 +1656,27 @@
         "studies/postfix-applications/verify.py"
       ],
       "remaining": "Full-suite and general native-binding/operator/literal conformance are separate. Active-label stress translation remains incomplete."
+    },
+    {
+      "id": "transparent_alias_descriptions",
+      "status": "implemented-slice",
+      "environment": "Explicit elements module; Type 0 carriers; Selected(A,S) expands to Element(A,S).",
+      "source": "Let x: Selected(A,S)",
+      "expected_tree": [
+        "let",
+        [
+          "x"
+        ],
+        "Selected(A,S)"
+      ],
+      "expected_lean_type": "{a : A // a ∈ S}",
+      "obligation": "Descriptions are frozen presentation metadata only. Exact native statement targets equal expanded subtypes. Distinct aliases retain their own prose; context pruning never adds a semantic dependency.",
+      "evidence": [
+        "docs/alias-descriptions.md",
+        "tests/test_alias_descriptions.py",
+        "studies/alias-descriptions/verify.py"
+      ],
+      "remaining": "Full-suite and review-browser refresh pending; general binding/adapter conformance remains separate."
     }
   ]
 }

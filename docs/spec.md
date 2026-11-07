@@ -831,3 +831,15 @@ field selections. This preserves existing named-call trees and introduces no
 inferred currying or overload policy. Focused acceptance passes; broad validation
 and general conformance remain pending.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Transparent alias prose
+
+`Type … Equals:` now accepts optional `Describe` and `Describe plural` fields.
+These customize typed `Let` prose while preserving the expanded semantic type
+and exact Lean target. Only the outer authored alias supplies wording; missing
+forms fall back to the expanded type. Context pruning never retains mathematical
+parameters merely for prose. See the [alias description contract](alias-descriptions.md)
+for deterministic instantiation, scope, fallback and acceptance boundaries.
+:::

@@ -4756,6 +4756,74 @@
         "# ",
         ""
       ]
+    },
+    "tests/test_alias_descriptions.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "docs/alias-descriptions.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/alias-descriptions/Statements.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/alias-descriptions/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/alias-descriptions/Verified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/alias-descriptions/latex.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/alias-descriptions/Statements.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/alias-descriptions/Generated.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/alias-descriptions/verify.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/alias-descriptions/Statements.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
     }
   }
 }

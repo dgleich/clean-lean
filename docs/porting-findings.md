@@ -546,8 +546,9 @@ Two readability/application boundaries surfaced while writing this source:
 transparent `Type … Equals:` aliases reject `Describe` metadata, and chained
 application was initially unavailable. Chained application is now implemented
 under the [postfix contract](postfix-applications.md), including its native oracles
-and rendering checks. Alias descriptions remain a gap; opaque replacement types
-are not a substitute for preserving transparent alias semantics.
+and rendering checks. Alias descriptions now have an implemented presentation slice under the
+[alias-description contract](alias-descriptions.md). It preserves transparent
+semantics; the full-suite validation remains pending.
 :::
 
 :::llm gpt-6 2026-11-07 role=assisted

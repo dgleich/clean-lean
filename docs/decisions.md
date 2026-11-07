@@ -659,3 +659,16 @@ Proof-index spelling may preserve applied functions containing binders, without
 adding reduction inside their bodies. The [contract](postfix-applications.md)
 records the acceptance evidence and remaining boundaries.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Keep alias descriptions outside semantic types
+
+Freeze the outer authored alias's instantiated prose on each typed statement
+clause. Keep its type fully expanded, including for equality, inference and Lean
+emission. Distinct aliases of the same type may describe it differently. Missing
+singular/plural wording falls back rather than inheriting an inner alias's label.
+If context pruning drops a presentation dependency, use expanded-type prose;
+never introduce Lean binders to preserve a description. The conservative scope
+rule and exact-target checks are specified in alias-descriptions.md.
+:::

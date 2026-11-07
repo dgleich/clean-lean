@@ -1,0 +1,38 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "../../library/logic/elements.clean"
+Source clean:
+  Kind: other
+  Label: Clean
+  Title: Transparent alias presentation examples
+
+Type Selected(A: Type,S: Set(A)):
+  Equals: Element(A,S)
+  Describe: a selected element of ${S}$
+  Describe plural: selected elements of ${S}$
+
+Type Eligible(A: Type,S: Set(A)):
+  Equals: Element(A,S)
+  Describe: an eligible element of ${S}$
+
+Result selected element identity:
+  Attribution: clean; selected element identity; original
+  Let A: Type
+  Let S: Set(A)
+  Let x: Selected(A,S)
+  Conclude: x = x
+
+Result selected pair identity:
+  Attribution: clean; selected pair identity; original
+  Let A: Type
+  Let S: Set(A)
+  Let x,y: Selected(A,S)
+  Conclude: x = x and y = y
+
+Result eligible element identity:
+  Attribution: clean; eligible element identity; original
+  Let A: Type
+  Let S: Set(A)
+  Let x: Eligible(A,S)
+  Conclude: x = x
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
