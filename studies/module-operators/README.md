@@ -22,7 +22,7 @@ read-only-use symlink; Lean runs only on the generated fixture in the temporary
 copy. The patch intentionally omits generated_parser.py; the pinned generator
 produces it from the patched grammar.
 
-The prototype passes fifteen independent canonical native targets and two proofs,
+The prototype passes sixteen independent canonical native targets and two proofs,
 plus source-tree and dispatch checks. It verifies that renaming Scalar to Matrix
 does not activate mathematical behavior based on the new display name; ambiguity
 is rejected in either candidate order; missing declarations do not fall back to
@@ -41,4 +41,14 @@ proof-family and module-scope interactions still need a wider overload audit. Un
 fixity/precedence, isolated module scope, the full foundation migration, editor
 support and broad conformance remain unfinished. The main compiler's behavior and
 current validation jobs are unchanged by this study.
+:::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The authored-body scope regression now captures visible binary bindings when a
+definition is checked. If those bindings later change, comparison and producer
+reduction retain the checked wrapper instead of reinterpreting its source body.
+The independent native fixture checks the original authored addition body. This
+conservative guard does not complete module isolation; the draft records the
+remaining typed-expression and import-scope requirements.
 :::

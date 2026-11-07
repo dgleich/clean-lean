@@ -46,7 +46,7 @@ assert nested.tree==['Operator','*',['Local','x'],['Operator','+',['Local','y'],
 # A type named Matrix with no dimensions must not trigger the old matrix branch.
 renamed=load(source.replace('Scalar','Matrix'))
 assert Expressions(renamed,local(renamed,'Matrix')).parse('x*(y+x)').lean==nested.lean
-missing=load(source.replace('  Infix: +\n',''))
+missing=load(source.split('\nDefine authored sum',1)[0].replace('  Infix: +\n',''))
 reject(missing,'x+y','No declared meaning')
 reject(env,'x+1','numeral interpretation')
 ambiguous=load(source+'''\nNotation another sum(x: Scalar,y: Scalar): Scalar:
@@ -54,6 +54,16 @@ ambiguous=load(source+'''\nNotation another sum(x: Scalar,y: Scalar): Scalar:
   Means: x+y
   Render latex: {x}+{y}
 ''')
+from cleanlang.conversion import comparison_normal_form
+original=Expressions(env,scope).parse('authored sum(x,y)')
+expanded=comparison_normal_form(original,env,scope)
+assert 'cleanNotation_scalar_addition_' in expanded.lean
+assert 'cleanDefine_authored_sum_' not in expanded.lean
+changed=Expressions(ambiguous,local(ambiguous)).parse('authored sum(x,y)')
+assert changed.lean==original.lean
+preserved=comparison_normal_form(changed,ambiguous,local(ambiguous))
+assert preserved.lean==changed.lean
+assert preserved.tree==changed.tree
 first=reject(ambiguous,'x+y','Ambiguous operator')
 ambiguous.operator_overloads['+'].reverse()
 assert reject(ambiguous,'x+y','Ambiguous operator')==first
@@ -86,6 +96,8 @@ noncomputable def expected_eq (x y : Real) : Prop := x=y
 '''
 for name,expected_name in [(add,'expected_add'),(mul,'expected_mul'),(eq,'expected_eq')]:
     native+=f'same_basic_target {name} {expected_name}\n'
+native+=f'noncomputable def expected_authored_sum (x y : Real) : Real := {add} x y\n'
+native+=f"same_basic_target {f('authored sum')} expected_authored_sum\n"
 native+=f'def actual_expression (x y : Real) : Prop := {actual.lean}\n'
 native+=f'def expected_expression (x y : Real) : Prop := {eq} ({add} x y) ({add} y x)\n'
 native+='same_basic_target actual_expression expected_expression\n'
@@ -175,6 +187,6 @@ assert reject(linear,'A*B','Ambiguous operator',ls)==message
 
 p=COMPILER/'OperatorAcceptance.lean';p.write_text(native)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(p)],cwd=COMPILER,check=True)
-print('Operator prototype: syntax/dispatch checks, fifteen exact targets and two proofs passed')
+print('Operator prototype: syntax/dispatch checks, sixteen exact targets and two proofs passed')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

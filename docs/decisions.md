@@ -618,3 +618,16 @@ Matrix/Vector display-name dispatch. Fifteen exact targets and two proofs pass;
 literals, declared fixity, module-owned scope and the wider dependent-overload
 audit remain integration gates.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Guard operator-dependent authored expansion
+
+The isolated prototype records visible binary-operator declaration identities
+before publishing an authored definition's own binding. If the visible set changes,
+retain its wrapper during comparison and producer reduction. Do not re-expand an
+already checked body under newly ambiguous operator meanings. The scope snapshot
+is insensitive to candidate order. This is a conservative opacity boundary;
+stable typed binding identities and independent module imports remain required.
+Sixteen exact targets and two proofs pass, including the original authored body.
+:::

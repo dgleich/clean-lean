@@ -97,12 +97,41 @@ The operator expression retains its precedence. Thus `x*(y+x)` cannot render as
 an ungrouped product followed by addition. Rendering does not select a declaration
 or change the emitted Lean expression.
 
+## Guarding authored-body expansion
+
+A checked authored definition records the visible binary-operator bindings just
+before publishing its own Infix metadata, if any. The snapshot is the sorted set
+of symbol/generated-declaration-identity pairs, including all visible bindings;
+candidate insertion order is irrelevant. It is comparison/emission metadata, not
+an external registry or a new source declaration.
+
+Before re-expanding an authored body during comparison or producer projection
+reduction, require that snapshot to equal the current operator environment. If it
+differs, retain the checked wrapper/projection instead of re-elaborating the body.
+The original wrapper's checked Lean body is not rewritten. All previous opacity
+and shadowing gates still apply. Definitions without this metadata retain their
+existing behavior, including generated constructors.
+
+The regression defines `authored sum(x,y)` using the one visible scalar-addition
+binding, then adds an overlapping binding. A new `x+y` is ambiguous. The named
+`authored sum(x,y)` call still emits the same checked wrapper; comparison keeps
+that wrapper rather than attempting the now-ambiguous source expansion. The
+native oracle independently checks that wrapper's original addition call.
+
+This is a conservative guard, not full module isolation. Even an unrelated new
+operator binding can make an old body opaque and reduce comparison power. It
+does not make imports independent of the importer, nor freeze bindings throughout
+all substituted proof/type expressions. Producer projection emission also retains
+its existing reduction-versus-opacity distinction; identical canonical emissions
+across different import environments are not claimed. A complete implementation
+needs stable bound identities through typed expressions and module-owned scopes.
+
 ## Evidence and integration gates
 
 [The study](../studies/module-operators/README.md) contains a patch, proposed Clean
 source and a driver that applies the patch to a temporary copy, regenerates the
 parser with strict checks, then runs independent binding and Lean-target fixtures.
-The prototype passes fifteen canonical targets and two proofs. Tests exercise missing
+The prototype passes sixteen canonical targets and two proofs. Tests exercise missing
 bindings, ambiguous bindings in both orders, invalid arity without partial
 publication, unequal operand types, grouping, literals rejected explicitly, and
 an interrupted competing candidate. A zero-argument type named Matrix, meaning

@@ -25,3 +25,7 @@ Notation scalar equality(x: Scalar,y: Scalar): Proposition:
   Render latex: {x}={y}
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Define authored sum(x: Scalar,y: Scalar): Scalar:
+  Equals: x+y
+  Render latex: {x}+{y}

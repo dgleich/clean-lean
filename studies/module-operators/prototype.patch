@@ -39,16 +39,21 @@
      implementation = next(iter(implementations))
      expression = None
      if implementation == 'equals':
-@@ -192,6 +195,9 @@
+@@ -192,8 +195,14 @@
          env.data['functions'][name]['dependent_signature']={
              'implicit':list(implicit.items()),'parameters':list(types.items()),
              'result':result,'key':key}
++    from .operator_bindings import scope_snapshot
++    operator_scope=scope_snapshot(env)
 +    if 'infix' in values:
 +        from .operator_bindings import declare
 +        declare(env,values['infix'],name)
      if authored:
          env.definitions[name] = {'key': key, 'parameters': list(local), 'implementation': implementation,
++            'operator_scope':operator_scope,
              'tree': expression.tree if expression else None,
+             'body': values[implementation], 'returns': str(result), 'attribution': attribution}
+
 --- a/cleanlang/core.py
 +++ b/cleanlang/core.py
 @@ -5,6 +5,12 @@
@@ -149,7 +154,16 @@
              if a.type==Type('Type'):raise CleanError('Type-valued operands do not support unary operators')
 --- a/cleanlang/conversion.py
 +++ b/cleanlang/conversion.py
-@@ -93,7 +93,7 @@
+@@ -58,6 +58,8 @@
+         return Expressions(env,locals).elaborate(tree[2][pos])
+     definition=env.definitions.get(tree[1])
+     if not definition or definition['implementation']!='equals':return None
++    from .operator_bindings import scope_unchanged
++    if not scope_unchanged(env,definition):return None
+     parameters=env.data['functions'][tree[1]]['signature_tree'][2]
+     body=definition['tree']
+     bindings=dict(zip((p[1] for p in parameters if p[3]=='explicit'),
+@@ -93,7 +95,7 @@
          if local is None or local.local_normal is None:return expression
          return _normal_form(local.local_normal,env,locals) if local.local_expand and not shadowed_globals(env,locals) else local.local_normal
      if kind in ('Decimal','Lambda','Forall','Exists'):return expression
@@ -158,9 +172,29 @@
      if kind=='Unary':
          a=normal(tree[2]);op='-' if tree[1]=='-' else '¬'
          return Expr('('+op+a.lean+')',expression.tex,expression.type,tree=['Unary',tree[1],a.tree])
+@@ -129,6 +131,8 @@
+     checked=env.call(name,args,locals)
+     definition=env.definitions.get(name)
+     if definition and definition['implementation']=='equals':
++        from .operator_bindings import scope_unchanged
++        if not scope_unchanged(env,definition):return checked
+         parameters=env.data['functions'][name]['signature_tree'][2]
+         implicit={p[1] for p in parameters if p[3]=='implicit'}
+         body=definition['tree']
+--- a/cleanlang/structures.py
++++ b/cleanlang/structures.py
+@@ -47,6 +47,8 @@
+         return Expressions(env,locals).elaborate(tree[2][position])
+     definition=env.definitions.get(tree[1])
+     if not definition or definition['implementation']!='equals':return None
++    from .operator_bindings import scope_unchanged
++    if not scope_unchanged(env,definition):return None
+     signature=env.data['functions'][tree[1]]['signature_tree']
+     parameters=signature[2]
+     if any(p[3]=='implicit' for p in parameters):return None
 --- a/cleanlang/operator_bindings.py
 +++ b/cleanlang/operator_bindings.py
-@@ -0,0 +1,66 @@
+@@ -0,0 +1,74 @@
 +# generated: gpt-6 2026-11-07 role=assisted; isolated prototype
 +import re
 +from dataclasses import replace
@@ -227,3 +261,11 @@
 +    result.precedence=precedence
 +    result.tree=['Operator',op,a.tree,b.tree]
 +    return result
++
++def scope_snapshot(env):
++    return tuple(sorted((op,tuple(sorted(env.data['functions'][name]['lean'].split()[0]
++                        for name in names)))
++                        for op,names in getattr(env,'operator_overloads',{}).items()))
++
++def scope_unchanged(env,definition):
++    return definition.get('operator_scope',scope_snapshot(env))==scope_snapshot(env)

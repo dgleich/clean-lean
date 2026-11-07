@@ -927,7 +927,7 @@ let p : n = n := h n</code></pre></section></div>
   Render latex: {x}+{y}</code></pre></section><section><h3>Readable Lean equivalent</h3><pre><code>def scalar_addition (x y : Real) : Real := x+y
 -- Clean x+y selects this wrapper when it is the unique match.
 -- Exact generated names are checked in the prototype fixtures.</code></pre></section></div>
-<p>Parsing uses the existing operator tree; matching selects exactly one declared callable. Two matches are ambiguity, and an interrupted candidate cannot be discarded. There is no fallback to built-in binary meanings. The prototype rejects unresolved numerals. Its dependent-call matching checks matrix/vector dimensions and keeps nested elaboration failures distinct from candidate mismatches. Fifteen exact native targets and two proofs pass in the isolated study.</p>
+<p>Parsing uses the existing operator tree; matching selects exactly one declared callable. Two matches are ambiguity, and an interrupted candidate cannot be discarded. There is no fallback to built-in binary meanings. The prototype rejects unresolved numerals. Its dependent-call matching checks matrix/vector dimensions and keeps nested elaboration failures distinct from candidate mismatches. Sixteen exact native targets and two proofs pass in the isolated study. Authored-body expansion stays opaque after its binary-operator environment changes; this guard does not complete module isolation.</p>
 <p>Literal policy, declared precedence, module-owned scope, editor support and the full foundation migration remain unfinished. See <a href="module-operators.md">the draft contract</a> and <a href="../studies/module-operators/README.md">the isolated executable study</a>.</p>
 </section></llm>
 </main>
