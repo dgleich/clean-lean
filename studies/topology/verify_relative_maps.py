@@ -10,7 +10,7 @@ env=Environment();results=load_document(here/'RelativeMaps.clean',env)
 source=lean(results,env,['Lean'])
 (here/'RelativeMaps.lean').write_text(source)
 (here/'RelativeMaps.tex').write_text(latex(results,env))
-function=lambda n:env.data['functions'][n]['lean'].split()[0]
+function=lambda n:env.data['functions'][n]['native_binding']
 mapping={}
 for oracle,name in [('projection','relative chain projection'),('commutes','pair chain commutes'),
  ('chainMap','relative chain map'),('homologyMap','relative homology map'),('image','relative homology image')]:
@@ -58,41 +58,41 @@ elab "same_target " a:ident b:ident : command => do
 '''
 expected=r'''
 namespace RelativeMapOracle
-noncomputable def projection {K : Type} (field : Field K) (H : THEORY K field) (X : TopCat.{0})
+noncomputable def projection {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (X : SPACETYPE)
   (Q : PAIR X) : MAP((@SINGULAR K field H (@SUBSPACE X Q.ambient)),(@RELCHAINS K field H X Q)) :=
   @QUOTIENTPROJ K field (@SINGULAR K field H (@SUBSPACE X Q.relative))
     (@SINGULAR K field H (@SUBSPACE X Q.ambient)) (@PAIRMAP K field H X Q)
-noncomputable def commutes {K : Type} (field : Field K) (H : THEORY K field) (X : TopCat.{0})
-  (Q : INCLUSION X) : Prop :=
+noncomputable def commutes {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (X : SPACETYPE)
+  (Q : INCLUSION X) : CONDITIONTYPE :=
   @COMPOSE K field A B D (@AMBIENT K field H X Q) (@PAIRMAP K field H X Q.source) =
     @COMPOSE K field A C D (@PAIRMAP K field H X Q.target) (@RELATIVE K field H X Q)
-noncomputable def chainMap {K : Type} (field : Field K) (H : THEORY K field) (X : TopCat.{0})
+noncomputable def chainMap {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (X : SPACETYPE)
   (Q : INCLUSION X) (h : @commutes K field H X Q) :
   MAP((@RELCHAINS K field H X Q.source),(@RELCHAINS K field H X Q.target)) :=
   @QUOTIENTMAP K field A B C D (@PAIRMAP K field H X Q.source) (@PAIRMAP K field H X Q.target)
     (@RELATIVE K field H X Q) (@AMBIENT K field H X Q) h
-noncomputable def homologyMap {K : Type} (field : Field K) (H : THEORY K field) (X : TopCat.{0})
-  (Q : INCLUSION X) (h : @commutes K field H X Q) : @ModuleCat.Hom K field.toRing MS MT :=
+noncomputable def homologyMap {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (X : SPACETYPE)
+  (Q : INCLUSION X) (h : @commutes K field H X Q) : MODULEMAPTYPE K field MS MT :=
   @HOMOLOGYMAP K field (@RELCHAINS K field H X Q.source) (@RELCHAINS K field H X Q.target)
     (@chainMap K field H X Q h) H.degree
-noncomputable def image {K : Type} (field : Field K) (H : THEORY K field) (X : TopCat.{0})
+noncomputable def image {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (X : SPACETYPE)
   (Q : INCLUSION X) (h : @commutes K field H X Q) : SUBSPACE_T :=
   @RANGE K field MS MT (@homologyMap K field H X Q h)
 
-def commutationStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field)
-  (X : TopCat.{0}) (Q : INCLUSION X), @commutes K field H X Q
-def quotientStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field)
-  (X : TopCat.{0}) (Q : INCLUSION X) (h : @commutes K field H X Q),
+def commutationStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field)
+  (X : SPACETYPE) (Q : INCLUSION X), @commutes K field H X Q
+def quotientStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field)
+  (X : SPACETYPE) (Q : INCLUSION X) (h : @commutes K field H X Q),
   @COMPOSE K field B (@RELCHAINS K field H X Q.source) (@RELCHAINS K field H X Q.target)
     (@chainMap K field H X Q h) (@projection K field H X Q.source) =
   @COMPOSE K field B D (@RELCHAINS K field H X Q.target)
     (@projection K field H X Q.target) (@AMBIENT K field H X Q)
-def imageStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field)
-  (X : TopCat.{0}) (Q : INCLUSION X) (h : @commutes K field H X Q)
-  (x : @ModuleCat.carrier K field.toRing MT),
-  let f : @ModuleCat.Hom K field.toRing MS MT := @homologyMap K field H X Q h;
+def imageStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field)
+  (X : SPACETYPE) (Q : INCLUSION X) (h : @commutes K field H X Q)
+  (x : ELEMENTTYPE K field MT),
+  let f : MODULEMAPTYPE K field MS MT := @homologyMap K field H X Q h;
   let U : SUBSPACE_T := @image K field H X Q h;
-  @BELONGS K field MT x U ↔ @Exists (@ModuleCat.carrier K field.toRing MS)
+  @BELONGS K field MT x U ↔ @Exists (ELEMENTTYPE K field MS)
     (fun y => @VALUE K field MS MT f y = x)
 end RelativeMapOracle
 '''
@@ -102,7 +102,7 @@ corners={n:f'(@SINGULAR K field H (@SUBSPACE X Q.{pair}.{subset}))'
          for n,pair,subset in [('A','source','relative'),('B','source','ambient'),
                               ('C','target','relative'),('D','target','ambient')]}
 expected=re.sub(r'\b[A-D]\b',lambda m:corners[m[0]],expected)
-expected=expected.replace('SUBSPACE_T','(@Submodule K MT.carrier field.toSemiring MT.isAddCommGroup.toAddCommMonoid MT.isModule)')
+expected=expected.replace('SUBSPACE_T','(SUBSPACETYPE K field MT)')
 expected=expected.replace('MS','(@RELHOMOLOGY K field H X Q.source)').replace('MT','(@RELHOMOLOGY K field H X Q.target)')
 while 'MAP(' in expected:
     start=expected.index('MAP(');i=start+4;depth=0;split=None
@@ -115,7 +115,7 @@ while 'MAP(' in expected:
         elif ch==',' and depth==0:split=i
         i+=1
     a,b=expected[start+4:split],expected[split+1:i]
-    expected=expected[:start]+f'(letI : Field K := field; @Quiver.Hom (ChainComplex (ModuleCat.{{0}} K) ℕ) inferInstance {a} {b})'+expected[i+1:]
+    expected=expected[:start]+f'(CHAINMAPTYPE K field {a} {b})'+expected[i+1:]
 substitutions={'THEORY':env.structures['HomologyTheory']['key'],'PAIR':env.structures['TopologicalPair']['key'],
                'INCLUSION':env.structures['PairInclusion']['key']}
 for placeholder,name in [('SINGULAR','singular chains'),('SUBSPACE','subspace'),('RELCHAINS','relative chains'),
@@ -123,6 +123,10 @@ for placeholder,name in [('SINGULAR','singular chains'),('SUBSPACE','subspace'),
  ('COMPOSE','compose chain maps'),('AMBIENT','ambient chain map'),('RELATIVE','relative subset chain map'),
  ('QUOTIENTMAP','chain cokernel map'),('HOMOLOGYMAP','induced chain homology map'),('RANGE','module map range'),
  ('BELONGS','belongs to module subspace'),('VALUE','module map value')]:substitutions[placeholder]=function(name)
+for placeholder,name in [('FIELDTYPE','FieldStructure'),('SPACETYPE','TopologicalSpace'),
+ ('CARRIERTYPE','Type'),('CONDITIONTYPE','Proposition'),('MODULEMAPTYPE','ModuleMap'),
+ ('ELEMENTTYPE','ModuleElement'),('SUBSPACETYPE','ModuleSubspace'),('CHAINMAPTYPE','ChainMap')]:
+    substitutions[placeholder]='_root_.'+env.data['types'][name]['native_binding']
 # Longest names first avoids replacing PAIR inside PAIRMAP.
 for placeholder in sorted(substitutions,key=len,reverse=True):expected=expected.replace(placeholder,substitutions[placeholder])
 checks=[f'same_target {target} {oracle}' for oracle,target in mapping.items()]

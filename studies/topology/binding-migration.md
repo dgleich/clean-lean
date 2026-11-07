@@ -18,7 +18,9 @@ directly against the repository compiler, without applying historical patches.
 | `studies/topology/verify_evidence.py` | 42 | 4 |
 | `studies/topology/verify_local_names.py` | 4 | 2 |
 | `studies/topology/verify_pair_composition.py` | 20 | 6 |
-| Total | 237 | 53 |
+| `studies/topology/verify_relative.py` | 24 | 4 |
+| `studies/topology/verify_relative_maps.py` | 8 | 3 |
+| Total | 269 | 60 |
 
 Run each with the repository Python environment and `LAKE` set to the pinned Lake
 executable. Each verifier generates its artifacts and invokes Lean. The foundation
@@ -96,9 +98,20 @@ tests pass. An initial command used the nonexistent module name
 `test_beta_indices`; the corrected command above completed successfully. Both
 TeX outputs are unchanged after provenance restoration.
 
+The relative-chain study checks six additional type adapters and two extracted
+categorical-instance proof helpers. Lean shares these helpers with the earlier
+absolute-homology adapter; explicit name mappings are accompanied by exact
+helper type/body checks. The expected chain-map types now use the declared
+adapter, while its independently written body still fixes the category and its
+instance. The chain module also compiles independently of topology's transitive
+imports. The relative-map study checks its five definitions and three statements
+against explicit native type references. Twenty-three focused relative-homology
+and conversion tests pass. Both TeX outputs are unchanged after provenance
+restoration.
+
 The main compiler still uses the existing built-in operators. The separate
 [declared-operator experiment](../operator-integration/topology-migration.md)
-remains isolated. Relative homology and the larger interlevel and well-group native verifiers still
+remains isolated. The larger interlevel, chain-square and well-group native verifiers still
 need migration. These checks establish neither the missing paper proofs nor
 general universe polymorphism or the complete language acceptance contract.
 :::

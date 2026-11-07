@@ -10,16 +10,23 @@ env=Environment();results=load_document(here/'Relative.clean',env)
 source=lean(results,env,['Lean'])
 (here/'Relative.lean').write_text(source)
 (here/'Relative.tex').write_text(latex(results,env))
-function=lambda n:env.data['functions'][n]['lean'].split()[0]
-typekey=lambda n:next(k for k in env.notation_definitions if k.startswith('cleanType_'+n+'_'))
+function=lambda n:env.data['functions'][n]['native_binding']
+typekey=lambda n:env.data['types'][n]['native_binding']
 mapping={}
-for oracle,name in [('Complex','ModuleChainComplex'),('Map','ChainMap')]:
+for oracle,name in [('Complex','ModuleChainComplex'),('Map','ChainMap'),
+                    ('carrierType','Type'),('fieldType','FieldStructure'),('naturalType','Natural'),
+                    ('spaceType','TopologicalSpace'),('continuousType','ContinuousMap'),
+                    ('moduleType','CoefficientModule')]:
     mapping['RelativeOracle.'+oracle]=typekey(name)
 for oracle,name in [('cokernel','chain cokernel'),('projection','chain cokernel projection'),
  ('compose','compose chain maps'),('zeroMap','zero chain map'),('homology','chain homology'),
  ('singular','singular chains'),('induced','induced chain map'),('inclusion','pair chain inclusion'),
  ('relativeChains','relative chains'),('relativeHomology','relative homology')]:
     mapping['RelativeOracle.'+oracle]=function(name)
+# Lean shares extracted instance proofs with the earlier homology adapter.
+# Explicitly compare these helpers; do not erase or unfold arbitrary proof terms.
+mapping['RelativeOracle.homology._proof_1']=function('homology module')+'._proof_2'
+mapping['RelativeOracle.singular._proof_1']=function('homology module')+'._proof_1'
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
 open Lean Elab Command
@@ -48,6 +55,9 @@ elab "same_target " a:ident b:ident : command => do
   | .defnInfo x,.defnInfo y =>
     unless Expr.equal (canonical x.value) (canonical y.value) do
       throwError "Canonical body differs: {a} vs {b}"
+  | .thmInfo x,.thmInfo y =>
+    unless Expr.equal (canonical x.value) (canonical y.value) do
+      throwError "Canonical auxiliary proof differs"
   | .ctorInfo x,.ctorInfo y =>
     unless x.numParams == y.numParams && x.numFields == y.numFields && x.cidx == y.cidx &&
         canonicalName x.induct == canonicalName y.induct do
@@ -60,58 +70,66 @@ elab "same_target " a:ident b:ident : command => do
 '''
 expected=r'''
 namespace RelativeOracle
-noncomputable def Complex (K : Type) (field : Field K) : Type 1 :=
+noncomputable abbrev carrierType : Type 1 := Type
+noncomputable abbrev fieldType (K : Type) : Type := Field K
+noncomputable abbrev naturalType : Type := ℕ
+noncomputable abbrev spaceType : Type 1 := TopCat.{0}
+noncomputable abbrev continuousType (X Y : spaceType) : Type :=
+  @ContinuousMap X.carrier Y.carrier X.str Y.str
+noncomputable abbrev moduleType (K : Type) (field : fieldType K) : Type 1 :=
+  @ModuleCat.{0,0} K field.toRing
+noncomputable abbrev Complex (K : Type) (field : fieldType K) : Type 1 :=
   letI : Field K := field
   ChainComplex (ModuleCat.{0} K) ℕ
-noncomputable def Map (K : Type) (field : Field K)
-  (C D : (letI : Field K := field; ChainComplex (ModuleCat.{0} K) ℕ)) : Type :=
+noncomputable abbrev Map (K : Type) (field : fieldType K)
+  (C D : Complex K field) : Type :=
   letI : Field K := field
   @Quiver.Hom (ChainComplex (ModuleCat.{0} K) ℕ) inferInstance C D
-noncomputable def cokernel {K : Type} (field : Field K) (C D : COMPLEX)
+noncomputable def cokernel {K : Type} (field : fieldType K) (C D : COMPLEX)
   (f : MAP(C,D)) : COMPLEX :=
   letI : Field K := field
   CategoryTheory.Limits.cokernel f
-noncomputable def projection {K : Type} (field : Field K) (C D : COMPLEX)
+noncomputable def projection {K : Type} (field : fieldType K) (C D : COMPLEX)
   (f : MAP(C,D)) : MAP(D,(@cokernel K field C D f)) :=
   letI : Field K := field
   CategoryTheory.Limits.cokernel.π f
-noncomputable def compose {K : Type} (field : Field K) (C D E : COMPLEX)
+noncomputable def compose {K : Type} (field : fieldType K) (C D E : COMPLEX)
   (g : MAP(D,E)) (f : MAP(C,D)) : MAP(C,E) :=
   letI : Field K := field
   CategoryTheory.CategoryStruct.comp f g
-noncomputable def zeroMap {K : Type} (field : Field K) (C D : COMPLEX) : MAP(C,D) :=
+noncomputable def zeroMap {K : Type} (field : fieldType K) (C D : COMPLEX) : MAP(C,D) :=
   letI : Field K := field
   0
-noncomputable def homology {K : Type} (field : Field K) (C : COMPLEX) (n : ℕ) : MODULE :=
+noncomputable def homology {K : Type} (field : fieldType K) (C : COMPLEX) (n : naturalType) : MODULE :=
   letI : Field K := field
   (HomologicalComplex.homologyFunctor (ModuleCat.{0} K) (ComplexShape.down ℕ) n).obj C
-noncomputable def singular {K : Type} (field : Field K) (H : THEORY K field) (X : TopCat.{0}) : COMPLEX :=
+noncomputable def singular {K : Type} (field : fieldType K) (H : THEORY K field) (X : spaceType) : COMPLEX :=
   letI : Field K := field
   ((AlgebraicTopology.singularChainComplexFunctor (ModuleCat.{0} K)).obj H.coefficients).obj X
-noncomputable def induced {K : Type} (field : Field K) (H : THEORY K field) (X Y : TopCat.{0})
-  (f : @ContinuousMap X.carrier Y.carrier X.str Y.str) : MAP((@singular K field H X),(@singular K field H Y)) :=
+noncomputable def induced {K : Type} (field : fieldType K) (H : THEORY K field) (X Y : spaceType)
+  (f : continuousType X Y) : MAP((@singular K field H X),(@singular K field H Y)) :=
   letI : Field K := field
   ((AlgebraicTopology.singularChainComplexFunctor (ModuleCat.{0} K)).obj H.coefficients).map (TopCat.ofHom f)
-noncomputable def inclusion {K : Type} (field : Field K) (H : THEORY K field) (X : TopCat.{0})
+noncomputable def inclusion {K : Type} (field : fieldType K) (H : THEORY K field) (X : spaceType)
   (Q : PAIR X) : MAP((@singular K field H (@SUBSPACE X Q.relative)),(@singular K field H (@SUBSPACE X Q.ambient))) :=
   @induced K field H (@SUBSPACE X Q.relative) (@SUBSPACE X Q.ambient)
     (@SUBINCLUSION X Q.relative Q.ambient Q.nesting)
-noncomputable def relativeChains {K : Type} (field : Field K) (H : THEORY K field) (X : TopCat.{0})
+noncomputable def relativeChains {K : Type} (field : fieldType K) (H : THEORY K field) (X : spaceType)
   (Q : PAIR X) : COMPLEX :=
   @cokernel K field (@singular K field H (@SUBSPACE X Q.relative))
     (@singular K field H (@SUBSPACE X Q.ambient)) (@inclusion K field H X Q)
-noncomputable def relativeHomology {K : Type} (field : Field K) (H : THEORY K field) (X : TopCat.{0})
+noncomputable def relativeHomology {K : Type} (field : fieldType K) (H : THEORY K field) (X : spaceType)
   (Q : PAIR X) : MODULE := @homology K field (@relativeChains K field H X Q) H.degree
 
-def quotientStatement : Prop := ∀ (K : Type) (field : Field K) (C D : COMPLEX) (f : MAP(C,D)),
+def quotientStatement : Prop := ∀ (K : carrierType) (field : fieldType K) (C D : COMPLEX) (f : MAP(C,D)),
   @compose K field C D (@cokernel K field C D f) (@projection K field C D f) f =
     @zeroMap K field C (@cokernel K field C D f)
-def agreementStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field) (X : TopCat.{0}),
+def agreementStatement : Prop := ∀ (K : carrierType) (field : fieldType K) (H : THEORY K field) (X : spaceType),
   @homology K field (@singular K field H X) H.degree = @ABSOLUTE K field H X
-def relativeChainStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field) (X : TopCat.{0}) (Q : PAIR X),
+def relativeChainStatement : Prop := ∀ (K : carrierType) (field : fieldType K) (H : THEORY K field) (X : spaceType) (Q : PAIR X),
   @relativeChains K field H X Q = @cokernel K field (@singular K field H (@SUBSPACE X Q.relative))
     (@singular K field H (@SUBSPACE X Q.ambient)) (@inclusion K field H X Q)
-def relativeHomologyStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field) (X : TopCat.{0}) (Q : PAIR X),
+def relativeHomologyStatement : Prop := ∀ (K : carrierType) (field : fieldType K) (H : THEORY K field) (X : spaceType) (Q : PAIR X),
   @relativeHomology K field H X Q = @homology K field (@relativeChains K field H X Q) H.degree
 end RelativeOracle
 '''
@@ -128,9 +146,9 @@ while 'MAP(' in expected:
         elif ch==',' and depth==0:split=i
         i+=1
     left=expected[start+4:split];right=expected[split+1:i]
-    expected=expected[:start]+f'(letI : Field K := field; @Quiver.Hom (ChainComplex (ModuleCat.{{0}} K) ℕ) inferInstance {left} {right})'+expected[i+1:]
-expected=expected.replace('COMPLEX','(letI : Field K := field; ChainComplex (ModuleCat.{0} K) ℕ)')
-expected=expected.replace('MODULE','(@ModuleCat.{0,0} K field.toRing)')
+    expected=expected[:start]+f'(Map K field {left} {right})'+expected[i+1:]
+expected=expected.replace('COMPLEX','(Complex K field)')
+expected=expected.replace('MODULE','(moduleType K field)')
 for placeholder,target in [('THEORY',env.structures['HomologyTheory']['key']),
  ('PAIR',env.structures['TopologicalPair']['key']),('SUBSPACE',function('subspace')),
  ('SUBINCLUSION',function('subspace inclusion')),('ABSOLUTE',function('homology module'))]:

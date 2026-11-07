@@ -454,3 +454,14 @@ are compared separately. The exact matcher was not weakened. Eleven migrated
 topology verifiers total 237 exact targets and 53 proofs. TeX outputs for these
 two studies are unchanged after provenance restoration.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+Relative chains and relative maps now pass 24 and eight exact target checks,
+with four and three proofs respectively. This includes exact type/body checks
+for two shared categorical-instance proof helpers and standalone compilation of
+the algebraic chain module. Twenty-three relative-homology/conversion tests pass.
+Thirteen migrated topology verifiers total 269 exact targets and 60 proofs.
+The two TeX sources are unchanged after provenance restoration. Full discovery
+remains active and unfinished.
+:::
