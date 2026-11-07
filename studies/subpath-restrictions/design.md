@@ -153,15 +153,16 @@ renames binders in inserted actual expressions before checking the result.
 The patch includes studies/callable-evidence/Statements.clean and its standalone
 verify.py. With the patch applied, run
 `LAKE=lake python3 studies/callable-evidence/verify.py` from the isolated checkout.
-Fourteen independent exact native comparisons and ten proofs pass. Cases include
+Twenty-one independent exact native comparisons and fifteen proofs pass. Cases include
 direct and named universal evidence, generic projected proof fields, proof-family
 arguments, nested quantification, captured free variables and type scopes,
 implication application and saving an assumption as a local value. The verifier
 regenerates Lean and TeX artifacts; these will be tracked directly on integration.
 
 The generated parser matches its unchanged grammar under strict LALR and lexer
-checks. The combined focused/regression run passes 186 tests. Sixteen focused callable
-cases, including an additional syntax-only serializer round-trip test, also pass.
+checks. The combined focused/regression run passes 197 tests, including 26 callable
+evidence cases. These cover syntax-only serialization, local/module call collisions,
+ambiguous arrow bindings, nested proof-family arguments and captured-scope conflicts.
 The old assertion that quantified assumptions cannot be saved as values has been
 replaced; a separate exact native target now covers that operation. Three older
 negative tests exposed changed diagnostic precedence. The revised non-condition
@@ -169,7 +170,7 @@ index test supplies a correctly typed lambda and still requires binder rejection
 Higher-order lambda applications whose bodies contain binders remain rejected;
 their tests now check the specific application-boundary diagnostic.
 
-The specimen compiles twice and its two-page rendering was inspected. The proof
+The expanded specimen compiles twice and its three-page rendering was inspected. The proof
 field's prose description explicitly includes its carrier; the initial generic
 fallback omitted that information and was corrected in the specimen.
 
@@ -182,9 +183,15 @@ preserves these binders without consulting an environment; the semantic check
 selects the permitted index representation. This boundary needs to enter the
 formal specification and acceptance catalog before integration.
 
-Remaining work includes the full substitution and expression-consumer audit,
-local/module call-name collision tests, further canonical comparison under binder
-renaming, formal acceptance documentation, full-suite validation and integration.
+The [integration contract draft](../../docs/callable-evidence.md) now specifies
+parsing, scoped indices, head views, recursive function matching, capture-conflict
+rejection, resolution precedence and exact Lean emission. The HTML reference marks
+this as an isolated prototype; its links, search, status filter and mobile layout pass.
+
+The isolated compiler snapshot is now frozen for a full regression run and the
+33-study native portfolio. Both are pending, not reported as passing. Remaining
+work includes closing the consumer audit, further canonical binder-renaming cases,
+the normative acceptance catalog, full validation and integration.
 The experiment has not established conformance. General captured-scope
 substitution must not be inferred safe merely from the passing examples.
 :::

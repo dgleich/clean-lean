@@ -531,3 +531,22 @@ the new node. Local type definitions and arbitrary computed types remain rejecte
 The earlier compound-type-as-value opacity boundary is superseded; full validation
 status is recorded in the type-expression study.
 :::
+
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Callable evidence integration draft
+
+The [draft contract](callable-evidence.md) keeps existing Call/Apply syntax and
+adds scoped condition indices with source-derived callable views for universal
+quantification and implication. Named native condition bodies remain opaque.
+Function matching recurses under shared fresh binders; it emits the original
+proof term without casts or replacement evidence. Captured locals may only be
+replaced explicitly. The prototype rejects accidental scope rebinding.
+
+This work is isolated in the subpath study's patch while the preceding compiler
+snapshot completes validation. It is not yet repository-supported syntax or a
+conformance claim. The 197-test focused run, 21 exact native targets and 15 proofs
+are evidence for the draft; full regression, native portfolio and final acceptance
+integration remain pending.
+:::

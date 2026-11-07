@@ -4104,6 +4104,10 @@
     "studies/subpath-restrictions/callable-evidence-prototype.patch": {
       "origin": "llm-assisted",
       "mode": "sidecar"
+    },
+    "docs/callable-evidence.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

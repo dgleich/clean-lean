@@ -19,7 +19,7 @@ main{max-width:1200px;margin:auto;padding:40px 28px 70px}h1{font-size:clamp(2rem
 <body>
 <llm date="2026-10-23" role="assisted" style="display:contents">
 <main>
-<div class="eyebrow">Local language reference · For Lean users · Updated 6 November 2026</div>
+<div class="eyebrow">Local language reference · For Lean users · Updated 7 November 2026</div>
 <h1>Clean to Lean</h1>
 <p><llm model="gpt-6" date="2026-11-05" role="assisted">Related reports: <a href="clean-and-dafny.html">Clean and Dafny</a> and <a href="../studies/topology/comparison.html">five topology theorems in Clean and Lean</a>.</llm></p>
 <p>New proposed examples: <a href="sorting-examples.md">insertion sort, heapsort, and their runtime statements</a>. Recursion and pattern syntax remain unspecified; the heapsort comparison proof is an independent Lean reference.</p>
@@ -902,6 +902,19 @@ pack(type(Function(k: Natural,Vector(k,Real))),f)</code></pre>
 <p>Substitution descends into type indices and freshens dependent binders. Automatic assumption names retain <code>type(...)</code>, with existing punctuation encoding and collision rejection. LaTeX uses the ordinary mathematical type rendering.</p>
 <p><a href="type-expressions.md">Normative rules and consumer audit</a> · <a href="../studies/type-expressions/README.md">Eight exact native targets and three proofs</a>.</p>
 </section>
+<llm model="gpt-6" date="2026-11-07" role="assisted" style="display:contents">
+<section class="mapping" id="callable-evidence" data-status="proposed">
+<h2>Callable evidence of universal conditions</h2>
+<p><strong>Isolated prototype; not integrated.</strong> The proposed rule uses existing call syntax to apply evidence of authored universal conditions or implications. It preserves the original named condition as the assumption's Lean type.</p>
+<div class="pair"><section><h3>Clean statement fragment</h3><pre><code>Assume h: for every (x: Natural,x = x)
+Let n: Natural
+Let p = h(n)</code></pre></section><section><h3>Readable Lean equivalent</h3><pre><code>-- Given h : ∀ x : ℕ, x = x and n : ℕ
+let p : n = n := h n</code></pre></section></div>
+<p>A callable view exposes the checked domain and codomain; the emitted term remains ordinary application of h. Named authored conditions may unfold under the specified source-conversion rule. Opaque native condition bodies are not inspected. There is no proof search, replacement evidence or inserted cast.</p>
+<p>Known function types compare recursively under fresh binders, allowing universal evidence where a dependent proof family is expected. Captured proof locals cannot be rebound implicitly. A callable local takes precedence over a same-named module callable; a wrong argument does not trigger fallback to the module.</p>
+<p><a href="callable-evidence.md">Integration contract draft</a> · <a href="../studies/subpath-restrictions/design.md">Prototype patch and acceptance evidence</a>. Full integration and conformance checks remain unfinished.</p>
+</section>
+</llm>
 </main>
 <script>
 (() => {
