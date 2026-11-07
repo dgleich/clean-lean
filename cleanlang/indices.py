@@ -17,15 +17,15 @@ def index_value(expression,environment=None,locals=None):
         from .beta_indices import contract_index
         expression=contract_index(expression,environment,locals or {})
     tree=expression.tree
-    if environment is not None:
-        from .bound_calls import bind
-        tree=bind(tree,environment,locals or {})
     def check(node):
         if not isinstance(node,list):return
         if node and node[0] in ('Lambda','Forall','Exists'):
             raise CleanError('Computed indices do not introduce binders')
         for child in node:check(child)
     check(tree)
+    if environment is not None:
+        from .bound_calls import bind
+        tree=bind(tree,environment,locals or {})
     comparison=None
     if environment is not None:
         from .conversion import index_comparison

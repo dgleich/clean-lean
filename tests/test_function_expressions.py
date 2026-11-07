@@ -18,7 +18,8 @@ class FunctionExpressions(unittest.TestCase):
     def test_independent_tree_and_target(self):
         e=self.parse('function(x: Real, x)')
         self.assertEqual(e.tree,['Lambda','x','Real',['Local','x']])
-        self.assertEqual(e.lean,'(fun (clean_bound_0 : ℝ) => clean_bound_0)')
+        real=self.env.data['types']['Real']['native_binding']
+        self.assertEqual(e.lean,f'(fun (clean_bound_0 : (_root_.{real})) => clean_bound_0)')
         self.assertEqual(e.type,Type('Function',(Type('Real'),Type('Real'))))
 
     def test_nested_capture_and_local_application(self):
@@ -30,7 +31,8 @@ class FunctionExpressions(unittest.TestCase):
     def test_sibling_scope_and_deterministic_freshness(self):
         local={'clean_bound_0':Expr('clean_bound_0','z',Type('Real'))}
         e=self.parse('FUNCTION(x: Real, x + clean_bound_0)',local)
-        self.assertIn('fun (clean_bound_1 : ℝ)',e.lean)
+        real=self.env.data['types']['Real']['native_binding']
+        self.assertIn(f'fun (clean_bound_1 : (_root_.{real}))',e.lean)
         self.assertEqual(e.lean,self.parse('FUNCTION(x: Real, x + clean_bound_0)',local).lean)
         with self.assertRaises(CleanError):self.parse('function(x: Real,x) + x')
 

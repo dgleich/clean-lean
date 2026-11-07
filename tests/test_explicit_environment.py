@@ -46,7 +46,10 @@ class ExplicitEnvironmentTests(unittest.TestCase):
     def test_new_type_and_phrase_need_no_python_changes(self):
         env=self.module('Type Count():\n    Means: Nat\n    Render latex: N\n\nPhrase counting numbers => Count\n')
         self.assertEqual(env.type('counting numbers'),Type('Count'))
-        self.assertEqual(env.render_type(env.type('Count'),'lean'),'Nat')
+        key=env.data['types']['Count']['native_binding']
+        self.assertEqual(env.render_type(env.type('Count'),'lean'),f'(_root_.{key})')
+        self.assertEqual(env.notation_definitions[key],
+                         f'noncomputable abbrev {key}  : Type :=\n  Nat\n')
 
     def test_explicit_source_declaration(self):
         env=self.module('Source local:\n    Kind: other\n    Label: Local notes\n    Title: Working notes\n')

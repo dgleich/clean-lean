@@ -24,7 +24,8 @@ class LocalConversion(unittest.TestCase):
         b=self.typ('ChainMap(K,field,(relative chains(field,H,X,P)),(relative chains(field,H,X,P)))')
         self.assertEqual(a,b);self.assertEqual(hash(a),hash(b))
         self.assertNotEqual(self.e.render_type(a,'lean'),self.e.render_type(b,'lean'))
-        self.assertIn(' R ',self.e.render_type(a,'lean'))
+        key=self.e.data['types']['ChainMap']['native_binding']
+        self.assertEqual(self.e.render_type(a,'lean'),f'(_root_.{key} (K) (field) (R) (S))')
     def test_distinct_variables_and_native_terms_stay_distinct(self):
         self.bind('R','relative chains(field,H,X,P)')
         self.assertNotEqual(self.typ('ChainMap(K,field,R,R)'),
@@ -59,7 +60,9 @@ Result local names:
             p=Path(d)/'test.clean';p.write_text(source)
             e=Environment();rs=load_document(p,e)
         target=lean(rs,e,[])
-        self.assertIn('let R :',target);self.assertIn(' R R',target)
+        key=e.data['types']['ChainMap']['native_binding']
+        self.assertIn('let R :',target)
+        self.assertIn(f'∀ (f : (_root_.{key} (K) (field) (R) (R))),',target)
     def test_function_alias_call_head_converts(self):
         self.locals['g']=Expr('g','g',self.typ('Function(Real,Real)'))
         self.bind('f','g')

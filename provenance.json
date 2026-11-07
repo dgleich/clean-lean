@@ -6108,6 +6108,10 @@
     "docs/fresh-bound-call-comparison.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "docs/binding-oracle-migration.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

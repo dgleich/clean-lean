@@ -51,11 +51,13 @@ change: migrate expected declarations and independently check their wrapper bodi
   and passes 77 exact targets and seventeen proofs. That is separate prototype
   evidence, not evidence that declared operators are integrated into main.
 
-A full discovery run is active, with periodic stack traces enabled. It began
-before the seven newly extracted identity tests were added; those tests were run
-separately. Its completion is pending and must not be reported as passing. The
-older five-patch full discovery process is also still active. Neither run validates
-all later changes merely by remaining alive.
+The first instrumented full discovery run later aborted during a timed stack
+dump. A subsequent reordered run exposed sixteen expectation/diagnostic failures
+before another diagnostic crash. Those checks have been repaired with 161 affected
+module tests passing; see [oracle migration](binding-oracle-migration.md). A current
+739-test run without timed dumps is active, with the two slow modules last and no
+tests omitted. Completion and broader validation remain pending. The older
+five-patch uninstrumented run is still separate, historical work.
 
 The exact main-tree commands for the native checks are:
 

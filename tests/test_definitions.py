@@ -22,8 +22,11 @@ class DefinitionTests(unittest.TestCase):
         env = self.load(IDENTITY)
         self.assertEqual(env.definitions['identity']['tree'], ['Local','x'])
         key = env.definitions['identity']['key']
+        real=env.data['types']['Real']['native_binding']
+        self.assertEqual(env.notation_definitions[real],
+                         f'noncomputable abbrev {real}  : Type :=\n  ℝ\n')
         self.assertEqual(env.notation_definitions[key],
-                         f'noncomputable def {key}  (x : ℝ) : ℝ :=\n  x\n')
+                         f'noncomputable def {key}  (x : (_root_.{real})) : (_root_.{real}) :=\n  x\n')
 
     def test_fields_reordered(self):
         expected = self.load(IDENTITY).definitions['identity']['key']

@@ -21,7 +21,9 @@ class CleanTests(unittest.TestCase):
     def test_multiplication_and_local_definition(self):
         s=lean(parse(SOURCE,self.reg),self.reg,[])
         self.assertIn('A *ᵥ x',s); self.assertIn('μ • x',s)
-        self.assertIn('let y : Fin n → ℂ :=',s)
+        vector=self.reg.data['types']['Vector']['native_binding']
+        complex=self.reg.data['types']['Complex']['native_binding']
+        self.assertIn(f'let y : (_root_.{vector} (n) ((_root_.{complex}))) :=',s)
         self.assertNotIn('sorry',s); self.assertNotIn('axiom',s)
     def reject(self,s,part):
         with self.assertRaisesRegex(CleanError,part): parse(s,self.reg)

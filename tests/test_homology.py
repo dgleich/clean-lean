@@ -24,7 +24,7 @@ class HomologyInterfaces(unittest.TestCase):
             with self.subTest(text=text),self.assertRaisesRegex(CleanError,'index mismatch'):
                 self.parse(text)
     def test_map_is_an_authored_lambda(self):
-        name=self.env.data['functions']['induced homology map']['lean'].split()[0]
+        name=self.env.data['functions']['induced homology map']['native_binding']
         self.assertIn('fun (clean_bound_0',self.env.notation_definitions[name])
         self.assertEqual(self.parse('induced homology map(field,H,X,Y,f)').type.name,'Function')
     def test_module_result_keeps_field_index(self):

@@ -922,3 +922,16 @@ incomplete analysis still propagates. This is an implementation correction under
 the existing parse and Lean-target rules, not permission for broader semantic
 memoization or first-success inference. Full stress validation remains pending.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Preserve exact binding oracles and structural index diagnostics
+
+After binding integration, map expected native type/callable identifiers explicitly
+and check adapter bodies independently. Keep local types distinct from module
+heads and retained ModuleCall targets explicit in tree expectations. Run the
+existing no-binders check before closing noncondition index call heads so the
+specified rejection is not obscured by an internal closure diagnostic. See
+[binding oracle migration](binding-oracle-migration.md). This changes no accepted
+source form or canonical target rule.
+:::

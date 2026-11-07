@@ -64,7 +64,9 @@ class DefinitionConversion(unittest.TestCase):
         self.local['h']=Expr('h','h',self.e.type('(S ⊆ T)',self.local))
         self.assertIn('subset_certificate',self.expr('subset certificate(S,T,h)').lean)
         expanded=self.norm('subset certificate(S,T,h)')
-        self.assertEqual(expanded.tree,['Call','certified inclusion',[['Local',n] for n in ['K','S','T','h']]])
+        selected=self.e.data['functions']['certified inclusion']['lean']
+        self.assertEqual(expanded.tree,['ModuleCall','certified inclusion',
+                         [['Local',n] for n in ['K','S','T','h']],selected])
         self.assertEqual(expanded.lean,self.expr('certified inclusion(K,S,T,h)').lean)
         self.assertIn('closed_interval',self.norm('closed interval(I)').lean)
     def test_no_algebraic_rewriting(self):

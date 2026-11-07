@@ -2,7 +2,7 @@
 """Distinct scalar/module structures remain distinct in explicit algebra wrappers."""
 import unittest
 from pathlib import Path
-from cleanlang.core import Environment,Type,Expr,Expressions,CleanError,lean,latex
+from cleanlang.core import Environment,Type,LocalType,Expr,Expressions,CleanError,lean,latex
 from cleanlang.modules import load_module,load_document
 ROOT=Path(__file__).resolve().parents[1]
 class LinearSpaces(unittest.TestCase):
@@ -18,9 +18,12 @@ class LinearSpaces(unittest.TestCase):
     def expr(self,s):return Expressions(self.e,self.local).parse(s)
     def test_real_submodule_type(self):
         target=self.e.render_type(self.local['U'].type,'lean')
-        self.assertEqual(target,'@Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action')
+        key=self.e.data['types']['Subspace']['native_binding']
+        self.assertEqual(target,f'(_root_.{key} (K) (f) (V) (L))')
+        self.assertEqual(self.e.notation_definitions[key].split(':=\n',1)[1],
+                         '  @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action\n')
     def test_carrier_has_vector_type(self):
-        self.assertEqual(self.expr('subspace carrier(f,L,U)').type,Type('Set',(Type('V'),)))
+        self.assertEqual(self.expr('subspace carrier(f,L,U)').type,Type('Set',(LocalType('V',(), 'V'),)))
     def test_different_module_bundle_is_rejected(self):
         with self.assertRaisesRegex(CleanError,'index mismatch'):
             self.expr('subspace carrier(f,M,U)')
@@ -33,7 +36,7 @@ class LinearSpaces(unittest.TestCase):
     def test_intersection_retains_ambient_type(self):
         self.assertEqual(self.expr('intersection of subspaces(f,L,A,spaces)').type,self.local['U'].type)
     def test_wrong_index_set_rejected(self):
-        self.local['B']=Expr('B','B',Type('Set',(Type('V'),)))
+        self.local['B']=Expr('B','B',Type('Set',(LocalType('V',(), 'V'),)))
         with self.assertRaisesRegex(CleanError,'Inconsistent'):
             self.expr('intersection of subspaces(f,L,B,spaces)')
     def test_intersection_is_authored_not_an_adapter(self):

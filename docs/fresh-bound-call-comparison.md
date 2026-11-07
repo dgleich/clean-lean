@@ -38,15 +38,17 @@ the final seven-test retained-call suite also passes. Twelve exact global-refere
 targets and six proofs pass, as do the regenerated 92 corpus proofs.
 
 The active-label load is still slow in `active label equivalence`. The profiling
-helper `tools/profile_active_labels.py` prints declaration timings and emits a
-stack trace every two minutes without interrupting execution. No claim is made
+helper `tools/profile_active_labels.py` prints declaration timings. Its subsequent
+`--stack-every 120` option samples the stack from a Python thread; the original
+asynchronous dump mode was removed after observed diagnostic crashes. No claim is made
 that this local correction resolves the full normalization cost.
 
 A new complete discovery run collected 739 tests and moved only the active-label
 module to the end; no tests were omitted. It has already exposed integration-era
 expectation failures (inline native types versus named bindings, Call versus
-retained ModuleCall, and binder rejection diagnostics). Its final result is still
-pending. Earlier full runs remain live on earlier compiler code and are not
-validation of this change. Historical operator patch studies also retain their
+retained ModuleCall, and binder rejection diagnostics). That instrumented run later aborted during a timed stack dump; it is not a
+completed result. The [oracle migration report](binding-oracle-migration.md) records
+the failures, focused repairs and replacement full run. Earlier compiler results
+are not validation of this change. Historical operator patch studies also retain their
 pinned implementation unless explicitly updated.
 :::

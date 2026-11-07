@@ -25,7 +25,7 @@ class DimensionIndices(unittest.TestCase):
     def test_implicit_dimension_uses_last_consistent_occurrence(self):
         self.local['A']=Expr('A','A',self.typ('Matrix(n,m,Complex)'))
         term=self.expr('det(A)');key=self.e.data['functions']['det']['dependent_signature']['key']
-        self.assertEqual(term.lean,'(@'+key+' (m) (A))')
+        self.assertEqual(term.lean,'(@_root_.'+key+' (m) (A))')
     def test_different_dimensions_reject(self):
         self.local['A']=Expr('A','A',self.typ('Matrix(n,k,Complex)'))
         with self.assertRaisesRegex(CleanError,'Inconsistent'):self.expr('det(A)')
@@ -50,8 +50,9 @@ class DimensionIndices(unittest.TestCase):
             with self.subTest(text=text),self.assertRaises(CleanError):self.typ(text)
     def test_bound_dimension_preserves_lean_identity(self):
         result=self.expr('for every (j: Natural, for every (v: Vector(j,Real), v = v))')
-        self.assertIn('Fin clean_bound_0',result.lean)
-        self.assertNotIn('Fin j',result.lean)
+        vector=self.e.data['types']['Vector']['native_binding']
+        self.assertIn(f'_root_.{vector} (clean_bound_0)',result.lean)
+        self.assertNotIn(f'_root_.{vector} (j)',result.lean)
     def test_dimension_from_dependent_record_field(self):
         from cleanlang.structures import declare
         declare('Structure Sized():',['Let size: Natural','Let vector: Vector(size,Real)',
