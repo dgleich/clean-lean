@@ -6172,6 +6172,58 @@
         "-- ",
         ""
       ]
+    },
+    "studies/module-numerals/expressions.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/module-numerals/Expressions.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/module-numerals/ExpressionsVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/module-numerals/Expressions.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/module-numerals/latex.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/module-numerals/verify_expressions.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/module-numerals/Expressions.pdf": {
+      "origin": "llm-assisted",
+      "mode": "sidecar"
+    },
+    "studies/module-numerals/references.json": {
+      "origin": "upstream-or-bibliographic-data",
+      "mode": "sidecar"
     }
   }
 }

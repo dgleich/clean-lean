@@ -25,6 +25,10 @@ with tempfile.TemporaryDirectory(prefix='clean-numeral-parser-') as td:
                     '-p','test_generated_parser.py','-v'],cwd=dest,check=True)
     subprocess.run(['git','apply',str(HERE/'adapters.patch')],cwd=dest,check=True)
     subprocess.run([sys.executable,str(HERE/'verify_adapters.py'),str(dest)],cwd=dest,check=True)
-print('Isolated numeral syntax and declaration checks passed; expression binding is explicitly unsupported')
+    subprocess.run(['git','apply',str(HERE/'expressions.patch')],cwd=dest,check=True)
+    subprocess.run([sys.executable,str(HERE/'verify_expressions.py'),str(dest)],cwd=dest,check=True)
+    for verifier in ['verify_saved.py','verify_dispatch.py','verify_foundations.py','verify_topology.py']:
+        subprocess.run([sys.executable,str(ROOT/'studies/operator-integration'/verifier),str(dest)],cwd=dest,check=True)
+print('Isolated numeral expression checks and operator regressions passed; main integration and implicit numerals remain pending')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -2,11 +2,12 @@
 
 # Module-owned numeral interpretation: first migration step
 
-Status: proposed, with an isolated parser and native declaration implementation; not accepted as conforming. The working compiler
+Status: isolated explicit-numeral expression prototype; not accepted as fully conforming or integrated. The working compiler
 still has display-name-based numeral handling. The [parser study](../studies/module-numerals/README.md)
 checks the annotation grammar, ASCII validation and metadata syntax. A subsequent
-patch emits declaration-owned adapters; numeral expression binding is still
-explicitly rejected. The isolated declared-operator
+patch emits declaration-owned adapters. The expression patch binds explicit
+numeral annotations to those adapters and preserves them through expression
+consumers. Unannotated numeral inference remains unsupported in the operator stack. The isolated declared-operator
 prototype rejects unresolved numeral operands. This proposal defines an explicit
 first step; it does not settle the implicit/default inference required for the
 broader corpus migration.
@@ -30,8 +31,8 @@ Result adding a specified numeral:
   Conclude: x + (1: Real) = (1: Real) + x
 ```
 
-The isolated adapter stack can read and emit this Type declaration, but cannot
-yet translate the result’s numeral expressions. Equality also needs an explicit imported declaration;
+The isolated expression stack can translate this declaration and explicit numeral
+expressions. The working compiler does not yet support them. Equality also needs an explicit imported declaration;
 its availability is not implied by the example. `Nat` in the Numerals payload is
 native Lean syntax, just as identifiers in Means are native Lean syntax. It is
 not an implicit Clean import or a mathematical meaning assigned to a Clean name.
@@ -131,8 +132,51 @@ ordinary overloaded numeral syntax as a different canonical target. Run it with
 `lake env lean studies/operator-integration/NumeralPayloadProbe.lean`. This only
 checks the proposed payload mechanism. The isolated parser study checks eleven
 syntax cases, including ASCII validation and binding-phase separation. The subsequent adapter checks compare independently authored native carrier and
-constructor targets. Application, retained expression identity, expression-consumer,
-rendering and main-integration acceptance remain pending.
+constructor targets. The expression study checks nineteen exact native targets and
+two proofs in a fresh reconstructed checkout, including aliases, named and operator forms, generated-name collisions,
+retained identities and several consumer interactions. Broad integration and
+complete native import/instance isolation remain pending.
+
+## Bound representation and consumer rules in the isolated prototype
+
+A successful binding replaces the raw annotation with
+`BoundNumeral(digits, canonical_carrier_name, identity_snapshot)`. The snapshot is
+an ordered list of six strings: native carrier name, native carrier declaration,
+carrier template, numeral constructor name, constructor declaration, and native
+payload. Rebinding must match all six and verify that the current environment
+still contains the corresponding native declarations. The constructor declaration
+must agree with its saved payload and carrier. A changed or missing binding is
+an error, including at public comparison entries; cached expression metadata does
+not bypass this validation.
+
+Resolve raw carrier syntax by the existing type rules, then require a plain,
+closed module Type with a Numerals attachment. Aliases canonicalize before
+selection. Local types, proof types, dependent functions and applied carriers are
+rejected. `Real()` and `Real` resolve identically for a zero-argument declaration.
+Once bound, later local shadowing cannot reinterpret the carrier.
+
+The bound atom has no free local names. Capture-avoiding substitution preserves
+it and checks its identity. Substituting a raw, unchecked numeral annotation is
+explicitly unsupported: bind it first. Both index and condition source printers
+emit `(digits: canonical carrier)`. Automatic assumption labels normalize leading
+zeros and aliases, so equivalent spellings collide under the existing duplicate
+assumption rule. LaTeX preserves the authored digits and renders the resolved
+carrier with a visible colon. Index comparison uses the checked native application;
+leading zeros therefore compare equally while distinct constructors do not.
+Serialized computed-index trees retain the identity snapshot and revalidate it on
+use. Generic beta/projection traversals treat bound numerals as leaves.
+
+Canonical digit emission removes leading ASCII zeros directly; it never converts
+the source token to a Python integer. This avoids an incidental digit-count limit
+in the translator. Lean resource exhaustion remains incomplete validation, not a
+successful target check. The 5000-digit test checks translation only; the native
+suite checks a smaller large integer separately.
+
+Numerals payloads are opaque Lean fields, including native comments, exactly like
+Means. The isolated lexical rules for VS Code, Vim and Emacs follow this boundary.
+Portable browser scopes and native Vim scopes are tested; native Emacs execution
+is unavailable in the current environment. Main editor integration remains pending
+with the compiler integration.
 
 ## Still needed for the final architecture
 

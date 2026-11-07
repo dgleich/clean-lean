@@ -1,9 +1,9 @@
 :::llm gpt-6 2026-11-07 role=assisted
 
-# Explicit numeral parser and declaration steps
+# Explicit module-owned numeral prototype
 
-Status: isolated parser and native declaration prototype. The working compiler is
-unchanged. Neither compiler implements numeral expression binding yet.
+Status: isolated parser, native declaration and explicit expression prototype. The
+working compiler is unchanged. Ordinary unannotated numeral inference is pending.
 The normative proposal and remaining target obligations are in
 [the module numeral draft](../../docs/module-numerals.md).
 
@@ -23,7 +23,7 @@ by the parser-only stack’s declaration interpreter. The driver checks that
 boundary before applying the separate adapter patch.
 
 Reproduce from the pinned historical baseline plus the eight operator/binding
-patches and this parser patch:
+patches and the three numeral patches:
 
 ```sh
 python studies/module-numerals/verify_prototype.py
@@ -53,8 +53,39 @@ No exact-target oracle was weakened. A fresh reconstruction passed on 2026-11-07
 28 syntax tests, six exact native targets, three zero proofs and two expected
 kernel rejections.
 
-Next steps are annotation binding and retained native identities in expressions,
-every expression consumer, LaTeX, and independent full application targets.
+The third patch, `expressions.patch`, implements explicit numeral binding and its
+expression consumers. It also fixes opaque payload comment handling and updates
+the isolated editor rules. `Expressions.clean.proposed` contains independently
+readable declarations and theorem specimens; `ExpressionsVerified.lean` includes
+native target oracles and proofs. Nineteen target comparisons and two proofs pass
+on the directly patched checkout. Consumer checks cover substitution, beta/index
+comparison, JSON index reconstruction, quantifiers, automatic-name collisions,
+imported aliases, local shadowing, changed bindings and generated-name capture.
+The translated 5000-digit case is not claimed kernel-checked. Native Emacs scope
+execution is unavailable; portable browser and native Vim scopes pass.
+
+The driver applies each patch in order, checks the earlier rejection boundaries
+before enabling the next layer, and finally runs all four operator regression
+leaves. Fresh full-driver reproduction passed on 2026-11-07: 28 parser tests,
+105 exact native targets and 22 proofs (six targets/three proofs for adapters,
+nineteen/two for expressions, and eighty/seventeen for operator regressions), plus
+two expected native rejection cases. The historical and working-compiler full
+regression processes remain running; neither is claimed to pass here.
+
+`Expressions.pdf` is the one-page rendered specimen. The LaTeX document compiled
+twice and was visually inspected: type annotations remain visible, with no
+clipping, overfull boxes or unresolved references. The existing package-path
+warning is unchanged. Rebuild with:
+
+```sh
+pdflatex -output-directory=/tmp studies/module-numerals/latex.tex
+pdflatex -output-directory=/tmp studies/module-numerals/latex.tex
+```
+
+Copy `/tmp/latex.pdf` to `Expressions.pdf` when regenerating the tracked specimen.
+
+Next steps include broad consumer regression, main integration and complete
+native identity/import/instance isolation.
 Expected-type propagation and module-declared defaults remain a later required
 step before ordinary unannotated numerals can migrate to this architecture.
 :::

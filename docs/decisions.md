@@ -941,7 +941,9 @@ source form or canonical target rule.
 The [module numeral draft](module-numerals.md) proposes a carrier-owned Numerals
 adapter and explicitly typed integer atoms as a first migration step. It is not
 accepted as conforming. Its isolated study now checks the grammar, ASCII validation and declaration-owned
-native adapter targets. Numeral expression binding and full literal target acceptance
+native adapters and explicitly annotated applications. Bound numeral atoms retain
+the selected identity through substitution and comparison; the draft specifies
+the consumer and rendering rules. Full integration and complete native isolation
 remain pending, as do the subsequent expected-type/default rules
 needed for ordinary unannotated numerals. The historical display-name-based
 Natural default is not the final architecture.

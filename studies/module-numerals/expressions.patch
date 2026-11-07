@@ -1,0 +1,263 @@
+--- a/cleanlang/annotations.py
++++ b/cleanlang/annotations.py
+@@ -22,7 +22,12 @@
+     def tree_names(tree):
+         kind=tree[0]
+         if kind=='Local':return {tree[1]}
+-        if kind=='Decimal':return set()
++        if kind in ('Decimal','BoundNumeral'):return set()
++        if kind=='NumeralAnnotation':
++            from .numerals import type_source
++            from .core import ID
++            import re
++            return set(re.findall(ID,type_source(tree[2]))).intersection(locals)
+         if kind=='TypeValue':
+             if isinstance(tree[1],Annotation):return set(tree[1].names)
+             from .core import ID
+--- a/cleanlang/bound_calls.py
++++ b/cleanlang/bound_calls.py
+@@ -15,6 +15,9 @@
+
+ def bind(tree,env,locals,*,binders=False):
+     kind=tree[0]
++    if kind in ('NumeralAnnotation','BoundNumeral'):
++        from .numerals import bind as numeral
++        return numeral(tree,env,locals)
+     if kind=='ModuleCall':
+         if tree[3]!=identity(env,tree[1]):raise CleanError('Changed bound module callable: '+tree[1])
+         return [kind,tree[1],[bind(a,env,locals,binders=binders) for a in tree[2]],*tree[3:]]
+--- a/cleanlang/conditions.py
++++ b/cleanlang/conditions.py
+@@ -9,6 +9,9 @@
+ def source_expression(tree):
+     """Canonical label spelling from normalized expression trees; no target-text parsing."""
+     kind=tree[0]
++    if kind in ('NumeralAnnotation','BoundNumeral'):
++        from .numerals import spelling
++        return spelling(tree,canonical_digits=True)
+     if kind=='ModuleCall' and len(tree)>4:
+         from .bound_calls import source_operator
+         return source_operator(tree,source_expression)
+--- a/cleanlang/conversion.py
++++ b/cleanlang/conversion.py
+@@ -94,6 +94,7 @@
+         local=locals.get(tree[1])
+         if local is None or local.local_normal is None:return expression
+         return _normal_form(local.local_normal,env,locals) if local.local_expand and not shadowed_globals(env,locals) else local.local_normal
++    if kind in ('NumeralAnnotation','BoundNumeral'):return elaborate(tree)
+     if kind in ('Decimal','Lambda','Forall','Exists'):return expression
+     if kind=='Operator':return env.operator(tree[1],normal(tree[2]),normal(tree[3]),locals)
+     if kind=='Unary':
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -59,7 +59,7 @@
+         else:
+             if depth <= 0 and column < continuation_column:
+                 raise CleanError(f'line {i + 1}: continued expression must be indented at least two spaces beyond its first line')
+-            if re.match(r'(Let|Define|Condition|Structure|Constructor|Assume|Conclude|Result|Theorem|Context|Import|Attribution|Returns|Means|Render|Holds when|Assumption name)(?=\s|:|$)', stripped, re.I):
++            if re.match(r'(Let|Define|Condition|Structure|Constructor|Assume|Conclude|Result|Theorem|Context|Import|Attribution|Returns|Numerals|Means|Render|Holds when|Assumption name)(?=\s|:|$)', stripped, re.I):
+                 raise CleanError(f'line {i + 1}: expected a continued expression, not a new clause')
+             output[start] += ' ' + stripped
+             output[i] = ''
+@@ -540,7 +540,9 @@
+             value=self.reg.type(tree[1],self.env,phrases=False)
+             self.reg.require_type_argument(value)
+             return Expr(self.reg.render_type(value,'lean',self.env),self.reg.render_type(value,'latex',self.env),Type('Type'),tree=['TypeValue',tree[1] if isinstance(tree[1],Annotation) else str(value)])
+-        if kind=='NumeralAnnotation':raise CleanError('Explicit numeral binding is not implemented in this parser prototype')
++        if kind in ('NumeralAnnotation','BoundNumeral'):
++            from .numerals import elaborate
++            return elaborate(tree,self.reg,self.env)
+         if kind=='Decimal':return Expr(tree[1],tree[1],NUM,tree=tree)
+         if kind=='Local':
+             if tree[1] not in self.env:raise CleanError('Unknown name: '+tree[1])
+--- a/cleanlang/dependent_functions.py
++++ b/cleanlang/dependent_functions.py
+@@ -15,7 +15,12 @@
+ def tree_names(tree):
+     kind=tree[0]
+     if kind=='Local':return {tree[1]}
+-    if kind=='Decimal':return set()
++    if kind in ('Decimal','BoundNumeral'):return set()
++    if kind=='NumeralAnnotation':
++        from .numerals import type_source
++        import re
++        from .core import ID
++        return set(re.findall(ID,type_source(tree[2])))
+     if kind=='TypeValue':
+         from .annotations import Annotation
+         return set(tree[1].names) if isinstance(tree[1],Annotation) else set(re.findall(ID,tree[1]))
+--- a/cleanlang/hygiene.py
++++ b/cleanlang/hygiene.py
+@@ -96,6 +96,10 @@
+         kind=node[0]
+         if kind=='Local':return mapping.get(node[1],node)
+         if kind=='Decimal':return node
++        if kind=='BoundNumeral':
++            from .numerals import bind
++            return bind(node,environment,locals)
++        if kind=='NumeralAnnotation':raise UnrepresentableSubstitution('Bind numeral annotations before substitution')
+         if kind=='TypeValue':return ['TypeValue',annotation(node[1],mapping,callheads)]
+         if kind=='ModuleCall':return [kind,node[1],[expr(a,mapping,callheads) for a in node[2]],*node[3:]]
+         if kind=='Call':
+--- a/cleanlang/inferred_conversion.py
++++ b/cleanlang/inferred_conversion.py
+@@ -34,7 +34,12 @@
+         return set()
+     kind=tree[0]
+     if kind=='Local':return {tree[1]}
+-    if kind=='Decimal':return set()
++    if kind in ('Decimal','BoundNumeral'):return set()
++    if kind=='NumeralAnnotation':
++        from .numerals import type_source
++        import re
++        from .core import ID
++        return set(re.findall(ID,type_source(tree[2])))
+     if kind=='TypeValue':return type_values(type_tree(parse(tree[1],'type_ref')))
+     if kind=='ModuleCall':return set().union(*(value_names(a) for a in tree[2]))
+     if kind=='Call':return {tree[1]}|set().union(*(value_names(a) for a in tree[2]))
+--- a/cleanlang/literate.py
++++ b/cleanlang/literate.py
+@@ -126,7 +126,7 @@
+                         start = None
+                 else: i += 1
+                 continue
+-            if not quoted and not ''.join(masked[:i]).strip() and re.match(r'(?:Means|From Lean|Render(?: latex)?)\s*:', raw[i:], re.I): break
++            if not quoted and not ''.join(masked[:i]).strip() and re.match(r'(?:Numerals|Means|From Lean|Render(?: latex)?)\s*:', raw[i:], re.I): break
+             if raw[i] == '"': quoted = not quoted; i += 1
+             elif not quoted and pair == '--':
+                 regions[row].append((i, len(raw), 'comment'))
+--- /dev/null
++++ b/cleanlang/numerals.py
+@@ -0,0 +1,59 @@
++# generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
++"""Explicit carrier-owned numeral atoms; never infer a carrier from digits."""
++from .core import CleanError,Type,Expr
++
++
++def digits(text):
++    if not isinstance(text,str) or not text or any(c not in '0123456789' for c in text):
++        raise CleanError('Explicit numeral annotations require ASCII digits')
++    return text.lstrip('0') or '0'
++
++
++def type_source(node):
++    from .syntax import condition_spelling
++    kind=node[0]
++    if kind in ('Name','Numeral'):return node[1]
++    if kind=='Projection':return type_source(node[1])+'.'+node[2]
++    if kind=='Apply':return node[1]+'('+','.join(type_source(a) for a in node[2])+')'
++    if kind=='BoundTypeApply':return node[1]+'('+node[2]+': '+type_source(node[3])+','+type_source(node[4])+')'
++    if kind=='ComputedIndex':return '('+condition_spelling(node[1])+')'
++    raise CleanError('Unsupported numeral carrier syntax: '+kind)
++
++
++def spelling(tree,*,canonical_digits=False):
++    value=digits(tree[1]) if canonical_digits else tree[1]
++    carrier=type_source(tree[2]) if tree[0]=='NumeralAnnotation' else tree[2]
++    return '('+value+': '+carrier+')'
++
++
++def identity(name,env):
++    spec=env.data['types'].get(name)
++    if spec is None or spec.get('args') or spec.get('universe')!=0 or 'canonical' in spec:
++        raise CleanError('Numerals requires a closed module Type-0 carrier')
++    attachment=spec.get('numerals')
++    if attachment is None:raise CleanError('Carrier has no Numerals declaration: '+name)
++    env.render_type(Type(name),'lean')
++    carrier=spec['native_binding'];constructor=attachment['native_binding']
++    expected=f'noncomputable def {constructor} (digits : Nat) : _root_.{carrier} :=\n  ({attachment["payload"]}) digits\n'
++    if attachment['carrier_binding']!=carrier or attachment['native_declaration']!=expected or env.notation_definitions.get(constructor)!=expected:
++        raise CleanError('Changed or missing numeral constructor: '+name)
++    return [carrier,spec['native_declaration'],spec['native_template'],constructor,expected,attachment['payload']]
++
++
++def bind(tree,env,locals):
++    digits(tree[1])
++    if tree[0]=='BoundNumeral':
++        if tree[3]!=identity(tree[2],env):raise CleanError('Changed bound numeral carrier or constructor: '+tree[2])
++        return tree
++    typ=env.type(type_source(tree[2]),locals,phrases=False)
++    if type(typ) is not Type or typ.args:
++        raise CleanError('Numerals requires a closed module Type-0 carrier')
++    return ['BoundNumeral',tree[1],typ.name,identity(typ.name,env)]
++
++
++def elaborate(tree,env,locals):
++    bound=bind(tree,env,locals)
++    typ=Type(bound[2]);constructor=bound[3][3]
++    lean='(_root_.'+constructor+' (nat_lit '+digits(bound[1])+'))'
++    tex=r'\left('+bound[1]+r' \: : \: '+env.render_type(typ,'latex')+r'\right)'
++    return Expr(lean,tex,typ,tree=bound)
+--- a/cleanlang/syntax.py
++++ b/cleanlang/syntax.py
+@@ -62,6 +62,9 @@
+     """Canonical, fully grouped source for binder-free index expressions."""
+     from .core import CleanError
+     kind=tree[0]
++    if kind in ('NumeralAnnotation','BoundNumeral'):
++        from .numerals import spelling
++        return spelling(tree)
+     if kind=='ModuleCall' and len(tree)>4:
+         from .bound_calls import source_operator
+         return source_operator(tree,expression_spelling)
+@@ -253,6 +256,9 @@
+     """Canonical source for scoped condition expressions; no environment lookup."""
+     from .core import CleanError
+     kind=tree[0]
++    if kind in ('NumeralAnnotation','BoundNumeral'):
++        from .numerals import spelling
++        return spelling(tree)
+     if kind=='ModuleCall' and len(tree)>4:
+         from .bound_calls import source_operator
+         return source_operator(tree,condition_spelling)
+--- a/editors/emacs/clean-math-mode.el
++++ b/editors/emacs/clean-math-mode.el
+@@ -44,7 +44,7 @@
+          ((eq (char-after) ?\") (setq quoted (not quoted)) (forward-char 1))
+          (quoted (forward-char 1))
+          ((and (bolp) (let ((case-fold-search t))
+-                        (looking-at " *\\(?:Means\\|From Lean\\|Render\\(?: latex\\)?\\) *:")))
++                        (looking-at " *\\(?:Numerals\\|Means\\|From Lean\\|Render\\(?: latex\\)?\\) *:")))
+           (end-of-line))
+          ((looking-at "--")
+           (setq face 'font-lock-comment-face start (point)) (end-of-line)
+@@ -72,7 +72,7 @@
+     ("^ *\\(Let\\) +\\(.+?\\)\\(?: *:\\| +be +\\)\\(.+\\)$"
+      (1 font-lock-keyword-face t) (2 font-lock-variable-name-face t) (3 font-lock-type-face t))
+     (,(concat "^ *" clean-math--metadata " *:.*$") (0 font-lock-string-face t) (1 font-lock-keyword-face t))
+-    ("^ *\\(Means\\|From Lean\\) *:.*$" (0 font-lock-preprocessor-face t) (1 font-lock-keyword-face t))
++    ("^ *\\(Numerals\\|Means\\|From Lean\\) *:.*$" (0 font-lock-preprocessor-face t) (1 font-lock-keyword-face t))
+     ("^ *Import\\b.*$" (0 font-lock-string-face t))
+     (clean-math--comment (0 clean-math--matched-face t))
+     ("\t+" (0 font-lock-warning-face t))))
+--- a/editors/vim/syntax/cleanmath.vim
++++ b/editors/vim/syntax/cleanmath.vim
+@@ -12,7 +12,7 @@
+ syntax match cleanMathTypedLet '\c^ *Let\>.*\%(:\|\<be\>\).*' contains=cleanMathKeyword,cleanMathDelimiter
+ syntax match cleanMathMetadataKey '\c^ *\%(Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:' contained
+ syntax match cleanMathOpaque '\c^ *\%(Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:.*$' contains=cleanMathMetadataKey
+-syntax match cleanMathLean '\c^ *\%(Means\|From Lean\)\s*:.*$'
++syntax match cleanMathLean '\c^ *\%(Numerals\|Means\|From Lean\)\s*:.*$'
+ syntax match cleanMathImport '\c^ *Import\>.*$'
+ syntax region cleanMathQuote start='"' end='"' oneline containedin=ALLBUT,cleanMathComment,cleanMathBlock,cleanMathLean,cleanMathOpaque,cleanMathText,cleanMathTriple,cleanMathDoc
+ syntax match cleanMathComment '--.*$' containedin=ALLBUT,cleanMathQuote,cleanMathLean,cleanMathRender,cleanMathBlock,cleanMathText,cleanMathTriple,cleanMathDoc
+--- a/editors/vscode/syntaxes/clean.tmLanguage.json
++++ b/editors/vscode/syntaxes/clean.tmLanguage.json
+@@ -27,7 +27,7 @@
+     },
+     {
+       "name": "meta.embedded.line.lean.clean",
+-      "match": "(?i)^ *(?:Means|From Lean)\\s*:.*$"
++      "match": "(?i)^ *(?:Numerals|Means|From Lean)\\s*:.*$"
+     },
+     {
+       "name": "string.unquoted.metadata.clean",
+@@ -100,7 +100,7 @@
+           }
+         },
+         {
+-          "match": "^ *(?i:(Means|From Lean))\\s*(:)(.*)$",
++          "match": "^ *(?i:(Numerals|Means|From Lean))\\s*(:)(.*)$",
+           "captures": {
+             "1": {
+               "name": "keyword.control.clean"
