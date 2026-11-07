@@ -23,7 +23,9 @@ directly against the repository compiler, without applying historical patches.
 | `studies/topology/verify_chain_squares.py` | 17 | 2 |
 | `studies/topology/verify_interlevel.py` | 66 | 12 |
 | `studies/topology/verify_well_groups.py` | 24 | 5 |
-| Total | 376 | 79 |
+| `studies/topology/verify_shifted_perturbations.py` | 11 | 6 |
+| `studies/topology/verify_extreme_images.py` | 18 | 4 |
+| Total | 405 | 89 |
 
 Run each with the repository Python environment and `LAKE` set to the pinned Lake
 executable. Each verifier generates its artifacts and invokes Lean. The foundation
@@ -136,9 +138,22 @@ statement retain their declared type bindings. Its TeX is unchanged after
 provenance restoration. The separate `test_well_groups` run completed: all five tests pass in
 290.351 seconds. None of this proves the two-image characterization.
 
+The shifted-perturbation study passes eleven exact targets and six study proofs,
+rechecking twenty supporting proofs. Extreme images pass eighteen exact targets
+and four study proofs, rechecking twenty-six supporting proofs. As above, reused
+proofs are counted in their originating rows only. The extreme-image target count
+includes the explicitly unproved two-image equality proposition; it is not a
+proof count. Shifted maps and both extreme certificates keep the same fixed target
+module. Their TeX outputs, including the candidate statement, are unchanged after
+provenance restoration. The shifted focused Python run is still pending.
+
+All eighteen verifiers in this topology directory have now completed on the
+working compiler. This is a collection of individual runs during the migration,
+not a new monolithic all-suite run. It does not validate every separate study in
+the repository or the isolated declared-operator stack.
+
 The main compiler still uses the existing built-in operators. The separate
 [declared-operator experiment](../operator-integration/topology-migration.md)
-remains isolated. The shifted-perturbation and extreme-image native verifiers still
-need migration. These checks establish neither the missing paper proofs nor
+remains isolated. Other repository studies still need native-verifier migration. These checks establish neither the missing paper proofs nor
 general universe polymorphism or the complete language acceptance contract.
 :::

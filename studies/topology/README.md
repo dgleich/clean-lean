@@ -397,8 +397,8 @@ now explicitly imports Mathlib.Topology.Continuous for continuous_def.
 
 ## Working-compiler topology binding checks
 
-The [binding migration report](binding-migration.md) records 376 exact native
-targets and 79 proofs across sixteen topology foundation studies,
+The [binding migration report](binding-migration.md) records 405 exact native
+targets and 89 proofs across all eighteen topology verifiers,
 plus 23 focused Python tests. These checks run on the integrated compiler;
 declared-operator integration and broader native-study migration remain pending.
 :::

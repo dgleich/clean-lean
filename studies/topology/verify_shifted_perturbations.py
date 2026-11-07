@@ -12,7 +12,7 @@ results=load_document(here/'ShiftedPerturbations.clean',env)
 source=lean(support+results,env,['Lean','Mathlib.Tactic.Linarith'])
 (here/'ShiftedPerturbations.lean').write_text(lean(results,env,[]))
 (here/'ShiftedPerturbations.tex').write_text(latex(results,env))
-function=lambda n:env.data['functions'][n]['lean'].split()[0]
+function=lambda n:env.data['functions'][n]['native_binding']
 mapping={}
 for oracle,name in [('constant','constant real map'),('add','add real maps'),('translate','translate real map'),
  ('shift','shifted perturbation'),('image','shifted pair image')]:
@@ -60,47 +60,51 @@ elab "same_target " a:ident b:ident : command => do
 '''
 expected=r'''
 namespace ShiftOracle
-noncomputable def constant (X : TopCat.{0}) (c : ℝ) : REALMAP_X :=
+noncomputable def constant (X : SPACETYPE) (c : REALTYPE) : REALMAP_X :=
   @ContinuousMap.const X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace c
-noncomputable def add (X : TopCat.{0}) (f g : REALMAP_X) : REALMAP_X :=
+noncomputable def add (X : SPACETYPE) (f g : REALMAP_X) : REALMAP_X :=
   letI : TopologicalSpace X.carrier := X.str
   f+g
-noncomputable def translate (X : TopCat.{0}) (f : REALMAP_X) (t : ℝ) : REALMAP_X :=
+noncomputable def translate (X : SPACETYPE) (f : REALMAP_X) (t : REALTYPE) : REALMAP_X :=
   @add X f (@constant X t)
-noncomputable def shift (P : PROBLEM) (t : ℝ) : REALMAP_P := @translate P.space P.map (-t)
-noncomputable def image {K : Type} (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ)
-  (nesting : NESTING) (t : ℝ) (C : CERTIFIED K field H P r nesting)
+noncomputable def shift (P : PROBLEM) (t : REALTYPE) : REALMAP_P := @translate P.space P.map (-t)
+noncomputable def image {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
+  (nesting : NESTING) (t : REALTYPE) (C : CERTIFIED K field H P r nesting)
   (represents : C.data.map = @shift P t) : SUB_TARGET := @IMAGE K field H P r nesting C
 
-def valueStatement : Prop := ∀ (P : PROBLEM) (t : ℝ) (x : P.space.carrier),
+def valueStatement : Prop := ∀ (P : PROBLEM) (t : REALTYPE) (x : POINTTYPE P.space),
   @VALUE P.space (@shift P t) x = @VALUE P.space P.map x - t
-def boundStatement : Prop := ∀ (P : PROBLEM) (t r : ℝ), -r ≤ t → t ≤ r → @BOUNDED P (@shift P t) r
-def pairStatement : Prop := ∀ (P : PROBLEM) (t : ℝ), @PERTURBED P (@shift P t) = @SHIFTED P t
-def certificatesStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field) (P : PROBLEM) (t r : ℝ),
+def boundStatement : Prop := ∀ (P : PROBLEM) (t r : REALTYPE), -r ≤ t → t ≤ r → @BOUNDED P (@shift P t) r
+def pairStatement : Prop := ∀ (P : PROBLEM) (t : REALTYPE), @PERTURBED P (@shift P t) = @SHIFTED P t
+def certificatesStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (t r : REALTYPE),
   P.interval.lower ≤ P.interval.upper → r ≥ 0 → -r ≤ t → t ≤ r → ∀ (nesting : NESTING),
   ∃ C : CERTIFIED K field H P r nesting, C.data.map = @shift P t
-def independenceStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field) (P : PROBLEM) (t r : ℝ)
+def independenceStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (t r : REALTYPE)
   (nesting : NESTING) (C D : CERTIFIED K field H P r nesting)
   (first : C.data.map = @shift P t) (second : D.data.map = @shift P t),
   @image K field H P r nesting t C first = @image K field H P r nesting t D second
-def inclusionStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field) (P : PROBLEM) (t r : ℝ)
+def inclusionStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (t r : REALTYPE)
   (nesting : NESTING) (C : CERTIFIED K field H P r nesting)
-  (represents : C.data.map = @shift P t) (x : @ModuleCat.carrier K field.toRing TARGET_MODULE),
+  (represents : C.data.map = @shift P t) (x : ELEMENTTYPE K field TARGET_MODULE),
   @BELONGS K field TARGET_MODULE x (@WELL K field H P r nesting) →
     @BELONGS K field TARGET_MODULE x (@image K field H P r nesting t C represents)
 end ShiftOracle
 '''
-expected=expected.replace('REALMAP_X','(@ContinuousMap X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)')
-expected=expected.replace('REALMAP_P','(@ContinuousMap P.space.carrier ℝ P.space.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace)')
+expected=expected.replace('REALMAP_X','(REALMAPTYPE X)')
+expected=expected.replace('REALMAP_P','(REALMAPTYPE P.space)')
 expected=expected.replace('NESTING','(@NESTED P.space (@EXPANDED P r))')
 target='(@RELHOMOLOGY K field H P.space (@TARGET P r nesting))'
 expected=expected.replace('TARGET_MODULE',target)
-expected=expected.replace('SUB_TARGET',f'(@Submodule K {target}.carrier field.toSemiring {target}.isAddCommGroup.toAddCommMonoid {target}.isModule)')
+expected=expected.replace('SUB_TARGET',f'(SUBSPACETYPE K field {target})')
 substitutions={'PROBLEM':env.structures['InterlevelProblem']['key'],'THEORY':env.structures['HomologyTheory']['key'],
  'CERTIFIED':env.structures['CertifiedPerturbation']['key']}
 for placeholder,name in [('IMAGE','perturbation homology image'),('VALUE','real map value'),('BOUNDED','bounded perturbation'),
  ('PERTURBED','perturbed pair'),('SHIFTED','shifted pair'),('NESTED','nested pair'),('EXPANDED','expanded pair'),
  ('RELHOMOLOGY','relative homology'),('TARGET','perturbation target'),('WELL','relative well group'),('BELONGS','belongs to module subspace')]:substitutions[placeholder]=function(name)
+for placeholder,name in [('SPACETYPE','TopologicalSpace'),('REALTYPE','Real'),('FIELDTYPE','FieldStructure'),
+ ('CARRIERTYPE','Type'),('POINTTYPE','Point'),('ELEMENTTYPE','ModuleElement'),
+ ('REALMAPTYPE','ContinuousRealMap'),('SUBSPACETYPE','ModuleSubspace')]:
+    substitutions[placeholder]='_root_.'+env.data['types'][name]['native_binding']
 for key in sorted(substitutions,key=len,reverse=True):expected=expected.replace(key,substitutions[key])
 checks=[f'same_target {target} {oracle}' for oracle,target in mapping.items()]
 for name,oracle in [('shifted_perturbation_value','valueStatement'),('shifted_perturbation_bound','boundStatement'),

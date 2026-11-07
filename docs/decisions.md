@@ -935,3 +935,13 @@ specified rejection is not obscured by an internal closure diagnostic. See
 [binding oracle migration](binding-oracle-migration.md). This changes no accepted
 source form or canonical target rule.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The [module numeral draft](module-numerals.md) proposes a carrier-owned Numerals
+adapter and explicitly typed integer atoms as a first migration step. It is not
+implemented or accepted as conforming. Parser implementation and exact native
+literal acceptance oracles remain pending, as do the subsequent expected-type/default rules
+needed for ordinary unannotated numerals. The historical display-name-based
+Natural default is not the final architecture.
+:::

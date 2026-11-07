@@ -2147,6 +2147,33 @@
         "Declared operator and literal integration",
         "Complete identity and native import isolation"
       ]
+    },
+    {
+      "id": "module_owned_explicit_numerals",
+      "status": "proposed",
+      "environment": "Explicit closed Type-0 Real declaration with Numerals attachment; no implicit mathematical prelude or default type. See docs/module-numerals.md.",
+      "source": "(001: Real)",
+      "expected_tree": [
+        "NumeralAnnotation",
+        "001",
+        [
+          "Name",
+          "Real"
+        ]
+      ],
+      "expected_lean": "Root-qualified declaration-owned numeral adapter applied to Lean.Expr.lit (.natVal 1); result is the selected Real type wrapper. Adapter payload is checked at Nat → that wrapper.",
+      "checks": [
+        "studies/operator-integration/NumeralPayloadProbe.lean (native payload mechanism only)"
+      ],
+      "pending": [
+        "Generated-parser production and ASCII spelling validation",
+        "Native adapter ownership, type checking and retained expression bindings",
+        "Independent full adapter/application targets and type oracles",
+        "Ambiguity, import/alias/shadowing and generated-name collision tests",
+        "All expression consumers and LaTeX annotation rendering",
+        "Subsequent expected-type propagation and module-declared defaults",
+        "Native import/instance isolation and full identity contract"
+      ]
     }
   ]
 }

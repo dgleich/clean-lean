@@ -6116,6 +6116,18 @@
     "studies/topology/binding-migration.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "docs/module-numerals.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/operator-integration/NumeralPayloadProbe.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

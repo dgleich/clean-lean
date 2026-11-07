@@ -14,7 +14,7 @@ source=lean(support+results+candidate,env,['Lean','Mathlib.Tactic.Linarith'])
 for stem,entries in [('ExtremeImages',results),('TwoImageCandidate',candidate)]:
     (here/(stem+'.lean')).write_text(lean(entries,env,[]))
     (here/(stem+'.tex')).write_text(latex(entries,env))
-function=lambda n:env.data['functions'][n]['lean'].split()[0]
+function=lambda n:env.data['functions'][n]['native_binding']
 mapping={'ExtremeOracle.Extreme':env.structures['ExtremePerturbations']['key']}
 for oracle,name in [('intersection','intersection of module subspaces'),('included','module subspace included'),
  ('scalars','scalar coefficient module'),('scalarTheory','scalar homology'),('compact','compact space'),('extreme','extreme perturbations'),('image','extreme pair image')]:
@@ -62,57 +62,57 @@ elab "same_target " a:ident b:ident : command => do
 '''
 expected=r'''
 namespace ExtremeOracle
-noncomputable def intersection {K : Type} (field : Field K) (M : MODULE) (U V : SUB_M) : SUB_M :=
+noncomputable def intersection {K : Type} (field : FIELDTYPE K) (M : MODULE) (U V : SUB_M) : SUB_M :=
   @INF K field M (@SETOF SUB_M (fun W => W=U ∨ W=V))
-noncomputable def included {K : Type} (field : Field K) (M : MODULE) (U V : SUB_M) : Prop :=
+noncomputable def included {K : Type} (field : FIELDTYPE K) (M : MODULE) (U V : SUB_M) : CONDITIONTYPE :=
   @CARRIER K field M U ⊆ @CARRIER K field M V
-noncomputable def scalars {K : Type} (field : Field K) : MODULE :=
+noncomputable def scalars {K : Type} (field : FIELDTYPE K) : MODULE :=
   letI : Field K := field
   ModuleCat.of K K
-noncomputable def scalarTheory (K : Type) (field : Field K) (p : ℕ) : THEORY K field :=
+noncomputable def scalarTheory (K : CARRIERTYPE) (field : FIELDTYPE K) (p : NATURALTYPE) : THEORY K field :=
   @THEORYCTOR K field (@scalars K field) p
-noncomputable def compact (X : TopCat.{0}) : Prop := @CompactSpace X.carrier X.str
-structure Extreme (K : Type) (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ)
+noncomputable def compact (X : SPACETYPE) : CONDITIONTYPE := @CompactSpace X.carrier X.str
+structure Extreme (K : Type) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) where
   top : CERTIFIED K field H P r nesting
   bottom : CERTIFIED K field H P r nesting
   topShift : top.data.map = @SHIFT P r
   bottomShift : bottom.data.map = @SHIFT P (-r)
-noncomputable def extreme (K : Type) (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ)
+noncomputable def extreme (K : Type) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (top bottom : CERTIFIED K field H P r nesting)
   (topShift : top.data.map = @SHIFT P r) (bottomShift : bottom.data.map = @SHIFT P (-r)) : Extreme K field H P r nesting :=
   @Extreme.mk K field H P r nesting top bottom topShift bottomShift
-noncomputable def image {K : Type} (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ)
+noncomputable def image {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (E : Extreme K field H P r nesting) : SUB_TARGET :=
   @intersection K field TARGET_MODULE
     (@SHIFTIMAGE K field H P r nesting r E.top E.topShift)
     (@SHIFTIMAGE K field H P r nesting (-r) E.bottom E.bottomShift)
-def membershipStatement : Prop := ∀ (K : Type) (field : Field K) (M : MODULE) (U V : SUB_M)
-  (x : @ModuleCat.carrier K field.toRing M),
+def membershipStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (M : MODULE) (U V : SUB_M)
+  (x : ELEMENTTYPE K field M),
   @BELONGS K field M x (@intersection K field M U V) ↔
     (@BELONGS K field M x U ∧ @BELONGS K field M x V)
-def existenceStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ),
+def existenceStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE),
   P.interval.lower ≤ P.interval.upper → r ≥ 0 → ∀ (nesting : NESTING),
   ∃ E : Extreme K field H P r nesting, E.top.data.map = @SHIFT P r ∧ E.bottom.data.map = @SHIFT P (-r)
-def independenceStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ)
+def independenceStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (E F : Extreme K field H P r nesting),
   @image K field H P r nesting E = @image K field H P r nesting F
-def containmentStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field) (P : PROBLEM) (r : ℝ)
+def containmentStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (E : Extreme K field H P r nesting),
   @included K field TARGET_MODULE (@WELL K field H P r nesting) (@image K field H P r nesting E)
 -- This is a proposition definition, deliberately not a theorem or axiom.
-def candidateStatement : Prop := ∀ (K : Type) (field : Field K) (p : ℕ),
+def candidateStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (p : NATURALTYPE),
   let H : THEORY K field := @scalarTheory K field p
-  ∀ (P : PROBLEM) (r : ℝ),
+  ∀ (P : PROBLEM) (r : REALTYPE),
   @compact P.space → P.interval.lower < P.interval.upper → r ≥ 0 → ∀ (nesting : NESTING)
   (E : Extreme K field H P r nesting),
   @WELL K field H P r nesting = @image K field H P r nesting E
 end ExtremeOracle
 '''
-sub=lambda m:f'(@Submodule K {m}.carrier field.toSemiring {m}.isAddCommGroup.toAddCommMonoid {m}.isModule)'
+sub=lambda m:f'(SUBSPACETYPE K field {m})'
 expected=expected.replace('SUB_M',sub('M')).replace('SUB_TARGET',sub('TARGET_MODULE'))
 target='(@RELHOMOLOGY K field H P.space (@TARGET P r nesting))'
-expected=expected.replace('TARGET_MODULE',target).replace('MODULE','(@ModuleCat.{0,0} K field.toRing)')
+expected=expected.replace('TARGET_MODULE',target).replace('MODULE','(MODULETYPE K field)')
 expected=expected.replace('NESTING','(@NESTED P.space (@EXPANDED P r))')
 subs={'THEORY':env.structures['HomologyTheory']['key'],'PROBLEM':env.structures['InterlevelProblem']['key'],
       'CERTIFIED':env.structures['CertifiedPerturbation']['key']}
@@ -120,6 +120,10 @@ for key,name in [('INF','module subspace infimum'),('SETOF','set of'),('CARRIER'
  ('SHIFT','shifted perturbation'),('SHIFTIMAGE','shifted pair image'),('BELONGS','belongs to module subspace'),
  ('WELL','relative well group'),('RELHOMOLOGY','relative homology'),('TARGET','perturbation target'),
  ('NESTED','nested pair'),('EXPANDED','expanded pair'),('THEORYCTOR','homology theory')]:subs[key]=function(name)
+for placeholder,name in [('FIELDTYPE','FieldStructure'),('NATURALTYPE','Natural'),('REALTYPE','Real'),
+ ('SPACETYPE','TopologicalSpace'),('CARRIERTYPE','Type'),('ELEMENTTYPE','ModuleElement'),
+ ('CONDITIONTYPE','Proposition'),('SUBSPACETYPE','ModuleSubspace'),('MODULETYPE','CoefficientModule')]:
+    subs[placeholder]='_root_.'+env.data['types'][name]['native_binding']
 for key in sorted(subs,key=len,reverse=True):expected=expected.replace(key,subs[key])
 checks=[f'same_target {actual} {oracle}' for oracle,actual in mapping.items()]
 checks += [f"same_target {env.structures['ExtremePerturbations']['key']}.{field} ExtremeOracle.Extreme.{field}" for field in ['mk','top','bottom','topShift','bottomShift']]

@@ -501,3 +501,15 @@ profiler logged completion of the module in 2191.234 seconds, including 2178.765
 seconds for `active label equivalence`; its tool session returned status 143.
 That diagnostic log is not a completed test-suite result or a clean process exit.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+Shifted perturbations pass eleven exact targets and six study proofs; extreme
+images pass eighteen targets and four study proofs. Their twenty and twenty-six
+supporting proofs also pass and are counted only in originating study rows. All
+eighteen topology verifiers have now completed individually on the working
+compiler, totaling 405 exact checks and 89 study/agreement proofs. One of the
+extreme-image exact targets is the unproved equality proposition. This is not a
+new full-suite result. The shifted Python run and full discovery remain active.
+The regenerated TeX sources are unchanged after provenance restoration.
+:::
