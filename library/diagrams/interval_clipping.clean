@@ -1,0 +1,42 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "interval_bases.clean"
+Import "subpaths.clean"
+
+Notation natural minimum(a,b):
+  Let a,b: Natural
+  Returns: Natural
+  Means: min a b
+  Render latex: \min({a},{b})
+
+Notation minimum left bound(a,b):
+  Let a,b: Natural
+  Returns: Evidence((natural minimum(a,b) ≤ a))
+  Means: Nat.min_le_left a b
+  Render latex: \operatorname{{minBound}}
+
+Notation bounded vertex(n,k,h):
+  Let n,k: Natural
+  Let h: Evidence((k ≤ n))
+  Returns: Vertex((n+1))
+  Means: Fin.mk k (Nat.lt_succ_of_le h)
+  Render latex: {k}
+
+Define clipped vertex(n,a,m,v):
+  Let n,a,m: Natural
+  Let v: Vertex((n+1))
+  Returns: Vertex((m+1))
+  Equals: bounded vertex(m,natural minimum(m,vertex number(n+1,v)-a),
+    minimum left bound(m,vertex number(n+1,v)-a))
+  Render latex: c_{{{a},{m}}}({v})
+
+Define surviving interval labels(I,n,a,m,L):
+  Let I: Type
+  Let n,a,m: Natural
+  Let L: IntervalLabels(I,n)
+  Returns: Set(I)
+  Equals: set of(function(i: I,
+    vertex number(n+1,L.lower(i)) ≤ a+m and
+      a ≤ vertex number(n+1,L.upper(i))))
+  Render latex: {L}|_{{[{a},{a}+{m}]}}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

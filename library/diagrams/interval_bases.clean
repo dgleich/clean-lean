@@ -24,6 +24,7 @@ Structure IntervalLabels(I: Type,n: Natural):
   Let lower,upper: Function(I,Vertex((n+1)))
   Let ordered: Evidence((ordered interval endpoints(I,n,lower,upper)))
   Constructor: interval labels
+  Describe: a family of ordered interval labels indexed by ${I}$ on vertices $0$ through ${n}$
   Render latex: \mathcal{{I}}
 
 Define interval labels at(I,n,L,v):

@@ -1,0 +1,36 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "../../library/diagrams/interval_clipping.clean"
+Source clipping:
+  Kind: other
+  Label: Interval clipping
+  Title: Restriction coordinates for finite zigzag interval labels
+
+Result clipped subpath vertex:
+  Attribution: clipping; coordinate retraction; original
+  Let n,a,m: Natural
+  Assume h: a+m ≤ n
+  Let v: Vertex((m+1))
+  Conclude: clipped vertex(n,a,m,subpath vertex(n,a,m,h,v)) = v
+
+Result clipping preserves order:
+  Attribution: clipping; monotonicity; original
+  Let n,a,m: Natural
+  Let u,v: Vertex((n+1))
+  Assume ordered: u ≤ v
+  Conclude: clipped vertex(n,a,m,u) ≤ clipped vertex(n,a,m,v)
+
+Result clipped interval support:
+  Attribution: clipping; surviving interval support; original
+  Let I: Type
+  Let n,a,m: Natural
+  Assume h: a+m ≤ n
+  Let L: IntervalLabels(I,n)
+  Let i: I
+  Assume survives: i ∈ surviving interval labels(I,n,a,m,L)
+  Let v: Vertex((m+1))
+  Conclude:
+    (clipped vertex(n,a,m,L.lower(i)) ≤ v and
+      v ≤ clipped vertex(n,a,m,L.upper(i))) ↔
+        i ∈ interval labels at(I,n,L,subpath vertex(n,a,m,h,v))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

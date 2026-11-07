@@ -498,3 +498,17 @@ and 15 proofs. The full regression and 33-study portfolio remain running on a
 frozen equivalent snapshot. The subpath arrow check and interval-basis restriction
 remain unfinished; this evidence does not prove the paper's extension theorem.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Interval clipping uses existing syntax
+
+The [interval-clipping study](../studies/interval-clipping/README.md) authors
+coordinate clamping and surviving-label selection in Clean. Explicit foundational
+adapters expose natural minimum, its bound and the Fin constructor. Eight exact
+native targets, three proofs and five Python checks pass. No new grammar or
+paper-specific Lean definition is required. Clipping alone does not restrict an
+interval basis: constructing surviving-label records, reindexing bases and proving
+compatibility remain separate mathematical work. The shared IntervalLabels type
+now has explicit prose metadata so LaTeX describes a family of ordered labels.
+:::

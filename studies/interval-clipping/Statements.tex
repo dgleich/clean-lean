@@ -1,0 +1,27 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{clipped subpath vertex}\cleanattribution{[Interval clipping, coordinate retraction]}
+Let $n$, $a$ and $m$ be natural numbers.
+Assume $a + m \le n$ (\texttt{h}).
+Let $v$ be a vertex in $\{0,\ldots,m + 1-1\}$.
+Then \[c_{a,m}(a+v) = v.\]
+\end{cleanresult}
+
+\begin{cleanresult}{clipping preserves order}\cleanattribution{[Interval clipping, monotonicity]}
+Let $n$, $a$ and $m$ be natural numbers.
+Let $u$ and $v$ be vertices in $\{0,\ldots,n + 1-1\}$.
+Assume $u \le v$ (\texttt{ordered}).
+Then \[c_{a,m}(u) \le c_{a,m}(v).\]
+\end{cleanresult}
+
+\begin{cleanresult}{clipped interval support}\cleanattribution{[Interval clipping, surviving interval support]}
+Let $I$ be a type.
+Let $n$, $a$ and $m$ be natural numbers.
+Assume $a + m \le n$ (\texttt{h}).
+Let $L$ be a family of ordered interval labels indexed by $I$ on vertices $0$ through $n$.
+Let $i$ be an element of $I$.
+Assume $i \text{ belongs to } L|_{[a,a+m]}$ (\texttt{survives}).
+Let $v$ be a vertex in $\{0,\ldots,m + 1-1\}$.
+Then \[c_{a,m}(L.\mathrm{lower}(i)) \le v \text{ and } v \le c_{a,m}(L.\mathrm{upper}(i)) \text{ if and only if } i \text{ belongs to } L_{a+v}.\]
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
