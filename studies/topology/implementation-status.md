@@ -62,8 +62,8 @@ case's own limitations or substitute for its outstanding validation.
 - The active-label study has authored maps and a support record, but its instrumented
   verifier crashed during translation (status 139). That source was superseded by a generic subtype construction, which passes ten
   exact checks, three proofs and five Python tests. The refactored interval
-  translation and corrected verifier remain active; its existence theorem is
-  not yet proved by completed validation.
+  translation and earlier verifier remain active; the native-oracle arithmetic support and existence theorem now pass separately.
+  Full generated interval-target comparison remains pending.
 - The browser build using the pre-postfix compiler was stopped as superseded.
   A new build, source-hash validation and UI checks remain pending.
 
@@ -72,7 +72,7 @@ case's own limitations or substitute for its outstanding validation.
 | Requested theorem | What is real now | What is still missing |
 |---|---|---|
 | Big Steps, Theorem 9 | Indexed records and ordinary set/function definitions can express its inputs and support predicates | Filtered complex, lazy reduction, the actual algorithm run and its invariants; the two sides must be computed independently |
-| Interlevel, Theorem 1 | Explicit diagrams, interval bases, subpath restrictions, endpoint clipping, surviving-label support and restricted label records, and a checked generic basis-reindexing wrapper | Surviving active-label equivalence, basis reindexing and compatibility, pyramid construction, exact-diamond basis flips and extension proof |
+| Interlevel, Theorem 1 | Explicit diagrams, interval bases, subpath restrictions, endpoint clipping, surviving-label support and restricted label records, and a checked generic basis-reindexing wrapper | Full generated-target comparison for the native-checked surviving active-label equivalence; basis reindexing and compatibility, pyramid construction, exact-diamond basis flips and extension proof |
 | Interlevel, Theorem 3 | Actual singular-homology, submodule, perturbation and shifted-image foundations | Assemble the level-set specialization and prove the two-extreme-perturbation formula with justified cover hypotheses |
 | Interlevel, Theorem 4 | A translated two-image candidate over actual relative objects; checked supporting inclusion maps | Reverse inclusion and the cover/excision audit; no proof is claimed by translating the candidate |
 | Mayer–Vietoris | Graded objects, maps and ordinary/relative chain foundations | Connecting maps, sequence/exactness interface, excision and the long-exact-sequence construction |

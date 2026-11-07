@@ -4824,6 +4824,22 @@
     "studies/alias-descriptions/Statements.pdf": {
       "origin": "derived-from-authored-sources; cited data retains source origin",
       "mode": "sidecar"
+    },
+    "studies/active-labels/Arithmetic.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/active-labels/verify_arithmetic.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

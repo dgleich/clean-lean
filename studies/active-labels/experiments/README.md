@@ -48,3 +48,12 @@ The combined generic-source experiment was stopped on this correctness evidence;
 its timing and unfinished interval run are not acceptance evidence. The original
 main interval verifier and translation remain unchanged and running.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The current generic-source call-index-only experiment, based on `70ab618`, passes
+244 focused Python tests and ten generic-subtype exact checks plus three proofs.
+Its interval translation remains incomplete. It does not include alias-description
+changes or establish scope-safe caching in every supported context. No compiler
+optimization has been integrated.
+:::

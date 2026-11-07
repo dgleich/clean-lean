@@ -6,13 +6,23 @@ ROOT=Path(__file__).resolve().parents[2];HERE=Path(__file__).resolve().parent
 sys.path.insert(0,str(ROOT))
 from cleanlang.core import Environment,lean,latex
 from cleanlang.modules import load_document
-e=Environment();results=load_document(HERE/'Statements.clean',e)
-f=lambda n:e.data['functions'][n]['lean'].split()[0]
-s=lean(results,e,['Lean']);(HERE/'Generated.lean').write_text(s)
-(HERE/'Statements.tex').write_text(latex(results,e))
+snapshot_only=sys.argv[1:]==['--from-generated']
+if sys.argv[1:] and not snapshot_only:raise SystemExit('Usage: verify.py [--from-generated]')
+if snapshot_only:
+    s=(HERE/'Generated.lean').read_text()
+else:
+    e=Environment();results=load_document(HERE/'Statements.clean',e)
+    s=lean(results,e,['Lean']);(HERE/'Generated.lean').write_text(s)
+    (HERE/'Statements.tex').write_text(latex(results,e))
+def emitted_key(name,structure=False):
+    prefix='structure (cleanStructure_' if structure else r'noncomputable def (clean(?:Notation|Define|Constructor)_'
+    matches=re.findall(prefix+re.escape(name.replace(' ','_'))+r'_[0-9a-f]+)\b',s)
+    if len(matches)!=1:raise ValueError('Expected exactly one generated binding for '+name)
+    return matches[0]
+f=emitted_key
 keys={k:f(v) for k,v in [('VALUE','element value'),('MEMBER','element membership'),('ELEMENT','element from membership'),('OLD','original active labels'),('NEW','restricted active labels'),('SUR','surviving interval labels'),('AT','interval labels at'),('RESTRICT','restricted interval labels'),('SUBPATH','subpath vertex'),('FORWARD','restrict active label'),('BACKWARD','restore active label'),('EQUIV','equivalence'),('LABEL_EQUIV','active label equivalence'),('EVAL','equivalence forward')]}
 keys.update({k:f(v) for k,v in [('GFORWARD','restrict element'),('GBACKWARD','restore element'),('GEQUIV','subtype restriction equivalence')]})
-keys.update(LABELS=e.structures['IntervalLabels']['key'],SUPPORT=e.structures['SubtypeRestrictionSupport']['key'])
+keys.update(LABELS=emitted_key('IntervalLabels',True),SUPPORT=emitted_key('SubtypeRestrictionSupport',True))
 expected=r'''
 namespace ActiveOracle
 noncomputable def value {A : Type} (S : Set A) (x : {a : A // a ∈ S}) : A := x.val
@@ -114,7 +124,7 @@ private theorem support_exists (I : Type) (n a m : ℕ) (h : a+m ≤ n) (L : LAB
    simp only [UNFOLD] at *
    try simp only [Fin.val_mk, Fin.coe_natAdd, Fin.coe_castLE, Fin.coe_cast] at *
    omega
- exact ⟨SUPPORT.mk I n a m h L v survives active original⟩
+ exact ⟨⟨survives,active,original⟩⟩
 
 theorem active_labels_checked : CleanStatements.active_labels_correspond := by
  intro I n a m h L v
@@ -125,13 +135,14 @@ theorem active_labels_checked : CleanStatements.active_labels_correspond := by
  intro x
  rfl
 '''
-unfold=[f(n) for n in ['original active labels','restricted active labels','surviving interval labels','interval labels at','set of','restricted interval labels','clipped vertex','natural minimum','bounded vertex','vertex number','subpath vertex','offset vertex','widen vertex','transport vertex','selected value','element value','element from membership']]
+unfold=[f(n) for n in ['original active labels','restricted active labels','surviving interval labels','interval labels at','set of','restricted interval labels','interval labels','clipped vertex','natural minimum','bounded vertex','vertex number','subpath vertex','offset vertex','widen vertex','transport vertex','selected value','element value','element from membership']]
 proofs=proofs.replace('UNFOLD',', '.join(unfold+['Set.mem_setOf_eq','Fin.le_iff_val_le_val']))
 extra=expected+comparison+checks+ctor_check+proofs
 extra=extra.replace('SUPPORT I n a m h L v','SUPPORT I (SUR I n a m L) (OLD I n a m h L v) (NEW I n a m L v)').replace('SUPPORT.mk I n a m h L v','SUPPORT.mk I (SUR I n a m L) (OLD I n a m h L v) (NEW I n a m L v)')
 for key,value in keys.items():extra=re.sub(r'\b'+key+r'\b',value,extra)
 p=HERE/'Verified.lean';p.write_text(s+extra)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(p)],cwd=ROOT,check=True)
-print('Fifteen exact active-label checks and four proofs passed')
+print('Fifteen exact active-label checks and four proofs passed'+
+      (' for the existing Generated.lean snapshot; current Clean source was not retranslated' if snapshot_only else ''))
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -31,17 +31,37 @@ evidence, direction, field layout and authored bodies. The one-page `Generic.pdf
 was compiled twice and inspected. Expected native expressions are shared literal
 oracles in `verify.py`; they are not derived from generated targets.
 
-## Interval instantiation remains in progress
+## Checked arithmetic construction
+
+Run `LAKE=lake python3 studies/active-labels/verify_arithmetic.py`. This loads the
+Clean-authored generic construction and interval-clipping foundations, then proves
+support and the value-preserving equivalence for the independently authored native
+old/new active-set expressions from `verify.py`. The generated `Arithmetic.lean`
+passes the Lean kernel. The support evidence is derived from numerical bounds;
+it is not assumed. No axioms or `sorry` are added.
+
+The first run exposed two proof issues: the raw support constructor's parameters
+are implicit, and the interval-label constructor wrapper must be unfolded before
+`omega` can see endpoint arithmetic. The checked version uses expected-type record
+construction and includes that wrapper in its unfold list. Both fixes are now in
+the full verifier.
+
+This isolates mathematical correctness from the remaining translation bottleneck.
+It does **not** compare the full generated interval definitions/statements against
+the native oracle: that bridge remains pending. `Arithmetic.lean` is a native-oracle
+check, not a replacement for `Statements.clean` or its requested verification.
+
+## Interval translation remains in progress
 
 `library/diagrams/active_labels.clean` instantiates the generic construction with
 the surviving set, original active set, and restricted active set. Its type aliases
-keep authored signatures shorter. Transparent aliases still reject `Describe`
-metadata; the expanded generic support type supplies the available description.
+keep authored signatures shorter. Transparent aliases now support optional
+`Describe` metadata under the [alias contract](../../docs/alias-descriptions.md).
 
 The final interval existence theorem assumes only a subpath bound and ordered
 interval labels. It does **not** assume support or inverse laws. Its verifier must
 construct support from numerical bounds and then instantiate the checked generic
-maps. That interval verification is not complete. The updated verifier specifies
+maps. The isolated native construction passes; full interval verification is not complete. The updated verifier specifies
 fourteen canonical body/type comparisons and one constructor-type comparison,
 plus four proof obligations; these are pending checks, not passing counts.
 
@@ -50,7 +70,16 @@ verifier crashed during translation with status 139. The cause is not establishe
 That source and its plain translation job were superseded by the generic refactor.
 An interval run carrying the old explicit-constructor oracle was also stopped once
 the generic native check demonstrated that the constructor parameters are implicit.
-The corrected interval verifier and a plain refactored translation remain running.
+The interval verifier started before the latest proof fixes and the plain
+refactored translation remain running. Their eventual artifacts can be checked
+with the updated proof driver, without repeating translation.
+
+Once `Generated.lean` exists, run `LAKE=lake python3 studies/active-labels/verify.py
+--from-generated` to replay canonical comparisons and corrected proofs for that
+artifact. The driver requires exactly one generated binding for each referenced
+name. Snapshot mode does not claim to regenerate or validate changed Clean sources;
+the default mode still translates first. The replay path has not yet had a complete
+interval artifact to check. Its binding lookup was checked against `Arithmetic.lean`.
 
 [Comparison experiments](experiments/README.md) preserve two unintegrated compiler
 patches and their limited results. No compiler optimization was adopted. Constructing

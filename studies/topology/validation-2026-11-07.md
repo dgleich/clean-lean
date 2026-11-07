@@ -202,3 +202,27 @@ pending. The earlier instrumented status-139 crash has no established cause.
 The operator prototype also passed its sixteen exact targets and two proofs after
 the postfix parser change. This remains an isolated proposal, not main syntax.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Isolated active-label arithmetic
+
+`studies/active-labels/verify_arithmetic.py` passes its native support and existence
+proofs using generated generic/clipping foundations and independently authored
+native active-set expressions. No full interval canonical comparison is claimed.
+The first attempt failed because constructor projections remained opaque to `omega`;
+the corrected unfold list passes. Expected-type support record construction also
+avoids the invalid explicit call to its implicit constructor parameters.
+
+These fixes are in the full verifier. `--from-generated` can replay the native
+checks for an existing artifact without another translation, explicitly labelled
+as a snapshot check. The long-running older verifier has its earlier proof code;
+its output will need replay with these fixes. The separate plain translation is
+still live. Neither has yet emitted the complete interval artifact.
+
+The narrower call-index cache experiment passed 244 focused tests plus ten generic
+canonical checks and three proofs. Its interval check is still live and incomplete;
+no optimization is integrated. The original tree-only reuse experiment failed two
+scope regressions and remains rejected. The current alias-description full-suite
+run is also pending, distinct from the older codomain snapshot.
+:::
