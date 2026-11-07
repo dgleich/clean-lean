@@ -480,3 +480,21 @@ the new node. Local type definitions and arbitrary computed types remain rejecte
 The earlier compound-type-as-value opacity boundary is superseded; full validation
 status is recorded in the type-expression study.
 :::
+
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Named endpoint evidence now has a callable view
+
+The [callable-evidence prototype](callable-evidence.md) is integrated after the
+preceding compiler passed all 584 tests. Named authored universal conditions can
+now supply dependent constructor fields directly. In a separate subpath check,
+source- and target-preservation assumptions are passed unchanged to the shape-map
+constructor; three exact native targets and one inclusion proof pass. This
+removes the need for separate proof-family aliases at that interface.
+
+The new compiler passes 197 focused tests and its own study's 21 exact targets
+and 15 proofs. The full regression and 33-study portfolio remain running on a
+frozen equivalent snapshot. The subpath arrow check and interval-basis restriction
+remain unfinished; this evidence does not prove the paper's extension theorem.
+:::

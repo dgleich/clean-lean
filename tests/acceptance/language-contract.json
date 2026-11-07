@@ -1389,7 +1389,7 @@
     },
     {
       "id": "scoped_callable_evidence",
-      "status": "isolated-prototype",
+      "status": "implemented-slice",
       "specification": "docs/callable-evidence.md",
       "environment": "Explicit types and evidence modules; one declared Lean arrow binding; local n : Natural and h : evidence of for every (x: Natural,x=x).",
       "source_fragment": "h(n)",
@@ -1406,18 +1406,18 @@
       "expected_lean_fragment": "h n",
       "expected_lean_type": "n = n",
       "checks": [
-        "studies/subpath-restrictions/callable-evidence-prototype.patch"
+        "tests/test_callable_evidence.py",
+        "studies/callable-evidence/verify.py"
       ],
       "obligation": "Preserve the original evidence term and assumption type; compare independently authored canonical native targets, including named conditions, projected fields, nested proof-family domains and local/module resolution.",
       "pending": [
-        "Integrate the standalone native study and focused tests from the patch",
         "Finish full regression and native-study validation",
         "Complete the remaining acceptance audit before claiming conformance"
       ]
     },
     {
       "id": "callable_evidence_no_resolution_fallback",
-      "status": "isolated-prototype",
+      "status": "implemented-slice",
       "specification": "docs/callable-evidence.md",
       "environment": "A module callable evidence accepts two Natural arguments; a same-named local evidence proves for every (x: Natural,x=x); n : Natural.",
       "source_fragment": "evidence(n,n)",
@@ -1438,18 +1438,20 @@
       "expected_error": "Function argument mismatch",
       "obligation": "Once the callable local is selected, its arity error must not trigger selection of the module callable. Parsing remains independent of both types.",
       "checks": [
-        "studies/subpath-restrictions/callable-evidence-prototype.patch"
+        "tests/test_callable_evidence.py",
+        "studies/callable-evidence/verify.py"
       ]
     },
     {
       "id": "captured_evidence_scope_conflict",
-      "status": "isolated-prototype",
+      "status": "implemented-slice",
       "specification": "docs/callable-evidence.md",
       "environment": "A proof index captures n as the Lean term first. An active substitution scope binds the same source name to second. The substitution mapping is empty.",
       "expected_error": "Captured proof scope conflict: n",
       "obligation": "Reject implicit rebinding; with n explicitly in the substitution mapping, substitute the selected actual instead. Compare the emitted condition against an independently supplied target.",
       "checks": [
-        "studies/subpath-restrictions/callable-evidence-prototype.patch"
+        "tests/test_callable_evidence.py",
+        "studies/callable-evidence/verify.py"
       ]
     }
   ]

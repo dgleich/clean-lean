@@ -1,0 +1,120 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{direct}\cleanattribution{[Callable evidence, direct assumption]}
+Let $n$ be a natural number.
+Assume $\left(\text{for every }x : \mathbb{N},\; x = x\right)$ (\texttt{h}).
+Let $p = h(n)$.
+Then \[p = p.\]
+\end{cleanresult}
+
+\begin{cleanresult}{named}\cleanattribution{[Callable evidence, named assumption]}
+Let $n$ be a natural number.
+Assume $\operatorname{reflexive}()$ (\texttt{h}).
+Let $p = h(n)$.
+Then \[p = p.\]
+\end{cleanresult}
+
+\begin{cleanresult}{nested}\cleanattribution{[Callable evidence, nested assumption]}
+Let $n$ and $m$ be natural numbers.
+Assume $\left(\text{for every }x : \mathbb{N},\; \left(\text{for every }y : \mathbb{N},\; x + y = y + x\right)\right)$ (\texttt{h}).
+Let $k = h(n)$.
+Let $p = k(m)$.
+Then \[p = p.\]
+\end{cleanresult}
+
+\begin{cleanresult}{projected}\cleanattribution{[Callable evidence, projected universal evidence]}
+Let $w$ be a family of proofs that every element of $\mathbb{N}$ equals itself.
+Let $n$ be a natural number.
+Let $p = w.\mathrm{all}(n)$.
+Then \[p = p.\]
+\end{cleanresult}
+
+\begin{cleanresult}{proof domain}\cleanattribution{[Callable evidence, universal evidence as an argument]}
+Assume $\left(\text{for every }h : \left(\text{for every }x : \mathbb{N},\; x = x\right),\; \left(\text{for every }n : \mathbb{N},\; n = n\right)\right)$ (\texttt{r}).
+Assume $\left(\text{for every }x : \mathbb{N},\; x = x\right)$ (\texttt{h}).
+Let $n$ be a natural number.
+Let $k = r(h)$.
+Let $p = k(n)$.
+Then \[p = p.\]
+\end{cleanresult}
+
+\begin{cleanresult}{function domain}\cleanattribution{[Callable evidence, proof family as an argument]}
+Assume $\left(\text{for every }h : \prod_{x:\mathbb{N}} x = x,\; \left(\text{for every }n : \mathbb{N},\; n = n\right)\right)$ (\texttt{r}).
+Assume $\left(\text{for every }x : \mathbb{N},\; x = x\right)$ (\texttt{h}).
+Let $n$ be a natural number.
+Let $k = r(h)$.
+Let $p = k(n)$.
+Then \[p = p.\]
+\end{cleanresult}
+
+\begin{cleanresult}{captured type}\cleanattribution{[Callable evidence, type scope preservation]}
+Assume $\left(\text{for every }x : \mathbb{R},\; x = x\right)$ (\texttt{h}).
+Let $z$ be a real number.
+Let $\mathit{Real}$ be a type.
+Let $p = h(z)$.
+Then \[p = p.\]
+\end{cleanresult}
+
+\begin{cleanresult}{captured free}\cleanattribution{[Callable evidence, free variable preservation]}
+Let $n$ be a natural number.
+Assume $\left(\text{for every }x : \mathbb{N},\; \left(\text{for every }y : \mathbb{N},\; x + y = n\right)\right)$ (\texttt{h}).
+Let $y$ be a natural number.
+Let $k = h(y)$.
+Let $p = k(n)$.
+Then \[p = p.\]
+\end{cleanresult}
+
+\begin{cleanresult}{implication}\cleanattribution{[Callable evidence, implication application]}
+Let $n$ be a natural number.
+Assume $n = 0 \text{ implies } n = n$ (\texttt{h}).
+Assume $n = 0$ (\texttt{p}).
+Let $q = h(p)$.
+Then \[q = q.\]
+\end{cleanresult}
+
+\begin{cleanresult}{saved assumption}\cleanattribution{[Callable evidence, local evidence alias]}
+Assume $\left(\text{for every }x : \mathbb{N},\; x = x\right)$ (\texttt{all}).
+Let $h = \mathit{all}$.
+Let $n$ be a natural number.
+Let $p = h(n)$.
+Then \[p = p.\]
+\end{cleanresult}
+
+\begin{cleanresult}{local precedence}\cleanattribution{[Callable evidence, callable local precedence]}
+Let $n$ be a natural number.
+Assume $\left(\text{for every }x : \mathbb{N},\; x = x\right)$ (\texttt{evidence}).
+Let $p = \mathit{evidence}(n)$.
+Then \[p = p.\]
+\end{cleanresult}
+
+\begin{cleanresult}{global fallback}\cleanattribution{[Callable evidence, noncallable local preserves module resolution]}
+Let $n$ be a natural number.
+Assume $n = n$ (\texttt{evidence}).
+Let $p = e(n)$.
+Then \[p = p.\]
+\end{cleanresult}
+
+\begin{cleanresult}{inferred carrier}\cleanattribution{[Callable evidence, inferred condition carrier]}
+Let $T$ be a type.
+Let $f$ and $g$ be functions from $T$ to $T$.
+Let $x$ be an element of $T$.
+Assume $\operatorname{pointwise\ equal}(f, g)$ (\texttt{h}).
+Let $p = h(x)$.
+Then \[p = p.\]
+\end{cleanresult}
+
+\begin{cleanresult}{existential result}\cleanattribution{[Callable evidence, existential proof as result]}
+Assume $\left(\text{for every }x : \mathbb{N},\; \left(\text{there exists }y : \mathbb{N},\; x = y\right)\right)$ (\texttt{h}).
+Let $n$ be a natural number.
+Let $p = h(n)$.
+Then \[p = p.\]
+\end{cleanresult}
+
+\begin{cleanresult}{nested function domain}\cleanattribution{[Callable evidence, nested proof-family argument]}
+Let $n$ be a natural number.
+Assume $\left(\text{for every }h : \prod_{x:\mathbb{N}} \prod_{y:\mathbb{N}} x + y = y + x,\; n = n\right)$ (\texttt{r}).
+Assume $\left(\text{for every }x : \mathbb{N},\; \left(\text{for every }y : \mathbb{N},\; x + y = y + x\right)\right)$ (\texttt{h}).
+Let $p = r(h)$.
+Then \[p = p.\]
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

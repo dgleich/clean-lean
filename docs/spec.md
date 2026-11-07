@@ -767,3 +767,26 @@ the new node. Local type definitions and arbitrary computed types remain rejecte
 The earlier compound-type-as-value opacity boundary is superseded; full validation
 status is recorded in the type-expression study.
 :::
+
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Callable evidence and scoped condition indices
+
+The implemented [callable-evidence contract](callable-evidence.md) specifies how
+an identifier-labelled assumption of a universal condition or implication can
+be called with existing expression syntax. The selected proof term is applied
+directly; no replacement evidence or cast is generated. Named authored conditions
+may expose their function type through the specified hygienic conversion rule.
+Opaque native condition bodies remain opaque.
+
+Condition-valued type arguments retain scoped binder syntax, allowing the ordinary
+Evidence alias to accept universal conditions. Other computed indices retain their
+binder restriction. Captured proof locals cannot be rebound implicitly. Known
+function types compare recursively under fresh binders, including nested proof
+families. A callable local takes precedence over a same-named module callable;
+a local arity or type error does not select the module callable instead.
+
+The [study](../studies/callable-evidence/README.md) records validation and remaining
+gates. This prototype's integration is not a completed conformance claim.
+:::

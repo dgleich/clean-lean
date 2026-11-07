@@ -4101,13 +4101,81 @@
       "origin": "llm-assisted",
       "mode": "markdown"
     },
-    "studies/subpath-restrictions/callable-evidence-prototype.patch": {
-      "origin": "llm-assisted",
-      "mode": "sidecar"
-    },
     "docs/callable-evidence.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "cleanlang/proof_types.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_callable_evidence.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/callable-evidence/verify.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/callable-evidence/Statements.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/callable-evidence/Generated.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/callable-evidence/Verified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/callable-evidence/Statements.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/callable-evidence/latex.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/callable-evidence/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/callable-evidence/Statements.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
     }
   }
 }

@@ -133,65 +133,47 @@ interlevel extension and paper theorem remain separate unfinished mathematics.
 
 :::llm gpt-6 2026-11-07 role=assisted
 
-## Isolated implementation checkpoint
+## Implemented callable evidence checkpoint
 
-The [prototype patch](callable-evidence-prototype.patch) records the experimental
-compiler, tests and a reproducible native study without changing the compiler
-being validated in the main repository. It applies to the compiler at commit
-6ca37dd. This is an intermediate implementation, not an accepted or integrated
-language change. Apply it only to an isolated copy when reproducing the experiment.
+The callable-evidence prototype is now integrated. Its
+[contract](../../docs/callable-evidence.md), [native study](../callable-evidence/README.md)
+and focused tests are directly available. Historical patches are preserved in
+Git history. The integration follows the preceding compiler's passing 584-test
+run; it is not a completed conformance claim for the new feature.
 
-The experiment stores a checked condition tree, captured local expressions and
-an owned comparison key in a scoped proof index. A source-derived callable view
-exposes authored universal quantification and implication as function types.
-Emission retains the original proof type and uses the original evidence term.
-No proof search, replacement proof, eta expansion or native cast is introduced.
-Negation does not yet receive a callable view, and opaque native conditions are
-not inspected. Existing immediate-lambda contraction is retained; substitution
-renames binders in inserted actual expressions before checking the result.
+The scoped proof index retains the checked condition tree, captured local
+expressions and owned comparison key. Authored universal quantification and
+implication expose callable views while emission preserves the original evidence
+term and named condition type. Function comparison recurses under fresh binders.
+Implicit rebinding of a captured proof local is rejected. Opaque native conditions
+and automatic callable views of negation remain unsupported.
 
-The patch includes studies/callable-evidence/Statements.clean and its standalone
-verify.py. With the patch applied, run
-`LAKE=lake python3 studies/callable-evidence/verify.py` from the isolated checkout.
-Twenty-one independent exact native comparisons and fifteen proofs pass. Cases include
-direct and named universal evidence, generic projected proof fields, proof-family
-arguments, nested quantification, captured free variables and type scopes,
-implication application and saving an assumption as a local value. The verifier
-regenerates Lean and TeX artifacts; these will be tracked directly on integration.
+The combined focused/regression run passes 197 tests, including 26 callable cases.
+Twenty-one independent exact native comparisons and fifteen proofs pass. Cases
+cover generic projected proof fields, nested proof-family arguments, inferred
+carriers, name-resolution precedence, wrong arity without fallback and captured
+scopes. The three-page LaTeX specimen compiles twice and was inspected. Its proof
+field description explicitly includes the carrier.
 
-The generated parser matches its unchanged grammar under strict LALR and lexer
-checks. The combined focused/regression run passes 197 tests, including 26 callable
-evidence cases. These cover syntax-only serialization, local/module call collisions,
-ambiguous arrow bindings, nested proof-family arguments and captured-scope conflicts.
-The old assertion that quantified assumptions cannot be saved as values has been
-replaced; a separate exact native target now covers that operation. Three older
-negative tests exposed changed diagnostic precedence. The revised non-condition
-index test supplies a correctly typed lambda and still requires binder rejection.
-Higher-order lambda applications whose bodies contain binders remain rejected;
-their tests now check the specific application-boundary diagnostic.
+The motivating subpath interface has also been checked in a separate prototype:
 
-The expanded specimen compiles twice and its three-page rendering was inspected. The proof
-field's prose description explicitly includes its carrier; the initial generic
-fallback omitted that information and was corrected in the specimen.
+```clean
+Assume hs: subpath sources preserved(n,a,m,h,d)
+Assume ht: subpath targets preserved(n,a,m,h,d)
+```
 
-One necessary extension surfaced during the experiment: Evidence is a transparent
-alias taking a condition as a value argument. Supporting a direct universal
-condition therefore requires scoped condition-valued type indices as well as
-proof types. The prototype permits these only when the argument's checked type
-is Proposition. Other computed indices still reject binders. Type syntax spelling
-preserves these binders without consulting an environment; the semantic check
-selects the permitted index representation. This boundary needs to enter the
-formal specification and acceptance catalog before integration.
+These named assumptions are accepted directly by the subpath shape-map and
+restriction definitions. Three independently authored exact targets and one
+inclusion proof pass. The native targets retain the two named condition types
+and pass hs and ht unchanged to the constructor. This check assumes endpoint
+preservation; it does not replace the earlier unconditional endpoint proofs or
+establish the unfinished interval-basis theorem.
 
-The [integration contract draft](../../docs/callable-evidence.md) now specifies
-parsing, scoped indices, head views, recursive function matching, capture-conflict
-rejection, resolution precedence and exact Lean emission. The HTML reference marks
-this as an isolated prototype; its links, search, status filter and mobile layout pass.
-
-The isolated compiler snapshot is now frozen for a full regression run and the
-33-study native portfolio. Both are pending, not reported as passing. Remaining
-work includes closing the consumer audit, further canonical binder-renaming cases,
-the normative acceptance catalog, full validation and integration.
-The experiment has not established conformance. General captured-scope
-substitution must not be inferred safe merely from the passing examples.
+The main compiler's ASTs match the isolated snapshot frozen for full regression
+and the 33-study native portfolio. Both runs are pending. The existing review
+browser describes the preceding 107-file snapshot; a refresh for the new study
+is pending. Remaining work includes completing full validation and the consumer
+acceptance audit, integrating the subpath construction and finishing its arrow
+statement. The contract and acceptance catalog describe implemented behavior but
+are not themselves evidence that these remaining gates passed.
 :::

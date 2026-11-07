@@ -126,7 +126,8 @@ class ProofType(Type):
 def proof_type(condition,environment=None,locals=None):
     from .indices import index_value
     if condition.type!=PROP:raise CleanError('A computed proof type must be a condition')
-    return ProofType(index_value(condition,environment,locals))
+    from .proof_types import index
+    return ProofType(index(condition,environment,locals or {}))
 
 
 
@@ -237,7 +238,8 @@ class Environment:
                 if actual.type!=expected:
                     raise CleanError(f'Value index {a} requires {expected}, got {actual.type}')
                 from .indices import index_value
-                out.append(index_value(actual,self,env or {}));continue
+                from .proof_types import index as condition_index
+                out.append(condition_index(actual,self,env or {}) if actual.type==PROP else index_value(actual,self,env or {}));continue
             if not (a.startswith('(') or re.fullmatch(r'\d+|'+ID+r'(?:\.'+ID+r')*',a)):
                 raise CleanError('Dimension must be a numeral, natural parameter, field or parenthesized computation')
             if re.fullmatch(ID,a) and (env is None or a not in env or env[a].type!=NAT):
@@ -267,6 +269,9 @@ class Environment:
             return bindings[t.name].lean if target=='lean' and t.name in bindings else t.name
         return self.data['types'][t.name][target].format(*args)
     def is_function_type(self,t):
+        if isinstance(t,ProofType):
+            from .proof_types import callable_view
+            return callable_view(t,self) is not None
         from .dependent_functions import DependentFunctionType
         if isinstance(t,DependentFunctionType):return True
         spec=self.data['types'].get(t.name,{})
@@ -358,6 +363,10 @@ class Environment:
             return substitutions.get(t,t)
 
         def match(pattern,actual):
+            from .proof_types import callable_view
+            if isinstance(pattern,ProofType) != isinstance(actual,ProofType):
+                pattern=callable_view(pattern,self) or pattern
+                actual=callable_view(actual,self) or actual
             # Preserve concrete numeric argument compatibility on migrated dimension signatures.
             if actual==NUM and pattern in (NAT,Type('Real'),Type('Complex')):return
             from .indices import DimensionIndex

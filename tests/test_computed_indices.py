@@ -41,8 +41,11 @@ class ComputedIndices(unittest.TestCase):
     def test_wrong_slot_and_wrong_type(self):
         for text in ['Set((homology module(field,H,X)))','ModuleElement(K,field,(X))']:
             with self.subTest(text=text),self.assertRaises(CleanError):self.e.type(text,self.local)
-    def test_no_binders_in_indices(self):
+    def test_no_binders_in_noncondition_indices(self):
+        type_declaration('Type AtMap(f: Function(Real,Real)):', ['Means: Real','Render latex: A({f})'],self.e)
         with self.assertRaisesRegex(CleanError,'do not introduce binders'):
+            self.e.type('AtMap((function(z: Real,z)))',self.local)
+        with self.assertRaisesRegex(CleanError,'requires CoefficientModule'):
             self.e.type('ModuleElement(K,field,(function(z: Real,z)))',self.local)
     def test_no_alias_unfolding(self):
         value=self.expr('homology module(field,H,X)')

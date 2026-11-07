@@ -1,11 +1,11 @@
 :::llm gpt-6 2026-11-07 role=assisted
 
-# Scoped callable evidence — integration draft
+# Scoped callable evidence
 
-Status: implemented only in the isolated prototype linked from the
-[subpath study](../studies/subpath-restrictions/design.md). This document proposes
-the integration contract. It does not claim that the repository compiler supports
-these rules, or that the prototype has completed the language acceptance audit.
+Status: implemented prototype. The [acceptance study](../studies/callable-evidence/README.md)
+records focused tests, independent native targets and remaining validation. The
+full regression and native-study runs are pending; integration is not a claim
+of completed language conformance.
 
 ## Source syntax and one parse
 
@@ -129,7 +129,7 @@ assumption's type and the original evidence term as the argument.
 
 ## Required acceptance evidence
 
-The isolated study records independent native targets for direct and named
+The acceptance study records independent native targets for direct and named
 universals, nested calls, projected proof fields, function/proof domains, captured
 free variables and type scopes, implications and local evidence aliases. The
 additional collision and nested-function cases must also have exact native
@@ -141,9 +141,9 @@ binders, ambiguous arrow bindings and forbidden non-condition indices. Preserve
 all existing universe restrictions. Tests must check alpha-renamed binders and
 compiler-like source names without normalizing unrelated free names away.
 
-Before integration, update the normative spec, decisions, acceptance catalog and
-Clean-to-Lean HTML reference together. Complete the expression-consumer audit,
-run the full regression suite and kernel checks, and refresh the review browser.
+The spec, decisions, acceptance catalog and Clean-to-Lean HTML reference describe
+this implemented prototype. Before claiming conformance, complete the remaining
+expression-consumer audit and full validation, and refresh the review browser.
 The prototype's focused tests and native fixtures do not by themselves prove
 conformance with this contract.
 :::

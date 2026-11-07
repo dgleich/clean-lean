@@ -550,3 +550,16 @@ conformance claim. The 197-test focused run, 21 exact native targets and 15 proo
 are evidence for the draft; full regression, native portfolio and final acceptance
 integration remain pending.
 :::
+
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Callable evidence prototype integrated
+
+After the preceding compiler passed all 584 tests, the callable-evidence prototype
+was integrated with its native fixtures and regression tests. The normative rule
+is [scoped callable evidence](callable-evidence.md). The isolated snapshot remains
+frozen for the full regression and native portfolio; those checks are still pending.
+The historical patch remains in Git history rather than as a second implementation
+in the working tree. No full-conformance claim is made by this integration.
+:::

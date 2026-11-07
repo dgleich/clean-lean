@@ -141,6 +141,8 @@ the final study and focused tests separately cover that guard. The integration-c
 full suite completed 581 tests with one obsolete certificate-opacity assertion
 failing; that assertion was already corrected in the main checkout before its
 current full run began. No other failures were reported. The final main-checkout
-full suite completed all 584 tests successfully.
+full suite completed all 584 tests successfully. The Python runner
+reported OK and its recorded process exit status was 0; the tool shell returned
+143 when reaped afterward, so the runner status was checked independently.
 This slice does not claim general universe polymorphism or callable universal evidence.
 :::

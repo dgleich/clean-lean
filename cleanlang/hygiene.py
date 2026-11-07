@@ -3,7 +3,7 @@
 import re
 from .core import ID,CleanError,Type
 from .dependent_functions import tree_names
-from .syntax import parse,type_tree,expression_spelling
+from .syntax import parse,type_tree,expression_spelling,condition_spelling
 
 class UnrepresentableSubstitution(CleanError):
     """A checked argument has no spelling in a source type annotation."""
@@ -56,7 +56,7 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
         if kind=='Numeral':return node[1]
         if kind=='Projection':return index(expr(type_expr(node),mapping,callheads))
         if kind=='ComputedIndex':
-            try:return '('+expression_spelling(expr(node[1],mapping,callheads))+')'
+            try:return '('+condition_spelling(expr(node[1],mapping,callheads))+')'
             except CleanError as e:raise UnrepresentableSubstitution(str(e)) from e
         if kind=='Apply':return node[1]+'('+','.join(typ(a,mapping,callheads,type_mapping) for a in node[2])+')'
         if kind=='BoundTypeApply':

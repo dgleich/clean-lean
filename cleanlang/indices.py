@@ -33,6 +33,8 @@ def index_value(expression,environment=None,locals=None):
 
 
 def substitute_index(index,bindings,env,locals):
+    from .proof_types import ProofIndex,substitute_proof
+    if isinstance(index,ProofIndex):return substitute_proof(index,bindings,env,locals)
     from .core import Expressions,Expr
     from .syntax import parse,expression_tree
     tree=json.loads(index.syntax) if isinstance(index,ComputedIndex) else expression_tree(parse(index.name,'expression'))

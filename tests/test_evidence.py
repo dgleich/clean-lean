@@ -52,11 +52,10 @@ class Evidence(unittest.TestCase):
             with self.subTest(new=new),self.assertRaises(CleanError):self.load(RESULT.replace(old,new))
     def test_duplicate_binding(self):
         with self.assertRaises(CleanError):self.load(RESULT.replace('Let Q =','Let inclusion: Real\n  Let Q ='))
-    def test_binder_assumption_still_legal_but_not_a_value(self):
+    def test_binder_assumption_can_be_saved_as_evidence(self):
         source=RESULT.replace('Assume inclusion: S ⊆ T','Assume all: for every (x: X, x=x)\n  Assume inclusion: S ⊆ T')
         self.load(source)
-        with self.assertRaisesRegex(CleanError,'named Condition'):
-            self.load(source.replace('Let Q =','Let h = all\n  Let Q ='))
+        self.load(source.replace('Let Q =','Let h = all\n  Let Q ='))
     def test_named_condition_and_sequential_assumptions(self):
         extra='''Condition included(X: Type,S: Set(X),T: Set(X)):
   Holds when: S ⊆ T

@@ -1,0 +1,146 @@
+-- generated: gpt-6 2026-11-07 role=assisted; experimental
+Import "../../library/types.clean"
+Import "../../library/logic/evidence.clean"
+Source evidence:
+  Kind: other
+  Label: Callable evidence
+  Title: Callable evidence prototype
+Condition reflexive():
+  Holds when: for every (x: Natural,x = x)
+Define apply reflexive(h,n):
+  Let h: Evidence((reflexive()))
+  Let n: Natural
+  Returns: Evidence((n = n))
+  Equals: h(n)
+Define consume(g,n):
+  Let g: Function(x: Natural,Evidence((x = x)))
+  Let n: Natural
+  Returns: Evidence((n = n))
+  Equals: g(n)
+Define use named(h,n):
+  Let h: Evidence((reflexive()))
+  Let n: Natural
+  Returns: Evidence((n = n))
+  Equals: consume(h,n)
+Notation evidence(n: Natural): Natural:
+  Means: n+1
+  Render latex: e({n})
+Condition pointwise equal(f,g):
+  Let T: Type
+  Let f,g: Function(T,T)
+  Holds when: for every (x: T,f(x) = g(x))
+Structure UniversalWitness(T: Type):
+  Let all: Evidence((for every (x: T,x = x)))
+  Constructor: universal witness
+  Render latex: \operatorname{{Reflexivity}}({T})
+  Describe: a family of proofs that every element of ${T}$ equals itself
+  Describe plural: families of proofs that every element of ${T}$ equals itself
+Result direct:
+  Attribution: evidence; direct assumption; original
+  Let n: Natural
+  Assume h: for every (x: Natural,x = x)
+  Let p = h(n)
+  Conclude: p = p
+Result named:
+  Attribution: evidence; named assumption; original
+  Let n: Natural
+  Assume h: reflexive()
+  Let p = h(n)
+  Conclude: p = p
+Result nested:
+  Attribution: evidence; nested assumption; original
+  Let n,m: Natural
+  Assume h: for every (x: Natural,for every (y: Natural,x+y = y+x))
+  Let k = h(n)
+  Let p = k(m)
+  Conclude: p = p
+
+Result projected:
+  Attribution: evidence; projected universal evidence; original
+  Let w: UniversalWitness(Natural)
+  Let n: Natural
+  Let p = w.all(n)
+  Conclude: p = p
+Result proof domain:
+  Attribution: evidence; universal evidence as an argument; original
+  Assume r: for every (h: Evidence((for every (x: Natural,x = x))),for every (n: Natural,n = n))
+  Assume h: for every (x: Natural,x = x)
+  Let n: Natural
+  Let k = r(h)
+  Let p = k(n)
+  Conclude: p = p
+
+Result function domain:
+  Attribution: evidence; proof family as an argument; original
+  Assume r: for every (h: Function(x: Natural,Evidence((x = x))),for every (n: Natural,n = n))
+  Assume h: for every (x: Natural,x = x)
+  Let n: Natural
+  Let k = r(h)
+  Let p = k(n)
+  Conclude: p = p
+Result captured type:
+  Attribution: evidence; type scope preservation; original
+  Assume h: for every (x: Real,x = x)
+  Let z: Real
+  Let Real: Type
+  Let p = h(z)
+  Conclude: p = p
+Result captured free:
+  Attribution: evidence; free variable preservation; original
+  Let n: Natural
+  Assume h: for every (x: Natural,for every (y: Natural,x+y = n))
+  Let y: Natural
+  Let k = h(y)
+  Let p = k(n)
+  Conclude: p = p
+
+Result implication:
+  Attribution: evidence; implication application; original
+  Let n: Natural
+  Assume h: n = 0 → n = n
+  Assume p: n = 0
+  Let q = h(p)
+  Conclude: q = q
+Result saved assumption:
+  Attribution: evidence; local evidence alias; original
+  Assume all: for every (x: Natural,x = x)
+  Let h = all
+  Let n: Natural
+  Let p = h(n)
+  Conclude: p = p
+
+Result local precedence:
+  Attribution: evidence; callable local precedence; original
+  Let n: Natural
+  Assume evidence: for every (x: Natural,x = x)
+  Let p = evidence(n)
+  Conclude: p = p
+Result global fallback:
+  Attribution: evidence; noncallable local preserves module resolution; original
+  Let n: Natural
+  Assume evidence: n = n
+  Let p = evidence(n)
+  Conclude: p = p
+Result inferred carrier:
+  Attribution: evidence; inferred condition carrier; original
+  Let T: Type
+  Let f,g: Function(T,T)
+  Let x: T
+  Assume h: pointwise equal(f,g)
+  Let p = h(x)
+  Conclude: p = p
+Result existential result:
+  Attribution: evidence; existential proof as result; original
+  Assume h: for every (x: Natural,there exists (y: Natural,x = y))
+  Let n: Natural
+  Let p = h(n)
+  Conclude: p = p
+Result nested function domain:
+  Attribution: evidence; nested proof-family argument; original
+  Let n: Natural
+  Assume r: for every (h: Function(x: Natural,Function(y: Natural,Evidence((x+y = y+x)))),n = n)
+  Assume h: for every (x: Natural,for every (y: Natural,x+y = y+x))
+  Let p = r(h)
+  Conclude: p = p
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

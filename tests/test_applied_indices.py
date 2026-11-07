@@ -44,10 +44,10 @@ class AppliedIndices(unittest.TestCase):
         with self.assertRaisesRegex(CleanError,'do not introduce binders'):
             index_value(self.expr('function(t: Real,t)'),self.e,self.local)
     def test_quantified_body_remains_rejected(self):
-        with self.assertRaisesRegex(CleanError,'do not introduce binders'):
+        with self.assertRaisesRegex(CleanError,'application requires a named function or field'):
             self.expr('equality congruence(function(t: Real,for every (u: Real,t=u)),a,b,hab)')
     def test_nested_lambda_remains_rejected(self):
-        with self.assertRaisesRegex(CleanError,'do not introduce binders'):
+        with self.assertRaisesRegex(CleanError,'application requires a named function or field'):
             self.expr('equality congruence(function(t: Real,function(u: Real,t+u)),a,b,hab)')
     def test_named_function_stays_opaque(self):
         proof=self.expr('equality congruence(f,a,b,hab)')

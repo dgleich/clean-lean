@@ -31,7 +31,7 @@ def name(tree):return ' '.join(map(str,tree.children))
 
 def type_spelling(tree):
     if isinstance(tree,generated.Token):return str(tree)
-    if tree.data=='computed_index':return '('+expression_spelling(expression_tree(tree.children[0]))+')'
+    if tree.data=='computed_index':return '('+condition_spelling(expression_tree(tree.children[0]))+')'
     if tree.data=='index_reference':return '.'.join(map(str,tree.children))
     if tree.data=='type_ref':
         head=str(tree.children[0])
@@ -225,3 +225,24 @@ def fields(nodes):
             text+=' '.join(' '+child.text for child in node.children)
         result.append(text.strip())
     return result
+
+def condition_spelling(tree):
+    """Canonical source for scoped condition expressions; no environment lookup."""
+    from .core import CleanError
+    kind=tree[0]
+    if kind in ('Local','Decimal'):return tree[1]
+    if kind=='TypeValue':return 'type('+tree[1]+')'
+    if kind=='Call':return tree[1]+'('+','.join(map(condition_spelling,tree[2]))+')'
+    if kind=='Projection':
+        base=condition_spelling(tree[1])
+        if tree[1][0]=='Apply':base='('+base+')'
+        return base+'.'+tree[2]
+    if kind=='Apply':
+        if tree[1][0] not in ('Local','Projection'):raise CleanError('Computed index application requires a named function or field')
+        return condition_spelling(tree[1])+'('+','.join(map(condition_spelling,tree[2]))+')'
+    if kind=='Operator':return '('+condition_spelling(tree[2])+' '+tree[1]+' '+condition_spelling(tree[3])+')'
+    if kind=='Unary':return '('+tree[1]+' '+condition_spelling(tree[2])+')'
+    if kind in ('Forall','Exists','Lambda'):
+        word={'Forall':'for every','Exists':'there exists','Lambda':'function'}[kind]
+        return word+'('+tree[1]+': '+tree[2]+','+condition_spelling(tree[3])+')'
+    raise CleanError('Unsupported proof expression')

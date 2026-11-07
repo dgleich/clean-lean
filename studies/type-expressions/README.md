@@ -54,8 +54,9 @@ The refreshed browser contains 107 Clean files with no translation errors. Every
 source hash and the complete inventory match. Search, declarations, target navigation,
 imports, notes/export, reload, responsive layout and the no-JavaScript fallback pass.
 
-Computed types as carrier arguments, Type-valued local definitions, universe polymorphism and
-application of named universal evidence are separate unfinished features. The
+Computed types as carrier arguments, Type-valued local definitions and universe
+polymorphism remain unfinished. Named universal evidence now has a separate
+[implemented prototype](../callable-evidence/README.md) with its own validation gates. The
 subpath prototype exercises the new syntax, but interval clipping and basis
 restriction are not established by this specimen.
 :::
