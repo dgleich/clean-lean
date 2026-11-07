@@ -2,6 +2,12 @@
 
 # Local and module type identity
 
+**Current status:** the seven binding repairs are now in the working compiler.
+See the [integration report](../../docs/binding-integration.md) for current
+validation and remaining gates. The account below records the isolated experiment;
+default patch drivers reconstruct its pinned baseline, not the current compiler.
+
+
 Status: **failing acceptance gate**, not an implemented repair. This study exposes
 a silent change in statement meaning in main Clean and in the four-patch carrier,
 bound-call, proof-binding and checked-annotation prototype.

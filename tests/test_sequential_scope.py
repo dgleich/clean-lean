@@ -35,7 +35,8 @@ class SequentialScope(unittest.TestCase):
   second=RESULT.replace('first','second').replace('  Let T: Type\n','')
   rs,e=self.load(BASE+SOURCE+RESULT+LATE+second)
   target=lean(rs,e,[])
-  self.assertIn('∀ (x : T)',target);self.assertIn('∀ (x : Real)',target)
+  key=e.data['types']['T']['native_binding']
+  self.assertIn('∀ (x : T)',target);self.assertIn(f'∀ (x : (_root_.{key}))',target)
   self.assertIsNot(rs[0].environment,rs[1].environment)
  def test_adjacent_results_share_snapshot_not_mutable_loader(self):
   rs,e=self.load(BASE+SOURCE+RESULT+RESULT.replace('first','second'))
@@ -54,6 +55,7 @@ class SequentialScope(unittest.TestCase):
   first,a=self.load(BASE+SOURCE+RESULT)
   second,b=self.load(BASE+SOURCE+LATE+RESULT.replace('first','second').replace('  Let T: Type\n',''))
   target=lean([*first,*second],combine([a,b]),[])
-  self.assertIn('∀ (x : T)',target);self.assertIn('∀ (x : Real)',target)
+  key=b.data['types']['T']['native_binding']
+  self.assertIn('∀ (x : T)',target);self.assertIn(f'∀ (x : (_root_.{key}))',target)
 
 # generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

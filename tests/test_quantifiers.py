@@ -56,12 +56,14 @@ class Quantifiers(unittest.TestCase):
             self.parse('for every (x: Real,x=x)')
     def test_dependent_domain_renaming(self):
         e=self.parse("for every (n: Natural, for every (x: Vector(n,Real), x=x))")
-        self.assertIn("Fin clean_bound_0",e.lean)
+        key=self.env.data['types']['Vector']['native_binding']
+        self.assertIn(key+' (clean_bound_0)',e.lean)
         self.assertNotIn("Fin n",e.lean)
 
     def test_type_template_constants_are_not_local_names(self):
         e=self.parse('for every (Fin: Natural, for every (x: Vector(Fin,Real), x=x))')
-        self.assertIn('Fin clean_bound_0',e.lean)
+        key=self.env.data['types']['Vector']['native_binding']
+        self.assertIn(key+' (clean_bound_0)',e.lean)
         self.assertNotIn('clean_bound_0 clean_bound_0',e.lean)
 
     def test_study_and_universe_binding(self):

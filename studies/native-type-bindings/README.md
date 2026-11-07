@@ -2,6 +2,12 @@
 
 # Native type adapters retain their declaration scope
 
+**Current status:** the seven binding repairs are now in the working compiler.
+See the [integration report](../../docs/binding-integration.md) for current
+validation and remaining gates. The account below records the isolated experiment;
+default patch drivers reconstruct its pinned baseline, not the current compiler.
+
+
 Status: isolated prototype, not enabled in main. Apply `prototype.patch` after
 the carrier, bound-call, proof-binding, annotation and local-type patches.
 

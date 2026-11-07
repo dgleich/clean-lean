@@ -2,6 +2,12 @@
 
 # Carrier fields in a pointed topological space
 
+**Current status:** the seven binding repairs are now in the working compiler.
+See the [integration report](../../docs/binding-integration.md) for current
+validation and remaining gates. The account below records the isolated experiment;
+default patch drivers reconstruct its pinned baseline, not the current compiler.
+
+
 This isolated prototype authors a bundle with its own carrier, topology and point
 in [Bundle.clean.proposed](Bundle.clean.proposed). Subsequent fields depend on the
 carrier field. The six [statements](Statements.clean.proposed) use `P.carrier`,

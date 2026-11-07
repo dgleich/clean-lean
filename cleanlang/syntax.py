@@ -64,7 +64,7 @@ def expression_spelling(tree):
     kind=tree[0]
     if kind in ('Local','Decimal'):return tree[1]
     if kind=='TypeValue':return 'type('+tree[1]+')'
-    if kind=='Call':return tree[1]+'('+','.join(map(expression_spelling,tree[2]))+')'
+    if kind in ('Call','ModuleCall'):return tree[1]+'('+','.join(map(expression_spelling,tree[2]))+')'
     if kind=='Projection':
         base=expression_spelling(tree[1])
         if tree[1][0]=='Apply':base='('+base+')'
@@ -246,7 +246,7 @@ def condition_spelling(tree):
     kind=tree[0]
     if kind in ('Local','Decimal'):return tree[1]
     if kind=='TypeValue':return 'type('+tree[1]+')'
-    if kind=='Call':return tree[1]+'('+','.join(map(condition_spelling,tree[2]))+')'
+    if kind in ('Call','ModuleCall'):return tree[1]+'('+','.join(map(condition_spelling,tree[2]))+')'
     if kind=='Projection':
         base=condition_spelling(tree[1])
         if tree[1][0]=='Apply':base='('+base+')'

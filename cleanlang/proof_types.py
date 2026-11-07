@@ -17,9 +17,11 @@ def index(expression,env,locals,*,_fresh=False):
     from .syntax import condition_spelling
     from .quantified_beta import comparison_expression
     comparison=comparison_expression(expression,env,locals)
+    from .bound_calls import bind
+    tree=bind(expression.tree,env,locals,binders=True)
     return ProofIndex('('+condition_spelling(expression.tree)+')',expression.lean,expression.tex,
-                      json.dumps(expression.tree,ensure_ascii=False),tuple(locals.items()),
-                      comparison=index_comparison(comparison,env,locals,_fresh=_fresh))
+                      json.dumps(tree,ensure_ascii=False),tuple(locals.items()),
+                      comparison=index_comparison(comparison,env,locals,_fresh=_fresh),resolved=tree)
 
 
 def callable_view(typ,env):
@@ -28,9 +30,9 @@ def callable_view(typ,env):
     if not isinstance(saved,ProofIndex):return None
     from .hygiene import substitute
     from .conversion import _normal_form
-    from .dependent_functions import fresh_bound,inferred_type
+    from .dependent_functions import fresh_bound,inferred_type,index_tree
     scope=dict(saved.scope)
-    tree=substitute(json.loads(saved.syntax),{},env,scope)
+    tree=substitute(index_tree(saved),{},env,scope)
     condition=_normal_form(Expressions(env,scope).elaborate(tree),env,scope,fresh=True)
     if condition.tree[0]=='Operator' and condition.tree[1]=='→':
         left=Expressions(env,scope).elaborate(condition.tree[2])
@@ -52,7 +54,7 @@ def substitute_proof(saved,bindings,env,locals):
     from .dependent_functions import index_tree,tree_names
     from .syntax import parse,expression_tree
     captured=dict(saved.scope)
-    used=tree_names(json.loads(saved.syntax))
+    used=tree_names(index_tree(saved))
     for name in sorted(used.intersection(captured).intersection(locals).difference(bindings)):
         before,after=captured[name],locals[name]
         if before.lean!=after.lean or before.type!=after.type:
@@ -64,7 +66,7 @@ def substitute_proof(saved,bindings,env,locals):
         elif isinstance(v,ValueIndex):values[k]=Expressions(env,locals).elaborate(index_tree(v))
         elif isinstance(v,str):values[k]=Expressions(env,locals).elaborate(expression_tree(parse(v,'expression')))
     types={k:v for k,v in bindings.items() if isinstance(v,Type)}
-    tree=substitute(json.loads(saved.syntax),values,env,scope,types)
+    tree=substitute(index_tree(saved),values,env,scope,types)
     tree=substitute(tree,{},env,scope)
     result=Expressions(env,scope).elaborate(tree)
     return index(result,env,scope,_fresh=True)

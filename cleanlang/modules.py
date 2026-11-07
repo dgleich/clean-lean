@@ -88,7 +88,9 @@ def type_declaration(header, fields, env):
     if 'equals' in values:
         if values.keys()-{'equals','describe','describe plural'}:
             raise CleanError('Type alias accepts Equals and optional Describe / Describe plural')
-        spec = {'args': kinds, 'canonical': substitute(values['equals'], names)}
+        resolved=env.type(values['equals'],local,phrases=False,trail=(name,))
+        spec = {'args': kinds, 'canonical': substitute(values['equals'], names),
+                'canonical_type':resolved,'parameter_names':names,'parameter_types':parameter_types}
         for src,dst in [('describe','prose'),('describe plural','prose_plural')]:
             if src in values:spec[dst]=template(values[src],names)
         env.data['types'][name] = spec
@@ -98,14 +100,19 @@ def type_declaration(header, fields, env):
         raise CleanError('Type requires Means and Render latex; optional Describe, Describe plural and Universe')
     default_level=1 if values['means']=='Type' else 0
     level=universe_level(values,default_level)
-    spec={'args': kinds, 'lean': substitute(values['means'], names), 'latex': template(values['render latex'], names)}
+    spec={'args': kinds, 'lean': substitute(values['means'], names), 'latex': template(values['render latex'], names),
+          'parameter_names':names,'parameter_types':parameter_types}
     spec['universe']=level
     for src,dst in [('describe','prose'),('describe plural','prose_plural')]:
         if src in values: spec[dst] = template(values[src], names)
     env.data['types'][name] = spec
     signature=' '.join(f'({n} : '+('Type' if t==Type('Type') else 'Nat' if t==NAT else env.render_type(t,'lean'))+')' for n,t in zip(names,parameter_types))
     sort=universe_sort(level) if level!=default_level else {'Prop':'Sort 1', 'Type':'Type 1'}.get(values['means'],'Type')
-    add_definition(env, 'cleanType_', name, f'{signature} : {sort} :=\n  {values["means"]}')
+    key=add_definition(env, 'cleanType_', name, f'{signature} : {sort} :=\n  {values["means"]}')
+    env.notation_definitions[key]=env.notation_definitions[key].replace('noncomputable def ', 'noncomputable abbrev ', 1)
+    spec['native_binding']=key
+    spec['native_template']=spec['lean']
+    spec['native_declaration']=env.notation_definitions[key]
 
 
 def signature_fields(header, fields):
@@ -181,14 +188,19 @@ def notation(header, fields, env, *, authored=False):
     body=f'{signature} : {env.render_type(result,"lean")} :=\n  {meaning}'
     # Install the name only after its body is resolved: no recursion/forward references.
     def pattern(t):
-        return re.sub(ID, lambda m: '$'+m[0] if m[0] in implicit else m[0], str(t))
+        from .core import LocalType,ValueIndex
+        if isinstance(t,LocalType):return '$'+t.name if t.name in implicit else t.name
+        if isinstance(t,ValueIndex):return '$'+t.name if t.name in implicit else str(t)
+        if isinstance(t,Type):return t.name+('('+','.join(pattern(a) for a in t.args)+')' if t.args else '')
+        return '$'+t if t in implicit else t
     # Every implicit parameter must be inferable from argument types.
     for n in implicit:
-        if not any(re.search(r'\b'+re.escape(n)+r'\b',str(t)) for t in types.values()):
+        from .dependent_functions import occurs
+        if not any(occurs(t,n) for t in types.values()):
             raise CleanError('Implicit parameter is absent from argument types: '+n)
     key=add_definition(env,'cleanDefine_' if authored else 'cleanNotation_',name,body)
     env.data['functions'][name]={'params':[pattern(types[p]) for p in params], 'returns':pattern(result),
-        'lean':key+''.join(' ({'+str(i)+'})' for i in range(len(params))), 'latex':latex,
+        'native_binding':key,'lean':'_root_.'+key+''.join(' ({'+str(i)+'})' for i in range(len(params))), 'latex':latex,
         'signature_tree':['Signature', name,
             [['Parameter', n, str(v.type), 'implicit' if n in implicit else 'explicit'] for n,v in local.items()],
             str(result)]}
@@ -196,9 +208,14 @@ def notation(header, fields, env, *, authored=False):
         env.data['functions'][name]['dependent_signature']={
             'implicit':list(implicit.items()),'parameters':list(types.items()),
             'result':result,'key':key}
+    bound_body=None
+    if authored and expression:
+        from .bound_calls import bind as bind_calls,UnclosedBinding
+        try:bound_body=bind_calls(expression.tree,env,local,binders=True)
+        except UnclosedBinding:pass
     if authored:
         env.definitions[name] = {'key': key, 'parameters': list(local), 'implementation': implementation,
-            'tree': expression.tree if expression else None,
+            'tree': expression.tree if expression else None, 'bound_tree':bound_body,
             'body': values[implementation], 'returns': str(result), 'attribution': attribution}
 
 

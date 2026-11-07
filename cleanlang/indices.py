@@ -1,12 +1,13 @@
 # generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
 """Source-preserving indices with bounded comparison normalization."""
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass,field
 from .core import ValueIndex, Type, CleanError
 
 @dataclass(frozen=True, eq=False)
 class ComputedIndex(ValueIndex):
     syntax: str
+    resolved: object = field(default=None,kw_only=True,compare=False,repr=False)
 
 
 def index_value(expression,environment=None,locals=None):
@@ -16,6 +17,9 @@ def index_value(expression,environment=None,locals=None):
         from .beta_indices import contract_index
         expression=contract_index(expression,environment,locals or {})
     tree=expression.tree
+    if environment is not None:
+        from .bound_calls import bind
+        tree=bind(tree,environment,locals or {})
     def check(node):
         if not isinstance(node,list):return
         if node and node[0] in ('Lambda','Forall','Exists'):
@@ -29,7 +33,7 @@ def index_value(expression,environment=None,locals=None):
     ref=reference_name(tree)
     if ref is not None:return ValueIndex(ref,expression.lean,expression.tex,comparison=comparison)
     return ComputedIndex('('+expression_spelling(tree)+')',expression.lean,expression.tex,
-                         json.dumps(tree,ensure_ascii=False,separators=(',',':')),comparison=comparison)
+                         json.dumps(tree,ensure_ascii=False,separators=(',',':')),comparison=comparison,resolved=tree)
 
 
 def substitute_index(index,bindings,env,locals):
@@ -37,10 +41,11 @@ def substitute_index(index,bindings,env,locals):
     if isinstance(index,ProofIndex):return substitute_proof(index,bindings,env,locals)
     from .core import Expressions,Expr
     from .syntax import parse,expression_tree
-    tree=json.loads(index.syntax) if isinstance(index,ComputedIndex) else expression_tree(parse(index.name,'expression'))
+    from .dependent_functions import index_tree
+    tree=index_tree(index)
     def reference(value):
         if isinstance(value,Expr):return value.tree
-        if isinstance(value,ComputedIndex):return json.loads(value.syntax)
+        if isinstance(value,ComputedIndex):return index_tree(value)
         if isinstance(value,ValueIndex):return expression_tree(parse(value.name,'expression'))
         if isinstance(value,Type):
             from .inferred_conversion import reify
@@ -51,6 +56,7 @@ def substitute_index(index,bindings,env,locals):
             from .type_values import substitute
             return substitute(node,bindings,env,locals)
         if node[0]=='Local' and node[1] in bindings:return reference(bindings[node[1]])
+        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],node[3]]
         if node[0]=='Call':
             args=[replace(a) for a in node[2]]
             value=bindings.get(node[1])
@@ -95,4 +101,4 @@ def dimension_index(expression,environment,locals):
     value=index_value(expression,environment,locals)
     syntax=value.syntax if isinstance(value,ComputedIndex) else json.dumps(expression.tree,ensure_ascii=False,separators=(',',':'))
     name=expression.tree[1] if expression.tree[0]=='Decimal' else value.name
-    return DimensionIndex(name,value.lean,value.tex,syntax,comparison=value.comparison)
+    return DimensionIndex(name,value.lean,value.tex,syntax,comparison=value.comparison,resolved=value.resolved if isinstance(value,ComputedIndex) else expression.tree)

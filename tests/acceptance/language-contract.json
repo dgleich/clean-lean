@@ -1876,7 +1876,7 @@
     {
       "id": "carrier_fields_prototype",
       "status": "partial",
-      "environment": "Isolated carrier-fields patch and strict regenerated parser; fixed Type-0 carriers in an explicit Universe-1 record.",
+      "environment": "Working compiler with seven binding repairs; strict generated parser; fixed Type-0 carriers in an explicit Universe-1 record. Historical patch drivers use their pinned baseline.",
       "source_fragment": "Structure PointedSpace():\n  Universe: 1\n  Let carrier: Type\n  Let topology: Topology(carrier)\n  Let point: carrier\n  Constructor: pointed space\n",
       "expected_tree": [
         "Projection",
@@ -1899,9 +1899,9 @@
         "studies/carrier-fields/verify_bound_operators.py"
       ],
       "pending": [
-        "Bound operator composition isolated; foundation/literal migration, complete identity/closure audit and integration remain open",
-        "Main integration and complete carrier-consumer audit",
-        "Full corpus and study validation",
+        "Declared operators/literals/foundation integration",
+        "Complete carrier-consumer and identity/closure audit",
+        "Full regression and broader study/native-oracle validation",
         "Universe polymorphism and native module-scope policy"
       ]
     },
@@ -1961,7 +1961,7 @@
     {
       "id": "native_type_binding_scope",
       "status": "partial",
-      "environment": "Six isolated patches through native type bindings, pinned Lean/Mathlib, explicit type adapters; built-in operators remain in this experiment.",
+      "environment": "Working compiler with seven binding repairs; pinned Lean/Mathlib; explicit native type adapters. Built-in mathematical dispatch remains migration debt.",
       "source_fragment": "Type NativeReal():\n  Means: Real\n  Render latex: R\n\nLet Real: Type\nLet x: NativeReal\nConclude: x=x\n",
       "expected_tree": [
         "Name",
@@ -1972,13 +1972,14 @@
       "checks": [
         "studies/native-type-bindings/verify_prototype.py",
         "studies/native-type-bindings/check_capture.py",
-        "studies/native-type-bindings/PrototypeVerified.lean"
+        "studies/native-type-bindings/PrototypeVerified.lean",
+        "studies/native-type-bindings/verify_bindings.py (compiler argument: repository root)"
       ],
       "pending": [
-        "Main integration and migration of prior inline-type exact oracles",
-        "Generated callable/record qualification and native import-scope audit",
+        "Migration of prior inline-type exact oracles",
+        "Native import-scope audit and source-binder escaping",
         "Complete declaration identity, metadata migration and serialization",
-        "Operator composition, literal policy and broader study checks"
+        "Operator/literal integration and full regression/study validation"
       ]
     },
     {
@@ -2122,6 +2123,29 @@
         "Main compiler integration",
         "Bundled space and homology module migration",
         "Separate research theorem constructions and proofs"
+      ]
+    },
+    {
+      "id": "integrated_binding_repairs",
+      "status": "partial",
+      "environment": "Working compiler after seven binding repairs; built-in operator dispatch retained pending declared-operator migration.",
+      "source": "Let Real: Type\nLet x: Real\nConclude: x=x",
+      "expected_tree": [
+        "Name",
+        "Real"
+      ],
+      "expected_lean": "The local Real binder types x; generated module bindings remain root-qualified and distinct from caller locals. See independently authored native binding and global collision targets.",
+      "checks": [
+        "tests/test_binding_identity.py",
+        "studies/native-type-bindings/verify_bindings.py (repository-root compiler)",
+        "studies/qualified-globals/verify_bindings.py (repository-root compiler)",
+        "generated/VerifiedCorpus.lean"
+      ],
+      "pending": [
+        "Full discovery completion",
+        "Broader study/native-oracle migration",
+        "Declared operator and literal integration",
+        "Complete identity and native import isolation"
       ]
     }
   ]

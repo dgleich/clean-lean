@@ -17,8 +17,9 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
     """
     type_bindings=dict(type_bindings or {})
     for n,value in bindings.items():
-        if value.type==Type('Type') and value.tree[0]=='TypeValue':
-            type_bindings[n]=environment.type(value.tree[1],locals,phrases=False)
+        if value.type==Type('Type') and value.tree[0]!='Local':
+            from .carrier_types import carrier
+            type_bindings[n]=carrier(value,environment,locals)
     occupied=set(locals)|set(environment.data['types'])|set(environment.data['aliases'])|set(environment.data['functions'])|tree_names(tree)
     replacements={n:v.tree for n,v in bindings.items()}
     heads=set()
@@ -59,7 +60,10 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
                 return source
             return index(mapping[node[1]]) if node[1] in mapping else node[1]
         if kind=='Numeral':return node[1]
-        if kind=='Projection':return index(expr(type_expr(node),mapping,callheads))
+        if kind=='Projection':
+            result=expr(type_expr(node),mapping,callheads)
+            from .structures import reference_name
+            return reference_name(result) or index(result)
         if kind=='ComputedIndex':
             try:return '('+condition_spelling(expr(node[1],mapping,callheads))+')'
             except CleanError as e:raise UnrepresentableSubstitution(str(e)) from e
@@ -69,11 +73,31 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
             codomain=typ(node[4],{**mapping,node[2]:['Local',name]},callheads|{node[2]},type_mapping)
             return node[1]+'('+name+': '+domain+','+codomain+')'
         raise UnrepresentableSubstitution('Unsupported type syntax: '+kind)
+    bound_values={}
+    def annotation(source,mapping,callheads):
+        from .annotations import Annotation,replace
+        if not isinstance(source,Annotation):return typ(type_tree(parse(source,'type_ref')),mapping,callheads,type_bindings)
+        from .core import Expressions,Expr
+        replacements={}
+        scope=dict(locals)
+        # Fresh binder references have not yet entered the caller's semantic scope.
+        for name,tree in mapping.items():
+            if name in bindings and tree==bindings[name].tree:replacements[name]=bindings[name]
+            elif tree[0]=='Local':
+                from .dependent_functions import tree_names
+                original=bound_values.get(name) or locals.get(name)
+                if original is not None:
+                    value=Expr(tree[1],tree[1],original.type,tree=tree)
+                    scope[tree[1]]=value;replacements[name]=value
+                else:replacements[name]=tree[1]
+            else:replacements[name]=Expressions(environment,scope).elaborate(tree)
+        return replace(source,{**replacements,**type_bindings},environment,scope)
     def expr(node,mapping,callheads):
         kind=node[0]
         if kind=='Local':return mapping.get(node[1],node)
         if kind=='Decimal':return node
-        if kind=='TypeValue':return ['TypeValue',typ(type_tree(parse(node[1],'type_ref')),mapping,callheads,type_bindings)]
+        if kind=='TypeValue':return ['TypeValue',annotation(node[1],mapping,callheads)]
+        if kind=='ModuleCall':return [kind,node[1],[expr(a,mapping,callheads) for a in node[2]],node[3]]
         if kind=='Call':
             args=[expr(a,mapping,callheads) for a in node[2]]
             if node[1] in mapping and (node[1] in callheads or is_call_head(node[1])):
@@ -85,8 +109,15 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
         if kind=='Operator':return ['Operator',node[1],expr(node[2],mapping,callheads),expr(node[3],mapping,callheads)]
         if kind=='Unary':return ['Unary',node[1],expr(node[2],mapping,callheads)]
         if kind in ('Lambda','Forall','Exists'):
-            domain=typ(type_tree(parse(node[2],'type_ref')),mapping,callheads,type_bindings);name=fresh()
-            body=expr(node[3],{**mapping,node[1]:['Local',name]},callheads|{node[1]})
+            domain=annotation(node[2],mapping,callheads);name=fresh()
+            from .annotations import Annotation
+            from .core import Expr
+            previous=bound_values.get(node[1])
+            if isinstance(domain,Annotation):bound_values[node[1]]=Expr(name,name,domain.typ,tree=['Local',name])
+            try:body=expr(node[3],{**mapping,node[1]:['Local',name]},callheads|{node[1]})
+            finally:
+                if previous is None:bound_values.pop(node[1],None)
+                else:bound_values[node[1]]=previous
             return [kind,name,domain,body]
         raise UnrepresentableSubstitution('Unsupported expression syntax: '+kind)
     return expr(tree,replacements,heads)

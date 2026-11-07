@@ -2,7 +2,7 @@
 import tempfile
 import unittest
 from pathlib import Path
-from cleanlang.core import Environment, Expr, Type, ValueIndex, Expressions, CleanError, normalize_layout, lean
+from cleanlang.core import Environment, Expr, Type, LocalType, ValueIndex, Expressions, CleanError, normalize_layout, lean
 from cleanlang.modules import load_module, load_document
 from cleanlang.structures import declare
 from cleanlang import syntax
@@ -11,7 +11,7 @@ ROOT=Path(__file__).resolve().parents[1]
 class Structures(unittest.TestCase):
     def setUp(self):
         self.e=Environment();load_module(ROOT/'library/topology/bundles.clean',self.e)
-        self.local={'X':Expr('X','X',Type('Type')),'P':Expr('P','P',Type('BasedPath',(Type('X'),))),
+        self.local={'X':Expr('X','X',Type('Type')),'P':Expr('P','P',Type('BasedPath',(LocalType('X',(), 'X'),))),
                     'I':Expr('I','I',Type('Endpoints')),'a':Expr('a','a',Type('Real')),
                     'b':Expr('b','b',Type('Real'))}
     def expr(self,s):return Expressions(self.e,self.local).parse(s)
@@ -39,7 +39,7 @@ class Structures(unittest.TestCase):
                             ['Projection',['Name','P'],'start'],['Projection',['Name','P'],'finish']]])
     def test_projection_target(self):
         self.assertEqual(self.expr('I.lower').type,Type('Real'))
-        self.assertEqual(self.expr('I.lower').lean,'(@'+self.e.structures['Endpoints']['key']+'.«lower» (I))')
+        self.assertEqual(self.expr('I.lower').lean,'(@_root_.'+self.e.structures['Endpoints']['key']+'.«lower» (I))')
     def test_dependent_field_type(self):
         expected=self.e.type('Path(X,P.topology,P.start,P.finish)',self.local)
         self.assertEqual(self.expr('P.path').type,expected)
@@ -52,7 +52,7 @@ class Structures(unittest.TestCase):
         self.assertEqual(self.expr('based path(X,P.topology,P.start,P.finish,P.path)').type,self.local['P'].type)
     def test_explicit_type_substitution(self):
         self.local['Y']=Expr('Y','Y',Type('Type'))
-        self.local['Q']=Expr('Q','Q',Type('BasedPath',(Type('Y'),)))
+        self.local['Q']=Expr('Q','Q',Type('BasedPath',(LocalType('Y',(), 'Y'),)))
         self.assertEqual(self.expr('reversed bundle(Y,Q)').type,self.local['Q'].type)
         with self.assertRaises(CleanError):self.expr('reversed bundle(X,Q)')
     def test_two_records_are_not_interchanged(self):
@@ -111,7 +111,7 @@ class Structures(unittest.TestCase):
         for fields in [['Let x = a','Constructor: bad'],['Let x: Real','Constructor: bad','Means: Unit']]:
             with self.subTest(fields=fields),self.assertRaises(CleanError):declare('Structure Bad():',fields,self.e)
     def test_universe_boundary_is_explicit(self):
-        with self.assertRaisesRegex(CleanError,'higher-universe'):
+        with self.assertRaisesRegex(CleanError,'exceeds declared Universe 0'):
             declare('Structure Space():',['Let carrier: Type','Constructor: space'],self.e)
     def test_metadata_reordering_preserves_target(self):
         other=Environment();load_module(ROOT/'library/topology/bundles.clean',other)

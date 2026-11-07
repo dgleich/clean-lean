@@ -2,27 +2,33 @@
 """Explicit dependent arrows: scoped identities, alpha keys and substitution."""
 from dataclasses import dataclass
 import json,re
-from .core import Type,ProofType,ValueIndex,Expr,CleanError,ID,NUM,texid
+from .core import Type,LocalType,ProofType,ValueIndex,Expr,CleanError,ID,NUM,texid
 
 
 def index_tree(index):
     from .indices import ComputedIndex
     from .syntax import parse,expression_tree
-    return json.loads(index.syntax) if isinstance(index,ComputedIndex) else expression_tree(parse(index.name,'expression'))
+    if isinstance(index,ComputedIndex):return index.resolved if index.resolved is not None else json.loads(index.syntax)
+    return expression_tree(parse(index.name,'expression'))
 
 
 def tree_names(tree):
     kind=tree[0]
     if kind=='Local':return {tree[1]}
     if kind=='Decimal':return set()
-    if kind=='TypeValue':return set(re.findall(ID,tree[1]))
+    if kind=='TypeValue':
+        from .annotations import Annotation
+        return set(tree[1].names) if isinstance(tree[1],Annotation) else set(re.findall(ID,tree[1]))
+    if kind=='ModuleCall':return set().union(*(tree_names(a) for a in tree[2]))
     if kind=='Call':return {tree[1]}|set().union(*(tree_names(a) for a in tree[2]))
     if kind=='Projection':return tree_names(tree[1])
     if kind=='Apply':return tree_names(tree[1])|set().union(*(tree_names(a) for a in tree[2]))
     if kind=='Operator':return tree_names(tree[2])|tree_names(tree[3])
     if kind=='Unary':return tree_names(tree[2])
     if kind in ('Lambda','Forall','Exists'):
-        return {tree[1]}|set(re.findall(ID,tree[2]))|tree_names(tree[3])
+        from .annotations import Annotation
+        domain=set(tree[2].names) if isinstance(tree[2],Annotation) else set(re.findall(ID,tree[2]))
+        return {tree[1]}|domain|tree_names(tree[3])
     raise CleanError('Unsupported expression in dependent function substitution: '+kind)
 
 
@@ -30,7 +36,8 @@ def occurs(typ,name):
     if isinstance(typ,DependentFunctionType):
         return occurs(typ.domain,name) or (typ.binder!=name and occurs(typ.codomain,name))
     if isinstance(typ,ValueIndex):return name in tree_names(index_tree(typ))
-    if isinstance(typ,Type):return typ.name==name or any(occurs(a,name) for a in typ.args)
+    if isinstance(typ,LocalType):return typ.name==name
+    if isinstance(typ,Type):return any(occurs(a,name) for a in typ.args)
     return typ==name
 
 
@@ -100,6 +107,7 @@ def type_key(typ,bound=()):
             return ('type',typ.constructor,(type_key(typ.domain,bound),codomain))
         return ('Pi',typ.constructor,type_key(typ.domain,bound),type_key(typ.codomain,bound+(typ.bound,)))
     if isinstance(typ,ValueIndex):return ('index',abstract_template(typ.comparison_key(),bound))
+    if isinstance(typ,LocalType):return ('local-type',abstract_template(typ.lean,bound))
     if isinstance(typ,Type):return ('type',typ.name,tuple(type_key(a,bound) for a in typ.args))
     return ('literal',typ)
 
@@ -162,13 +170,14 @@ def substitute(typ,bindings,env,locals):
         if not tree_names(index_tree(typ)).intersection(bindings):return typ
         return substitute_index(typ,bindings,env,locals)
     if isinstance(typ,Type):
-        if not typ.args and typ.name in bindings:
+        if isinstance(typ,LocalType) and typ.name in bindings:
             value=bindings[typ.name]
             if isinstance(value,Type):return value
             if isinstance(value,Expr) and value.type==Type('Type'):
-                if value.tree[0]=='Local':return Type(value.tree[1])
-                if value.tree[0]=='TypeValue':return env.type(value.tree[1],locals,phrases=False)
+                from .carrier_types import carrier
+                return carrier(value,env,locals)
             raise CleanError('Expected a named type argument: '+typ.name)
+        if isinstance(typ,LocalType):return typ
         return Type(typ.name,tuple(substitute(a,bindings,env,locals) for a in typ.args))
     return bindings.get(typ,typ)
 

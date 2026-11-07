@@ -2,6 +2,12 @@
 
 # Isolated local type repair
 
+**Current status:** the seven binding repairs are now in the working compiler.
+See the [integration report](../../docs/binding-integration.md) for current
+validation and remaining gates. The account below records the isolated experiment;
+default patch drivers reconstruct its pinned baseline, not the current compiler.
+
+
 Status: implemented in `local-types.patch`, on top of the carrier, bound-call,
 proof-binding and checked-annotation patches. **Not enabled in main.** The
 original [counterexample](README.md) remains a failing gate for main and for the

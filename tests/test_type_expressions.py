@@ -23,7 +23,8 @@ class TypeValues(unittest.TestCase):
   self.local['x']=Expr('x','x',Type('Real'),tree=['Local','x'])
   for source in ['type(Big)','type(Type)','type((x = x))']:
    with self.assertRaises(CleanError):self.expr(source)
-  self.assertEqual(self.expr('type(Proposition)').lean,'Prop')
+  key=self.e.data['types']['Proposition']['native_binding']
+  self.assertEqual(self.expr('type(Proposition)').lean,f'(_root_.{key})')
  def test_explicit_constructor(self):
   declare('Structure Box(T: Type):',['Let value: T','Constructor: box value'],self.e)
   self.local['x']=Expr('x','x',Type('Real'),tree=['Local','x'])
@@ -102,14 +103,14 @@ class TypeValues(unittest.TestCase):
     self.expr(source)
   self.local['U']=Expr('U','U',Type('Type'),tree=['Local','U'])
   with self.assertRaisesRegex(CleanError,'Type-valued operands'):self.expr('U+U')
-  self.assertEqual(self.expr('type(Real)=type(Complex)').lean,'(ℝ = ℂ)')
-  self.assertEqual(self.expr('type(Real)!=type(Complex)').lean,'(ℝ ≠ ℂ)')
- def test_computed_type_is_not_an_explicit_carrier(self):
+  real=self.e.data['types']['Real']['native_binding'];complex=self.e.data['types']['Complex']['native_binding']
+  self.assertEqual(self.expr('type(Real)=type(Complex)').lean,f'((_root_.{real}) = (_root_.{complex}))')
+  self.assertEqual(self.expr('type(Real)!=type(Complex)').lean,f'((_root_.{real}) ≠ (_root_.{complex}))')
+ def test_computed_type_is_an_explicit_carrier(self):
   declare('Structure Box(T: Type):',['Let value: T','Constructor: box value'],self.e)
   notation('Define real carrier(): Type:', ['Equals: type(Real)'],self.e,authored=True)
   self.local['x']=Expr('x','x',Type('Real'),tree=['Local','x'])
-  with self.assertRaisesRegex(CleanError,'named local or type expression'):
-   self.expr('box value(real carrier(),x)')
+  self.assertEqual(self.expr('box value(real carrier(),x)').type,self.e.type('Box(Real)',self.local))
   self.assertEqual(self.expr('real carrier() = type(Real)').type,Type('Proposition'))
  def test_local_value_with_dependent_carrier_does_not_rebind(self):
   from cleanlang.conversion import local_definition

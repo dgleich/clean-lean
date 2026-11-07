@@ -2,7 +2,7 @@
 """Finite authored records and explicit field references; no structural subtyping."""
 import hashlib
 import re
-from .core import CleanError, Type, ProofType, ValueIndex, Expr, NAT, ID, texid, textext
+from .core import CleanError, Type, LocalType, ProofType, ValueIndex, Expr, NAT, ID, texid, textext
 
 
 def reference_name(tree):
@@ -26,10 +26,11 @@ def substitute_type(t, bindings, env=None, locals=None):
             return substitute_index(t,bindings,env,locals)
         raise CleanError('Unresolved structure index: '+t.name)
     if isinstance(t,Type):
-        if not t.args and t.name in bindings:
+        if isinstance(t,LocalType) and t.name in bindings:
             value=bindings[t.name]
             if not isinstance(value,Type):raise CleanError('Expected type parameter: '+t.name)
             return value
+        if isinstance(t,LocalType):return t
         return Type(t.name,tuple(substitute_type(a,bindings,env,locals) for a in t.args))
     return bindings.get(t,t)
 
@@ -38,9 +39,9 @@ def projection_reduction(env, base, field, locals):
     """Reduce constructor fields and explicit, binder-free authored producers only."""
     from .core import Expressions
     tree=base.tree
-    if not tree or tree[0]!='Call':return None
+    if not tree or tree[0] not in ('Call','ModuleCall'):return None
     # A local function wins over a module callable, even if names coincide.
-    if tree[1] in locals and env.is_function_type(locals[tree[1]].type):return None
+    if tree[0]=='Call' and tree[1] in locals and env.is_function_type(locals[tree[1]].type):return None
     spec=env.structures[base.type.name]
     if tree[1]==spec['constructor']:
         position=len(spec['parameters'])+[n for n,_ in spec['fields']].index(field)
@@ -50,7 +51,7 @@ def projection_reduction(env, base, field, locals):
     signature=env.data['functions'][tree[1]]['signature_tree']
     parameters=signature[2]
     if any(p[3]=='implicit' for p in parameters):return None
-    body=definition['tree']
+    body=definition.get('bound_tree') or definition['tree']
     from .beta_indices import has_binder
     if has_binder(body):return None
     bindings=dict(zip((p[1] for p in parameters),tree[2]))
@@ -59,6 +60,7 @@ def projection_reduction(env, base, field, locals):
             from .type_values import substitute
             return substitute(node,{n:Expressions(env,locals).elaborate(t) for n,t in bindings.items()},env,locals)
         if node[0]=='Local':return bindings.get(node[1],node)
+        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],node[3]]
         if node[0]=='Call':
             args=[replace(a) for a in node[2]]
             if node[1] in bindings:
@@ -89,12 +91,15 @@ def project(env, base, field, locals):
              for a in base.type.args]
     for name,typ in spec['fields']:
         result_type=substitute_type(typ,bindings,env,locals)
-        target='(@'+spec['key']+'.«'+name+'»'+''.join(' ('+v+')' for v in targets)+' ('+base.lean+'))'
+        target='(@_root_.'+spec['key']+'.«'+name+'»'+''.join(' ('+v+')' for v in targets)+' ('+base.lean+'))'
         tex=base.tex+r'.\mathrm{'+textext(name)+'}'
         value=Expr(target,tex,result_type,tree=['Projection',base.tree,name])
         if name==field:return value
         from .indices import index_value
-        bindings[name]=index_value(value,env,locals)
+        if result_type==Type('Type'):
+            from .carrier_types import carrier
+            bindings[name]=carrier(value,env,locals)
+        else:bindings[name]=index_value(value,env,locals)
     raise CleanError('Missing field: '+field)
 
 
@@ -120,7 +125,6 @@ def declare(header, fields, env):
         kind,names,spelling=let_clause(line)
         if kind!='let':raise CleanError('Structure fields require typed Let; defaults are not supported')
         t=env.type(spelling,local)
-        if t==Type('Type'):raise CleanError('Carrier-type fields require higher-universe structures; use an explicit Type parameter for now')
         for n in names:
             if n in local or n in env.data['types'] or n in env.data['aliases'] or n in ('mk','rec','recOn','casesOn'):
                 raise CleanError('Structure field must be fresh: '+n)
@@ -148,8 +152,10 @@ def declare(header, fields, env):
     stem=''.join(c if c.isascii() and (c.isalnum() or c=='_') else f'_u{ord(c):x}_' for c in name)
     key='cleanStructure_'+stem+'_'+hashlib.sha256((name+body).encode()).hexdigest()[:20]
     if key in env.notation_definitions:raise CleanError('Generated structure identifier collision')
-    spec={'args':kinds,'lean':key+''.join(' ({'+str(i)+'})' for i in range(len(params))),
+    spec={'args':kinds,'lean':'_root_.'+key+''.join(' ({'+str(i)+'})' for i in range(len(params))),
           'latex':template(values.get('render latex',r'\operatorname{{'+name+'}}'),pnames)}
+    spec['parameter_names']=pnames
+    spec['parameter_types']=[t for _,t in params]
     spec['universe']=level
     for source,dest in [('describe','prose'),('describe plural','prose_plural')]:
         if source in values:spec[dest]=template(values[source],pnames)
@@ -163,16 +169,16 @@ def declare(header, fields, env):
     result=env.type(name+'('+','.join(pnames)+')' if pnames else name,local)
     allparams=params+members
     csig=' '.join('(«'+n+'» : '+('Type' if t==Type('Type') else env.render_type(t,'lean',local))+')' for n,t in allparams)
-    cbody=csig+' : '+env.render_type(result,'lean',local)+' :=\n  @'+key+'.mk'+''.join(' «'+n+'»' for n,_ in allparams)
+    cbody=csig+' : '+env.render_type(result,'lean',local)+' :=\n  @_root_.'+key+'.mk'+''.join(' «'+n+'»' for n,_ in allparams)
     ckey=add_definition(env,'cleanConstructor_',constructor,cbody)
     env.data['functions'][constructor]={'params':[str(t) for _,t in allparams], 'returns':str(result),
-        'lean':ckey+''.join(' ({'+str(i)+'})' for i in range(len(allparams))),
+        'native_binding':ckey,'lean':'_root_.'+ckey+''.join(' ({'+str(i)+'})' for i in range(len(allparams))),
         'latex':r'\operatorname{{'+textext(constructor).replace(' ',r'\ ')+'}}('+', '.join('{'+str(i)+'}' for i in range(len(allparams)))+')',
         'dependent_signature':{'implicit':[],'parameters':allparams,'result':result,'key':ckey},
         'signature_tree':['Constructor',constructor,name,[[n,str(t)] for n,t in allparams]]}
     env.definitions[constructor]={'key':ckey,'parameters':list(local),'implementation':'generated constructor',
                                   'tree':env.data['functions'][constructor]['signature_tree'],
-                                  'body':'@'+key+'.mk','returns':str(result),'attribution':None}
+                                  'body':'@_root_.'+key+'.mk','returns':str(result),'attribution':None}
     return key
 
 # generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

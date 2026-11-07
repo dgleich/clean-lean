@@ -15,7 +15,8 @@ class DependentFunctions(unittest.TestCase):
         a=self.typ('Function(n: Natural,Vector(n,Real))')
         b=self.typ('Function(k: Natural,Vector(k,Real))')
         self.assertEqual(a,b);self.assertEqual(hash(a),hash(b))
-        self.assertEqual(self.e.render_type(a,'lean'),'(clean_pi_bound_0 : ℕ) → (Fin clean_pi_bound_0 → ℝ)')
+        nat,vector,real=[self.e.data['types'][n]['native_binding'] for n in ['Natural','Vector','Real']]
+        self.assertEqual(self.e.render_type(a,'lean'),f'(clean_pi_bound_0 : (_root_.{nat})) → ((_root_.{vector} (clean_pi_bound_0) ((_root_.{real}))))')
     def test_nested_alpha(self):
         a=self.typ('Function(n: Natural,Function(m: Natural,Matrix(n,m,Real)))')
         b=self.typ('Function(i: Natural,Function(j: Natural,Matrix(i,j,Real)))')
@@ -52,7 +53,8 @@ class DependentFunctions(unittest.TestCase):
         local={'z':Expr('clean_pi_bound_0','z',NAT)}
         t=self.typ('Function(n: Natural,Matrix(n,z,Real))',local)
         self.assertEqual(t.bound,'clean_pi_bound_1')
-        self.assertIn('Fin clean_pi_bound_0',self.e.render_type(t,'lean'))
+        matrix=self.e.data['types']['Matrix']['native_binding']
+        self.assertIn(matrix+' (clean_pi_bound_1) (clean_pi_bound_0)',self.e.render_type(t,'lean'))
     def test_scope_and_module_gate(self):
         for s in ['Matrix(n: Natural,Real)','Function(T: Type,T)',
                   'Function(n: Natural,Function(n: Natural,Vector(n,Real)))',

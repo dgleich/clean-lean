@@ -936,3 +936,18 @@ Twenty-six exact targets and four proofs cover this slice. Production integratio
 explicit foundation migration, numeric literals and broader operator/corpus
 oracles remain pending; earlier built-in regression counts do not apply here.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Integrate binding repairs
+
+The working compiler now implements the seven repairs through qualified globals.
+[Binding integration](binding-integration.md) records their constructive rules and
+validation boundaries: carrier-field type projections, retained module/proof calls,
+semantic annotations, distinct local type parameters, checked alias bodies,
+declaration-scoped native type abbreviations and root-qualified generated globals.
+These supersede earlier statements above that the repairs are only isolated.
+Canonical target changes require explicit oracle migration. Declared operators
+and numeric-literal policy remain separate, unfinished integration work. Full
+regression/study validation and general identity/import isolation remain open.
+:::

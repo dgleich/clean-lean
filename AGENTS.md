@@ -91,3 +91,19 @@ constructor. Include naming and encoded-identifier collision tests; a supported
 record or quantified argument must not fail merely because its automatic label
 serializer was left behind.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Binding integration and historical studies
+
+The seven binding repairs are integrated; preserve local/module type distinctions,
+checked annotations, retained module-call identities and root-qualified native
+references. See [the integration report](docs/binding-integration.md) for the
+precise current boundary and pending checks. Do not restore inline native type
+bodies merely to satisfy an old exact-target oracle.
+
+Historical patch drivers must use `tools/study_checkout.py` and its pinned baseline,
+not copy the working compiler and reapply integrated patches. Their passing results
+validate that historical stack only. Working-compiler validation must run directly
+against the working compiler and use independently migrated native expectations.
+:::

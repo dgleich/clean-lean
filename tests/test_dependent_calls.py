@@ -2,7 +2,7 @@
 """Independent structural substitution and rejection cases."""
 import unittest
 from pathlib import Path
-from cleanlang.core import Environment, Expr, Type, ValueIndex, Expressions, CleanError
+from cleanlang.core import Environment, Expr, Type, LocalType, ValueIndex, Expressions, CleanError
 from cleanlang.modules import load_module, notation, condition_declaration
 from cleanlang import syntax
 ROOT = Path(__file__).resolve().parents[1]
@@ -11,7 +11,7 @@ class DependentCalls(unittest.TestCase):
     def setUp(self):
         self.e = Environment()
         load_module(ROOT/'library/topology/paths.clean', self.e)
-        X = Type('X')
+        X = LocalType('X',(), 'X')
         self.local = {'X': Expr('X','X',Type('Type')),
                       't': Expr('t','t',Type('Topology',(X,))),
                       'u': Expr('u','u',Type('Topology',(X,))),
@@ -47,7 +47,7 @@ class DependentCalls(unittest.TestCase):
         self.assertEqual(self.expr('constant path(t,same point(x))').type,
             self.e.type('Path(X,t,(same point(x)),(same point(x)))',self.local))
     def test_naming_computed_index_is_supported(self):
-        self.local['w']=Expr('w','w',Type('X'))
+        self.local['w']=Expr('w','w',LocalType('X',(), 'X'))
         self.assertEqual(self.expr('constant path(t,w)').type,
                          self.e.type('Path(X,t,w,w)',self.local))
     def test_fresh_bound_endpoint_is_used(self):
@@ -61,7 +61,7 @@ class DependentCalls(unittest.TestCase):
         from cleanlang.dependent_functions import DependentFunctionType
         self.assertIsInstance(self.expr('function(a: X, constant path(t,a))').type,DependentFunctionType)
     def test_local_identity_not_just_printed_name(self):
-        self.local['p'].type=Type('Path',(Type('X'),ValueIndex('t','different_t','t'),
+        self.local['p'].type=Type('Path',(LocalType('X',(), 'X'),ValueIndex('t','different_t','t'),
                                        ValueIndex('x','x','x'),ValueIndex('y','y','y')))
         with self.assertRaisesRegex(CleanError,'index mismatch'):
             self.expr('reverse path(t,x,y,p)')
@@ -100,7 +100,7 @@ class DependentCalls(unittest.TestCase):
         self.local['v']=Expr('v','v',self.e.type('Vector(3,Real)',self.local))
         self.assertEqual(self.expr('tag(v)').type,self.e.type('Tagged(3,v)',self.local))
     def test_actual_local_index_does_not_capture_declared_name(self):
-        self.local['a']=Expr('bound_a','a',Type('X'))
+        self.local['a']=Expr('bound_a','a',LocalType('X',(), 'X'))
         result=self.expr('constant path(t,a)')
         self.assertEqual(result.type.args[-1],ValueIndex('a','bound_a','a'))
         self.assertIn('(bound_a)',result.lean)

@@ -6052,6 +6052,42 @@
     "docs/study-reproduction.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "cleanlang/annotations.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "cleanlang/bound_calls.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "cleanlang/carrier_types.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_binding_identity.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "docs/binding-integration.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

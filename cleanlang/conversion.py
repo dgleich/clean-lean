@@ -50,7 +50,7 @@ def _producer_field(expression,field,env,locals):
     from .inferred_conversion import reify,value_names
     if shadowed_globals(env,locals):return None
     tree=expression.tree
-    if not tree or tree[0]!='Call':return None
+    if not tree or tree[0] not in ('Call','ModuleCall'):return None
     spec=env.structures.get(expression.type.name)
     if spec is None:return None
     if tree[1]==spec['constructor']:
@@ -59,7 +59,7 @@ def _producer_field(expression,field,env,locals):
     definition=env.definitions.get(tree[1])
     if not definition or definition['implementation']!='equals':return None
     parameters=env.data['functions'][tree[1]]['signature_tree'][2]
-    body=definition['tree']
+    body=definition.get('bound_tree') or definition['tree']
     bindings=dict(zip((p[1] for p in parameters if p[3]=='explicit'),
                       (Expressions(env,locals).elaborate(a) for a in tree[2])))
     inferred=dict(expression.inferred_args);required=tree_names(body);values=value_names(body);types={}
@@ -74,7 +74,7 @@ def _producer_field(expression,field,env,locals):
             else:bindings[n]=reify(actual,env,locals)
         expanded=substitute(body,bindings,env,locals,types)
     except UnrepresentableSubstitution:return None
-    if expanded[0]=='Call' and expanded[1]==spec['constructor']:
+    if expanded[0] in ('Call','ModuleCall') and expanded[1]==spec['constructor']:
         pos=len(spec['parameters'])+[n for n,_ in spec['fields']].index(field)
         return Expressions(env,locals).elaborate(expanded[2][pos])
     value=Expressions(env,locals).elaborate(expanded)
@@ -124,7 +124,7 @@ def _normal_form(expression,environment,locals,*,fresh=False):
         # if it is a stable projection, otherwise normalize its selected expression.
         if result.tree==['Projection',base.tree,tree[2]]:return result
         return _normal_form(result,env,locals)
-    if kind!='Call':return expression
+    if kind not in ('Call','ModuleCall'):return expression
     name=tree[1]
     # Only a synchronous elaboration in this traversal establishes freshness.
     # Public entry points and stored local definitions never set this flag.
@@ -134,7 +134,7 @@ def _normal_form(expression,environment,locals,*,fresh=False):
     for argument in typed:
         value=_normal_form(argument,env,locals,fresh=True)
         args.append(argument if has_binder(value.tree) else value)
-    if name in locals and env.is_function_type(locals[name].type):
+    if kind=='Call' and name in locals and env.is_function_type(locals[name].type):
         head=normal(['Local',name])
         return Expr('('+head.lean+' '+args[0].lean+')',expression.tex,expression.type,
                     tree=['Apply',head.tree,[a.tree for a in args]])
@@ -146,15 +146,18 @@ def _normal_form(expression,environment,locals,*,fresh=False):
     reuse=(fresh and expression.checked_args is not None and
            len(args)==len(expression.checked_args) and
            all(unchanged(a,b) for a,b in zip(args,expression.checked_args)))
-    checked=expression if reuse else env.call(name,args,locals)
+    if kind=='ModuleCall':
+        from .bound_calls import elaborate as bound_elaborate
+        checked=bound_elaborate(tree,env,locals,args)
+    else:checked=expression if reuse else env.call(name,args,locals)
     definition=env.definitions.get(name)
     if definition and definition['implementation']=='equals':
         parameters=env.data['functions'][name]['signature_tree'][2]
         implicit={p[1] for p in parameters if p[3]=='implicit'}
-        body=definition['tree']
+        body=definition.get('bound_tree') or definition['tree']
         from .dependent_functions import tree_names
         from .hygiene import substitute,UnrepresentableSubstitution
-        if not shadowed_globals(env,locals):
+        if kind=='ModuleCall' and definition.get('bound_tree') is not None or not shadowed_globals(env,locals):
             bindings=dict(zip((p[1] for p in parameters if p[3]=='explicit'),args))
             required=tree_names(body).intersection(implicit)
             inferred=dict(checked.inferred_args)

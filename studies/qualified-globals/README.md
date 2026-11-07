@@ -2,6 +2,12 @@
 
 # Generated globals cannot be captured by locals
 
+**Current status:** the seven binding repairs are now in the working compiler.
+See the [integration report](../../docs/binding-integration.md) for current
+validation and remaining gates. The account below records the isolated experiment;
+default patch drivers reconstruct its pinned baseline, not the current compiler.
+
+
 Status: isolated prototype after the six patches through native type bindings.
 Main is unchanged. This extends root qualification to generated callables,
 constructors, record types and projections.

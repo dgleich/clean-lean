@@ -2,8 +2,10 @@
 
 # Carrier fields and projected types — prototype contract
 
-Status: proposed, executable isolated prototype. Main still rejects
-carrier fields. This extends closed-universe structures, not universe polymorphism.
+Status: integrated bounded implementation; broader validation remains pending.
+See [binding integration](binding-integration.md). This extends closed-universe
+structures, not universe polymorphism. Historical prototype counts below apply
+to their recorded compiler stacks.
 
 ```clean
 Structure BundledSpace():

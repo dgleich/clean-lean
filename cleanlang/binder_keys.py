@@ -31,7 +31,7 @@ def environment_tokens(environment):
     """Cache only the pure token union of an identical immutable text snapshot."""
     texts=[]
     def collect(value):
-        if isinstance(value,str):texts.append(value)
+        if isinstance(value,str):texts.append(str(value))
         elif isinstance(value,dict):
             for k,v in value.items():collect(k);collect(v)
         elif isinstance(value,(tuple,list)):
@@ -49,6 +49,8 @@ class Pool:
     def __init__(self,environment,locals,tree):
         self.reserved=set();self.owned=set();self.counter=0
         def reserve(value):
+            from .annotations import Annotation
+            if isinstance(value,Annotation):self.reserve_type(value.typ)
             if isinstance(value,str):self.reserved.update(re.findall(ID,value))
             elif isinstance(value,dict):
                 for k,v in value.items():reserve(k);reserve(v)
@@ -63,8 +65,9 @@ class Pool:
             self.reserved.update(re.findall(ID,str(value.type)))
             self.reserve_type(value.type)
     def reserve_type(self,typ):
-        from .core import Type,ValueIndex
+        from .core import Type,LocalType,ValueIndex
         from .dependent_functions import DependentFunctionType
+        if isinstance(typ,LocalType):self.reserved.update(re.findall(ID,typ.lean))
         if isinstance(typ,DependentFunctionType):self.reserved.add(typ.bound)
         if isinstance(typ,Type):
             for arg in typ.args:self.reserve_type(arg)

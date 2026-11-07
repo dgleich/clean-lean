@@ -99,7 +99,14 @@ def normalize_layout(text):
 class Type:
     name: str
     args: tuple = ()
-    def __str__(self): return self.name + ('(' + ','.join(map(str,self.args)) + ')' if self.args else '')
+    def __str__(self):
+        if self.name=='$carrier':return self.args[0].name
+        return self.name + ('(' + ','.join(map(str,self.args)) + ')' if self.args else '')
+@dataclass(frozen=True)
+class LocalType(Type):
+    """A local carrier reference, distinct from a module constructor."""
+    lean: str = ''
+
 @dataclass(frozen=True, eq=False)
 class ValueIndex:
     name: str
@@ -206,6 +213,8 @@ class Environment:
         self.declaration_docs={}
         self.module_docs=[]
     def type(self,s,env=None,phrases=True,trail=(),*,presentation=None):
+        from .annotations import Annotation,resolve
+        if isinstance(s,Annotation):return resolve(s,self,env or {})
         s=re.sub(r'^(a|an)\s+','',s.strip(),flags=re.I)
         # Constructor applications have reserved structural syntax, never prose dispatch.
         if phrases and not s.startswith('(') and not re.match(ID+r'\s*\(',s):
@@ -215,16 +224,25 @@ class Environment:
         from .syntax import parse as syntax_parse, type_spelling
         try:syntax=syntax_parse(s,'type_ref')
         except CleanError as e:raise CleanError('Unknown type phrase: '+s) from e
-        if syntax.data=='computed_index':
-            from .syntax import expression_tree
-            return proof_type(Expressions(self,env or {}).elaborate(expression_tree(syntax.children[0])),self,env or {},_fresh=True)
+        if syntax.data in ('computed_index','index_reference'):
+            from .syntax import expression_tree, type_spelling, parse
+            tree=(expression_tree(syntax.children[0]) if syntax.data=='computed_index'
+                  else expression_tree(parse(type_spelling(syntax),'expression')))
+            value=Expressions(self,env or {}).elaborate(tree)
+            if value.type==Type('Type'):
+                from .carrier_types import carrier
+                return carrier(value,self,env or {})
+            if syntax.data=='index_reference':raise CleanError('Type projection must have type Type')
+            return proof_type(value,self,env or {},_fresh=True)
         if len(syntax.children)>1 and syntax.children[1].data=='bound_type_arguments':
             from .dependent_functions import parse_type
             return parse_type(syntax,self,env or {},trail)
         source_name=str(syntax.children[0])
         name=self.data.get('aliases',{}).get(source_name,source_name)
         args=[type_spelling(x) for x in syntax.children[1].children] if len(syntax.children)>1 else []
-        if env and name in env and env[name].type == Type('Type') and not args: return Type(name)
+        if env and source_name in env and env[source_name].type == Type('Type') and not args:
+            return LocalType(source_name,(),env[source_name].lean)
+        if name in trail:raise CleanError('Cyclic type alias: '+name)
         if name not in self.data['types']: raise CleanError('Unknown type: '+name)
         kinds=self.data['types'][name].get('args',[])
         if len(args)!=len(kinds): raise CleanError(f'{name} expects {len(kinds)} parameters')
@@ -239,7 +257,12 @@ class Environment:
                     raise CleanError('Value index must be a previously declared name, field reference or parenthesized computation: '+a)
                 if env is None:raise CleanError('Unknown value index: '+a)
                 actual=Expressions(self,env).parse(a)
-                expected=self.type(k['value'].format(*map(str,out)),env,False)
+                spec=self.data['types'][name]
+                if 'parameter_types' in spec:
+                    from .dependent_functions import substitute
+                    expected=substitute(spec['parameter_types'][len(out)],
+                        dict(zip(spec['parameter_names'],out)),self,env or {})
+                else:expected=self.type(k['value'].format(*map(str,out)),env,False)
                 if actual.type!=expected:
                     raise CleanError(f'Value index {a} requires {expected}, got {actual.type}')
                 from .indices import index_value
@@ -254,8 +277,13 @@ class Environment:
             out.append(dimension_index(actual,self,env or {}))
         if 'canonical' in self.data['types'][name]:
             if name in trail: raise CleanError('Cyclic type alias: '+name)
-            expanded=self.data['types'][name]['canonical'].format(*map(str,out))
-            resolved=self.type(expanded,env,False,trail+(name,))
+            spec=self.data['types'][name]
+            if 'canonical_type' in spec:
+                from .dependent_functions import substitute
+                resolved=substitute(spec['canonical_type'],dict(zip(spec['parameter_names'],out)),self,env or {})
+            else:
+                expanded=spec['canonical'].format(*map(str,out))
+                resolved=self.type(expanded,env,False,trail+(name,))
             if presentation is not None and any(k in self.data['types'][name] for k in ('prose','prose_plural')):
                 spec=self.data['types'][name]
                 rendered=[self.render_type(a,'latex') if isinstance(a,Type) else a.tex for a in out]
@@ -269,6 +297,8 @@ class Environment:
     def render_type(self,t,target,bindings=None):
         from .dependent_functions import DependentFunctionType
         bindings=bindings or {}
+        if isinstance(t,LocalType):return t.lean if target=='lean' else texid(t.name)
+        if t.name=='$carrier':return '('+t.args[0].lean+')' if target=='lean' else t.args[0].tex
         if isinstance(t,DependentFunctionType):
             domain=self.render_type(t.domain,target,bindings);codomain=self.render_type(t.codomain,target,bindings)
             if target=='lean':return '('+t.bound+' : '+domain+') → ('+codomain+')'
@@ -281,8 +311,18 @@ class Environment:
               texid(a) if target=='latex' and not a.isdigit() else a for a in t.args]
         if t.name not in self.data['types']:
             return bindings[t.name].lean if target=='lean' and t.name in bindings else t.name
-        return self.data['types'][t.name][target].format(*args)
+        spec=self.data['types'][t.name]
+        if target=='lean' and 'native_binding' in spec:
+            if spec['lean']!=spec['native_template']:
+                raise CleanError('Changed bound native type: '+t.name)
+            if self.notation_definitions.get(spec['native_binding'])!=spec['native_declaration']:
+                raise CleanError('Changed or missing bound native type declaration: '+t.name)
+            if self.is_function_type(t) and len(args)==2:
+                return '('+args[0]+') → ('+args[1]+')'
+            return '(_root_.'+spec['native_binding']+''.join(' ('+a+')' for a in args)+')'
+        return spec[target].format(*args)
     def is_function_type(self,t):
+        if isinstance(t,LocalType):return False
         if isinstance(t,ProofType):
             from .proof_types import callable_view
             return callable_view(t,self) is not None
@@ -298,6 +338,7 @@ class Environment:
         """Closed Lean Sort level; checked local carrier variables inhabit Type 0."""
         if not isinstance(t,Type) or t==NUM:
             raise CleanError('Cannot determine a closed universe for an unresolved type')
+        if isinstance(t,LocalType):return 1
         if isinstance(t,ProofType):return 0
         if self.is_function_type(t) and len(t.args)==2:
             codomain=self.sort_level(t.args[1])
@@ -316,6 +357,7 @@ class Environment:
             raise CleanError('Function expressions require one explicit Lean arrow type binding')
         return Type(names[0],(domain,codomain))
     def describe_type(self,t,plural=False):
+        if isinstance(t,LocalType):return ('elements of $' if plural else 'an element of $')+self.render_type(t,'latex')+'$'
         from .dependent_functions import DependentFunctionType
         if isinstance(t,DependentFunctionType):
             value='evidence that $' if self.is_proof_type(t.codomain) else 'a value of type $'
@@ -336,7 +378,7 @@ class Environment:
         if not m: raise CleanError('Invalid notation signature: '+p)
         ps=split(m[2] or '')
         if a==NUM and m[1] in ('Natural','Real','Complex'): return
-        if not isinstance(a,Type) or a.name!=m[1] or len(ps)!=len(a.args): raise CleanError(f'Expected {p}, got {a}')
+        if not isinstance(a,Type) or isinstance(a,LocalType) or a.name!=m[1] or len(ps)!=len(a.args): raise CleanError(f'Expected {p}, got {a}')
         for p2,a2 in zip(ps,a.args):
             if isinstance(a2,Type) or p2.startswith('$'): self.match(p2,a2,bind)
             elif p2!=a2: raise CleanError('Dimension mismatch')
@@ -373,8 +415,8 @@ class Environment:
             if isinstance(t,ComputedIndex):
                 return substitute_index(t,{**substitutions,**actuals,**scope},self,locals)
             if isinstance(t,ValueIndex):return index(t.name,scope)
+            if isinstance(t,LocalType):return substitutions.get(t.name,t)
             if isinstance(t,Type):
-                if not t.args and t.name in substitutions:return substitutions[t.name]
                 return Type(t.name,tuple(replace(a,scope) for a in t.args))
             return substitutions.get(t,t)
 
@@ -421,16 +463,16 @@ class Environment:
                 if replace(pattern,scope)!=actual:
                     raise CleanError('Dependent index mismatch: '+pattern.name)
             elif isinstance(pattern,Type):
-                if pattern.name in implicit and not pattern.args:
+                if isinstance(pattern,LocalType) and pattern.name in implicit:
                     if implicit[pattern.name]!=Type('Type') or not isinstance(actual,Type) or self.is_proof_type(actual):
                         raise CleanError('Expected a type argument: '+pattern.name)
                     self.require_type_argument(actual)
                     bind(pattern.name,actual)
-                elif not pattern.args and pattern.name in substitutions:
+                elif isinstance(pattern,LocalType) and pattern.name in substitutions:
                     if substitutions[pattern.name]!=actual:raise CleanError('Dependent type mismatch: '+pattern.name)
                 else:
-                    expected=replace(Type(pattern.name),scope)
-                    if not isinstance(actual,Type) or expected.name!=actual.name or len(pattern.args)!=len(actual.args):
+                    expected=replace(pattern if isinstance(pattern,LocalType) else Type(pattern.name),scope)
+                    if not isinstance(actual,Type) or isinstance(expected,LocalType)!=isinstance(actual,LocalType) or (isinstance(expected,LocalType) and expected!=actual) or expected.name!=actual.name or len(pattern.args)!=len(actual.args):
                         raise CleanError(f'Expected {replace(pattern,scope)}, got {actual}')
                     for p,a in zip(pattern.args,actual.args):match(p,a,scope)
             elif replace(pattern,scope)!=actual:raise CleanError('Dimension mismatch')
@@ -438,15 +480,10 @@ class Environment:
         for n,t in parameters:
             match(t,actuals[n].type)
             if t==Type('Type'):
-                from .structures import reference_name
-                if actuals[n].tree[0]=='TypeValue':
-                    value=self.type(actuals[n].tree[1],locals,phrases=False)
-                    self.require_type_argument(value)
-                    bind(n,value)
-                else:
-                    ref=reference_name(actuals[n].tree)
-                    if ref is None:raise CleanError('Type argument must be a named local or type expression')
-                    bind(n,Type(ref))
+                from .carrier_types import carrier
+                value=carrier(actuals[n],self,locals)
+                self.require_type_argument(value)
+                bind(n,value)
         for n in implicit:
             if n not in substitutions:raise CleanError('Cannot infer implicit parameter: '+n)
         targets=[]
@@ -455,7 +492,7 @@ class Environment:
             targets.append(self.render_type(v,'lean',locals) if isinstance(v,Type) else
                            v.lean if isinstance(v,ValueIndex) else locals[v].lean if v in locals else v)
         targets.extend(a.lean for a in args)
-        target='(@'+signature['key']+''.join(' ('+v+')' for v in targets)+')'
+        target='(@_root_.'+signature['key']+''.join(' ('+v+')' for v in targets)+')'
         return Expr(target,spec['latex'].format(*(a.tex for a in args)),replace(signature['result']),
                     tree=['Call',name,[a.tree for a in args]],
                     inferred_args=tuple((n,substitutions[n]) for n in implicit),checked_args=tuple(args))
@@ -479,6 +516,7 @@ class Expressions:
         self.bound_counter=0
         return self._elaborate(tree)
     def _elaborate(self,tree):
+        from .annotations import Annotation
         kind=tree[0]
         if kind=='TypeValue':
             sort=self.reg.data['types'].get('Type',{})
@@ -486,7 +524,7 @@ class Expressions:
                 raise CleanError('Type expressions require the foundational Type binding to Lean Type')
             value=self.reg.type(tree[1],self.env,phrases=False)
             self.reg.require_type_argument(value)
-            return Expr(self.reg.render_type(value,'lean',self.env),self.reg.render_type(value,'latex',self.env),Type('Type'),tree=['TypeValue',str(value)])
+            return Expr(self.reg.render_type(value,'lean',self.env),self.reg.render_type(value,'latex',self.env),Type('Type'),tree=['TypeValue',tree[1] if isinstance(tree[1],Annotation) else str(value)])
         if kind=='Decimal':return Expr(tree[1],tree[1],NUM,tree=tree)
         if kind=='Local':
             if tree[1] not in self.env:raise CleanError('Unknown name: '+tree[1])
@@ -511,6 +549,9 @@ class Expressions:
             inner=('('+a.tex+')') if a.precedence < 8 else a.tex
             tx=('-'+inner) if tok=='-' else (r'\text{not }('+a.tex+')')
             return Expr('('+('-' if tok=='-' else '¬')+a.lean+')',tx,a.type,7 if tok=='-' else 5,['Unary',tok,a.tree])
+        if kind=='ModuleCall':
+            from .bound_calls import elaborate
+            return elaborate(tree,self.reg,self.env,[self._elaborate(a) for a in tree[2]])
         if kind=='Call':
             tok=tree[1];args=[self._elaborate(a) for a in tree[2]]
             if tok in self.env and self.reg.is_function_type(self.env[tok].type):
@@ -543,14 +584,14 @@ class Expressions:
                 words='for every' if kind=='Forall' else 'there exists'
                 tex=(r'\left(\text{'+words+' }'+texid(name)+r' : '+
                      self.reg.render_type(domain,'latex')+r',\; '+body.tex+r'\right)')
-                return Expr(target,tex,PROP,tree=[kind,name,str(domain),body.tree])
+                return Expr(target,tex,PROP,tree=[kind,name,tree[2] if isinstance(tree[2],Annotation) else str(domain),body.tree])
             if body.type==NUM:
                 raise CleanError('Function body requires a determined return type')
             from .dependent_functions import inferred_type
             result=inferred_type(name,bound,domain,body.type,self.reg,self.env)
             return Expr(f'(fun ({bound} : {lean_domain}) => {body.lean})',
                         r'\left('+texid(name)+r' \mapsto '+body.tex+r'\right)',result,
-                        tree=['Lambda',name,str(domain),body.tree])
+                        tree=['Lambda',name,tree[2] if isinstance(tree[2],Annotation) else str(domain),body.tree])
         raise CleanError('Unknown syntax constructor: '+kind)
 
 def binary(op,a,b):
