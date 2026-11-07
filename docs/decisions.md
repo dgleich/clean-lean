@@ -839,3 +839,16 @@ display names would not repair stored module references. Exact identity allocati
 alias-template substitution and serialization remain design work; this decision
 does not claim the full repair is specified or implemented.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Prototype local carrier references and semantic alias substitution
+
+Use a distinct local type representation carrying the selected Lean binder in the
+[isolated repair](../studies/type-identity/Prototype.md). Resolve locals before
+module aliases; substitute only local type parameters. Store checked alias bodies
+and parameter telescopes rather than recovering their meaning from formatted
+source strings. Retain semantic annotations when reifying inferred types. This
+repairs the demonstrated counterexamples without claiming full module-owned
+identity, opaque native-template hygiene or main integration.
+:::

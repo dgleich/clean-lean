@@ -55,6 +55,9 @@ The exact native target also fails on both compilers, after its compilation
 control succeeds. A neutral type-parse check passes on the four-patch stack.
 The native check is optional because it invokes Lean; skipping it is not a pass.
 
+The subsequent [isolated repair](Prototype.md) passes these gates on its five-patch
+stack. Main and the earlier four-patch stack remain unchanged.
+
 ## Required repair boundary
 
 No new source grammar is needed. The existing bare type reference must retain

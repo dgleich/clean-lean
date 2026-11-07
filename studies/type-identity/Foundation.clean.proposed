@@ -4,6 +4,7 @@ Import Lean Mathlib.Data.Real.Basic
 Type Type():
   Means: Type
   Render latex: \mathsf{{Type}}
+  Describe: a type
 Type Real():
   Means: ℝ
   Render latex: \mathbb{{R}}

@@ -891,3 +891,13 @@ types during substitution. These requirements are not yet implemented throughout
 the compiler. The study's acceptance gates intentionally fail; compiling the
 generated Lean statement does not establish that its meaning was preserved.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The [isolated local-type repair](../studies/type-identity/Prototype.md) distinguishes
+local carrier references from module types, stores checked alias bodies and
+parameter telescopes, and preserves those distinctions through substitution,
+annotation reification and rendering. It changes no source grammar. Main remains
+unrepaired; native adapter scope, operator composition and broader identity
+conformance remain open.
+:::

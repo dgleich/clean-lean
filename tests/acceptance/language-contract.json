@@ -1937,19 +1937,21 @@
     },
     {
       "id": "local_module_type_identity",
-      "status": "failing-gate",
+      "status": "partial",
       "environment": "Main compiler and isolated carrier/bound-call/proof-binding/annotation stack; explicit Foundation.clean.proposed; pinned Lean/Mathlib.",
       "source_fragment": "Let Real: Type\nLet x: Real\nConclude: x = x\n",
       "expected_lean": "∀ (Real : Type) (x : Real), x = x",
       "obligation": "Resolve local type parameters before module aliases. Preserve distinct local and module declaration identities in matching, substitution, stored annotations and rendering. Compare elaborated native targets, not compilation success.",
       "checks": [
-        "studies/type-identity/check_identity.py --native"
+        "studies/type-identity/check_identity.py --native",
+        "studies/type-identity/verify_prototype.py",
+        "studies/type-identity/PrototypeVerified.lean"
       ],
       "pending": [
-        "All six Python gates currently fail on main and four-patch prototype",
-        "Exact Lean-target gate fails on main although generated and expected statements both compile",
-        "Binding identity allocation and serialization, semantic alias expansion and full consumer migration",
-        "Declared-operator composition and main integration"
+        "Main and earlier four-patch stack still fail the original gates",
+        "Isolated local-type repair passes; composed-operator integration remains unchecked",
+        "Full module-owned identity and serialization, native adapter scope and legacy metadata migration",
+        "Full corpus/study validation and main integration"
       ],
       "expected_tree": [
         "Name",

@@ -5664,6 +5664,58 @@
     "studies/type-identity/README.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "studies/type-identity/local-types.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/type-identity/PrototypeVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/type-identity/Prototype.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/type-identity/verify_prototype.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/type-identity/check_preservation.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/type-identity/Prototype.pdf": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/type-identity/Prototype.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/type-identity/specimen.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
     }
   }
 }

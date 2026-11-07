@@ -970,6 +970,7 @@ let c : Module.Basis J K M := b.reindex e
 Let x: Real
 Conclude: x = x</code></pre></section><section><h3>Required Lean target</h3><pre><code>∀ (Real : Type) (x : Real), x = x</code></pre></section></div>
 <p>The current translator instead uses <code>x : ℝ</code>. Both statements compile, but their canonical elaborated targets differ. The <a href="../studies/type-identity/README.md">type-identity study</a> supplies six failing semantic checks and an independent failing native-target check. Local references must be distinguished from module type heads in substitution, alias expansion and rendering; the complete internal identity mechanism remains unfinished.</p>
+<p>The <a href="../studies/type-identity/Prototype.md">isolated local-type repair</a> now passes these gates. It retains the local Lean binder, substitutes checked alias bodies, and reifies inferred module types as semantic annotations. Four additional exact targets and three proofs cover local and quantified carriers, aliases and reification. Main integration, declared-operator composition and native-adapter scope remain pending.</p>
 </section>
 <section class="mapping" id="carrier-fields" data-status="proposed">
 <h2>Structures with carrier fields</h2>
