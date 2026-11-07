@@ -44,9 +44,15 @@ is unavailable for a native runtime check.
 
 The earlier full run loaded an obsolete certificate-opacity assertion; its
 replacement passes the fifteen-test conversion module. A fresh full run of the
-final source, native-study regeneration and browser refresh are pending. The
-separate integration-copy run remains useful regression evidence but predates the
-final operator rejection guard and the specimen's reduced import list.
+final source remains running. All 32 native-study verification scripts passed in
+the integration copy, and the regenerated artifacts were reconciled with the main
+checkout. That copy's full run completed 581 tests with only the obsolete assertion
+failing; it predates the final operator rejection guard and reduced specimen import
+list. The final specimen has separately passed its native checks.
+
+The refreshed browser contains 107 Clean files with no translation errors. Every
+source hash and the complete inventory match. Search, declarations, target navigation,
+imports, notes/export, reload, responsive layout and the no-JavaScript fallback pass.
 
 Computed types as carrier arguments, Type-valued local definitions, universe polymorphism and
 application of named universal evidence are separate unfinished features. The

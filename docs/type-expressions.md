@@ -129,7 +129,9 @@ equations and an inferred dependent-carrier equality. The
 acceptance artifacts. The normative references and acceptance catalog are updated.
 The final focused run passes 116 tests, and the 92 corpus proof fixtures pass the
 Lean kernel. The final specimen compiled twice and its single-page layout was inspected.
-The review browser refresh remains to be completed for this snapshot.
+The review browser contains 107 files with no translation errors. Inventory and
+source SHA256 checks pass, as do search, declaration/target navigation, imports,
+notes/export, reload, responsive layout and the no-JavaScript fallback.
 
 All 32 study verification scripts passed in the integration copy. Its generated
 artifacts differ from the previous checked artifacts only in the position or
@@ -139,6 +141,6 @@ the final study and focused tests separately cover that guard. The integration-c
 full suite completed 581 tests with one obsolete certificate-opacity assertion
 failing; that assertion was already corrected in the main checkout before its
 current full run began. No other failures were reported. The final full
-suite and browser build are still running, so neither is reported as passing.
+suite is still running and is not reported as passing.
 This slice does not claim general universe polymorphism or callable universal evidence.
 :::
