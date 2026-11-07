@@ -435,3 +435,12 @@ proofs. Seven migrated topology verifiers now total 157 targets and 37 proofs.
 Their homology and compact-image TeX sources are unchanged after provenance
 restoration. Full discovery remains active and unfinished.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The path and evidence studies now pass on the working compiler: 14 and 42 exact
+targets respectively, with four proofs each. Thirty-two focused evidence and
+dependent-call Python tests pass. Their TeX outputs are unchanged after
+provenance restoration. Nine migrated topology verifiers total 213 exact targets
+and 45 proofs. Full discovery is still running; these counts do not complete it.
+:::

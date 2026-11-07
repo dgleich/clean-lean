@@ -11,8 +11,11 @@ env=Environment();results=load_document(here/'Evidence.clean',env)
 source=lean(results,env,['Lean'])
 (here/'Evidence.lean').write_text(source)
 (here/'Evidence.tex').write_text(latex(results,env))
-function=lambda n:env.data['functions'][n]['lean'].split()[0]
+function=lambda n:env.data['functions'][n]['native_binding']
 mapping={}
+for oracle,name in [('carrierType','Type'),('setType','Set'),('elementType','Element'),
+                    ('spaceType','TopologicalSpace'),('pointType','Point'),('mapType','ContinuousMap')]:
+    mapping['EvidenceOracle.'+oracle]=env.data['types'][name]['native_binding']
 records={'Subset':'SubsetInclusion','Pair':'TopologicalPair','Inclusion':'PairInclusion'}
 for oracle,name in records.items():mapping['EvidenceOracle.'+oracle]=env.structures[name]['key']
 for oracle,name in [('certify','certified inclusion'),('pair','topological pair'),('inclusion','pair inclusion'),
@@ -65,72 +68,74 @@ elab "same_target " a:ident b:ident : command => do
 '''
 expected=r'''
 namespace EvidenceOracle
+noncomputable abbrev carrierType : Type 1 := Type
+noncomputable abbrev setType (X : Type) : Type := Set X
+noncomputable abbrev elementType (X : Type) (S : setType X) : Type := {x : X // x ∈ S}
+noncomputable abbrev spaceType : Type 1 := TopCat.{0}
+noncomputable abbrev pointType (X : spaceType) : Type := TopCat.carrier X
+noncomputable abbrev mapType (X Y : spaceType) : Type := @ContinuousMap X.carrier Y.carrier X.str Y.str
 structure Subset (X : Type) where
-  source : Set X
-  target : Set X
+  source : setType X
+  target : setType X
   containment : source ⊆ target
-noncomputable def certify (X : Type) (S T : Set X) (h : S ⊆ T) : Subset X := @Subset.mk X S T h
-noncomputable def subsetMap (X : Type) (S T : Set X) (h : S ⊆ T) : {x : X // x ∈ S} → {x : X // x ∈ T} := Set.inclusion h
-noncomputable def certifiedMap (X : Type) (Q : Subset X) : {x : X // x ∈ Q.source} → {x : X // x ∈ Q.target} :=
+noncomputable def certify (X : Type) (S T : setType X) (h : S ⊆ T) : Subset X := @Subset.mk X S T h
+noncomputable def subsetMap (X : carrierType) (S T : setType X) (h : S ⊆ T) : elementType X S → elementType X T := Set.inclusion h
+noncomputable def certifiedMap (X : carrierType) (Q : Subset X) : elementType X Q.source → elementType X Q.target :=
   @subsetMap X Q.source Q.target Q.containment
-noncomputable def certificate {X : Type} (S T : Set X) (h : S ⊆ T) : Subset X := @certify X S T h
-noncomputable def point {X : Type} (S : Set X) (x : {x : X // x ∈ S}) : X := x.val
-structure Pair (X : TopCat.{0}) where
-  ambient : Set X.carrier
-  relative : Set X.carrier
+noncomputable def certificate {X : Type} (S T : setType X) (h : S ⊆ T) : Subset X := @certify X S T h
+noncomputable def point {X : Type} (S : setType X) (x : elementType X S) : X := x.val
+structure Pair (X : spaceType) where
+  ambient : setType (pointType X)
+  relative : setType (pointType X)
   nesting : relative ⊆ ambient
-structure Inclusion (X : TopCat.{0}) where
+structure Inclusion (X : spaceType) where
   source : Pair X
   target : Pair X
   ambient : source.ambient ⊆ target.ambient
   relative : source.relative ⊆ target.relative
-noncomputable def pair (X : TopCat.{0}) (S T : Set X.carrier) (h : T ⊆ S) : Pair X := @Pair.mk X S T h
-noncomputable def inclusion (X : TopCat.{0}) (S T : Pair X)
+noncomputable def pair (X : spaceType) (S T : setType (pointType X)) (h : T ⊆ S) : Pair X := @Pair.mk X S T h
+noncomputable def inclusion (X : spaceType) (S T : Pair X)
   (h : S.ambient ⊆ T.ambient) (k : S.relative ⊆ T.relative) : Inclusion X := @Inclusion.mk X S T h k
-noncomputable def ambient (X : TopCat.{0}) (Q : Inclusion X) : Subset X.carrier :=
-  @certificate X.carrier Q.source.ambient Q.target.ambient Q.ambient
-noncomputable def relative (X : TopCat.{0}) (Q : Inclusion X) : Subset X.carrier :=
-  @certificate X.carrier Q.source.relative Q.target.relative Q.relative
-noncomputable def subspace (X : TopCat.{0}) (S : Set X.carrier) : TopCat.{0} :=
+noncomputable def ambient (X : spaceType) (Q : Inclusion X) : Subset (pointType X) :=
+  @certificate (pointType X) Q.source.ambient Q.target.ambient Q.ambient
+noncomputable def relative (X : spaceType) (Q : Inclusion X) : Subset (pointType X) :=
+  @certificate (pointType X) Q.source.relative Q.target.relative Q.relative
+noncomputable def subspace (X : spaceType) (S : setType (pointType X)) : spaceType :=
   letI : TopologicalSpace X.carrier := X.str
   TopCat.of S
-noncomputable def subspaceMap (X : TopCat.{0}) (S T : Set X.carrier) (h : S ⊆ T) :
-  @ContinuousMap (subspace X S).carrier (subspace X T).carrier (subspace X S).str (subspace X T).str :=
+noncomputable def subspaceMap (X : spaceType) (S T : setType (pointType X)) (h : S ⊆ T) :
+  mapType (subspace X S) (subspace X T) :=
   letI : TopologicalSpace X.carrier := X.str
   ContinuousMap.inclusion h
-noncomputable def ambientMap (X : TopCat.{0}) (Q : Inclusion X) :
-  @ContinuousMap (subspace X Q.source.ambient).carrier (subspace X Q.target.ambient).carrier
-    (subspace X Q.source.ambient).str (subspace X Q.target.ambient).str :=
+noncomputable def ambientMap (X : spaceType) (Q : Inclusion X) :
+  mapType (subspace X Q.source.ambient) (subspace X Q.target.ambient) :=
   @subspaceMap X Q.source.ambient Q.target.ambient Q.ambient
-noncomputable def relativeMap (X : TopCat.{0}) (Q : Inclusion X) :
-  @ContinuousMap (subspace X Q.source.relative).carrier (subspace X Q.target.relative).carrier
-    (subspace X Q.source.relative).str (subspace X Q.target.relative).str :=
+noncomputable def relativeMap (X : spaceType) (Q : Inclusion X) :
+  mapType (subspace X Q.source.relative) (subspace X Q.target.relative) :=
   @subspaceMap X Q.source.relative Q.target.relative Q.relative
-noncomputable def compose (X Y Z : TopCat.{0})
-  (g : @ContinuousMap Y.carrier Z.carrier Y.str Z.str)
-  (f : @ContinuousMap X.carrier Y.carrier X.str Y.str) :
-  @ContinuousMap X.carrier Z.carrier X.str Z.str :=
+noncomputable def compose (X Y Z : spaceType)
+  (g : mapType Y Z)
+  (f : mapType X Y) :
+  mapType X Z :=
   @ContinuousMap.comp X.carrier Y.carrier Z.carrier X.str Y.str Z.str g f
-noncomputable def ambientComposite (X : TopCat.{0}) (Q : Inclusion X) :
-  @ContinuousMap (subspace X Q.source.relative).carrier (subspace X Q.target.ambient).carrier
-    (subspace X Q.source.relative).str (subspace X Q.target.ambient).str :=
+noncomputable def ambientComposite (X : spaceType) (Q : Inclusion X) :
+  mapType (subspace X Q.source.relative) (subspace X Q.target.ambient) :=
   @compose (subspace X Q.source.relative) (subspace X Q.source.ambient) (subspace X Q.target.ambient)
     (@ambientMap X Q) (@subspaceMap X Q.source.relative Q.source.ambient Q.source.nesting)
-noncomputable def relativeComposite (X : TopCat.{0}) (Q : Inclusion X) :
-  @ContinuousMap (subspace X Q.source.relative).carrier (subspace X Q.target.ambient).carrier
-    (subspace X Q.source.relative).str (subspace X Q.target.ambient).str :=
+noncomputable def relativeComposite (X : spaceType) (Q : Inclusion X) :
+  mapType (subspace X Q.source.relative) (subspace X Q.target.ambient) :=
   @compose (subspace X Q.source.relative) (subspace X Q.target.relative) (subspace X Q.target.ambient)
     (@subspaceMap X Q.target.relative Q.target.ambient Q.target.nesting) (@relativeMap X Q)
-def constructorStatement : Prop := ∀ (X : Type) (S T : Set X) (h : S ⊆ T),
+def constructorStatement : Prop := ∀ (X : carrierType) (S T : setType X) (h : S ⊆ T),
   let Q : Subset X := @certify X S T h;
   Q.source = S ∧ Q.target = T
-def inclusionStatement : Prop := ∀ (X : Type) (S T : Set X) (h : S ⊆ T) (x : {x : X // x ∈ S}),
-  let f : {x : X // x ∈ S} → {x : X // x ∈ T} := @subsetMap X S T h;
+def inclusionStatement : Prop := ∀ (X : carrierType) (S T : setType X) (h : S ⊆ T) (x : elementType X S),
+  let f : elementType X S → elementType X T := @subsetMap X S T h;
   @point X T (f x) = @point X S x
-def certifiedStatement : Prop := ∀ (X : Type) (Q : Subset X) (x : {x : X // x ∈ Q.source}),
-  let f : {x : X // x ∈ Q.source} → {x : X // x ∈ Q.target} := @certifiedMap X Q;
+def certifiedStatement : Prop := ∀ (X : carrierType) (Q : Subset X) (x : elementType X Q.source),
+  let f : elementType X Q.source → elementType X Q.target := @certifiedMap X Q;
   @point X Q.target (f x) = @point X Q.source x
-def squareStatement : Prop := ∀ (X : TopCat.{0}) (Q : Inclusion X),
+def squareStatement : Prop := ∀ (X : spaceType) (Q : Inclusion X),
   @ambientComposite X Q = @relativeComposite X Q
 end EvidenceOracle
 '''

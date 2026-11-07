@@ -130,7 +130,7 @@ LAKE=lake python3 studies/topology/verify_compact_image.py
 to state subtype membership, reversal twice, existence of constant paths, and
 composition of paths. The wrappers use actual Mathlib definitions; reverse twice
 is authored in Clean. [PathsVerified.lean](PathsVerified.lean) checks five canonical
-wrapper targets, four canonical statement targets, and four proofs. Regenerate
+type bodies, five wrapper targets, four statement targets, and four proofs. Regenerate
 with `LAKE=lake python3 studies/topology/verify_paths.py`.
 
 Dependent callable signatures are now implemented under the
@@ -397,8 +397,8 @@ now explicitly imports Mathlib.Topology.Continuous for continuous_def.
 
 ## Working-compiler topology binding checks
 
-The [binding migration report](binding-migration.md) records 157 exact native
-targets and 37 proofs across seven topology foundation studies,
+The [binding migration report](binding-migration.md) records 213 exact native
+targets and 45 proofs across nine topology foundation studies,
 plus 23 focused Python tests. These checks run on the integrated compiler;
 declared-operator integration and broader native-study migration remain pending.
 :::
