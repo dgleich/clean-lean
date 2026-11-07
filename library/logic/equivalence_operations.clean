@@ -1,0 +1,64 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "equivalences.clean"
+
+Notation equality transitivity(x,y,z,first,second):
+  Let A: Type
+  Let x,y,z: A
+  Let first: Evidence((x = y))
+  Let second: Evidence((y = z))
+  Returns: Evidence((x = z))
+  Means: Eq.trans first second
+  Render latex: \operatorname{{trans}}({first},{second})
+
+Notation equivalence left inverse(e,x):
+  Let A,B: Type
+  Let e: Equivalence(A,B)
+  Let x: A
+  Returns: Evidence((equivalence backward(e,equivalence forward(e,x)) = x))
+  Means: e.symm_apply_apply x
+  Render latex: \operatorname{{left}}({e},{x})
+
+Notation equivalence right inverse(e,y):
+  Let A,B: Type
+  Let e: Equivalence(A,B)
+  Let y: B
+  Returns: Evidence((equivalence forward(e,equivalence backward(e,y)) = y))
+  Means: e.apply_symm_apply y
+  Render latex: \operatorname{{right}}({e},{y})
+
+Define inverse equivalence(e):
+  Let A,B: Type
+  Let e: Equivalence(A,B)
+  Returns: Equivalence(B,A)
+  Equals: equivalence(B,A,
+    function(y: B,equivalence backward(e,y)),
+    function(x: A,equivalence forward(e,x)),
+    function(y: B,equivalence right inverse(e,y)),
+    function(x: A,equivalence left inverse(e,x)))
+  Render latex: {e}^{{-1}}
+
+Define compose equivalences(e,f):
+  Let A,B,C: Type
+  Let e: Equivalence(A,B)
+  Let f: Equivalence(B,C)
+  Returns: Equivalence(A,C)
+  Equals: equivalence(A,C,
+    function(x: A,equivalence forward(f,equivalence forward(e,x))),
+    function(z: C,equivalence backward(e,equivalence backward(f,z))),
+    function(x: A,equality transitivity(
+      equivalence backward(e,equivalence backward(f,equivalence forward(f,equivalence forward(e,x)))),
+      equivalence backward(e,equivalence forward(e,x)),x,
+      equality congruence(function(y: B,equivalence backward(e,y)),
+        equivalence backward(f,equivalence forward(f,equivalence forward(e,x))),
+        equivalence forward(e,x),equivalence left inverse(f,equivalence forward(e,x))),
+      equivalence left inverse(e,x))),
+    function(z: C,equality transitivity(
+      equivalence forward(f,equivalence forward(e,equivalence backward(e,equivalence backward(f,z)))),
+      equivalence forward(f,equivalence backward(f,z)),z,
+      equality congruence(function(y: B,equivalence forward(f,y)),
+        equivalence forward(e,equivalence backward(e,equivalence backward(f,z))),
+        equivalence backward(f,z),equivalence right inverse(e,equivalence backward(f,z))),
+      equivalence right inverse(f,z))))
+  Render latex: \left({f}\circ {e}\right)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

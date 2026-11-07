@@ -559,3 +559,17 @@ reuses ordinary set/subtype foundations and leaves the interval-specific arithme
 support construction as an explicit unfinished proof obligation. It does not
 weaken the interval existence statement by assuming its desired support record.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Equivalence composition can be authored with proof functions
+
+The [equivalence-operations study](../studies/equivalence-operations/README.md)
+constructs inverse and composition directly in Clean, using foundational equality
+transitivity, congruence and existing inverse laws. Eight exact targets and three
+proofs pass. No new syntax was needed. The nested equality chains are a concrete
+readability limitation for future local proof syntax, not a missing ability to
+construct the equivalence. Composition renders with parentheses so applying or
+inverting it preserves grouping. Interval-specific support remains separately
+unverified.
+:::

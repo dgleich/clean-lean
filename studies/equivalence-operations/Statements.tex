@@ -1,0 +1,28 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{inverse equivalence evaluation}\cleanattribution{[mathlib, Equiv.symm\_apply\_apply]}
+Let $A$ and $B$ be types.
+Let $e$ be an equivalence from $A$ to $B$.
+Let $y$ be an element of $B$.
+Then \[e^{-1}(y) = e^{-1}(y).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{composed equivalence evaluation}\cleanattribution{[mathlib, Equiv.trans\_apply]}
+Let $A$, $B$ and $C$ be types.
+Let $e$ be an equivalence from $A$ to $B$.
+Let $f$ be an equivalence from $B$ to $C$.
+Let $x$ be an element of $A$.
+Then \[\left(f\circ e\right)(x) = f(e(x)).\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{composed equivalence round trip}\cleanattribution{[mathlib, Equiv.symm\_apply\_apply]}
+Let $A$, $B$ and $C$ be types.
+Let $e$ be an equivalence from $A$ to $B$.
+Let $f$ be an equivalence from $B$ to $C$.
+Let $x$ be an element of $A$.
+Then \[\left(f\circ e\right)^{-1}(\left(f\circ e\right)(x)) = x.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

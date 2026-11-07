@@ -1,0 +1,31 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "../../library/logic/equivalence_operations.clean"
+Source mathlib:
+  Kind: other
+  Label: mathlib
+  Title: Mathlib pinned by lake-manifest.json
+
+Result inverse equivalence evaluation:
+  Attribution: mathlib; Equiv.symm_apply_apply; adapted
+  Let A,B: Type
+  Let e: Equivalence(A,B)
+  Let y: B
+  Conclude: equivalence forward(inverse equivalence(e),y) = equivalence backward(e,y)
+
+Result composed equivalence evaluation:
+  Attribution: mathlib; Equiv.trans_apply; adapted
+  Let A,B,C: Type
+  Let e: Equivalence(A,B)
+  Let f: Equivalence(B,C)
+  Let x: A
+  Conclude: equivalence forward(compose equivalences(e,f),x) = equivalence forward(f,equivalence forward(e,x))
+
+Result composed equivalence round trip:
+  Attribution: mathlib; Equiv.symm_apply_apply; adapted
+  Let A,B,C: Type
+  Let e: Equivalence(A,B)
+  Let f: Equivalence(B,C)
+  Let x: A
+  Conclude: equivalence backward(compose equivalences(e,f),equivalence forward(compose equivalences(e,f),x)) = x
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
