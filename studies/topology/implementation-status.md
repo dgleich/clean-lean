@@ -33,8 +33,9 @@ case's own limitations or substitute for its outstanding validation.
 
 ## Current validation evidence
 
-The [working-compiler binding migration](binding-migration.md) adds 69 exact
-native targets and 21 proofs, with 23 focused Python tests. Broader discovery
+The [working-compiler binding migration](binding-migration.md) adds 117 exact
+native targets and 30 proofs, including two universe rejection checks. Focused
+Python validation is scoped in that report. Broader discovery
 is still in progress; the older counts below retain their historical scope.
 
 

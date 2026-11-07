@@ -10,7 +10,9 @@ directly against the repository compiler, without applying historical patches.
 | `studies/topology/verify.py` | 17 | 7 |
 | `studies/topology/verify_bundles.py` | 43 | 10 |
 | `studies/topology/verify_indices.py` | 9 | 4 |
-| Total | 69 | 21 |
+| `studies/topology/verify_spaces.py` | 26 | 5 |
+| `studies/topology/verify_subspaces.py` | 22 | 4 |
+| Total | 117 | 30 |
 
 Run each with the repository Python environment and `LAKE` set to the pinned Lake
 executable. Each verifier generates its artifacts and invokes Lean. The foundation
@@ -38,6 +40,21 @@ No completed full-suite pass is claimed.
 
 Generated Lean files have been refreshed. The three associated TeX sources are
 unchanged after provenance restoration, so their existing PDFs were not rebuilt.
+The space study additionally rejects two incorrect universe targets in Lean. Its
+expected declarations now explicitly name the Type, topology, space, point and
+continuous-map adapters. The subspace study explicitly checks Type, condition and
+set adapters alongside field, additive-group, module and subspace adapters.
+Independent wrappers use `abbrev` where Lean instance search must unfold them;
+the canonical body comparison is unchanged. No mathematical body moved out of
+Clean. Seventeen tests in `test_universes` and `test_linear_spaces` pass.
+
+The subspace context's generated identifier changed with the retained binding
+identities. Its expanded PDF was rebuilt twice and visually inspected. A separate
+referenced-context build was compiled twice and inspected: all four references
+resolve to Context (1), with no undefined references or overflow warnings. The
+package-path warning is unchanged. The space TeX is unchanged after provenance
+restoration.
+
 The main compiler still uses the existing built-in operators. The separate
 [declared-operator experiment](../operator-integration/topology-migration.md)
 remains isolated. Larger topology, homology and well-group native verifiers still

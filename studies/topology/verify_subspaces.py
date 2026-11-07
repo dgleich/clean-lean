@@ -12,9 +12,12 @@ source=lean(results,env,['Lean'])
 (here/'Subspaces.lean').write_text(source)
 (here/'Subspaces.tex').write_text(latex(results,env))
 record=env.structures['LinearSpace']['key']
-function=lambda n:env.data['functions'][n]['lean'].split()[0]
-typekey=lambda n:next(k for k in env.notation_definitions if k.startswith('cleanType_'+n+'_'))
+function=lambda n:env.data['functions'][n]['native_binding']
+typekey=lambda n:env.data['types'][n]['native_binding']
 mapping={'SubspaceOracle.LinearSpace':record,
+ 'SubspaceOracle.carrierType':typekey('Type'),
+ 'SubspaceOracle.conditionType':typekey('Proposition'),
+ 'SubspaceOracle.setType':typekey('Set'),
  'SubspaceOracle.fieldType':typekey('FieldStructure'),
  'SubspaceOracle.additiveType':typekey('AdditiveGroup'),
  'SubspaceOracle.moduleType':typekey('ModuleStructure'),
@@ -66,52 +69,55 @@ elab "same_target " a:ident b:ident : command => do
 '''
 expected=r'''
 namespace SubspaceOracle
-noncomputable def fieldType (K : Type) : Type := Field K
-noncomputable def additiveType (V : Type) : Type := AddCommGroup V
-noncomputable def moduleType (K : Type) (f : Field K) (V : Type) (a : AddCommGroup V) : Type :=
+noncomputable abbrev carrierType : Type 1 := Type
+noncomputable abbrev conditionType : Sort 1 := Prop
+noncomputable abbrev setType (X : Type) : Type := Set X
+noncomputable abbrev fieldType (K : Type) : Type := Field K
+noncomputable abbrev additiveType (V : Type) : Type := AddCommGroup V
+noncomputable abbrev moduleType (K : Type) (f : fieldType K) (V : Type) (a : additiveType V) : Type :=
   @Module K V f.toSemiring a.toAddCommMonoid
-structure LinearSpace (K : Type) (f : Field K) (V : Type) : Type where
-  addition : AddCommGroup V
-  action : @Module K V f.toSemiring addition.toAddCommMonoid
-noncomputable def makeSpace (K : Type) (f : Field K) (V : Type) (a : AddCommGroup V)
-    (m : @Module K V f.toSemiring a.toAddCommMonoid) : LinearSpace K f V :=
+structure LinearSpace (K : Type) (f : fieldType K) (V : Type) : Type where
+  addition : additiveType V
+  action : moduleType K f V addition
+noncomputable def makeSpace (K : Type) (f : fieldType K) (V : Type) (a : additiveType V)
+    (m : moduleType K f V a) : LinearSpace K f V :=
   @LinearSpace.mk K f V a m
-noncomputable def subspaceType (K : Type) (f : Field K) (V : Type) (L : LinearSpace K f V) : Type :=
+noncomputable abbrev subspaceType (K : Type) (f : fieldType K) (V : Type) (L : LinearSpace K f V) : Type :=
   @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action
-noncomputable def carrier {K V : Type} (f : Field K) (L : LinearSpace K f V)
-    (U : @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) : Set V :=
+noncomputable def carrier {K V : Type} (f : fieldType K) (L : LinearSpace K f V)
+    (U : subspaceType K f V L) : setType V :=
   @SetLike.coe (@Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) V
     (@Submodule.setLike K V f.toSemiring L.addition.toAddCommMonoid L.action) U
-noncomputable def belongs {K V : Type} (f : Field K) (L : LinearSpace K f V) (x : V)
-    (U : @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) : Prop :=
+noncomputable def belongs {K V : Type} (f : fieldType K) (L : LinearSpace K f V) (x : V)
+    (U : subspaceType K f V L) : conditionType :=
   x ∈ @carrier K V f L U
-noncomputable def included {K V : Type} (f : Field K) (L : LinearSpace K f V)
-    (U W : @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) : Prop :=
+noncomputable def included {K V : Type} (f : fieldType K) (L : LinearSpace K f V)
+    (U W : subspaceType K f V L) : conditionType :=
   ∀ x : V, @belongs K V f L x U → @belongs K V f L x W
-noncomputable def infimum {K V : Type} (f : Field K) (L : LinearSpace K f V)
-    (S : Set (@Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action)) :
-    @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action :=
+noncomputable def infimum {K V : Type} (f : fieldType K) (L : LinearSpace K f V)
+    (S : setType (subspaceType K f V L)) :
+    subspaceType K f V L :=
   @sInf (@Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action)
     (@Submodule.instInfSet K V f.toSemiring L.addition.toAddCommMonoid L.action) S
-noncomputable def setOf {X : Type} (condition : X → Prop) : Set X := _root_.setOf condition
-noncomputable def intersection {K V I : Type} (f : Field K) (L : LinearSpace K f V)
-    (A : Set I) (spaces : I → @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) :
-    @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action :=
-  @infimum K V f L (@setOf (@Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action)
+noncomputable def setOf {X : Type} (condition : X → conditionType) : setType X := _root_.setOf condition
+noncomputable def intersection {K V I : Type} (f : fieldType K) (L : LinearSpace K f V)
+    (A : setType I) (spaces : I → subspaceType K f V L) :
+    subspaceType K f V L :=
+  @infimum K V f L (@setOf (subspaceType K f V L)
     (fun U => @Exists I (fun i => i ∈ A ∧ U=spaces i)))
 
-def membershipStatement : Prop := ∀ (K V I : Type) (f : Field K) (L : LinearSpace K f V)
-  (A : Set I) (spaces : I → @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) (x : V),
+def membershipStatement : Prop := ∀ (K V I : carrierType) (f : fieldType K) (L : LinearSpace K f V)
+  (A : setType I) (spaces : I → subspaceType K f V L) (x : V),
   @belongs K V f L x (@intersection K V I f L A spaces) ↔
     ∀ i : I, i ∈ A → @belongs K V f L x (spaces i)
-def includedStatement : Prop := ∀ (K V I : Type) (f : Field K) (L : LinearSpace K f V)
-  (A : Set I) (spaces : I → @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) (i : I),
+def includedStatement : Prop := ∀ (K V I : carrierType) (f : fieldType K) (L : LinearSpace K f V)
+  (A : setType I) (spaces : I → subspaceType K f V L) (i : I),
   i ∈ A → @included K V f L (@intersection K V I f L A spaces) (spaces i)
-def antitoneStatement : Prop := ∀ (K V I : Type) (f : Field K) (L : LinearSpace K f V)
-  (A : Set I) (spaces : I → @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) (B : Set I),
+def antitoneStatement : Prop := ∀ (K V I : carrierType) (f : fieldType K) (L : LinearSpace K f V)
+  (A : setType I) (spaces : I → subspaceType K f V L) (B : setType I),
   A ⊆ B → @included K V f L (@intersection K V I f L B spaces) (@intersection K V I f L A spaces)
-def emptyStatement : Prop := ∀ (K V I : Type) (f : Field K) (L : LinearSpace K f V)
-  (A : Set I) (spaces : I → @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) (x : V),
+def emptyStatement : Prop := ∀ (K V I : carrierType) (f : fieldType K) (L : LinearSpace K f V)
+  (A : setType I) (spaces : I → subspaceType K f V L) (x : V),
   (∀ i : I, ¬ i ∈ A) → @belongs K V f L x (@intersection K V I f L A spaces)
 end SubspaceOracle
 '''

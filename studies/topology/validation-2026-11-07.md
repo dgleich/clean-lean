@@ -415,3 +415,13 @@ targets and 21 proofs across the foundation, bundle and indexed-type studies,
 plus 23 focused Python tests. These checks run on the integrated compiler;
 declared-operator integration and broader native-study migration remain pending.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The next working-compiler migration covers spaces (26 exact targets, five proofs,
+two rejected universe targets) and subspaces (22 exact targets, four proofs).
+The five migrated topology verifiers now total 117 targets and 30 proofs.
+Seventeen focused universe/linear-space Python tests pass. The subspace PDF was
+rebuilt and inspected, including a separate referenced-context rendering with
+four resolved Context (1) references. Full discovery remains unfinished.
+:::

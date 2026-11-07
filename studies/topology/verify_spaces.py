@@ -12,10 +12,11 @@ source=lean(results,env,['Lean'])
 (here/'Spaces.lean').write_text(source)
 (here/'Spaces.tex').write_text(latex(results,env))
 record=env.structures['TopologicalDiagram']['key']
-function=lambda n:env.data['functions'][n]['lean'].split()[0]
-typekey=lambda n:next(k for k in env.notation_definitions if k.startswith('cleanType_'+n+'_'))
+function=lambda n:env.data['functions'][n]['native_binding']
+typekey=lambda n:env.data['types'][n]['native_binding']
 mapping={'SpaceOracle.Diagram':record}
-for n,t in [('spaceType','TopologicalSpace'),('pointType','Point'),('mapType','ContinuousMap')]:
+for n,t in [('spaceType','TopologicalSpace'),('pointType','Point'),('mapType','ContinuousMap'),
+            ('carrierType','Type'),('topologyType','Topology')]:
     mapping['SpaceOracle.'+n]=typekey(t)
 for n,t in [('bundle','topological space'),('topology','space topology'),
  ('underlying','underlying continuous map'),('value','continuous value'),
@@ -71,43 +72,40 @@ namespace SpaceOracle
 noncomputable def levelZero : Type := Nat
 noncomputable def levelOne : Type 1 := Type
 noncomputable def levelTwo : Type 2 := Type 1
+noncomputable def carrierType : Type 1 := Type
+noncomputable def topologyType (X : Type) : Type := TopologicalSpace X
 noncomputable def spaceType : Type 1 := TopCat.{0}
-noncomputable def pointType (X : TopCat.{0}) : Type := TopCat.carrier X
-noncomputable def mapType (X Y : TopCat.{0}) : Type :=
+noncomputable def pointType (X : spaceType) : Type := TopCat.carrier X
+noncomputable def mapType (X Y : spaceType) : Type :=
   @ContinuousMap X.carrier Y.carrier X.str Y.str
-noncomputable def bundle (X : Type) (t : TopologicalSpace X) : TopCat.{0} := @TopCat.of.{0} X t
-noncomputable def topology (X : TopCat.{0}) : TopologicalSpace X.carrier := TopCat.str X
-noncomputable def underlying (X Y : TopCat.{0}) (f : @ContinuousMap X.carrier Y.carrier X.str Y.str) :
-  X.carrier → Y.carrier := @ContinuousMap.toFun X.carrier Y.carrier X.str Y.str f
-noncomputable def value (X Y : TopCat.{0}) (f : @ContinuousMap X.carrier Y.carrier X.str Y.str)
-  (x : X.carrier) : Y.carrier := @ContinuousMap.toFun X.carrier Y.carrier X.str Y.str f x
-noncomputable def identity (X : TopCat.{0}) : @ContinuousMap X.carrier X.carrier X.str X.str :=
+noncomputable def bundle (X : carrierType) (t : topologyType X) : spaceType := @TopCat.of.{0} X t
+noncomputable def topology (X : spaceType) : topologyType (pointType X) := TopCat.str X
+noncomputable def underlying (X Y : spaceType) (f : mapType X Y) :
+  pointType X → pointType Y := @ContinuousMap.toFun X.carrier Y.carrier X.str Y.str f
+noncomputable def value (X Y : spaceType) (f : mapType X Y)
+  (x : pointType X) : pointType Y := @ContinuousMap.toFun X.carrier Y.carrier X.str Y.str f x
+noncomputable def identity (X : spaceType) : mapType X X :=
   @ContinuousMap.id X.carrier X.str
-noncomputable def compose (X Y Z : TopCat.{0})
-  (g : @ContinuousMap Y.carrier Z.carrier Y.str Z.str)
-  (f : @ContinuousMap X.carrier Y.carrier X.str Y.str) :
-  @ContinuousMap X.carrier Z.carrier X.str Z.str :=
+noncomputable def compose (X Y Z : spaceType)
+  (g : mapType Y Z) (f : mapType X Y) : mapType X Z :=
   @ContinuousMap.comp X.carrier Y.carrier Z.carrier X.str Y.str Z.str g f
 structure Diagram : Type 1 where
-  source : TopCat.{0}
-  target : TopCat.{0}
-  arrow : @ContinuousMap source.carrier target.carrier source.str target.str
-noncomputable def diagram (source target : TopCat.{0})
-  (arrow : @ContinuousMap source.carrier target.carrier source.str target.str) : Diagram :=
-  @Diagram.mk source target arrow
-noncomputable def identityDiagram (X : TopCat.{0}) : Diagram := diagram X X (@identity X)
-def identityStatement : Prop := ∀ (X : TopCat.{0}) (x : X.carrier), @value X X (@identity X) x=x
-def composeStatement : Prop := ∀ (X Y Z : TopCat.{0})
-  (f : @ContinuousMap X.carrier Y.carrier X.str Y.str)
-  (g : @ContinuousMap Y.carrier Z.carrier Y.str Z.str) (x : X.carrier),
+  source : spaceType
+  target : spaceType
+  arrow : mapType source target
+noncomputable def diagram (source target : spaceType)
+  (arrow : mapType source target) : Diagram := @Diagram.mk source target arrow
+noncomputable def identityDiagram (X : spaceType) : Diagram := diagram X X (@identity X)
+def identityStatement : Prop := ∀ (X : spaceType) (x : pointType X), @value X X (@identity X) x=x
+def composeStatement : Prop := ∀ (X Y Z : spaceType)
+  (f : mapType X Y) (g : mapType Y Z) (x : pointType X),
   @value X Z (@compose X Y Z g f) x = @value Y Z g (@value X Y f x)
-def leftIdentityStatement : Prop := ∀ (X Y : TopCat.{0})
-  (f : @ContinuousMap X.carrier Y.carrier X.str Y.str), @compose X Y Y (@identity Y) f=f
-def diagramStatement : Prop := ∀ (X : TopCat.{0}), let D : Diagram := identityDiagram X;
+def leftIdentityStatement : Prop := ∀ (X Y : spaceType)
+  (f : mapType X Y), @compose X Y Y (@identity Y) f=f
+def diagramStatement : Prop := ∀ (X : spaceType), let D : Diagram := identityDiagram X;
   @Diagram.source D = X ∧ @Diagram.target D = X
 def arrowStatement : Prop := ∀ (D : Diagram),
-  @Exists (@ContinuousMap D.source.carrier D.target.carrier D.source.str D.target.str)
-    (fun f => f = @Diagram.arrow D)
+  @Exists (mapType D.source D.target) (fun f => f = @Diagram.arrow D)
 end SpaceOracle
 '''
 checks=[f'same_target {target} {oracle}' for oracle,target in mapping.items()]

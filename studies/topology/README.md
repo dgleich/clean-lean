@@ -190,7 +190,7 @@ remains pending because Emacs is not installed.
 The [Mathlib foundation inventory](mathlib-foundations.md) describes the explicit
 field/module/subspace interface and its remaining homology obligations.
 [Subspaces.clean](Subspaces.clean) authors four results about admissible indexed
-intersections; [SubspacesVerified.lean](SubspacesVerified.lean) checks 19 canonical
+intersections; [SubspacesVerified.lean](SubspacesVerified.lean) checks 22 canonical
 targets and four proofs. The indexed intersection itself is authored in Clean in
 [linear_spaces.clean](../../library/algebra/linear_spaces.clean). These are genuine
 algebraic ingredients, not proofs of the two-extreme-perturbation characterization.
@@ -395,8 +395,9 @@ now explicitly imports Mathlib.Topology.Continuous for continuous_def.
 
 ## Working-compiler topology binding checks
 
-The [binding migration report](binding-migration.md) records 69 exact native
-targets and 21 proofs across the foundation, bundle and indexed-type studies,
+The [binding migration report](binding-migration.md) records 117 exact native
+targets and 30 proofs across the foundation, bundle, indexed-type, space and
+subspace studies,
 plus 23 focused Python tests. These checks run on the integrated compiler;
 declared-operator integration and broader native-study migration remain pending.
 :::
