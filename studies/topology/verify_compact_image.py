@@ -2,6 +2,7 @@
 """Generate the Clean target and kernel-check its equivalence and proof."""
 from pathlib import Path
 import os
+import ast
 import subprocess
 import sys
 
@@ -13,9 +14,29 @@ from cleanlang.modules import load_document
 here = Path(__file__).resolve().parent
 env = Environment()
 results = load_document(here / "CompactImage.clean", env)
-source = lean(results, env, [])
+source = lean(results, env, ["Lean", "Mathlib.Topology.Continuous"])
 (here / "CompactImage.lean").write_text(source)
 (here / "CompactImage.tex").write_text(latex(results, env))
+# Exact adapter and statement checks supplement the mathematical equivalence.
+comparison = next(ast.literal_eval(n.value) for n in
+    ast.parse((ROOT / 'tools/check_basic_targets.py').read_text()).body
+    if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and
+        t.id == 'COMPARISON' for t in n.targets))
+k = lambda name: '_root_.' + env.data['types'][name]['native_binding']
+f = lambda name: '_root_.' + env.data['functions'][name]['native_binding']
+K, P, S, T = (k(name) for name in ['Type', 'Proposition', 'Set', 'Topology'])
+compact, continuous, image = (f(name) for name in
+    ['compact in', 'continuous between', 'image'])
+exact = f"""
+noncomputable def expected_compact_adapter {{X : Type}} (S : {S} X) (t : {T} X) : {P} :=
+  @IsCompact X t S
+same_basic_target {compact.removeprefix('_root_.')} expected_compact_adapter
+noncomputable def expected_compact_statement : Prop :=
+  ∀ (X Y : {K}) (t : {T} X) (u : {T} Y) (f : X → Y) (S : {S} X),
+    @{continuous} X Y f t u → @{compact} X S t →
+    @{compact} Y (@{image} X Y f S) u
+same_basic_target CleanStatements.continuous_image_of_a_compact_set expected_compact_statement
+"""
 proofs = r"""
 namespace CompactImageProofs
 
@@ -44,9 +65,9 @@ theorem continuous_image_of_a_compact_set :
 
 end CompactImageProofs
 """
-(here / "CompactImageVerified.lean").write_text(source + proofs)
+(here / "CompactImageVerified.lean").write_text(source + comparison + exact + proofs)
 subprocess.run([os.environ.get("LAKE", "lake"), "env", "lean",
                 str(here / "CompactImageVerified.lean")], cwd=ROOT, check=True)
-print("Checked compact-image theorem and native-statement equivalence.")
+print("Checked two exact compact-image targets, the theorem and native-statement equivalence.")
 
 # generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

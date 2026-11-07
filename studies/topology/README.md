@@ -110,7 +110,9 @@ through [compactness.clean](../../library/topology/compactness.clean).
 [CompactImageVerified.lean](CompactImageVerified.lean) adds a kernel-checked proof
 using `IsCompact.image` and an equivalence proof against an independently written
 native Mathlib statement. This equivalence is a mathematical agreement check,
-not a canonical-expression comparison or a new language-conformance claim.
+not a canonical-expression comparison. The verifier now additionally checks the
+compactness adapter and full statement against two independently authored exact
+targets. This does not establish general language conformance.
 No new syntax is introduced. The paper-specific targets remain pending.
 
 Regenerate and check with:
@@ -211,7 +213,7 @@ classes, an authored coefficient/degree bundle and an authored induced map.
 [The interface note](singular-homology.md) explains precise native meanings and
 computed-index integration and the remaining relative-homology gaps.
 
-Run `LAKE=lake python3 studies/topology/verify_homology.py` for 31 independent
+Run `LAKE=lake python3 studies/topology/verify_homology.py` for 38 independent
 canonical comparisons and five proofs. [Homology.pdf](Homology.pdf) is generated
 from `latex_homology.tex`, compiled twice. These results do not prove any of the
 five research targets.
@@ -395,9 +397,8 @@ now explicitly imports Mathlib.Topology.Continuous for continuous_def.
 
 ## Working-compiler topology binding checks
 
-The [binding migration report](binding-migration.md) records 117 exact native
-targets and 30 proofs across the foundation, bundle, indexed-type, space and
-subspace studies,
+The [binding migration report](binding-migration.md) records 157 exact native
+targets and 37 proofs across seven topology foundation studies,
 plus 23 focused Python tests. These checks run on the integrated compiler;
 declared-operator integration and broader native-study migration remain pending.
 :::

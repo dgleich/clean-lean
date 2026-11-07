@@ -12,7 +12,9 @@ directly against the repository compiler, without applying historical patches.
 | `studies/topology/verify_indices.py` | 9 | 4 |
 | `studies/topology/verify_spaces.py` | 26 | 5 |
 | `studies/topology/verify_subspaces.py` | 22 | 4 |
-| Total | 117 | 30 |
+| `studies/topology/verify_homology.py` | 38 | 5 |
+| `studies/topology/verify_compact_image.py` | 2 | 2 |
+| Total | 157 | 37 |
 
 Run each with the repository Python environment and `LAKE` set to the pinned Lake
 executable. Each verifier generates its artifacts and invokes Lean. The foundation
@@ -55,9 +57,24 @@ resolve to Context (1), with no undefined references or overflow warnings. The
 package-path warning is unchanged. The space TeX is unchanged after provenance
 restoration.
 
+The homology verifier now checks seven additional type adapters, including the
+explicit field structure, space, continuous-map and condition wrappers. Its
+coefficient module constructor uses the declared Type wrapper for explicit
+carrier arguments; inferred and type-declaration carrier parameters retain the
+specified raw Type binders. Thirty-eight exact targets and five proofs pass,
+along with all six `test_homology` tests.
+
+The compact-image verifier adds independent exact checks for the compactness
+adapter and full statement. It retains the separate mathematical equivalence
+proof and the `IsCompact.image` proof, and explicitly imports
+`Mathlib.Topology.Continuous` for `continuous_def`. Its comparator receives the
+resolved declaration name while expected expressions use root-qualified
+references. The homology and compact-image TeX outputs are unchanged after
+provenance restoration.
+
 The main compiler still uses the existing built-in operators. The separate
 [declared-operator experiment](../operator-integration/topology-migration.md)
-remains isolated. Larger topology, homology and well-group native verifiers still
+remains isolated. Relative homology and the larger interlevel and well-group native verifiers still
 need migration. These checks establish neither the missing paper proofs nor
 general universe polymorphism or the complete language acceptance contract.
 :::

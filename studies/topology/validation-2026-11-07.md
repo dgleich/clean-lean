@@ -425,3 +425,13 @@ Seventeen focused universe/linear-space Python tests pass. The subspace PDF was
 rebuilt and inspected, including a separate referenced-context rendering with
 four resolved Context (1) references. Full discovery remains unfinished.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The homology verifier now passes 38 exact targets and five proofs on the working
+compiler; six focused homology Python tests pass. The compact-image verifier
+passes two new exact targets alongside its theorem and mathematical-equivalence
+proofs. Seven migrated topology verifiers now total 157 targets and 37 proofs.
+Their homology and compact-image TeX sources are unchanged after provenance
+restoration. Full discovery remains active and unfinished.
+:::
