@@ -21,7 +21,12 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
             type_bindings[n]=environment.type(value.tree[1],locals,phrases=False)
     occupied=set(locals)|set(environment.data['types'])|set(environment.data['aliases'])|set(environment.data['functions'])|tree_names(tree)
     replacements={n:v.tree for n,v in bindings.items()}
-    heads={n for n,v in bindings.items() if environment.is_function_type(v.type)}
+    heads=set()
+    checked_heads={}
+    def is_call_head(name):
+        if name not in checked_heads:
+            checked_heads[name]=name in bindings and environment.is_function_type(bindings[name].type)
+        return checked_heads[name]
     for value in bindings.values():
         if value.tree is None:raise UnrepresentableSubstitution('Substitution requires a source tree')
         occupied.update(tree_names(value.tree))
@@ -71,7 +76,7 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
         if kind=='TypeValue':return ['TypeValue',typ(type_tree(parse(node[1],'type_ref')),mapping,callheads,type_bindings)]
         if kind=='Call':
             args=[expr(a,mapping,callheads) for a in node[2]]
-            if node[1] in mapping and node[1] in callheads:
+            if node[1] in mapping and (node[1] in callheads or is_call_head(node[1])):
                 head=mapping[node[1]]
                 return ['Call',head[1],args] if head[0]=='Local' else ['Apply',head,args]
             return ['Call',node[1],args]

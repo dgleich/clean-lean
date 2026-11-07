@@ -18,6 +18,33 @@ class HygienicSubstitution(unittest.TestCase):
         result=substitute(t,bindings,self.e,{'y':bindings['x']})
         self.assertEqual(result,['Lambda','clean_conversion_bound_0','Real',
           ['Operator','+',['Local','y'],['Local','clean_conversion_bound_0']]])
+    def test_value_substitution_does_not_derive_callable_view(self):
+        from unittest.mock import patch
+        value=Expr('p','p',Type('ConditionEvidence'),tree=['Local','p'])
+        with patch.object(self.e,'is_function_type',side_effect=AssertionError('unused callable view')):
+            self.assertEqual(substitute(['Local','h'],{'h':value},self.e,{}),['Local','p'])
+            self.assertEqual(substitute(['Decimal','0'],{'h':value},self.e,{}),['Decimal','0'])
+    def test_call_head_checked_once_and_noncallable_preserved(self):
+        from unittest.mock import patch
+        tree=['Operator','+',['Call','f',[['Decimal','0']]],['Call','f',[['Decimal','1']]]]
+        value=Expr('g','g',Type('SomeType'),tree=['Local','g'])
+        for callable_value,head in [(True,'g'),(False,'f')]:
+            with patch.object(self.e,'is_function_type',return_value=callable_value) as check:
+                result=substitute(tree,{'f':value},self.e,{})
+                self.assertEqual(result,['Operator','+',['Call',head,[['Decimal','0']]],['Call',head,[['Decimal','1']]]])
+                check.assert_called_once_with(value.type)
+    def test_unused_actual_still_reserves_binder_names(self):
+        value=Expr('p','p',NAT,tree=['Local','clean_conversion_bound_0'])
+        result=substitute(self.tree('function(x: Natural,x)'),{'unused':value},self.e,{})
+        self.assertEqual(result,['Lambda','clean_conversion_bound_1','Natural',['Local','clean_conversion_bound_1']])
+    def test_call_head_in_condition_annotation(self):
+        from unittest.mock import patch
+        value=Expr('g','g',Type('SomeType'),tree=['Local','g'])
+        tree=['Lambda','h','Evidence((f(0) = 0))',['Local','h']]
+        with patch.object(self.e,'is_function_type',return_value=True) as check:
+            result=substitute(tree,{'f':value},self.e,{})
+            self.assertIn('g(0)',result[2])
+            check.assert_called_once_with(value.type)
     def test_dependent_domain_substitution(self):
         t=self.tree('function(v: Vector(n,Real),v)')
         actual=Expr('(m + m)','',NAT,tree=self.tree('m + m'))

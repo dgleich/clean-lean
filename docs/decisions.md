@@ -563,3 +563,16 @@ frozen for the full regression and native portfolio; those checks are still pend
 The historical patch remains in Git history rather than as a second implementation
 in the working tree. No full-conformance claim is made by this integration.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Inspect substitution arguments only in call-head position
+
+Callable-evidence classification can unfold authored conditions. Hygienic
+substitution now requests that view only for a formal used as a Call head,
+including in a type annotation; plain value substitution needs no function view.
+All arguments still participate in fresh-name reservation. This implements the
+existing positional substitution rule without changing syntax or selected Lean
+terms. The subpath arrow performance problem remains open; this optimization is
+not evidence that its native validation has completed.
+:::

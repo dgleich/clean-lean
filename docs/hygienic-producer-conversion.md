@@ -138,3 +138,23 @@ The later [family-index comparison rule](family-index-comparison.md) supersedes
 only the blanket opacity of residual binders at the final index-key boundary.
 Internal callable reconstruction and local caching retain the boundaries above.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Demand-driven call-head classification
+
+Substitution asks whether a checked actual is callable only when the original
+formal occurs as a Call head, including calls inside type annotations. Copying a
+Local value does not require a callable view. A traversed binder's replacement
+remains a call head by the existing binder rule. Classification is memoized only
+within one substitution invocation; no environment-dependent result survives it.
+All actual trees still reserve fresh names, including unused actuals. Traversal,
+simultaneous insertion, emitted terms and fresh-name allocation are unchanged.
+
+The regression fixtures check value-only substitution without callable inspection,
+repeated callable/noncallable heads, calls in condition annotations and unused
+actuals reserving binder names. This avoids unnecessary condition unfolding but
+does not solve the subpath arrow's repeated dependent normalization: an isolated
+20-second profile still exhausted its diagnostic budget. That diagnostic is
+incomplete analysis, not acceptance evidence for the arrow theorem.
+:::
