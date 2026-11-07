@@ -7,9 +7,9 @@
 -    return ProofType(index_value(condition,environment,locals))
 +    from .proof_types import index
 +    return ProofType(index(condition,environment,locals or {}))
- 
- 
- 
+
+
+
 @@ -237,7 +238,8 @@
                  if actual.type!=expected:
                      raise CleanError(f'Value index {a} requires {expected}, got {actual.type}')
@@ -32,7 +32,7 @@
          spec=self.data['types'].get(t.name,{})
 @@ -358,6 +363,10 @@
              return substitutions.get(t,t)
- 
+
          def match(pattern,actual):
 +            from .proof_types import callable_view
 +            if isinstance(pattern,ProofType) != isinstance(actual,ProofType):
@@ -44,7 +44,7 @@
 --- a/cleanlang/dependent_functions.py
 +++ b/cleanlang/dependent_functions.py
 @@ -164,9 +164,10 @@
- 
+
  def application(function,args,env,locals,tree,tex):
      from .core import compatible
 -    if not env.is_function_type(function.type) or len(args)!=1 or not compatible(args[0].type,function.type.args[0]):
@@ -55,12 +55,12 @@
 -    typ=function.type
      result=substitute(typ.codomain,{typ.binder:args[0]},env,locals) if isinstance(typ,DependentFunctionType) else typ.args[1]
      return Expr('('+function.lean+' '+args[0].lean+')',tex,result,tree=tree)
- 
+
 --- a/cleanlang/indices.py
 +++ b/cleanlang/indices.py
 @@ -33,6 +33,8 @@
- 
- 
+
+
  def substitute_index(index,bindings,env,locals):
 +    from .proof_types import ProofIndex,substitute_proof
 +    if isinstance(index,ProofIndex):return substitute_proof(index,bindings,env,locals)
@@ -70,7 +70,7 @@
 --- a/cleanlang/syntax.py
 +++ b/cleanlang/syntax.py
 @@ -31,7 +31,9 @@
- 
+
  def type_spelling(tree):
      if isinstance(tree,generated.Token):return str(tree)
 -    if tree.data=='computed_index':return '('+expression_spelling(expression_tree(tree.children[0]))+')'

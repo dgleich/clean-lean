@@ -135,7 +135,10 @@ All 32 study verification scripts passed in the integration copy. Its generated
 artifacts differ from the previous checked artifacts only in the position or
 presence of the foundational Type declaration; those 61 Lean files have been
 refreshed. This portfolio preceded the final Type-valued operator rejection guard;
-the final study and focused tests separately cover that guard. The final full
+the final study and focused tests separately cover that guard. The integration-copy
+full suite completed 581 tests with one obsolete certificate-opacity assertion
+failing; that assertion was already corrected in the main checkout before its
+current full run began. No other failures were reported. The final full
 suite and browser build are still running, so neither is reported as passing.
 This slice does not claim general universe polymorphism or callable universal evidence.
 :::
