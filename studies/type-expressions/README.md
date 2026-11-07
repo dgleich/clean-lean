@@ -44,7 +44,7 @@ is unavailable for a native runtime check.
 
 The earlier full run loaded an obsolete certificate-opacity assertion; its
 replacement passes the fifteen-test conversion module. A fresh full run of the
-final source remains running. All 32 native-study verification scripts passed in
+final source completed all 584 tests successfully. All 32 native-study verification scripts passed in
 the integration copy, and the regenerated artifacts were reconciled with the main
 checkout. That copy's full run completed 581 tests with only the obsolete assertion
 failing; it predates the final operator rejection guard and reduced specimen import

@@ -140,7 +140,7 @@ refreshed. This portfolio preceded the final Type-valued operator rejection guar
 the final study and focused tests separately cover that guard. The integration-copy
 full suite completed 581 tests with one obsolete certificate-opacity assertion
 failing; that assertion was already corrected in the main checkout before its
-current full run began. No other failures were reported. The final full
-suite is still running and is not reported as passing.
+current full run began. No other failures were reported. The final main-checkout
+full suite completed all 584 tests successfully.
 This slice does not claim general universe polymorphism or callable universal evidence.
 :::

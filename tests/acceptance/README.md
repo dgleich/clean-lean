@@ -18,3 +18,14 @@ annotations), `rfl`, or a definitional-equality procedure. The runner currently
 requires matching universe parameter lists; it does not claim general canonical
 universe renaming support. Its two negative guards detect a lost binderInfo check
 and an accidental reduction-based comparison.
+
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+`isolated-prototype` means that an implementation and executable fixtures are
+preserved in a reviewable patch but are not enabled in the repository compiler.
+The callable-evidence cases use this status. Their source-to-Lean fragments are
+oracles under the stated environment, not proof that the unmodified compiler
+accepts the source. The linked patch contains the full native study and tests;
+integration and full validation are still required.
+:::
