@@ -1,0 +1,32 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "../../library/diagrams/active_labels.clean"
+Import "../../library/algebra/basis_reindexing.clean"
+Source clean:
+  Kind: other
+  Label: Clean topology study
+  Title: Restricting an interval basis at one vertex
+
+Result basis at a restricted vertex:
+  Attribution: clean; basis at a restricted vertex; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let I: Type
+  Let n,a,m: Natural
+  Assume bound: a+m ≤ n
+  Let L: IntervalLabels(I,n)
+  Let v: Vertex((m+1))
+  Let b: ModuleBasis(K,field,M,OriginalActiveLabels(I,n,a,m,bound,L,v))
+  Let vectors: Function(I,ModuleElement(K,field,M))
+  Assume realizes: for every(x: OriginalActiveLabels(I,n,a,m,bound,L,v),
+      module basis vector(field,M,b,x) =
+        evaluate map(vectors,element value(original active labels(I,n,a,m,bound,L,v),x)))
+  Conclude:
+    there exists(c: ModuleBasis(K,field,M,RestrictedActiveLabels(I,n,a,m,L,v)),
+      for every(y: RestrictedActiveLabels(I,n,a,m,L,v),
+        module basis vector(field,M,c,y) =
+          evaluate map(vectors,
+            element value(surviving interval labels(I,n,a,m,L),
+              element value(restricted active labels(I,n,a,m,L,v),y)))))
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

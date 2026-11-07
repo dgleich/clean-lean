@@ -587,3 +587,17 @@ choice wrappers and authored set helpers now pass seven exact targets and three
 proofs. They supply a foundation for consuming existence evidence; they do not
 complete the interval-basis restriction or its compatibility proof.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## A restricted basis at one vertex
+
+The [restricted-basis study](../studies/interval-basis-restriction/README.md)
+adds a syntactically checked Clean statement and a kernel-checked native proof
+constructing the restricted basis from the original basis. The proof uses the
+arithmetic label equivalence and Mathlib basis reindexing, and establishes the
+vector formula. No additional syntax or wrapper was needed for the statement.
+Its full Clean binding/type/target check remains pending behind active-label
+translation. Edge compatibility and assembly into an interval-basis record remain
+mathematical work; the native proof alone is not a completed Clean port.
+:::

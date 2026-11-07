@@ -86,7 +86,8 @@ patches and their results. The fresh-subtree rule has now been integrated after
 its [scope audit](../../docs/fresh-checked-subtrees.md); the earlier tree-only
 reuse and call-index cache patches remain unintegrated.
 A separate [declaration-token scan cache](../../docs/fresh-bound-name-cache.md)
-preserves the existing fresh-name rule and is now implemented. Constructing
-and reindexing the actual interval bases, then proving vector compatibility and the
-pyramid theorem, remains subsequent mathematical work.
+preserves the existing fresh-name rule and is now implemented. The [restricted-basis study](../interval-basis-restriction/README.md) now checks a
+native pointwise basis construction and its vector formula. Its Clean target
+comparison, assembly into an interval basis, edge compatibility, and the pyramid
+theorem remain unfinished.
 :::
