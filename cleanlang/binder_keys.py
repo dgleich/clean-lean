@@ -27,6 +27,24 @@ def key(term,owned):
     return ScopedKey(tuple(parts))
 
 
+def environment_tokens(environment):
+    """Cache only the pure token union of an identical immutable text snapshot."""
+    texts=[]
+    def collect(value):
+        if isinstance(value,str):texts.append(value)
+        elif isinstance(value,dict):
+            for k,v in value.items():collect(k);collect(v)
+        elif isinstance(value,(tuple,list)):
+            for v in value:collect(v)
+    collect(environment.data);collect(environment.notation_definitions)
+    snapshot=tuple(texts)
+    cached=getattr(environment,'_comparison_reserved_tokens',None)
+    if cached is None or cached[0]!=snapshot:
+        cached=(snapshot,frozenset(token for text in snapshot for token in re.findall(ID,text)))
+        environment._comparison_reserved_tokens=cached
+    return cached[1]
+
+
 class Pool:
     def __init__(self,environment,locals,tree):
         self.reserved=set();self.owned=set();self.counter=0
@@ -36,7 +54,7 @@ class Pool:
                 for k,v in value.items():reserve(k);reserve(v)
             elif isinstance(value,(tuple,list)):
                 for v in value:reserve(v)
-        reserve(environment.data);reserve(environment.notation_definitions);reserve(tree)
+        self.reserved.update(environment_tokens(environment));reserve(tree)
         self.reserve_locals(locals)
     def reserve_locals(self,locals):
         for name,value in locals.items():

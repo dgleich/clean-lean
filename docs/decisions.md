@@ -712,3 +712,15 @@ remain caller-scoped. Preserve structural inference order, escape rejection, and
 emitted calls. The normative rule and independent regression are linked from
 [source-pattern-matching.md](source-pattern-matching.md).
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Cache comparison-pool environment tokens without semantic reuse
+
+Reuse only the frozen identifier union of an exactly equal immutable snapshot of
+all environment string leaves, including dictionary keys. Rescan trees and locals;
+keep mutable pool allocation state private. The preservation argument and bounded
+validation are in [comparison-token-cache.md](comparison-token-cache.md). This
+optimization changes no syntax or translation rule and does not discharge the
+remaining broad conformance checks.
+:::

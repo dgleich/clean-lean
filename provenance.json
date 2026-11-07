@@ -5230,6 +5230,26 @@
         ""
       ],
       "model": "gpt-6"
+    },
+    "tests/test_comparison_token_cache.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/profile_comparison_tokens.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "docs/comparison-token-cache.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

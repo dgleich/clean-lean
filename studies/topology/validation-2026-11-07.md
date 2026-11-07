@@ -299,3 +299,27 @@ has not changed. The older plain translation, earlier-proof verifier, and
 call-index-only experiment also remain live. No complete interval artifact or
 full-suite success is yet claimed.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Comparison-token snapshot cache
+
+The lexical [comparison-token cache](../../docs/comparison-token-cache.md) passes
+285 focused tests, eleven declaration-identity targets with changed-body rejection,
+and the four interval-basis targets and pointwise/full restriction proofs. Native
+regeneration leaves the tracked targets unchanged after provenance restoration.
+The isolated operator patch still applies to this source snapshot.
+
+The older plain active-label translation, earlier-proof verifier, call-index
+experiment, fresh-subtree interval verifier and pre-cache full Python suite were
+explicitly interrupted as superseded. They are not passing runs. A new current
+full Python suite and specialized active-label verifier are running; neither has
+completed. The latter reaches the specialized equivalence declaration after
+checking its generic equivalence and forward/inverse definitions. The interval-basis
+restriction proof above uses its separately checked foundation and must not be
+confused with completion of that specialized active-label verifier.
+
+A cold/warm pool diagnostic produces identical names. Sampling indicates reduced
+regex scanning, but concurrent workloads and differing phases prevent a compiler
+speedup claim. The cache retains no semantic or inference results.
+:::
