@@ -1,0 +1,116 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "zigzags.clean"
+Import "pullback_arrows.clean"
+
+Notation offset vertex(a,m,v):
+  Let a,m: Natural
+  Let v: Vertex(m)
+  Returns: Vertex((a+m))
+  Means: Fin.natAdd a v
+  Render latex: {a}+{v}
+
+Notation widen vertex(n,m,h,v):
+  Let n,m: Natural
+  Let h: Evidence((m ≤ n))
+  Let v: Vertex(m)
+  Returns: Vertex(n)
+  Means: Fin.castLE h v
+  Render latex: {v}
+
+Notation transport vertex(n,m,h,v):
+  Let n,m: Natural
+  Let h: Evidence((n = m))
+  Let v: Vertex(n)
+  Returns: Vertex(m)
+  Means: Fin.cast h v
+  Render latex: {v}
+
+Notation natural sum association(a,b,c):
+  Let a,b,c: Natural
+  Returns: Evidence(((a+b)+c = a+(b+c)))
+  Means: Nat.add_assoc a b c
+  Render latex: \operatorname{{assoc}}
+
+Notation advance bound(a,b,c,h):
+  Let a,b,c: Natural
+  Let h: Evidence((a ≤ b))
+  Returns: Evidence((a+c ≤ b+c))
+  Means: Nat.add_le_add_right h c
+  Render latex: {h}
+
+Define subpath edge(n,a,m,h,e):
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let e: Vertex(m)
+  Returns: Vertex(n)
+  Equals: widen vertex(n,a+m,h,offset vertex(a,m,e))
+  Render latex: {a}+{e}
+
+Define subpath vertex(n,a,m,h,v):
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let v: Vertex((m+1))
+  Returns: Vertex((n+1))
+  Equals: widen vertex(n+1,(a+m)+1,advance bound(a+m,n,1,h),
+    transport vertex(a+(m+1),(a+m)+1,
+      equality symmetry((a+m)+1,a+(m+1),natural sum association(a,m,1)),
+      offset vertex(a,m+1,v)))
+  Render latex: {a}+{v}
+
+Define subpath directions(n,a,m,h,d):
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let d: Function(Vertex(n),Boolean)
+  Returns: Function(Vertex(m),Boolean)
+  Equals: function(e: Vertex(m),d(subpath edge(n,a,m,h,e)))
+  Render latex: {d}|_{{{a},{m}}}
+
+Condition subpath sources preserved(n,a,m,h,d):
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let d: Function(Vertex(n),Boolean)
+  Holds when: for every (e: Vertex(m),
+    subpath vertex(n,a,m,h,zigzag shape(m,subpath directions(n,a,m,h,d)).source(e)) =
+      zigzag shape(n,d).source(subpath edge(n,a,m,h,e)))
+
+Condition subpath targets preserved(n,a,m,h,d):
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let d: Function(Vertex(n),Boolean)
+  Holds when: for every (e: Vertex(m),
+    subpath vertex(n,a,m,h,zigzag shape(m,subpath directions(n,a,m,h,d)).target(e)) =
+      zigzag shape(n,d).target(subpath edge(n,a,m,h,e)))
+
+Type SubpathShapeMap(n: Natural,a: Natural,m: Natural,h: Evidence((a+m ≤ n)),d: Function(Vertex(n),Boolean)):
+  Equals: DiagramShapeMap(Vertex((m+1)),Vertex(m),Vertex((n+1)),Vertex(n),
+    (zigzag shape(m,subpath directions(n,a,m,h,d))),(zigzag shape(n,d)))
+
+Define subpath shape map(n,a,m,h,d,hs,ht):
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let d: Function(Vertex(n),Boolean)
+  Let hs: Evidence((subpath sources preserved(n,a,m,h,d)))
+  Let ht: Evidence((subpath targets preserved(n,a,m,h,d)))
+  Returns: SubpathShapeMap(n,a,m,h,d)
+  Equals: shape map(type(Vertex((m+1))),type(Vertex(m)),type(Vertex((n+1))),type(Vertex(n)),
+    zigzag shape(m,subpath directions(n,a,m,h,d)),zigzag shape(n,d),
+    function(v: Vertex((m+1)),subpath vertex(n,a,m,h,v)),
+    function(e: Vertex(m),subpath edge(n,a,m,h,e)),hs,ht)
+  Render latex: \iota_{{{a},{m}}}
+
+Define restricted zigzag(field,n,a,m,h,d,hs,ht,Z):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let d: Function(Vertex(n),Boolean)
+  Let hs: Evidence((subpath sources preserved(n,a,m,h,d)))
+  Let ht: Evidence((subpath targets preserved(n,a,m,h,d)))
+  Let Z: Zigzag(K,field,n,d)
+  Returns: Zigzag(K,field,m,(subpath directions(n,a,m,h,d)))
+  Equals: pull back diagram(field,
+    zigzag shape(m,subpath directions(n,a,m,h,d)),zigzag shape(n,d),
+    subpath shape map(n,a,m,h,d,hs,ht),Z)
+  Render latex: {Z}|_{{[{a},{a}+{m}]}}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

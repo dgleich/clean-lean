@@ -173,7 +173,8 @@ The main compiler's ASTs match the isolated snapshot frozen for full regression
 and the 33-study native portfolio. Both runs are pending. The existing review
 browser describes the preceding 107-file snapshot; a refresh for the new study
 is pending. Remaining work includes completing full validation and the consumer
-acceptance audit, integrating the subpath construction and finishing its arrow
-statement. The contract and acceptance catalog describe implemented behavior but
+acceptance audit, validating the reusable subpath modules and finishing the arrow
+statement. The [source study](README.md) now records the current intermediate
+checkpoint; its expanded native run remains pending. The contract and acceptance catalog describe implemented behavior but
 are not themselves evidence that these remaining gates passed.
 :::

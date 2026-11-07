@@ -1,0 +1,67 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "../../library/diagrams/subpaths.clean"
+Source subpaths:
+  Kind: other
+  Label: Subpath restrictions
+  Title: Named endpoint assumptions
+Result assumed subpath inclusion:
+  Attribution: subpaths; inclusion from named universal assumptions; original
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let d: Function(Vertex(n),Boolean)
+  Assume hs: subpath sources preserved(n,a,m,h,d)
+  Assume ht: subpath targets preserved(n,a,m,h,d)
+  Conclude: there exists (i: SubpathShapeMap(n,a,m,h,d),
+    for every (v: Vertex((m+1)),i.vertices(v) = subpath vertex(n,a,m,h,v)))
+
+Result subpath sources:
+  Attribution: subpaths; endpoint preservation; original
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let d: Function(Vertex(n),Boolean)
+  Conclude: subpath sources preserved(n,a,m,h,d)
+Result subpath targets:
+  Attribution: subpaths; endpoint preservation; original
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let d: Function(Vertex(n),Boolean)
+  Conclude: subpath targets preserved(n,a,m,h,d)
+Result subpath inclusion exists:
+  Attribution: subpaths; unconditional finite subpath inclusion; original
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let d: Function(Vertex(n),Boolean)
+  Conclude: there exists (i: SubpathShapeMap(n,a,m,h,d),
+    for every (v: Vertex((m+1)),i.vertices(v) = subpath vertex(n,a,m,h,v)))
+Result restricted zigzag object:
+  Attribution: subpaths; restriction objects; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let d: Function(Vertex(n),Boolean)
+  Assume hs: subpath sources preserved(n,a,m,h,d)
+  Assume ht: subpath targets preserved(n,a,m,h,d)
+  Let Z: Zigzag(K,field,n,d)
+  Let v: Vertex((m+1))
+  Conclude: restricted zigzag(field,n,a,m,h,d,hs,ht,Z).object(v) =
+    Z.object(subpath vertex(n,a,m,h,v))
+
+Result restricted zigzag arrow:
+  Attribution: subpaths; restriction arrows with endpoint transports; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let d: Function(Vertex(n),Boolean)
+  Assume hs: subpath sources preserved(n,a,m,h,d)
+  Assume ht: subpath targets preserved(n,a,m,h,d)
+  Let Z: Zigzag(K,field,n,d)
+  Let e: Vertex(m)
+  Let Q = zigzag shape(m,subpath directions(n,a,m,h,d))
+  Let R = zigzag shape(n,d)
+  Let i = subpath shape map(n,a,m,h,d,hs,ht)
+  Conclude: restricted zigzag(field,n,a,m,h,d,hs,ht,Z).arrow(e) =
+    pull back arrow(field,Q,R,i,Z,e)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -1,0 +1,22 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "pullbacks.clean"
+
+Define pull back arrow(field,Q,R,f,M,e):
+  Let K,V,E,W,F: Type
+  Let field: FieldStructure(K)
+  Let Q: DiagramShape(V,E)
+  Let R: DiagramShape(W,F)
+  Let f: DiagramShapeMap(V,E,W,F,Q,R)
+  Let M: ModuleDiagram(K,field,W,F,R)
+  Let e: E
+  Returns: ModuleMap(K,field,(M.object(f.vertices(Q.source(e)))),(M.object(f.vertices(Q.target(e)))))
+  Equals: module composition(field,
+    M.object(f.vertices(Q.source(e))),M.object(R.target(f.edges(e))),M.object(f.vertices(Q.target(e))),
+    module composition(field,
+      M.object(f.vertices(Q.source(e))),M.object(R.source(f.edges(e))),M.object(R.target(f.edges(e))),
+      module family transport(field,M.object,f.vertices(Q.source(e)),R.source(f.edges(e)),f.sources(e)),M.arrow(f.edges(e))),
+    module family transport(field,M.object,R.target(f.edges(e)),f.vertices(Q.target(e)),
+      equality symmetry(f.vertices(Q.target(e)),R.target(f.edges(e)),f.targets(e))))
+  Render latex: ({f}^{{*}}{M})({e})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
