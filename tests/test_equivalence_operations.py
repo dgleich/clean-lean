@@ -11,6 +11,13 @@ class EquivalenceOperations(unittest.TestCase):
         cls.env=Environment()
         load_module(ROOT/'library/logic/equivalence_operations.clean',cls.env)
 
+    def test_composes_with_existing_equality_chain_module(self):
+        for names in [('equality_chains','equivalence_operations'),('equivalence_operations','equality_chains')]:
+            env=Environment()
+            for name in names:load_module(ROOT/('library/logic/'+name+'.clean'),env)
+            self.assertIn('equality transitivity',env.data['functions'])
+            self.assertIn('compose equivalences',env.data['functions'])
+
     def scope(self):
         local={}
         for name,kind in [('A','Type'),('B','Type'),('C','Type'),

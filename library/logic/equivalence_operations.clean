@@ -1,14 +1,6 @@
 -- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
 Import "equivalences.clean"
-
-Notation equality transitivity(x,y,z,first,second):
-  Let A: Type
-  Let x,y,z: A
-  Let first: Evidence((x = y))
-  Let second: Evidence((y = z))
-  Returns: Evidence((x = z))
-  Means: Eq.trans first second
-  Render latex: \operatorname{{trans}}({first},{second})
+Import "equality_chains.clean"
 
 Notation equivalence left inverse(e,x):
   Let A,B: Type

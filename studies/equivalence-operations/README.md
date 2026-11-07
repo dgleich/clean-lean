@@ -17,8 +17,8 @@ Let h = inverse equivalence(g)
 
 Both constructions use `Define … Equals:`. Their forward/backward functions and
 inverse-law evidence are written in Clean. The module imports foundational
-wrappers for `Equiv`, function application and congruence, and declares wrappers
-for `Eq.trans`, `Equiv.symm_apply_apply`, and `Equiv.apply_symm_apply`. It does
+wrappers for `Equiv`, function application and congruence, and imports the existing `Eq.trans` wrapper from `equality_chains.clean`. It
+declares wrappers for `Equiv.symm_apply_apply` and `Equiv.apply_symm_apply`. It does
 not import Mathlib's composition or inverse construction as an opaque body.
 Carriers remain in Lean `Type 0`, as in the existing equivalence module.
 
@@ -38,14 +38,15 @@ Validation with the pinned dependencies:
 
 - `LAKE=lake python3 studies/equivalence-operations/verify.py`: eight exact
   elaborated target comparisons and three kernel-checked proofs pass.
-- Six focused Python tests pass: carrier inference, composition order, inverse
-  direction, both inverse-law proposition types, and authored construction bodies.
+- Seven focused Python tests pass: carrier inference, composition order, inverse
+  direction, both inverse-law proposition types, authored construction bodies,
+  and joint imports with the equality-chain module in either order.
 - The one-page PDF is compiled twice and inspected. No unresolved references or
   overfull boxes remain.
 - The 92-statement proof corpus was regenerated and kernel-checked successfully.
   Reference links, search, mobile width and the no-JavaScript fallback pass.
 
-The exact comparisons check all five new definition bodies and all three theorem
+The exact comparisons check the four new definition bodies and shared transitivity body and all three theorem
 statements. They include the explicit proof terms rather than checking only
 extensional equality to Mathlib's constructions. No axioms or `sorry` are added.
 The global suite and review-browser refresh remain pending separately; this

@@ -111,8 +111,11 @@ noncomputable def cleanNotation_equivalence_backward_e72e31c61ebe95923018 {A : T
 noncomputable def cleanDefine_identity_equivalence_65a44dab62957ae3bb79  (A : Type) : A ≃ A :=
   (@cleanNotation_equivalence_9dc94fc17e20833d2fb8 (A) (A) ((fun (clean_bound_0 : A) => clean_bound_0)) ((fun (clean_bound_1 : A) => clean_bound_1)) ((fun (clean_bound_2 : A) => (@cleanNotation_equality_reflexivity_72bfc1f43c6e40a818db (A) (clean_bound_2)))) ((fun (clean_bound_3 : A) => (@cleanNotation_equality_reflexivity_72bfc1f43c6e40a818db (A) (clean_bound_3)))))
 
-noncomputable def cleanNotation_equality_transitivity_c07bfb0511d1038a5d7c {A : Type} (x : A) (y : A) (z : A) (first : ((x = y))) (second : ((y = z))) : ((x = z)) :=
-  Eq.trans first second
+noncomputable def cleanNotation_equality_symmetry_9c171431d92e37157b4c {T : Type} (x : T) (y : T) (h : ((x = y))) : ((y = x)) :=
+  Eq.symm h
+
+noncomputable def cleanNotation_equality_transitivity_6a3ecc1273cd16127fa3 {T : Type} (x : T) (y : T) (z : T) (h : ((x = y))) (k : ((y = z))) : ((x = z)) :=
+  Eq.trans h k
 
 noncomputable def cleanNotation_equivalence_left_inverse_11e59bbc8370041c7173 {A : Type} {B : Type} (e : A ≃ B) (x : A) : (((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (e) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (x)))) = x)) :=
   e.symm_apply_apply x
@@ -123,8 +126,8 @@ noncomputable def cleanNotation_equivalence_right_inverse_15f9381536a3ab5b0038 {
 noncomputable def cleanDefine_inverse_equivalence_9d2c632ec2cd0aa310b1 {A : Type} {B : Type} (e : A ≃ B) : B ≃ A :=
   (@cleanNotation_equivalence_9dc94fc17e20833d2fb8 (B) (A) ((fun (clean_bound_0 : B) => (cleanNotation_equivalence_backward_e72e31c61ebe95923018 (e) (clean_bound_0)))) ((fun (clean_bound_1 : A) => (cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (clean_bound_1)))) ((fun (clean_bound_2 : B) => (@cleanNotation_equivalence_right_inverse_15f9381536a3ab5b0038 (A) (B) (e) (clean_bound_2)))) ((fun (clean_bound_3 : A) => (@cleanNotation_equivalence_left_inverse_11e59bbc8370041c7173 (A) (B) (e) (clean_bound_3)))))
 
-noncomputable def cleanDefine_compose_equivalences_0a2a6c58628a77a61305 {A : Type} {B : Type} {C : Type} (e : A ≃ B) (f : B ≃ C) : A ≃ C :=
-  (@cleanNotation_equivalence_9dc94fc17e20833d2fb8 (A) (C) ((fun (clean_bound_0 : A) => (cleanNotation_equivalence_forward_ebd1d090984645228598 (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (clean_bound_0)))))) ((fun (clean_bound_1 : C) => (cleanNotation_equivalence_backward_e72e31c61ebe95923018 (e) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) (clean_bound_1)))))) ((fun (clean_bound_2 : A) => (@cleanNotation_equality_transitivity_c07bfb0511d1038a5d7c (A) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (e) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (clean_bound_2))))))))) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (e) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (clean_bound_2))))) (clean_bound_2) ((@cleanNotation_equality_congruence_3e3f32efa32223213c0e (B) (A) ((fun (clean_bound_3 : B) => (cleanNotation_equivalence_backward_e72e31c61ebe95923018 (e) (clean_bound_3)))) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (clean_bound_2))))))) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (clean_bound_2))) ((@cleanNotation_equivalence_left_inverse_11e59bbc8370041c7173 (B) (C) (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (clean_bound_2))))))) ((@cleanNotation_equivalence_left_inverse_11e59bbc8370041c7173 (A) (B) (e) (clean_bound_2)))))) ((fun (clean_bound_4 : C) => (@cleanNotation_equality_transitivity_c07bfb0511d1038a5d7c (C) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (e) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) (clean_bound_4))))))))) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (f) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) (clean_bound_4))))) (clean_bound_4) ((@cleanNotation_equality_congruence_3e3f32efa32223213c0e (B) (C) ((fun (clean_bound_5 : B) => (cleanNotation_equivalence_forward_ebd1d090984645228598 (f) (clean_bound_5)))) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (e) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) (clean_bound_4))))))) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) (clean_bound_4))) ((@cleanNotation_equivalence_right_inverse_15f9381536a3ab5b0038 (A) (B) (e) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) (clean_bound_4))))))) ((@cleanNotation_equivalence_right_inverse_15f9381536a3ab5b0038 (B) (C) (f) (clean_bound_4)))))))
+noncomputable def cleanDefine_compose_equivalences_3eb00958450c76bcd2ca {A : Type} {B : Type} {C : Type} (e : A ≃ B) (f : B ≃ C) : A ≃ C :=
+  (@cleanNotation_equivalence_9dc94fc17e20833d2fb8 (A) (C) ((fun (clean_bound_0 : A) => (cleanNotation_equivalence_forward_ebd1d090984645228598 (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (clean_bound_0)))))) ((fun (clean_bound_1 : C) => (cleanNotation_equivalence_backward_e72e31c61ebe95923018 (e) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) (clean_bound_1)))))) ((fun (clean_bound_2 : A) => (@cleanNotation_equality_transitivity_6a3ecc1273cd16127fa3 (A) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (e) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (clean_bound_2))))))))) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (e) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (clean_bound_2))))) (clean_bound_2) ((@cleanNotation_equality_congruence_3e3f32efa32223213c0e (B) (A) ((fun (clean_bound_3 : B) => (cleanNotation_equivalence_backward_e72e31c61ebe95923018 (e) (clean_bound_3)))) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (clean_bound_2))))))) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (clean_bound_2))) ((@cleanNotation_equivalence_left_inverse_11e59bbc8370041c7173 (B) (C) (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (clean_bound_2))))))) ((@cleanNotation_equivalence_left_inverse_11e59bbc8370041c7173 (A) (B) (e) (clean_bound_2)))))) ((fun (clean_bound_4 : C) => (@cleanNotation_equality_transitivity_6a3ecc1273cd16127fa3 (C) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (e) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) (clean_bound_4))))))))) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (f) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) (clean_bound_4))))) (clean_bound_4) ((@cleanNotation_equality_congruence_3e3f32efa32223213c0e (B) (C) ((fun (clean_bound_5 : B) => (cleanNotation_equivalence_forward_ebd1d090984645228598 (f) (clean_bound_5)))) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (e) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) (clean_bound_4))))))) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) (clean_bound_4))) ((@cleanNotation_equivalence_right_inverse_15f9381536a3ab5b0038 (A) (B) (e) ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 (f) (clean_bound_4))))))) ((@cleanNotation_equivalence_right_inverse_15f9381536a3ab5b0038 (B) (C) (f) (clean_bound_4)))))))
 
 
 open scoped Matrix
@@ -155,7 +158,7 @@ def composed_equivalence_evaluation : Prop :=
   ∀ (e : A ≃ B),
   ∀ (f : B ≃ C),
   ∀ (x : A),
-  ((cleanNotation_equivalence_forward_ebd1d090984645228598 ((cleanDefine_compose_equivalences_0a2a6c58628a77a61305 (e) (f))) (x)) = (cleanNotation_equivalence_forward_ebd1d090984645228598 (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (x)))))
+  ((cleanNotation_equivalence_forward_ebd1d090984645228598 ((cleanDefine_compose_equivalences_3eb00958450c76bcd2ca (e) (f))) (x)) = (cleanNotation_equivalence_forward_ebd1d090984645228598 (f) ((cleanNotation_equivalence_forward_ebd1d090984645228598 (e) (x)))))
 
 /--
 source: mathlib
@@ -167,7 +170,7 @@ def composed_equivalence_round_trip : Prop :=
   ∀ (e : A ≃ B),
   ∀ (f : B ≃ C),
   ∀ (x : A),
-  ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 ((cleanDefine_compose_equivalences_0a2a6c58628a77a61305 (e) (f))) ((cleanNotation_equivalence_forward_ebd1d090984645228598 ((cleanDefine_compose_equivalences_0a2a6c58628a77a61305 (e) (f))) (x)))) = x)
+  ((cleanNotation_equivalence_backward_e72e31c61ebe95923018 ((cleanDefine_compose_equivalences_3eb00958450c76bcd2ca (e) (f))) ((cleanNotation_equivalence_forward_ebd1d090984645228598 ((cleanDefine_compose_equivalences_3eb00958450c76bcd2ca (e) (f))) (x)))) = x)
 
 end CleanStatements
 
@@ -185,20 +188,20 @@ noncomputable def compose {A B C : Type} (e : A ≃ B) (f : B ≃ C) : A ≃ C :
  cleanNotation_equivalence_9dc94fc17e20833d2fb8 A C
    (fun x => cleanNotation_equivalence_forward_ebd1d090984645228598 f (cleanNotation_equivalence_forward_ebd1d090984645228598 e x))
    (fun z => cleanNotation_equivalence_backward_e72e31c61ebe95923018 e (cleanNotation_equivalence_backward_e72e31c61ebe95923018 f z))
-   (fun x => cleanNotation_equality_transitivity_c07bfb0511d1038a5d7c (cleanNotation_equivalence_backward_e72e31c61ebe95923018 e (cleanNotation_equivalence_backward_e72e31c61ebe95923018 f (cleanNotation_equivalence_forward_ebd1d090984645228598 f (cleanNotation_equivalence_forward_ebd1d090984645228598 e x))))
+   (fun x => cleanNotation_equality_transitivity_6a3ecc1273cd16127fa3 (cleanNotation_equivalence_backward_e72e31c61ebe95923018 e (cleanNotation_equivalence_backward_e72e31c61ebe95923018 f (cleanNotation_equivalence_forward_ebd1d090984645228598 f (cleanNotation_equivalence_forward_ebd1d090984645228598 e x))))
       (cleanNotation_equivalence_backward_e72e31c61ebe95923018 e (cleanNotation_equivalence_forward_ebd1d090984645228598 e x)) x
       (cleanNotation_equality_congruence_3e3f32efa32223213c0e (fun y => cleanNotation_equivalence_backward_e72e31c61ebe95923018 e y) (cleanNotation_equivalence_backward_e72e31c61ebe95923018 f (cleanNotation_equivalence_forward_ebd1d090984645228598 f (cleanNotation_equivalence_forward_ebd1d090984645228598 e x)))
         (cleanNotation_equivalence_forward_ebd1d090984645228598 e x) (cleanNotation_equivalence_left_inverse_11e59bbc8370041c7173 f (cleanNotation_equivalence_forward_ebd1d090984645228598 e x))) (cleanNotation_equivalence_left_inverse_11e59bbc8370041c7173 e x))
-   (fun z => cleanNotation_equality_transitivity_c07bfb0511d1038a5d7c (cleanNotation_equivalence_forward_ebd1d090984645228598 f (cleanNotation_equivalence_forward_ebd1d090984645228598 e (cleanNotation_equivalence_backward_e72e31c61ebe95923018 e (cleanNotation_equivalence_backward_e72e31c61ebe95923018 f z))))
+   (fun z => cleanNotation_equality_transitivity_6a3ecc1273cd16127fa3 (cleanNotation_equivalence_forward_ebd1d090984645228598 f (cleanNotation_equivalence_forward_ebd1d090984645228598 e (cleanNotation_equivalence_backward_e72e31c61ebe95923018 e (cleanNotation_equivalence_backward_e72e31c61ebe95923018 f z))))
       (cleanNotation_equivalence_forward_ebd1d090984645228598 f (cleanNotation_equivalence_backward_e72e31c61ebe95923018 f z)) z
       (cleanNotation_equality_congruence_3e3f32efa32223213c0e (fun y => cleanNotation_equivalence_forward_ebd1d090984645228598 f y) (cleanNotation_equivalence_forward_ebd1d090984645228598 e (cleanNotation_equivalence_backward_e72e31c61ebe95923018 e (cleanNotation_equivalence_backward_e72e31c61ebe95923018 f z)))
         (cleanNotation_equivalence_backward_e72e31c61ebe95923018 f z) (cleanNotation_equivalence_right_inverse_15f9381536a3ab5b0038 e (cleanNotation_equivalence_backward_e72e31c61ebe95923018 f z))) (cleanNotation_equivalence_right_inverse_15f9381536a3ab5b0038 f z))
 def inverseStatement : Prop := ∀ (A B : Type) (e : A ≃ B) (y : B),
  cleanNotation_equivalence_forward_ebd1d090984645228598 (cleanDefine_inverse_equivalence_9d2c632ec2cd0aa310b1 e) y = cleanNotation_equivalence_backward_e72e31c61ebe95923018 e y
 def composeStatement : Prop := ∀ (A B C : Type) (e : A ≃ B) (f : B ≃ C) (x : A),
- cleanNotation_equivalence_forward_ebd1d090984645228598 (cleanDefine_compose_equivalences_0a2a6c58628a77a61305 e f) x = cleanNotation_equivalence_forward_ebd1d090984645228598 f (cleanNotation_equivalence_forward_ebd1d090984645228598 e x)
+ cleanNotation_equivalence_forward_ebd1d090984645228598 (cleanDefine_compose_equivalences_3eb00958450c76bcd2ca e f) x = cleanNotation_equivalence_forward_ebd1d090984645228598 f (cleanNotation_equivalence_forward_ebd1d090984645228598 e x)
 def roundtripStatement : Prop := ∀ (A B C : Type) (e : A ≃ B) (f : B ≃ C) (x : A),
- cleanNotation_equivalence_backward_e72e31c61ebe95923018 (cleanDefine_compose_equivalences_0a2a6c58628a77a61305 e f) (cleanNotation_equivalence_forward_ebd1d090984645228598 (cleanDefine_compose_equivalences_0a2a6c58628a77a61305 e f) x) = x
+ cleanNotation_equivalence_backward_e72e31c61ebe95923018 (cleanDefine_compose_equivalences_3eb00958450c76bcd2ca e f) (cleanNotation_equivalence_forward_ebd1d090984645228598 (cleanDefine_compose_equivalences_3eb00958450c76bcd2ca e f) x) = x
 end EquivalenceOperationsOracle
 
 open Lean Elab Command
@@ -218,11 +221,11 @@ elab "same_basic_target " a:ident b:ident : command => do
       Expr.equal (canonical x.type) (canonical y.type) &&
       Expr.equal (canonical x.value) (canonical y.value) do
     throwError "Canonical type or value differs"
-same_basic_target cleanNotation_equality_transitivity_c07bfb0511d1038a5d7c EquivalenceOperationsOracle.transitivity
+same_basic_target cleanNotation_equality_transitivity_6a3ecc1273cd16127fa3 EquivalenceOperationsOracle.transitivity
 same_basic_target cleanNotation_equivalence_left_inverse_11e59bbc8370041c7173 EquivalenceOperationsOracle.left
 same_basic_target cleanNotation_equivalence_right_inverse_15f9381536a3ab5b0038 EquivalenceOperationsOracle.right
 same_basic_target cleanDefine_inverse_equivalence_9d2c632ec2cd0aa310b1 EquivalenceOperationsOracle.inverse
-same_basic_target cleanDefine_compose_equivalences_0a2a6c58628a77a61305 EquivalenceOperationsOracle.compose
+same_basic_target cleanDefine_compose_equivalences_3eb00958450c76bcd2ca EquivalenceOperationsOracle.compose
 same_basic_target CleanStatements.inverse_equivalence_evaluation EquivalenceOperationsOracle.inverseStatement
 same_basic_target CleanStatements.composed_equivalence_evaluation EquivalenceOperationsOracle.composeStatement
 same_basic_target CleanStatements.composed_equivalence_round_trip EquivalenceOperationsOracle.roundtripStatement
@@ -237,6 +240,6 @@ theorem composition_evaluation_checked : CleanStatements.composed_equivalence_ev
 
 theorem composition_roundtrip_checked : CleanStatements.composed_equivalence_round_trip := by
  intro A B C e f x
- exact (cleanDefine_compose_equivalences_0a2a6c58628a77a61305 e f).symm_apply_apply x
+ exact (cleanDefine_compose_equivalences_3eb00958450c76bcd2ca e f).symm_apply_apply x
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
