@@ -87,7 +87,9 @@ its [scope audit](../../docs/fresh-checked-subtrees.md); the earlier tree-only
 reuse and call-index cache patches remain unintegrated.
 A separate [declaration-token scan cache](../../docs/fresh-bound-name-cache.md)
 preserves the existing fresh-name rule and is now implemented. The [restricted-basis study](../interval-basis-restriction/README.md) now checks a
-pointwise basis construction and its vector formula, including three exact
-Clean target comparisons and a proof of the generated statement. Assembly into
-an interval basis, edge compatibility, and the pyramid theorem remain unfinished.
+pointwise basis construction and full interval-basis restriction, including four
+exact Clean target comparisons and proofs of both generated statements. Its
+assembly uses separately checked vanishing and edge-compatibility results. The
+pyramid theorem and the full canonical check of this module's specialized maps
+remain unfinished.
 :::

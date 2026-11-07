@@ -467,6 +467,26 @@ def restricted_vectors_vanish : Prop :=
   ∀ («vanishes» : (@cleanDefine_interval_vectors_vanish_76b24f11b6da51eab033 (K) (field) (n) (d) (Z) (I) (L) (vectors))),
   (@cleanDefine_interval_vectors_vanish_76b24f11b6da51eab033 (K) (field) (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) («bound») (d))) ((@cleanDefine_restricted_zigzag_60d15adfd9b03073eff1 (K) (field) (n) (a) (m) («bound») (d) («sources») («targets») (Z))) ({x : I // x ∈ (@cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 (I) (n) (a) (m) (L))}) ((@cleanDefine_restricted_interval_labels_4699560db33250f6be06 (I) (n) (a) (m) (L))) ((@cleanDefine_restricted_interval_vectors_17c9803c94f731a4263e (K) (field) (n) (a) (m) («bound») (d) («sources») («targets») (Z) (I) (L) (vectors))))
 
+/--
+source: clean
+reference: restricted vectors compatible
+relationship: original
+-/
+def restricted_vectors_compatible : Prop :=
+  ∀ (K : Type),
+  ∀ (field : Field K),
+  ∀ (n a m : ℕ),
+  ∀ («bound» : ((a + m) ≤ n)),
+  ∀ (d : (Fin n) → (Bool)),
+  ∀ («sources» : (@cleanDefine_subpath_sources_preserved_46191249bc7c5cd92929 (n) (a) (m) («bound») (d))),
+  ∀ («targets» : (@cleanDefine_subpath_targets_preserved_21dad01a350642fb797c (n) (a) (m) («bound») (d))),
+  ∀ (Z : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 (K) (field) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d)))),
+  ∀ (I : Type),
+  ∀ (L : cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe (I) (n)),
+  ∀ (vectors : (clean_pi_bound_12 : Fin (n + 1)) → ((I) → ((@ModuleCat.carrier K field.toRing ((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d))) (Z)) clean_pi_bound_12))))),
+  ∀ («compatible» : (@cleanDefine_interval_vectors_compatible_9ad73449cd688c6c847b (K) (field) (n) (d) (Z) (I) (L) (vectors))),
+  (@cleanDefine_interval_vectors_compatible_9ad73449cd688c6c847b (K) (field) (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) («bound») (d))) ((@cleanDefine_restricted_zigzag_60d15adfd9b03073eff1 (K) (field) (n) (a) (m) («bound») (d) («sources») («targets») (Z))) ({x : I // x ∈ (@cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 (I) (n) (a) (m) (L))}) ((@cleanDefine_restricted_interval_labels_4699560db33250f6be06 (I) (n) (a) (m) (L))) ((@cleanDefine_restricted_interval_vectors_17c9803c94f731a4263e (K) (field) (n) (a) (m) («bound») (d) («sources») («targets») (Z) (I) (L) (vectors))))
+
 end CleanStatements
 
 namespace RestrictedVectorsOracle
@@ -500,6 +520,17 @@ def vanishingStatement : Prop := ∀ (K : Type) (field : Field K)
    (cleanDefine_restricted_zigzag_60d15adfd9b03073eff1 field n a m bound d sources targets Z)
    {j : I // j ∈ cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 I n a m L} (cleanDefine_restricted_interval_labels_4699560db33250f6be06 I n a m L)
    (cleanDefine_restricted_interval_vectors_17c9803c94f731a4263e field n a m bound d sources targets Z I L vectors)
+def compatibleStatement : Prop := ∀ (K : Type) (field : Field K)
+ (n a m : ℕ) (bound : a+m ≤ n) (d : Fin n → Bool)
+ (sources : cleanDefine_subpath_sources_preserved_46191249bc7c5cd92929 n a m bound d) (targets : cleanDefine_subpath_targets_preserved_21dad01a350642fb797c n a m bound d)
+ (Z : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 K field (Fin (n+1)) (Fin n) (cleanDefine_zigzag_shape_aabf9ce777651ce61e96 n d))
+ (I : Type) (L : cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe I n)
+ (vectors : (u : Fin (n+1)) → I → @ModuleCat.carrier K field.toRing (Z.object u))
+ (compatible : cleanDefine_interval_vectors_compatible_9ad73449cd688c6c847b K field n d Z I L vectors),
+ cleanDefine_interval_vectors_compatible_9ad73449cd688c6c847b K field m (cleanDefine_subpath_directions_d5b179a212a0b19f9880 n a m bound d)
+   (cleanDefine_restricted_zigzag_60d15adfd9b03073eff1 field n a m bound d sources targets Z)
+   {j : I // j ∈ cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 I n a m L} (cleanDefine_restricted_interval_labels_4699560db33250f6be06 I n a m L)
+   (cleanDefine_restricted_interval_vectors_17c9803c94f731a4263e field n a m bound d sources targets Z I L vectors)
 end RestrictedVectorsOracle
 
 open Lean Elab Command
@@ -523,6 +554,7 @@ elab "same_basic_target " a:ident b:ident : command => do
 same_basic_target cleanDefine_restricted_interval_vectors_17c9803c94f731a4263e RestrictedVectorsOracle.vectors
 same_basic_target CleanStatements.restricted_vector_value RestrictedVectorsOracle.valueStatement
 same_basic_target CleanStatements.restricted_vectors_vanish RestrictedVectorsOracle.vanishingStatement
+same_basic_target CleanStatements.restricted_vectors_compatible RestrictedVectorsOracle.compatibleStatement
 
 theorem restricted_vector_value_checked : CleanStatements.restricted_vector_value := by
  intro K field n a m bound d sources targets Z I L vectors v j
@@ -537,5 +569,39 @@ theorem restricted_vectors_vanish_checked : CleanStatements.restricted_vectors_v
  simp only [cleanDefine_interval_labels_at_1f63148e436b0a274491, cleanNotation_set_of_25534029a1fdae044ce8, cleanDefine_restricted_interval_labels_4699560db33250f6be06, cleanConstructor_interval_labels_c716f00fe8e77d75edb2, cleanDefine_clipped_vertex_2105907b2c6d43692206, cleanNotation_natural_minimum_a98622f728b78fbd6d0f, cleanNotation_bounded_vertex_5747514b48fa95eb06be, cleanNotation_vertex_number_64138f6f46dd27172356, cleanDefine_subpath_vertex_ed24b88b5532567c119f, cleanNotation_offset_vertex_8893e544ed839c8e4060, cleanNotation_widen_vertex_69bf9fc558a039a86f3c, cleanNotation_transport_vertex_ae30515c2c6ff2e395df, cleanNotation_selected_value_df54a12138d36423a390, Set.mem_setOf_eq, Fin.le_iff_val_le_val] at active ⊢
  simp only [Fin.val_mk, Fin.coe_natAdd, Fin.coe_castLE, Fin.coe_cast] at *
  omega
+
+
+private theorem transport_edge_value {K W : Type} (field : Field K)
+ (M : W → @ModuleCat.{0,0} K field.toRing) (fs s t ft : W)
+ (hs : fs = s) (ht : ft = t) (g : @ModuleCat.Hom K field.toRing (M s) (M t))
+ (vectors : (w : W) → @ModuleCat.carrier K field.toRing (M w))
+ (law : cleanNotation_module_map_value_f0835c4f7a36db98a213 field (M s) (M t) g (vectors s) = vectors t) :
+ cleanNotation_module_map_value_f0835c4f7a36db98a213 field (M fs) (M ft)
+   (cleanNotation_module_composition_115d9963c374fb45e52e field (M fs) (M t) (M ft)
+     (cleanNotation_module_composition_115d9963c374fb45e52e field (M fs) (M s) (M t) (cleanNotation_module_family_transport_d6b9d443d0d35715792a field M fs s hs) g)
+     (cleanNotation_module_family_transport_d6b9d443d0d35715792a field M t ft ht.symm)) (vectors fs) = vectors ft := by
+ cases hs
+ cases ht
+ simpa [cleanNotation_module_map_value_f0835c4f7a36db98a213, cleanNotation_module_composition_115d9963c374fb45e52e, cleanNotation_module_family_transport_d6b9d443d0d35715792a] using law
+
+theorem restricted_vectors_compatible_checked : CleanStatements.restricted_vectors_compatible := by
+ intro K field n a m bound d sources targets Z I L vectors compatible
+ intro edge j active
+ have old_active : j.val ∈ cleanDefine_interval_labels_at_1f63148e436b0a274491 I n L
+     (cleanDefine_subpath_vertex_ed24b88b5532567c119f n a m bound ((cleanDefine_zigzag_shape_aabf9ce777651ce61e96 m (cleanDefine_subpath_directions_d5b179a212a0b19f9880 n a m bound d)).source edge)) := by
+   have survives := j.property
+   simp only [cleanDefine_interval_labels_at_1f63148e436b0a274491, cleanNotation_set_of_25534029a1fdae044ce8, cleanDefine_restricted_interval_labels_4699560db33250f6be06, cleanConstructor_interval_labels_c716f00fe8e77d75edb2, cleanDefine_clipped_vertex_2105907b2c6d43692206, cleanNotation_natural_minimum_a98622f728b78fbd6d0f, cleanNotation_bounded_vertex_5747514b48fa95eb06be, cleanNotation_vertex_number_64138f6f46dd27172356, cleanDefine_subpath_vertex_ed24b88b5532567c119f, cleanNotation_offset_vertex_8893e544ed839c8e4060, cleanNotation_widen_vertex_69bf9fc558a039a86f3c, cleanNotation_transport_vertex_ae30515c2c6ff2e395df, cleanNotation_selected_value_df54a12138d36423a390, Set.mem_setOf_eq, Fin.le_iff_val_le_val, cleanDefine_zigzag_source_dc6df9137c1a7c80c3de, cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651] at active survives ⊢
+   simp only [Fin.val_mk, Fin.coe_natAdd, Fin.coe_castLE, Fin.coe_cast] at *
+   omega
+ have original_active : j.val ∈ cleanDefine_interval_labels_at_1f63148e436b0a274491 I n L ((cleanDefine_zigzag_shape_aabf9ce777651ce61e96 n d).source (cleanDefine_subpath_edge_c6bc2388be5e8cd17cf2 n a m bound edge)) := by
+   rw [← sources edge]
+   exact old_active
+ exact transport_edge_value field Z.object
+   (cleanDefine_subpath_vertex_ed24b88b5532567c119f n a m bound ((cleanDefine_zigzag_shape_aabf9ce777651ce61e96 m (cleanDefine_subpath_directions_d5b179a212a0b19f9880 n a m bound d)).source edge))
+   ((cleanDefine_zigzag_shape_aabf9ce777651ce61e96 n d).source (cleanDefine_subpath_edge_c6bc2388be5e8cd17cf2 n a m bound edge))
+   ((cleanDefine_zigzag_shape_aabf9ce777651ce61e96 n d).target (cleanDefine_subpath_edge_c6bc2388be5e8cd17cf2 n a m bound edge))
+   (cleanDefine_subpath_vertex_ed24b88b5532567c119f n a m bound ((cleanDefine_zigzag_shape_aabf9ce777651ce61e96 m (cleanDefine_subpath_directions_d5b179a212a0b19f9880 n a m bound d)).target edge))
+   (sources edge) (targets edge) (Z.arrow (cleanDefine_subpath_edge_c6bc2388be5e8cd17cf2 n a m bound edge))
+   (fun u => vectors u j.val) (compatible (cleanDefine_subpath_edge_c6bc2388be5e8cd17cf2 n a m bound edge) j.val original_active)
 
 -- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

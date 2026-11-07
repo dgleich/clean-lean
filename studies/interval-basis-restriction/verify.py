@@ -16,6 +16,8 @@ load_module(ROOT/'library/logic/subtype_restriction.clean',e)
 f=lambda n:e.data['functions'][n]['lean'].split()[0]
 keys={k:f(v) for k,v in [('OLD','original active labels'),('NEW','restricted active labels'),('SUR','surviving interval labels'),('VECTOR','module basis vector'),('MAP','evaluate map'),('VALUE','element value')]}
 keys['LABELS']=e.structures['IntervalLabels']['key']
+keys.update({k:f(v) for k,v in [('SOURCES','subpath sources preserved'),('TARGETS','subpath targets preserved'),('ZIG','zigzag shape'),('DIRECTIONS','subpath directions'),('RESTRICT','restricted zigzag'),('LABELRESTRICT','restricted interval labels'),('VECTORS','restricted interval vectors'),('VERTEX','subpath vertex'),('CTOR','interval basis')]})
+keys.update(BASIS=e.structures['IntervalBasis']['key'],DIAGRAM=e.structures['ModuleDiagram']['key'])
 expected=r'''
 namespace RestrictedBasisOracle
 -- Explicit coefficient instances are part of the expected target.
@@ -32,6 +34,15 @@ def statement : Prop := ∀ (K : Type) (field : Field K)
    K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule,
  ∀ y : {j : {i : I // i ∈ SUR I n a m L} // j ∈ NEW I n a m L v},
    VECTOR field M c y = MAP vectors (VALUE (SUR I n a m L) (VALUE (NEW I n a m L v) y))
+def restrictionStatement : Prop := ∀ (K : Type) (field : Field K)
+ (n a m : ℕ) (bound : a+m ≤ n) (d : Fin n → Bool)
+ (sources : SOURCES n a m bound d) (targets : TARGETS n a m bound d)
+ (Z : DIAGRAM K field (Fin (n+1)) (Fin n) (ZIG n d))
+ (I : Type) (L : LABELS I n) (B : BASIS K field n d Z I L),
+ ∃ C : BASIS K field m (DIRECTIONS n a m bound d)
+   (RESTRICT field n a m bound d sources targets Z)
+   {i : I // i ∈ SUR I n a m L} (LABELRESTRICT I n a m L),
+ C.vectors = VECTORS field n a m bound d sources targets Z I L B.vectors
 end RestrictedBasisOracle
 '''
 for k,v in keys.items():expected=re.sub(r'\b'+k+r'\b',v,expected)
@@ -44,18 +55,51 @@ module=ast.parse((HERE/'verify_native.py').read_text())
 native=next(ast.literal_eval(n.value) for n in module.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='extra' for t in n.targets))
 native_keys={**keys,'EVAL':f('equivalence forward')}
 for k,v in native_keys.items():native=re.sub(r'\b'+k+r'\b',v,native)
-s=lean(results,e,['Lean'])+'\n'+arithmetic+'\n'+native+'\n'+expected+comparison
+# Each source document has its own attribution declarations. Their mathematical
+# imports share this proof environment; their source tables are checked separately.
+basis_sources=e.sources
+e.sources=type(basis_sources)()
+try:
+    vector_results=load_document(ROOT/'studies/interval-vector-restriction/Statements.clean',e)
+finally:
+    e.sources=basis_sources
+vector_proofs=runpy.run_path(str(ROOT/'studies/interval-vector-restriction/proof_templates.py'))['render_proofs'](e)
+s=lean([*results,*vector_results],e,['Lean'])+'\n'+arithmetic+'\n'+native+'\n'+expected+comparison
 s+='\nsame_basic_target '+keys['OLD']+' Arithmetic.old\n'
 s+='same_basic_target '+keys['NEW']+' Arithmetic.new\n'
 s+='same_basic_target CleanStatements.basis_at_a_restricted_vertex RestrictedBasisOracle.statement\n'
+s+='same_basic_target CleanStatements.interval_basis_restricts RestrictedBasisOracle.restrictionStatement\n'
+s+=vector_proofs
 s+='''
 theorem clean_restricted_basis_checked : CleanStatements.basis_at_a_restricted_vertex := by
  intro K field M I n a m bound L v b vectors realizes
  letI : Field K := field
  exact RestrictedBasis.exists_basis_at_restricted_vertex M I n a m bound L v b vectors realizes
 '''
+assembly=r'''
+theorem interval_basis_restricts_checked : CleanStatements.interval_basis_restricts := by
+ classical
+ intro K field n a m bound d sources targets Z I L B
+ letI : Field K := field
+ have pointwise (v : Fin (m+1)) :=
+   clean_restricted_basis_checked K field (Z.object (VERTEX n a m bound v))
+     I n a m bound L v (B.basis (VERTEX n a m bound v))
+     (B.vectors (VERTEX n a m bound v)) (B.realizes (VERTEX n a m bound v))
+ choose bases realizes using pointwise
+ refine ⟨CTOR K field m (DIRECTIONS n a m bound d)
+   (RESTRICT field n a m bound d sources targets Z)
+   {i : I // i ∈ SUR I n a m L} (LABELRESTRICT I n a m L)
+   (VECTORS field n a m bound d sources targets Z I L B.vectors)
+   bases ?_ ?_ ?_, ?_⟩
+ · exact realizes
+ · exact restricted_vectors_vanish_checked K field n a m bound d sources targets Z I L B.vectors B.vanishes
+ · exact restricted_vectors_compatible_checked K field n a m bound d sources targets Z I L B.vectors B.compatible
+ · rfl
+'''
+for k,v in keys.items():assembly=re.sub(r'\b'+k+r'\b',v,assembly)
+s+=assembly
 p=HERE/'Verified.lean';p.write_text(s)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(p)],cwd=ROOT,check=True)
-print('Three exact targets and the generated Clean restricted-basis theorem proved',flush=True)
+print('Four exact targets and the pointwise/full interval-basis restriction theorems proved',flush=True)
 
 # generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

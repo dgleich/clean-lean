@@ -96,7 +96,7 @@ Condition interval vectors compatible(K,field,n,d,Z,I,L,vectors):
       module map value(field,Z.object(zigzag source(n,d,e)),Z.object(zigzag target(n,d,e)),
         Z.arrow(e),evaluate map(vectors(zigzag source(n,d,e)),i)) =
           evaluate map(vectors(zigzag target(n,d,e)),i)))
-  Render: the vectors respect the directed edges on their source support
+  Render: {vectors} respect the directed edges of {Z} on the source support of {L}
 
 Structure IntervalBasis(K: Type,field: FieldStructure(K),n: Natural,d: Function(Vertex(n),Boolean),Z: Zigzag(K,field,n,d),I: Type,L: IntervalLabels(I,n)):
   Let vectors: Function(v: Vertex((n+1)),Function(I,ModuleElement(K,field,(Z.object(v)))))

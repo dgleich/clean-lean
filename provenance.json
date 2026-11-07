@@ -5116,6 +5116,15 @@
       "origin": "llm-assisted",
       "mode": "manifest",
       "model": "gpt-6"
+    },
+    "studies/interval-vector-restriction/proof_templates.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6"
     }
   }
 }

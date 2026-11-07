@@ -629,3 +629,30 @@ This is a reminder that readable rendering must preserve which objects a stateme
 concerns. Edge compatibility and assembly with the checked pointwise bases remain
 unfinished.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Restriction preserves edge compatibility
+
+The interval-vector study now checks four exact targets and proves three generated
+statements, including preservation of directed-edge compatibility. Active source
+membership transfers from clipped intervals to the original interval using endpoint
+arithmetic and survival of the label. A native helper proves that the two endpoint
+transports preserve the action of the original edge map; equality elimination
+reduces the helper to that original action. The mathematical vector definition
+remains authored in Clean. No new syntax or imported mathematical definition was
+needed. The compatibility rendering now identifies its vectors, diagram, and
+interval labels so restriction changes are visible in the PDF.
+
+The proof templates are reusable against the current explicit environment,
+resolving its generated bindings instead of copying names from another build.
+The full interval-basis assembly now passes four exact target checks and proofs
+of both the pointwise and assembled restriction statements. Classical choice
+selects the vertex bases; their realization, vector vanishing, and edge
+compatibility populate the authored record constructor. The resulting vectors
+are proved equal to the Clean-authored restricted family. This supersedes the
+assembly/compatibility gaps recorded above. Subpath source/target evidence remains
+explicit and is separately proved in the subpath study. The paper's extension
+and pyramid theorem, full specialized-map validation, and broad compiler checks
+remain unfinished.
+:::

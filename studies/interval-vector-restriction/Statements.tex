@@ -32,4 +32,20 @@ Assume $\mathit{vectors}\text{ vanish outside the intervals }L$ (\texttt{vanishe
 Then \[\mathit{vectors}|_{[a,a+m]}\text{ vanish outside the intervals }L|_{[a,a+m]}.\]
 \end{cleanresult}
 
+\begin{cleanresult}{restricted vectors compatible}\cleanattribution{[Clean topology study, restricted vectors compatible]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $n$, $a$ and $m$ be natural numbers.
+Assume $a + m \le n$ (\texttt{bound}).
+Let $d$ be a function from $\{0,\ldots,n-1\}$ to $\{\mathrm{false},\mathrm{true}\}$.
+Assume $\operatorname{subpath\ sources\ preserved}(n, a, m, \mathit{bound}, d)$ (\texttt{sources}).
+Assume $\operatorname{subpath\ targets\ preserved}(n, a, m, \mathit{bound}, d)$ (\texttt{targets}).
+Let $Z$ be a module diagram on $Q_{d}$.
+Let $I$ be a type.
+Let $L$ be a family of ordered interval labels indexed by $I$ on vertices $0$ through $n$.
+Let $\mathit{vectors}$ be a function assigning to each $u : \{0,\ldots,n + 1-1\}$ a value of type $(I\to Z.\mathrm{object}(u))$.
+Assume $\mathit{vectors}\text{ respect the directed edges of }Z\text{ on the source support of }L$ (\texttt{compatible}).
+Then \[\mathit{vectors}|_{[a,a+m]}\text{ respect the directed edges of }Z|_{[a,a+m]}\text{ on the source support of }L|_{[a,a+m]}.\]
+\end{cleanresult}
+
 % generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

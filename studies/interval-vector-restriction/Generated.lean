@@ -467,6 +467,26 @@ def restricted_vectors_vanish : Prop :=
   ∀ («vanishes» : (@cleanDefine_interval_vectors_vanish_76b24f11b6da51eab033 (K) (field) (n) (d) (Z) (I) (L) (vectors))),
   (@cleanDefine_interval_vectors_vanish_76b24f11b6da51eab033 (K) (field) (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) («bound») (d))) ((@cleanDefine_restricted_zigzag_60d15adfd9b03073eff1 (K) (field) (n) (a) (m) («bound») (d) («sources») («targets») (Z))) ({x : I // x ∈ (@cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 (I) (n) (a) (m) (L))}) ((@cleanDefine_restricted_interval_labels_4699560db33250f6be06 (I) (n) (a) (m) (L))) ((@cleanDefine_restricted_interval_vectors_17c9803c94f731a4263e (K) (field) (n) (a) (m) («bound») (d) («sources») («targets») (Z) (I) (L) (vectors))))
 
+/--
+source: clean
+reference: restricted vectors compatible
+relationship: original
+-/
+def restricted_vectors_compatible : Prop :=
+  ∀ (K : Type),
+  ∀ (field : Field K),
+  ∀ (n a m : ℕ),
+  ∀ («bound» : ((a + m) ≤ n)),
+  ∀ (d : (Fin n) → (Bool)),
+  ∀ («sources» : (@cleanDefine_subpath_sources_preserved_46191249bc7c5cd92929 (n) (a) (m) («bound») (d))),
+  ∀ («targets» : (@cleanDefine_subpath_targets_preserved_21dad01a350642fb797c (n) (a) (m) («bound») (d))),
+  ∀ (Z : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 (K) (field) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d)))),
+  ∀ (I : Type),
+  ∀ (L : cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe (I) (n)),
+  ∀ (vectors : (clean_pi_bound_12 : Fin (n + 1)) → ((I) → ((@ModuleCat.carrier K field.toRing ((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d))) (Z)) clean_pi_bound_12))))),
+  ∀ («compatible» : (@cleanDefine_interval_vectors_compatible_9ad73449cd688c6c847b (K) (field) (n) (d) (Z) (I) (L) (vectors))),
+  (@cleanDefine_interval_vectors_compatible_9ad73449cd688c6c847b (K) (field) (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) («bound») (d))) ((@cleanDefine_restricted_zigzag_60d15adfd9b03073eff1 (K) (field) (n) (a) (m) («bound») (d) («sources») («targets») (Z))) ({x : I // x ∈ (@cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 (I) (n) (a) (m) (L))}) ((@cleanDefine_restricted_interval_labels_4699560db33250f6be06 (I) (n) (a) (m) (L))) ((@cleanDefine_restricted_interval_vectors_17c9803c94f731a4263e (K) (field) (n) (a) (m) («bound») (d) («sources») («targets») (Z) (I) (L) (vectors))))
+
 end CleanStatements
 
 -- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

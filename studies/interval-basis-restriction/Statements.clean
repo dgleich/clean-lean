@@ -2,6 +2,7 @@
 Import "../../library/diagrams/active_label_sets.clean"
 Import "../../library/algebra/basis_reindexing.clean"
 Import "../../library/logic/elements.clean"
+Import "../../library/diagrams/interval_restriction.clean"
 Source clean:
   Kind: other
   Label: Clean topology study
@@ -31,3 +32,23 @@ Result basis at a restricted vertex:
               element value(restricted active labels(I,n,a,m,L,v),y)))))
 
 -- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Result interval basis restricts:
+  Attribution: clean; interval basis restricts; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let n,a,m: Natural
+  Assume bound: a+m ≤ n
+  Let d: Function(Vertex(n),Boolean)
+  Assume sources: subpath sources preserved(n,a,m,bound,d)
+  Assume targets: subpath targets preserved(n,a,m,bound,d)
+  Let Z: Zigzag(K,field,n,d)
+  Let I: Type
+  Let L: IntervalLabels(I,n)
+  Let B: IntervalBasis(K,field,n,d,Z,I,L)
+  Conclude:
+    there exists(C: IntervalBasis(K,field,m,(subpath directions(n,a,m,bound,d)),
+      (restricted zigzag(field,n,a,m,bound,d,sources,targets,Z)),
+      Element(I,(surviving interval labels(I,n,a,m,L))),
+      (restricted interval labels(I,n,a,m,L))),
+      C.vectors = restricted interval vectors(field,n,a,m,bound,d,sources,targets,Z,I,L,B.vectors))

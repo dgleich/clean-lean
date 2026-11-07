@@ -14,4 +14,19 @@ Assume $\left(\text{for every }x : A(L,a+v),\; b_{x} = \mathit{vectors}(x)\right
 Then \[\left(\text{there exists }c : \operatorname{Basis}_{K}(M,R(L,v)),\; \left(\text{for every }y : R(L,v),\; c_{y} = \mathit{vectors}(y)\right)\right).\]
 \end{cleanresult}
 
+\begin{cleanresult}{interval basis restricts}\cleanattribution{[Clean topology study, interval basis restricts]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $n$, $a$ and $m$ be natural numbers.
+Assume $a + m \le n$ (\texttt{bound}).
+Let $d$ be a function from $\{0,\ldots,n-1\}$ to $\{\mathrm{false},\mathrm{true}\}$.
+Assume $\operatorname{subpath\ sources\ preserved}(n, a, m, \mathit{bound}, d)$ (\texttt{sources}).
+Assume $\operatorname{subpath\ targets\ preserved}(n, a, m, \mathit{bound}, d)$ (\texttt{targets}).
+Let $Z$ be a module diagram on $Q_{d}$.
+Let $I$ be a type.
+Let $L$ be a family of ordered interval labels indexed by $I$ on vertices $0$ through $n$.
+Let $B$ be an interval basis of $Z$ with labels $L$.
+Then \[\left(\text{there exists }C : \operatorname{IBasis}(Z|_{[a,a+m]},L|_{[a,a+m]}),\; C.\mathrm{vectors} = B.\mathrm{vectors}|_{[a,a+m]}\right).\]
+\end{cleanresult}
+
 % generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
