@@ -16,7 +16,8 @@ under changed bindings.
 
 | Entry/path | Rule |
 | --- | --- |
-| `comparison_normal_form`, `index_comparison`, callable proof view | Start without a freshness witness; re-elaborate arguments in the current scope |
+| Public `comparison_normal_form` and `index_comparison` | Start without a freshness witness; re-elaborate arguments in the current scope |
+| Immediate checked proof-condition paths | Use the additional audited witness in [fresh-condition-comparison.md](fresh-condition-comparison.md) |
 | The traversal's `normal(tree)` helper | Elaborates the tree synchronously, then marks that result fresh |
 | Arguments of a fresh module call with typed-child metadata | They were checked during that same elaboration and may be traversed as fresh |
 | Missing typed-child metadata | Elaborate source arguments again; selected record fields can take this path |

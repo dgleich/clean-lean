@@ -174,11 +174,15 @@
      parameters=env.data['functions'][tree[1]]['signature_tree'][2]
      body=definition['tree']
      bindings=dict(zip((p[1] for p in parameters if p[3]=='explicit'),
-@@ -93,10 +95,10 @@
+@@ -93,14 +95,10 @@
          if local is None or local.local_normal is None:return expression
          return _normal_form(local.local_normal,env,locals) if local.local_expand and not shadowed_globals(env,locals) else local.local_normal
      if kind in ('Decimal','Lambda','Forall','Exists'):return expression
--    if kind=='Operator':return binary(tree[1],normal(tree[2]),normal(tree[3]))
+-    if kind=='Operator':
+-        if fresh and expression.checked_args is not None:
+-            a,b=expression.checked_args
+-            return binary(tree[1],_normal_form(a,env,locals,fresh=True),_normal_form(b,env,locals,fresh=True))
+-        return binary(tree[1],normal(tree[2]),normal(tree[3]))
 +    if kind=='Operator':return env.operator(tree[1],normal(tree[2]),normal(tree[3]),locals)
      if kind=='Unary':
 -        a=normal(tree[2]);op='-' if tree[1]=='-' else '¬'
@@ -188,7 +192,7 @@
      if kind=='Apply':
          f=normal(tree[1]);args=[normal(a) for a in tree[2]]
          result=Expr('('+f.lean+' '+args[0].lean+')',expression.tex,expression.type,
-@@ -145,6 +147,8 @@
+@@ -149,6 +147,8 @@
      checked=expression if reuse else env.call(name,args,locals)
      definition=env.definitions.get(name)
      if definition and definition['implementation']=='equals':

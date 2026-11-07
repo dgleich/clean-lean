@@ -123,11 +123,11 @@ class ProofType(Type):
     def __str__(self):return '('+str(self.args[0])+')'
 
 
-def proof_type(condition,environment=None,locals=None):
+def proof_type(condition,environment=None,locals=None,*,_fresh=False):
     from .indices import index_value
     if condition.type!=PROP:raise CleanError('A computed proof type must be a condition')
     from .proof_types import index
-    return ProofType(index(condition,environment,locals or {}))
+    return ProofType(index(condition,environment,locals or {},_fresh=_fresh))
 
 
 
@@ -216,7 +216,7 @@ class Environment:
         except CleanError as e:raise CleanError('Unknown type phrase: '+s) from e
         if syntax.data=='computed_index':
             from .syntax import expression_tree
-            return proof_type(Expressions(self,env or {}).elaborate(expression_tree(syntax.children[0])),self,env or {})
+            return proof_type(Expressions(self,env or {}).elaborate(expression_tree(syntax.children[0])),self,env or {},_fresh=True)
         if len(syntax.children)>1 and syntax.children[1].data=='bound_type_arguments':
             from .dependent_functions import parse_type
             return parse_type(syntax,self,env or {},trail)
@@ -243,7 +243,7 @@ class Environment:
                     raise CleanError(f'Value index {a} requires {expected}, got {actual.type}')
                 from .indices import index_value
                 from .proof_types import index as condition_index
-                out.append(condition_index(actual,self,env or {}) if actual.type==PROP else index_value(actual,self,env or {}));continue
+                out.append(condition_index(actual,self,env or {},_fresh=True) if actual.type==PROP else index_value(actual,self,env or {}));continue
             if not (a.startswith('(') or re.fullmatch(r'\d+|'+ID+r'(?:\.'+ID+r')*',a)):
                 raise CleanError('Dimension must be a numeral, natural parameter, field or parenthesized computation')
             if re.fullmatch(ID,a) and (env is None or a not in env or env[a].type!=NAT):
@@ -592,7 +592,7 @@ def binary(op,a,b):
     tex=left+' '+top+' '+right
     if op=='^': tex='{'+left+'}^{'+b.tex+'}'
     if op=='/': tex=r'\frac{'+a.tex+'}{'+b.tex+'}'
-    return Expr('('+a.lean+' '+lop+' '+b.lean+')',tex,t,prec,['Operator',op,a.tree,b.tree])
+    return Expr('('+a.lean+' '+lop+' '+b.lean+')',tex,t,prec,['Operator',op,a.tree,b.tree],checked_args=(a,b))
 
 def _parse_flat(text,reg):
     results=[]; r=None; env={}; labels=set(); mode=None; conclusion=[]

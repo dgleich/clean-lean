@@ -110,3 +110,12 @@ These changes remain isolated; the main compiler and its running validation jobs
 are unchanged. Numeral interpretation, module scope, declared precedence and
 foundation/editor migration remain open.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The patch has been refreshed against fresh proof-condition traversal. It retains
+the immediate-condition witness but conservatively rechecks operator operands
+through declared dispatch during normalization. The fresh-copy driver again passes
+strict parser generation, thirty-two exact targets and three proofs. Main's binary
+child metadata optimization does not introduce a native operator fallback here.
+:::

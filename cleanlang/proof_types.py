@@ -10,7 +10,7 @@ class ProofIndex(ComputedIndex):
     scope: tuple = field(default=(),compare=False)
 
 
-def index(expression,env,locals):
+def index(expression,env,locals,*,_fresh=False):
     from .beta_indices import contract_index
     expression=contract_index(expression,env,locals)
     from .conversion import index_comparison
@@ -19,7 +19,7 @@ def index(expression,env,locals):
     comparison=comparison_expression(expression,env,locals)
     return ProofIndex('('+condition_spelling(expression.tree)+')',expression.lean,expression.tex,
                       json.dumps(expression.tree,ensure_ascii=False),tuple(locals.items()),
-                      comparison=index_comparison(comparison,env,locals))
+                      comparison=index_comparison(comparison,env,locals,_fresh=_fresh))
 
 
 def callable_view(typ,env):
@@ -31,18 +31,18 @@ def callable_view(typ,env):
     from .dependent_functions import fresh_bound,inferred_type
     scope=dict(saved.scope)
     tree=substitute(json.loads(saved.syntax),{},env,scope)
-    condition=_normal_form(Expressions(env,scope).elaborate(tree),env,scope)
+    condition=_normal_form(Expressions(env,scope).elaborate(tree),env,scope,fresh=True)
     if condition.tree[0]=='Operator' and condition.tree[1]=='→':
         left=Expressions(env,scope).elaborate(condition.tree[2])
         right=Expressions(env,scope).elaborate(condition.tree[3])
-        return env.function_type(ProofType(index(left,env,scope)),ProofType(index(right,env,scope)))
+        return env.function_type(ProofType(index(left,env,scope,_fresh=True)),ProofType(index(right,env,scope,_fresh=True)))
     if condition.tree[0]!='Forall':return None
     _,name,annotation,body=condition.tree
     domain=env.type(annotation,scope,phrases=False)
     bound=fresh_bound(env,scope)
     scope[name]=Expr(bound,texid(name),domain,tree=['Local',name])
     result=Expressions(env,scope).elaborate(body)
-    codomain=ProofType(index(result,env,scope))
+    codomain=ProofType(index(result,env,scope,_fresh=True))
     return inferred_type(name,bound,domain,codomain,env,scope)
 
 
@@ -67,7 +67,7 @@ def substitute_proof(saved,bindings,env,locals):
     tree=substitute(json.loads(saved.syntax),values,env,scope,types)
     tree=substitute(tree,{},env,scope)
     result=Expressions(env,scope).elaborate(tree)
-    return index(result,env,scope)
+    return index(result,env,scope,_fresh=True)
 
 
 def compatible_evidence(actual,expected,env,locals):

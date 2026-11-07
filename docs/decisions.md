@@ -737,3 +737,16 @@ Constructor mismatch diagnostics must not elaborate uninferred indices. The full
 contract remains in module-operators.md; this does not enable metadata in main
 or close numeral, declared-fixity, scope and foundation migration gates.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Carry synchronous freshness into proof-condition comparison
+
+Retain binary operands as nonsemantic checked children, and pass an internal
+freshness witness from immediate proof-condition elaboration into comparison.
+Public calls and stored local values still recheck current scope. Beta preparation
+preserves freshness only by retaining checked input or checking its replacement.
+The audited call sites and preservation argument are in
+[fresh-condition-comparison.md](fresh-condition-comparison.md). No source syntax,
+normalization rule, emitted term or cross-invocation cache is added.
+:::

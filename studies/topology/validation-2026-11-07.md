@@ -323,3 +323,35 @@ A cold/warm pool diagnostic produces identical names. Sampling indicates reduced
 regex scanning, but concurrent workloads and differing phases prevent a compiler
 speedup claim. The cache retains no semantic or inference results.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Fresh proof-condition traversal
+
+The [fresh-condition audit](../../docs/fresh-condition-comparison.md) adds immediate
+checked proof-condition entry points and binary operand metadata to the existing
+fresh traversal. Public calls still recheck caller scope. An eight-call regression
+falls from sixteen checks to eight; changed-scope and poisoned-metadata cases pass.
+The corrected focused command passes 282 tests. An initial command lacked the
+fixtures' tests-directory PYTHONPATH and had five import errors; those are not
+compiler failures or a passing invocation.
+
+The isolated compiler passes ten generic-subtype exact targets/three proofs and
+seven choice targets/three proofs. Main was then updated with the same three
+compiler files. The refreshed operator patch applies and its fresh-copy driver
+passes strict parser generation, 32 exact targets and three proofs. Its operator
+normalization conservatively rechecks operands, retaining declared dispatch; the
+main binary-operand fast path is not silently carried across that migration.
+The regenerated 92-proof corpus passes direct Lean kernel checking.
+
+The token-cache-only full suite and specialized verifier were explicitly
+interrupted as superseded after integrating this change; neither completed.
+A new main full suite runs on the current snapshot. The fresh-condition isolated
+specialized active-label verifier remains live on the same compiler implementation.
+The main interval-basis recheck passes four exact targets and both pointwise/full
+restriction proofs; its generated files are unchanged after provenance restoration.
+No complete specialized active-label
+or full-suite result is claimed. A finite 60-second profile reached the specialized
+equivalence at 10.78 seconds versus 16.29 in an earlier concurrent run, but neither
+finished it; this is diagnostic evidence only, not a controlled speedup claim.
+:::

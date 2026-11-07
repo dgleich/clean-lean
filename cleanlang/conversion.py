@@ -17,13 +17,13 @@ def comparison_normal_form(expression,environment,locals):
     return expression if has_binder(result.tree) else result
 
 
-def index_comparison(expression,environment,locals):
+def index_comparison(expression,environment,locals,*,_fresh=False):
     """Materialize one checked normal tree for comparison, including binders.
 
     Whole-tree elaboration assigns fresh compiler binder identities in one scope.
     The resulting template is never fed back as an authored actual argument.
     """
-    result=_normal_form(expression,environment,locals)
+    result=_normal_form(expression,environment,locals,fresh=_fresh)
     from .beta_indices import has_binder
     if not has_binder(result.tree):return result.lean
     from .binder_keys import Pool,key
@@ -93,7 +93,11 @@ def _normal_form(expression,environment,locals,*,fresh=False):
         if local is None or local.local_normal is None:return expression
         return _normal_form(local.local_normal,env,locals) if local.local_expand and not shadowed_globals(env,locals) else local.local_normal
     if kind in ('Decimal','Lambda','Forall','Exists'):return expression
-    if kind=='Operator':return binary(tree[1],normal(tree[2]),normal(tree[3]))
+    if kind=='Operator':
+        if fresh and expression.checked_args is not None:
+            a,b=expression.checked_args
+            return binary(tree[1],_normal_form(a,env,locals,fresh=True),_normal_form(b,env,locals,fresh=True))
+        return binary(tree[1],normal(tree[2]),normal(tree[3]))
     if kind=='Unary':
         a=normal(tree[2]);op='-' if tree[1]=='-' else '¬'
         return Expr('('+op+a.lean+')',expression.tex,expression.type,tree=['Unary',tree[1],a.tree])
