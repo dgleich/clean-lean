@@ -57,3 +57,42 @@ Its interval translation remains incomplete. It does not include alias-descripti
 changes or establish scope-safe caching in every supported context. No compiler
 optimization has been integrated.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Fresh checked subtrees prototype
+
+`fresh-subtrees.patch`, based on `9169d78`, is a separate unintegrated prototype.
+It is not the rejected tree-only cache. It retains typed call arguments as private
+`Expr` metadata and introduces a private freshness flag in comparison traversal.
+Public comparison entry points and stored local-definition expansion start without
+that flag. The flag is set only for synchronous elaboration within the traversal
+or for its freshly checked argument children.
+
+Fresh calls may normalize their retained typed arguments instead of elaborating
+the source again. A checked call itself is reused only if every normalized argument
+still has the same source tree, emitted term, rendered type, checked type,
+inferred-argument metadata, presentation and precedence. Changed arguments are
+rechecked. This is a proposed within-traversal reuse rule, not a cross-scope cache.
+It assumes no semantic environment mutation during the synchronous traversal;
+comparison-pool allocation and temporary binder scopes still require careful audit.
+
+The public entry deliberately ignores retained argument metadata. Four regression
+cases pass in both main and the prototype: changed caller value, changed caller
+type, nested calls with changed bindings, and invalid retained argument metadata.
+The wider candidate run passes 282 focused tests (it preceded the two additional
+regression cases). Choice passes seven exact targets/three proofs and postfix
+passes eight exact targets/five proofs. Generic subtype verification passes ten
+exact targets and three proofs. The full interval run remains pending.
+
+A diagnostic generic-module load made 8,900 fresh-bound allocations and took
+16.25s, compared with 33,998 allocations and 49.89s for the exact-text cache alone.
+Those runs overlapped other work. They are useful profiling evidence, not a
+controlled benchmark or proof that the interval bottleneck is solved.
+
+Before integration, audit every path that establishes freshness, preserving the
+rule that earlier checked expressions do not become trusted merely because their
+source trees are unchanged. In particular, selected record fields can lose typed
+argument metadata and must use the recheck path. No new syntax, implicit proof
+selection, or change to authored emitted terms is intended by this prototype.
+:::

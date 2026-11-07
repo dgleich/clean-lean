@@ -33,6 +33,20 @@ class ComparisonReuse(unittest.TestCase):
         self.assertIn('second',normalized.lean)
         self.assertNotIn('first',normalized.lean)
 
+    def test_nested_call_uses_current_bindings(self):
+        original=Expressions(self.env,self.local).parse('retain(retain(x))')
+        self.bind('second','B')
+        normalized=comparison_normal_form(original,self.env,self.local)
+        fresh=Expressions(self.env,self.local).parse('retain(retain(x))')
+        self.assertEqual(normalized.lean,fresh.lean)
+        self.assertEqual(normalized.type,fresh.type)
+        self.assertNotIn('first',normalized.lean)
+
+    def test_public_entry_does_not_trust_retained_argument_metadata(self):
+        self.original.checked_args=(Expr('wrong','wrong',self.env.type('B',self.local)),)
+        self.bind('second','B')
+        self.check_current_binding()
+
     def test_same_tree_different_value(self):
         self.bind('second','A')
         self.check_current_binding()
