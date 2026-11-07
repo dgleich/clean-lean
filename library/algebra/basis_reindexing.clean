@@ -1,0 +1,15 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "module_bases.clean"
+Import "../logic/equivalences.clean"
+
+Notation reindex module basis(field,M,b,e):
+  Let K,I,J: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let b: ModuleBasis(K,field,M,I)
+  Let e: Equivalence(I,J)
+  Returns: ModuleBasis(K,field,M,J)
+  Means: (letI : Field K := field; b.reindex e)
+  Render latex: {b}[{e}]
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

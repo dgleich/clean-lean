@@ -1,0 +1,44 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "equalities.clean"
+Import "functions.clean"
+Import Lean Mathlib.Logic.Equiv.Defs
+
+Type Equivalence(A: Type,B: Type):
+  Means: A ≃ B
+  Render latex: {A}\simeq {B}
+  Describe: an equivalence from ${A}$ to ${B}$
+
+Notation equivalence(A,B,f,g,left,right):
+  Let A,B: Type
+  Let f: Function(A,B)
+  Let g: Function(B,A)
+  Let left: Function(x: A,Evidence((g(f(x)) = x)))
+  Let right: Function(y: B,Evidence((f(g(y)) = y)))
+  Returns: Equivalence(A,B)
+  Means: Equiv.mk f g left right
+  Render latex: ({f},{g})
+
+Notation equivalence forward(e,x):
+  Let A,B: Type
+  Let e: Equivalence(A,B)
+  Let x: A
+  Returns: B
+  Means: e x
+  Render latex: {e}({x})
+
+Notation equivalence backward(e,y):
+  Let A,B: Type
+  Let e: Equivalence(A,B)
+  Let y: B
+  Returns: A
+  Means: e.symm y
+  Render latex: {e}^{{-1}}({y})
+
+Define identity equivalence(A):
+  Let A: Type
+  Returns: Equivalence(A,A)
+  Equals: equivalence(A,A,function(x: A,x),function(y: A,y),
+    function(x: A,equality reflexivity(x)),function(y: A,equality reflexivity(y)))
+  Render latex: \operatorname{{id}}_{{{A}}}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

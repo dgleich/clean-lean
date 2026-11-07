@@ -512,3 +512,21 @@ interval basis: constructing surviving-label records, reindexing bases and provi
 compatibility remain separate mathematical work. The shared IntervalLabels type
 now has explicit prose metadata so LaTeX describes a family of ordered labels.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Equivalences for reindexing bases
+
+`library/logic/equivalences.clean` exposes `Equivalence(A,B)`, its constructor from
+two functions and inverse evidence, and forward/backward application. Its identity
+is authored with Clean functions and equality reflexivity. The algebra reindexing
+module wraps `Module.Basis.reindex` with the explicit coefficient field and module.
+This makes the needed direction visible: old indices to new indices. Vector
+lookup uses the inverse equivalence.
+
+The [study](../studies/basis-reindexing/README.md) checks ten native targets and
+four proofs, with seven source/type rejection checks. No new syntax was needed.
+The study-specific bijection between surviving active interval labels and original
+active labels remains to be constructed; these wrappers do not assume or establish
+that bijection, basis compatibility, or the pyramid theorem.
+:::

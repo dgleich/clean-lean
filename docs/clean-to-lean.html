@@ -919,6 +919,17 @@ let p : n = n := h n</code></pre></section></div>
 </section>
 </llm>
 <llm model="gpt-6" date="2026-11-07" role="assisted" style="display:contents">
+<section class="mapping" id="basis-reindexing" data-status="implemented">
+<h2>Equivalences and reindexed bases</h2>
+<p>Explicit modules <code>logic/equivalences.clean</code> and <code>algebra/basis_reindexing.clean</code> expose Mathlib's equivalence constructor, its two applications, and basis reindexing. Both inverse equations are supplied as proof-producing functions. All carriers here are in Type 0; no new syntax is introduced.</p>
+<div class="pair"><section><h3>Clean fragment</h3><pre><code>Let b: ModuleBasis(K,field,M,I)
+Let e: Equivalence(I,J)
+Let c = reindex module basis(field,M,b,e)</code></pre></section><section><h3>Readable Lean equivalent</h3><pre><code>-- With the corresponding Field and Module instances in scope:
+-- b : Module.Basis I K M, e : I ≃ J
+let c : Module.Basis J K M := b.reindex e
+-- c j = b (e.symm j)</code></pre></section></div>
+<p>The equivalence runs from old indices to new indices; vector evaluation uses its inverse. The identity equivalence is authored in Clean with two identity functions and reflexivity evidence. <a href="../studies/basis-reindexing/README.md">The study</a> checks ten exact native targets and four proofs. Constructing the surviving-label equivalence for interval-basis restriction is still separate work.</p>
+</section>
 <section class="mapping" id="module-operators" data-status="proposed">
 <h2>Module-declared binary operators</h2>
 <p><strong>Proposed; isolated prototype only.</strong> Infix metadata associates an ordinary named notation with a binary symbol. Main Clean files do not accept this metadata yet.</p>

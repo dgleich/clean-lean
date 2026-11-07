@@ -1,0 +1,40 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "../../library/algebra/basis_reindexing.clean"
+Source mathlib:
+  Kind: other
+  Label: mathlib
+  Title: Mathlib pinned by lake-manifest.json
+
+Result reindexed basis vector:
+  Attribution: mathlib; Module.Basis.reindex_apply; adapted
+  Let K,I,J: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let b: ModuleBasis(K,field,M,I)
+  Let e: Equivalence(I,J)
+  Let j: J
+  Conclude:
+    module basis vector(field,M,reindex module basis(field,M,b,e),j) =
+      module basis vector(field,M,b,equivalence backward(e,j))
+
+Result equivalence backward forward:
+  Attribution: mathlib; Equiv.symm_apply_apply; adapted
+  Let A,B: Type
+  Let e: Equivalence(A,B)
+  Let x: A
+  Conclude: equivalence backward(e,equivalence forward(e,x)) = x
+
+Result equivalence forward backward:
+  Attribution: mathlib; Equiv.apply_symm_apply; adapted
+  Let A,B: Type
+  Let e: Equivalence(A,B)
+  Let y: B
+  Conclude: equivalence forward(e,equivalence backward(e,y)) = y
+
+Result identity equivalence fixes points:
+  Attribution: mathlib; Equiv.refl_apply; adapted
+  Let A: Type
+  Let x: A
+  Conclude: equivalence forward(identity equivalence(A),x) = x
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
