@@ -25,6 +25,6 @@
 +        spec['numerals']={'native_binding':constructor,
 +            'native_declaration':env.notation_definitions[constructor],
 +            'payload':values['numerals'],'carrier_binding':key}
- 
- 
+
+
  def signature_fields(header, fields):
