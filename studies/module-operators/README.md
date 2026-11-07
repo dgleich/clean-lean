@@ -52,3 +52,13 @@ The independent native fixture checks the original authored addition body. This
 conservative guard does not complete module isolation; the draft records the
 remaining typed-expression and import-scope requirements.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+Current-base status: `git apply --check prototype.patch` fails against the current
+compiler at the dependent-call matcher and checked-subtree conversion contexts.
+The sixteen-target/two-proof results above are historical evidence from the
+compatible prototype base, not a passing run on the current compiler. Refreshing
+the isolated patch and rerunning its full fixture remain required; the operator
+feature is still unintegrated. No main-compiler fallback was introduced.
+:::

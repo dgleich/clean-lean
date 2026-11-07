@@ -1615,13 +1615,16 @@
           ]
         ]
       ],
-      "obligation": "Once all implicit parameters are known, compare instantiated codomains in caller scope without substituting declaration parameters again. Accept h : forall x, n=m; reject h : forall x, m=m. Preserve ordered Lean arguments.",
+      "obligation": "Keep expected patterns in declaration scope throughout matching. Carry shared-binder mappings separately and apply implicit/explicit/binder substitutions simultaneously at comparison leaves once. Preserve caller n when formal n is supplied as m, even with unrelated implicit T inferred from a later argument. Reject captured equations and binder escape; preserve ordered Lean arguments.",
       "evidence": [
         "tests/test_callable_evidence.py",
         "tests/test_interval_clipping.py",
-        "studies/interval-clipping/verify.py"
+        "studies/interval-clipping/verify.py",
+        "tests/test_partial_codomain_inference.py",
+        "studies/partial-codomain-inference/verify.py",
+        "studies/partial-codomain-inference/Verified.lean"
       ],
-      "remaining": "General unresolved-parameter inference and module-owned binding identities remain unaudited. Native oracle covers the restricted-label compound-type construction, not every instance of this rule."
+      "remaining": "General module-owned identities and whole-language inference conformance remain unaudited. This rule retains bounded structural inference and adds no higher-order solving."
     },
     {
       "id": "postfix_application_chain",

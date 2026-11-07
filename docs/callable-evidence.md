@@ -152,23 +152,22 @@ conformance with this contract.
 
 ## Comparing instantiated dependent codomains
 
-After domain matching, instantiate the expected codomain with the declaration's
-known arguments and the shared fresh comparison binder. Instantiate the actual
-codomain with that binder only. If every declared implicit parameter has already
-been determined, these are caller-scoped types: compare them with the known-type
-compatibility rule, including recursive callable evidence, without applying the
-declaration substitution again. Reject a mismatch. No new argument or Lean term
-is chosen by this check; successful calls retain the ordered checked arguments.
+The [declaration-scoped matching rule](source-pattern-matching.md) now supersedes
+the earlier fully-inferred-only safeguard. Keep each expected pattern in its
+original declaration scope while traversing dependent arrows. Rename the actual
+codomain's binder to a shared fresh local; carry the corresponding expected-binder
+mapping separately. Instantiate original comparison leaves once with the current
+implicit substitutions, explicit actuals, and shared-binder map. Never re-enter
+inference with an already instantiated expected codomain.
 
-Applying the substitution twice can capture caller names inside an inserted
-function. For example, a constructor parameter `n` supplied as `m` must not replace
-an outer `n` inside the separately supplied function `function(x: Natural,n)`.
-The regression accepts evidence of `n = m` in that example and rejects evidence
-of `m = m`. The restricted-interval-label constructor additionally checks compound
-type arguments and nested proof-producing functions against an independent native
-oracle. No grammar changes are involved.
+This matters while an unrelated later argument's implicit type is still unknown.
+A formal `n` supplied as `m` must not replace caller `n` inside the separately
+supplied `function(x: Natural,n)`. The new native study accepts evidence of `n = m`
+and rejects `m = m`, including direct universal evidence. Nested function scopes
+and inference from an earlier function codomain have focused regressions. Calls
+retain their original ordered arguments; no proof, coercion, or cast is inserted.
 
-When implicit arguments remain undetermined, the existing inference matcher still
-runs. This change is not a full audit of that inference path or of module-owned
-binding identities. Full language conformance remains unproved.
+The rule leaves the existing bounded structural inference policy in place.
+General higher-order inference, module-owned identities, and full conformance
+remain separate requirements.
 :::

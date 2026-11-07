@@ -5166,6 +5166,61 @@
         "-- ",
         ""
       ]
+    },
+    "docs/source-pattern-matching.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown",
+      "model": "gpt-6"
+    },
+    "tests/test_partial_codomain_inference.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/partial-codomain-inference/Statements.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/partial-codomain-inference/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown",
+      "model": "gpt-6"
+    },
+    "studies/partial-codomain-inference/Verified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/partial-codomain-inference/Generated.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/partial-codomain-inference/verify.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

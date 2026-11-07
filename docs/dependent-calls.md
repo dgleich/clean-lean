@@ -176,3 +176,13 @@ and substituted structurally, including dependent arrows and computed dimensions
 The original named-carrier-only rule is superseded on this point; no arbitrary
 computed type or universe inference is added.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+Dependent signature matching now follows the
+[declaration-scoped pattern contract](source-pattern-matching.md), including when
+other implicit parameters remain undetermined. Recursive matching keeps the
+original expected pattern and a separate shared-binder map; leaf substitution is
+simultaneous and occurs once. This supersedes the earlier fully-inferred-only
+codomain safeguard. Grammar and ordered argument emission are unchanged.
+:::

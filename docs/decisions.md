@@ -698,3 +698,17 @@ arguments take the ordinary recheck path. The freshness audit and preservation
 argument are in fresh-checked-subtrees.md. This replaces repeated work without
 adopting the rejected cross-scope tree-only reuse rule.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Keep inference patterns in declaration scope throughout matching
+
+The earlier instantiated-codomain safeguard was conditional on all implicit
+parameters being known. An unrelated later implicit parameter exposed the same
+capture bug: valid caller evidence was rejected and incorrect evidence accepted.
+Keep expected patterns in declaration scope, carry dependent-binder renamings
+separately, and substitute at comparison leaves exactly once. Actual codomains
+remain caller-scoped. Preserve structural inference order, escape rejection, and
+emitted calls. The normative rule and independent regression are linked from
+[source-pattern-matching.md](source-pattern-matching.md).
+:::

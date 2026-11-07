@@ -356,26 +356,29 @@ class Environment:
                 raise CleanError('Inconsistent dependent argument: '+n)
             substitutions[n]=value
 
-        def index(n):
+        def index(n,scope):
             from .indices import index_value, substitute_index
+            if n in scope:return index_value(scope[n],self,locals)
             if n in actuals:return index_value(actuals[n],self,locals)
-            return substitute_index(ValueIndex(n,'',''),{**substitutions,**actuals},self,locals)
+            return substitute_index(ValueIndex(n,'',''),{**substitutions,**actuals,**scope},self,locals)
 
-        def replace(t):
+        def replace(t,scope=None):
+            scope={} if scope is None else scope
             from .indices import ComputedIndex, DimensionIndex, substitute_index
             from .dependent_functions import DependentFunctionType,substitute
-            if isinstance(t,DependentFunctionType):return substitute(t,{**substitutions,**actuals},self,locals)
-            if isinstance(t,ProofType):return ProofType(replace(t.args[0]))
+            if isinstance(t,DependentFunctionType):return substitute(t,{**substitutions,**actuals,**scope},self,locals)
+            if isinstance(t,ProofType):return ProofType(replace(t.args[0],scope))
             if isinstance(t,DimensionIndex) and t.name in substitutions:return substitutions[t.name]
             if isinstance(t,ComputedIndex):
-                return substitute_index(t,{**substitutions,**actuals},self,locals)
-            if isinstance(t,ValueIndex):return index(t.name)
+                return substitute_index(t,{**substitutions,**actuals,**scope},self,locals)
+            if isinstance(t,ValueIndex):return index(t.name,scope)
             if isinstance(t,Type):
                 if not t.args and t.name in substitutions:return substitutions[t.name]
-                return Type(t.name,tuple(replace(a) for a in t.args))
+                return Type(t.name,tuple(replace(a,scope) for a in t.args))
             return substitutions.get(t,t)
 
-        def match(pattern,actual):
+        def match(pattern,actual,scope=None):
+            scope={} if scope is None else scope
             from .proof_types import callable_view
             if isinstance(pattern,ProofType) != isinstance(actual,ProofType):
                 pattern=callable_view(pattern,self) or pattern
@@ -390,26 +393,20 @@ class Environment:
                 pconstructor=pattern.constructor if isinstance(pattern,DependentFunctionType) else pattern.name
                 aconstructor=actual.constructor if isinstance(actual,DependentFunctionType) else actual.name
                 if pconstructor!=aconstructor:raise CleanError('Dependent function type mismatch')
-                match(pattern.args[0],actual.args[0])
+                match(pattern.args[0],actual.args[0],scope)
                 shared=fresh_source('clean_comparison_binder',self,locals,
-                                    {**substitutions,**actuals,'__pattern':pattern,'__actual':actual})
+                                    {**substitutions,**actuals,**scope,'__pattern':pattern,'__actual':actual})
                 identity=fresh_bound(self,locals)
                 value=Expr(identity,texid(shared),actual.args[0],tree=['Local',shared])
                 locals[shared]=value
                 try:
-                    p=(substitute(pattern.codomain,{**substitutions,**actuals,pattern.binder:value},self,locals)
-                       if isinstance(pattern,DependentFunctionType) else replace(pattern.args[1]))
+                    # Keep the pattern in declaration scope. Apply caller actuals
+                    # and shared-binder replacements together only at a leaf.
+                    # An instantiated codomain must never re-enter this matcher.
                     a=(substitute(actual.codomain,{actual.binder:value},self,locals)
                        if isinstance(actual,DependentFunctionType) else actual.args[1])
-                    if all(n in substitutions for n in implicit):
-                        # Both codomains now belong to the caller's shared scope.
-                        # Reapplying declaration substitutions would capture names
-                        # inside already inserted argument expressions.
-                        from .proof_types import compatible_evidence
-                        if not compatible_evidence(a,p,self,locals):
-                            raise CleanError('Dependent index mismatch in function codomain')
-                    else:
-                        match(p,a)
+                    nested={**scope,pattern.binder:value} if isinstance(pattern,DependentFunctionType) else scope
+                    match(pattern.args[1],a,nested)
                     from .dependent_functions import occurs
                     if any(occurs(v,shared) for v in substitutions.values()):
                         raise CleanError('A dependent function binder cannot escape into an inferred argument')
@@ -420,7 +417,7 @@ class Environment:
                     raise CleanError('Expected a natural dimension: '+pattern.name)
                 bind(pattern.name,actual)
             elif isinstance(pattern,ValueIndex):
-                if replace(pattern)!=actual:
+                if replace(pattern,scope)!=actual:
                     raise CleanError('Dependent index mismatch: '+pattern.name)
             elif isinstance(pattern,Type):
                 if pattern.name in implicit and not pattern.args:
@@ -431,11 +428,11 @@ class Environment:
                 elif not pattern.args and pattern.name in substitutions:
                     if substitutions[pattern.name]!=actual:raise CleanError('Dependent type mismatch: '+pattern.name)
                 else:
-                    expected=replace(Type(pattern.name))
+                    expected=replace(Type(pattern.name),scope)
                     if not isinstance(actual,Type) or expected.name!=actual.name or len(pattern.args)!=len(actual.args):
-                        raise CleanError(f'Expected {replace(pattern)}, got {actual}')
-                    for p,a in zip(pattern.args,actual.args):match(p,a)
-            elif replace(pattern)!=actual:raise CleanError('Dimension mismatch')
+                        raise CleanError(f'Expected {replace(pattern,scope)}, got {actual}')
+                    for p,a in zip(pattern.args,actual.args):match(p,a,scope)
+            elif replace(pattern,scope)!=actual:raise CleanError('Dimension mismatch')
 
         for n,t in parameters:
             match(t,actuals[n].type)

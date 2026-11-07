@@ -1,0 +1,46 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "../../library/logic/evidence.clean"
+Source clean:
+  Kind: other
+  Label: Clean inference study
+  Title: Partial inference without caller-name capture
+
+Notation retain with law(n,f,h,z):
+  Let T: Type
+  Let n: Natural
+  Let f: Function(Natural,Natural)
+  Let h: Function(x: Natural,Evidence((f(x) = n)))
+  Let z: T
+  Returns: T
+  Means: z
+  Render latex: {z}
+
+Notation retain after family(f,z):
+  Let T,U: Type
+  Let f: Function(x: Natural,T)
+  Let z: U
+  Returns: U
+  Means: z
+  Render latex: {z}
+
+Result retain with later inference:
+  Attribution: clean; retain with later inference; original
+  Let n,m: Natural
+  Let z: Real
+  Assume h: for every(x: Natural,n = m)
+  Conclude: retain with law(m,function(x: Natural,n),function(x: Natural,h(x)),z) = z
+
+Result retain direct evidence:
+  Attribution: clean; retain direct evidence; original
+  Let n,m: Natural
+  Let z: Real
+  Assume h: for every(x: Natural,n = m)
+  Conclude: retain with law(m,function(x: Natural,n),h,z) = z
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Result infer from dependent codomain:
+  Attribution: clean; infer from dependent codomain; original
+  Let n: Natural
+  Let z: Real
+  Conclude: retain after family(function(x: Natural,n),z) = z

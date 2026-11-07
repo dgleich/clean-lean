@@ -856,3 +856,13 @@ unapplied lambda bodies. The ordinary computed-index rule is unchanged. The
 native targets and remaining checks; it supersedes earlier blanket statements
 that all quantified bodies remain opaque to beta comparison.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+Dependent callable inference obeys the
+[declaration-scoped matching rule](source-pattern-matching.md). Original expected
+patterns retain declaration scope throughout recursive matching; caller arguments
+are substituted simultaneously only at comparison leaves. This prevents capture
+while later implicit parameters remain uninferred, without changing grammar or
+ordered Lean argument emission.
+:::
