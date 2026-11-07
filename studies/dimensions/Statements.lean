@@ -11,6 +11,9 @@ import Mathlib.Analysis.Calculus.Deriv.Basic
 import Mathlib.Data.List.Sort
 import Mathlib.Data.Nat.GCD.Basic
 
+noncomputable def cleanType_Type_c1fed1af64ab6f12e0ed  : Type 1 :=
+  Type
+
 noncomputable def cleanType_Natural_469c53b6dafb7a218246  : Type :=
   ℕ
 

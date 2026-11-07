@@ -126,8 +126,16 @@ The native prototype passes eight exact targets and three proofs: explicit packi
 inferred packing, concrete Real, vector and dependent-family constructors, their reduced field
 equations and an inferred dependent-carrier equality. The
 [type-expression study](../studies/type-expressions/README.md) preserves these
-acceptance artifacts. Remaining validation includes
-updating the normative references and acceptance catalog, running the full suite
-and corpus, inspecting the rendered specimens, and refreshing the review browser.
+acceptance artifacts. The normative references and acceptance catalog are updated.
+The final focused run passes 116 tests, and the 92 corpus proof fixtures pass the
+Lean kernel. The final specimen compiled twice and its single-page layout was inspected.
+The review browser refresh remains to be completed for this snapshot.
+
+All 32 study verification scripts passed in the integration copy. Its generated
+artifacts differ from the previous checked artifacts only in the position or
+presence of the foundational Type declaration; those 61 Lean files have been
+refreshed. This portfolio preceded the final Type-valued operator rejection guard;
+the final study and focused tests separately cover that guard. The final full
+suite and browser build are still running, so neither is reported as passing.
 This slice does not claim general universe polymorphism or callable universal evidence.
 :::

@@ -32,6 +32,9 @@ Evidence is an ordinary transparent alias. A parenthesized condition used
    as a type denotes proofs of that condition. This module supplies no proofs.
 -/
 
+noncomputable def cleanType_Type_c1fed1af64ab6f12e0ed  : Type 1 :=
+  Type
+
 noncomputable def cleanType_Natural_469c53b6dafb7a218246  : Type :=
   ℕ
 
@@ -64,9 +67,6 @@ noncomputable def cleanType_Set_6e300741358eee425e81 (p0 : Type) : Type :=
 
 noncomputable def cleanType_Function_9d746dbeb0e035328deb (p0 : Type) (p1 : Type) : Type :=
   (p0) → (p1)
-
-noncomputable def cleanType_Type_c1fed1af64ab6f12e0ed  : Type 1 :=
-  Type
 
 noncomputable def cleanType_Topology_2eca621ea710e87cf174 (X : Type) : Type :=
   TopologicalSpace X
