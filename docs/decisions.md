@@ -631,3 +631,16 @@ is insensitive to candidate order. This is a conservative opacity boundary;
 stable typed binding identities and independent module imports remain required.
 Sixteen exact targets and two proofs pass, including the original authored body.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Keep instantiated codomains in the caller's scope
+
+The restricted-interval-label construction exposed a second substitution of
+already-instantiated proof-family codomains. Once implicit arguments are known,
+use known-type comparison under the shared fresh binder; do not substitute the
+declaration's parameters again. Preserve caller names in inserted functions and
+compound type arguments. Keep unresolved inference as an explicit remaining audit
+boundary. Clipped label records and their ordering evidence are authored in Clean;
+only natural-order operations and Fin order views are foundational Lean adapters.
+:::

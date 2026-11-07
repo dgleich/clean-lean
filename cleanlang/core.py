@@ -388,7 +388,15 @@ class Environment:
                        if isinstance(pattern,DependentFunctionType) else replace(pattern.args[1]))
                     a=(substitute(actual.codomain,{actual.binder:value},self,locals)
                        if isinstance(actual,DependentFunctionType) else actual.args[1])
-                    match(p,a)
+                    if all(n in substitutions for n in implicit):
+                        # Both codomains now belong to the caller's shared scope.
+                        # Reapplying declaration substitutions would capture names
+                        # inside already inserted argument expressions.
+                        from .proof_types import compatible_evidence
+                        if not compatible_evidence(a,p,self,locals):
+                            raise CleanError('Dependent index mismatch in function codomain')
+                    else:
+                        match(p,a)
                     from .dependent_functions import occurs
                     if any(occurs(v,shared) for v in substitutions.values()):
                         raise CleanError('A dependent function binder cannot escape into an inferred argument')

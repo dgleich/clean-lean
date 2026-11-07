@@ -1575,6 +1575,53 @@
         "Full regression and native portfolio for the selection rule",
         "Final acceptance audit"
       ]
+    },
+    {
+      "id": "instantiated_codomain_scope",
+      "status": "implemented-slice",
+      "environment": "Explicit logic/evidence.clean imports and Constant constructor regression; interval_clipping.clean for compound type and proof-family integration.",
+      "source": "constant(m,function(x: Natural,n),function(x: Natural,h(x)))",
+      "expected_tree": [
+        "Call",
+        "constant",
+        [
+          [
+            "Local",
+            "m"
+          ],
+          [
+            "Lambda",
+            "x",
+            "Natural",
+            [
+              "Local",
+              "n"
+            ]
+          ],
+          [
+            "Lambda",
+            "x",
+            "Natural",
+            [
+              "Call",
+              "h",
+              [
+                [
+                  "Local",
+                  "x"
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "obligation": "Once all implicit parameters are known, compare instantiated codomains in caller scope without substituting declaration parameters again. Accept h : forall x, n=m; reject h : forall x, m=m. Preserve ordered Lean arguments.",
+      "evidence": [
+        "tests/test_callable_evidence.py",
+        "tests/test_interval_clipping.py",
+        "studies/interval-clipping/verify.py"
+      ],
+      "remaining": "General unresolved-parameter inference and module-owned binding identities remain unaudited. Native oracle covers the restricted-label compound-type construction, not every instance of this rule."
     }
   ]
 }

@@ -809,3 +809,12 @@ an isolated patch, not enabled syntax. Literal policy, the wider dependent-overl
 declared fixity and module scope remain integration gates; existing main-compiler
 operator dispatch is not presented as the completed architecture.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+For dependent function matching with all implicit parameters determined, compare
+instantiated codomains as caller-scoped known types, without applying declaration
+substitution twice. The constructive rule and remaining inference boundary are
+in [callable evidence](callable-evidence.md#comparing-instantiated-dependent-codomains).
+Parsing and emitted application arguments are unchanged.
+:::

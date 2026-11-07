@@ -147,3 +147,28 @@ expression-consumer audit and full validation, and refresh the review browser.
 The prototype's focused tests and native fixtures do not by themselves prove
 conformance with this contract.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Comparing instantiated dependent codomains
+
+After domain matching, instantiate the expected codomain with the declaration's
+known arguments and the shared fresh comparison binder. Instantiate the actual
+codomain with that binder only. If every declared implicit parameter has already
+been determined, these are caller-scoped types: compare them with the known-type
+compatibility rule, including recursive callable evidence, without applying the
+declaration substitution again. Reject a mismatch. No new argument or Lean term
+is chosen by this check; successful calls retain the ordered checked arguments.
+
+Applying the substitution twice can capture caller names inside an inserted
+function. For example, a constructor parameter `n` supplied as `m` must not replace
+an outer `n` inside the separately supplied function `function(x: Natural,n)`.
+The regression accepts evidence of `n = m` in that example and rejects evidence
+of `m = m`. The restricted-interval-label constructor additionally checks compound
+type arguments and nested proof-producing functions against an independent native
+oracle. No grammar changes are involved.
+
+When implicit arguments remain undetermined, the existing inference matcher still
+runs. This change is not a full audit of that inference path or of module-owned
+binding identities. Full language conformance remains unproved.
+:::

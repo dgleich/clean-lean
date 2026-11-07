@@ -76,6 +76,13 @@ class CallableEvidence(unittest.TestCase):
   definitions='Notation evidence(a: Natural,b: Natural): Natural:\n  Means: a+b\n  Render latex: e({a},{b})\n'
   with self.assertRaisesRegex(CleanError,'Function argument mismatch'):
    self.load(definitions,'  Assume evidence: for every (x: Natural,x = x)\n  Let n: Natural\n  Let p = evidence(n,n)\n  Conclude: p = p\n')
+ def test_instantiated_codomain_preserves_caller_names(self):
+  definitions='Condition constant law(n,value):\n  Let n: Natural\n  Let value: Function(Natural,Natural)\n  Holds when: for every (x: Natural,value(x) = n)\nStructure Constant(n: Natural):\n  Let value: Function(Natural,Natural)\n  Let law: Evidence((constant law(n,value)))\n  Constructor: constant\n'
+  self.load(definitions,'  Let n,m: Natural\n  Assume h: for every (x: Natural,n = m)\n  Let c = constant(m,function(x: Natural,n),function(x: Natural,h(x)))\n  Conclude: c = c\n')
+ def test_instantiated_codomain_rejects_captured_equation(self):
+  definitions='Condition constant law(n,value):\n  Let n: Natural\n  Let value: Function(Natural,Natural)\n  Holds when: for every (x: Natural,value(x) = n)\nStructure Constant(n: Natural):\n  Let value: Function(Natural,Natural)\n  Let law: Evidence((constant law(n,value)))\n  Constructor: constant\n'
+  with self.assertRaisesRegex(CleanError,'Dependent index mismatch'):
+   self.load(definitions,'  Let n,m: Natural\n  Assume h: for every (x: Natural,m = m)\n  Let c = constant(m,function(x: Natural,n),function(x: Natural,h(x)))\n  Conclude: c = c\n')
 if __name__=='__main__':unittest.main(verbosity=2)
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

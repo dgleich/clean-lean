@@ -100,7 +100,16 @@
                  match(pattern.args[0],actual.args[0])
                  shared=fresh_source('clean_comparison_binder',self,locals,
                                      {**substitutions,**actuals,'__pattern':pattern,'__actual':actual})
-@@ -396,25 +402,25 @@
+@@ -394,7 +400,7 @@
+                         # inside already inserted argument expressions.
+                         from .proof_types import compatible_evidence
+                         if not compatible_evidence(a,p,self,locals):
+-                            raise CleanError('Dependent index mismatch in function codomain')
++                            raise SignatureMismatch('Dependent index mismatch in function codomain',mismatch_owner)
+                     else:
+                         match(p,a)
+                     from .dependent_functions import occurs
+@@ -404,25 +410,25 @@
                      del locals[shared]
              elif isinstance(pattern,DimensionIndex) and pattern.name in implicit:
                  if implicit[pattern.name]!=NAT or not isinstance(actual,DimensionIndex):
@@ -132,18 +141,18 @@
 
          for n,t in parameters:
              match(t,actuals[n].type)
-@@ -441,6 +447,10 @@
+@@ -448,6 +454,10 @@
+         return Expr(target,spec['latex'].format(*(a.tex for a in args)),replace(signature['result']),
                      tree=['Call',name,[a.tree for a in args]],
                      inferred_args=tuple((n,substitutions[n]) for n in implicit))
-
++
 +    def operator(self,op,a,b,locals):
 +        from .operator_bindings import apply
 +        return apply(self,op,a,b,locals)
-+
+
      def call(self,name,args,locals=None):
          if name not in self.data['functions']: raise CleanError('Unknown function: '+name)
-         s=self.data['functions'][name]; bind={}
-@@ -482,7 +492,7 @@
+@@ -490,7 +500,7 @@
          if kind=='Projection':
              from .structures import project
              return project(self.reg,self._elaborate(tree[1]),tree[2],self.env)
@@ -192,7 +201,7 @@
      signature=env.data['functions'][tree[1]]['signature_tree']
      parameters=signature[2]
      if any(p[3]=='implicit' for p in parameters):return None
---- a/cleanlang/operator_bindings.py
+--- /dev/null
 +++ b/cleanlang/operator_bindings.py
 @@ -0,0 +1,74 @@
 +# generated: gpt-6 2026-11-07 role=assisted; isolated prototype
