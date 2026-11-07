@@ -6032,6 +6032,26 @@
         "-- ",
         ""
       ]
+    },
+    "tools/study_checkout.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/check_study_checkout.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "docs/study-reproduction.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

@@ -8,15 +8,12 @@ import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+from tools.study_checkout import create_study_checkout
 HERE = Path(__file__).resolve().parent
 with tempfile.TemporaryDirectory(prefix='clean-local-types-') as td:
     dest = Path(td)
-    for name in subprocess.check_output(['git', 'ls-files', '-z'], cwd=ROOT, text=True).split('\0'):
-        if name and (ROOT / name).is_file():
-            target = dest / name
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(ROOT / name, target)
-    (dest / '.lake').symlink_to(ROOT / '.lake', target_is_directory=True)
+    create_study_checkout(dest, ROOT)
     for patch in ['prototype.patch', 'bound-calls.patch', 'proof-bindings.patch', 'annotations.patch']:
         subprocess.run(['git', 'apply', str(ROOT / 'studies/carrier-fields' / patch)], cwd=dest, check=True)
     subprocess.run(['git', 'apply', str(HERE / 'local-types.patch')], cwd=dest, check=True)

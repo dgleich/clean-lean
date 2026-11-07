@@ -3,13 +3,12 @@
 from pathlib import Path
 import sys,ast,subprocess,os,shutil,tempfile,json
 ROOT=Path(__file__).resolve().parents[2];HERE=Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT))
+from tools.study_checkout import create_study_checkout
 if len(sys.argv)==1:
  with tempfile.TemporaryDirectory(prefix='clean-bound-calls-') as td:
   dest=Path(td)
-  for name in subprocess.check_output(['git','ls-files','-z'],cwd=ROOT,text=True).split('\0'):
-   if name and (ROOT/name).is_file():
-    out=dest/name;out.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(ROOT/name,out)
-  (dest/'.lake').symlink_to(ROOT/'.lake',target_is_directory=True)
+  create_study_checkout(dest, ROOT)
   for patch in ['prototype.patch','bound-calls.patch','proof-bindings.patch']:
    subprocess.run(['git','apply',str(HERE/patch)],cwd=dest,check=True)
   for args in [[],['--check']]:subprocess.run([sys.executable,str(dest/'tools/generate_parser.py'),*args],cwd=dest,check=True)
