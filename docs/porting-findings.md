@@ -544,9 +544,18 @@ full equivalence translation, canonical checks and kernel proofs remain pending.
 
 Two readability/application boundaries surfaced while writing this source:
 transparent `Type … Equals:` aliases reject `Describe` metadata, and chained
-application such as `support.active(x)(h)` has no grammar production. The present
-construction uses neither unsupported feature. These are concrete gaps for future
-language work, not permission to accept ambiguous syntax or opaque replacement
-types. The planned general application form needs its own deterministic postfix
-rule, call/field binding semantics, target oracle and rendering tests.
+application was initially unavailable. Chained application is now implemented
+under the [postfix contract](postfix-applications.md), including its native oracles
+and rendering checks. Alias descriptions remain a gap; opaque replacement types
+are not a substitute for preserving transparent alias semantics.
+:::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The active-label support and maps are now factored through the authored generic
+`SubtypeRestrictionSupport(A,S,T,U)` construction. Its conditional equivalence
+result passes ten exact native checks, three proofs and five Python tests. This
+reuses ordinary set/subtype foundations and leaves the interval-specific arithmetic
+support construction as an explicit unfinished proof obligation. It does not
+weaken the interval existence statement by assuming its desired support record.
 :::

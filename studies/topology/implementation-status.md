@@ -56,11 +56,14 @@ case's own limitations or substitute for its outstanding validation.
   this later compiler change.
 - Chained application is now implemented. The isolated implementation passes 227
   focused regressions; main passes eight exact targets, five proofs, nine postfix
-  tests, parser reproducibility and the 92-proof corpus recheck. A new frozen full
-  suite is pending. This does not validate general native-binding uniqueness.
+  tests, parser reproducibility and the 92-proof corpus recheck. The frozen full suite was superseded by a corrected obsolete syntax assertion
+  and the generic subtype refactor; a new complete run is still required. This
+  does not validate general native-binding uniqueness.
 - The active-label study has authored maps and a support record, but its instrumented
-  verifier crashed during translation (status 139). The separate plain translation
-  remains active. Its existence theorem is not yet proved by completed validation.
+  verifier crashed during translation (status 139). That source was superseded by a generic subtype construction, which passes ten
+  exact checks, three proofs and five Python tests. The refactored interval
+  translation and corrected verifier remain active; its existence theorem is
+  not yet proved by completed validation.
 - The browser build using the pre-postfix compiler was stopped as superseded.
   A new build, source-hash validation and UI checks remain pending.
 

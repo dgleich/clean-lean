@@ -1,0 +1,13 @@
+--- a/cleanlang/conversion.py
++++ b/cleanlang/conversion.py
+@@ -126,7 +126,9 @@
+         head=normal(['Local',name])
+         return Expr('('+head.lean+' '+args[0].lean+')',expression.tex,expression.type,
+                     tree=['Apply',head.tree,[a.tree for a in args]])
+-    checked=env.call(name,args,locals)
++    # The input call was checked in this environment. Reuse that result when
++    # comparison preserved every argument tree; changed arguments are rechecked.
++    checked=expression if all(a.tree==t for a,t in zip(args,tree[2])) else env.call(name,args,locals)
+     definition=env.definitions.get(name)
+     if definition and definition['implementation']=='equals':
+         parameters=env.data['functions'][name]['signature_tree'][2]

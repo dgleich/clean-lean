@@ -4596,6 +4596,86 @@
     "studies/postfix-applications/Statements.pdf": {
       "origin": "derived-from-authored-sources; cited data retains source origin",
       "mode": "sidecar"
+    },
+    "library/logic/subtype_restriction.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "tests/test_subtype_restriction.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/active-labels/GenericVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/active-labels/verify_generic.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/active-labels/Generic.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
+    },
+    "studies/active-labels/generic-latex.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/active-labels/Generic.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/active-labels/Generic.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/active-labels/GenericGenerated.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/active-labels/experiments/stable-call.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/active-labels/experiments/call-index-cache.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/active-labels/experiments/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

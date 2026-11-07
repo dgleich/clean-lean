@@ -1,7 +1,6 @@
 -- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
 Import "interval_clipping.clean"
-Import "../logic/elements.clean"
-Import "../logic/equivalences.clean"
+Import "../logic/subtype_restriction.clean"
 
 Define original active labels(I,n,a,m,h,L,v):
   Let I: Type
@@ -29,12 +28,9 @@ Type OriginalActiveLabels(I: Type,n: Natural,a: Natural,m: Natural,h: Evidence((
 Type RestrictedActiveLabels(I: Type,n: Natural,a: Natural,m: Natural,L: IntervalLabels(I,n),v: Vertex((m+1))):
   Equals: Element(Element(I,(surviving interval labels(I,n,a,m,L))),(restricted active labels(I,n,a,m,L,v)))
 
-Structure ActiveLabelSupport(I: Type,n: Natural,a: Natural,m: Natural,h: Evidence((a+m ≤ n)),L: IntervalLabels(I,n),v: Vertex((m+1))):
-  Let survives: Function(x: OriginalActiveLabels(I,n,a,m,h,L,v),Evidence((element value(original active labels(I,n,a,m,h,L,v),x) ∈ surviving interval labels(I,n,a,m,L))))
-  Let active: Function(x: OriginalActiveLabels(I,n,a,m,h,L,v),Evidence((element from membership(surviving interval labels(I,n,a,m,L),element value(original active labels(I,n,a,m,h,L,v),x),survives(x)) ∈ restricted active labels(I,n,a,m,L,v))))
-  Let original: Function(y: RestrictedActiveLabels(I,n,a,m,L,v),Evidence((element value(surviving interval labels(I,n,a,m,L),element value(restricted active labels(I,n,a,m,L,v),y)) ∈ original active labels(I,n,a,m,h,L,v))))
-  Constructor: active label support
-  Describe: evidence identifying active labels at ${v}$ with those at ${a}+{v}$
+Type ActiveLabelSupport(I: Type,n: Natural,a: Natural,m: Natural,h: Evidence((a+m ≤ n)),L: IntervalLabels(I,n),v: Vertex((m+1))):
+  Equals: SubtypeRestrictionSupport(I,(surviving interval labels(I,n,a,m,L)),
+    (original active labels(I,n,a,m,h,L,v)),(restricted active labels(I,n,a,m,L,v)))
 
 Define restrict active label(I,n,a,m,h,L,v,support,x):
   Let I: Type
@@ -45,8 +41,8 @@ Define restrict active label(I,n,a,m,h,L,v,support,x):
   Let support: ActiveLabelSupport(I,n,a,m,h,L,v)
   Let x: OriginalActiveLabels(I,n,a,m,h,L,v)
   Returns: RestrictedActiveLabels(I,n,a,m,L,v)
-  Equals: element from membership(restricted active labels(I,n,a,m,L,v),
-    element from membership(surviving interval labels(I,n,a,m,L),element value(original active labels(I,n,a,m,h,L,v),x),support.survives(x)),support.active(x))
+  Equals: restrict element(I,surviving interval labels(I,n,a,m,L),
+    original active labels(I,n,a,m,h,L,v),restricted active labels(I,n,a,m,L,v),support,x)
   Render latex: \rho({x})
 
 Define restore active label(I,n,a,m,h,L,v,support,y):
@@ -58,7 +54,8 @@ Define restore active label(I,n,a,m,h,L,v,support,y):
   Let support: ActiveLabelSupport(I,n,a,m,h,L,v)
   Let y: RestrictedActiveLabels(I,n,a,m,L,v)
   Returns: OriginalActiveLabels(I,n,a,m,h,L,v)
-  Equals: element from membership(original active labels(I,n,a,m,h,L,v),element value(surviving interval labels(I,n,a,m,L),element value(restricted active labels(I,n,a,m,L,v),y)),support.original(y))
+  Equals: restore element(I,surviving interval labels(I,n,a,m,L),
+    original active labels(I,n,a,m,h,L,v),restricted active labels(I,n,a,m,L,v),support,y)
   Render latex: \iota({y})
 
 Define active label equivalence(I,n,a,m,h,L,v,support,left,right):
@@ -75,11 +72,8 @@ Define active label equivalence(I,n,a,m,h,L,v,support,left,right):
     Evidence((restrict active label(I,n,a,m,h,L,v,support,
       restore active label(I,n,a,m,h,L,v,support,y)) = y)))
   Returns: Equivalence(OriginalActiveLabels(I,n,a,m,h,L,v),RestrictedActiveLabels(I,n,a,m,L,v))
-  Equals: equivalence(type(OriginalActiveLabels(I,n,a,m,h,L,v)),
-    type(RestrictedActiveLabels(I,n,a,m,L,v)),
-    function(x: OriginalActiveLabels(I,n,a,m,h,L,v),restrict active label(I,n,a,m,h,L,v,support,x)),
-    function(y: RestrictedActiveLabels(I,n,a,m,L,v),restore active label(I,n,a,m,h,L,v,support,y)),
-    left,right)
+  Equals: subtype restriction equivalence(I,surviving interval labels(I,n,a,m,L),
+    original active labels(I,n,a,m,h,L,v),restricted active labels(I,n,a,m,L,v),support,left,right)
   Render latex: e({L},{v})
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

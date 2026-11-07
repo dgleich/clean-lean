@@ -1,0 +1,48 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "elements.clean"
+Import "equivalences.clean"
+
+Structure SubtypeRestrictionSupport(A: Type,S: Set(A),T: Set(A),U: Set(Element(A,S))):
+  Let survives: Function(x: Element(A,T),Evidence((element value(T,x) ∈ S)))
+  Let active: Function(x: Element(A,T),Evidence((element from membership(S,element value(T,x),survives(x)) ∈ U)))
+  Let original: Function(y: Element(Element(A,S),U),Evidence((element value(S,element value(U,y)) ∈ T)))
+  Constructor: subtype restriction support
+  Describe: evidence identifying ${T}$ with the elements of ${S}$ selected by ${U}$
+
+Define restrict element(A,S,T,U,support,x):
+  Let A: Type
+  Let S,T: Set(A)
+  Let U: Set(Element(A,S))
+  Let support: SubtypeRestrictionSupport(A,S,T,U)
+  Let x: Element(A,T)
+  Returns: Element(Element(A,S),U)
+  Equals: element from membership(U,
+    element from membership(S,element value(T,x),support.survives(x)),support.active(x))
+  Render latex: r({x})
+
+Define restore element(A,S,T,U,support,y):
+  Let A: Type
+  Let S,T: Set(A)
+  Let U: Set(Element(A,S))
+  Let support: SubtypeRestrictionSupport(A,S,T,U)
+  Let y: Element(Element(A,S),U)
+  Returns: Element(A,T)
+  Equals: element from membership(T,element value(S,element value(U,y)),support.original(y))
+  Render latex: j({y})
+
+Define subtype restriction equivalence(A,S,T,U,support,left,right):
+  Let A: Type
+  Let S,T: Set(A)
+  Let U: Set(Element(A,S))
+  Let support: SubtypeRestrictionSupport(A,S,T,U)
+  Let left: Function(x: Element(A,T),
+    Evidence((restore element(A,S,T,U,support,restrict element(A,S,T,U,support,x)) = x)))
+  Let right: Function(y: Element(Element(A,S),U),
+    Evidence((restrict element(A,S,T,U,support,restore element(A,S,T,U,support,y)) = y)))
+  Returns: Equivalence(Element(A,T),Element(Element(A,S),U))
+  Equals: equivalence(type(Element(A,T)),type(Element(Element(A,S),U)),
+    function(x: Element(A,T),restrict element(A,S,T,U,support,x)),
+    function(y: Element(Element(A,S),U),restore element(A,S,T,U,support,y)),left,right)
+  Render latex: e({T},{U})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -1,0 +1,22 @@
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -343,9 +343,18 @@
+                 raise CleanError('Inconsistent dependent argument: '+n)
+             substitutions[n]=value
+
++        actual_indices={}
++        caller_scope=tuple(locals.items())
+         def index(n):
+             from .indices import index_value, substitute_index
+-            if n in actuals:return index_value(actuals[n],self,locals)
++            if n in actuals:
++                if getattr(self,'_comparison_pool',None) is not None:
++                    return index_value(actuals[n],self,locals)
++                if len(locals)!=len(caller_scope) or any(locals.get(k) is not v for k,v in caller_scope):
++                    return index_value(actuals[n],self,locals)
++                if n not in actual_indices:
++                    actual_indices[n]=index_value(actuals[n],self,locals)
++                return actual_indices[n]
+             return substitute_index(ValueIndex(n,'',''),{**substitutions,**actuals},self,locals)
+
+         def replace(t):

@@ -1,0 +1,37 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "../../library/logic/subtype_restriction.clean"
+Source subtype:
+  Kind: other
+  Label: Subtype restriction
+  Title: Restriction and restoration through membership evidence
+
+Result restore a restricted element:
+  Attribution: subtype; original element round trip; original
+  Let A: Type
+  Let S,T: Set(A)
+  Let U: Set(Element(A,S))
+  Let support: SubtypeRestrictionSupport(A,S,T,U)
+  Let x: Element(A,T)
+  Conclude: restore element(A,S,T,U,support,restrict element(A,S,T,U,support,x)) = x
+
+Result restrict a restored element:
+  Attribution: subtype; selected element round trip; original
+  Let A: Type
+  Let S,T: Set(A)
+  Let U: Set(Element(A,S))
+  Let support: SubtypeRestrictionSupport(A,S,T,U)
+  Let y: Element(Element(A,S),U)
+  Conclude: restrict element(A,S,T,U,support,restore element(A,S,T,U,support,y)) = y
+
+Result supported sets correspond:
+  Attribution: subtype; value preserving equivalence; original
+  Let A: Type
+  Let S,T: Set(A)
+  Let U: Set(Element(A,S))
+  Let support: SubtypeRestrictionSupport(A,S,T,U)
+  Conclude:
+    there exists (e: Equivalence(Element(A,T),Element(Element(A,S),U)),
+      for every (x: Element(A,T),
+        element value(S,element value(U,equivalence forward(e,x))) = element value(T,x)))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

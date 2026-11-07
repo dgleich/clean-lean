@@ -171,3 +171,34 @@ Compiler hashes at this checkpoint:
 
 This is another implemented acceptance slice, not complete language conformance.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Generic subtype restriction and superseded runs
+
+The support record and maps are factored into `logic/subtype_restriction.clean`.
+Its separate native driver passes ten exact checks (including the constructor's
+implicit parameter metadata) and three proofs. Five Python tests pass. The generic
+statements' one-page PDF was compiled twice and inspected. The interval-specific
+existence theorem is unchanged and still needs completed verification of support
+from arithmetic bounds. Its current driver plans fifteen exact checks and four
+proofs; those counts remain pending.
+
+The wider focused run exposed an obsolete negative test for `I.lower.other(a).next`,
+which is now legal postfix syntax. The updated main structure tests pass all 43
+cases, including the independent tree for this form. The previously started frozen
+postfix full suite contains that obsolete assertion and the old interval-specific
+support source; it was stopped as superseded, not reported as passing. The older
+codomain full suite remains a separate live run.
+
+Two comparison experiments remain unintegrated; their patches and results are in
+`active-labels/experiments`. One passed 312 focused cases, but neither completed the
+interval native checks. Their runs and the original plain interval translation
+were stopped when the generic source refactor superseded their input. A newer
+interval verifier was stopped after the generic check exposed its obsolete explicit
+constructor oracle. The corrected verifier and plain refactored translation remain
+pending. The earlier instrumented status-139 crash has no established cause.
+
+The operator prototype also passed its sixteen exact targets and two proofs after
+the postfix parser change. This remains an isolated proposal, not main syntax.
+:::
