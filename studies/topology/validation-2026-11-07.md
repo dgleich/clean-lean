@@ -15,7 +15,10 @@ acceptance variants and the isolated operator prototype have separate checks;
 the latter is not integrated main-language syntax.
 
 The full Python run for the selected-field snapshot and the current browser
-inventory/UI validation remain pending. This report does not claim complete
+inventory/UI validation remain pending. The selected-field Python process returned
+exit status 143 without a terminal unittest summary; its log ends during
+`test_import_navigation_and_fresh_targets`. The termination cause has not been
+established, and this is not a passing full-suite result. This report does not claim complete
 language conformance or proofs of the research-paper targets.
 
 ## Native verifier results
