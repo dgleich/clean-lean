@@ -1,0 +1,50 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Topology.clean.proposed"
+Source topology:
+  Kind: other
+  Label: Topology foundations
+  Title: Clean topology foundation checks
+
+Text:
+  These foundation results exercise the implemented language.
+  They do not assert the five pending paper theorems.
+
+Result inverse image intersection:
+  Attribution: topology; inverse image intersection; original
+  Let X,Y: Type
+  Let f: Function(X,Y)
+  Let S,T: Set(Y)
+  Conclude:
+    inverse image(f,S ∩ T) = inverse image(f,S) ∩ inverse image(f,T)
+
+Result image membership:
+  Attribution: topology; image membership; original
+  Let X,Y: Type
+  Let f: Function(X,Y)
+  Let S: Set(X)
+  Let y: Y
+  Conclude:
+    y ∈ image(f,S) ↔ there exists (x: X, x ∈ S and f(x) = y)
+
+Result continuous composition:
+  Attribution: topology; continuous composition; original
+  Let X,Y,Z: Type
+  Let t: Topology(X)
+  Let u: Topology(Y)
+  Let v: Topology(Z)
+  Let f: Function(X,Y)
+  Let g: Function(Y,Z)
+  Assume continuous between(f,t,u), continuous between(g,u,v)
+  Conclude: continuous between(compose maps(g,f),t,v)
+
+Result family intersection membership:
+  Attribution: topology; family intersection membership; original
+  Let I,X: Type
+  Let sets: Function(I,Set(X))
+  Let x: X
+  Conclude:
+    x ∈ intersection family(sets) ↔ for every (i: I, x ∈ sets(i))
+
+-- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

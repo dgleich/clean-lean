@@ -1,0 +1,81 @@
+-- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
+Import "Sets.clean.proposed"
+Import Lean Mathlib.Topology.Basic
+
+/-! Basic topology with explicit carrier types and topologies.
+    Mathematical preimages, images, composition, and continuity are authored here.
+    This first module is restricted to carrier types in Lean Type 0. -/
+
+Type Topology(X: Type):
+  Means: TopologicalSpace X
+  Render latex: \operatorname{{Topology}}({X})
+  Describe: a topology on ${X}$
+  Describe plural: topologies on ${X}$
+
+Notation set of(condition):
+  Let X: Type
+  Let condition: Function(X,Proposition)
+  Returns: Set(X)
+  Means: setOf condition
+  Render latex: \{{x \mid {condition}(x)\}}
+
+Condition open in(S,t):
+  Let X: Type
+  Let S: Set(X)
+  Let t: Topology(X)
+  From Lean: @IsOpen X t S
+  Assumption name: openness of {S} in {t}
+
+Define inverse image(f,S):
+  Let X,Y: Type
+  Let f: Function(X,Y)
+  Let S: Set(Y)
+  Returns: Set(X)
+  Equals: set of(function(x: X, f(x) ∈ S))
+  Render latex: {f}^{{-1}}({S})
+
+Define image(f,S):
+  Let X,Y: Type
+  Let f: Function(X,Y)
+  Let S: Set(X)
+  Returns: Set(Y)
+  Equals:
+    set of(function(y: Y,
+      there exists (x: X, x ∈ S and f(x) = y)))
+  Render latex: {f}({S})
+
+Define compose maps(g,f):
+  Let X,Y,Z: Type
+  Let g: Function(Y,Z)
+  Let f: Function(X,Y)
+  Returns: Function(X,Z)
+  Equals: function(x: X, g(f(x)))
+  Render latex: {g} \circ {f}
+
+Condition continuous between(f,t,u):
+  Let X,Y: Type
+  Let f: Function(X,Y)
+  Let t: Topology(X)
+  Let u: Topology(Y)
+  Holds when:
+    for every (S: Set(Y),
+      open in(S,u) → open in(inverse image(f,S),t))
+  Assumption name: continuity of {f} from {t} to {u}
+  Render: {f} is continuous from {t} to {u}
+
+Define selected elements(S,condition):
+  Let X: Type
+  Let S: Set(X)
+  Let condition: Function(X,Proposition)
+  Returns: Set(X)
+  Equals: set of(function(x: X, x ∈ S and condition(x)))
+
+Define intersection family(sets):
+  Let I,X: Type
+  Let sets: Function(I,Set(X))
+  Returns: Set(X)
+  Equals: set of(function(x: X, for every (i: I, x ∈ sets(i))))
+
+-- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

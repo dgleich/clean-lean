@@ -2073,6 +2073,56 @@
         "Generic algebraic and topology interfaces",
         "Automatic assumption naming for infix conditions"
       ]
+    },
+    {
+      "id": "topology_declared_operator_migration",
+      "status": "isolated-prototype",
+      "environment": "Explicit proposed Logic, Sets and Topology modules on the composed eight-patch compiler. Mathlib.Topology.Continuous is an explicit agreement-proof dependency.",
+      "source": "x ∈ S and f(x) = y",
+      "expected_tree": [
+        "Operator",
+        "∧",
+        [
+          "Operator",
+          "∈",
+          [
+            "Local",
+            "x"
+          ],
+          [
+            "Local",
+            "S"
+          ]
+        ],
+        [
+          "Operator",
+          "=",
+          [
+            "Call",
+            "f",
+            [
+              [
+                "Local",
+                "x"
+              ]
+            ]
+          ],
+          [
+            "Local",
+            "y"
+          ]
+        ]
+      ],
+      "expected_lean": "Declared conjunction applied to declared membership at X and equality at Y; exact authored image and statement targets in verify_topology.py.",
+      "checks": [
+        "studies/operator-integration/verify_topology.py",
+        "studies/operator-integration/verify_prototype.py"
+      ],
+      "pending": [
+        "Main compiler integration",
+        "Bundled space and homology module migration",
+        "Separate research theorem constructions and proofs"
+      ]
     }
   ]
 }

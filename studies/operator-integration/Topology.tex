@@ -1,0 +1,40 @@
+% Generated statements, not proof certificates.
+These foundation results exercise the implemented language.
+They do not assert the five pending paper theorems.
+\par
+
+\begin{cleanresult}{inverse image intersection}\cleanattribution{[Topology foundations, inverse image intersection]}
+Let $X$ and $Y$ be types.
+Let $f$ be a function from $X$ to $Y$.
+Let $S$ and $T$ be subsets of $Y$.
+Then \[f^{-1}(S\cap T)=f^{-1}(S)\cap f^{-1}(T).\]
+\end{cleanresult}
+
+\begin{cleanresult}{image membership}\cleanattribution{[Topology foundations, image membership]}
+Let $X$ and $Y$ be types.
+Let $f$ be a function from $X$ to $Y$.
+Let $S$ be a subset of $X$.
+Let $y$ be an element of $Y$.
+Then \[y\in f(S)\text{ if and only if }\left(\text{there exists }x : X,\; x\in S\text{ and }f(x)=y\right).\]
+\end{cleanresult}
+
+\begin{cleanresult}{continuous composition}\cleanattribution{[Topology foundations, continuous composition]}
+Let $X$, $Y$ and $Z$ be types.
+Let $t$ be a topology on $X$.
+Let $u$ be a topology on $Y$.
+Let $v$ be a topology on $Z$.
+Let $f$ be a function from $X$ to $Y$.
+Let $g$ be a function from $Y$ to $Z$.
+Assume $f\text{ is continuous from }t\text{ to }u$ (\texttt{continuity of f from t to u}).
+Assume $g\text{ is continuous from }u\text{ to }v$ (\texttt{continuity of g from u to v}).
+Then \[g \circ f\text{ is continuous from }t\text{ to }v.\]
+\end{cleanresult}
+
+\begin{cleanresult}{family intersection membership}\cleanattribution{[Topology foundations, family intersection membership]}
+Let $I$ and $X$ be types.
+Let $\mathit{sets}$ be a function from $I$ to $\mathcal{P}(X)$.
+Let $x$ be an element of $X$.
+Then \[x\in \operatorname{intersection\ family}(\mathit{sets})\text{ if and only if }\left(\text{for every }i : I,\; x\in \mathit{sets}(i)\right).\]
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

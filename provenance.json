@@ -5976,6 +5976,62 @@
         "-- ",
         ""
       ]
+    },
+    "studies/operator-integration/topology-migration.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/operator-integration/Topology.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/operator-integration/verify_topology.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/operator-integration/TopologyVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/operator-integration/TopologySpecimen.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/operator-integration/TopologySpecimen.pdf": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/operator-integration/foundations/Topology.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/operator-integration/foundations/TopologyStatements.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

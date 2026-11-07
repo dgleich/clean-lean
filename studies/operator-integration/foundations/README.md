@@ -9,7 +9,7 @@ The driver is [../verify_prototype.py](../verify_prototype.py).
 
 | Module | Declared vocabulary |
 | --- | --- |
-| [Logic](Logic.clean.proposed) | Type, conditions, generic Type-0 equality, conjunction, negation, authored implication |
+| [Logic](Logic.clean.proposed) | Type, conditions, function types, generic Type-0 equality, conjunction, negation, equivalence, authored implication |
 | [Reals](Reals.clean.proposed) | Real, addition, multiplication, negative, order, authored difference |
 | [Sets](Sets.clean.proposed) | Set, union, intersection, subset, membership, authored common part |
 | [LinearAlgebra](LinearAlgebra.clean.proposed) | Natural dimensions, real matrices/vectors, product, application, scalar multiplication |
@@ -20,6 +20,11 @@ module deliberately specializes its carriers; this is not yet a general algebrai
 structure/typeclass interface. Sets and equality accept arbitrary Type-0 carriers.
 The wrappers expose basic Lean/Mathlib operations. The derived difference, common
 part and implication definitions are authored in Clean.
+
+| [Topology](Topology.clean.proposed) | Explicit topology values and openness; authored inverse image, image, composition, continuity, selection and family intersection |
+
+The [topology migration report](../topology-migration.md) checks four existing
+study results using this explicit vocabulary.
 
 ## Readable source and precise target
 
@@ -60,8 +65,8 @@ naming/collision rule and implementation; this study does not silently add one.
 
 ## Validation
 
-The foundation verifier checks 36 exact native targets: seven type bodies,
-eighteen callable bodies, six statements, four inferred matrix/scalar applications,
+The foundation verifier checks 38 exact native targets: eight type bodies,
+nineteen callable bodies, six statements, four inferred matrix/scalar applications,
 and the automatically named membership statement. Six proofs establish addition
 commutativity, the authored difference equation, intersection commutativity,
 common-part containment, intersection membership and matrix-product application.
@@ -77,7 +82,7 @@ was compiled twice and inspected for missing symbols and overflow. Its current
 rendering of `x+(-y)` is `x + −y`; preserving optional authored parentheses or
 adding readability parentheses around negative operands remains a presentation
 improvement. The mathematical grouping is unchanged. The full composed driver now checks
-62 exact targets and ten proofs across the three specimens.
+77 exact targets and seventeen proofs across the four specimens.
 
 ## Remaining scope
 

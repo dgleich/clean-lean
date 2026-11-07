@@ -58,7 +58,7 @@ with tempfile.TemporaryDirectory() as td:
     else:raise AssertionError('Undeclared automatic infix naming policy accepted')
 assert e.notation_definitions==other.notation_definitions
 for first,second in zip(results,again):assert first.conclusion.lean==second.conclusion.lean
-assert len(e.data['functions'])==18 and len(e.data['types'])==7
+assert len(e.data['functions'])==19 and len(e.data['types'])==8
 
 comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_basic_targets.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))
 native=lean(results,e,['Lean'])+comparison
@@ -74,12 +74,14 @@ for name,binders,typ,body in [
  ('Type','','Type 1','Type'),('Proposition','','Sort 1','Prop'),
  ('Set','(T : Type)','Type','Set T'),('Real','','Type','Real'),
  ('Natural','','Type','Nat'),('Matrix','(m n : Nat)','Type','Matrix (Fin m) (Fin n) Real'),
- ('Vector','(n : Nat)','Type','Fin n → Real')]:target(k(name),binders,typ,body)
+ ('Vector','(n : Nat)','Type','Fin n → Real'),
+ ('Function','(X Y : Type)','Type','X → Y')]:target(k(name),binders,typ,body)
 for name,binders,typ,body in [
  ('equal','{T : Type} (x y : T)',P,'x=y'),
  ('conjunction',f'(p q : {P})',P,'p ∧ q'),
  ('implication',f'(p q : {P})',P,'∀ (_ : p), q'),
  ('negation',f'(p : {P})',P,'¬p'),
+ ('equivalent',f'(p q : {P})',P,'p ↔ q'),
  ('union',f'{{T : Type}} (A B : {S} T)',f'{S} T','A ∪ B'),
  ('intersection',f'{{T : Type}} (A B : {S} T)',f'{S} T','A ∩ B'),
  ('subset',f'{{T : Type}} (A B : {S} T)',P,'A ⊆ B'),
@@ -141,11 +143,11 @@ named_native=lean([named_results[4]],named_env,[])
 named_native=named_native[named_native.index('namespace CleanStatements'):]
 native+=named_native.replace('CleanStatements','NamedAssumptions')
 target('NamedAssumptions.intersection_membership','','Prop',expected_statements[4])
-assert count==36
+assert count==38
 p=COMPILER/'FoundationsVerified.lean';p.write_text(native)
 subprocess.run([os.environ.get('LAKE','/home/claude/.elan/bin/lake'),'env','lean',str(p)],cwd=COMPILER,check=True)
 (HERE/'FoundationsVerified.lean').write_text(native)
 (HERE/'Foundations.tex').write_text(latex(results,e))
-print('Explicit foundations: 36 exact targets, six proofs; import order, dependent dimensions and missing-operator rejection passed')
+print('Explicit foundations: 38 exact targets, six proofs; import order, dependent dimensions and missing-operator rejection passed')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

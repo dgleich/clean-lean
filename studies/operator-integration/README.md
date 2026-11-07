@@ -47,7 +47,9 @@ The driver rebuilds from tracked source, applies the seven binding patches and
 this composition patch, and strictly regenerates/checks the parser. Do not also
 apply the older composed-operators patch. The original saved/dispatch checks comprise 26 exact Lean targets and four
 kernel-checked proofs. The subsequent [explicit foundations](foundations/README.md)
-add 36 exact targets and six proofs, making 62 targets and ten proofs in the driver. Expected native bodies and selected uses
+now add 38 exact targets and six proofs. The [topology migration](topology-migration.md)
+adds thirteen targets and seven proofs, making 77 targets and seventeen proofs
+in the driver. Expected native bodies and selected uses
 are independently written with explicit generated-name mappings. The semantic
 checks cover candidate-order reversal, ambiguous equal-bodied declarations,
 wrong dependent witnesses, same-spelled local carriers, interrupted analysis and

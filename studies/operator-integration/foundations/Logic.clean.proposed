@@ -35,3 +35,14 @@ Condition negation(p: Proposition):
   Render: not {p}
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Type Function(X: Type,Y: Type):
+  Means: (X) → (Y)
+  Render latex: {X}\to {Y}
+  Describe: a function from ${X}$ to ${Y}$
+  Describe plural: functions from ${X}$ to ${Y}$
+
+Condition equivalent(p: Proposition,q: Proposition):
+  Infix: ↔
+  From Lean: p ↔ q
+  Render: {p} if and only if {q}

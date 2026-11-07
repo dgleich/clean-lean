@@ -378,3 +378,15 @@ definitions over relative chains. The selected-degree components agree with the
 existing interfaces. Ten exact targets and five proofs cover the definitions and
 graded chain-homology laws; pair-functor laws and exactness/excision remain open.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Explicit operator migration prototype
+
+The [isolated migration](../operator-integration/topology-migration.md) now
+rechecks this study's four original foundation results using declared Logic and
+Sets operators. Mathematical definition bodies stay authored in Clean. Thirteen
+exact targets and seven proofs cover that slice; the production files here and
+the larger homology/well-group modules are not yet migrated. The agreement harness
+now explicitly imports Mathlib.Topology.Continuous for continuous_def.
+:::

@@ -22,6 +22,12 @@ noncomputable def cleanDefine_implication_1f3f9e2e944d6a1d3361  (p : (_root_.cle
 noncomputable def cleanDefine_negation_9dda1c9733c05d83ca6e  (p : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   ¬p
 
+noncomputable abbrev cleanType_Function_12d8de15d2a858a3dd9d (X : Type) (Y : Type) : Type :=
+  (X) → (Y)
+
+noncomputable def cleanDefine_equivalent_38494fec3ab77a8922dc  (p : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (q : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  p ↔ q
+
 noncomputable abbrev cleanType_Set_5f6d12891083226ff185 (T : Type) : Type :=
   Set T
 
@@ -191,97 +197,103 @@ same_basic_target cleanType_Matrix_931ade84b5cc3b2b3285 expected_foundation_5
 noncomputable def expected_foundation_6 (n : Nat) : Type := Fin n → Real
 same_basic_target cleanType_Vector_6f95cf6726ca8c24260f expected_foundation_6
 
-noncomputable def expected_foundation_7 {T : Type} (x y : T) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := x=y
-same_basic_target cleanDefine_equal_59dc0f11ba9b345348cf expected_foundation_7
+noncomputable def expected_foundation_7 (X Y : Type) : Type := X → Y
+same_basic_target cleanType_Function_12d8de15d2a858a3dd9d expected_foundation_7
 
-noncomputable def expected_foundation_8 (p q : _root_.cleanType_Proposition_ae4a13d2f060407bce35) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := p ∧ q
-same_basic_target cleanDefine_conjunction_ae2d24c261b2e4e69e4e expected_foundation_8
+noncomputable def expected_foundation_8 {T : Type} (x y : T) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := x=y
+same_basic_target cleanDefine_equal_59dc0f11ba9b345348cf expected_foundation_8
 
-noncomputable def expected_foundation_9 (p q : _root_.cleanType_Proposition_ae4a13d2f060407bce35) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := ∀ (_ : p), q
-same_basic_target cleanDefine_implication_1f3f9e2e944d6a1d3361 expected_foundation_9
+noncomputable def expected_foundation_9 (p q : _root_.cleanType_Proposition_ae4a13d2f060407bce35) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := p ∧ q
+same_basic_target cleanDefine_conjunction_ae2d24c261b2e4e69e4e expected_foundation_9
 
-noncomputable def expected_foundation_10 (p : _root_.cleanType_Proposition_ae4a13d2f060407bce35) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := ¬p
-same_basic_target cleanDefine_negation_9dda1c9733c05d83ca6e expected_foundation_10
+noncomputable def expected_foundation_10 (p q : _root_.cleanType_Proposition_ae4a13d2f060407bce35) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := ∀ (_ : p), q
+same_basic_target cleanDefine_implication_1f3f9e2e944d6a1d3361 expected_foundation_10
 
-noncomputable def expected_foundation_11 {T : Type} (A B : _root_.cleanType_Set_5f6d12891083226ff185 T) : _root_.cleanType_Set_5f6d12891083226ff185 T := A ∪ B
-same_basic_target cleanNotation_union_dcc6950eff8ce91fc4c5 expected_foundation_11
+noncomputable def expected_foundation_11 (p : _root_.cleanType_Proposition_ae4a13d2f060407bce35) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := ¬p
+same_basic_target cleanDefine_negation_9dda1c9733c05d83ca6e expected_foundation_11
 
-noncomputable def expected_foundation_12 {T : Type} (A B : _root_.cleanType_Set_5f6d12891083226ff185 T) : _root_.cleanType_Set_5f6d12891083226ff185 T := A ∩ B
-same_basic_target cleanNotation_intersection_3664aeb82d8ed4eb3723 expected_foundation_12
+noncomputable def expected_foundation_12 (p q : _root_.cleanType_Proposition_ae4a13d2f060407bce35) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := p ↔ q
+same_basic_target cleanDefine_equivalent_38494fec3ab77a8922dc expected_foundation_12
 
-noncomputable def expected_foundation_13 {T : Type} (A B : _root_.cleanType_Set_5f6d12891083226ff185 T) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := A ⊆ B
-same_basic_target cleanDefine_subset_c18f8bc50dce9defa00e expected_foundation_13
+noncomputable def expected_foundation_13 {T : Type} (A B : _root_.cleanType_Set_5f6d12891083226ff185 T) : _root_.cleanType_Set_5f6d12891083226ff185 T := A ∪ B
+same_basic_target cleanNotation_union_dcc6950eff8ce91fc4c5 expected_foundation_13
 
-noncomputable def expected_foundation_14 {T : Type} (x : T) (A : _root_.cleanType_Set_5f6d12891083226ff185 T) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := x ∈ A
-same_basic_target cleanDefine_member_7c91d8d36d949b553ecb expected_foundation_14
+noncomputable def expected_foundation_14 {T : Type} (A B : _root_.cleanType_Set_5f6d12891083226ff185 T) : _root_.cleanType_Set_5f6d12891083226ff185 T := A ∩ B
+same_basic_target cleanNotation_intersection_3664aeb82d8ed4eb3723 expected_foundation_14
 
-noncomputable def expected_foundation_15 {T : Type} (A B : _root_.cleanType_Set_5f6d12891083226ff185 T) : _root_.cleanType_Set_5f6d12891083226ff185 T := @_root_.cleanNotation_intersection_3664aeb82d8ed4eb3723 T A B
-same_basic_target cleanDefine_common_part_dac9c8c8052d029840f9 expected_foundation_15
+noncomputable def expected_foundation_15 {T : Type} (A B : _root_.cleanType_Set_5f6d12891083226ff185 T) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := A ⊆ B
+same_basic_target cleanDefine_subset_c18f8bc50dce9defa00e expected_foundation_15
 
-noncomputable def expected_foundation_16 (x y : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Real_8457e8182afcbbac5a10 := x+y
-same_basic_target cleanNotation_real_addition_2f9c0f4763f570a3d88b expected_foundation_16
+noncomputable def expected_foundation_16 {T : Type} (x : T) (A : _root_.cleanType_Set_5f6d12891083226ff185 T) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := x ∈ A
+same_basic_target cleanDefine_member_7c91d8d36d949b553ecb expected_foundation_16
 
-noncomputable def expected_foundation_17 (x y : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Real_8457e8182afcbbac5a10 := x*y
-same_basic_target cleanNotation_real_multiplication_d0c3228ee18f92e85dfc expected_foundation_17
+noncomputable def expected_foundation_17 {T : Type} (A B : _root_.cleanType_Set_5f6d12891083226ff185 T) : _root_.cleanType_Set_5f6d12891083226ff185 T := @_root_.cleanNotation_intersection_3664aeb82d8ed4eb3723 T A B
+same_basic_target cleanDefine_common_part_dac9c8c8052d029840f9 expected_foundation_17
 
-noncomputable def expected_foundation_18 (x : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Real_8457e8182afcbbac5a10 := -x
-same_basic_target cleanNotation_real_negative_4287e62987bfb0a81586 expected_foundation_18
+noncomputable def expected_foundation_18 (x y : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Real_8457e8182afcbbac5a10 := x+y
+same_basic_target cleanNotation_real_addition_2f9c0f4763f570a3d88b expected_foundation_18
 
-noncomputable def expected_foundation_19 (x y : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := x ≤ y
-same_basic_target cleanDefine_real_at_most_e358c3829d332446969b expected_foundation_19
+noncomputable def expected_foundation_19 (x y : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Real_8457e8182afcbbac5a10 := x*y
+same_basic_target cleanNotation_real_multiplication_d0c3228ee18f92e85dfc expected_foundation_19
 
-noncomputable def expected_foundation_20 (x y : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Real_8457e8182afcbbac5a10 := _root_.cleanNotation_real_addition_2f9c0f4763f570a3d88b x (_root_.cleanNotation_real_negative_4287e62987bfb0a81586 y)
-same_basic_target cleanDefine_real_difference_e669fb606a3082576233 expected_foundation_20
+noncomputable def expected_foundation_20 (x : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Real_8457e8182afcbbac5a10 := -x
+same_basic_target cleanNotation_real_negative_4287e62987bfb0a81586 expected_foundation_20
 
-noncomputable def expected_foundation_21 {m n p : _root_.cleanType_Natural_ed60542607241095b2d0} (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m p := A*B
-same_basic_target cleanNotation_matrix_product_13c120c46037b521cd1a expected_foundation_21
+noncomputable def expected_foundation_21 (x y : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := x ≤ y
+same_basic_target cleanDefine_real_at_most_e358c3829d332446969b expected_foundation_21
 
-noncomputable def expected_foundation_22 {m n : _root_.cleanType_Natural_ed60542607241095b2d0} (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) : _root_.cleanType_Vector_6f95cf6726ca8c24260f m := Matrix.mulVec A x
-same_basic_target cleanNotation_matrix_application_d95f015d11f6de7d4aeb expected_foundation_22
+noncomputable def expected_foundation_22 (x y : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Real_8457e8182afcbbac5a10 := _root_.cleanNotation_real_addition_2f9c0f4763f570a3d88b x (_root_.cleanNotation_real_negative_4287e62987bfb0a81586 y)
+same_basic_target cleanDefine_real_difference_e669fb606a3082576233 expected_foundation_22
 
-noncomputable def expected_foundation_23 {m n : _root_.cleanType_Natural_ed60542607241095b2d0} (s : _root_.cleanType_Real_8457e8182afcbbac5a10) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n := s • A
-same_basic_target cleanNotation_scale_matrix_b8c46e89838abc1442fd expected_foundation_23
+noncomputable def expected_foundation_23 {m n p : _root_.cleanType_Natural_ed60542607241095b2d0} (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m p := A*B
+same_basic_target cleanNotation_matrix_product_13c120c46037b521cd1a expected_foundation_23
 
-noncomputable def expected_foundation_24 {n : _root_.cleanType_Natural_ed60542607241095b2d0} (s : _root_.cleanType_Real_8457e8182afcbbac5a10) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) : _root_.cleanType_Vector_6f95cf6726ca8c24260f n := s • x
-same_basic_target cleanNotation_scale_vector_38dd53b8177c9787c58a expected_foundation_24
+noncomputable def expected_foundation_24 {m n : _root_.cleanType_Natural_ed60542607241095b2d0} (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) : _root_.cleanType_Vector_6f95cf6726ca8c24260f m := Matrix.mulVec A x
+same_basic_target cleanNotation_matrix_application_d95f015d11f6de7d4aeb expected_foundation_24
 
-noncomputable def expected_foundation_25  : Prop := ∀ (x y : _root_.cleanType_Real_8457e8182afcbbac5a10), @_root_.cleanDefine_equal_59dc0f11ba9b345348cf _root_.cleanType_Real_8457e8182afcbbac5a10 (_root_.cleanNotation_real_addition_2f9c0f4763f570a3d88b x y) (_root_.cleanNotation_real_addition_2f9c0f4763f570a3d88b y x)
-same_basic_target CleanStatements.addition_commutes expected_foundation_25
+noncomputable def expected_foundation_25 {m n : _root_.cleanType_Natural_ed60542607241095b2d0} (s : _root_.cleanType_Real_8457e8182afcbbac5a10) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n := s • A
+same_basic_target cleanNotation_scale_matrix_b8c46e89838abc1442fd expected_foundation_25
 
-noncomputable def expected_foundation_26  : Prop := ∀ (x y : _root_.cleanType_Real_8457e8182afcbbac5a10), @_root_.cleanDefine_equal_59dc0f11ba9b345348cf _root_.cleanType_Real_8457e8182afcbbac5a10 (_root_.cleanDefine_real_difference_e669fb606a3082576233 x y) (_root_.cleanNotation_real_addition_2f9c0f4763f570a3d88b x (_root_.cleanNotation_real_negative_4287e62987bfb0a81586 y))
-same_basic_target CleanStatements.subtraction_means_addition_of_the_negative expected_foundation_26
+noncomputable def expected_foundation_26 {n : _root_.cleanType_Natural_ed60542607241095b2d0} (s : _root_.cleanType_Real_8457e8182afcbbac5a10) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) : _root_.cleanType_Vector_6f95cf6726ca8c24260f n := s • x
+same_basic_target cleanNotation_scale_vector_38dd53b8177c9787c58a expected_foundation_26
 
-noncomputable def expected_foundation_27  : Prop := ∀ (T : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (A B : _root_.cleanType_Set_5f6d12891083226ff185 T), @_root_.cleanDefine_equal_59dc0f11ba9b345348cf (_root_.cleanType_Set_5f6d12891083226ff185 T) (@_root_.cleanNotation_intersection_3664aeb82d8ed4eb3723 T A B) (@_root_.cleanNotation_intersection_3664aeb82d8ed4eb3723 T B A)
-same_basic_target CleanStatements.intersection_commutes expected_foundation_27
+noncomputable def expected_foundation_27  : Prop := ∀ (x y : _root_.cleanType_Real_8457e8182afcbbac5a10), @_root_.cleanDefine_equal_59dc0f11ba9b345348cf _root_.cleanType_Real_8457e8182afcbbac5a10 (_root_.cleanNotation_real_addition_2f9c0f4763f570a3d88b x y) (_root_.cleanNotation_real_addition_2f9c0f4763f570a3d88b y x)
+same_basic_target CleanStatements.addition_commutes expected_foundation_27
 
-noncomputable def expected_foundation_28  : Prop := ∀ (T : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (A B : _root_.cleanType_Set_5f6d12891083226ff185 T), @_root_.cleanDefine_subset_c18f8bc50dce9defa00e T (@_root_.cleanDefine_common_part_dac9c8c8052d029840f9 T A B) A
-same_basic_target CleanStatements.common_part_is_contained expected_foundation_28
+noncomputable def expected_foundation_28  : Prop := ∀ (x y : _root_.cleanType_Real_8457e8182afcbbac5a10), @_root_.cleanDefine_equal_59dc0f11ba9b345348cf _root_.cleanType_Real_8457e8182afcbbac5a10 (_root_.cleanDefine_real_difference_e669fb606a3082576233 x y) (_root_.cleanNotation_real_addition_2f9c0f4763f570a3d88b x (_root_.cleanNotation_real_negative_4287e62987bfb0a81586 y))
+same_basic_target CleanStatements.subtraction_means_addition_of_the_negative expected_foundation_28
 
-noncomputable def expected_foundation_29  : Prop := ∀ (T : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (x : T) (A B : _root_.cleanType_Set_5f6d12891083226ff185 T) (_ : @_root_.cleanDefine_member_7c91d8d36d949b553ecb T x A) (_ : @_root_.cleanDefine_member_7c91d8d36d949b553ecb T x B), @_root_.cleanDefine_member_7c91d8d36d949b553ecb T x (@_root_.cleanNotation_intersection_3664aeb82d8ed4eb3723 T A B)
-same_basic_target CleanStatements.intersection_membership expected_foundation_29
+noncomputable def expected_foundation_29  : Prop := ∀ (T : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (A B : _root_.cleanType_Set_5f6d12891083226ff185 T), @_root_.cleanDefine_equal_59dc0f11ba9b345348cf (_root_.cleanType_Set_5f6d12891083226ff185 T) (@_root_.cleanNotation_intersection_3664aeb82d8ed4eb3723 T A B) (@_root_.cleanNotation_intersection_3664aeb82d8ed4eb3723 T B A)
+same_basic_target CleanStatements.intersection_commutes expected_foundation_29
 
-noncomputable def expected_foundation_30  : Prop := ∀ (m n p : _root_.cleanType_Natural_ed60542607241095b2d0) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f p), @_root_.cleanDefine_equal_59dc0f11ba9b345348cf (_root_.cleanType_Vector_6f95cf6726ca8c24260f m) (@_root_.cleanNotation_matrix_application_d95f015d11f6de7d4aeb m p (@_root_.cleanNotation_matrix_product_13c120c46037b521cd1a m n p A B) x) (@_root_.cleanNotation_matrix_application_d95f015d11f6de7d4aeb m n A (@_root_.cleanNotation_matrix_application_d95f015d11f6de7d4aeb n p B x))
-same_basic_target CleanStatements.matrix_product_application expected_foundation_30
+noncomputable def expected_foundation_30  : Prop := ∀ (T : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (A B : _root_.cleanType_Set_5f6d12891083226ff185 T), @_root_.cleanDefine_subset_c18f8bc50dce9defa00e T (@_root_.cleanDefine_common_part_dac9c8c8052d029840f9 T A B) A
+same_basic_target CleanStatements.common_part_is_contained expected_foundation_30
+
+noncomputable def expected_foundation_31  : Prop := ∀ (T : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (x : T) (A B : _root_.cleanType_Set_5f6d12891083226ff185 T) (_ : @_root_.cleanDefine_member_7c91d8d36d949b553ecb T x A) (_ : @_root_.cleanDefine_member_7c91d8d36d949b553ecb T x B), @_root_.cleanDefine_member_7c91d8d36d949b553ecb T x (@_root_.cleanNotation_intersection_3664aeb82d8ed4eb3723 T A B)
+same_basic_target CleanStatements.intersection_membership expected_foundation_31
+
+noncomputable def expected_foundation_32  : Prop := ∀ (m n p : _root_.cleanType_Natural_ed60542607241095b2d0) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f p), @_root_.cleanDefine_equal_59dc0f11ba9b345348cf (_root_.cleanType_Vector_6f95cf6726ca8c24260f m) (@_root_.cleanNotation_matrix_application_d95f015d11f6de7d4aeb m p (@_root_.cleanNotation_matrix_product_13c120c46037b521cd1a m n p A B) x) (@_root_.cleanNotation_matrix_application_d95f015d11f6de7d4aeb m n A (@_root_.cleanNotation_matrix_application_d95f015d11f6de7d4aeb n p B x))
+same_basic_target CleanStatements.matrix_product_application expected_foundation_32
 
 noncomputable def actual_application_0 (m n p : _root_.cleanType_Natural_ed60542607241095b2d0) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) (s : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m p := (@_root_.cleanNotation_matrix_product_13c120c46037b521cd1a (m) (n) (p) (A) (B))
 
-noncomputable def expected_foundation_31 (m n p : _root_.cleanType_Natural_ed60542607241095b2d0) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) (s : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m p := @_root_.cleanNotation_matrix_product_13c120c46037b521cd1a m n p A B
-same_basic_target actual_application_0 expected_foundation_31
+noncomputable def expected_foundation_33 (m n p : _root_.cleanType_Natural_ed60542607241095b2d0) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) (s : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m p := @_root_.cleanNotation_matrix_product_13c120c46037b521cd1a m n p A B
+same_basic_target actual_application_0 expected_foundation_33
 
 noncomputable def actual_application_1 (m n p : _root_.cleanType_Natural_ed60542607241095b2d0) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) (s : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Vector_6f95cf6726ca8c24260f m := (@_root_.cleanNotation_matrix_application_d95f015d11f6de7d4aeb (m) (n) (A) (x))
 
-noncomputable def expected_foundation_32 (m n p : _root_.cleanType_Natural_ed60542607241095b2d0) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) (s : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Vector_6f95cf6726ca8c24260f m := @_root_.cleanNotation_matrix_application_d95f015d11f6de7d4aeb m n A x
-same_basic_target actual_application_1 expected_foundation_32
+noncomputable def expected_foundation_34 (m n p : _root_.cleanType_Natural_ed60542607241095b2d0) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) (s : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Vector_6f95cf6726ca8c24260f m := @_root_.cleanNotation_matrix_application_d95f015d11f6de7d4aeb m n A x
+same_basic_target actual_application_1 expected_foundation_34
 
 noncomputable def actual_application_2 (m n p : _root_.cleanType_Natural_ed60542607241095b2d0) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) (s : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n := (@_root_.cleanNotation_scale_matrix_b8c46e89838abc1442fd (m) (n) (s) (A))
 
-noncomputable def expected_foundation_33 (m n p : _root_.cleanType_Natural_ed60542607241095b2d0) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) (s : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n := @_root_.cleanNotation_scale_matrix_b8c46e89838abc1442fd m n s A
-same_basic_target actual_application_2 expected_foundation_33
+noncomputable def expected_foundation_35 (m n p : _root_.cleanType_Natural_ed60542607241095b2d0) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) (s : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n := @_root_.cleanNotation_scale_matrix_b8c46e89838abc1442fd m n s A
+same_basic_target actual_application_2 expected_foundation_35
 
 noncomputable def actual_application_3 (m n p : _root_.cleanType_Natural_ed60542607241095b2d0) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) (s : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Vector_6f95cf6726ca8c24260f n := (@_root_.cleanNotation_scale_vector_38dd53b8177c9787c58a (n) (s) (x))
 
-noncomputable def expected_foundation_34 (m n p : _root_.cleanType_Natural_ed60542607241095b2d0) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) (s : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Vector_6f95cf6726ca8c24260f n := @_root_.cleanNotation_scale_vector_38dd53b8177c9787c58a n s x
-same_basic_target actual_application_3 expected_foundation_34
+noncomputable def expected_foundation_36 (m n p : _root_.cleanType_Natural_ed60542607241095b2d0) (A : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 m n) (B : _root_.cleanType_Matrix_931ade84b5cc3b2b3285 n p) (x : _root_.cleanType_Vector_6f95cf6726ca8c24260f n) (s : _root_.cleanType_Real_8457e8182afcbbac5a10) : _root_.cleanType_Vector_6f95cf6726ca8c24260f n := @_root_.cleanNotation_scale_vector_38dd53b8177c9787c58a n s x
+same_basic_target actual_application_3 expected_foundation_36
 
 theorem addition_checked : CleanStatements.addition_commutes := by
   intro x y
@@ -327,7 +339,7 @@ def intersection_membership : Prop :=
 
 end NamedAssumptions
 
-noncomputable def expected_foundation_35  : Prop := ∀ (T : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (x : T) (A B : _root_.cleanType_Set_5f6d12891083226ff185 T) (_ : @_root_.cleanDefine_member_7c91d8d36d949b553ecb T x A) (_ : @_root_.cleanDefine_member_7c91d8d36d949b553ecb T x B), @_root_.cleanDefine_member_7c91d8d36d949b553ecb T x (@_root_.cleanNotation_intersection_3664aeb82d8ed4eb3723 T A B)
-same_basic_target NamedAssumptions.intersection_membership expected_foundation_35
+noncomputable def expected_foundation_37  : Prop := ∀ (T : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (x : T) (A B : _root_.cleanType_Set_5f6d12891083226ff185 T) (_ : @_root_.cleanDefine_member_7c91d8d36d949b553ecb T x A) (_ : @_root_.cleanDefine_member_7c91d8d36d949b553ecb T x B), @_root_.cleanDefine_member_7c91d8d36d949b553ecb T x (@_root_.cleanNotation_intersection_3664aeb82d8ed4eb3723 T A B)
+same_basic_target NamedAssumptions.intersection_membership expected_foundation_37
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
