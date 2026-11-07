@@ -129,3 +129,46 @@ not yet clip intervals, discard empty intersections, reindex surviving basis
 vectors or prove that they form a basis at each restricted vertex. The pyramid,
 interlevel extension and paper theorem remain separate unfinished mathematics.
 :::
+
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Isolated implementation checkpoint
+
+The [prototype patch](callable-evidence-prototype.patch) records the experimental
+compiler and ten focused tests without changing the compiler being validated in
+the main repository. It applies to the compiler at commit 6ca37dd. This is a
+reviewable intermediate implementation, not an accepted or integrated language
+change. Apply it only to an isolated copy when reproducing the experiment.
+
+The experiment stores a checked condition tree, captured local expressions and
+an owned comparison key in a scoped proof index. A source-derived callable view
+exposes an authored universal condition as a dependent function type. Emission
+retains the original proof type and uses the original evidence term. The ten
+focused tests pass, as do twenty existing dependent-function tests. Independent
+native checks of four definitions and three propositions pass, with three proofs.
+Those native fixtures remain in the isolated working study and must be packaged
+with the eventual integration; the patch alone is not their reproducible verifier.
+
+The initial evidence regression run passes nine of ten tests. Its remaining test
+asserts the old rule that a quantified assumption cannot be used as a value.
+That assertion must be replaced with independent positive and negative oracles;
+it is not a passing regression result.
+
+One necessary extension surfaced during the experiment: Evidence is a transparent
+alias taking a condition as a value argument. Supporting a direct universal
+condition therefore requires scoped condition-valued type indices as well as
+proof types. The prototype permits these only when the argument's checked type
+is Proposition. Other computed indices still reject binders. Type syntax spelling
+must preserve these binders without deciding whether an argument is a condition.
+This boundary needs to enter the formal specification and acceptance catalog
+before integration.
+
+Remaining work includes a full substitution and expression-consumer audit, exact
+targets for projected proof fields and captured scopes, implication/condition-head
+policy, local/module call-name collisions, more negative domain and equation tests,
+canonical comparison under binder renaming, packageable native fixtures, LaTeX
+inspection and full regression validation. The experiment has not established
+conformance. In particular, general captured-scope substitution must not be
+inferred safe merely from the ten passing examples.
+:::

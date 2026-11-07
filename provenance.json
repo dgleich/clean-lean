@@ -4100,6 +4100,10 @@
     "studies/subpath-restrictions/design.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "studies/subpath-restrictions/callable-evidence-prototype.patch": {
+      "origin": "llm-assisted",
+      "mode": "sidecar"
     }
   }
 }

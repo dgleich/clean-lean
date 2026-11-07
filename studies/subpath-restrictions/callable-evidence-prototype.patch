@@ -1,0 +1,200 @@
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -126,7 +126,8 @@
+ def proof_type(condition,environment=None,locals=None):
+     from .indices import index_value
+     if condition.type!=PROP:raise CleanError('A computed proof type must be a condition')
+-    return ProofType(index_value(condition,environment,locals))
++    from .proof_types import index
++    return ProofType(index(condition,environment,locals or {}))
+ 
+ 
+ 
+@@ -237,7 +238,8 @@
+                 if actual.type!=expected:
+                     raise CleanError(f'Value index {a} requires {expected}, got {actual.type}')
+                 from .indices import index_value
+-                out.append(index_value(actual,self,env or {}));continue
++                from .proof_types import index as condition_index
++                out.append(condition_index(actual,self,env or {}) if actual.type==PROP else index_value(actual,self,env or {}));continue
+             if not (a.startswith('(') or re.fullmatch(r'\d+|'+ID+r'(?:\.'+ID+r')*',a)):
+                 raise CleanError('Dimension must be a numeral, natural parameter, field or parenthesized computation')
+             if re.fullmatch(ID,a) and (env is None or a not in env or env[a].type!=NAT):
+@@ -267,6 +269,9 @@
+             return bindings[t.name].lean if target=='lean' and t.name in bindings else t.name
+         return self.data['types'][t.name][target].format(*args)
+     def is_function_type(self,t):
++        if isinstance(t,ProofType):
++            from .proof_types import callable_view
++            return callable_view(t,self) is not None
+         from .dependent_functions import DependentFunctionType
+         if isinstance(t,DependentFunctionType):return True
+         spec=self.data['types'].get(t.name,{})
+@@ -358,6 +363,10 @@
+             return substitutions.get(t,t)
+ 
+         def match(pattern,actual):
++            from .proof_types import callable_view
++            if isinstance(pattern,ProofType) != isinstance(actual,ProofType):
++                pattern=callable_view(pattern,self) or pattern
++                actual=callable_view(actual,self) or actual
+             # Preserve concrete numeric argument compatibility on migrated dimension signatures.
+             if actual==NUM and pattern in (NAT,Type('Real'),Type('Complex')):return
+             from .indices import DimensionIndex
+--- a/cleanlang/dependent_functions.py
++++ b/cleanlang/dependent_functions.py
+@@ -164,9 +164,10 @@
+ 
+ def application(function,args,env,locals,tree,tex):
+     from .core import compatible
+-    if not env.is_function_type(function.type) or len(args)!=1 or not compatible(args[0].type,function.type.args[0]):
++    from .proof_types import callable_view
++    typ=callable_view(function.type,env)
++    if typ is None or not env.is_function_type(typ) or len(args)!=1 or not compatible(args[0].type,typ.args[0]):
+         raise CleanError('Function field argument mismatch' if tree[0]=='Apply' else 'Function argument mismatch')
+-    typ=function.type
+     result=substitute(typ.codomain,{typ.binder:args[0]},env,locals) if isinstance(typ,DependentFunctionType) else typ.args[1]
+     return Expr('('+function.lean+' '+args[0].lean+')',tex,result,tree=tree)
+ 
+--- a/cleanlang/indices.py
++++ b/cleanlang/indices.py
+@@ -33,6 +33,8 @@
+ 
+ 
+ def substitute_index(index,bindings,env,locals):
++    from .proof_types import ProofIndex,substitute_proof
++    if isinstance(index,ProofIndex):return substitute_proof(index,bindings,env,locals)
+     from .core import Expressions,Expr
+     from .syntax import parse,expression_tree
+     tree=json.loads(index.syntax) if isinstance(index,ComputedIndex) else expression_tree(parse(index.name,'expression'))
+--- a/cleanlang/syntax.py
++++ b/cleanlang/syntax.py
+@@ -31,7 +31,9 @@
+ 
+ def type_spelling(tree):
+     if isinstance(tree,generated.Token):return str(tree)
+-    if tree.data=='computed_index':return '('+expression_spelling(expression_tree(tree.children[0]))+')'
++    if tree.data=='computed_index':
++        from .proof_types import proof_spelling
++        return '('+proof_spelling(expression_tree(tree.children[0]))+')'
+     if tree.data=='index_reference':return '.'.join(map(str,tree.children))
+     if tree.data=='type_ref':
+         head=str(tree.children[0])
+--- /dev/null
++++ b/cleanlang/proof_types.py
+@@ -0,0 +1,77 @@
++# generated: gpt-6 2026-11-07 role=assisted; experimental, not integrated
++"""Prototype scoped evidence indices and a source-derived callable view."""
++from dataclasses import dataclass,field
++import json
++from .core import ProofType,Expr,Expressions,PROP,texid
++from .indices import ComputedIndex
++
++@dataclass(frozen=True,eq=False)
++class ProofIndex(ComputedIndex):
++    scope: tuple = field(default=(),compare=False)
++
++
++def index(expression,env,locals):
++    from .conversion import index_comparison
++    from .syntax import expression_spelling
++    return ProofIndex('('+proof_spelling(expression.tree)+')',expression.lean,expression.tex,
++                      json.dumps(expression.tree,ensure_ascii=False),tuple(locals.items()),
++                      comparison=index_comparison(expression,env,locals))
++
++
++def callable_view(typ,env):
++    if not isinstance(typ,ProofType):return typ
++    saved=typ.args[0]
++    if not isinstance(saved,ProofIndex):return None
++    from .hygiene import substitute
++    from .conversion import _normal_form
++    from .dependent_functions import fresh_source,fresh_bound,inferred_type
++    scope=dict(saved.scope)
++    tree=substitute(json.loads(saved.syntax),{},env,scope)
++    condition=_normal_form(Expressions(env,scope).elaborate(tree),env,scope)
++    if condition.tree[0]!='Forall':return None
++    _,name,annotation,body=condition.tree
++    domain=env.type(annotation,scope,phrases=False)
++    bound=fresh_bound(env,scope)
++    scope[name]=Expr(bound,texid(name),domain,tree=['Local',name])
++    result=Expressions(env,scope).elaborate(body)
++    codomain=ProofType(index(result,env,scope))
++    return inferred_type(name,bound,domain,codomain,env,scope)
++
++
++def substitute_proof(saved,bindings,env,locals):
++    from .hygiene import substitute
++    from .core import Type,ValueIndex
++    from .dependent_functions import index_tree
++    from .syntax import parse,expression_tree
++    scope={**dict(saved.scope),**locals}
++    values={}
++    for k,v in bindings.items():
++        if isinstance(v,Expr):values[k]=v
++        elif isinstance(v,ValueIndex):values[k]=Expressions(env,locals).elaborate(index_tree(v))
++        elif isinstance(v,str):values[k]=Expressions(env,locals).elaborate(expression_tree(parse(v,'expression')))
++    types={k:v for k,v in bindings.items() if isinstance(v,Type)}
++    tree=substitute(json.loads(saved.syntax),values,env,scope,types)
++    result=Expressions(env,scope).elaborate(tree)
++    return index(result,env,scope)
++
++def proof_spelling(tree):
++    """Canonical, fully grouped source for binder-free index expressions."""
++    from .core import CleanError
++    kind=tree[0]
++    if kind in ('Local','Decimal'):return tree[1]
++    if kind=='TypeValue':return 'type('+tree[1]+')'
++    if kind=='Call':return tree[1]+'('+','.join(map(proof_spelling,tree[2]))+')'
++    if kind=='Projection':
++        base=proof_spelling(tree[1])
++        if tree[1][0]=='Apply':base='('+base+')'
++        return base+'.'+tree[2]
++    if kind=='Apply':
++        if tree[1][0] not in ('Local','Projection'):raise CleanError('Computed index application requires a named function or field')
++        return proof_spelling(tree[1])+'('+','.join(map(proof_spelling,tree[2]))+')'
++    if kind=='Operator':return '('+proof_spelling(tree[2])+' '+tree[1]+' '+proof_spelling(tree[3])+')'
++    if kind=='Unary':return '('+tree[1]+' '+proof_spelling(tree[2])+')'
++    if kind in ('Forall','Exists','Lambda'):
++        word={'Forall':'for every','Exists':'there exists','Lambda':'function'}[kind]
++        return word+'('+tree[1]+': '+tree[2]+','+proof_spelling(tree[3])+')'
++    raise CleanError('Unsupported proof expression')
++
+--- /dev/null
++++ b/tests/test_callable_evidence.py
+@@ -0,0 +1,35 @@
++# generated: gpt-6 2026-11-07 role=assisted; experimental
++import unittest,sys,tempfile
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[1]
++sys.path.insert(0,str(ROOT))
++from cleanlang.core import Environment,CleanError,lean
++from cleanlang.modules import load_document
++from cleanlang.syntax import expression_tree,parse
++BASE=f'''Import "{ROOT / 'library/logic/evidence.clean'}"
++Source test:
++  Kind: other
++  Label: test
++  Title: test
++'''
++class CallableEvidence(unittest.TestCase):
++ def load(self,definitions,clauses):
++  with tempfile.TemporaryDirectory() as td:
++   p=Path(td)/'Test.clean';p.write_text(BASE+definitions+'\nResult specimen:\n  Attribution: test; specimen; original\n'+clauses)
++   e=Environment();r=load_document(p,e);return lean(r,e,['Lean'])
++ def test_parse(self):self.assertEqual(expression_tree(parse('h(n)','expression')),['Call','h',[['Local','n']]])
++ def test_direct(self):self.load('', '  Assume h: for every (x: Natural,x = x)\n  Let n: Natural\n  Let p = h(n)\n  Conclude: p = p\n')
++ def test_later_binder_name(self):self.load('', '  Assume h: for every (x: Natural,x = x)\n  Let x: Natural\n  Let p = h(x)\n  Conclude: p = p\n')
++ def test_nested_capture(self):self.load('', '  Let n: Natural\n  Assume h: for every (x: Natural,for every (y: Natural,x+y = n))\n  Let y: Natural\n  Let k = h(y)\n  Let p = k(n)\n  Conclude: p = p\n')
++ def test_wrong_domain(self):
++  with self.assertRaisesRegex(CleanError,'argument mismatch'):self.load('', '  Assume h: for every (x: Natural,x = x)\n  Let z: Complex\n  Let p = h(z)\n  Conclude: p = p\n')
++ def test_nonuniversal(self):
++  with self.assertRaisesRegex(CleanError,'Unknown function'):self.load('', '  Let n: Natural\n  Assume h: n = n\n  Let p = h(n)\n  Conclude: p = p\n')
++ def test_opaque(self):
++  with self.assertRaisesRegex(CleanError,'Unknown function'):self.load('Notation opaque():\n  Returns: Proposition\n  Means: ∀ x : ℕ, x = x\n  Render latex: opaque\n', '  Let n: Natural\n  Assume h: opaque()\n  Let p = h(n)\n  Conclude: p = p\n')
++ def test_projected(self):self.load('Structure Witness():\n  Let all: Evidence((for every (x: Natural,x = x)))\n  Constructor: witness\n', '  Let w: Witness\n  Let n: Natural\n  Let p = w.all(n)\n  Conclude: p = p\n')
++ def test_later_type_collision(self):self.load('', '  Assume h: for every (x: Real,x = x)\n  Let z: Real\n  Let Real: Type\n  Let p = h(z)\n  Conclude: p = p\n')
++ def test_wrong_equation(self):
++  definitions='Define consume(g,n):\n  Let g: Function(x: Natural,Evidence((x = x)))\n  Let n: Natural\n  Returns: Evidence((n = n))\n  Equals: g(n)\n'
++  with self.assertRaisesRegex(CleanError,'Dependent index mismatch'):self.load(definitions, '  Let n: Natural\n  Assume h: for every (x: Natural,x = n)\n  Let p = consume(h,n)\n  Conclude: p = p\n')
++if __name__=='__main__':unittest.main(verbosity=2)
