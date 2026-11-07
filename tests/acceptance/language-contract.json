@@ -1677,6 +1677,52 @@
         "studies/alias-descriptions/verify.py"
       ],
       "remaining": "Full-suite and review-browser refresh pending; general binding/adapter conformance remains separate."
+    },
+    {
+      "id": "proof_beta_under_exists",
+      "status": "implemented-slice",
+      "source": "there exists(x: A,(function(y: A,y ∈ S))(x))",
+      "expected_tree": [
+        "Exists",
+        "x",
+        "A",
+        [
+          "Apply",
+          [
+            "Lambda",
+            "y",
+            "A",
+            [
+              "Operator",
+              "∈",
+              [
+                "Local",
+                "y"
+              ],
+              [
+                "Local",
+                "S"
+              ]
+            ]
+          ],
+          [
+            [
+              "Local",
+              "x"
+            ]
+          ]
+        ]
+      ],
+      "expected_lean": "∃ x : A, (fun y : A => y ∈ S) x",
+      "expected_lean_type": "Prop",
+      "environment": "Explicit choice/evidence/function/set foundations; A : Type 0 and S : Set A.",
+      "obligation": "Compare the proof type with existence of membership using scoped beta substitution, retaining the original emitted lambda application and exact witness/proof arguments. Include binder-bearing bodies and actuals without capturing free references.",
+      "evidence": [
+        "docs/proof-beta-comparison.md",
+        "tests/test_quantified_beta.py",
+        "studies/choice/verify.py"
+      ],
+      "remaining": "Final-rule full suite pending; 276 focused tests, seven exact choice targets/three proofs and eight postfix targets/five proofs pass. Ordinary computed-index behavior unchanged; general native-binding conformance remains separate."
     }
   ]
 }

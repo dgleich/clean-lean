@@ -843,3 +843,16 @@ forms fall back to the expanded type. Context pruning never retains mathematical
 parameters merely for prose. See the [alias description contract](alias-descriptions.md)
 for deterministic instantiation, scope, fallback and acceptance boundaries.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Beta comparison inside proof conditions
+
+Proof-condition comparison now contracts checked immediate lambda applications
+inside quantified conditions, using hygienic substitution even when bodies or
+arguments contain binders. It preserves emitted terms and does not reduce inside
+unapplied lambda bodies. The ordinary computed-index rule is unchanged. The
+[proof beta contract](proof-beta-comparison.md) specifies traversal, scope, exact
+native targets and remaining checks; it supersedes earlier blanket statements
+that all quantified bodies remain opaque to beta comparison.
+:::

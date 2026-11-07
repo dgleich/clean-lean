@@ -15,9 +15,11 @@ def index(expression,env,locals):
     expression=contract_index(expression,env,locals)
     from .conversion import index_comparison
     from .syntax import condition_spelling
+    from .quantified_beta import comparison_expression
+    comparison=comparison_expression(expression,env,locals)
     return ProofIndex('('+condition_spelling(expression.tree)+')',expression.lean,expression.tex,
                       json.dumps(expression.tree,ensure_ascii=False),tuple(locals.items()),
-                      comparison=index_comparison(expression,env,locals))
+                      comparison=index_comparison(comparison,env,locals))
 
 
 def callable_view(typ,env):

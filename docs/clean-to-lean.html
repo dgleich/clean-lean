@@ -929,6 +929,13 @@ p.action(x)(y)
 (fun t : Nat =&gt; t) n</code></pre></section></div>
 <p>Dependent proof arguments are preserved verbatim. Grouping a single name does not change its Call tree. Multiword names need an immediate argument list. <a href="postfix-applications.md">The specification</a> and <a href="../studies/postfix-applications/README.md">native study</a> cover parsing, scope, rendering and current validation limits.</p>
 </section>
+<section class="mapping" id="proof-beta" data-status="implemented">
+<h2>Substituted conditions and classical witnesses</h2>
+<pre><code>Let S: Set(A)
+Assume inhabited: there exists(x: A,x ∈ S)
+Conclude: choose element(S,inhabited) ∈ S</code></pre>
+<p>Import <code>logic/choice.clean</code>. Its primitive maps are <code>Classical.choose</code> and <code>Classical.choose_spec</code>; set selection and membership evidence are authored Clean definitions. This is noncomputable witness extraction from an existence proof. Conditions may themselves contain quantifiers. Checked literal function applications inside proof conditions compare by hygienic beta substitution, while their emitted Lean terms remain unchanged. Unapplied lambda bodies stay opaque. The <a href="proof-beta-comparison.md">comparison contract</a> and <a href="../studies/choice/README.md">study</a> record seven exact native targets, three proofs, 276 focused regression tests and the pending full-suite checks.</p>
+</section>
 <section class="mapping" id="alias-descriptions" data-status="implemented">
 <h2>Transparent aliases with readable descriptions</h2>
 <pre><code>Type Selected(A: Type,S: Set(A)):

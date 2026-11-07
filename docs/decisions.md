@@ -672,3 +672,16 @@ If context pruning drops a presentation dependency, use expanded-type prose;
 never introduce Lean binders to preserve a description. The conservative scope
 rule and exact-target checks are specified in alias-descriptions.md.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Compare substituted conditions without changing their emitted terms
+
+Classical witness extraction exposed a beta redex under an existential binder.
+Selecting a witness with a universally quantified property also requires an
+applied function body containing binders. Use the existing hygienic substitution
+for checked literal applications in proof-condition comparison. Keep unapplied
+lambda bodies opaque and retain the authored Lean term. Do not broaden ordinary
+computed indices or use extensional equality. Explicit choice wrappers expose
+Lean's noncomputable foundation; set-specific helpers are authored in Clean.
+:::

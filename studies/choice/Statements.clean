@@ -1,0 +1,29 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "../../library/logic/choice.clean"
+Source lean:
+  Kind: other
+  Label: Lean
+  Title: Lean classical choice
+
+Result chosen element is a member:
+  Attribution: lean; Classical.choose_spec; specialized
+  Let A: Type
+  Let S: Set(A)
+  Assume inhabited: there exists(x: A,x ∈ S)
+  Conclude: choose element(S,inhabited) ∈ S
+
+Result choice from an applied condition:
+  Attribution: lean; Classical.choose_spec; specialized
+  Let A: Type
+  Let S: Set(A)
+  Assume inhabited: there exists(x: A,(function(y: A,y ∈ S))(x))
+  Conclude: choose element(S,inhabited) ∈ S
+
+Result choice with a universal condition:
+  Attribution: lean; Classical.choose_spec; specialized
+  Let A: Type
+  Assume inhabited: there exists(x: A,for every(y: A,y = x))
+  Conclude:
+    for every(y: A,y = choose witness(function(x: A,for every(z: A,z = x)),inhabited))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

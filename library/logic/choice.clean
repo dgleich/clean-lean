@@ -1,0 +1,38 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "evidence.clean"
+Import "functions.clean"
+Import "../topology/basic.clean"
+
+Notation choose witness(condition,h):
+  Let A: Type
+  Let condition: Function(A,Proposition)
+  Let h: Evidence((there exists(x: A,condition(x))))
+  Returns: A
+  Means: Classical.choose h
+  Render latex: \operatorname{{choose}}({h})
+
+Notation chosen witness satisfies(condition,h):
+  Let A: Type
+  Let condition: Function(A,Proposition)
+  Let h: Evidence((there exists(x: A,condition(x))))
+  Returns: Evidence((condition(choose witness(condition,h))))
+  Means: Classical.choose_spec h
+  Render latex: \operatorname{{chooseSpec}}({h})
+
+Define choose element(S,h):
+  Let A: Type
+  Let S: Set(A)
+  Let h: Evidence((there exists(x: A,x ∈ S)))
+  Returns: A
+  Equals: choose witness(function(x: A,x ∈ S),h)
+  Render latex: \operatorname{{choose}}({S},{h})
+
+Define chosen element belongs(S,h):
+  Let A: Type
+  Let S: Set(A)
+  Let h: Evidence((there exists(x: A,x ∈ S)))
+  Returns: Evidence((choose element(S,h) ∈ S))
+  Equals: chosen witness satisfies(function(x: A,x ∈ S),h)
+  Render latex: \operatorname{{membership}}({S},{h})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

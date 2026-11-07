@@ -226,3 +226,27 @@ no optimization is integrated. The original tree-only reuse experiment failed tw
 scope regressions and remains rejected. The current alias-description full-suite
 run is also pending, distinct from the older codomain snapshot.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Proof-condition beta and explicit classical choice
+
+The final scoped comparison rule passes 276 focused tests. It uses hygienic
+substitution for checked literal applications in proof conditions, including
+quantified bodies, and preserves emitted terms. Seven exact choice targets and
+three proofs pass, including choice with a universally quantified property.
+The existing postfix driver passes eight targets and five proofs; the regenerated
+92-statement corpus passes. The choice PDF and reference page checks pass.
+A new full-suite run for this rule is pending, separately from the live alias-era
+run. The older codomain suite terminated with status 143 and no terminal unittest
+summary; its cause is not established and it is not a passing result.
+
+The equality transitivity duplicate in the equivalence module was removed in
+favor of the existing equality-chain import. Both import orders pass, along with
+seven focused tests and eight native targets/three proofs. No operator-dispatch
+or general module-identity completion is claimed by this local conflict repair.
+
+The original interval translation, earlier-proof verifier and call-index-only
+experiment remain live. The corrected native interval arithmetic proof is checked,
+but the full generated interval artifact is still unavailable for snapshot replay.
+:::

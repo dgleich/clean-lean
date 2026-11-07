@@ -574,3 +574,16 @@ construct the equivalence. Composition renders with parentheses so applying or
 inverting it preserves grouping. Interval-specific support remains separately
 unverified.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Extracting witnesses from existence evidence
+
+The choice study exposed immediate function applications under existential binders.
+Selecting an object with a property of every element further requires an applied
+body containing quantifiers. The [proof beta rule](proof-beta-comparison.md) uses
+hygienic comparison substitution while preserving emitted targets. Explicit Lean
+choice wrappers and authored set helpers now pass seven exact targets and three
+proofs. They supply a foundation for consuming existence evidence; they do not
+complete the interval-basis restriction or its compatibility proof.
+:::
