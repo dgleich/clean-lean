@@ -465,3 +465,12 @@ Thirteen migrated topology verifiers total 269 exact targets and 60 proofs.
 The two TeX sources are unchanged after provenance restoration. Full discovery
 remains active and unfinished.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The chain-square verifier now passes 17 exact targets and two proofs on the
+working compiler, with ten focused Python tests. Its TeX is unchanged after
+provenance restoration. Fourteen migrated topology verifiers total 286 targets
+and 62 proofs. The well-group migration and full-discovery validation processes
+remain active; no passing result is claimed for either run.
+:::

@@ -10,7 +10,7 @@ env=Environment();results=load_document(here/'ChainSquares.clean',env)
 source=lean(results,env,['Lean'])
 (here/'ChainSquares.lean').write_text(source)
 (here/'ChainSquares.tex').write_text(latex(results,env))
-function=lambda n:env.data['functions'][n]['lean'].split()[0]
+function=lambda n:env.data['functions'][n]['native_binding']
 record=env.structures['ChainSquare']['key']
 mapping={'SquareOracle.Square':record}
 for oracle,name in [('square','chain square'),('cokernelMap','chain cokernel map'),
@@ -59,52 +59,52 @@ elab "same_target " a:ident b:ident : command => do
 '''
 expected=r'''
 namespace SquareOracle
-structure Square (K : Type) (field : Field K) (C D E F : COMPLEX) where
+structure Square (K : Type) (field : FIELDTYPE K) (C D E F : COMPLEX) where
   source : MAP(C,D)
   target : MAP(E,F)
   left : MAP(C,E)
   right : MAP(D,F)
   commutes : @COMPOSE K field C D F right source = @COMPOSE K field C E F target left
-noncomputable def square (K : Type) (field : Field K) (C D E F : COMPLEX)
+noncomputable def square (K : Type) (field : FIELDTYPE K) (C D E F : COMPLEX)
   (f : MAP(C,D)) (g : MAP(E,F)) (p : MAP(C,E)) (q : MAP(D,F))
   (h : @COMPOSE K field C D F q f = @COMPOSE K field C E F g p) : Square K field C D E F :=
   @Square.mk K field C D E F f g p q h
-noncomputable def cokernelMap {K : Type} (field : Field K) (C D E F : COMPLEX)
+noncomputable def cokernelMap {K : Type} (field : FIELDTYPE K) (C D E F : COMPLEX)
   (f : MAP(C,D)) (g : MAP(E,F)) (p : MAP(C,E)) (q : MAP(D,F))
   (h : @COMPOSE K field C D F q f = @COMPOSE K field C E F g p) :
   MAP((@COKERNEL K field C D f),(@COKERNEL K field E F g)) :=
   letI : Field K := field
   CategoryTheory.Limits.cokernel.map f g p q h
-noncomputable def quotient {K : Type} (field : Field K) (C D E F : COMPLEX)
+noncomputable def quotient {K : Type} (field : FIELDTYPE K) (C D E F : COMPLEX)
   (S : Square K field C D E F) : MAP((@COKERNEL K field C D S.source),(@COKERNEL K field E F S.target)) :=
   @cokernelMap K field C D E F S.source S.target S.left S.right S.commutes
-noncomputable def homologyMap {K : Type} (field : Field K) (C D : COMPLEX) (f : MAP(C,D)) (n : ℕ) :
-  @ModuleCat.Hom K field.toRing (@HOMOLOGY K field C n) (@HOMOLOGY K field D n) :=
+noncomputable def homologyMap {K : Type} (field : FIELDTYPE K) (C D : COMPLEX) (f : MAP(C,D)) (n : NATURALTYPE) :
+  MODULEMAPTYPE K field (@HOMOLOGY K field C n) (@HOMOLOGY K field D n) :=
   letI : Field K := field
   (HomologicalComplex.homologyFunctor (ModuleCat.{0} K) (ComplexShape.down ℕ) n).map f
-noncomputable def squareHomologyMap {K : Type} (field : Field K) (C D E F : COMPLEX)
-  (S : Square K field C D E F) (n : ℕ) :
-  @ModuleCat.Hom K field.toRing (@HOMOLOGY K field (@COKERNEL K field C D S.source) n)
+noncomputable def squareHomologyMap {K : Type} (field : FIELDTYPE K) (C D E F : COMPLEX)
+  (S : Square K field C D E F) (n : NATURALTYPE) :
+  MODULEMAPTYPE K field (@HOMOLOGY K field (@COKERNEL K field C D S.source) n)
     (@HOMOLOGY K field (@COKERNEL K field E F S.target) n) :=
   @homologyMap K field (@COKERNEL K field C D S.source) (@COKERNEL K field E F S.target)
     (@quotient K field C D E F S) n
-noncomputable def ambient {K : Type} (field : Field K) (H : THEORY K field) (X : TopCat.{0})
+noncomputable def ambient {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (X : SPACETYPE)
   (Q : PAIRINCLUSION X) : MAP(B,D) :=
   @INDUCED K field H (@SUBSPACE X Q.source.ambient) (@SUBSPACE X Q.target.ambient) (@AMBIENTCONT X Q)
-noncomputable def relative {K : Type} (field : Field K) (H : THEORY K field) (X : TopCat.{0})
+noncomputable def relative {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (X : SPACETYPE)
   (Q : PAIRINCLUSION X) : MAP(A,C) :=
   @INDUCED K field H (@SUBSPACE X Q.source.relative) (@SUBSPACE X Q.target.relative) (@RELATIVECONT X Q)
-noncomputable def represents {K : Type} (field : Field K) (H : THEORY K field) (X : TopCat.{0})
-  (Q : PAIRINCLUSION X) (S : Square K field A B C D) : Prop :=
+noncomputable def represents {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (X : SPACETYPE)
+  (Q : PAIRINCLUSION X) (S : Square K field A B C D) : CONDITIONTYPE :=
   ((S.source = @PAIRMAP K field H X Q.source ∧ S.target = @PAIRMAP K field H X Q.target) ∧
     S.left = @relative K field H X Q) ∧ S.right = @ambient K field H X Q
 
-def quotientStatement : Prop := ∀ (K : Type) (field : Field K) (C D E F : COMPLEX)
+def quotientStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (C D E F : COMPLEX)
   (S : Square K field C D E F),
   @COMPOSE K field D (@COKERNEL K field C D S.source) (@COKERNEL K field E F S.target)
     (@quotient K field C D E F S) (@PROJECTION K field C D S.source) =
   @COMPOSE K field D F (@COKERNEL K field E F S.target) (@PROJECTION K field E F S.target) S.right
-def pairStatement : Prop := ∀ (K : Type) (field : Field K) (H : THEORY K field) (X : TopCat.{0})
+def pairStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (X : SPACETYPE)
   (Q : PAIRINCLUSION X), ∃ S : Square K field A B C D, @represents K field H X Q S
 end SquareOracle
 '''
@@ -131,14 +131,18 @@ while 'MAP(' in expected:
         elif ch==',' and depth==0:split=i
         i+=1
     a,b=expected[start+4:split],expected[split+1:i]
-    expected=expected[:start]+f'(letI : Field K := field; @Quiver.Hom (ChainComplex (ModuleCat.{{0}} K) ℕ) inferInstance {a} {b})'+expected[i+1:]
-expected=expected.replace('COMPLEX','(letI : Field K := field; ChainComplex (ModuleCat.{0} K) ℕ)')
+    expected=expected[:start]+f'(CHAINMAPTYPE K field {a} {b})'+expected[i+1:]
+expected=expected.replace('COMPLEX','(CHAINTYPE K field)')
 substitutions={'THEORY':env.structures['HomologyTheory']['key'],'PAIRINCLUSION':env.structures['PairInclusion']['key']}
 for placeholder,name in [('HOMOLOGY','chain homology'),('COMPOSE','compose chain maps'),('COKERNEL','chain cokernel'),
  ('PROJECTION','chain cokernel projection'),('INDUCED','induced chain map'),('SUBSPACE','subspace'),
  ('AMBIENTCONT','ambient continuous map'),('RELATIVECONT','relative continuous map'),
  ('PAIRMAP','pair chain inclusion'),('SINGULAR','singular chains')]:substitutions[placeholder]=function(name)
-for placeholder,target in substitutions.items():expected=expected.replace(placeholder,target)
+for placeholder,name in [('FIELDTYPE','FieldStructure'),('SPACETYPE','TopologicalSpace'),
+ ('NATURALTYPE','Natural'),('CARRIERTYPE','Type'),('MODULEMAPTYPE','ModuleMap'),
+ ('CONDITIONTYPE','Proposition'),('CHAINMAPTYPE','ChainMap'),('CHAINTYPE','ModuleChainComplex')]:
+    substitutions[placeholder]='_root_.'+env.data['types'][name]['native_binding']
+for placeholder in sorted(substitutions,key=len,reverse=True):expected=expected.replace(placeholder,substitutions[placeholder])
 checks=[f'same_target {target} {oracle}' for oracle,target in mapping.items()]
 checks += [f'same_target {record}.{name} SquareOracle.Square.{name}' for name in ['mk','source','target','left','right','commutes']]
 checks += ['same_target CleanStatements.quotient_square_commutes SquareOracle.quotientStatement',

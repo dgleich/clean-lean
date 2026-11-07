@@ -20,7 +20,8 @@ directly against the repository compiler, without applying historical patches.
 | `studies/topology/verify_pair_composition.py` | 20 | 6 |
 | `studies/topology/verify_relative.py` | 24 | 4 |
 | `studies/topology/verify_relative_maps.py` | 8 | 3 |
-| Total | 269 | 60 |
+| `studies/topology/verify_chain_squares.py` | 17 | 2 |
+| Total | 286 | 62 |
 
 Run each with the repository Python environment and `LAKE` set to the pinned Lake
 executable. Each verifier generates its artifacts and invokes Lean. The foundation
@@ -109,9 +110,17 @@ against explicit native type references. Twenty-three focused relative-homology
 and conversion tests pass. Both TeX outputs are unchanged after provenance
 restoration.
 
+The chain-square study now uses explicit field, chain-complex, chain-map, module
+map, space, natural-number and condition adapters in its independently authored
+expectations. Seventeen exact structure/projection/definition/statement targets
+and two proofs pass. Ten `test_chain_squares` cases pass, including incorrect
+ambient-pair, commutativity-evidence and homology-degree rejection. Its TeX is
+unchanged after provenance restoration. The well-group verifier migration is
+underway; its current validation processes have not completed.
+
 The main compiler still uses the existing built-in operators. The separate
 [declared-operator experiment](../operator-integration/topology-migration.md)
-remains isolated. The larger interlevel, chain-square and well-group native verifiers still
+remains isolated. The larger interlevel and well-group native verifiers still
 need migration. These checks establish neither the missing paper proofs nor
 general universe polymorphism or the complete language acceptance contract.
 :::
