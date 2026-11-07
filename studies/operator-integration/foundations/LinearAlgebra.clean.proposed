@@ -1,0 +1,57 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated foundation migration
+Import "Reals.clean.proposed"
+Import Lean Mathlib.Data.Matrix.Mul
+
+Type Natural():
+  Means: Nat
+  Render latex: \mathbb{{N}}
+  Describe: a natural number
+  Describe plural: natural numbers
+Type Matrix(m: Natural,n: Natural):
+  Means: Matrix (Fin m) (Fin n) Real
+  Render latex: \mathbb{{R}}^{{{m}\times {n}}}
+  Describe: a real ${m}\times {n}$ matrix
+  Describe plural: real ${m}\times {n}$ matrices
+Type Vector(n: Natural):
+  Means: Fin n → Real
+  Render latex: \mathbb{{R}}^{{{n}}}
+  Describe: a real ${n}$-vector
+  Describe plural: real ${n}$-vectors
+
+Notation matrix product(A,B):
+  Let m,n,p: Natural
+  Let A: Matrix(m,n)
+  Let B: Matrix(n,p)
+  Returns: Matrix(m,p)
+  Infix: *
+  Means: A*B
+  Render latex: {A}\,{B}
+
+Notation matrix application(A,x):
+  Let m,n: Natural
+  Let A: Matrix(m,n)
+  Let x: Vector(n)
+  Returns: Vector(m)
+  Infix: *
+  Means: Matrix.mulVec A x
+  Render latex: {A}\,{x}
+
+Notation scale matrix(s,A):
+  Let m,n: Natural
+  Let s: Real
+  Let A: Matrix(m,n)
+  Returns: Matrix(m,n)
+  Infix: *
+  Means: s • A
+  Render latex: {s}\,{A}
+
+Notation scale vector(s,x):
+  Let n: Natural
+  Let s: Real
+  Let x: Vector(n)
+  Returns: Vector(n)
+  Infix: *
+  Means: s • x
+  Render latex: {s}\,{x}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

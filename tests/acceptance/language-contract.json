@@ -2036,6 +2036,43 @@
         "Broader exact-target and corpus migration",
         "Overloaded generated-global collision fixtures"
       ]
+    },
+    {
+      "id": "explicit_operator_foundations",
+      "status": "isolated-prototype",
+      "environment": "Explicit Logic, Reals, Sets and LinearAlgebra proposed modules on the eight-patch composed operator compiler; pinned Mathlib.",
+      "source": "x ∈ A ∩ B",
+      "expected_tree": [
+        "Operator",
+        "∈",
+        [
+          "Local",
+          "x"
+        ],
+        [
+          "Operator",
+          "∩",
+          [
+            "Local",
+            "A"
+          ],
+          [
+            "Local",
+            "B"
+          ]
+        ]
+      ],
+      "expected_lean": "Root-qualified member at carrier T applied to x and root-qualified intersection at T applied to A and B; independent native oracles in verify_foundations.py.",
+      "checks": [
+        "studies/operator-integration/verify_foundations.py",
+        "studies/operator-integration/verify_prototype.py"
+      ],
+      "pending": [
+        "Main compiler integration",
+        "Numeric literal interpretation",
+        "Generic algebraic and topology interfaces",
+        "Automatic assumption naming for infix conditions"
+      ]
     }
   ]
 }

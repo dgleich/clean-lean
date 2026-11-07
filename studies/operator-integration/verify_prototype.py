@@ -26,8 +26,8 @@ with tempfile.TemporaryDirectory(prefix='clean-operator-integration-') as td:
         subprocess.run(['git', 'apply', str(patch)], cwd=dest, check=True)
     for args in [[], ['--check']]:
         subprocess.run([sys.executable, str(dest / 'tools/generate_parser.py'), *args], cwd=dest, check=True)
-    for verifier in ['verify_saved.py', 'verify_dispatch.py']:
+    for verifier in ['verify_saved.py', 'verify_dispatch.py', 'verify_foundations.py']:
         subprocess.run([sys.executable, str(HERE / verifier), str(dest)], cwd=dest, check=True)
-print('Integrated operator slice: 26 exact targets and four proofs passed')
+print('Integrated operator slice: 62 exact targets and ten proofs passed')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

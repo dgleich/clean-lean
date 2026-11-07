@@ -1,0 +1,49 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated foundation migration
+Import "Logic.clean.proposed"
+Import Lean Mathlib.Data.Set.Basic
+
+Type Set(T: Type):
+  Means: Set T
+  Render latex: \mathcal{{P}}({T})
+  Describe: a subset of ${T}$
+  Describe plural: subsets of ${T}$
+
+Notation union(A,B):
+  Let T: Type
+  Let A,B: Set(T)
+  Returns: Set(T)
+  Infix: ∪
+  Means: A ∪ B
+  Render latex: {A}\cup {B}
+
+Notation intersection(A,B):
+  Let T: Type
+  Let A,B: Set(T)
+  Returns: Set(T)
+  Infix: ∩
+  Means: A ∩ B
+  Render latex: {A}\cap {B}
+
+Condition subset(A,B):
+  Let T: Type
+  Let A,B: Set(T)
+  Infix: ⊆
+  From Lean: A ⊆ B
+  Render latex: {A}\subseteq {B}
+
+Condition member(x,A):
+  Let T: Type
+  Let x: T
+  Let A: Set(T)
+  Infix: ∈
+  From Lean: x ∈ A
+  Render latex: {x}\in {A}
+
+Define common part(A,B):
+  Let T: Type
+  Let A,B: Set(T)
+  Returns: Set(T)
+  Equals: A ∩ B
+  Render latex: {A}\cap {B}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

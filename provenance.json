@@ -5896,6 +5896,86 @@
     "studies/operator-integration/Specimen.pdf": {
       "origin": "llm-assisted",
       "mode": "manifest"
+    },
+    "studies/operator-integration/FoundationsSpecimen.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/operator-integration/verify_foundations.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/operator-integration/FoundationsSpecimen.pdf": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/operator-integration/FoundationsVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/operator-integration/Foundations.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/operator-integration/foundations/Sets.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/operator-integration/foundations/Statements.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/operator-integration/foundations/Logic.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/operator-integration/foundations/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/operator-integration/foundations/Reals.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/operator-integration/foundations/LinearAlgebra.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

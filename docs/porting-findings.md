@@ -656,3 +656,19 @@ explicit and is separately proved in the subpath study. The paper's extension
 and pyramid theorem, full specialized-map validation, and broad compiler checks
 remain unfinished.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Explicit operator foundation slice
+
+The [composed foundation modules](../studies/operator-integration/foundations/README.md)
+state six proved laws using declared operators and derived Clean definitions.
+All 25 foundation type/callable bodies have independent exact native oracles.
+One readability boundary arose: automatic assumption labels accept named
+Condition calls, including comma lists, but reject their infix presentations.
+Explicit labels work; named and labelled versions have the same canonical Lean
+statement. Operator-based automatic names need a specified collision policy before
+extension. No new policy was silently inferred from the mathematical notation.
+Numeric operands, general algebraic structures and topology/homology interfaces
+remain outside this foundation slice. Main compiler migration is still pending.
+:::

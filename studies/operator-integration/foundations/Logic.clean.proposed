@@ -1,0 +1,37 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated foundation migration
+Import Lean Mathlib.Logic.Basic
+
+Type Type():
+  Means: Type
+  Render latex: \mathsf{{Type}}
+  Describe: a type
+  Describe plural: types
+Type Proposition():
+  Means: Prop
+  Render latex: condition
+  Describe: a condition
+  Describe plural: conditions
+
+Condition equal(x,y):
+  Let T: Type
+  Let x,y: T
+  Infix: =
+  From Lean: x=y
+  Render latex: {x}={y}
+
+Condition conjunction(p: Proposition,q: Proposition):
+  Infix: and
+  From Lean: p ∧ q
+  Render: {p} and {q}
+
+Condition implication(p: Proposition,q: Proposition):
+  Infix: →
+  Holds when: for every (h: (p), q)
+  Render: {p} implies {q}
+
+Condition negation(p: Proposition):
+  Prefix: not
+  From Lean: ¬p
+  Render: not {p}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

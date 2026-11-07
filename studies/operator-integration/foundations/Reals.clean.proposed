@@ -1,0 +1,36 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated foundation migration
+Import "Logic.clean.proposed"
+Import Lean Mathlib.Data.Real.Basic
+
+Type Real():
+  Means: Real
+  Render latex: \mathbb{{R}}
+  Describe: a real number
+  Describe plural: real numbers
+
+Notation real addition(x: Real,y: Real): Real:
+  Infix: +
+  Means: x+y
+  Render latex: {x}+{y}
+
+Notation real multiplication(x: Real,y: Real): Real:
+  Infix: *
+  Means: x*y
+  Render latex: {x}\,{y}
+
+Notation real negative(x: Real): Real:
+  Prefix: -
+  Means: -x
+  Render latex: -{x}
+
+Condition real at most(x: Real,y: Real):
+  Infix: ≤
+  From Lean: x ≤ y
+  Render latex: {x}\le {y}
+
+Define real difference(x: Real,y: Real): Real:
+  Infix: -
+  Equals: x + (-y)
+  Render latex: {x}-{y}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

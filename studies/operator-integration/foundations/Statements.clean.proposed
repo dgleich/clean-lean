@@ -1,0 +1,49 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated foundation migration
+Import "Sets.clean.proposed"
+Import "LinearAlgebra.clean.proposed"
+
+Source mathlib:
+  Kind: other
+  Label: mathlib
+  Title: Pinned Mathlib foundations
+
+Result addition commutes:
+  Attribution: mathlib; add_comm; specialized
+  Let x,y: Real
+  Conclude: x+y = y+x
+
+Result subtraction means addition of the negative:
+  Attribution: mathlib; sub_eq_add_neg; adapted
+  Let x,y: Real
+  Conclude: x-y = x+(-y)
+
+Result intersection commutes:
+  Attribution: mathlib; Set.inter_comm; adapted
+  Let T: Type
+  Let A,B: Set(T)
+  Conclude: A ∩ B = B ∩ A
+
+Result common part is contained:
+  Attribution: mathlib; Set.inter_subset_left; adapted
+  Let T: Type
+  Let A,B: Set(T)
+  Conclude: common part(A,B) ⊆ A
+
+Result intersection membership:
+  Attribution: mathlib; Set.mem_inter; adapted
+  Let T: Type
+  Let x: T
+  Let A,B: Set(T)
+  Assume in A: x ∈ A
+  Assume in B: x ∈ B
+  Conclude: x ∈ A ∩ B
+
+Result matrix product application:
+  Attribution: mathlib; Matrix.mulVec_mulVec; adapted
+  Let m,n,p: Natural
+  Let A: Matrix(m,n)
+  Let B: Matrix(n,p)
+  Let x: Vector(p)
+  Conclude: (A*B)*x = A*(B*x)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
