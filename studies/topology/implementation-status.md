@@ -38,11 +38,11 @@ case's own limitations or substitute for its outstanding validation.
   passes and one failure: `studies/diagram-maps/verify.py`. Unnecessary callable
   classification reached an internal application that lacked a supported source
   spelling. Its full Python run also recorded a diagram-map setup error and is
-  still running; it must not be reported as passing.
+  now stopped as superseded; it must not be reported as passing.
 - The newer selected-field snapshot has passed the diagram-map study's 15 exact
-  targets and six proofs. Its full Python run and complete native portfolio are
-  still running. Completion and all failures must be inspected before updating
-  that status.
+  targets and six proofs. Its complete native portfolio has now passed all 34
+  studies; see the [durable validation record](validation-2026-11-07.md). Its full
+  Python run is still active and is not yet a passing result.
 - Current main passes the subpath study's 19 exact targets and six proofs, and
   the clipping study's eight exact targets, three proofs and five Python checks.
   The corrected label-rendering regeneration passes the zigzag study's 46 exact

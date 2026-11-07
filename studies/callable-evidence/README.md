@@ -2,9 +2,9 @@
 
 # Callable evidence acceptance study
 
-The repository compiler supports this prototype. Its full regression and
-native-study validation runs remain pending; passing the focused tests does
-not establish complete language conformance. See the
+The repository compiler supports this prototype. The newer compiler has passed
+all 34 native studies; full Python regression remains pending. Passing these
+checks does not establish complete language conformance. See the
 [contract](../../docs/callable-evidence.md) for scope and exact emission rules.
 
 Run `python3 studies/callable-evidence/verify.py`. The verifier produces
@@ -41,10 +41,11 @@ proof-field description explicitly displays its carrier.
 The first frozen callable-evidence snapshot completed its native portfolio with
 32 of 33 studies passing. Diagram maps failed when eager callable classification
 attempted to serialize an internal application. The same snapshot's full test
-run records a diagram-map setup error and remains in progress. The newer compiler
+run recorded a diagram-map setup error and was stopped as superseded. The newer compiler
 uses demand-driven call-head classification and selected producer fields; its
-native diagram-map check passes all 15 exact targets and six proofs. Its full
-regression and portfolio remain pending. See the
+native diagram-map check passes all 15 exact targets and six proofs. Its
+[complete native portfolio](../topology/validation-2026-11-07.md) passes all 34
+studies; its full Python regression remains pending. See the
 [topology acceptance audit](../topology/implementation-status.md); neither run is
 being reported as a completed all-green validation.
 :::

@@ -4400,6 +4400,10 @@
         "-- ",
         ""
       ]
+    },
+    "studies/topology/validation-2026-11-07.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

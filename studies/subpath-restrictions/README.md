@@ -40,8 +40,9 @@ Current checkpoint: all nineteen exact targets and six proofs pass, including
 unconditional endpoint preservation, the inclusion, and the object and arrow
 formulas. Comparison now selects the requested authored field before expanding
 sibling fields; generated Lean retains the original projections and wrappers.
-The focused producer-field tests pass. Full regression and the complete native
-portfolio for the new comparison rule remain pending.
+The focused producer-field tests pass. The new comparison rule has passed the
+[34-study native portfolio](../topology/validation-2026-11-07.md). Full Python
+regression remains pending.
 
 Earlier slow executions of the named and fully expanded arrow statements were
 stopped after the replacement passed the independent native oracle. Those earlier
