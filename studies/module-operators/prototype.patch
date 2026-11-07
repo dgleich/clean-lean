@@ -5,7 +5,7 @@
  LET: /(?i:Let)(?!\w)/
  DEFINE: /(?i:Define)(?!\w)/
 -FIELD: /(?i:Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
-+FIELD: /(?i:Infix|Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
++FIELD: /(?i:Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
  IFF: "↔"
  IMPLIES: "→"
  OR: /(?i:or)(?=\W)/ | "∨"
@@ -14,7 +14,7 @@
  CONCLUDE_LINE: /(?i:Conclude)(?!\w)[^\n]*/
  EXPR_FIELD_LINE: /(?i:Equals|Holds when)[ ]*:[^\n]*/
 -FIELD_LINE: /(?i:Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
-+FIELD_LINE: /(?i:Infix|Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
++FIELD_LINE: /(?i:Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
  EXPR_LINE: /\S[^\n]*/
  _NL: /\n[ ]*/
  %declare _INDENT _DEDENT
@@ -25,29 +25,31 @@
          raise CleanError('Declare parameters in header order and provide Returns')
      implementations = set(values) & ({'equals', 'from lean'} if authored else {'means'})
 -    allowed = {'returns', 'render', 'render latex'} | ({'equals', 'from lean', 'attribution'} if authored else {'means'})
-+    allowed = {'returns', 'render', 'render latex', 'infix'} | ({'equals', 'from lean', 'attribution'} if authored else {'means'})
++    allowed = {'returns', 'render', 'render latex', 'infix', 'prefix'} | ({'equals', 'from lean', 'attribution'} if authored else {'means'})
      if len(implementations) != 1 or values.keys() - allowed:
          raise CleanError('Provide exactly one Equals or From Lean' if authored else 'Provide Means')
      renders = set(values)&{'render','render latex'}
-@@ -157,6 +157,9 @@
+@@ -157,6 +157,10 @@
          raise CleanError('Provide exactly one Render or Render latex field')
      result = env.type(values['returns'],local)
      dependent=any(has_value_indices(t) for t in [result,*types.values()]) or Type('Type') in types.values()
-+    if 'infix' in values:
-+        from .operator_bindings import validate
-+        validate(values['infix'],len(params))
++    for fixity in ('infix','prefix'):
++        if fixity in values:
++            from .operator_bindings import validate
++            validate(values[fixity],len(params),fixity)
      implementation = next(iter(implementations))
      expression = None
      if implementation == 'equals':
-@@ -196,8 +199,14 @@
+@@ -196,8 +200,15 @@
          env.data['functions'][name]['dependent_signature']={
              'implicit':list(implicit.items()),'parameters':list(types.items()),
              'result':result,'key':key}
 +    from .operator_bindings import scope_snapshot
 +    operator_scope=scope_snapshot(env)
-+    if 'infix' in values:
-+        from .operator_bindings import declare
-+        declare(env,values['infix'],name)
++    for fixity in ('infix','prefix'):
++        if fixity in values:
++            from .operator_bindings import declare
++            declare(env,values[fixity],name,fixity)
      if authored:
          env.definitions[name] = {'key': key, 'parameters': list(local), 'implementation': implementation,
 +            'operator_scope':operator_scope,
@@ -125,7 +127,7 @@
                      expected=replace(Type(pattern.name),scope)
                      if not isinstance(actual,Type) or expected.name!=actual.name or len(pattern.args)!=len(actual.args):
 -                        raise CleanError(f'Expected {replace(pattern,scope)}, got {actual}')
-+                        raise SignatureMismatch(f'Expected {replace(pattern,scope)}, got {actual}',mismatch_owner)
++                        raise SignatureMismatch(f'Expected type constructor {expected.name} with {len(pattern.args)} arguments, got {actual}',mismatch_owner)
                      for p,a in zip(pattern.args,actual.args):match(p,a,scope)
 -            elif replace(pattern,scope)!=actual:raise CleanError('Dimension mismatch')
 +            elif replace(pattern,scope)!=actual:raise SignatureMismatch('Dimension mismatch',mismatch_owner)
@@ -143,15 +145,24 @@
 
      def call(self,name,args,locals=None):
          if name not in self.data['functions']: raise CleanError('Unknown function: '+name)
-@@ -502,7 +512,7 @@
+@@ -502,14 +512,10 @@
          if kind=='Projection':
              from .structures import project
              return project(self.reg,self._elaborate(tree[1]),tree[2],self.env)
 -        if kind=='Operator':return binary(tree[1],self._elaborate(tree[2]),self._elaborate(tree[3]))
 +        if kind=='Operator':return self.reg.operator(tree[1],self._elaborate(tree[2]),self._elaborate(tree[3]),self.env)
          if kind=='Unary':
-             tok=tree[1];a=self._elaborate(tree[2])
-             if a.type==Type('Type'):raise CleanError('Type-valued operands do not support unary operators')
+-            tok=tree[1];a=self._elaborate(tree[2])
+-            if a.type==Type('Type'):raise CleanError('Type-valued operands do not support unary operators')
+-            if tok!='-' and a.type!=PROP:raise CleanError('Not requires a proposition')
+-            inner=('('+a.tex+')') if a.precedence < 8 else a.tex
+-            tx=('-'+inner) if tok=='-' else (r'\text{not }('+a.tex+')')
+-            return Expr('('+('-' if tok=='-' else '¬')+a.lean+')',tx,a.type,7 if tok=='-' else 5,['Unary',tok,a.tree])
++            from .operator_bindings import apply_prefix
++            return apply_prefix(self.reg,tree[1],self._elaborate(tree[2]),self.env)
+         if kind=='Call':
+             tok=tree[1];args=[self._elaborate(a) for a in tree[2]]
+             if tok in self.env and self.reg.is_function_type(self.env[tok].type):
 --- a/cleanlang/conversion.py
 +++ b/cleanlang/conversion.py
 @@ -58,6 +58,8 @@
@@ -163,15 +174,20 @@
      parameters=env.data['functions'][tree[1]]['signature_tree'][2]
      body=definition['tree']
      bindings=dict(zip((p[1] for p in parameters if p[3]=='explicit'),
-@@ -93,7 +95,7 @@
+@@ -93,10 +95,10 @@
          if local is None or local.local_normal is None:return expression
          return _normal_form(local.local_normal,env,locals) if local.local_expand and not shadowed_globals(env,locals) else local.local_normal
      if kind in ('Decimal','Lambda','Forall','Exists'):return expression
 -    if kind=='Operator':return binary(tree[1],normal(tree[2]),normal(tree[3]))
 +    if kind=='Operator':return env.operator(tree[1],normal(tree[2]),normal(tree[3]),locals)
      if kind=='Unary':
-         a=normal(tree[2]);op='-' if tree[1]=='-' else '¬'
-         return Expr('('+op+a.lean+')',expression.tex,expression.type,tree=['Unary',tree[1],a.tree])
+-        a=normal(tree[2]);op='-' if tree[1]=='-' else '¬'
+-        return Expr('('+op+a.lean+')',expression.tex,expression.type,tree=['Unary',tree[1],a.tree])
++        from .operator_bindings import apply_prefix
++        return apply_prefix(env,tree[1],normal(tree[2]),locals)
+     if kind=='Apply':
+         f=normal(tree[1]);args=[normal(a) for a in tree[2]]
+         result=Expr('('+f.lean+' '+args[0].lean+')',expression.tex,expression.type,
 @@ -145,6 +147,8 @@
      checked=expression if reuse else env.call(name,args,locals)
      definition=env.definitions.get(name)
@@ -194,26 +210,32 @@
      if any(p[3]=='implicit' for p in parameters):return None
 --- /dev/null
 +++ b/cleanlang/operator_bindings.py
-@@ -0,0 +1,74 @@
+@@ -0,0 +1,93 @@
 +# generated: gpt-6 2026-11-07 role=assisted; isolated prototype
 +import re
 +from dataclasses import replace
 +from .core import CleanError,SignatureMismatch,NUM,Type,split,Expressions
 +ALIASES={'!=':'≠','<=':'≤','>=':'≥','and':'∧','or':'∨'}
 +TOKENS={'↔','→','∨','∧','=','≠','<','>','≤','≥','∈','⊆','∣','+','-','∪','∩','*','/','^'}
-+def token(text):
++def token(text,fixity='infix'):
++    if fixity=='prefix':
++        result='¬' if text.lower()=='not' else text
++        if result not in {'-','¬'}:raise CleanError('Prefix requires one supported operator token')
++        return result
 +    result=ALIASES.get(text.lower(),text)
 +    if result not in TOKENS:raise CleanError('Infix requires one supported operator token')
 +    return result
 +
-+def validate(text,arity):
-+    token(text)
-+    if arity!=2:raise CleanError('Infix requires exactly two explicit operands')
++def validate(text,arity,fixity='infix'):
++    token(text,fixity)
++    expected=1 if fixity=='prefix' else 2
++    if arity!=expected:raise CleanError(fixity.title()+' requires exactly '+('one explicit operand' if expected==1 else 'two explicit operands'))
 +
-+def declare(env,text,name):
-+    op=token(text)
-+    if not hasattr(env,'operator_overloads'):env.operator_overloads={}
-+    env.operator_overloads.setdefault(op,[]).append(name)
++def declare(env,text,name,fixity='infix'):
++    op=token(text,fixity)
++    attribute='prefix_overloads' if fixity=='prefix' else 'operator_overloads'
++    if not hasattr(env,attribute):setattr(env,attribute,{})
++    getattr(env,attribute).setdefault(op,[]).append(name)
 +
 +def match(env,pattern,actual,bindings):
 +    if pattern.startswith('$'):
@@ -242,8 +264,24 @@
 +            return replace(value,tex=r'\left('+value.tex+r'\right)')
 +        return value
 +    args=[grouped(a,False),grouped(b,True)]
++    result=select(env,op,args,locals,getattr(env,'operator_overloads',{}))
++    result.precedence=precedence
++    result.tree=['Operator',op,a.tree,b.tree]
++    return result
++
++def apply_prefix(env,text,a,locals):
++    op=token(text,'prefix')
++    if a.type==NUM:raise CleanError('Operator numeral interpretation is not specified in this prototype')
++    precedence=7 if op=='-' else 5
++    rendered=replace(a,tex=r'\left('+a.tex+r'\right)') if a.precedence<=precedence else a
++    result=select(env,op,[rendered],locals,getattr(env,'prefix_overloads',{}))
++    result.precedence=precedence
++    result.tree=['Unary',text,a.tree]
++    return result
++
++def select(env,op,args,locals,overloads):
 +    candidates=[];checked={}
-+    for name in getattr(env,'operator_overloads',{}).get(op,[]):
++    for name in overloads.get(op,[]):
 +        spec=env.data['functions'][name];bindings={}
 +        if 'dependent_signature' in spec:
 +            owner=object()
@@ -257,15 +295,12 @@
 +    if not candidates:raise CleanError('No declared meaning for operator '+op)
 +    if len(candidates)>1:raise CleanError('Ambiguous operator '+op+': '+', '.join(sorted(candidates)))
 +    selected=candidates[0]
-+    result=checked[selected] if selected in checked else env.call(selected,args,locals)
-+    result.precedence=precedence
-+    result.tree=['Operator',op,a.tree,b.tree]
-+    return result
++    return checked[selected] if selected in checked else env.call(selected,args,locals)
 +
 +def scope_snapshot(env):
-+    return tuple(sorted((op,tuple(sorted(env.data['functions'][name]['lean'].split()[0]
-+                        for name in names)))
-+                        for op,names in getattr(env,'operator_overloads',{}).items()))
++    return tuple((fixity,tuple(sorted((op,tuple(sorted(env.data['functions'][name]['lean'].split()[0]
++                        for name in names))) for op,names in getattr(env,attribute,{}).items())))
++                 for fixity,attribute in [('infix','operator_overloads'),('prefix','prefix_overloads')])
 +
 +def scope_unchanged(env,definition):
 +    return definition.get('operator_scope',scope_snapshot(env))==scope_snapshot(env)

@@ -1809,11 +1809,38 @@
       ],
       "pending": [
         "Main compiler integration",
-        "Literal interpretation and unary operators",
+        "Literal interpretation and main unary migration",
         "Declared fixity and syntax conflicts",
         "Module-owned scope and identity",
         "Complete foundational migration and editor support",
         "General native-adapter policy and full conformance"
+      ]
+    },
+    {
+      "id": "module_prefix_operator_prototype",
+      "status": "partial",
+      "environment": "Isolated operator patch, strict generated parser, explicit Operators and Prefix proposed modules. Main compiler does not accept Prefix.",
+      "source_fragment": "Notation scalar opposite(x: Scalar): Scalar:\n  Prefix: -\n  Means: -x\n  Render latex: -{x}\n",
+      "expected_tree": [
+        "Unary",
+        "-",
+        [
+          "Local",
+          "x"
+        ]
+      ],
+      "expected_lean": "scalarOpposite x, with the wrapper type and body independently checked against Real negation",
+      "obligation": "Fixed parse before exhaustive one-operand matching. Prefix and infix minus coexist. Reject missing or ambiguous meanings and unfinished candidates. Do not evaluate uninferred indices while reporting constructor mismatch. Preserve caller scope, inferred dimensions and rendered grouping.",
+      "checks": [
+        "studies/module-operators/check_prefix.py",
+        "studies/module-operators/verify_prototype.py",
+        "studies/module-operators/PrototypeVerified.lean"
+      ],
+      "pending": [
+        "Main integration and complete foundation migration",
+        "Module-owned identities and import scope",
+        "Numeral/default interpretations and declared fixity",
+        "Editor and broad conformance migration"
       ]
     }
   ]

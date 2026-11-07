@@ -230,8 +230,11 @@ message=reject(family,'refl*n','Ambiguous operator',fs)
 family.operator_overloads['*'].reverse()
 assert reject(family,'refl*n','Ambiguous operator',fs)==message
 
+from check_prefix import check as check_prefix
+native=check_prefix(HERE,source,load,native,{**emitted,**family.notation_definitions})
+
 p=COMPILER/'OperatorAcceptance.lean';p.write_text(native)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(p)],cwd=COMPILER,check=True)
-print('Operator prototype: syntax/dispatch checks, twenty-one exact targets and two proofs passed')
+print('Operator prototype: syntax/dispatch checks, thirty-two exact targets and three proofs passed')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

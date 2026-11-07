@@ -5250,6 +5250,24 @@
     "docs/comparison-token-cache.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "studies/module-operators/Prefix.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "studies/module-operators/check_prefix.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6"
     }
   }
 }

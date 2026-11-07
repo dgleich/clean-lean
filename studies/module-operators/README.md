@@ -1,6 +1,6 @@
 :::llm gpt-6 2026-11-07 role=assisted
 
-# Explicit binary operator binding prototype
+# Explicit operator binding prototype
 
 This study tests the [module-operator migration draft](../../docs/module-operators.md).
 It is isolated: `Operators.clean.proposed` is not accepted by the main compiler,
@@ -22,7 +22,7 @@ read-only-use symlink; Lean runs only on the generated fixture in the temporary
 copy. The patch intentionally omits generated_parser.py; the pinned generator
 produces it from the patched grammar.
 
-The prototype passes twenty-one independent canonical native targets and two proofs,
+The prototype passes thirty-two independent canonical native targets and three proofs,
 plus source-tree and dispatch checks. It verifies that renaming Scalar to Matrix
 does not activate mathematical behavior based on the new display name; ambiguity
 is rejected in either candidate order; missing declarations do not fall back to
@@ -37,7 +37,7 @@ from nested errors, which must propagate even when another candidate succeeds.
 
 This is an intermediate implementation step. It deliberately rejects unresolved
 numeric operands. Dependent matching uses the existing bounded callable rule;
-proof-family and module-scope interactions still need a wider overload audit. Unary operators, declared
+proof-family and module-scope interactions still need a wider overload audit. Declared
 fixity/precedence, isolated module scope, the full foundation migration, editor
 support and broad conformance remain unfinished. The main compiler's behavior and
 current validation jobs are unchanged by this study.
@@ -71,7 +71,8 @@ rejected. Candidate reordering preserves the selected application, while two
 eligible proof-family declarations are ambiguous in both orders. Existing nested
 failure and interrupted-candidate checks continue to pass.
 
-The current bounded total is twenty-one exact targets and two statement proofs.
+Before the prefix extension below, the bounded total was twenty-one exact targets
+and two statement proofs.
 Both the already-patched checkout and the default fresh-copy/apply/regenerate
 driver pass on the current compiler base.
 A first fixture attempt used an arrow adapter spelling outside the existing
@@ -81,4 +82,31 @@ requires shared generated declarations to be byte-identical before reusing them.
 Neither correction adds a main-compiler fallback or broadens the adapter contract.
 The wider module-scope, literals, fixity, and foundation migration gates remain
 unfinished.
+:::
+
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Prefix extension
+
+[Prefix.clean.proposed](Prefix.clean.proposed) declares scalar and row negation,
+logical negation, subtraction and a Clean-authored opposite function. Prefix and
+infix minus coexist; existing parse precedence is preserved. The shared selector
+checks one operand for a prefix and two for an infix, including the same dependent
+mismatch ownership and ambiguity handling. Comparison normalization also uses
+the declared prefix wrapper. Prefix bindings join the authored-body scope snapshot.
+
+[check_prefix.py](check_prefix.py) adds eleven exact native targets and a proof,
+for a current total of thirty-two targets and three proofs. It checks grouping,
+keyword/Unicode negation, inferred dimensions, missing/ambiguous bindings,
+reordering, invalid metadata, interrupted inference and scope-change opacity.
+The rejected row candidate initially tried to elaborate its unknown dimension
+while formatting an error. The patch now reports the already-known constructor
+mismatch without evaluating the unmatched pattern. The no-dimension caller case
+is a regression. Earlier fixture corrections used the existing typed Type header
+and retained the parsed `not` token separately from normalized binding lookup.
+
+These changes remain isolated; the main compiler and its running validation jobs
+are unchanged. Numeral interpretation, module scope, declared precedence and
+foundation/editor migration remain open.
 :::

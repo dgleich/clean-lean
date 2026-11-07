@@ -1,9 +1,9 @@
 :::llm gpt-6 2026-11-07 role=assisted
 
-# Module-declared binary operators: migration draft
+# Module-declared operators: migration draft
 
 This is a proposed migration with an isolated executable prototype. The main
-compiler does not accept `Infix` yet. It is not a replacement for the agreed
+compiler does not accept `Infix` or `Prefix` yet. It is not a replacement for the agreed
 architecture: declared fixity/precedence, numeral interpretation, stable module
 scope and the removal of all mathematical display-name dispatch remain required.
 
@@ -40,7 +40,8 @@ For example, `x+y = y+x` has exactly this tree before binding:
 ```
 
 Declaring Infix cannot reinterpret this tree or complete a different parse.
-Custom operator tokens, postfix forms and module-declared fixity remain outside
+The later prefix extension is specified below. Custom operator tokens, postfix
+forms and module-declared fixity remain outside
 the prototype; they require a subsequent lexical/grammar contract. In particular,
 this draft does not discharge the catalog's factorial/postfix examples.
 
@@ -131,7 +132,7 @@ needs stable bound identities through typed expressions and module-owned scopes.
 [The study](../studies/module-operators/README.md) contains a patch, proposed Clean
 source and a driver that applies the patch to a temporary copy, regenerates the
 parser with strict checks, then runs independent binding and Lean-target fixtures.
-The prototype passes twenty-one canonical targets and two proofs. Tests exercise missing
+The prototype passes thirty-two canonical targets and three proofs. Tests exercise missing
 bindings, ambiguous bindings in both orders, invalid arity without partial
 publication, unequal operand types, grouping, literals rejected explicitly, and
 an interrupted competing candidate. A zero-argument type named Matrix, meaning
@@ -155,7 +156,8 @@ native-adapter policy requirements.
 
 Before main integration:
 
-- Specify and implement numeral interpretations/defaults and unary bindings.
+- Specify and implement numeral interpretations/defaults; migrate the isolated
+  unary bindings with the binary foundation.
   Fully remove the old numeric and operator paths; do not add an implicit legacy
   fallback when a declaration is missing.
 - Complete the dependent-overload audit beyond the matrix/vector dimension
@@ -175,4 +177,70 @@ Before main integration:
 
 General native-adapter elaboration and the remaining foundational sort/display-name
 coupling also stay open. A passing bounded prototype does not resolve them.
+:::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Prefix bindings in the isolated prototype
+
+```clean
+Notation scalar opposite(x: Scalar): Scalar:
+  Prefix: -
+  Means: -x
+  Render latex: -{x}
+
+Notation condition negation(p: Proposition): Proposition:
+  Prefix: not
+  Means: ¬p
+  Render latex: \text{{not }}{p}
+```
+
+`Prefix` is a case-insensitive metadata field on Notation or Define, parallel to
+Infix. Its payload must be exactly `-`, `¬`, or case-insensitive `not`. The last
+normalizes to `¬`. Exactly one explicit parameter is required; implicit parameters
+remain permitted. Duplicate fields, extra words, unsupported symbols and wrong
+arity are errors before publishing a callable. A declaration cannot have both
+Prefix and Infix: their respective arity requirements cannot both hold.
+
+This slice adds only FIELD/FIELD_LINE alternatives, with strict parser generation.
+Expression grammar remains fixed: minus has the signed-expression production,
+and negation the negation production. `-x^y` parses as `-(x^y)`; `(-x)^y` has a
+prefix child of power. `not x=y` parses as `not (x=y)`. Unary trees retain the parsed token: `[Unary, -, operand]`,
+`[Unary, not, operand]`, or `[Unary, ¬, operand]`. Keyword case normalizes
+during parsing; `not` and `¬` select the same prefix table entry. Syntax does not inspect types or
+candidate declarations. Separate prefix and infix meanings of `-` are permitted;
+`x - -y` selects them at distinct tree nodes. `x--y` still starts a comment.
+Custom tokens, precedence declarations and postfix binding remain outside this
+prototype and require their own lexical/import-conflict contract.
+
+Check the operand once, then apply the binary prototype's candidate-selection
+rule to the prefix table and its one explicit argument. Numeric placeholders
+are rejected; there is no hardcoded unary mathematical meaning or native fallback.
+Each candidate has private inference state. Direct mismatch rejects that candidate;
+nested errors and unfinished analysis propagate. Exactly one successful candidate
+is required, including all inferred arguments and evidence. Emit its checked
+wrapper application and retain the unary source tree. Comparison normalization
+uses this same prefix rule, rather than rebuilding native `-` or `¬` expressions.
+
+Rendering uses the selected declaration's template. Assign minus precedence 7
+and negation precedence 5 in the existing rendering scale; parenthesize any operand
+with lower or equal precedence. This conservative equality rule groups nested
+prefixes and comparisons. Higher-precedence operands remain ungrouped. Rendering
+cannot select meaning or alter the target. Both prefix and infix bindings enter
+the authored-body scope snapshot. A later prefix-table change therefore makes an
+older authored body opaque under the same conservative guard described above.
+
+The independent prefix fixture adds eleven exact targets: five wrapper bodies
+and six applications, including an inferred row dimension and nested grouping.
+A double-negation proof checks the scalar wrapper. Missing/ambiguous bindings,
+reordered candidates, invalid metadata, an interrupted competitor, and changed
+prefix scope are rejected or preserved as specified. A scalar call with no `n`
+in scope rejects the `Row(n)` candidate by its type constructor alone. Diagnostic
+formatting must not elaborate the full unmatched pattern: its uninferred index
+is irrelevant once the constructor mismatch has established rejection.
+
+This is still isolated proposed syntax, not a main-compiler feature. It removes
+the unary fallback only inside the prototype. The module-isolation limitation
+still applies to both tables, and numeral/default interpretation, declared fixity,
+foundational sort coupling and full corpus migration remain integration gates.
 :::

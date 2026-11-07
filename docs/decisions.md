@@ -724,3 +724,16 @@ validation are in [comparison-token-cache.md](comparison-token-cache.md). This
 optimization changes no syntax or translation rule and does not discharge the
 remaining broad conformance checks.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Extend the isolated operator migration to prefixes
+
+Use `Prefix: -` or `Prefix: not` (also `¬`) on one-operand declarations, parallel
+to Infix. Keep the existing source grammar and share exhaustive candidate selection;
+no mathematical unary fallback is allowed in the prototype. Include prefix bindings
+in authored-body scope guards and route comparison normalization through them.
+Constructor mismatch diagnostics must not elaborate uninferred indices. The full
+contract remains in module-operators.md; this does not enable metadata in main
+or close numeral, declared-fixity, scope and foundation migration gates.
+:::
