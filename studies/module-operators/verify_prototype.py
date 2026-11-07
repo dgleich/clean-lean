@@ -185,8 +185,53 @@ message=reject(linear,'A*B','Ambiguous operator',ls)
 linear.operator_overloads['*'].reverse()
 assert reject(linear,'A*B','Ambiguous operator',ls)==message
 
+# Proof-family matching uses the same source-scoped matcher as named calls.
+family=load(source+'\n'+(HERE/'ProofFamilies.clean.proposed').read_text())
+fs={n:Expr(n,n,family.type(t),tree=['Local',n]) for n,t in [('n','Natural'),('m','Natural'),('z','Scalar')]}
+for name,condition in [('h','for every(x: Natural,n = m)'),('bad','for every(x: Natural,m = m)'),('refl','for every(x: Natural,x = x)')]:
+    fs[name]=Expr(name,name,family.type('Evidence(('+condition+'))',fs),tree=['Local',name])
+retained=Expressions(family,fs).parse('retain with law(m,function(x: Natural,n),function(x: Natural,h(x)),z)')
+reject(family,'retain with law(m,function(x: Natural,n),function(x: Natural,bad(x)),z)','Dependent index mismatch',fs)
+application=Expressions(family,fs).parse('refl*n')
+assert application.tree==['Operator','*',['Local','refl'],['Local','n']]
+reject(family,'bad*n','No declared meaning',fs)
+family.operator_overloads['*'].reverse()
+again=Expressions(family,fs).parse('refl*n')
+assert (again.lean,again.type,again.tree)==(application.lean,application.type,application.tree)
+assert set(fs)=={'n','m','z','h','bad','refl'}
+# Reuse only byte-identical already emitted foundations; new declarations follow.
+emitted={**env.notation_definitions,**linear.notation_definitions}
+for key,value in family.notation_definitions.items():
+    if key in emitted:assert emitted[key]==value,'Conflicting native foundation identity'
+    else:native+=value+'\n'
+f=lambda name:family.data['functions'][name]['lean'].split()[0]
+nateq,retain,applyfamily=(f(n) for n in ['natural equality','retain with law','apply reflexive family'])
+native+=f"""
+noncomputable def expected_natural_equality (x y : Nat) : Prop := x=y
+noncomputable def expected_retain {{T : Type}} (n : Nat) (f : Nat → Nat)
+ (h : (x : Nat) → {nateq} (f x) n) (z : T) : T := z
+noncomputable def expected_family_apply (h : (x : Nat) → {nateq} x x) (n : Nat) : {nateq} n n := h n
+same_basic_target {nateq} expected_natural_equality
+same_basic_target {retain} expected_retain
+same_basic_target {applyfamily} expected_family_apply
+noncomputable def actual_retained (n m : Nat) (z : Real) (h : ∀ x : Nat, {nateq} n m) : Real := {retained.lean}
+noncomputable def expected_retained (n m : Nat) (z : Real) (h : ∀ x : Nat, {nateq} n m) : Real :=
+ @{retain} Real m (fun x : Nat => n) (fun x : Nat => h x) z
+same_basic_target actual_retained expected_retained
+noncomputable def actual_family_application (refl : ∀ x : Nat, {nateq} x x) (n : Nat) : {nateq} n n := {application.lean}
+noncomputable def expected_family_application (refl : ∀ x : Nat, {nateq} x x) (n : Nat) : {nateq} n n := {applyfamily} refl n
+same_basic_target actual_family_application expected_family_application
+"""
+# A second eligible proof-family binding is ambiguity even with equal native bodies.
+notation('Notation another family(h,n):',[
+ 'Let h: Function(x: Natural,Evidence((x = x)))','Let n: Natural',
+ 'Returns: Evidence((n = n))','Infix: *','Means: h n','Render latex: {h}({n})'],family)
+message=reject(family,'refl*n','Ambiguous operator',fs)
+family.operator_overloads['*'].reverse()
+assert reject(family,'refl*n','Ambiguous operator',fs)==message
+
 p=COMPILER/'OperatorAcceptance.lean';p.write_text(native)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(p)],cwd=COMPILER,check=True)
-print('Operator prototype: syntax/dispatch checks, sixteen exact targets and two proofs passed')
+print('Operator prototype: syntax/dispatch checks, twenty-one exact targets and two proofs passed')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

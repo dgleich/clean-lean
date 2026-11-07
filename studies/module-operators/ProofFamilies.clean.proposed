@@ -1,0 +1,37 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated prototype only
+-- Loaded after Operators.clean.proposed by the acceptance driver.
+Type Natural():
+  Means: Nat
+  Render latex: N
+
+Type Function(A: Type,B: Type):
+  Means: (A) → (B)
+  Render latex: ({A}\to {B})
+
+Type Evidence(condition: Proposition):
+  Equals: (condition)
+
+Notation natural equality(x: Natural,y: Natural): Proposition:
+  Infix: =
+  Means: x=y
+  Render latex: {x}={y}
+
+Notation retain with law(n,f,h,z):
+  Let T: Type
+  Let n: Natural
+  Let f: Function(Natural,Natural)
+  Let h: Function(x: Natural,Evidence((f(x) = n)))
+  Let z: T
+  Returns: T
+  Means: z
+  Render latex: {z}
+
+Notation apply reflexive family(h,n):
+  Let h: Function(x: Natural,Evidence((x = x)))
+  Let n: Natural
+  Returns: Evidence((n = n))
+  Infix: *
+  Means: h n
+  Render latex: {h}({n})
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

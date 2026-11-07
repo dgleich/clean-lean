@@ -131,7 +131,7 @@ needs stable bound identities through typed expressions and module-owned scopes.
 [The study](../studies/module-operators/README.md) contains a patch, proposed Clean
 source and a driver that applies the patch to a temporary copy, regenerates the
 parser with strict checks, then runs independent binding and Lean-target fixtures.
-The prototype passes sixteen canonical targets and two proofs. Tests exercise missing
+The prototype passes twenty-one canonical targets and two proofs. Tests exercise missing
 bindings, ambiguous bindings in both orders, invalid arity without partial
 publication, unequal operand types, grouping, literals rejected explicitly, and
 an interrupted competing candidate. A zero-argument type named Matrix, meaning
@@ -142,6 +142,16 @@ equality. The statement `(A*B)*x = A*(B*x)` selects those meanings with explicit
 inferred dimensions and is proved using Mathlib's multiplication/application law.
 Wrong dimensions, two dependent matches and foreign/interrupted candidate errors
 have separate negative checks.
+
+The refreshed prototype also exercises proof-family operands with declared equality.
+It checks natural equality, the proof-family application adapter, and a named call
+whose implicit type is inferred only after its dependent evidence argument. Five
+additional exact targets preserve the inferred type and all proof arguments.
+Incorrect evidence is rejected; candidate reordering preserves a unique target;
+two eligible proof-family declarations are rejected as ambiguity. The patch retains
+the current declaration-scoped matching rule and tags only its direct mismatch
+leaves. This expands the bounded audit but does not close captured-module-scope or
+native-adapter policy requirements.
 
 Before main integration:
 

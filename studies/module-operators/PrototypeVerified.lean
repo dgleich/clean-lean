@@ -124,5 +124,32 @@ theorem grid_law_proof : CleanStatements.grid_product_application := by
  intro m n p A B x
  change (A * B).mulVec x = A.mulVec (B.mulVec x)
  exact (Matrix.mulVec_mulVec x A B).symm
+noncomputable def cleanType_Function_8573b0da6c8c62c25d21 (A : Type) (B : Type) : Type :=
+  (A) → (B)
+
+noncomputable def cleanNotation_natural_equality_e814707e5958f10c3f51  (x : Nat) (y : Nat) : Prop :=
+  x=y
+
+noncomputable def cleanNotation_retain_with_law_2e7ea68c44942dbe9392 {T : Type} (n : Nat) (f : (Nat) → (Nat)) (h : (clean_pi_bound_0 : Nat) → (((cleanNotation_natural_equality_e814707e5958f10c3f51 ((f clean_pi_bound_0)) (n))))) (z : T) : T :=
+  z
+
+noncomputable def cleanNotation_apply_reflexive_family_b0a48f9adb3b8e7f3fdd  (h : (clean_pi_bound_1 : Nat) → (((cleanNotation_natural_equality_e814707e5958f10c3f51 (clean_pi_bound_1) (clean_pi_bound_1))))) (n : Nat) : ((cleanNotation_natural_equality_e814707e5958f10c3f51 (n) (n))) :=
+  h n
+
+
+noncomputable def expected_natural_equality (x y : Nat) : Prop := x=y
+noncomputable def expected_retain {T : Type} (n : Nat) (f : Nat → Nat)
+ (h : (x : Nat) → cleanNotation_natural_equality_e814707e5958f10c3f51 (f x) n) (z : T) : T := z
+noncomputable def expected_family_apply (h : (x : Nat) → cleanNotation_natural_equality_e814707e5958f10c3f51 x x) (n : Nat) : cleanNotation_natural_equality_e814707e5958f10c3f51 n n := h n
+same_basic_target cleanNotation_natural_equality_e814707e5958f10c3f51 expected_natural_equality
+same_basic_target cleanNotation_retain_with_law_2e7ea68c44942dbe9392 expected_retain
+same_basic_target cleanNotation_apply_reflexive_family_b0a48f9adb3b8e7f3fdd expected_family_apply
+noncomputable def actual_retained (n m : Nat) (z : Real) (h : ∀ x : Nat, cleanNotation_natural_equality_e814707e5958f10c3f51 n m) : Real := (@cleanNotation_retain_with_law_2e7ea68c44942dbe9392 (Real) (m) ((fun (clean_bound_0 : Nat) => n)) ((fun (clean_bound_1 : Nat) => (h clean_bound_1))) (z))
+noncomputable def expected_retained (n m : Nat) (z : Real) (h : ∀ x : Nat, cleanNotation_natural_equality_e814707e5958f10c3f51 n m) : Real :=
+ @cleanNotation_retain_with_law_2e7ea68c44942dbe9392 Real m (fun x : Nat => n) (fun x : Nat => h x) z
+same_basic_target actual_retained expected_retained
+noncomputable def actual_family_application (refl : ∀ x : Nat, cleanNotation_natural_equality_e814707e5958f10c3f51 x x) (n : Nat) : cleanNotation_natural_equality_e814707e5958f10c3f51 n n := (@cleanNotation_apply_reflexive_family_b0a48f9adb3b8e7f3fdd (refl) (n))
+noncomputable def expected_family_application (refl : ∀ x : Nat, cleanNotation_natural_equality_e814707e5958f10c3f51 x x) (n : Nat) : cleanNotation_natural_equality_e814707e5958f10c3f51 n n := cleanNotation_apply_reflexive_family_b0a48f9adb3b8e7f3fdd refl n
+same_basic_target actual_family_application expected_family_application
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

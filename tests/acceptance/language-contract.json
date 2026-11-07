@@ -1783,6 +1783,38 @@
         "Full canonical declaration-graph and execution-independence audit",
         "Universe-polymorphic carrier bundles"
       ]
+    },
+    {
+      "id": "module_binary_operator_prototype",
+      "status": "partial",
+      "environment": "Isolated compiler copy with studies/module-operators/prototype.patch applied and strictly regenerated parser. Main compiler does not accept Infix. Explicit proposed scalar, matrix/vector, and proof-family modules.",
+      "source_fragment": "Notation apply reflexive family(h,n):\n  Let h: Function(x: Natural,Evidence((x = x)))\n  Let n: Natural\n  Returns: Evidence((n = n))\n  Infix: *\n  Means: h n\n  Render latex: {h}({n})\n",
+      "expected_tree": [
+        "Operator",
+        "*",
+        [
+          "Local",
+          "refl"
+        ],
+        [
+          "Local",
+          "n"
+        ]
+      ],
+      "expected_lean": "applyFamily refl n, retaining the declared natural-equality wrapper in the proof type",
+      "obligation": "Resolve all declared candidates without order preference. Preserve proof arguments and partially inferred caller scope. Reject multiple eligible candidates, wrong evidence, and unfinished/nested failures. Compare adapter types/bodies and selected applications with independently authored exact native targets.",
+      "checks": [
+        "studies/module-operators/verify_prototype.py",
+        "studies/module-operators/PrototypeVerified.lean"
+      ],
+      "pending": [
+        "Main compiler integration",
+        "Literal interpretation and unary operators",
+        "Declared fixity and syntax conflicts",
+        "Module-owned scope and identity",
+        "Complete foundational migration and editor support",
+        "General native-adapter policy and full conformance"
+      ]
     }
   ]
 }

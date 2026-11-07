@@ -1,6 +1,6 @@
 --- a/grammar/clean.lark
 +++ b/grammar/clean.lark
-@@ -86,7 +86,7 @@
+@@ -85,7 +85,7 @@
  DECL: /(?i:Notation|Define|Condition)(?!\w)/
  LET: /(?i:Let)(?!\w)/
  DEFINE: /(?i:Define)(?!\w)/
@@ -9,7 +9,7 @@
  IFF: "↔"
  IMPLIES: "→"
  OR: /(?i:or)(?=\W)/ | "∨"
-@@ -125,7 +125,7 @@
+@@ -124,7 +124,7 @@
  ATTRIBUTION_LINE: /(?i:Attribution)[ ]*:[^\n]*/
  CONCLUDE_LINE: /(?i:Conclude)(?!\w)[^\n]*/
  EXPR_FIELD_LINE: /(?i:Equals|Holds when)[ ]*:[^\n]*/
@@ -20,7 +20,7 @@
  %declare _INDENT _DEDENT
 --- a/cleanlang/modules.py
 +++ b/cleanlang/modules.py
-@@ -145,7 +145,7 @@
+@@ -149,7 +149,7 @@
      if list(types)!=params or 'returns' not in values:
          raise CleanError('Declare parameters in header order and provide Returns')
      implementations = set(values) & ({'equals', 'from lean'} if authored else {'means'})
@@ -29,7 +29,7 @@
      if len(implementations) != 1 or values.keys() - allowed:
          raise CleanError('Provide exactly one Equals or From Lean' if authored else 'Provide Means')
      renders = set(values)&{'render','render latex'}
-@@ -153,6 +153,9 @@
+@@ -157,6 +157,9 @@
          raise CleanError('Provide exactly one Render or Render latex field')
      result = env.type(values['returns'],local)
      dependent=any(has_value_indices(t) for t in [result,*types.values()]) or Type('Type') in types.values()
@@ -39,7 +39,7 @@
      implementation = next(iter(implementations))
      expression = None
      if implementation == 'equals':
-@@ -192,8 +195,14 @@
+@@ -196,8 +199,14 @@
          env.data['functions'][name]['dependent_signature']={
              'implicit':list(implicit.items()),'parameters':list(types.items()),
              'result':result,'key':key}
@@ -69,7 +69,7 @@
  ID = r'[^\W\d]\w*'
 
  def comment_lines(text):
-@@ -330,7 +336,7 @@
+@@ -343,7 +349,7 @@
          if p.startswith('$'): return bind[p]
          m=re.fullmatch(r'(\w+)(?:\((.*)\))?',p)
          return Type(m[1],tuple(self.instantiate(a,bind) for a in split(m[2] or '')))
@@ -78,7 +78,7 @@
          """Ordered structural substitution; never ask Lean to choose an index."""
          signature=spec['dependent_signature']
          implicit=dict(signature['implicit'])
-@@ -340,7 +346,7 @@
+@@ -353,7 +359,7 @@
 
          def bind(n,value):
              if n in substitutions and substitutions[n]!=value:
@@ -86,8 +86,8 @@
 +                raise SignatureMismatch('Inconsistent dependent argument: '+n,mismatch_owner)
              substitutions[n]=value
 
-         def index(n):
-@@ -373,10 +379,10 @@
+         def index(n,scope):
+@@ -389,10 +395,10 @@
              from .dependent_functions import DependentFunctionType,substitute,fresh_source,fresh_bound
              if isinstance(pattern,DependentFunctionType) or isinstance(actual,DependentFunctionType) and self.is_function_type(pattern):
                  if not self.is_function_type(pattern) or not self.is_function_type(actual):
@@ -97,19 +97,10 @@
                  aconstructor=actual.constructor if isinstance(actual,DependentFunctionType) else actual.name
 -                if pconstructor!=aconstructor:raise CleanError('Dependent function type mismatch')
 +                if pconstructor!=aconstructor:raise SignatureMismatch('Dependent function type mismatch',mismatch_owner)
-                 match(pattern.args[0],actual.args[0])
+                 match(pattern.args[0],actual.args[0],scope)
                  shared=fresh_source('clean_comparison_binder',self,locals,
-                                     {**substitutions,**actuals,'__pattern':pattern,'__actual':actual})
-@@ -394,7 +400,7 @@
-                         # inside already inserted argument expressions.
-                         from .proof_types import compatible_evidence
-                         if not compatible_evidence(a,p,self,locals):
--                            raise CleanError('Dependent index mismatch in function codomain')
-+                            raise SignatureMismatch('Dependent index mismatch in function codomain',mismatch_owner)
-                     else:
-                         match(p,a)
-                     from .dependent_functions import occurs
-@@ -404,25 +410,25 @@
+                                     {**substitutions,**actuals,**scope,'__pattern':pattern,'__actual':actual})
+@@ -414,25 +420,25 @@
                      del locals[shared]
              elif isinstance(pattern,DimensionIndex) and pattern.name in implicit:
                  if implicit[pattern.name]!=NAT or not isinstance(actual,DimensionIndex):
@@ -117,7 +108,7 @@
 +                    raise SignatureMismatch('Expected a natural dimension: '+pattern.name,mismatch_owner)
                  bind(pattern.name,actual)
              elif isinstance(pattern,ValueIndex):
-                 if replace(pattern)!=actual:
+                 if replace(pattern,scope)!=actual:
 -                    raise CleanError('Dependent index mismatch: '+pattern.name)
 +                    raise SignatureMismatch('Dependent index mismatch: '+pattern.name,mismatch_owner)
              elif isinstance(pattern,Type):
@@ -131,20 +122,20 @@
 -                    if substitutions[pattern.name]!=actual:raise CleanError('Dependent type mismatch: '+pattern.name)
 +                    if substitutions[pattern.name]!=actual:raise SignatureMismatch('Dependent type mismatch: '+pattern.name,mismatch_owner)
                  else:
-                     expected=replace(Type(pattern.name))
+                     expected=replace(Type(pattern.name),scope)
                      if not isinstance(actual,Type) or expected.name!=actual.name or len(pattern.args)!=len(actual.args):
--                        raise CleanError(f'Expected {replace(pattern)}, got {actual}')
-+                        raise SignatureMismatch(f'Expected {replace(pattern)}, got {actual}',mismatch_owner)
-                     for p,a in zip(pattern.args,actual.args):match(p,a)
--            elif replace(pattern)!=actual:raise CleanError('Dimension mismatch')
-+            elif replace(pattern)!=actual:raise SignatureMismatch('Dimension mismatch',mismatch_owner)
+-                        raise CleanError(f'Expected {replace(pattern,scope)}, got {actual}')
++                        raise SignatureMismatch(f'Expected {replace(pattern,scope)}, got {actual}',mismatch_owner)
+                     for p,a in zip(pattern.args,actual.args):match(p,a,scope)
+-            elif replace(pattern,scope)!=actual:raise CleanError('Dimension mismatch')
++            elif replace(pattern,scope)!=actual:raise SignatureMismatch('Dimension mismatch',mismatch_owner)
 
          for n,t in parameters:
              match(t,actuals[n].type)
-@@ -448,6 +454,10 @@
+@@ -458,6 +464,10 @@
          return Expr(target,spec['latex'].format(*(a.tex for a in args)),replace(signature['result']),
                      tree=['Call',name,[a.tree for a in args]],
-                     inferred_args=tuple((n,substitutions[n]) for n in implicit))
+                     inferred_args=tuple((n,substitutions[n]) for n in implicit),checked_args=tuple(args))
 +
 +    def operator(self,op,a,b,locals):
 +        from .operator_bindings import apply
@@ -152,7 +143,7 @@
 
      def call(self,name,args,locals=None):
          if name not in self.data['functions']: raise CleanError('Unknown function: '+name)
-@@ -490,7 +500,7 @@
+@@ -502,7 +512,7 @@
          if kind=='Projection':
              from .structures import project
              return project(self.reg,self._elaborate(tree[1]),tree[2],self.env)
@@ -181,8 +172,8 @@
      if kind=='Unary':
          a=normal(tree[2]);op='-' if tree[1]=='-' else '¬'
          return Expr('('+op+a.lean+')',expression.tex,expression.type,tree=['Unary',tree[1],a.tree])
-@@ -129,6 +131,8 @@
-     checked=env.call(name,args,locals)
+@@ -145,6 +147,8 @@
+     checked=expression if reuse else env.call(name,args,locals)
      definition=env.definitions.get(name)
      if definition and definition['implementation']=='equals':
 +        from .operator_bindings import scope_unchanged

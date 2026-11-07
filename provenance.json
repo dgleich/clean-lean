@@ -5221,6 +5221,15 @@
         "# ",
         ""
       ]
+    },
+    "studies/module-operators/ProofFamilies.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
     }
   }
 }

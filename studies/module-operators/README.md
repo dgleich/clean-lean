@@ -22,7 +22,7 @@ read-only-use symlink; Lean runs only on the generated fixture in the temporary
 copy. The patch intentionally omits generated_parser.py; the pinned generator
 produces it from the patched grammar.
 
-The prototype passes sixteen independent canonical native targets and two proofs,
+The prototype passes twenty-one independent canonical native targets and two proofs,
 plus source-tree and dispatch checks. It verifies that renaming Scalar to Matrix
 does not activate mathematical behavior based on the new display name; ambiguity
 is rejected in either candidate order; missing declarations do not fall back to
@@ -55,10 +55,30 @@ remaining typed-expression and import-scope requirements.
 
 :::llm gpt-6 2026-11-07 role=assisted
 
-Current-base status: `git apply --check prototype.patch` fails against the current
-compiler at the dependent-call matcher and checked-subtree conversion contexts.
-The sixteen-target/two-proof results above are historical evidence from the
-compatible prototype base, not a passing run on the current compiler. Refreshing
-the isolated patch and rerunning its full fixture remain required; the operator
-feature is still unintegrated. No main-compiler fallback was introduced.
+The patch now applies to the declaration-scoped matcher and fresh-subtree
+conversion implementation. Its mismatch tags cover direct comparison failures in
+the current leaf matcher; nested failures retain their own owner and propagate.
+The source-scope fix is preserved rather than replacing the matcher with its older
+instantiated-codomain path. `git apply --check` and strict parser generation pass.
+
+[ProofFamilies.clean.proposed](ProofFamilies.clean.proposed) adds a declared
+natural equality and an overloaded proof-family application. Its use of `*` for
+proof application is a dispatch stress fixture, not recommended mathematical
+notation or a declaration in the standard library. Five additional
+exact native targets check the adapters, a partially inferred named call, and
+operator application. Valid caller evidence survives; the captured equation is
+rejected. Candidate reordering preserves the selected application, while two
+eligible proof-family declarations are ambiguous in both orders. Existing nested
+failure and interrupted-candidate checks continue to pass.
+
+The current bounded total is twenty-one exact targets and two statement proofs.
+Both the already-patched checkout and the default fresh-copy/apply/regenerate
+driver pass on the current compiler base.
+A first fixture attempt used an arrow adapter spelling outside the existing
+recognized template; it was corrected to `(A) → (B)`. A second attempt duplicated
+a shared native Natural declaration when combining fixtures. The driver now
+requires shared generated declarations to be byte-identical before reusing them.
+Neither correction adds a main-compiler fallback or broadens the adapter contract.
+The wider module-scope, literals, fixity, and foundation migration gates remain
+unfinished.
 :::
