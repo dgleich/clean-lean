@@ -4984,6 +4984,65 @@
         "-- ",
         ""
       ]
+    },
+    "library/diagrams/active_label_sets.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/interval-basis-restriction/Verified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/interval-basis-restriction/latex.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/interval-basis-restriction/Statements.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/interval-basis-restriction/Generated.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/interval-basis-restriction/verify.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "model": "gpt-6",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/interval-basis-restriction/Statements.pdf": {
+      "origin": "llm-assisted",
+      "mode": "manifest",
+      "model": "gpt-6"
     }
   }
 }

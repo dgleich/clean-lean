@@ -50,6 +50,6 @@ for name,value in keys.items():extra=re.sub(r'\b'+name+r'\b',value,extra)
 p=HERE/'Native.lean'
 p.write_text('-- Native arithmetic input SHA256: '+hashlib.sha256(source.read_bytes()).hexdigest()+'\n'+s+extra)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(p)],cwd=ROOT,check=True)
-print('Native restricted-vertex basis existence and vector formula passed; Clean target comparison remains pending')
+print('Native restricted-vertex basis existence and vector formula passed; run verify.py for Clean target checks')
 
 # generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

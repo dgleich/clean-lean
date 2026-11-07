@@ -11,12 +11,38 @@ This study proves the next step after the [active-label correspondence](../activ
 Run from the repository root:
 
 ```sh
-LAKE=lake python3 studies/interval-basis-restriction/verify_native.py
+LAKE=lake python3 studies/interval-basis-restriction/verify.py
 ```
 
-The driver checks the Clean statement's syntax, copies the tracked arithmetic foundation into the standalone Lean file, records its input hash, and checks the native proof with Lean. The arithmetic source can first be regenerated with `studies/active-labels/verify_arithmetic.py`. Generated symbol lookup requires a unique binding; the mathematical theorem and proof are independently authored.
+This regenerates [Generated.lean](Generated.lean), containing the statement and its
+imported definitions, and [Statements.tex](Statements.tex). [Verified.lean](Verified.lean)
+adds three exact canonical target comparisons (the original active set, restricted
+active set, and theorem statement) and proves the generated theorem. The proof
+also rechecks the arithmetic support and native basis construction. All these
+checks pass. No added axioms or `sorry` placeholders are used. The one-page
+[PDF specimen](Statements.pdf) was compiled twice and visually inspected.
 
-**Validation boundary:** syntax and the native theorem pass. Clean name binding, type checking, translation, and comparison against the native theorem remain pending. The full active-label translation is still running; this native check does not replace that bridge. There are no added axioms or `sorry` placeholders.
+The statement imports `active_label_sets.clean`, `basis_reindexing.clean`, and
+`elements.clean` explicitly. The separate `active_labels.clean` module imports
+those set declarations and adds support/maps/equivalence definitions. This keeps
+the statement's dependencies small; the proof supplies the equivalence. Full
+canonical verification of the latter module's maps remains a separate running
+check, not a prerequisite hidden inside this statement.
+
+The proof driver loads the generic subtype foundations into its proof environment
+and renders independently authored arithmetic/basis proof templates with that
+environment's binding names. An initial attempt copied generated proof text from
+a different import order and failed: generated names currently depend on the
+binder-allocation context. The corrected driver resolves declared bindings rather
+than assuming those generated names are portable. It does not derive expected
+mathematical targets from generated statement bodies. Stable module-owned identity
+remains a broader compiler task.
+
+For the independent native-only check, run `verify_native.py`. It copies the
+tracked arithmetic foundation into `Native.lean`, records the input hash, and
+checks its native theorem. Regenerate that foundation with
+`studies/active-labels/verify_arithmetic.py` when necessary. This secondary check
+alone does not check the Clean target; `verify.py` does.
 
 This is a pointwise basis theorem. Constructing the restricted interval-basis record still requires assembling the vertexwise bases and proving vector vanishing and compatibility along edges. It does not establish the paper's pyramid theorem.
 :::

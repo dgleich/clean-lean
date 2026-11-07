@@ -593,11 +593,17 @@ complete the interval-basis restriction or its compatibility proof.
 ## A restricted basis at one vertex
 
 The [restricted-basis study](../studies/interval-basis-restriction/README.md)
-adds a syntactically checked Clean statement and a kernel-checked native proof
+now checks three exact native targets and proves the generated Clean statement
 constructing the restricted basis from the original basis. The proof uses the
 arithmetic label equivalence and Mathlib basis reindexing, and establishes the
-vector formula. No additional syntax or wrapper was needed for the statement.
-Its full Clean binding/type/target check remains pending behind active-label
-translation. Edge compatibility and assembly into an interval-basis record remain
-mathematical work; the native proof alone is not a completed Clean port.
+vector formula. No additional syntax or wrapper was needed. Factoring the set
+declarations into `active_label_sets.clean` lets this statement translate without
+loading the expensive equivalence definitions. An explicit element-module import
+supplies the value projections. Edge compatibility and assembly into an
+interval-basis record remain mathematical work.
+
+Copying generated proof names across import orders failed because binder allocation
+can change declaration hashes. The verifier now renders independent proof templates
+against its current environment. This fixes the check, not the broader outstanding
+module-identity design; generated names must not be treated as a portable API.
 :::
