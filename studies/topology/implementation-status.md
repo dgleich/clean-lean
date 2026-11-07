@@ -51,7 +51,8 @@ case's own limitations or substitute for its outstanding validation.
 - The known-codomain substitution fix passes 108 focused regressions. The expanded
   clipping study passes 14 exact native targets, three proofs, and seven Python
   checks, including the authored restricted-label record. A new frozen full-suite
-  run and corpus recheck are pending; earlier portfolio results do not validate
+  run is pending. The 92-proof corpus recheck and rebased operator prototype
+  (16 targets, two proofs) pass; earlier portfolio results do not validate
   this later compiler change.
 - The pre-fix browser build was stopped as superseded when the codomain compiler
   and clipped-label source changed. Its replacement reports per-file progress.

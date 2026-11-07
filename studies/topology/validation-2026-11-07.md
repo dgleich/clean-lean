@@ -106,3 +106,35 @@ run remained active. The stopped run is not a passing full-suite result. It was
 superseded because its diagnosed failure was fixed, not because an observation
 window expired.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Known-codomain scope and restricted labels checkpoint
+
+`3f0861a` avoids repeating declaration substitution into fully instantiated
+dependent codomains. `4b1974c` adds the authored restricted interval-label
+constructor and its composed ordering evidence.
+
+- Focused callable/dependent/hygiene/clipping run: 108 tests passed. After adding
+  two record-specific cases, the clipping module separately passed all seven tests.
+- Expanded clipping native verifier: 14 independently authored exact targets and
+  three proofs passed. New targets cover four foundational order adapters, the
+  authored ordering evidence, and the constructor with its surviving-label subtype.
+- Frozen-source corpus regeneration and Lean check: all 92 proof fixtures passed.
+  The corpus matches the tracked artifact apart from provenance and trailing space.
+- Rebased isolated operator prototype: strict grammar regeneration, dispatch
+  checks, 16 exact targets and two proofs passed. This remains proposed syntax.
+- Reference HTML links, search/status controls and mobile width passed.
+
+The fresh full Python run uses `/tmp/clean-codomain-scope`; it has no terminal
+summary yet. The browser build uses the corrected compiler and reports per-file
+progress; inventory/UI validation remains pending. The preceding browser process
+was stopped because its compiler and clipping source were superseded, not because
+it exceeded an observation interval.
+
+Current `cleanlang/core.py` SHA256: `2be4a447fec55a878d59b8561b544e528cb387b0b5b8d452952c909ca4564f87`.
+
+The fixed branch applies once every implicit parameter is determined; unresolved
+inference still needs a scope audit. Restricted labels do not yet establish
+restricted vertex bases or the pyramid extension theorem.
+:::
