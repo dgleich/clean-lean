@@ -4348,6 +4348,42 @@
     "studies/topology/implementation-status.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "docs/module-operators.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/module-operators/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/module-operators/Operators.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/module-operators/verify_prototype.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/module-operators/prototype.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/module-operators/PrototypeVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

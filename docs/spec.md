@@ -800,3 +800,12 @@ in [hygienic conversion](hygienic-producer-conversion.md#selecting-producer-fiel
 Source parsing and emitted projection terms are unchanged. This is an implemented
 prototype with broad regression validation pending.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The [module-operator migration draft](module-operators.md) proposes Infix metadata
+on existing Notation/Define declarations. Its parser and binder are exercised in
+an isolated patch, not enabled syntax. Literal policy, dependent candidate matching,
+declared fixity and module scope remain integration gates; existing main-compiler
+operator dispatch is not presented as the completed architecture.
+:::

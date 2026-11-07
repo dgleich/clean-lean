@@ -1,0 +1,145 @@
+--- a/grammar/clean.lark
++++ b/grammar/clean.lark
+@@ -86,7 +86,7 @@
+ DECL: /(?i:Notation|Define|Condition)(?!\w)/
+ LET: /(?i:Let)(?!\w)/
+ DEFINE: /(?i:Define)(?!\w)/
+-FIELD: /(?i:Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
++FIELD: /(?i:Infix|Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
+ IFF: "↔"
+ IMPLIES: "→"
+ OR: /(?i:or)(?=\W)/ | "∨"
+@@ -125,7 +125,7 @@
+ ATTRIBUTION_LINE: /(?i:Attribution)[ ]*:[^\n]*/
+ CONCLUDE_LINE: /(?i:Conclude)(?!\w)[^\n]*/
+ EXPR_FIELD_LINE: /(?i:Equals|Holds when)[ ]*:[^\n]*/
+-FIELD_LINE: /(?i:Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
++FIELD_LINE: /(?i:Infix|Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
+ EXPR_LINE: /\S[^\n]*/
+ _NL: /\n[ ]*/
+ %declare _INDENT _DEDENT
+--- a/cleanlang/modules.py
++++ b/cleanlang/modules.py
+@@ -145,7 +145,7 @@
+     if list(types)!=params or 'returns' not in values:
+         raise CleanError('Declare parameters in header order and provide Returns')
+     implementations = set(values) & ({'equals', 'from lean'} if authored else {'means'})
+-    allowed = {'returns', 'render', 'render latex'} | ({'equals', 'from lean', 'attribution'} if authored else {'means'})
++    allowed = {'returns', 'render', 'render latex', 'infix'} | ({'equals', 'from lean', 'attribution'} if authored else {'means'})
+     if len(implementations) != 1 or values.keys() - allowed:
+         raise CleanError('Provide exactly one Equals or From Lean' if authored else 'Provide Means')
+     renders = set(values)&{'render','render latex'}
+@@ -153,6 +153,9 @@
+         raise CleanError('Provide exactly one Render or Render latex field')
+     result = env.type(values['returns'],local)
+     dependent=any(has_value_indices(t) for t in [result,*types.values()]) or Type('Type') in types.values()
++    if 'infix' in values:
++        from .operator_bindings import validate
++        validate(values['infix'],len(params),dependent)
+     implementation = next(iter(implementations))
+     expression = None
+     if implementation == 'equals':
+@@ -192,6 +195,9 @@
+         env.data['functions'][name]['dependent_signature']={
+             'implicit':list(implicit.items()),'parameters':list(types.items()),
+             'result':result,'key':key}
++    if 'infix' in values:
++        from .operator_bindings import declare
++        declare(env,values['infix'],name)
+     if authored:
+         env.definitions[name] = {'key': key, 'parameters': list(local), 'implementation': implementation,
+             'tree': expression.tree if expression else None,
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -441,6 +441,10 @@
+                     tree=['Call',name,[a.tree for a in args]],
+                     inferred_args=tuple((n,substitutions[n]) for n in implicit))
+
++    def operator(self,op,a,b,locals):
++        from .operator_bindings import apply
++        return apply(self,op,a,b,locals)
++
+     def call(self,name,args,locals=None):
+         if name not in self.data['functions']: raise CleanError('Unknown function: '+name)
+         s=self.data['functions'][name]; bind={}
+@@ -482,7 +486,7 @@
+         if kind=='Projection':
+             from .structures import project
+             return project(self.reg,self._elaborate(tree[1]),tree[2],self.env)
+-        if kind=='Operator':return binary(tree[1],self._elaborate(tree[2]),self._elaborate(tree[3]))
++        if kind=='Operator':return self.reg.operator(tree[1],self._elaborate(tree[2]),self._elaborate(tree[3]),self.env)
+         if kind=='Unary':
+             tok=tree[1];a=self._elaborate(tree[2])
+             if a.type==Type('Type'):raise CleanError('Type-valued operands do not support unary operators')
+--- a/cleanlang/conversion.py
++++ b/cleanlang/conversion.py
+@@ -93,7 +93,7 @@
+         if local is None or local.local_normal is None:return expression
+         return _normal_form(local.local_normal,env,locals) if local.local_expand and not shadowed_globals(env,locals) else local.local_normal
+     if kind in ('Decimal','Lambda','Forall','Exists'):return expression
+-    if kind=='Operator':return binary(tree[1],normal(tree[2]),normal(tree[3]))
++    if kind=='Operator':return env.operator(tree[1],normal(tree[2]),normal(tree[3]),locals)
+     if kind=='Unary':
+         a=normal(tree[2]);op='-' if tree[1]=='-' else '¬'
+         return Expr('('+op+a.lean+')',expression.tex,expression.type,tree=['Unary',tree[1],a.tree])
+--- a/cleanlang/operator_bindings.py
++++ b/cleanlang/operator_bindings.py
+@@ -0,0 +1,58 @@
++# generated: gpt-6 2026-11-07 role=assisted; isolated prototype
++import re
++from dataclasses import replace
++from .core import CleanError,NUM,Type,split,Expressions
++ALIASES={'!=':'≠','<=':'≤','>=':'≥','and':'∧','or':'∨'}
++TOKENS={'↔','→','∨','∧','=','≠','<','>','≤','≥','∈','⊆','∣','+','-','∪','∩','*','/','^'}
++def token(text):
++    result=ALIASES.get(text.lower(),text)
++    if result not in TOKENS:raise CleanError('Infix requires one supported operator token')
++    return result
++
++def validate(text,arity,dependent):
++    token(text)
++    if arity!=2:raise CleanError('Infix requires exactly two explicit operands')
++    if dependent:raise CleanError('Dependent operator signatures are outside this prototype')
++
++def declare(env,text,name):
++    op=token(text)
++    if not hasattr(env,'operator_overloads'):env.operator_overloads={}
++    env.operator_overloads.setdefault(op,[]).append(name)
++
++def match(env,pattern,actual,bindings):
++    if pattern.startswith('$'):
++        if isinstance(actual,Type):env.require_type_argument(actual)
++        if pattern in bindings:return bindings[pattern]==actual
++        bindings[pattern]=actual
++        return True
++    parsed=re.fullmatch(r'(\w+)(?:\((.*)\))?',pattern)
++    if parsed is None:raise CleanError('Invalid operator signature: '+pattern)
++    children=split(parsed[2] or '')
++    if not isinstance(actual,Type) or actual.name!=parsed[1] or len(actual.args)!=len(children):return False
++    for child,value in zip(children,actual.args):
++        if isinstance(value,Type) or child.startswith('$'):
++            if not match(env,child,value,bindings):return False
++        elif child!=value:return False
++    return True
++
++def apply(env,text,a,b,locals):
++    op=token(text)
++    if NUM in (a.type,b.type):raise CleanError('Operator numeral interpretation is not specified in this prototype')
++    candidates=[]
++    for name in getattr(env,'operator_overloads',{}).get(op,[]):
++        spec=env.data['functions'][name];bindings={}
++        if all(match(env,formal,actual.type,bindings) for formal,actual in zip(spec['params'],(a,b))):
++            candidates.append(name)
++    if not candidates:raise CleanError('No declared meaning for operator '+op)
++    if len(candidates)>1:raise CleanError('Ambiguous operator '+op+': '+', '.join(sorted(candidates)))
++    precedence=Expressions.PREC.get(op,Expressions.PREC.get({'∧':'and','∨':'or'}.get(op,op),5))
++    right_associative=op in ('^','→')
++    def grouped(value,right):
++        equal_needs_group=right != right_associative
++        if value.precedence<precedence or (value.precedence==precedence and equal_needs_group):
++            return replace(value,tex=r'\left('+value.tex+r'\right)')
++        return value
++    result=env.call(candidates[0],[grouped(a,False),grouped(b,True)],locals)
++    result.precedence=precedence
++    result.tree=['Operator',op,a.tree,b.tree]
++    return result

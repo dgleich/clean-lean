@@ -1,0 +1,27 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated prototype only
+Import Lean Mathlib.Data.Real.Basic
+
+Type Scalar():
+  Means: Real
+  Render latex: \mathbb{{R}}
+
+Type Proposition():
+  Means: Prop
+  Render latex: condition
+
+Notation scalar addition(x: Scalar,y: Scalar): Scalar:
+  Infix: +
+  Means: x+y
+  Render latex: {x}+{y}
+
+Notation scalar product(x: Scalar,y: Scalar): Scalar:
+  Infix: *
+  Means: x*y
+  Render latex: {x}\,{y}
+
+Notation scalar equality(x: Scalar,y: Scalar): Proposition:
+  Infix: =
+  Means: x=y
+  Render latex: {x}={y}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -591,3 +591,16 @@ subpath oracle now passes nineteen canonical targets and six proofs; the prior
 slow executions are superseded, not recorded as successful. Full-suite validation
 of this change remains pending.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Explicit binary-operator migration prototype
+
+Use Infix metadata to connect an ordinary named notation to an existing binary
+symbol in the isolated prototype. Keep parsing independent of overload matching;
+require exactly one matching declaration and propagate unfinished candidates.
+Do not retain built-in fallback behavior for missing binary bindings. The
+[module-operator draft](module-operators.md) records the remaining literal,
+dependent-signature, precedence and module-scope gates. This is not main syntax
+or a completed one-semantic-space migration.
+:::

@@ -917,6 +917,19 @@ let p : n = n := h n</code></pre></section></div>
 <p><a href="callable-evidence.md">Callable-evidence contract</a> · <a href="../studies/subpath-restrictions/design.md">Motivating subpath study</a> · <a href="../studies/callable-evidence/README.md">Native acceptance fixtures</a>. Full conformance checks remain unfinished.</p>
 </section>
 </llm>
+<llm model="gpt-6" date="2026-11-07" role="assisted" style="display:contents">
+<section class="mapping" id="module-operators" data-status="proposed">
+<h2>Module-declared binary operators</h2>
+<p><strong>Proposed; isolated prototype only.</strong> Infix metadata associates an ordinary named notation with a binary symbol. Main Clean files do not accept this metadata yet.</p>
+<div class="pair"><section><h3>Proposed Clean</h3><pre><code>Notation scalar addition(x: Scalar,y: Scalar): Scalar:
+  Infix: +
+  Means: x+y
+  Render latex: {x}+{y}</code></pre></section><section><h3>Readable Lean equivalent</h3><pre><code>def scalar_addition (x y : Real) : Real := x+y
+-- Clean x+y selects this wrapper when it is the unique match.
+-- Exact generated names are checked in the prototype fixtures.</code></pre></section></div>
+<p>Parsing uses the existing operator tree; matching selects exactly one declared callable. Two matches are ambiguity, and an interrupted candidate cannot be discarded. There is no fallback to built-in binary meanings. The prototype rejects unresolved numerals and dependent operator signatures.</p>
+<p>Literal policy, declared precedence, module-owned scope, editor support and the full foundation migration remain unfinished. See <a href="module-operators.md">the draft contract</a> and <a href="../studies/module-operators/README.md">the isolated executable study</a>.</p>
+</section></llm>
 </main>
 <script>
 (() => {
