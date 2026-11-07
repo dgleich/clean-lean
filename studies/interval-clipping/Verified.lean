@@ -388,6 +388,24 @@ noncomputable def cleanDefine_clipped_vertex_2105907b2c6d43692206  (n : ℕ) (a 
 noncomputable def cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651  (I : Type) (n : ℕ) (a : ℕ) (m : ℕ) (L : cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe (I) (n)) : Set (I) :=
   (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : I) => (((@cleanNotation_vertex_number_64138f6f46dd27172356 ((n + 1)) (((@cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe.«lower» (I) (n) (L)) clean_bound_0))) ≤ (a + m)) ∧ (a ≤ (@cleanNotation_vertex_number_64138f6f46dd27172356 ((n + 1)) (((@cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe.«upper» (I) (n) (L)) clean_bound_0))))))))
 
+noncomputable def cleanNotation_vertex_order_numbers_d0bb5e78e6107e76915f  (n : ℕ) (u : Fin n) (v : Fin n) (h : ((u ≤ v))) : (((@cleanNotation_vertex_number_64138f6f46dd27172356 (n) (u)) ≤ (@cleanNotation_vertex_number_64138f6f46dd27172356 (n) (v)))) :=
+  h
+
+noncomputable def cleanNotation_subtraction_preserves_order_545889f2dbbe43ac08cd  (a : ℕ) (u : ℕ) (v : ℕ) (h : ((u ≤ v))) : (((u - a) ≤ (v - a))) :=
+  Nat.sub_le_sub_right h a
+
+noncomputable def cleanNotation_minimum_preserves_order_366e442832d54d11c011  (m : ℕ) (u : ℕ) (v : ℕ) (h : ((u ≤ v))) : (((cleanNotation_natural_minimum_a98622f728b78fbd6d0f (m) (u)) ≤ (cleanNotation_natural_minimum_a98622f728b78fbd6d0f (m) (v)))) :=
+  min_le_min_left m h
+
+noncomputable def cleanNotation_bounded_vertices_ordered_618d6a051cf02953cafd  (n : ℕ) (k : ℕ) (l : ℕ) (hk : ((k ≤ n))) (hl : ((l ≤ n))) (h : ((k ≤ l))) : (((@cleanNotation_bounded_vertex_5747514b48fa95eb06be (n) (k) (hk)) ≤ (@cleanNotation_bounded_vertex_5747514b48fa95eb06be (n) (l) (hl)))) :=
+  h
+
+noncomputable def cleanDefine_clipped_vertices_ordered_18639ea00d989c74f29e  (n : ℕ) (a : ℕ) (m : ℕ) (u : Fin (n + 1)) (v : Fin (n + 1)) (h : ((u ≤ v))) : (((@cleanDefine_clipped_vertex_2105907b2c6d43692206 (n) (a) (m) (u)) ≤ (@cleanDefine_clipped_vertex_2105907b2c6d43692206 (n) (a) (m) (v)))) :=
+  (@cleanNotation_bounded_vertices_ordered_618d6a051cf02953cafd (m) ((cleanNotation_natural_minimum_a98622f728b78fbd6d0f (m) (((@cleanNotation_vertex_number_64138f6f46dd27172356 ((n + 1)) (u)) - a)))) ((cleanNotation_natural_minimum_a98622f728b78fbd6d0f (m) (((@cleanNotation_vertex_number_64138f6f46dd27172356 ((n + 1)) (v)) - a)))) ((@cleanNotation_minimum_left_bound_18eddb4005f545937da0 (m) (((@cleanNotation_vertex_number_64138f6f46dd27172356 ((n + 1)) (u)) - a)))) ((@cleanNotation_minimum_left_bound_18eddb4005f545937da0 (m) (((@cleanNotation_vertex_number_64138f6f46dd27172356 ((n + 1)) (v)) - a)))) ((@cleanNotation_minimum_preserves_order_366e442832d54d11c011 (m) (((@cleanNotation_vertex_number_64138f6f46dd27172356 ((n + 1)) (u)) - a)) (((@cleanNotation_vertex_number_64138f6f46dd27172356 ((n + 1)) (v)) - a)) ((@cleanNotation_subtraction_preserves_order_545889f2dbbe43ac08cd (a) ((@cleanNotation_vertex_number_64138f6f46dd27172356 ((n + 1)) (u))) ((@cleanNotation_vertex_number_64138f6f46dd27172356 ((n + 1)) (v))) ((@cleanNotation_vertex_order_numbers_d0bb5e78e6107e76915f ((n + 1)) (u) (v) (h))))))))
+
+noncomputable def cleanDefine_restricted_interval_labels_4699560db33250f6be06  (I : Type) (n : ℕ) (a : ℕ) (m : ℕ) (L : cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe (I) (n)) : cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe ({x : I // x ∈ (@cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 (I) (n) (a) (m) (L))}) (m) :=
+  (@cleanConstructor_interval_labels_c716f00fe8e77d75edb2 ({x : I // x ∈ (@cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 (I) (n) (a) (m) (L))}) (m) ((fun (clean_bound_0 : {x : I // x ∈ (@cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 (I) (n) (a) (m) (L))}) => (@cleanDefine_clipped_vertex_2105907b2c6d43692206 (n) (a) (m) (((@cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe.«lower» (I) (n) (L)) (@cleanNotation_selected_value_df54a12138d36423a390 (I) ((@cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 (I) (n) (a) (m) (L))) (clean_bound_0))))))) ((fun (clean_bound_1 : {x : I // x ∈ (@cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 (I) (n) (a) (m) (L))}) => (@cleanDefine_clipped_vertex_2105907b2c6d43692206 (n) (a) (m) (((@cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe.«upper» (I) (n) (L)) (@cleanNotation_selected_value_df54a12138d36423a390 (I) ((@cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 (I) (n) (a) (m) (L))) (clean_bound_1))))))) ((fun (clean_bound_2 : {x : I // x ∈ (@cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 (I) (n) (a) (m) (L))}) => (@cleanDefine_clipped_vertices_ordered_18639ea00d989c74f29e (n) (a) (m) (((@cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe.«lower» (I) (n) (L)) (@cleanNotation_selected_value_df54a12138d36423a390 (I) ((@cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 (I) (n) (a) (m) (L))) (clean_bound_2)))) (((@cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe.«upper» (I) (n) (L)) (@cleanNotation_selected_value_df54a12138d36423a390 (I) ((@cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 (I) (n) (a) (m) (L))) (clean_bound_2)))) (((@cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe.«ordered» (I) (n) (L)) (@cleanNotation_selected_value_df54a12138d36423a390 (I) ((@cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 (I) (n) (a) (m) (L))) (clean_bound_2))))))))
+
 
 open scoped Matrix
 
@@ -451,7 +469,29 @@ def supportStatement : Prop := ∀ (I : Type) (n a m : ℕ) (h : a+m ≤ n)
  (L : cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe I n) (i : I) (_ : i ∈ cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 I n a m L) (v : Fin (m+1)),
  (cleanDefine_clipped_vertex_2105907b2c6d43692206 n a m (L.lower i) ≤ v ∧ v ≤ cleanDefine_clipped_vertex_2105907b2c6d43692206 n a m (L.upper i)) ↔
  i ∈ cleanDefine_interval_labels_at_1f63148e436b0a274491 I n L (cleanDefine_subpath_vertex_ed24b88b5532567c119f n a m h v)
+
+noncomputable def numberOrder (n : ℕ) (u v : Fin n) (h : u ≤ v) : cleanNotation_vertex_number_64138f6f46dd27172356 n u ≤ cleanNotation_vertex_number_64138f6f46dd27172356 n v := h
+noncomputable def subtractionOrder (a u v : ℕ) (h : u ≤ v) : u-a ≤ v-a := Nat.sub_le_sub_right h a
+noncomputable def minimumOrder (m u v : ℕ) (h : u ≤ v) : cleanNotation_natural_minimum_a98622f728b78fbd6d0f m u ≤ cleanNotation_natural_minimum_a98622f728b78fbd6d0f m v := min_le_min_left m h
+noncomputable def boundedOrder (n k l : ℕ) (hk : k ≤ n) (hl : l ≤ n) (h : k ≤ l) :
+ cleanNotation_bounded_vertex_5747514b48fa95eb06be n k hk ≤ cleanNotation_bounded_vertex_5747514b48fa95eb06be n l hl := h
+noncomputable def clippingOrder (n a m : ℕ) (u v : Fin (n+1)) (h : u ≤ v) :
+ cleanDefine_clipped_vertex_2105907b2c6d43692206 n a m u ≤ cleanDefine_clipped_vertex_2105907b2c6d43692206 n a m v :=
+ cleanNotation_bounded_vertices_ordered_618d6a051cf02953cafd m (cleanNotation_natural_minimum_a98622f728b78fbd6d0f m (cleanNotation_vertex_number_64138f6f46dd27172356 (n+1) u-a)) (cleanNotation_natural_minimum_a98622f728b78fbd6d0f m (cleanNotation_vertex_number_64138f6f46dd27172356 (n+1) v-a))
+   (cleanNotation_minimum_left_bound_18eddb4005f545937da0 m (cleanNotation_vertex_number_64138f6f46dd27172356 (n+1) u-a)) (cleanNotation_minimum_left_bound_18eddb4005f545937da0 m (cleanNotation_vertex_number_64138f6f46dd27172356 (n+1) v-a))
+   (cleanNotation_minimum_preserves_order_366e442832d54d11c011 m (cleanNotation_vertex_number_64138f6f46dd27172356 (n+1) u-a) (cleanNotation_vertex_number_64138f6f46dd27172356 (n+1) v-a)
+     (cleanNotation_subtraction_preserves_order_545889f2dbbe43ac08cd a (cleanNotation_vertex_number_64138f6f46dd27172356 (n+1) u) (cleanNotation_vertex_number_64138f6f46dd27172356 (n+1) v) (cleanNotation_vertex_order_numbers_d0bb5e78e6107e76915f (n+1) u v h)))
+noncomputable def restrictedLabels (I : Type) (n a m : ℕ) (L : cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe I n) :
+ cleanStructure_IntervalLabels_4e73cb2f4ca40b36affe {i : I // i ∈ cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 I n a m L} m :=
+ cleanConstructor_interval_labels_c716f00fe8e77d75edb2 {i : I // i ∈ cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 I n a m L} m
+   (fun j => cleanDefine_clipped_vertex_2105907b2c6d43692206 n a m (L.lower (cleanNotation_selected_value_df54a12138d36423a390 (cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 I n a m L) j)))
+   (fun j => cleanDefine_clipped_vertex_2105907b2c6d43692206 n a m (L.upper (cleanNotation_selected_value_df54a12138d36423a390 (cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 I n a m L) j)))
+   (fun j => cleanDefine_clipped_vertices_ordered_18639ea00d989c74f29e n a m
+     (L.lower (cleanNotation_selected_value_df54a12138d36423a390 (cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 I n a m L) j))
+     (L.upper (cleanNotation_selected_value_df54a12138d36423a390 (cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 I n a m L) j))
+     (L.ordered (cleanNotation_selected_value_df54a12138d36423a390 (cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 I n a m L) j)))
 end ClippingOracle
+
 
 open Lean Elab Command
 private def canonicalName (n : Name) : Name := Id.run do
@@ -495,6 +535,12 @@ same_target cleanDefine_surviving_interval_labels_c95e4788f0cd06a17651 ClippingO
 same_target CleanStatements.clipped_subpath_vertex ClippingOracle.retractionStatement
 same_target CleanStatements.clipping_preserves_order ClippingOracle.monotoneStatement
 same_target CleanStatements.clipped_interval_support ClippingOracle.supportStatement
+same_target cleanNotation_vertex_order_numbers_d0bb5e78e6107e76915f ClippingOracle.numberOrder
+same_target cleanNotation_subtraction_preserves_order_545889f2dbbe43ac08cd ClippingOracle.subtractionOrder
+same_target cleanNotation_minimum_preserves_order_366e442832d54d11c011 ClippingOracle.minimumOrder
+same_target cleanNotation_bounded_vertices_ordered_618d6a051cf02953cafd ClippingOracle.boundedOrder
+same_target cleanDefine_clipped_vertices_ordered_18639ea00d989c74f29e ClippingOracle.clippingOrder
+same_target cleanDefine_restricted_interval_labels_4699560db33250f6be06 ClippingOracle.restrictedLabels
 
 theorem clipping_retraction : CleanStatements.clipped_subpath_vertex := by
  unfold CleanStatements.clipped_subpath_vertex

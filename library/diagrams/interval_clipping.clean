@@ -39,4 +39,67 @@ Define surviving interval labels(I,n,a,m,L):
       a ≤ vertex number(n+1,L.upper(i))))
   Render latex: {L}|_{{[{a},{a}+{m}]}}
 
+Notation vertex order numbers(n,u,v,h):
+  Let n: Natural
+  Let u,v: Vertex(n)
+  Let h: Evidence((u ≤ v))
+  Returns: Evidence((vertex number(n,u) ≤ vertex number(n,v)))
+  Means: h
+  Render latex: {h}
+
+Notation subtraction preserves order(a,u,v,h):
+  Let a,u,v: Natural
+  Let h: Evidence((u ≤ v))
+  Returns: Evidence((u-a ≤ v-a))
+  Means: Nat.sub_le_sub_right h a
+  Render latex: {h}
+
+Notation minimum preserves order(m,u,v,h):
+  Let m,u,v: Natural
+  Let h: Evidence((u ≤ v))
+  Returns: Evidence((natural minimum(m,u) ≤ natural minimum(m,v)))
+  Means: min_le_min_left m h
+  Render latex: {h}
+
+Notation bounded vertices ordered(n,k,l,hk,hl,h):
+  Let n,k,l: Natural
+  Let hk: Evidence((k ≤ n))
+  Let hl: Evidence((l ≤ n))
+  Let h: Evidence((k ≤ l))
+  Returns: Evidence((bounded vertex(n,k,hk) ≤ bounded vertex(n,l,hl)))
+  Means: h
+  Render latex: {h}
+
+Define clipped vertices ordered(n,a,m,u,v,h):
+  Let n,a,m: Natural
+  Let u,v: Vertex((n+1))
+  Let h: Evidence((u ≤ v))
+  Returns: Evidence((clipped vertex(n,a,m,u) ≤ clipped vertex(n,a,m,v)))
+  Equals: bounded vertices ordered(m,
+    natural minimum(m,vertex number(n+1,u)-a),
+    natural minimum(m,vertex number(n+1,v)-a),
+    minimum left bound(m,vertex number(n+1,u)-a),
+    minimum left bound(m,vertex number(n+1,v)-a),
+    minimum preserves order(m,vertex number(n+1,u)-a,vertex number(n+1,v)-a,
+      subtraction preserves order(a,vertex number(n+1,u),vertex number(n+1,v),
+        vertex order numbers(n+1,u,v,h))))
+  Render latex: {h}
+
+Define restricted interval labels(I,n,a,m,L):
+  Let I: Type
+  Let n,a,m: Natural
+  Let L: IntervalLabels(I,n)
+  Returns: IntervalLabels(Element(I,(surviving interval labels(I,n,a,m,L))),m)
+  Equals: interval labels(type(Element(I,(surviving interval labels(I,n,a,m,L)))),m,
+    function(j: Element(I,(surviving interval labels(I,n,a,m,L))),
+      clipped vertex(n,a,m,L.lower(selected value(surviving interval labels(I,n,a,m,L),j)))),
+    function(j: Element(I,(surviving interval labels(I,n,a,m,L))),
+      clipped vertex(n,a,m,L.upper(selected value(surviving interval labels(I,n,a,m,L),j)))),
+    function(j: Element(I,(surviving interval labels(I,n,a,m,L))),
+      clipped vertices ordered(n,a,m,
+        L.lower(selected value(surviving interval labels(I,n,a,m,L),j)),
+        L.upper(selected value(surviving interval labels(I,n,a,m,L),j)),
+        L.ordered(selected value(surviving interval labels(I,n,a,m,L),j)))))
+  Render latex: {L}|_{{[{a},{a}+{m}]}}
+
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

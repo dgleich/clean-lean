@@ -42,21 +42,27 @@ case's own limitations or substitute for its outstanding validation.
 - The newer selected-field snapshot has passed the diagram-map study's 15 exact
   targets and six proofs. Its complete native portfolio has now passed all 34
   studies; see the [durable validation record](validation-2026-11-07.md). Its full
-  Python run is still active and is not yet a passing result.
-- Current main passes the subpath study's 19 exact targets and six proofs, and
-  the clipping study's eight exact targets, three proofs and five Python checks.
+  Python run terminated with status 143 during review collection, without a final
+  unittest summary. It is not a passing result.
+- Before the latest codomain fix, main passed the subpath study's 19 exact targets
+  and six proofs, and the initial clipping study's eight exact targets and three proofs.
   The corrected label-rendering regeneration passes the zigzag study's 46 exact
   targets and six proofs. The 92-proof corpus was checked after the compiler change.
-- The older browser build was superseded when clipping sources were added. The
-  current build must be checked against all source hashes, including the later
-  IntervalLabels prose correction, before it is called current.
+- The known-codomain substitution fix passes 108 focused regressions. The expanded
+  clipping study passes 14 exact native targets, three proofs, and seven Python
+  checks, including the authored restricted-label record. A new frozen full-suite
+  run and corpus recheck are pending; earlier portfolio results do not validate
+  this later compiler change.
+- The pre-fix browser build was stopped as superseded when the codomain compiler
+  and clipped-label source changed. Its replacement reports per-file progress.
+  Final source-hash and UI checks remain pending.
 
 ## Mathematical constructions still missing
 
 | Requested theorem | What is real now | What is still missing |
 |---|---|---|
 | Big Steps, Theorem 9 | Indexed records and ordinary set/function definitions can express its inputs and support predicates | Filtered complex, lazy reduction, the actual algorithm run and its invariants; the two sides must be computed independently |
-| Interlevel, Theorem 1 | Explicit diagrams, interval bases, subpath restrictions, endpoint clipping and surviving-label support | Restricted label records, basis reindexing and compatibility, pyramid construction, exact-diamond basis flips and extension proof |
+| Interlevel, Theorem 1 | Explicit diagrams, interval bases, subpath restrictions, endpoint clipping, surviving-label support and restricted label records | Basis reindexing and compatibility, pyramid construction, exact-diamond basis flips and extension proof |
 | Interlevel, Theorem 3 | Actual singular-homology, submodule, perturbation and shifted-image foundations | Assemble the level-set specialization and prove the two-extreme-perturbation formula with justified cover hypotheses |
 | Interlevel, Theorem 4 | A translated two-image candidate over actual relative objects; checked supporting inclusion maps | Reverse inclusion and the cover/excision audit; no proof is claimed by translating the candidate |
 | Mayer–Vietoris | Graded objects, maps and ordinary/relative chain foundations | Connecting maps, sequence/exactness interface, excision and the long-exact-sequence construction |
