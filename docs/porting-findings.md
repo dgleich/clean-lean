@@ -444,3 +444,24 @@ matcher's selected arguments. Compound types used as values remain opaque; this
 is not a new type-expression syntax. Native acceptance and full regression status
 are recorded in the inferred-conversion study.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Subpath prototype and universal proof families
+
+The isolated type-expression prototype can author a finite subpath inclusion using
+explicit Fin offset, bound-cast and equality-cast wrappers, plus Nat association
+and monotonicity facts. Its vertex/edge functions, restricted directions and
+certified shape map are authored in Clean. Lean checks the two endpoint laws,
+including zero-edge subpaths. This construction is not yet a checked repository
+study and has not been compared against independent exact native targets.
+
+The exercise exposed a separate interface boundary: evidence for a named condition
+whose body is universally quantified is not automatically callable as a dependent
+proof family. The current shape-map constructor expects the latter. Explicit
+Function(e: E,Evidence((...))) certificate arguments work without new native
+mathematical bodies; direct use of a named universal certificate needs a precise
+proof-elimination or conversion rule. This is recorded as unfinished language work,
+not hidden behind a study-specific native adapter. Interval clipping, removal of
+empty labels, basis reindexing and the paper's extension theorem remain separate.
+:::

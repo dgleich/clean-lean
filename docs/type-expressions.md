@@ -37,6 +37,12 @@ not silently reassigned another meaning.
 
 ## Meaning and target
 
+Require the explicit foundational Type binding to Lean Type, with declared
+universe 1. Move that existing declaration from topology/basic.clean to the shared
+types.clean module; this makes the meta-sort metadata available independently of
+topology. An absent or differently bound meta-sort is an error. In particular,
+Type itself cannot instantiate a parameter restricted to Type 0.
+
 Resolve the enclosed type in the fixed caller scope, then apply the existing
 closed-universe Type-parameter gate: its Lean target must inhabit Type 0. Emit that
 resolved target directly, with the existing explicit wrapper, index, universe and
@@ -101,10 +107,12 @@ definitional equality: the independently authored oracle must select that x.
 
 ## Current prototype evidence and remaining gates
 
-The isolated generated parser passes strict LALR and lexer checks. Eight focused
+The isolated generated parser passes strict LALR and lexer checks. Fourteen focused
 prototype tests cover the independent tree, universe checks, constructor typing,
 inferred compound expansion, nested dimension substitution, dependent comparison
-keys and label serialization. The focused regression run passes all 68 tests after
+keys, local type-definition rejection, meta-sort inference and actual automatic
+assumption names with alias collision rejection. The focused regression run passes
+all 82 tests after
 replacing the old zigzag-opacity assertion with an independent expected target
 function. The authored projection and its ordinary comparison form are still
 checked separately; whole-index comparison now materializes that function.
