@@ -1,0 +1,46 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "../../library/diagrams/active_labels.clean"
+Source restriction:
+  Kind: other
+  Label: Interval restriction
+  Title: Active labels of a finite subpath
+
+Result restoring a restricted label:
+  Attribution: restriction; original label round trip; original
+  Let I: Type
+  Let n,a,m: Natural
+  Assume h: a+m ≤ n
+  Let L: IntervalLabels(I,n)
+  Let v: Vertex((m+1))
+  Let support: ActiveLabelSupport(I,n,a,m,h,L,v)
+  Let x: OriginalActiveLabels(I,n,a,m,h,L,v)
+  Conclude: restore active label(I,n,a,m,h,L,v,support,
+    restrict active label(I,n,a,m,h,L,v,support,x)) = x
+
+Result restricting a restored label:
+  Attribution: restriction; surviving label round trip; original
+  Let I: Type
+  Let n,a,m: Natural
+  Assume h: a+m ≤ n
+  Let L: IntervalLabels(I,n)
+  Let v: Vertex((m+1))
+  Let support: ActiveLabelSupport(I,n,a,m,h,L,v)
+  Let y: RestrictedActiveLabels(I,n,a,m,L,v)
+  Conclude: restrict active label(I,n,a,m,h,L,v,support,
+    restore active label(I,n,a,m,h,L,v,support,y)) = y
+
+Result active labels correspond:
+  Attribution: restriction; value preserving equivalence; original
+  Let I: Type
+  Let n,a,m: Natural
+  Assume h: a+m ≤ n
+  Let L: IntervalLabels(I,n)
+  Let v: Vertex((m+1))
+  Conclude:
+    there exists (e: Equivalence(OriginalActiveLabels(I,n,a,m,h,L,v),RestrictedActiveLabels(I,n,a,m,L,v)),
+      for every (x: OriginalActiveLabels(I,n,a,m,h,L,v),
+        element value(surviving interval labels(I,n,a,m,L),
+          element value(restricted active labels(I,n,a,m,L,v),equivalence forward(e,x))) =
+            element value(original active labels(I,n,a,m,h,L,v),x)))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

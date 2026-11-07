@@ -1,0 +1,85 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "interval_clipping.clean"
+Import "../logic/elements.clean"
+Import "../logic/equivalences.clean"
+
+Define original active labels(I,n,a,m,h,L,v):
+  Let I: Type
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let L: IntervalLabels(I,n)
+  Let v: Vertex((m+1))
+  Returns: Set(I)
+  Equals: interval labels at(I,n,L,subpath vertex(n,a,m,h,v))
+  Render latex: A({L},{a}+{v})
+
+Define restricted active labels(I,n,a,m,L,v):
+  Let I: Type
+  Let n,a,m: Natural
+  Let L: IntervalLabels(I,n)
+  Let v: Vertex((m+1))
+  Returns: Set(Element(I,(surviving interval labels(I,n,a,m,L))))
+  Equals: interval labels at(type(Element(I,(surviving interval labels(I,n,a,m,L)))),m,
+    restricted interval labels(I,n,a,m,L),v)
+  Render latex: R({L},{v})
+
+Type OriginalActiveLabels(I: Type,n: Natural,a: Natural,m: Natural,h: Evidence((a+m ≤ n)),L: IntervalLabels(I,n),v: Vertex((m+1))):
+  Equals: Element(I,(original active labels(I,n,a,m,h,L,v)))
+
+Type RestrictedActiveLabels(I: Type,n: Natural,a: Natural,m: Natural,L: IntervalLabels(I,n),v: Vertex((m+1))):
+  Equals: Element(Element(I,(surviving interval labels(I,n,a,m,L))),(restricted active labels(I,n,a,m,L,v)))
+
+Structure ActiveLabelSupport(I: Type,n: Natural,a: Natural,m: Natural,h: Evidence((a+m ≤ n)),L: IntervalLabels(I,n),v: Vertex((m+1))):
+  Let survives: Function(x: OriginalActiveLabels(I,n,a,m,h,L,v),Evidence((element value(original active labels(I,n,a,m,h,L,v),x) ∈ surviving interval labels(I,n,a,m,L))))
+  Let active: Function(x: OriginalActiveLabels(I,n,a,m,h,L,v),Evidence((element from membership(surviving interval labels(I,n,a,m,L),element value(original active labels(I,n,a,m,h,L,v),x),survives(x)) ∈ restricted active labels(I,n,a,m,L,v))))
+  Let original: Function(y: RestrictedActiveLabels(I,n,a,m,L,v),Evidence((element value(surviving interval labels(I,n,a,m,L),element value(restricted active labels(I,n,a,m,L,v),y)) ∈ original active labels(I,n,a,m,h,L,v))))
+  Constructor: active label support
+  Describe: evidence identifying active labels at ${v}$ with those at ${a}+{v}$
+
+Define restrict active label(I,n,a,m,h,L,v,support,x):
+  Let I: Type
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let L: IntervalLabels(I,n)
+  Let v: Vertex((m+1))
+  Let support: ActiveLabelSupport(I,n,a,m,h,L,v)
+  Let x: OriginalActiveLabels(I,n,a,m,h,L,v)
+  Returns: RestrictedActiveLabels(I,n,a,m,L,v)
+  Equals: element from membership(restricted active labels(I,n,a,m,L,v),
+    element from membership(surviving interval labels(I,n,a,m,L),element value(original active labels(I,n,a,m,h,L,v),x),support.survives(x)),support.active(x))
+  Render latex: \rho({x})
+
+Define restore active label(I,n,a,m,h,L,v,support,y):
+  Let I: Type
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let L: IntervalLabels(I,n)
+  Let v: Vertex((m+1))
+  Let support: ActiveLabelSupport(I,n,a,m,h,L,v)
+  Let y: RestrictedActiveLabels(I,n,a,m,L,v)
+  Returns: OriginalActiveLabels(I,n,a,m,h,L,v)
+  Equals: element from membership(original active labels(I,n,a,m,h,L,v),element value(surviving interval labels(I,n,a,m,L),element value(restricted active labels(I,n,a,m,L,v),y)),support.original(y))
+  Render latex: \iota({y})
+
+Define active label equivalence(I,n,a,m,h,L,v,support,left,right):
+  Let I: Type
+  Let n,a,m: Natural
+  Let h: Evidence((a+m ≤ n))
+  Let L: IntervalLabels(I,n)
+  Let v: Vertex((m+1))
+  Let support: ActiveLabelSupport(I,n,a,m,h,L,v)
+  Let left: Function(x: OriginalActiveLabels(I,n,a,m,h,L,v),
+    Evidence((restore active label(I,n,a,m,h,L,v,support,
+      restrict active label(I,n,a,m,h,L,v,support,x)) = x)))
+  Let right: Function(y: RestrictedActiveLabels(I,n,a,m,L,v),
+    Evidence((restrict active label(I,n,a,m,h,L,v,support,
+      restore active label(I,n,a,m,h,L,v,support,y)) = y)))
+  Returns: Equivalence(OriginalActiveLabels(I,n,a,m,h,L,v),RestrictedActiveLabels(I,n,a,m,L,v))
+  Equals: equivalence(type(OriginalActiveLabels(I,n,a,m,h,L,v)),
+    type(RestrictedActiveLabels(I,n,a,m,L,v)),
+    function(x: OriginalActiveLabels(I,n,a,m,h,L,v),restrict active label(I,n,a,m,h,L,v,support,x)),
+    function(y: RestrictedActiveLabels(I,n,a,m,L,v),restore active label(I,n,a,m,h,L,v,support,y)),
+    left,right)
+  Render latex: e({L},{v})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

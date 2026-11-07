@@ -530,3 +530,23 @@ The study-specific bijection between surviving active interval labels and origin
 active labels remains to be constructed; these wrappers do not assume or establish
 that bijection, basis compatibility, or the pyramid theorem.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Active-label maps: construction in progress
+
+The [active-label study](../studies/active-labels/README.md) authors the original
+and restricted active sets, a support record, both maps, and equivalence assembly
+in Clean. Its final existence statement assumes only the subpath bound and interval
+labels. The verifier must construct support and inverse evidence; that construction
+is not assumed by the theorem. The support record and maps have loaded, but the
+full equivalence translation, canonical checks and kernel proofs remain pending.
+
+Two readability/application boundaries surfaced while writing this source:
+transparent `Type … Equals:` aliases reject `Describe` metadata, and chained
+application such as `support.active(x)(h)` has no grammar production. The present
+construction uses neither unsupported feature. These are concrete gaps for future
+language work, not permission to accept ambiguous syntax or opaque replacement
+types. The planned general application form needs its own deterministic postfix
+rule, call/field binding semantics, target oracle and rendering tests.
+:::

@@ -4484,6 +4484,50 @@
     "studies/basis-reindexing/Statements.pdf": {
       "origin": "derived-from-authored-sources; cited data retains source origin",
       "mode": "sidecar"
+    },
+    "library/logic/elements.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "library/diagrams/active_labels.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "tests/test_active_labels.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/active-labels/Statements.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/active-labels/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/active-labels/verify.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

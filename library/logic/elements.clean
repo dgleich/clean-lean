@@ -1,0 +1,30 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "../topology/indexed.clean"
+Import "evidence.clean"
+
+Notation element value(S,x):
+  Let A: Type
+  Let S: Set(A)
+  Let x: Element(A,S)
+  Returns: A
+  Means: x.val
+  Render latex: {x}
+
+Notation element membership(S,x):
+  Let A: Type
+  Let S: Set(A)
+  Let x: Element(A,S)
+  Returns: Evidence((element value(S,x) ∈ S))
+  Means: x.property
+  Render latex: \operatorname{{membership}}({x})
+
+Notation element from membership(S,x,h):
+  Let A: Type
+  Let S: Set(A)
+  Let x: A
+  Let h: Evidence((x ∈ S))
+  Returns: Element(A,S)
+  Means: Subtype.mk x h
+  Render latex: {x}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
