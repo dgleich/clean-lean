@@ -2,6 +2,12 @@
 
 # Explicit numeral defaults
 
+:::llm gpt-6 2026-11-07 role=assisted
+
+Implementation update: [operators and numerals are now integrated into the working compiler](operator-numeral-integration.md). Earlier isolated-status descriptions below describe the development stages. The curated subject libraries now explicitly import their operators and numeral default. Broader library/test migration and full language-contract conformance remain unfinished.
+:::
+
+
 Status: isolated prototype, following [contextual completion](numeral-inference.md).
 Defaults remain explicit module declarations; no builtin type name or implicit
 prelude supplies one.

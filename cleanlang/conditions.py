@@ -9,6 +9,12 @@ from .core import CleanError, ID, PROP, Expressions
 def source_expression(tree):
     """Canonical label spelling from normalized expression trees; no target-text parsing."""
     kind=tree[0]
+    if kind in ('NumeralAnnotation','BoundNumeral'):
+        from .numerals import spelling
+        return spelling(tree,canonical_digits=True)
+    if kind=='ModuleCall' and len(tree)>4:
+        from .bound_calls import source_operator
+        return source_operator(tree,source_expression)
     if kind=='Local': return tree[1]
     if kind=='TypeValue': return 'type('+tree[1]+')'
     if kind=='Decimal': return tree[1].lstrip('0') or '0'

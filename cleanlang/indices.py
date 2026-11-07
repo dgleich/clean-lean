@@ -56,7 +56,7 @@ def substitute_index(index,bindings,env,locals):
             from .type_values import substitute
             return substitute(node,bindings,env,locals)
         if node[0]=='Local' and node[1] in bindings:return reference(bindings[node[1]])
-        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],node[3]]
+        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],*node[3:]]
         if node[0]=='Call':
             args=[replace(a) for a in node[2]]
             value=bindings.get(node[1])

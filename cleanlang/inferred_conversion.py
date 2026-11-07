@@ -34,7 +34,12 @@ def value_names(tree):
         return set()
     kind=tree[0]
     if kind=='Local':return {tree[1]}
-    if kind=='Decimal':return set()
+    if kind in ('Decimal','BoundNumeral'):return set()
+    if kind=='NumeralAnnotation':
+        from .numerals import type_source
+        import re
+        from .core import ID
+        return set(re.findall(ID,type_source(tree[2])))
     if kind=='TypeValue':return type_values(type_tree(parse(tree[1],'type_ref')))
     if kind=='ModuleCall':return set().union(*(value_names(a) for a in tree[2]))
     if kind=='Call':return {tree[1]}|set().union(*(value_names(a) for a in tree[2]))

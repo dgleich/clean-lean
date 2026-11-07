@@ -4,7 +4,7 @@ from pathlib import Path
 import unittest
 from unittest.mock import patch
 from cleanlang.core import Environment,Expr,Expressions,CleanError
-from cleanlang.modules import load_module,notation
+from cleanlang.modules import load_module,notation,condition_declaration
 from cleanlang.bound_calls import bind
 from cleanlang.conversion import comparison_normal_form
 ROOT=Path(__file__).resolve().parents[1]
@@ -14,6 +14,8 @@ class BoundComparisonReuse(unittest.TestCase):
         self.env=Environment();load_module(ROOT/'library/logic/functions.clean',self.env)
         notation('Notation retain(x):',['Let A: Type','Let x: A','Returns: A',
                  'Means: x','Render latex: {x}'],self.env)
+        condition_declaration('Condition equal(x,y):', ['Let T: Type','Let x,y: T',
+                              'Infix: =','From Lean: x=y','Render latex: {x}={y}'],self.env)
         self.local={n:Expr(n,n,self.env.type('Type')) for n in ['A','B']}
         self.rebind('first','A')
 

@@ -5,6 +5,7 @@
     "line": 4,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.exp_pos",
@@ -36,6 +37,7 @@
     "line": 9,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.exp_ne_zero",
@@ -67,6 +69,7 @@
     "line": 14,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.exp_add",
@@ -98,6 +101,7 @@
     "line": 19,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.exp_sub",
@@ -129,6 +133,7 @@
     "line": 24,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.log_exp",
@@ -160,6 +165,7 @@
     "line": 29,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.exp_log",
@@ -191,6 +197,7 @@
     "line": 35,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.log_mul",
@@ -222,6 +229,7 @@
     "line": 42,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.log_div",
@@ -253,6 +261,7 @@
     "line": 49,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.sqrt_nonneg",
@@ -284,6 +293,7 @@
     "line": 54,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.sq_sqrt",
@@ -315,6 +325,7 @@
     "line": 60,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.sqrt_sq_eq_abs",
@@ -346,6 +357,7 @@
     "line": 65,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.sqrt_mul",
@@ -377,6 +389,7 @@
     "line": 71,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.sin_sq_add_cos_sq",
@@ -408,6 +421,7 @@
     "line": 76,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.sin_add",
@@ -439,6 +453,7 @@
     "line": 81,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.cos_add",
@@ -470,6 +485,7 @@
     "line": 86,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.sin_neg",
@@ -501,6 +517,7 @@
     "line": 91,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.cos_neg",
@@ -532,6 +549,7 @@
     "line": 96,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Continuous.comp",
@@ -563,6 +581,7 @@
     "line": 103,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Continuous.add",
@@ -594,6 +613,7 @@
     "line": 110,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Continuous.mul",
@@ -625,6 +645,7 @@
     "line": 117,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.sqrt_sq_eq_abs",
@@ -656,6 +677,7 @@
     "line": 122,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.sin_sq_add_cos_sq",
@@ -687,6 +709,7 @@
     "line": 127,
     "file": "corpus/analysis.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Real.sqrt_sq_eq_abs",

@@ -126,7 +126,7 @@ def scan(text):
                         start = None
                 else: i += 1
                 continue
-            if not quoted and not ''.join(masked[:i]).strip() and re.match(r'(?:Means|From Lean|Render(?: latex)?)\s*:', raw[i:], re.I): break
+            if not quoted and not ''.join(masked[:i]).strip() and re.match(r'(?:Numerals|Means|From Lean|Render(?: latex)?)\s*:', raw[i:], re.I): break
             if raw[i] == '"': quoted = not quoted; i += 1
             elif not quoted and pair == '--':
                 regions[row].append((i, len(raw), 'comment'))

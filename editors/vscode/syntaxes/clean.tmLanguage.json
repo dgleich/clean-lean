@@ -27,7 +27,7 @@
     },
     {
       "name": "meta.embedded.line.lean.clean",
-      "match": "(?i)^ *(?:Means|From Lean)\\s*:.*$"
+      "match": "(?i)^ *(?:Numerals|Means|From Lean)\\s*:.*$"
     },
     {
       "name": "string.unquoted.metadata.clean",
@@ -56,6 +56,23 @@
   "repository": {
     "code": {
       "patterns": [
+        {
+          "match": "^ *(?i:(Default) +(numerals))\\s*(:)\\s*([^\\n]*?)(?=--|$)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.clean"
+            },
+            "2": {
+              "name": "keyword.control.clean"
+            },
+            "3": {
+              "name": "punctuation.separator.clean"
+            },
+            "4": {
+              "name": "entity.name.type.clean"
+            }
+          }
+        },
         {
           "name": "invalid.illegal.tab.clean",
           "match": "\\t+"
@@ -100,7 +117,7 @@
           }
         },
         {
-          "match": "^ *(?i:(Means|From Lean))\\s*(:)(.*)$",
+          "match": "^ *(?i:(Numerals|Means|From Lean))\\s*(:)(.*)$",
           "captures": {
             "1": {
               "name": "keyword.control.clean"

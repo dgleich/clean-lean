@@ -1787,7 +1787,7 @@
     {
       "id": "module_binary_operator_prototype",
       "status": "partial",
-      "environment": "Isolated compiler copy with studies/module-operators/prototype.patch applied and strictly regenerated parser. Main compiler does not accept Infix. Explicit proposed scalar, matrix/vector, and proof-family modules.",
+      "environment": "Working compiler with declared Infix/Prefix and closed-carrier numerals; strict generated parser. Explicit proposed scalar, matrix/vector, and proof-family modules.",
       "source_fragment": "Notation apply reflexive family(h,n):\n  Let h: Function(x: Natural,Evidence((x = x)))\n  Let n: Natural\n  Returns: Evidence((n = n))\n  Infix: *\n  Means: h n\n  Render latex: {h}({n})\n",
       "expected_tree": [
         "Operator",
@@ -1805,15 +1805,16 @@
       "obligation": "Resolve all declared candidates without order preference. Preserve proof arguments and partially inferred caller scope. Reject multiple eligible candidates, wrong evidence, and unfinished/nested failures. Compare adapter types/bodies and selected applications with independently authored exact native targets.",
       "checks": [
         "studies/module-operators/verify_prototype.py",
-        "studies/module-operators/PrototypeVerified.lean"
+        "studies/module-operators/PrototypeVerified.lean",
+        "tests/test_declared_standard_operators.py (working compiler import, overload and retained-scope checks)",
+        "verify_corpus.py and generated/VerifiedCorpus.lean (92 working-compiler corpus proofs; not a canonical-target oracle)"
       ],
       "pending": [
-        "Main compiler integration",
-        "Literal interpretation and main unary migration",
         "Declared fixity and syntax conflicts",
         "Module-owned scope and identity",
         "Complete foundational migration and editor support",
-        "General native-adapter policy and full conformance"
+        "General native-adapter policy and full conformance",
+        "Complete main regression and downstream library/oracle migration; current full run fails"
       ]
     },
     {
@@ -1834,13 +1835,16 @@
       "checks": [
         "studies/module-operators/check_prefix.py",
         "studies/module-operators/verify_prototype.py",
-        "studies/module-operators/PrototypeVerified.lean"
+        "studies/module-operators/PrototypeVerified.lean",
+        "tests/test_declared_standard_operators.py (working compiler import, overload and retained-scope checks)",
+        "verify_corpus.py and generated/VerifiedCorpus.lean (92 working-compiler corpus proofs; not a canonical-target oracle)"
       ],
       "pending": [
         "Main integration and complete foundation migration",
         "Module-owned identities and import scope",
         "Numeral/default interpretations and declared fixity",
-        "Editor and broad conformance migration"
+        "Editor and broad conformance migration",
+        "Complete main regression and downstream library/oracle migration; current full run fails"
       ]
     },
     {
@@ -2166,13 +2170,15 @@
         "studies/operator-integration/NumeralPayloadProbe.lean (native payload mechanism only)",
         "studies/module-numerals/verify_prototype.py (isolated parser, declaration, expression and consumer checks)",
         "studies/module-numerals/verify_adapters.py (native declaration targets only; no numeral expression binding)",
-        "studies/module-numerals/verify_expressions.py (nineteen exact expression/definition/statement targets, two proofs, consumer and identity checks)"
+        "studies/module-numerals/verify_expressions.py (nineteen exact expression/definition/statement targets, two proofs, consumer and identity checks)",
+        "tests/test_declared_standard_operators.py (working compiler import, overload and retained-scope checks)",
+        "verify_corpus.py and generated/VerifiedCorpus.lean (92 working-compiler corpus proofs; not a canonical-target oracle)"
       ],
       "pending": [
-        "Main compiler and editor integration",
         "Broad consumer regression and full portfolio validation",
-        "Default integration and type-position numeral inference",
-        "Native import/instance isolation and full identity contract"
+        "Type-position numeral inference",
+        "Native import/instance isolation and full identity contract",
+        "Complete main regression and downstream library/oracle migration; current full run fails"
       ]
     },
     {
@@ -2195,13 +2201,16 @@
       "expected_lean": "Root-qualified declared Real addition applied to x and the selected Real numeral constructor applied to Lean.Expr.lit (.natVal 1). The constructor is retained with inferred presentation.",
       "checks": [
         "studies/module-numerals/verify_inference.py (fifteen exact native targets, four proofs, exhaustive completion and owned-failure checks)",
-        "studies/module-numerals/verify_prototype.py (fresh staged reconstruction and explicit/operator regressions)"
+        "studies/module-numerals/verify_prototype.py (fresh staged reconstruction and explicit/operator regressions)",
+        "tests/test_declared_standard_operators.py (working compiler import, overload and retained-scope checks)",
+        "verify_corpus.py and generated/VerifiedCorpus.lean (92 working-compiler corpus proofs; not a canonical-target oracle)"
       ],
       "pending": [
         "Main compiler integration and broad portfolio validation",
         "Constraint pruning and CLI resource-budget controls",
         "Default integration and inference across type-annotation boundaries",
-        "Parameterized carriers and complete native import/identity/instance isolation"
+        "Parameterized carriers and complete native import/identity/instance isolation",
+        "Complete main regression and downstream library/oracle migration; current full run fails"
       ]
     },
     {
@@ -2219,12 +2228,15 @@
       "expected_lean": "No new Lean declaration. Subsequent ambiguous numeral holes are restricted simultaneously using the retained Counting constructor identity, only after complete type analysis. Selected terms use that constructor with a primitive Nat payload; no implicit native coercion is inserted.",
       "checks": [
         "studies/module-numerals/verify_defaults.py (eight exact targets, four proofs, strict syntax, import conflicts, sequential scope, presentation and CLI compilation)",
-        "studies/module-numerals/verify_prototype.py (strict parser regeneration and final-stack regressions)"
+        "studies/module-numerals/verify_prototype.py (strict parser regeneration and final-stack regressions)",
+        "tests/test_declared_standard_operators.py (working compiler import, overload and retained-scope checks)",
+        "verify_corpus.py and generated/VerifiedCorpus.lean (92 working-compiler corpus proofs; not a canonical-target oracle)"
       ],
       "pending": [
         "Main compiler integration and broad portfolio validation",
         "Compact presentation with explicit referenced numeral conventions",
-        "Parameterized carriers, type-position inference and native import/identity/instance isolation"
+        "Parameterized carriers, type-position inference and native import/identity/instance isolation",
+        "Complete main regression and downstream library/oracle migration; current full run fails"
       ]
     }
   ]

@@ -8,10 +8,11 @@
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "4d15f41ed243-4",
+        "key": "256fed0a19e4-4",
         "line": 4
       }
     ],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.det_mul",
@@ -46,10 +47,11 @@
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "4d15f41ed243-4",
+        "key": "256fed0a19e4-4",
         "line": 4
       }
     ],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.det_transpose",
@@ -84,10 +86,11 @@
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "4d15f41ed243-4",
+        "key": "256fed0a19e4-4",
         "line": 4
       }
     ],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.det_mul_comm",
@@ -122,10 +125,11 @@
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "4d15f41ed243-4",
+        "key": "256fed0a19e4-4",
         "line": 4
       }
     ],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.det_mul_left_comm",
@@ -160,10 +164,11 @@
       {
         "name": "complex_square_matrices",
         "title": "complex square matrices",
-        "key": "4d15f41ed243-4",
+        "key": "256fed0a19e4-4",
         "line": 4
       }
     ],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.det_mul_right_comm",
@@ -195,6 +200,7 @@
     "line": 28,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.det_pow",
@@ -226,6 +232,7 @@
     "line": 35,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.trace_add",
@@ -257,6 +264,7 @@
     "line": 41,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.trace_sub",
@@ -288,6 +296,7 @@
     "line": 47,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.trace_neg",
@@ -319,6 +328,7 @@
     "line": 53,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.trace_transpose",
@@ -350,6 +360,7 @@
     "line": 59,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.trace_mul_comm",
@@ -381,6 +392,7 @@
     "line": 65,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.trace_mul_cycle",
@@ -412,6 +424,7 @@
     "line": 71,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.mulVec_mulVec",
@@ -443,6 +456,7 @@
     "line": 78,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.mulVec_add",
@@ -474,6 +488,7 @@
     "line": 85,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.add_mulVec",
@@ -505,6 +520,7 @@
     "line": 92,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.mulVec_sub",
@@ -536,6 +552,7 @@
     "line": 99,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.sub_mulVec",
@@ -567,6 +584,7 @@
     "line": 106,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.mulVec_smul",
@@ -598,6 +616,7 @@
     "line": 114,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.transpose_transpose",
@@ -629,6 +648,7 @@
     "line": 120,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.transpose_mul",
@@ -660,6 +680,7 @@
     "line": 126,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.trace_mul_comm",
@@ -691,6 +712,7 @@
     "line": 132,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.trace_mul_comm",
@@ -722,6 +744,7 @@
     "line": 138,
     "file": "corpus/linear_algebra.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "Matrix.det_mul",

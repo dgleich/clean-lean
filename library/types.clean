@@ -18,18 +18,21 @@ Type Type():
 
 Type Natural():
     Means: ℕ
+    Numerals: fun n : Nat => n
     Render latex: \mathbb{{N}}
     Describe: a natural number
     Describe plural: natural numbers
 
 Type Real():
     Means: ℝ
+    Numerals: fun n : Nat => (n : Real)
     Render latex: \mathbb{{R}}
     Describe: a real number
     Describe plural: real numbers
 
 Type Complex():
     Means: ℂ
+    Numerals: fun n : Nat => (n : Complex)
     Render latex: \mathbb{{C}}
     Describe: a complex number
     Describe plural: complex numbers

@@ -1,0 +1,448 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "types.clean"
+
+Default numerals: Natural
+
+Condition equal(x,y):
+  Let T: Type
+  Let x,y: T
+  Infix: =
+  From Lean: x=y
+  Render latex: {x}={y}
+
+Condition unequal(x,y):
+  Let T: Type
+  Let x,y: T
+  Infix: ≠
+  From Lean: x≠y
+  Render latex: {x}\ne {y}
+
+Condition conjunction(x,y):
+  Let x,y: Proposition
+  Infix: and
+  From Lean: x ∧ y
+  Render latex: {x}\text{{ and }}{y}
+
+Condition disjunction(x,y):
+  Let x,y: Proposition
+  Infix: or
+  From Lean: x ∨ y
+  Render latex: {x}\text{{ or }}{y}
+
+Condition implication(x,y):
+  Let x,y: Proposition
+  Infix: →
+  From Lean: x → y
+  Render latex: {x}\text{{ implies }}{y}
+
+Condition equivalence(x,y):
+  Let x,y: Proposition
+  Infix: ↔
+  From Lean: x ↔ y
+  Render latex: {x}\text{{ if and only if }}{y}
+
+Condition negation(x):
+  Let x: Proposition
+  Prefix: not
+  From Lean: ¬x
+  Render latex: \text{{not }}{x}
+
+Notation natural sum(x,y):
+  Let x,y: Natural
+  Returns: Natural
+  Infix: +
+  Means: x+y
+  Render latex: {x}+{y}
+
+Notation natural difference(x,y):
+  Let x,y: Natural
+  Returns: Natural
+  Infix: -
+  Means: x-y
+  Render latex: {x}-{y}
+
+Notation natural product(x,y):
+  Let x,y: Natural
+  Returns: Natural
+  Infix: *
+  Means: x*y
+  Render latex: {x}\,{y}
+
+Notation natural quotient(x,y):
+  Let x,y: Natural
+  Returns: Natural
+  Infix: /
+  Means: x/y
+  Render latex: \frac{{{x}}}{{{y}}}
+
+Notation natural power(x,y):
+  Let x: Natural
+  Let y: Natural
+  Returns: Natural
+  Infix: ^
+  Means: x^y
+  Render latex: {x}^{{{y}}}
+
+Condition natural less(x,y):
+  Let x,y: Natural
+  Infix: <
+  From Lean: x < y
+  Render latex: {x}< {y}
+
+Condition natural greater(x,y):
+  Let x,y: Natural
+  Infix: >
+  From Lean: x > y
+  Render latex: {x}> {y}
+
+Condition natural at most(x,y):
+  Let x,y: Natural
+  Infix: ≤
+  From Lean: x ≤ y
+  Render latex: {x}\le {y}
+
+Condition natural at least(x,y):
+  Let x,y: Natural
+  Infix: ≥
+  From Lean: x ≥ y
+  Render latex: {x}\ge {y}
+
+Notation real sum(x,y):
+  Let x,y: Real
+  Returns: Real
+  Infix: +
+  Means: x+y
+  Render latex: {x}+{y}
+
+Notation real difference(x,y):
+  Let x,y: Real
+  Returns: Real
+  Infix: -
+  Means: x-y
+  Render latex: {x}-{y}
+
+Notation real product(x,y):
+  Let x,y: Real
+  Returns: Real
+  Infix: *
+  Means: x*y
+  Render latex: {x}\,{y}
+
+Notation real quotient(x,y):
+  Let x,y: Real
+  Returns: Real
+  Infix: /
+  Means: x/y
+  Render latex: \frac{{{x}}}{{{y}}}
+
+Notation real power(x,y):
+  Let x: Real
+  Let y: Natural
+  Returns: Real
+  Infix: ^
+  Means: x^y
+  Render latex: {x}^{{{y}}}
+
+Notation real negative(x):
+  Let x: Real
+  Returns: Real
+  Prefix: -
+  Means: -x
+  Render latex: -{x}
+
+Condition real less(x,y):
+  Let x,y: Real
+  Infix: <
+  From Lean: x < y
+  Render latex: {x}< {y}
+
+Condition real greater(x,y):
+  Let x,y: Real
+  Infix: >
+  From Lean: x > y
+  Render latex: {x}> {y}
+
+Condition real at most(x,y):
+  Let x,y: Real
+  Infix: ≤
+  From Lean: x ≤ y
+  Render latex: {x}\le {y}
+
+Condition real at least(x,y):
+  Let x,y: Real
+  Infix: ≥
+  From Lean: x ≥ y
+  Render latex: {x}\ge {y}
+
+Notation complex sum(x,y):
+  Let x,y: Complex
+  Returns: Complex
+  Infix: +
+  Means: x+y
+  Render latex: {x}+{y}
+
+Notation complex difference(x,y):
+  Let x,y: Complex
+  Returns: Complex
+  Infix: -
+  Means: x-y
+  Render latex: {x}-{y}
+
+Notation complex product(x,y):
+  Let x,y: Complex
+  Returns: Complex
+  Infix: *
+  Means: x*y
+  Render latex: {x}\,{y}
+
+Notation complex quotient(x,y):
+  Let x,y: Complex
+  Returns: Complex
+  Infix: /
+  Means: x/y
+  Render latex: \frac{{{x}}}{{{y}}}
+
+Notation complex power(x,y):
+  Let x: Complex
+  Let y: Natural
+  Returns: Complex
+  Infix: ^
+  Means: x^y
+  Render latex: {x}^{{{y}}}
+
+Notation complex negative(x):
+  Let x: Complex
+  Returns: Complex
+  Prefix: -
+  Means: -x
+  Render latex: -{x}
+
+Notation real matrix sum(x,y):
+  Let m,n: Natural
+  Let x,y: Matrix(m,n,Real)
+  Returns: Matrix(m,n,Real)
+  Infix: +
+  Means: x+y
+  Render latex: {x}+{y}
+
+Notation real matrix difference(x,y):
+  Let m,n: Natural
+  Let x,y: Matrix(m,n,Real)
+  Returns: Matrix(m,n,Real)
+  Infix: -
+  Means: x-y
+  Render latex: {x}-{y}
+
+Notation real matrix product(x,y):
+  Let m,n,p: Natural
+  Let x: Matrix(m,n,Real)
+  Let y: Matrix(n,p,Real)
+  Returns: Matrix(m,p,Real)
+  Infix: *
+  Means: x*y
+  Render latex: {x}\,{y}
+
+Notation real matrix application(x,y):
+  Let m,n: Natural
+  Let x: Matrix(m,n,Real)
+  Let y: Vector(n,Real)
+  Returns: Vector(m,Real)
+  Infix: *
+  Means: Matrix.mulVec x y
+  Render latex: {x}\,{y}
+
+Notation real scale matrix(x,y):
+  Let m,n: Natural
+  Let x: Real
+  Let y: Matrix(m,n,Real)
+  Returns: Matrix(m,n,Real)
+  Infix: *
+  Means: x • y
+  Render latex: {x}\,{y}
+
+Notation real scale vector(x,y):
+  Let n: Natural
+  Let x: Real
+  Let y: Vector(n,Real)
+  Returns: Vector(n,Real)
+  Infix: *
+  Means: x • y
+  Render latex: {x}\,{y}
+
+Notation complex matrix sum(x,y):
+  Let m,n: Natural
+  Let x,y: Matrix(m,n,Complex)
+  Returns: Matrix(m,n,Complex)
+  Infix: +
+  Means: x+y
+  Render latex: {x}+{y}
+
+Notation complex matrix difference(x,y):
+  Let m,n: Natural
+  Let x,y: Matrix(m,n,Complex)
+  Returns: Matrix(m,n,Complex)
+  Infix: -
+  Means: x-y
+  Render latex: {x}-{y}
+
+Notation complex matrix product(x,y):
+  Let m,n,p: Natural
+  Let x: Matrix(m,n,Complex)
+  Let y: Matrix(n,p,Complex)
+  Returns: Matrix(m,p,Complex)
+  Infix: *
+  Means: x*y
+  Render latex: {x}\,{y}
+
+Notation complex matrix application(x,y):
+  Let m,n: Natural
+  Let x: Matrix(m,n,Complex)
+  Let y: Vector(n,Complex)
+  Returns: Vector(m,Complex)
+  Infix: *
+  Means: Matrix.mulVec x y
+  Render latex: {x}\,{y}
+
+Notation complex scale matrix(x,y):
+  Let m,n: Natural
+  Let x: Complex
+  Let y: Matrix(m,n,Complex)
+  Returns: Matrix(m,n,Complex)
+  Infix: *
+  Means: x • y
+  Render latex: {x}\,{y}
+
+Notation complex scale vector(x,y):
+  Let n: Natural
+  Let x: Complex
+  Let y: Vector(n,Complex)
+  Returns: Vector(n,Complex)
+  Infix: *
+  Means: x • y
+  Render latex: {x}\,{y}
+
+Condition natural divides(x: Natural,y: Natural):
+  Infix: ∣
+  From Lean: x ∣ y
+  Render latex: {x}\mid {y}
+
+Condition set member(x,A):
+  Let T: Type
+  Let x: T
+  Let A: Set(T)
+  Infix: ∈
+  From Lean: x ∈ A
+  Render latex: {x}\in {A}
+
+Condition list member(x,A):
+  Let T: Type
+  Let x: T
+  Let A: List(T)
+  Infix: ∈
+  From Lean: x ∈ A
+  Render latex: {x}\in {A}
+
+Condition set subset(A,B):
+  Let T: Type
+  Let A,B: Set(T)
+  Infix: ⊆
+  From Lean: A ⊆ B
+  Render latex: {A}\subseteq {B}
+
+Notation set intersection(A,B):
+  Let T: Type
+  Let A,B: Set(T)
+  Returns: Set(T)
+  Infix: ∩
+  Means: A ∩ B
+  Render latex: {A}\cap {B}
+
+Notation set union(A,B):
+  Let T: Type
+  Let A,B: Set(T)
+  Returns: Set(T)
+  Infix: ∪
+  Means: A ∪ B
+  Render latex: {A}\cup {B}
+
+Notation real matrix power(x,y):
+  Let n: Natural
+  Let x: Matrix(n,n,Real)
+  Let y: Natural
+  Returns: Matrix(n,n,Real)
+  Infix: ^
+  Means: x^y
+  Render latex: {x}^{{{y}}}
+
+Notation real vector sum(x,y):
+  Let n: Natural
+  Let x,y: Vector(n,Real)
+  Returns: Vector(n,Real)
+  Infix: +
+  Means: x+y
+  Render latex: {x}+{y}
+
+Notation real vector difference(x,y):
+  Let n: Natural
+  Let x,y: Vector(n,Real)
+  Returns: Vector(n,Real)
+  Infix: -
+  Means: x-y
+  Render latex: {x}-{y}
+
+Notation complex matrix power(x,y):
+  Let n: Natural
+  Let x: Matrix(n,n,Complex)
+  Let y: Natural
+  Returns: Matrix(n,n,Complex)
+  Infix: ^
+  Means: x^y
+  Render latex: {x}^{{{y}}}
+
+Notation complex vector sum(x,y):
+  Let n: Natural
+  Let x,y: Vector(n,Complex)
+  Returns: Vector(n,Complex)
+  Infix: +
+  Means: x+y
+  Render latex: {x}+{y}
+
+Notation complex vector difference(x,y):
+  Let n: Natural
+  Let x,y: Vector(n,Complex)
+  Returns: Vector(n,Complex)
+  Infix: -
+  Means: x-y
+  Render latex: {x}-{y}
+
+Notation pointwise real sum(x,y):
+  Let x,y: Function(Real,Real)
+  Returns: Function(Real,Real)
+  Infix: +
+  Means: x+y
+  Render latex: {x}+{y}
+
+Notation pointwise real product(x,y):
+  Let x,y: Function(Real,Real)
+  Returns: Function(Real,Real)
+  Infix: *
+  Means: x*y
+  Render latex: {x}*{y}
+
+Notation real matrix negative(x):
+  Let m,n: Natural
+  Let x: Matrix(m,n,Real)
+  Returns: Matrix(m,n,Real)
+  Prefix: -
+  Means: -x
+  Render latex: -{x}
+
+Notation complex matrix negative(x):
+  Let m,n: Natural
+  Let x: Matrix(m,n,Complex)
+  Returns: Matrix(m,n,Complex)
+  Prefix: -
+  Means: -x
+  Render latex: -{x}
+
+-- generated: gpt-6 2026-11-07 role=assisted; LLM-authored portions; see PROVENANCE.md

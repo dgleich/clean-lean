@@ -2,6 +2,12 @@
 
 # Contextual numeral completion
 
+:::llm gpt-6 2026-11-07 role=assisted
+
+Implementation update: [operators and numerals are now integrated into the working compiler](operator-numeral-integration.md). Earlier isolated-status descriptions below describe the development stages. The curated subject libraries now explicitly import their operators and numeral default. Broader library/test migration and full language-contract conformance remain unfinished.
+:::
+
+
 Status: isolated prototype on top of [explicit numeral bindings](module-numerals.md).
 This is a first closed-carrier inference rule, not main-compiler integration or a
 complete default/typeclass inference design. Mathematical meaning still comes

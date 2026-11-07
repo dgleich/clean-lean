@@ -1,4 +1,4 @@
-Import "types.clean"
+Import "operators.clean"
 
 Notation adjacent(x0,x1,x2):
     Let n: Natural

@@ -384,3 +384,8 @@ lexer conflicts; tests check independent syntax trees and detect stale output.
 [The parser guide](docs/generated-parser.md) explains layout, name/type checking,
 and Lean translation boundaries.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+Current implementation checkpoint: [declared operators and numerals](docs/operator-numeral-integration.md) are in the working compiler, and all 92 curated Mathlib corpus proofs check. The wider library/test migration is incomplete; the full regression suite is not passing.
+:::

@@ -20,6 +20,7 @@ postfix_suffix: "." ID -> field_suffix
 ?atom: NUMBER -> decimal
      | name -> reference
      | "(" expression ")" -> group
+     | "(" NUMBER ":" type_ref ")" -> numeral_annotation
      | TYPE_VALUE "(" type_ref ")" -> type_value
      | FUNCTION "(" ID ":" type_ref "," expression ")" -> function
      | FOR EVERY "(" ID ":" type_ref "," expression ")" -> universal
@@ -56,18 +57,22 @@ type_text: type_piece+
 import_line: "Import"i STRING -> clean_import
            | "Import"i "Lean"i MODULE -> lean_import
            | "Import"i "BibTeX"i STRING -> bib_import
+default_numerals_line: _DEFAULT_WORD _NUMERALS_WORD ":" type_ref
+_DEFAULT_WORD: /(?i:Default)(?!\w)/
+_NUMERALS_WORD: /(?i:numerals)(?!\w)/
 alias_line: "Alias"i TYPE_ID ":" TYPE_ID
 phrase_line: "Phrase"i PHRASE "=>" OPAQUE
 field: FIELD ":" OPAQUE
 // Document blocks are recognized from lexical logical lines, after layout/continuation.
 document: (_NL | top_level)*
-?top_level: declaration | result | context | import_stmt | alias_stmt | phrase_stmt | prose | documented
+?top_level: declaration | result | context | import_stmt | alias_stmt | phrase_stmt | default_numerals_stmt | prose | documented
 prose: PROSE_LINE _NL
 documented: DOC_LINE _NL (declaration | result)
 documented_result: DOC_LINE _NL result
 import_stmt: IMPORT_LINE _NL
 alias_stmt: ALIAS_LINE _NL
 phrase_stmt: PHRASE_LINE _NL
+default_numerals_stmt: DEFAULT_NUMERALS_LINE _NL
 declaration: HEADER_LINE _NL _INDENT declaration_field+ _DEDENT
 ?declaration_field: LET_LINE _NL -> declaration_let
                   | FIELD_LINE _NL -> declaration_field
@@ -85,7 +90,7 @@ context: CONTEXT_LINE _NL _INDENT (context_clause | prose)* (result | context | 
 DECL: /(?i:Notation|Define|Condition)(?!\w)/
 LET: /(?i:Let)(?!\w)/
 DEFINE: /(?i:Define)(?!\w)/
-FIELD: /(?i:Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
+FIELD: /(?i:Numerals|Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
 IFF: "↔"
 IMPLIES: "→"
 OR: /(?i:or)(?=\W)/ | "∨"
@@ -116,6 +121,7 @@ DOC_LINE: /\uE000D[0-9]+/
 IMPORT_LINE: /(?i:Import)[ ]+[^\n]+/
 ALIAS_LINE: /(?i:Alias)[ ]+[^\n]+/
 PHRASE_LINE: /(?i:Phrase)[ ]+[^\n]+/
+DEFAULT_NUMERALS_LINE: /(?i:Default)[ ]+(?i:numerals)[ ]*:[^\n]*/
 HEADER_LINE: /(?i:Structure|Notation|Condition|Type|Source)[ ]+[^\n]+|(?i:Define)[ ]+[^=\n]+/
 RESULT_LINE: /(?i:Result|Theorem)[ ]+[^\n]+/
 CONTEXT_LINE: /(?i:Context)[ ]+[^\n]+/
@@ -124,7 +130,7 @@ ASSUME_LINE: /(?i:Assume)[ ]+[^\n]+/
 ATTRIBUTION_LINE: /(?i:Attribution)[ ]*:[^\n]*/
 CONCLUDE_LINE: /(?i:Conclude)(?!\w)[^\n]*/
 EXPR_FIELD_LINE: /(?i:Equals|Holds when)[ ]*:[^\n]*/
-FIELD_LINE: /(?i:Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
+FIELD_LINE: /(?i:Numerals|Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
 EXPR_LINE: /\S[^\n]*/
 _NL: /\n[ ]*/
 %declare _INDENT _DEDENT

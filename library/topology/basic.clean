@@ -1,5 +1,5 @@
 -- generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
-Import "../types.clean"
+Import "../operators.clean"
 Import Lean Mathlib.Topology.Basic
 
 /-! Basic topology with explicit carrier types and topologies.

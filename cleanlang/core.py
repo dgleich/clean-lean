@@ -5,6 +5,12 @@ from pathlib import Path
 from .attribution import Sources, compact, normalize
 
 class CleanError(ValueError): pass
+
+class SignatureMismatch(CleanError):
+    def __init__(self,message,owner=None):
+        super().__init__(message)
+        self.owner=owner
+
 ID = r'[^\W\d]\w*'
 
 def comment_lines(text):
@@ -43,7 +49,7 @@ def _expression_lines(text, *, masked=False):
                 conclusion_column = column
                 continue
             expression = conclusion_column is not None or re.match(
-                r'(Let|Define|Notation|Condition|Structure|Type|Assume|Conclude|Returns|Equals|Holds when)\b', stripped, re.I)
+                r'(Let|Define|Notation|Condition|Structure|Type|Assume|Conclude|Returns|Equals|Holds when)\b', stripped, re.I) or re.match(r'Default[ ]+numerals[ ]*:',stripped,re.I)
             if not expression:
                 continue
             depth = stripped.count('(') - stripped.count(')')
@@ -53,7 +59,7 @@ def _expression_lines(text, *, masked=False):
         else:
             if depth <= 0 and column < continuation_column:
                 raise CleanError(f'line {i + 1}: continued expression must be indented at least two spaces beyond its first line')
-            if re.match(r'(Let|Define|Condition|Structure|Constructor|Assume|Conclude|Result|Theorem|Context|Import|Attribution|Returns|Means|Render|Holds when|Assumption name)(?=\s|:|$)', stripped, re.I):
+            if re.match(r'(Let|Define|Condition|Structure|Constructor|Assume|Conclude|Result|Theorem|Context|Import|Attribution|Returns|Numerals|Means|Render|Holds when|Assumption name)(?=\s|:|$)', stripped, re.I) or re.match(r'Default[ ]+numerals[ ]*:',stripped,re.I):
                 raise CleanError(f'line {i + 1}: expected a continued expression, not a new clause')
             output[start] += ' ' + stripped
             output[i] = ''
@@ -155,6 +161,7 @@ class Expr:
     inferred_args: tuple = field(default=(),compare=False,repr=False)
     # Typed children are reusable only with a traversal-local freshness witness.
     checked_args: object = field(default=None,compare=False,repr=False)
+    operator_binding: object = field(default=None,compare=False,repr=False)
 @dataclass
 class Clause:
     kind: str
@@ -198,7 +205,7 @@ def texid(s):
     return g.get(s, s if len(s)==1 and s.isascii() else r'\mathit{'+textext(s)+'}')
 
 def compatible(a,b):
-    return a==b or (a==NUM and b.name in ('Natural','Real','Complex','_number','Matrix','Vector')) or (b==NUM and a.name in ('Natural','Real','Complex','Matrix','Vector'))
+    return a==b
 
 class Environment:
     """Names introduced by explicit module declarations; initially empty."""
@@ -370,23 +377,23 @@ class Environment:
             return template.format(*args)
         return ('elements of $' if plural else 'an element of $')+self.render_type(t,'latex')+'$'
     def match(self,p,a,bind):
+        from .numeral_inference import mismatch
         if p.startswith('$'):
             if isinstance(a,Type):self.require_type_argument(a)
-            if p in bind and bind[p]!=a: raise CleanError('Type or dimension mismatch: '+p)
+            if p in bind and bind[p]!=a: mismatch(self,'Type or dimension mismatch: '+p)
             bind[p]=a; return
         m=re.fullmatch(r'(\w+)(?:\((.*)\))?',p)
         if not m: raise CleanError('Invalid notation signature: '+p)
         ps=split(m[2] or '')
-        if a==NUM and m[1] in ('Natural','Real','Complex'): return
-        if not isinstance(a,Type) or isinstance(a,LocalType) or a.name!=m[1] or len(ps)!=len(a.args): raise CleanError(f'Expected {p}, got {a}')
+        if not isinstance(a,Type) or isinstance(a,LocalType) or a.name!=m[1] or len(ps)!=len(a.args): mismatch(self,f'Expected {p}, got {a}')
         for p2,a2 in zip(ps,a.args):
             if isinstance(a2,Type) or p2.startswith('$'): self.match(p2,a2,bind)
-            elif p2!=a2: raise CleanError('Dimension mismatch')
+            elif p2!=a2: mismatch(self,'Dimension mismatch')
     def instantiate(self,p,bind):
         if p.startswith('$'): return bind[p]
         m=re.fullmatch(r'(\w+)(?:\((.*)\))?',p)
         return Type(m[1],tuple(self.instantiate(a,bind) for a in split(m[2] or '')))
-    def dependent_call(self, name, spec, args, locals):
+    def dependent_call(self, name, spec, args, locals, mismatch_owner=None):
         """Ordered structural substitution; never ask Lean to choose an index."""
         signature=spec['dependent_signature']
         implicit=dict(signature['implicit'])
@@ -396,7 +403,7 @@ class Environment:
 
         def bind(n,value):
             if n in substitutions and substitutions[n]!=value:
-                raise CleanError('Inconsistent dependent argument: '+n)
+                raise SignatureMismatch('Inconsistent dependent argument: '+n,mismatch_owner)
             substitutions[n]=value
 
         def index(n,scope):
@@ -426,16 +433,14 @@ class Environment:
             if isinstance(pattern,ProofType) != isinstance(actual,ProofType):
                 pattern=callable_view(pattern,self) or pattern
                 actual=callable_view(actual,self) or actual
-            # Preserve concrete numeric argument compatibility on migrated dimension signatures.
-            if actual==NUM and pattern in (NAT,Type('Real'),Type('Complex')):return
             from .indices import DimensionIndex
             from .dependent_functions import DependentFunctionType,substitute,fresh_source,fresh_bound
             if isinstance(pattern,DependentFunctionType) or isinstance(actual,DependentFunctionType) and self.is_function_type(pattern):
                 if not self.is_function_type(pattern) or not self.is_function_type(actual):
-                    raise CleanError('Dependent function type mismatch')
+                    raise SignatureMismatch('Dependent function type mismatch',mismatch_owner)
                 pconstructor=pattern.constructor if isinstance(pattern,DependentFunctionType) else pattern.name
                 aconstructor=actual.constructor if isinstance(actual,DependentFunctionType) else actual.name
-                if pconstructor!=aconstructor:raise CleanError('Dependent function type mismatch')
+                if pconstructor!=aconstructor:raise SignatureMismatch('Dependent function type mismatch',mismatch_owner)
                 match(pattern.args[0],actual.args[0],scope)
                 shared=fresh_source('clean_comparison_binder',self,locals,
                                     {**substitutions,**actuals,**scope,'__pattern':pattern,'__actual':actual})
@@ -457,25 +462,27 @@ class Environment:
                     del locals[shared]
             elif isinstance(pattern,DimensionIndex) and pattern.name in implicit:
                 if implicit[pattern.name]!=NAT or not isinstance(actual,DimensionIndex):
-                    raise CleanError('Expected a natural dimension: '+pattern.name)
+                    raise SignatureMismatch('Expected a natural dimension: '+pattern.name,mismatch_owner)
                 bind(pattern.name,actual)
             elif isinstance(pattern,ValueIndex):
                 if replace(pattern,scope)!=actual:
-                    raise CleanError('Dependent index mismatch: '+pattern.name)
+                    raise SignatureMismatch('Dependent index mismatch: '+pattern.name,mismatch_owner)
             elif isinstance(pattern,Type):
                 if isinstance(pattern,LocalType) and pattern.name in implicit:
                     if implicit[pattern.name]!=Type('Type') or not isinstance(actual,Type) or self.is_proof_type(actual):
-                        raise CleanError('Expected a type argument: '+pattern.name)
-                    self.require_type_argument(actual)
+                        raise SignatureMismatch('Expected a type argument: '+pattern.name,mismatch_owner)
+                    level=self.sort_level(actual)
+                    if level!=1:
+                        raise SignatureMismatch('Type parameter requires Lean Type 0; got Type '+str(level-1),mismatch_owner)
                     bind(pattern.name,actual)
                 elif isinstance(pattern,LocalType) and pattern.name in substitutions:
-                    if substitutions[pattern.name]!=actual:raise CleanError('Dependent type mismatch: '+pattern.name)
+                    if substitutions[pattern.name]!=actual:raise SignatureMismatch('Dependent type mismatch: '+pattern.name,mismatch_owner)
                 else:
                     expected=replace(pattern if isinstance(pattern,LocalType) else Type(pattern.name),scope)
                     if not isinstance(actual,Type) or isinstance(expected,LocalType)!=isinstance(actual,LocalType) or (isinstance(expected,LocalType) and expected!=actual) or expected.name!=actual.name or len(pattern.args)!=len(actual.args):
-                        raise CleanError(f'Expected {replace(pattern,scope)}, got {actual}')
+                        raise SignatureMismatch(f'Expected type constructor {expected.name} with {len(pattern.args)} arguments, got {actual}',mismatch_owner)
                     for p,a in zip(pattern.args,actual.args):match(p,a,scope)
-            elif replace(pattern,scope)!=actual:raise CleanError('Dimension mismatch')
+            elif replace(pattern,scope)!=actual:raise SignatureMismatch('Dimension mismatch',mismatch_owner)
 
         for n,t in parameters:
             match(t,actuals[n].type)
@@ -493,28 +500,34 @@ class Environment:
                            v.lean if isinstance(v,ValueIndex) else locals[v].lean if v in locals else v)
         targets.extend(a.lean for a in args)
         target='(@_root_.'+signature['key']+''.join(' ('+v+')' for v in targets)+')'
-        return Expr(target,spec['latex'].format(*(a.tex for a in args)),replace(signature['result']),
+        from .operator_bindings import present
+        return present(self,name,args,Expr(target,spec['latex'].format(*(a.tex for a in args)),replace(signature['result']),
                     tree=['Call',name,[a.tree for a in args]],
-                    inferred_args=tuple((n,substitutions[n]) for n in implicit),checked_args=tuple(args))
+                    inferred_args=tuple((n,substitutions[n]) for n in implicit),checked_args=tuple(args)))
+
+    def operator(self,op,a,b,locals):
+        from .operator_bindings import apply
+        return apply(self,op,a,b,locals)
 
     def call(self,name,args,locals=None):
         if name not in self.data['functions']: raise CleanError('Unknown function: '+name)
         s=self.data['functions'][name]; bind={}
         if len(args)!=len(s['params']): raise CleanError('Wrong number of arguments for '+name)
-        if 'dependent_signature' in s:return self.dependent_call(name,s,args,locals or {})
+        if 'dependent_signature' in s:return self.dependent_call(name,s,args,locals or {},mismatch_owner=getattr(self,'_numeral_trial_owner',None))
         for p,a in zip(s['params'],args): self.match(p,a.type,bind)
-        return Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]],inferred_args=tuple((p[1],bind['$'+p[1]]) for p in s.get('signature_tree',[None,None,[]])[2] if p[3]=='implicit'),checked_args=tuple(args))
+        from .operator_bindings import present
+        return present(self,name,args,Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]],inferred_args=tuple((p[1],bind['$'+p[1]]) for p in s.get('signature_tree',[None,None,[]])[2] if p[3]=='implicit'),checked_args=tuple(args)))
 
 class Expressions:
     # Presentation/continuation precedence; syntax precedence lives in grammar/clean.lark.
     PREC={'↔':1,'→':2,'or':3,'∨':3,'and':4,'∧':4,'=':5,'≠':5,'!=':5,'<':5,'>':5,'≤':5,'≥':5,'<=':5,'>=':5,'∈':5,'⊆':5,'∣':5,'+':6,'-':6,'∪':6,'∩':6,'*':7,'/':7,'^':8}
     def __init__(self,reg,env): self.reg,self.env=reg,env
-    def parse(self,s):
+    def parse(self,s,expected=None):
         from .syntax import parse,expression_tree
-        return self.elaborate(expression_tree(parse(s,'expression')))
-    def elaborate(self,tree):
-        self.bound_counter=0
-        return self._elaborate(tree)
+        return self.elaborate(expression_tree(parse(s,'expression')),expected)
+    def elaborate(self,tree,expected=None):
+        from .numeral_inference import complete
+        return complete(tree,self.reg,self.env,expected)
     def _elaborate(self,tree):
         from .annotations import Annotation
         kind=tree[0]
@@ -525,6 +538,9 @@ class Expressions:
             value=self.reg.type(tree[1],self.env,phrases=False)
             self.reg.require_type_argument(value)
             return Expr(self.reg.render_type(value,'lean',self.env),self.reg.render_type(value,'latex',self.env),Type('Type'),tree=['TypeValue',tree[1] if isinstance(tree[1],Annotation) else str(value)])
+        if kind in ('NumeralAnnotation','BoundNumeral'):
+            from .numerals import elaborate
+            return elaborate(tree,self.reg,self.env)
         if kind=='Decimal':return Expr(tree[1],tree[1],NUM,tree=tree)
         if kind=='Local':
             if tree[1] not in self.env:raise CleanError('Unknown name: '+tree[1])
@@ -541,14 +557,10 @@ class Expressions:
         if kind=='Projection':
             from .structures import project
             return project(self.reg,self._elaborate(tree[1]),tree[2],self.env)
-        if kind=='Operator':return binary(tree[1],self._elaborate(tree[2]),self._elaborate(tree[3]))
+        if kind=='Operator':return self.reg.operator(tree[1],self._elaborate(tree[2]),self._elaborate(tree[3]),self.env)
         if kind=='Unary':
-            tok=tree[1];a=self._elaborate(tree[2])
-            if a.type==Type('Type'):raise CleanError('Type-valued operands do not support unary operators')
-            if tok!='-' and a.type!=PROP:raise CleanError('Not requires a proposition')
-            inner=('('+a.tex+')') if a.precedence < 8 else a.tex
-            tx=('-'+inner) if tok=='-' else (r'\text{not }('+a.tex+')')
-            return Expr('('+('-' if tok=='-' else '¬')+a.lean+')',tx,a.type,7 if tok=='-' else 5,['Unary',tok,a.tree])
+            from .operator_bindings import apply_prefix
+            return apply_prefix(self.reg,tree[1],self._elaborate(tree[2]),self.env)
         if kind=='ModuleCall':
             from .bound_calls import elaborate
             return elaborate(tree,self.reg,self.env,[self._elaborate(a) for a in tree[2]])
@@ -716,7 +728,7 @@ def _parse_flat(text,reg):
                     raise CleanError('Cannot use let x = Type; use let x: Type or let x be Type')
                 value=Expressions(reg,env).elaborate(payload)
                 if value.type==Type('Type'):raise CleanError('Type-valued local definitions are not implemented; use a top-level Type declaration')
-                if value.type==NUM:value.type=NAT
+                if value.type==NUM:raise CleanError('Local definition requires a resolved numeral interpretation')
                 if value.type==PROP:raise CleanError('Local condition abbreviations are not implemented; use a top-level Condition declaration')
                 from .conversion import local_definition
                 env[name]=local_definition(name,value,reg,env)

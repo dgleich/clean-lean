@@ -2,6 +2,12 @@
 
 # Module-declared operators: migration draft
 
+:::llm gpt-6 2026-11-07 role=assisted
+
+Implementation update: [operators and numerals are now integrated into the working compiler](operator-numeral-integration.md). Earlier isolated-status descriptions below describe the development stages. The curated subject libraries now explicitly import their operators and numeral default. Broader library/test migration and full language-contract conformance remain unfinished.
+:::
+
+
 This is a proposed migration with an isolated executable prototype. The main
 compiler does not accept `Infix` or `Prefix` yet. It is not a replacement for the agreed
 architecture: declared fixity/precedence, numeral interpretation, stable module

@@ -2,6 +2,12 @@
 
 # Module-owned numeral interpretation: first migration step
 
+:::llm gpt-6 2026-11-07 role=assisted
+
+Implementation update: [operators and numerals are now integrated into the working compiler](operator-numeral-integration.md). Earlier isolated-status descriptions below describe the development stages. The curated subject libraries now explicitly import their operators and numeral default. Broader library/test migration and full language-contract conformance remain unfinished.
+:::
+
+
 Status: isolated explicit-numeral expression prototype; not accepted as fully conforming or integrated. The working compiler
 still has display-name-based numeral handling. The [parser study](../studies/module-numerals/README.md)
 checks the annotation grammar, ASCII validation and metadata syntax. A subsequent

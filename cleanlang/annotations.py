@@ -22,7 +22,12 @@ def references(value,locals):
     def tree_names(tree):
         kind=tree[0]
         if kind=='Local':return {tree[1]}
-        if kind=='Decimal':return set()
+        if kind in ('Decimal','BoundNumeral'):return set()
+        if kind=='NumeralAnnotation':
+            from .numerals import type_source
+            from .core import ID
+            import re
+            return set(re.findall(ID,type_source(tree[2]))).intersection(locals)
         if kind=='TypeValue':
             if isinstance(tree[1],Annotation):return set(tree[1].names)
             from .core import ID

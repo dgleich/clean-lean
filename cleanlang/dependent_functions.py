@@ -15,7 +15,12 @@ def index_tree(index):
 def tree_names(tree):
     kind=tree[0]
     if kind=='Local':return {tree[1]}
-    if kind=='Decimal':return set()
+    if kind in ('Decimal','BoundNumeral'):return set()
+    if kind=='NumeralAnnotation':
+        from .numerals import type_source
+        import re
+        from .core import ID
+        return set(re.findall(ID,type_source(tree[2])))
     if kind=='TypeValue':
         from .annotations import Annotation
         return set(tree[1].names) if isinstance(tree[1],Annotation) else set(re.findall(ID,tree[1]))
@@ -187,7 +192,8 @@ def application(function,args,env,locals,tree,tex):
     from .proof_types import callable_view,compatible_evidence
     typ=callable_view(function.type,env)
     if typ is None or not env.is_function_type(typ) or len(args)!=1 or not compatible_evidence(args[0].type,typ.args[0],env,locals):
-        raise CleanError('Function field argument mismatch' if tree[0]=='Apply' else 'Function argument mismatch')
+        from .numeral_inference import mismatch
+        mismatch(env,'Function field argument mismatch' if tree[0]=='Apply' else 'Function argument mismatch')
     result=substitute(typ.codomain,{typ.binder:args[0]},env,locals) if isinstance(typ,DependentFunctionType) else typ.args[1]
     return Expr('('+function.lean+' '+args[0].lean+')',tex,result,tree=tree)
 

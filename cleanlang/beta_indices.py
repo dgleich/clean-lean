@@ -31,7 +31,7 @@ def contract_index(expression, environment, locals):
                         from .type_values import substitute as replace_type
                         return replace_type(body,{name:Expressions(environment,locals).elaborate(actual)},environment,locals)
                     if body[0]=='Local':return actual if body[1]==name else body
-                    if body[0]=='ModuleCall':return [body[0],body[1],[substitute(a) for a in body[2]],body[3]]
+                    if body[0]=='ModuleCall':return [body[0],body[1],[substitute(a) for a in body[2]],*body[3:]]
                     if body[0]=='Call':
                         arguments=[substitute(a) for a in body[2]]
                         if body[1]==name:
@@ -44,7 +44,7 @@ def contract_index(expression, environment, locals):
                     return body
                 return reduce(substitute(function[3]))
             return ['Apply',function,args]
-        if tree[0]=='ModuleCall':return [tree[0],tree[1],[reduce(a) for a in tree[2]],tree[3]]
+        if tree[0]=='ModuleCall':return [tree[0],tree[1],[reduce(a) for a in tree[2]],*tree[3:]]
         if tree[0]=='Call':return ['Call',tree[1],[reduce(a) for a in tree[2]]]
         if tree[0]=='Projection':return ['Projection',reduce(tree[1]),tree[2]]
         if tree[0]=='Operator':return ['Operator',tree[1],reduce(tree[2]),reduce(tree[3])]

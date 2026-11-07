@@ -58,6 +58,8 @@ def _producer_field(expression,field,env,locals):
         return Expressions(env,locals).elaborate(tree[2][pos])
     definition=env.definitions.get(tree[1])
     if not definition or definition['implementation']!='equals':return None
+    from .operator_bindings import scope_unchanged
+    if not scope_unchanged(env,definition) and not (tree[0]=='ModuleCall' and definition.get('bound_tree') is not None):return None
     parameters=env.data['functions'][tree[1]]['signature_tree'][2]
     body=definition.get('bound_tree') or definition['tree']
     bindings=dict(zip((p[1] for p in parameters if p[3]=='explicit'),
@@ -92,15 +94,12 @@ def _normal_form(expression,environment,locals,*,fresh=False):
         local=locals.get(tree[1])
         if local is None or local.local_normal is None:return expression
         return _normal_form(local.local_normal,env,locals) if local.local_expand and not shadowed_globals(env,locals) else local.local_normal
+    if kind in ('NumeralAnnotation','BoundNumeral'):return elaborate(tree)
     if kind in ('Decimal','Lambda','Forall','Exists'):return expression
-    if kind=='Operator':
-        if fresh and expression.checked_args is not None:
-            a,b=expression.checked_args
-            return binary(tree[1],_normal_form(a,env,locals,fresh=True),_normal_form(b,env,locals,fresh=True))
-        return binary(tree[1],normal(tree[2]),normal(tree[3]))
+    if kind=='Operator':return env.operator(tree[1],normal(tree[2]),normal(tree[3]),locals)
     if kind=='Unary':
-        a=normal(tree[2]);op='-' if tree[1]=='-' else '¬'
-        return Expr('('+op+a.lean+')',expression.tex,expression.type,tree=['Unary',tree[1],a.tree])
+        from .operator_bindings import apply_prefix
+        return apply_prefix(env,tree[1],normal(tree[2]),locals)
     if kind=='Apply':
         f=normal(tree[1]);args=[normal(a) for a in tree[2]]
         result=Expr('('+f.lean+' '+args[0].lean+')',expression.tex,expression.type,
@@ -157,6 +156,8 @@ def _normal_form(expression,environment,locals,*,fresh=False):
     else:checked=expression if reuse else env.call(name,args,locals)
     definition=env.definitions.get(name)
     if definition and definition['implementation']=='equals':
+        from .operator_bindings import scope_unchanged
+        if not scope_unchanged(env,definition) and not (kind=='ModuleCall' and definition.get('bound_tree') is not None):return checked
         parameters=env.data['functions'][name]['signature_tree'][2]
         implicit={p[1] for p in parameters if p[3]=='implicit'}
         body=definition.get('bound_tree') or definition['tree']

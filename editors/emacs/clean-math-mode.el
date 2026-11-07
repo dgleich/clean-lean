@@ -44,7 +44,7 @@
          ((eq (char-after) ?\") (setq quoted (not quoted)) (forward-char 1))
          (quoted (forward-char 1))
          ((and (bolp) (let ((case-fold-search t))
-                        (looking-at " *\\(?:Means\\|From Lean\\|Render\\(?: latex\\)?\\) *:")))
+                        (looking-at " *\\(?:Numerals\\|Means\\|From Lean\\|Render\\(?: latex\\)?\\) *:")))
           (end-of-line))
          ((looking-at "--")
           (setq face 'font-lock-comment-face start (point)) (end-of-line)
@@ -72,7 +72,8 @@
     ("^ *\\(Let\\) +\\(.+?\\)\\(?: *:\\| +be +\\)\\(.+\\)$"
      (1 font-lock-keyword-face t) (2 font-lock-variable-name-face t) (3 font-lock-type-face t))
     (,(concat "^ *" clean-math--metadata " *:.*$") (0 font-lock-string-face t) (1 font-lock-keyword-face t))
-    ("^ *\\(Means\\|From Lean\\) *:.*$" (0 font-lock-preprocessor-face t) (1 font-lock-keyword-face t))
+    ("^ *\\(Numerals\\|Means\\|From Lean\\) *:.*$" (0 font-lock-preprocessor-face t) (1 font-lock-keyword-face t))
+    ("^ *\\(Default +numerals\\) *: *\\(.*\\)$" (1 font-lock-keyword-face t) (2 font-lock-type-face t))
     ("^ *Import\\b.*$" (0 font-lock-string-face t))
     (clean-math--comment (0 clean-math--matched-face t))
     ("\t+" (0 font-lock-warning-face t))))

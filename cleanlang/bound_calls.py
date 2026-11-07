@@ -1,6 +1,6 @@
 # generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
 """Internal module-call binding for checked computed indices."""
-from .core import CleanError,Expr,texid
+from .core import CleanError,Expr,texid,Expressions
 
 
 class UnclosedBinding(CleanError):
@@ -15,9 +15,12 @@ def identity(env,name):
 
 def bind(tree,env,locals,*,binders=False):
     kind=tree[0]
+    if kind in ('NumeralAnnotation','BoundNumeral'):
+        from .numerals import bind as numeral
+        return numeral(tree,env,locals)
     if kind=='ModuleCall':
         if tree[3]!=identity(env,tree[1]):raise CleanError('Changed bound module callable: '+tree[1])
-        return [kind,tree[1],[bind(a,env,locals,binders=binders) for a in tree[2]],tree[3]]
+        return [kind,tree[1],[bind(a,env,locals,binders=binders) for a in tree[2]],*tree[3:]]
     if kind=='Call':
         args=[bind(a,env,locals,binders=binders) for a in tree[2]]
         if tree[1] in locals and env.is_function_type(locals[tree[1]].type):
@@ -25,8 +28,12 @@ def bind(tree,env,locals,*,binders=False):
         return ['ModuleCall',tree[1],args,identity(env,tree[1])]
     if kind=='Projection':return [kind,bind(tree[1],env,locals,binders=binders),tree[2]]
     if kind=='Apply':return [kind,bind(tree[1],env,locals,binders=binders),[bind(a,env,locals,binders=binders) for a in tree[2]]]
-    if kind=='Operator':return [kind,tree[1],bind(tree[2],env,locals,binders=binders),bind(tree[3],env,locals,binders=binders)]
-    if kind=='Unary':return [kind,tree[1],bind(tree[2],env,locals,binders=binders)]
+    if kind in ('Operator','Unary'):
+        checked=Expressions(env,locals).elaborate(tree)
+        if checked.operator_binding is None:raise CleanError('Missing checked operator binding')
+        name,target,presentation=checked.operator_binding
+        actuals=checked.tree[2:] if kind=='Operator' else [checked.tree[2]]
+        return ['ModuleCall',name,[bind(a,env,locals,binders=binders) for a in actuals],target,presentation]
     if kind in ('Lambda','Forall','Exists') and binders:
         # Domain binding remains source-based; reject embedded calls rather than
         # silently closing a body while leaving its domain's calls unbound.
@@ -38,15 +45,26 @@ def bind(tree,env,locals,*,binders=False):
     if kind=='TypeValue':
         from .annotations import checked
         return [kind,checked(tree[1],env,locals)]
-    if kind in ('Local','Decimal'):return tree
+    if kind=='Decimal':raise UnclosedBinding('Numeral binding requires a checked interpretation')
+    if kind=='Local':return tree
     # Do not claim binding closure for source strings containing type expressions.
     raise UnclosedBinding('Bound callable prototype does not close '+kind)
 
 
 def elaborate(tree,env,locals,arguments):
     if tree[3]!=identity(env,tree[1]):raise CleanError('Changed bound module callable: '+tree[1])
-    result=env.call(tree[1],arguments,locals)
-    result.tree=['ModuleCall',tree[1],[a.tree for a in arguments],tree[3]]
+    if len(tree)>4:
+        from .operator_bindings import apply_bound
+        result=apply_bound(env,tree[1],arguments,locals,tree[4])
+    else:result=env.call(tree[1],arguments,locals)
+    result.tree=['ModuleCall',tree[1],[a.tree for a in arguments],*tree[3:]]
     return result
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+
+def source_operator(tree,spell):
+    fixity,text=tree[4]
+    args=tree[2]
+    if fixity=='prefix':return '('+text+' '+spell(args[0])+')'
+    return '('+spell(args[0])+' '+text+' '+spell(args[1])+')'

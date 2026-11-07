@@ -12,7 +12,11 @@ syntax match cleanMathDeclaration '\c^ *\%(Result\|Theorem\|Context\|Define\|Not
 syntax match cleanMathTypedLet '\c^ *Let\>.*\%(:\|\<be\>\).*' contains=cleanMathKeyword,cleanMathDelimiter
 syntax match cleanMathMetadataKey '\c^ *\%(Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:' contained
 syntax match cleanMathOpaque '\c^ *\%(Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:.*$' contains=cleanMathMetadataKey
-syntax match cleanMathLean '\c^ *\%(Means\|From Lean\)\s*:.*$'
+syntax match cleanMathLean '\c^ *\%(Numerals\|Means\|From Lean\)\s*:.*$'
+syntax match cleanMathDefaultKeyword '\c^ *Default \+numerals\>' contained
+syntax match cleanMathDefaultNumerals '\c^ *Default \+numerals *:.*$' contains=cleanMathDefaultKeyword,cleanMathDelimiter
+highlight default link cleanMathDefaultKeyword Keyword
+highlight default link cleanMathDefaultNumerals Type
 syntax match cleanMathImport '\c^ *Import\>.*$'
 syntax region cleanMathQuote start='"' end='"' oneline containedin=ALLBUT,cleanMathComment,cleanMathBlock,cleanMathLean,cleanMathOpaque,cleanMathText,cleanMathTriple,cleanMathDoc
 syntax match cleanMathComment '--.*$' containedin=ALLBUT,cleanMathQuote,cleanMathLean,cleanMathRender,cleanMathBlock,cleanMathText,cleanMathTriple,cleanMathDoc

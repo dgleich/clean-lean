@@ -2,6 +2,12 @@
 
 # Clean theorem statements
 
+:::llm gpt-6 2026-11-07 role=assisted
+
+Implementation update: [operators and numerals are now integrated into the working compiler](operator-numeral-integration.md). Earlier isolated-status descriptions below describe the development stages. The curated subject libraries now explicitly import their operators and numeral default. Broader library/test migration and full language-contract conformance remain unfinished.
+:::
+
+
 This document describes the current prototype. The accepted next-language rules allow interleaved top-level imports, parser-state continuation, and reordered fields in top-level `Define` declarations; these are specified in [the language reference](language-reference.md) and are not yet fully implemented. The proposed next language contract is [Clean syntax and semantics draft](language-reference.md); its new syntax is not implemented or yet fully agreed.
 
 All language changes are subject to the [unique-parse and unique-Lean-target acceptance contract](language-change-acceptance.md). This prototype’s existing tests do not establish full conformance.

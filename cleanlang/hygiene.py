@@ -96,8 +96,12 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
         kind=node[0]
         if kind=='Local':return mapping.get(node[1],node)
         if kind=='Decimal':return node
+        if kind=='BoundNumeral':
+            from .numerals import bind
+            return bind(node,environment,locals)
+        if kind=='NumeralAnnotation':raise UnrepresentableSubstitution('Bind numeral annotations before substitution')
         if kind=='TypeValue':return ['TypeValue',annotation(node[1],mapping,callheads)]
-        if kind=='ModuleCall':return [kind,node[1],[expr(a,mapping,callheads) for a in node[2]],node[3]]
+        if kind=='ModuleCall':return [kind,node[1],[expr(a,mapping,callheads) for a in node[2]],*node[3:]]
         if kind=='Call':
             args=[expr(a,mapping,callheads) for a in node[2]]
             if node[1] in mapping and (node[1] in callheads or is_call_head(node[1])):

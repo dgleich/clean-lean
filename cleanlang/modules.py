@@ -96,10 +96,12 @@ def type_declaration(header, fields, env):
         env.data['types'][name] = spec
         env.type(name+'('+','.join(names)+')' if names else name, local)
         return
-    if not {'means','render latex'} <= values.keys() or values.keys()-{'means','render latex','describe','describe plural','universe'}:
-        raise CleanError('Type requires Means and Render latex; optional Describe, Describe plural and Universe')
+    if not {'means','render latex'} <= values.keys() or values.keys()-{'means','render latex','describe','describe plural','universe','numerals'}:
+        raise CleanError('Type requires Means and Render latex; optional Describe, Describe plural, Universe and Numerals')
     default_level=1 if values['means']=='Type' else 0
     level=universe_level(values,default_level)
+    if 'numerals' in values and (names or level!=0 or values['means'].strip() in ('Prop','Type')):
+        raise CleanError('Numerals requires a closed Type-0 carrier with Means')
     spec={'args': kinds, 'lean': substitute(values['means'], names), 'latex': template(values['render latex'], names),
           'parameter_names':names,'parameter_types':parameter_types}
     spec['universe']=level
@@ -113,6 +115,12 @@ def type_declaration(header, fields, env):
     spec['native_binding']=key
     spec['native_template']=spec['lean']
     spec['native_declaration']=env.notation_definitions[key]
+    if 'numerals' in values:
+        constructor=add_definition(env,'cleanNumeral_',name,
+            f'(digits : Nat) : _root_.{key} :=\n  ({values["numerals"]}) digits')
+        spec['numerals']={'native_binding':constructor,
+            'native_declaration':env.notation_definitions[constructor],
+            'payload':values['numerals'],'carrier_binding':key}
 
 
 def signature_fields(header, fields):
@@ -156,7 +164,7 @@ def notation(header, fields, env, *, authored=False):
     if list(types)!=params or 'returns' not in values:
         raise CleanError('Declare parameters in header order and provide Returns')
     implementations = set(values) & ({'equals', 'from lean'} if authored else {'means'})
-    allowed = {'returns', 'render', 'render latex'} | ({'equals', 'from lean', 'attribution'} if authored else {'means'})
+    allowed = {'returns', 'render', 'render latex', 'infix', 'prefix'} | ({'equals', 'from lean', 'attribution'} if authored else {'means'})
     if len(implementations) != 1 or values.keys() - allowed:
         raise CleanError('Provide exactly one Equals or From Lean' if authored else 'Provide Means')
     renders = set(values)&{'render','render latex'}
@@ -164,10 +172,14 @@ def notation(header, fields, env, *, authored=False):
         raise CleanError('Provide exactly one Render or Render latex field')
     result = env.type(values['returns'],local)
     dependent=any(has_value_indices(t) for t in [result,*types.values()]) or Type('Type') in types.values()
+    for fixity in ('infix','prefix'):
+        if fixity in values:
+            from .operator_bindings import validate
+            validate(values[fixity],len(params),fixity)
     implementation = next(iter(implementations))
     expression = None
     if implementation == 'equals':
-        expression = Expressions(env, local).parse(values[implementation])
+        expression = Expressions(env, local).parse(values[implementation],expected=result)
         if not compatible(expression.type, result):
             raise CleanError(f'Definition body has type {expression.type}; expected {result}')
         meaning = expression.lean
@@ -198,6 +210,11 @@ def notation(header, fields, env, *, authored=False):
         from .dependent_functions import occurs
         if not any(occurs(t,n) for t in types.values()):
             raise CleanError('Implicit parameter is absent from argument types: '+n)
+    bound_body=None
+    if authored and expression:
+        from .bound_calls import bind as bind_calls,UnclosedBinding
+        try:bound_body=bind_calls(expression.tree,env,local,binders=True)
+        except UnclosedBinding:pass
     key=add_definition(env,'cleanDefine_' if authored else 'cleanNotation_',name,body)
     env.data['functions'][name]={'params':[pattern(types[p]) for p in params], 'returns':pattern(result),
         'native_binding':key,'lean':'_root_.'+key+''.join(' ({'+str(i)+'})' for i in range(len(params))), 'latex':latex,
@@ -208,14 +225,16 @@ def notation(header, fields, env, *, authored=False):
         env.data['functions'][name]['dependent_signature']={
             'implicit':list(implicit.items()),'parameters':list(types.items()),
             'result':result,'key':key}
-    bound_body=None
-    if authored and expression:
-        from .bound_calls import bind as bind_calls,UnclosedBinding
-        try:bound_body=bind_calls(expression.tree,env,local,binders=True)
-        except UnclosedBinding:pass
+    from .operator_bindings import scope_snapshot
+    operator_scope=scope_snapshot(env)
+    for fixity in ('infix','prefix'):
+        if fixity in values:
+            from .operator_bindings import declare
+            declare(env,values[fixity],name,fixity)
     if authored:
         env.definitions[name] = {'key': key, 'parameters': list(local), 'implementation': implementation,
             'tree': expression.tree if expression else None, 'bound_tree':bound_body,
+            'operator_scope':operator_scope,
             'body': values[implementation], 'returns': str(result), 'attribution': attribution}
 
 
@@ -233,7 +252,7 @@ def condition_declaration(header, fields, env):
     parameters=', '.join(n+(': '+t if t is not None else '') for n,t in parameter_fields)
     values = fields_map([f for f in fields if not re.match(r'Let\b',f,re.I)])
     if 'returns' in values: raise CleanError('Condition already specifies a condition result; omit Returns')
-    if set(values) - {'holds when','from lean','assumption name','render','render latex','attribution'}:
+    if set(values) - {'holds when','from lean','assumption name','render','render latex','attribution','infix','prefix'}:
         raise CleanError('Unknown Condition field')
     if len(set(values) & {'holds when','from lean'}) != 1:
         raise CleanError('Condition requires exactly one Holds when or From Lean')
@@ -292,6 +311,10 @@ def load_module(path, env, *, document=False):
                             if value not in env.lean_imports:env.lean_imports.append(value)
                         elif tree.data=='bib_import':env.sources.import_bibtex(file.parent/value[1:-1])
                         else:visit(file.parent/value[1:-1])
+                    elif node.kind=='default_numerals_stmt':
+                        from .numeral_inference import declare_default
+                        from .syntax import type_spelling
+                        declare_default(type_spelling(node.payload.children[0]),env)
                     elif node.kind=='alias_stmt':
                         alias,target=map(str,syntax_parse(line,'alias_line').children)
                         if alias in env.data['types'] or alias in env.data['aliases']:raise CleanError('Duplicate type alias')

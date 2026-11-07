@@ -13,10 +13,14 @@ for path in sorted((root/'corpus').glob('*.clean')):
     env=Environment(); results+=load_document(path,env); environments.append(env)
 reg=combine(environments)
 byname={r.name:r for r in results}
+# Declared numeral adapters denote Nat casts; zero and one require their
+# Mathlib cast laws rather than an assumption of definitional equality.
+numerals=[spec['numerals']['native_binding'] for spec in reg.data['types'].values() if 'numerals' in spec]
+normalize='  try simp only ['+', '.join(numerals+['Nat.cast_zero','Nat.cast_one'])+'] at *'
 out=[lean(results,reg,[]),'namespace CleanValidation']
 for item in items:
     r=byname[item['name']]; params=[n for c in r.clauses for n in c.names]
-    out += [f'theorem {r.name} : CleanStatements.{r.name} := by', '  intro '+' '.join(params), '  exact '+item['proof'],'']
+    out += [f'theorem {r.name} : CleanStatements.{r.name} := by', '  intro '+' '.join(params), normalize, '  exact '+item['proof'],'']
 out+=['end CleanValidation']
 (root/'generated'/'VerifiedCorpus.lean').write_text('\n'.join(out)+'\n')
 print('Wrote',len(items),'proof fixtures')

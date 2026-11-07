@@ -62,6 +62,12 @@ def expression_spelling(tree):
     """Canonical, fully grouped source for binder-free index expressions."""
     from .core import CleanError
     kind=tree[0]
+    if kind in ('NumeralAnnotation','BoundNumeral'):
+        from .numerals import spelling
+        return spelling(tree)
+    if kind=='ModuleCall' and len(tree)>4:
+        from .bound_calls import source_operator
+        return source_operator(tree,expression_spelling)
     if kind in ('Local','Decimal'):return tree[1]
     if kind=='TypeValue':return 'type('+tree[1]+')'
     if kind in ('Call','ModuleCall'):return tree[1]+'('+','.join(map(expression_spelling,tree[2]))+')'
@@ -110,6 +116,12 @@ def expression_tree(tree):
     if kind=='group':return expression_tree(c[0])
     if kind=='local':return ['Local',str(c[0])]
     if kind=='type_value':return ['TypeValue',type_spelling(c[1])]
+    if kind=='numeral_annotation':
+        digits=str(c[0])
+        if not digits or any(ch not in '0123456789' for ch in digits):
+            from .core import CleanError
+            raise CleanError('Explicit numeral annotations require ASCII digits')
+        return ['NumeralAnnotation',digits,type_tree(c[1])]
     if kind=='decimal':return ['Decimal',str(c[0])]
     if kind=='call':return ['Call',name(c[0]),[expression_tree(x) for x in c[1].children] if len(c)>1 else []]
     if kind=='unary':return ['Unary','-' if str(c[0])=='-' else 'not',expression_tree(c[1])]
@@ -203,6 +215,7 @@ def document(normalized):
             elif node.kind=='import_stmt':node.payload=parse(text,'import_line')
             elif node.kind=='alias_stmt':node.payload=parse(text,'alias_line')
             elif node.kind=='phrase_stmt':node.payload=parse(text,'phrase_line')
+            elif node.kind=='default_numerals_stmt':node.payload=parse(text,'default_numerals_line')
             elif node.kind.endswith('_let'):node.payload=parse(text,'let_clause')
             elif node.kind.endswith('_assume'):node.payload=parse(text.split(None,1)[1],'assumptions')
             elif node.kind in ('expression_field','conclusion'):
@@ -244,6 +257,12 @@ def condition_spelling(tree):
     """Canonical source for scoped condition expressions; no environment lookup."""
     from .core import CleanError
     kind=tree[0]
+    if kind in ('NumeralAnnotation','BoundNumeral'):
+        from .numerals import spelling
+        return spelling(tree)
+    if kind=='ModuleCall' and len(tree)>4:
+        from .bound_calls import source_operator
+        return source_operator(tree,condition_spelling)
     if kind in ('Local','Decimal'):return tree[1]
     if kind=='TypeValue':return 'type('+tree[1]+')'
     if kind in ('Call','ModuleCall'):return tree[1]+'('+','.join(map(condition_spelling,tree[2]))+')'

@@ -48,6 +48,8 @@ def projection_reduction(env, base, field, locals):
         return Expressions(env,locals).elaborate(tree[2][position])
     definition=env.definitions.get(tree[1])
     if not definition or definition['implementation']!='equals':return None
+    from .operator_bindings import scope_unchanged
+    if not scope_unchanged(env,definition) and not (tree[0]=='ModuleCall' and definition.get('bound_tree') is not None):return None
     signature=env.data['functions'][tree[1]]['signature_tree']
     parameters=signature[2]
     if any(p[3]=='implicit' for p in parameters):return None
@@ -60,7 +62,7 @@ def projection_reduction(env, base, field, locals):
             from .type_values import substitute
             return substitute(node,{n:Expressions(env,locals).elaborate(t) for n,t in bindings.items()},env,locals)
         if node[0]=='Local':return bindings.get(node[1],node)
-        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],node[3]]
+        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],*node[3:]]
         if node[0]=='Call':
             args=[replace(a) for a in node[2]]
             if node[1] in bindings:

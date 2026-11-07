@@ -5,6 +5,7 @@
     "line": 4,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.adj_symm",
@@ -36,6 +37,7 @@
     "line": 12,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.adj_comm",
@@ -67,6 +69,7 @@
     "line": 19,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.irrefl",
@@ -98,6 +101,7 @@
     "line": 26,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.ne_of_adj",
@@ -129,6 +133,7 @@
     "line": 34,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.sup_adj",
@@ -160,6 +165,7 @@
     "line": 41,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.inf_adj",
@@ -191,6 +197,7 @@
     "line": 48,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.compl_adj",
@@ -222,6 +229,7 @@
     "line": 55,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.support_mono",
@@ -253,6 +261,7 @@
     "line": 62,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.neighborSet_subset_support",
@@ -284,6 +293,7 @@
     "line": 69,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.mem_neighborSet",
@@ -315,6 +325,7 @@
     "line": 76,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.notMem_neighborSet_self",
@@ -346,6 +357,7 @@
     "line": 83,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.commonNeighbors_eq",
@@ -377,6 +389,7 @@
     "line": 90,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.mem_commonNeighbors",
@@ -408,6 +421,7 @@
     "line": 97,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.commonNeighbors_symm",
@@ -439,6 +453,7 @@
     "line": 104,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.commonNeighbors_subset_neighborSet_left",
@@ -470,6 +485,7 @@
     "line": 111,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.commonNeighbors_subset_neighborSet_right",
@@ -501,6 +517,7 @@
     "line": 118,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.Reachable.refl",
@@ -532,6 +549,7 @@
     "line": 125,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.Reachable.symm",
@@ -563,6 +581,7 @@
     "line": 133,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.Reachable.trans",
@@ -594,6 +613,7 @@
     "line": 142,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.Adj.reachable",
@@ -625,6 +645,7 @@
     "line": 150,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.adj_comm",
@@ -656,6 +677,7 @@
     "line": 157,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.irrefl",
@@ -687,6 +709,7 @@
     "line": 164,
     "file": "corpus/graph_theory.clean",
     "contexts": [],
+    "documentation": null,
     "attribution": {
       "source": "mathlib",
       "reference": "SimpleGraph.compl_adj",

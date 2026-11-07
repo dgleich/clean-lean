@@ -6344,6 +6344,62 @@
       "model": "gpt-6",
       "date": "2026-11-07",
       "mode": "sidecar"
+    },
+    "cleanlang/operator_bindings.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-07",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "cleanlang/numerals.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-07",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "cleanlang/numeral_inference.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-07",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_declared_standard_operators.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-07",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "library/operators.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-07",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "docs/operator-numeral-integration.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-07",
+      "mode": "markdown"
     }
   }
 }
