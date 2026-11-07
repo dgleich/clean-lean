@@ -26,6 +26,8 @@ for oracle,name in [('carrierType','Type'),('realType','Real'),('naturalType','N
                     ('conditionType','Proposition'),('topologyType','Topology'),
                     ('pathType','Path'),('vectorType','Vector')]:
     mapping['BundleOracle.'+oracle]=env.data['types'][name]['native_binding']
+for oracle,name in [('equal','equal'),('both','conjunction'),('add','real sum'),('less','real less')]:
+    mapping['BundleOracle.'+oracle]=env.data['functions'][name]['native_binding']
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
 open Lean Elab Command
@@ -73,6 +75,10 @@ noncomputable abbrev conditionType : Sort 1 := Prop
 noncomputable abbrev topologyType (X : Type) : Type := TopologicalSpace X
 noncomputable abbrev pathType (X : Type) (t : topologyType X) (x y : X) : Type := @Path X t x y
 noncomputable abbrev vectorType (n : Nat) (T : Type) : Type := Fin n → T
+noncomputable def equal {T : Type} (x y : T) : conditionType := x=y
+noncomputable def both (x y : conditionType) : conditionType := x ∧ y
+noncomputable def add (x y : realType) : realType := x+y
+noncomputable def less (x y : realType) : conditionType := x<y
 structure BasedPath (X : Type) : Type where
   topology : topologyType X
   start : X
@@ -96,26 +102,26 @@ noncomputable def reversePath {X : Type} (t : topologyType X) (x y : X)
 noncomputable def reverse (X : carrierType) (P : BasedPath X) : BasedPath X :=
   @makePath X P.topology P.finish P.start
     (@reversePath X P.topology P.start P.finish P.path)
-noncomputable def ordered (I : Endpoints) : conditionType := I.lower < I.upper
+noncomputable def ordered (I : Endpoints) : conditionType := less I.lower I.upper
 noncomputable def shift (I : Endpoints) (s : realType) : Endpoints :=
-  @endpoints (I.lower+s) (I.upper+s)
+  @endpoints (add I.lower s) (add I.upper s)
 def constructorStatement : Prop := ∀ (a b : realType),
   let I : Endpoints := @endpoints a b
-  I.lower=a ∧ I.upper=b
+  both (equal I.lower a) (equal I.upper b)
 def shiftStatement : Prop := ∀ (I : Endpoints) (s : realType), ordered I → ordered (shift I s)
 def pathStatement : Prop := ∀ (X : carrierType) (P : BasedPath X),
-  @Exists (pathType X P.topology P.start P.finish) (fun p => p=P.path)
-def reverseStatement : Prop := ∀ (X : carrierType) (P : BasedPath X), reverse X (reverse X P) = P
+  @Exists (pathType X P.topology P.start P.finish) (fun p => equal p P.path)
+def reverseStatement : Prop := ∀ (X : carrierType) (P : BasedPath X), equal (reverse X (reverse X P)) P
 def functionStatement : Prop := ∀ (f : realType → realType) (x : realType),
   let P : ScalarMap := scalarMap f
-  P.map x = f x
+  equal (P.map x) (f x)
 def dimensionStatement : Prop := ∀ (V : SizedVector),
-  @Exists (vectorType V.size realType) (fun v => v=V.vector)
+  @Exists (vectorType V.size realType) (fun v => equal v V.vector)
 noncomputable def nativeIdentity (I : Endpoints) : Endpoints := I
-def computedStatement : Prop := ∀ (a b : realType), a=a
-def authoredProjectionStatement : Prop := ∀ (I : Endpoints) (s : realType), I.lower+s=I.lower+s
-def opaqueStatement : Prop := ∀ (I : Endpoints), (@nativeIdentity I).lower=I.lower
-def computedDependentStatement : Prop := ∀ (X : carrierType) (P : BasedPath X), P.path=P.path
+def computedStatement : Prop := ∀ (a b : realType), equal a a
+def authoredProjectionStatement : Prop := ∀ (I : Endpoints) (s : realType), equal (add I.lower s) (add I.lower s)
+def opaqueStatement : Prop := ∀ (I : Endpoints), equal (@nativeIdentity I).lower I.lower
+def computedDependentStatement : Prop := ∀ (X : carrierType) (P : BasedPath X), equal P.path P.path
 end BundleOracle
 '''
 checks=[]
@@ -147,6 +153,7 @@ theorem bundled_path_has_its_declared_endpoints : CleanStatements.bundled_path_h
   exact ⟨P.path,rfl⟩
 theorem reversing_a_bundled_path_twice : CleanStatements.reversing_a_bundled_path_twice := by
   intro X P
+  change {keys['reversed bundle']} X ({keys['reversed bundle']} X P) = P
   cases P
   simp [{keys['reversed bundle']}, {keys['based path']}, {rkey}, Path.symm_symm]
 theorem function_field_application : CleanStatements.function_field_application := by

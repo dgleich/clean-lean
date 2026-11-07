@@ -2,7 +2,7 @@
 \begin{cleanresult}{endpoint constructor}\cleanattribution{[Topology foundations, endpoint constructor]}
 Let $a$ and $b$ be real numbers.
 Let $I = \operatorname{endpoints}(a, b)$.
-Then \[I.\mathrm{lower} = a \text{ and } I.\mathrm{upper} = b.\]
+Then \[I.\mathrm{lower}=a\text{ and }I.\mathrm{upper}=b.\]
 \end{cleanresult}
 
 \begin{cleanresult}{shifting endpoints preserves order}\cleanattribution{[Topology foundations, translating ordered endpoints]}
@@ -15,47 +15,47 @@ Then \[\operatorname{ordered\ endpoints}(\operatorname{shifted\ endpoints}(I, s)
 \begin{cleanresult}{bundled path has its declared endpoints}\cleanattribution{[Topology foundations, dependent path projection]}
 Let $X$ be a type.
 Let $P$ be a path with its topology and endpoints on $X$.
-Then \[\left(\text{there exists }p : \operatorname{Path}_{P.\mathrm{topology}}(P.\mathrm{start},P.\mathrm{finish}),\; p = P.\mathrm{path}\right).\]
+Then \[\left(\text{there exists }p : \operatorname{Path}_{P.\mathrm{topology}}(P.\mathrm{start},P.\mathrm{finish}),\; p=P.\mathrm{path}\right).\]
 \end{cleanresult}
 
 \begin{cleanresult}{reversing a bundled path twice}\cleanattribution{[Topology foundations, bundled path involution]}
 Let $X$ be a type.
 Let $P$ be a path with its topology and endpoints on $X$.
-Then \[\operatorname{reversed\ bundle}(X, \operatorname{reversed\ bundle}(X, P)) = P.\]
+Then \[\operatorname{reversed\ bundle}(X, \operatorname{reversed\ bundle}(X, P))=P.\]
 \end{cleanresult}
 
 \begin{cleanresult}{function field application}\cleanattribution{[Topology foundations, function field application]}
 Let $f$ be a function from $\mathbb{R}$ to $\mathbb{R}$.
 Let $x$ be a real number.
 Let $P = \operatorname{scalar\ map}(f)$.
-Then \[P.\mathrm{map}(x) = f(x).\]
+Then \[P.\mathrm{map}(x)=f(x).\]
 \end{cleanresult}
 
 \begin{cleanresult}{vector field dimensions}\cleanattribution{[Topology foundations, natural field dependency]}
 Let $V$ be an element of $\operatorname{SizedVector}$.
-Then \[\left(\text{there exists }v : \mathbb{R}^{V.\mathrm{size}},\; v = V.\mathrm{vector}\right).\]
+Then \[\left(\text{there exists }v : \mathbb{R}^{V.\mathrm{size}},\; v=V.\mathrm{vector}\right).\]
 \end{cleanresult}
 
 \begin{cleanresult}{computed constructor projection}\cleanattribution{[Topology foundations, constructor field computation]}
 Let $a$ and $b$ be real numbers.
-Then \[\operatorname{endpoints}(a, b).\mathrm{lower} = a.\]
+Then \[\operatorname{endpoints}(a, b).\mathrm{lower}=a.\]
 \end{cleanresult}
 
 \begin{cleanresult}{authored record projection}\cleanattribution{[Topology foundations, translated endpoints]}
 Let $I$ be a pair of real endpoints.
 Let $s$ be a real number.
-Then \[\operatorname{shifted\ endpoints}(I, s).\mathrm{lower} = I.\mathrm{lower} + s.\]
+Then \[\operatorname{shifted\ endpoints}(I, s).\mathrm{lower}=I.\mathrm{lower}+s.\]
 \end{cleanresult}
 
 \begin{cleanresult}{opaque record projection}\cleanattribution{[Topology foundations, native identity adapter]}
 Let $I$ be a pair of real endpoints.
-Then \[I.\mathrm{lower} = I.\mathrm{lower}.\]
+Then \[I.\mathrm{lower}=I.\mathrm{lower}.\]
 \end{cleanresult}
 
 \begin{cleanresult}{computed dependent field}\cleanattribution{[Topology foundations, dependent constructor projection]}
 Let $X$ be a type.
 Let $P$ be a path with its topology and endpoints on $X$.
-Then \[\operatorname{based\ path}(X, P.\mathrm{topology}, P.\mathrm{start}, P.\mathrm{finish}, P.\mathrm{path}).\mathrm{path} = P.\mathrm{path}.\]
+Then \[\operatorname{based\ path}(X, P.\mathrm{topology}, P.\mathrm{start}, P.\mathrm{finish}, P.\mathrm{path}).\mathrm{path}=P.\mathrm{path}.\]
 \end{cleanresult}
 
 % generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

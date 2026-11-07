@@ -88,3 +88,13 @@ studies after the operator migration. The remaining topology verifiers still
 need revalidation. A fresh full regression run follows the Common migration;
 its outcome is pending, independently of the earlier failed run.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The topology migration now covers five verifiers: foundation, named indices,
+paths, record bundles and indexed subspaces. The last three add 92 per-verifier
+exact-target checks and 18 proofs. [The migration report](../studies/topology/binding-migration.md)
+distinguishes repeated adapter checks and records the next actual failure:
+equality of bundled Type-1 spaces is outside the current Type-0 generic equality
+signature. This requires explicit library/universe support, not a fallback.
+:::

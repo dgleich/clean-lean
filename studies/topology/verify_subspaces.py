@@ -29,6 +29,9 @@ mapping={'SubspaceOracle.LinearSpace':record,
  'SubspaceOracle.infimum':function('subspace infimum'),
  'SubspaceOracle.intersection':function('intersection of subspaces'),
  'SubspaceOracle.setOf':function('set of')}
+for oracle,name in [('equal','equal'),('member','set member'),('subset','set subset'),
+                    ('both','conjunction'),('equivalent','equivalence'),('implies','implication'),('negate','negation')]:
+    mapping['SubspaceOracle.'+oracle]=function(name)
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
 open Lean Elab Command
@@ -72,6 +75,13 @@ namespace SubspaceOracle
 noncomputable abbrev carrierType : Type 1 := Type
 noncomputable abbrev conditionType : Sort 1 := Prop
 noncomputable abbrev setType (X : Type) : Type := Set X
+noncomputable def equal {T : Type} (x y : T) : conditionType := x=y
+noncomputable def member {T : Type} (x : T) (A : setType T) : conditionType := x ∈ A
+noncomputable def subset {T : Type} (A B : setType T) : conditionType := A ⊆ B
+noncomputable def both (x y : conditionType) : conditionType := x ∧ y
+noncomputable def equivalent (x y : conditionType) : conditionType := x ↔ y
+noncomputable def implies (x y : conditionType) : conditionType := x → y
+noncomputable def negate (x : conditionType) : conditionType := ¬x
 noncomputable abbrev fieldType (K : Type) : Type := Field K
 noncomputable abbrev additiveType (V : Type) : Type := AddCommGroup V
 noncomputable abbrev moduleType (K : Type) (f : fieldType K) (V : Type) (a : additiveType V) : Type :=
@@ -90,10 +100,10 @@ noncomputable def carrier {K V : Type} (f : fieldType K) (L : LinearSpace K f V)
     (@Submodule.setLike K V f.toSemiring L.addition.toAddCommMonoid L.action) U
 noncomputable def belongs {K V : Type} (f : fieldType K) (L : LinearSpace K f V) (x : V)
     (U : subspaceType K f V L) : conditionType :=
-  x ∈ @carrier K V f L U
+  member x (@carrier K V f L U)
 noncomputable def included {K V : Type} (f : fieldType K) (L : LinearSpace K f V)
     (U W : subspaceType K f V L) : conditionType :=
-  ∀ x : V, @belongs K V f L x U → @belongs K V f L x W
+  ∀ x : V, implies (@belongs K V f L x U) (@belongs K V f L x W)
 noncomputable def infimum {K V : Type} (f : fieldType K) (L : LinearSpace K f V)
     (S : setType (subspaceType K f V L)) :
     subspaceType K f V L :=
@@ -104,21 +114,21 @@ noncomputable def intersection {K V I : Type} (f : fieldType K) (L : LinearSpace
     (A : setType I) (spaces : I → subspaceType K f V L) :
     subspaceType K f V L :=
   @infimum K V f L (@setOf (subspaceType K f V L)
-    (fun U => @Exists I (fun i => i ∈ A ∧ U=spaces i)))
+    (fun U => @Exists I (fun i => both (member i A) (equal U (spaces i)))))
 
 def membershipStatement : Prop := ∀ (K V I : carrierType) (f : fieldType K) (L : LinearSpace K f V)
   (A : setType I) (spaces : I → subspaceType K f V L) (x : V),
-  @belongs K V f L x (@intersection K V I f L A spaces) ↔
-    ∀ i : I, i ∈ A → @belongs K V f L x (spaces i)
+  equivalent (@belongs K V f L x (@intersection K V I f L A spaces))
+    (∀ i : I, implies (member i A) (@belongs K V f L x (spaces i)))
 def includedStatement : Prop := ∀ (K V I : carrierType) (f : fieldType K) (L : LinearSpace K f V)
   (A : setType I) (spaces : I → subspaceType K f V L) (i : I),
-  i ∈ A → @included K V f L (@intersection K V I f L A spaces) (spaces i)
+  member i A → @included K V f L (@intersection K V I f L A spaces) (spaces i)
 def antitoneStatement : Prop := ∀ (K V I : carrierType) (f : fieldType K) (L : LinearSpace K f V)
   (A : setType I) (spaces : I → subspaceType K f V L) (B : setType I),
-  A ⊆ B → @included K V f L (@intersection K V I f L B spaces) (@intersection K V I f L A spaces)
+  subset A B → @included K V f L (@intersection K V I f L B spaces) (@intersection K V I f L A spaces)
 def emptyStatement : Prop := ∀ (K V I : carrierType) (f : fieldType K) (L : LinearSpace K f V)
   (A : setType I) (spaces : I → subspaceType K f V L) (x : V),
-  (∀ i : I, ¬ i ∈ A) → @belongs K V f L x (@intersection K V I f L A spaces)
+  (∀ i : I, negate (member i A)) → @belongs K V f L x (@intersection K V I f L A spaces)
 end SubspaceOracle
 '''
 checks=[f'same_target {target} {oracle}' for oracle,target in mapping.items()]

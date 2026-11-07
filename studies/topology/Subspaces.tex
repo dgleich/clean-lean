@@ -15,7 +15,7 @@ Let $S$ be a function from $I$ to $\operatorname{Subspace}(L)$.
 \begin{cleanresult}{indexed intersection membership}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, Submodule.mem\_sInf]}}
 Using Context (\cleancontextref{9b70518830d4-16}).
 Let $x$ be an element of $V$.
-Then \[x\text{ belongs to }\bigcap_{i \in A} S(i) \text{ if and only if } \left(\text{for every }i : I,\; i \text{ belongs to } A \text{ implies } x\text{ belongs to }S(i)\right).\]
+Then \[x\text{ belongs to }\bigcap_{i \in A} S(i)\text{ if and only if }\left(\text{for every }i : I,\; i\in A\text{ implies }x\text{ belongs to }S(i)\right).\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
 
@@ -27,7 +27,7 @@ Let $L$ be a vector space structure on $V$ over $f$.
 Let $A$ be a subset of $I$.
 Let $S$ be a function from $I$ to $\operatorname{Subspace}(L)$.
 Let $x$ be an element of $V$.
-Then \[x\text{ belongs to }\bigcap_{i \in A} S(i) \text{ if and only if } \left(\text{for every }i : I,\; i \text{ belongs to } A \text{ implies } x\text{ belongs to }S(i)\right).\]
+Then \[x\text{ belongs to }\bigcap_{i \in A} S(i)\text{ if and only if }\left(\text{for every }i : I,\; i\in A\text{ implies }x\text{ belongs to }S(i)\right).\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
 
@@ -36,7 +36,7 @@ Then \[x\text{ belongs to }\bigcap_{i \in A} S(i) \text{ if and only if } \left(
 \begin{cleanresult}{intersection is included in each member}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, Submodule.mem\_sInf]}}
 Using Context (\cleancontextref{9b70518830d4-16}).
 Let $i$ be an element of $I$.
-Assume $i \text{ belongs to } A$ (\texttt{admissible index}).
+Assume $i\in A$ (\texttt{admissible index}).
 Then \[\bigcap_{i \in A} S(i)\text{ is a subspace of }S(i).\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
@@ -49,7 +49,7 @@ Let $L$ be a vector space structure on $V$ over $f$.
 Let $A$ be a subset of $I$.
 Let $S$ be a function from $I$ to $\operatorname{Subspace}(L)$.
 Let $i$ be an element of $I$.
-Assume $i \text{ belongs to } A$ (\texttt{admissible index}).
+Assume $i\in A$ (\texttt{admissible index}).
 Then \[\bigcap_{i \in A} S(i)\text{ is a subspace of }S(i).\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
@@ -59,7 +59,7 @@ Then \[\bigcap_{i \in A} S(i)\text{ is a subspace of }S(i).\]
 \begin{cleanresult}{more indices give a smaller intersection}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, Submodule.mem\_sInf]}}
 Using Context (\cleancontextref{9b70518830d4-16}).
 Let $B$ be a subset of $I$.
-Assume $A \text{ is a subset of } B$ (\texttt{more indices}).
+Assume $A\subseteq B$ (\texttt{more indices}).
 Then \[\bigcap_{i \in B} S(i)\text{ is a subspace of }\bigcap_{i \in A} S(i).\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
@@ -72,7 +72,7 @@ Let $L$ be a vector space structure on $V$ over $f$.
 Let $A$ be a subset of $I$.
 Let $S$ be a function from $I$ to $\operatorname{Subspace}(L)$.
 Let $B$ be a subset of $I$.
-Assume $A \text{ is a subset of } B$ (\texttt{more indices}).
+Assume $A\subseteq B$ (\texttt{more indices}).
 Then \[\bigcap_{i \in B} S(i)\text{ is a subspace of }\bigcap_{i \in A} S(i).\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
@@ -82,7 +82,7 @@ Then \[\bigcap_{i \in B} S(i)\text{ is a subspace of }\bigcap_{i \in A} S(i).\]
 \begin{cleanresult}{empty family contains every vector}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, Submodule.mem\_sInf]}}
 Using Context (\cleancontextref{9b70518830d4-16}).
 Let $x$ be an element of $V$.
-Assume $\left(\text{for every }i : I,\; \text{not }(i \text{ belongs to } A)\right)$ (\texttt{no admissible indices}).
+Assume $\left(\text{for every }i : I,\; \text{not }\left(i\in A\right)\right)$ (\texttt{no admissible indices}).
 Then \[x\text{ belongs to }\bigcap_{i \in A} S(i).\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
@@ -95,7 +95,7 @@ Let $L$ be a vector space structure on $V$ over $f$.
 Let $A$ be a subset of $I$.
 Let $S$ be a function from $I$ to $\operatorname{Subspace}(L)$.
 Let $x$ be an element of $V$.
-Assume $\left(\text{for every }i : I,\; \text{not }(i \text{ belongs to } A)\right)$ (\texttt{no admissible indices}).
+Assume $\left(\text{for every }i : I,\; \text{not }\left(i\in A\right)\right)$ (\texttt{no admissible indices}).
 Then \[x\text{ belongs to }\bigcap_{i \in A} S(i).\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}

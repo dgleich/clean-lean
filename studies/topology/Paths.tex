@@ -3,7 +3,7 @@
 Let $X$ be a type.
 Let $S$ be a subset of $X$.
 Let $x$ be an element of $S$.
-Then \[x \text{ belongs to } S.\]
+Then \[x\in S.\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
 
@@ -12,14 +12,14 @@ Let $X$ be a type.
 Let $t$ be a topology on $X$.
 Let $x$ and $y$ be elements of $X$.
 Let $p$ be a path from $x$ to $y$ in $X$ with topology $t$.
-Then \[(p^{-1})^{-1} = p.\]
+Then \[(p^{-1})^{-1}=p.\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
 
 \begin{cleanresult}{constant paths exist}\cleanattribution{\href{https://github.com/leanprover-community/mathlib4/tree/v4.24.0}{[Mathlib, Path.refl]}}
 Let $X$ be a type.
 Let $t$ be a topology on $X$.
-Then \[\left(\text{for every }x : X,\; \left(\text{there exists }p : \operatorname{Path}_{t}(x,x),\; p = \operatorname{constant}(x)\right)\right).\]
+Then \[\left(\text{for every }x : X,\; \left(\text{there exists }p : \operatorname{Path}_{t}(x,x),\; p=\operatorname{constant}(x)\right)\right).\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
 
@@ -29,7 +29,7 @@ Let $t$ be a topology on $X$.
 Let $x$, $y$ and $z$ be elements of $X$.
 Let $p$ be a path from $x$ to $y$ in $X$ with topology $t$.
 Let $q$ be a path from $y$ to $z$ in $X$ with topology $t$.
-Then \[\left(\text{there exists }r : \operatorname{Path}_{t}(x,z),\; r = p * q\right).\]
+Then \[\left(\text{there exists }r : \operatorname{Path}_{t}(x,z),\; r=p * q\right).\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
 

@@ -37,6 +37,9 @@ elab "same_target " a:ident b:ident : command => do
 '''
 k = lambda name: env.data['types'][name]['native_binding']
 K, S, T, E, P = ('_root_.' + k(name) for name in ['Type', 'Set', 'Topology', 'Element', 'Path'])
+eq=env.data['functions']['equal']['native_binding']
+member=env.data['functions']['set member']['native_binding']
+prop='_root_.'+k('Proposition')
 type_checks = ''
 for i, (name, binders, sort, body) in enumerate([
     ('Type', '', 'Type 1', 'Type'),
@@ -46,6 +49,10 @@ for i, (name, binders, sort, body) in enumerate([
     ('Path', f'(X : Type) (t : {T} X) (x y : X)', 'Type', '@Path X t x y')]):
     type_checks += f'\nnoncomputable def expected_path_type_{i} {binders} : {sort} := {body}\nsame_target {k(name)} expected_path_type_{i}\n'
 expected = f'''
+noncomputable def expected_path_equality {{X : Type}} (x y : X) : {prop} := x=y
+noncomputable def expected_path_membership {{X : Type}} (x : X) (A : {S} X) : {prop} := x ∈ A
+same_target {eq} expected_path_equality
+same_target {member} expected_path_membership
 namespace PathOracles
 noncomputable def underlying {{X : Type}} (S : {S} X) (x : {E} X S) : X := x.val
 noncomputable def constant {{X : Type}} (t : {T} X) (x : X) : {P} X t x x :=
@@ -60,14 +67,14 @@ noncomputable def twice {{X : Type}} (t : {T} X) (x y : X)
   @_root_.{keys['reverse path']} X t y x (@_root_.{keys['reverse path']} X t x y p)
 
 def member : Prop := ∀ (X : {K}) (S : {S} X) (x : {E} X S),
-  @_root_.{keys['underlying point']} X S x ∈ S
+  @_root_.{member} X (@_root_.{keys['underlying point']} X S x) S
 def reversing : Prop := ∀ (X : {K}) (t : {T} X) (x y : X) (p : {P} X t x y),
-  @_root_.{keys['reverse twice']} X t x y p = p
+  @_root_.{eq} ({P} X t x y) (@_root_.{keys['reverse twice']} X t x y p) p
 def constants : Prop := ∀ (X : {K}) (t : {T} X),
-  ∀ (x : X), @Exists ({P} X t x x) (fun p => p = @_root_.{keys['constant path']} X t x)
+  ∀ (x : X), @Exists ({P} X t x x) (fun p => @_root_.{eq} ({P} X t x x) p (@_root_.{keys['constant path']} X t x))
 def joined : Prop := ∀ (X : {K}) (t : {T} X) (x y z : X)
   (p : {P} X t x y) (q : {P} X t y z),
-  @Exists ({P} X t x z) (fun r => r = @_root_.{keys['join paths']} X t x y z p q)
+  @Exists ({P} X t x z) (fun r => @_root_.{eq} ({P} X t x z) r (@_root_.{keys['join paths']} X t x y z p q))
 end PathOracles
 same_target {keys['underlying point']} PathOracles.underlying
 same_target {keys['constant path']} PathOracles.constant
@@ -97,6 +104,6 @@ end PathProofs
 path = here / 'PathsVerified.lean'
 path.write_text(source + comparison + type_checks + expected)
 subprocess.run([os.environ.get('LAKE', 'lake'), 'env', 'lean', str(path)], cwd=ROOT, check=True)
-print('Fourteen canonical path type/wrapper/statement targets and four proofs passed.')
+print('Sixteen canonical path type/wrapper/statement targets and four proofs passed.')
 
 # generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

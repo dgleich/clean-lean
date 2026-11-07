@@ -196,3 +196,47 @@ and were visually inspected. The foundation specimen retains a 0.12149pt
 paragraph overfull warning; no clipping was visible. The other sixteen topology
 verifiers and the paper theorem proofs remain outside this revalidation claim.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+Three further working-compiler verifiers now pass with declared operators:
+
+| Verifier | Exact target checks | Proofs |
+| --- | ---: | ---: |
+| `verify_paths.py` | 16 | 4 |
+| `verify_bundles.py` | 47 | 10 |
+| `verify_subspaces.py` | 29 | 4 |
+
+These checks retain independently declared equality, membership, arithmetic,
+order and logical adapters in authored expressions. Each adapter's native body
+is checked independently as well. Statement assumptions remain native universal
+proof binders; authored implication expressions retain the declared implication
+adapter. The comparison still checks canonical types and values, including
+constructor/projection shapes where relevant.
+
+The bundled-path involution proof first exposes native equality with `change`
+before eliminating the dependent record. This is a proof-script adaptation to
+the equality wrapper, not a change to the theorem or its comparison criterion.
+All eighteen proofs in these three rows passed Lean. The three rendered specimens
+compiled twice without box or unresolved-reference warnings; all four pages were
+visually inspected.
+
+Five of the eighteen topology verifiers are now revalidated after the operator
+migration. Their summed per-verifier counts are 125 exact-target checks and 29
+proofs; shared foundational adapters are checked in multiple verifiers, so this
+is not a count of 125 distinct imported declarations.
+
+### Next observed gap: equality of bundled spaces
+
+`cleanlang check studies/topology/Spaces.clean` currently rejects an undeclared
+`=`. A direct probe confirms that `X=Y` for `X,Y: TopologicalSpace` is rejected.
+`TopologicalSpace` wraps `TopCat.{0}` and inhabits Lean `Type 1` (Clean's internal
+sort level 2). The imported generic equality takes `T: Type`, meaning a Type-0
+carrier, and cannot instantiate to this larger type. This is an explicit library
+and universe-interface boundary. The parser is unambiguous; accepting it requires
+an explicit eligible declaration, not an implicit fallback to Lean equality.
+A space-specific adapter is possible with existing syntax; general
+universe-polymorphic operator declarations remain a larger outstanding language
+requirement. The remaining thirteen verifiers are not yet validated on this
+compiler. The five paper theorems remain unproved where previously documented.
+:::
