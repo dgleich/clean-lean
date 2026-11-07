@@ -10,7 +10,7 @@ catalog entries must not be read as a current all-green report.
 
 | Requirement | Concrete implementation and acceptance evidence | Remaining boundary |
 |---|---|---|
-| Named fields and constructors | `library/algebra/module_diagrams.clean`, `library/diagrams/interval_bases.clean`; structure, diagram-map and zigzag studies | Carrier-type fields and general universe polymorphism remain unsupported |
+| Named fields and constructors | `library/algebra/module_diagrams.clean`, `library/diagrams/interval_bases.clean`; structure, diagram-map and zigzag studies | Carrier-type fields are integrated with bounded universes; general universe polymorphism remains unsupported |
 | Dependent callable signatures and indices | Dependent-function, computed-index and inferred-conversion studies; explicit stored implicit arguments | General higher-order conversion and normalization inside binder bodies are not claimed |
 | Named conditions usable as evidence | Callable-evidence study: 21 exact targets and 15 proofs; captured scopes and local/module resolution have negative tests | Opaque native conditions do not acquire callable views; broader validation is pending |
 | Definition bodies authored in Clean | Topology images/preimages/continuity, relative quotient constructions, well-group intersections, diagram pullbacks, subpaths and clipping | Imported foundations remain explicit; mathematical constructions listed below are still missing |
@@ -21,7 +21,8 @@ catalog entries must not be read as a current all-green report.
 The basic identity checker is `LAKE=lake python3 tools/check_basic_targets.py`.
 It verifies the normalized statement tree, including attribution, binding and
 conclusion, then compares generated declaration types and bodies with independently
-written `∀ (x : ℝ), @Eq.{1} ℝ x x`. Local renaming, keyword case, prose type spelling,
+written identity statements over the selected Real wrapper, whose body is separately
+checked against `ℝ`. Local renaming, keyword case, prose type spelling,
 indentation, continuation, grouping and comments cannot change that target.
 A definitionally equal alias is deliberately rejected by the canonical comparator.
 This is a concrete acceptance slice, not a proof of general elaboration uniqueness.
@@ -31,6 +32,11 @@ implement part of an older obligation. Follow-up links do not erase the newer
 case's own limitations or substitute for its outstanding validation.
 
 ## Current validation evidence
+
+The [working-compiler binding migration](binding-migration.md) adds 69 exact
+native targets and 21 proofs, with 23 focused Python tests. Broader discovery
+is still in progress; the older counts below retain their historical scope.
+
 
 - The pre-callable compiler passed 584 Python tests. That count does not validate
   later compiler changes.

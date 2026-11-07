@@ -405,3 +405,13 @@ and full corpus/study validation remain gates. The current sequential-scope full
 suite and earlier specialized active-label diagnostic remain live without completion;
 this prototype does not claim to settle either run or the full goal.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Working-compiler topology binding checks
+
+The [binding migration report](binding-migration.md) records 69 exact native
+targets and 21 proofs across the foundation, bundle and indexed-type studies,
+plus 23 focused Python tests. These checks run on the integrated compiler;
+declared-operator integration and broader native-study migration remain pending.
+:::

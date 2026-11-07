@@ -31,23 +31,33 @@ elab "same_target " a:ident b:ident : command => do
       Expr.equal (canonical x.value) (canonical y.value) do
     throwError "Canonical type or value differs"
 '''
+k=lambda name:env.data['types'][name]['native_binding']
+K,S,T,E,P=('_root_.'+k(name) for name in ['Type','Set','Topology','Element','Path'])
+type_checks=''
+for i,(name,binders,body) in enumerate([
+    ('Type','','Type'),('Set','(X : Type)','Set X'),
+    ('Topology','(X : Type)','TopologicalSpace X'),
+    ('Element',f'(X : Type) (S : {S} X)','{x : X // x ∈ S}'),
+    ('Path',f'(X : Type) (t : {T} X) (x y : X)','@Path X t x y')]):
+    sort='Type 1' if name=='Type' else 'Type'
+    type_checks+=f'\nnoncomputable def expected_index_type_{i} {binders} : {sort} := {body}\nsame_target {k(name)} expected_index_type_{i}\n'
 expected=f"""
 namespace ValueIndexOracles
 
 def subsetElement : Prop :=
-  ∀ (X : Type) (S : Set X) (x : {{x : X // x ∈ S}}), x=x
+  ∀ (X : {K}) (S : {S} X) (x : {E} X S), x=x
 
 def pathReflexivity : Prop :=
-  ∀ (X : Type) (t : TopologicalSpace X) (x y : X) (p : @Path X t x y), p=p
+  ∀ (X : {K}) (t : {T} X) (x y : X) (p : {P} X t x y), p=p
 
 def constantPath : Prop :=
-  ∀ (X : Type) (t : TopologicalSpace X),
-    ∀ (x : X), @Exists (@Path X t x x) (fun p => p=p)
+  ∀ (X : {K}) (t : {T} X),
+    ∀ (x : X), @Exists ({P} X t x x) (fun p => p=p)
 
 def namedSubset : Prop :=
-  ∀ (X Y : Type) (f : X → Y) (S : Set Y),
-    let T : Set X := {pre} f S
-    ∀ (x : {{x : X // x ∈ T}}), x=x
+  ∀ (X Y : {K}) (f : X → Y) (S : {S} Y),
+    let T : {S} X := @_root_.{pre} X Y f S
+    ∀ (x : {E} X T), x=x
 
 end ValueIndexOracles
 same_target CleanStatements.subset_element_reflexivity ValueIndexOracles.subsetElement
@@ -77,8 +87,8 @@ theorem named_subset_expression : CleanStatements.named_subset_expression := by
 
 end ValueIndexProofs
 """
-path=here/'ValueIndicesVerified.lean';path.write_text(source+comparison+expected)
+path=here/'ValueIndicesVerified.lean';path.write_text(source+comparison+type_checks+expected)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Four canonical indexed-type statement targets and four proofs passed.')
+print('Nine canonical indexed-type/body/statement targets and four proofs passed.')
 
 # generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

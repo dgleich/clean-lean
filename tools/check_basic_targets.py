@@ -37,7 +37,7 @@ def source(name,body):
     return f'Import "{ROOT / "library/types.clean"}"\nSource local:\n  Kind: other\n  Label: Local\n  Title: Independent identity acceptance\n'+body
 
 def generate():
-    imports=[];bodies=[]
+    imports=[];bodies=[];shared=None;real=None
     with tempfile.TemporaryDirectory() as td:
         for i,(local,body) in enumerate(VARIANTS):
             p=Path(td)/'Identity.clean';p.write_text(source(local,body))
@@ -54,9 +54,21 @@ def generate():
             text=lean(results,env,['Lean']);lines=text.splitlines()
             for line in lines:
                 if line.startswith('import ') and line not in imports:imports.append(line)
-            bodies.append(f'namespace BasicCase{i}\n'+'\n'.join(line for line in lines if not line.startswith('import '))+f'\nend BasicCase{i}\n')
-    target='\n'.join(imports)+'\n'+COMPARISON+'\n'.join(bodies)
-    target+='\ndef basic_expected : Prop := ∀ (x : ℝ), @Eq.{1} ℝ x x\n'
+            declarations, statements = '\n'.join(
+                line for line in lines if not line.startswith('import ')
+            ).split('namespace CleanStatements', 1)
+            if shared is None:
+                shared = declarations
+                real = env.data['types']['Real']['native_binding']
+            else:
+                assert declarations == shared
+                assert env.data['types']['Real']['native_binding'] == real
+            bodies.append(f'namespace BasicCase{i}\nnamespace CleanStatements'
+                          + statements + f'\nend BasicCase{i}\n')
+    target='\n'.join(imports)+'\n'+COMPARISON+shared+'\n'.join(bodies)
+    target+='\ndef basic_real_expected : Type := ℝ\n'
+    target+=f'same_basic_target {real} basic_real_expected\n'
+    target+=f'\ndef basic_expected : Prop := ∀ (x : _root_.{real}), @Eq.{{1}} _root_.{real} x x\n'
     for i in range(len(VARIANTS)):
         target+=f'same_basic_target BasicCase{i}.CleanStatements.identity basic_expected\n'
     target+='''
@@ -71,6 +83,6 @@ same_basic_target basic_alias basic_expected
 if __name__=='__main__':
     path=ROOT/'generated/BasicAcceptance.lean';path.write_text(generate())
     subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-    print('Four identity trees and exact native targets passed; alias mismatch rejected')
+    print('Four identity trees, four statement targets and one Real adapter target passed; alias mismatch rejected')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

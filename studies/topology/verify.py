@@ -1,7 +1,7 @@
 # generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
 """Generate foundation targets and proofs; never assume a pending paper theorem."""
 from pathlib import Path
-import sys
+import sys,ast,os,subprocess
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT))
 from cleanlang.core import Environment, lean, latex
@@ -13,6 +13,42 @@ text=lean(rs,env,[])
 pre=env.definitions['inverse image']['key']
 image=env.definitions['image']['key']
 continuous=env.definitions['continuous between']['key']
+# Explicit declaration mappings; expected bodies are authored independently.
+f=lambda name:env.data['functions'][name]['native_binding']
+k=lambda name:env.data['types'][name]['native_binding']
+ref=lambda name:'_root_.'+f(name)
+K,P,S,T=('_root_.'+k(name) for name in ['Type','Proposition','Set','Topology'])
+setof,opn,pre_ref,img,compose,cont,selected,family=(ref(name) for name in
+    ['set of','open in','inverse image','image','compose maps','continuous between',
+     'selected elements','intersection family'])
+comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_basic_targets.py').read_text()).body
+    if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))
+oracles='';count=0
+def target(actual,binders,typ,body):
+    global oracles,count
+    expected='expected_topology_binding_'+str(count);count+=1
+    oracles+=f'\nnoncomputable def {expected} {binders} : {typ} := {body}\nsame_basic_target {actual} {expected}\n'
+for name,binders,typ,body in [
+ ('Type','','Type 1','Type'),('Proposition','','Sort 1','Prop'),
+ ('Set','(X : Type)','Type','Set X'),
+ ('Function','(X Y : Type)','Type','X → Y'),
+ ('Topology','(X : Type)','Type','TopologicalSpace X')]:target(k(name),binders,typ,body)
+for name,binders,typ,body in [
+ ('set of',f'{{X : Type}} (condition : X → {P})',f'{S} X','setOf condition'),
+ ('open in',f'{{X : Type}} (S : {S} X) (t : {T} X)',P,'@IsOpen X t S'),
+ ('inverse image',f'{{X Y : Type}} (f : X → Y) (S : {S} Y)',f'{S} X',f'@{setof} X (fun x : X => f x ∈ S)'),
+ ('image',f'{{X Y : Type}} (f : X → Y) (S : {S} X)',f'{S} Y',f'@{setof} Y (fun y : Y => ∃ x : X, x ∈ S ∧ f x = y)'),
+ ('compose maps','{X Y Z : Type} (g : Y → Z) (f : X → Y)','X → Z','fun x : X => g (f x)'),
+ ('continuous between',f'{{X Y : Type}} (f : X → Y) (t : {T} X) (u : {T} Y)',P,f'∀ S : {S} Y, @{opn} Y S u → @{opn} X (@{pre_ref} X Y f S) t'),
+ ('selected elements',f'{{X : Type}} (S : {S} X) (condition : X → {P})',f'{S} X',f'@{setof} X (fun x : X => x ∈ S ∧ condition x)'),
+ ('intersection family',f'{{I X : Type}} (sets : I → {S} X)',f'{S} X',f'@{setof} X (fun x : X => ∀ i : I, x ∈ sets i)')]:target(f(name),binders,typ,body)
+expected_statements=[
+ f'∀ (X Y : {K}) (f : X → Y) (S T : {S} Y), @{pre_ref} X Y f (S ∩ T) = @{pre_ref} X Y f S ∩ @{pre_ref} X Y f T',
+ f'∀ (X Y : {K}) (f : X → Y) (S : {S} X) (y : Y), y ∈ @{img} X Y f S ↔ ∃ x : X, x ∈ S ∧ f x = y',
+ f'∀ (X Y Z : {K}) (t : {T} X) (u : {T} Y) (v : {T} Z) (f : X → Y) (g : Y → Z) (_ : @{cont} X Y f t u) (_ : @{cont} Y Z g u v), @{cont} X Z (@{compose} X Y Z g f) t v',
+ f'∀ (I X : {K}) (sets : I → {S} X) (x : X), x ∈ @{family} I X sets ↔ ∀ i : I, x ∈ sets i']
+for result,body in zip(rs,expected_statements):target('CleanStatements.'+result.name,'','Prop',body)
+assert count==17
 proofs=f'''
 namespace TopologyFoundationProofs
 
@@ -51,8 +87,10 @@ theorem family_intersection_membership : CleanStatements.family_intersection_mem
 
 end TopologyFoundationProofs
 '''
-(here/'Verified.lean').write_text(text+proofs)
+verified='import Lean\nimport Mathlib.Topology.Continuous\n'+text+comparison+oracles+proofs
+(here/'Verified.lean').write_text(verified)
+subprocess.run([os.environ.get('LAKE','/home/claude/.elan/bin/lake'),'env','lean',str(here/'Verified.lean')],cwd=ROOT,check=True)
 (here/'Foundations.tex').write_text(latex(rs,env))
-print('Generated four foundation statements, four proofs, and three agreement proofs.')
+print('Checked seventeen exact topology targets, four foundation proofs and three Mathlib agreement proofs on the working compiler.')
 
 # generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -21,7 +21,11 @@ mapping={'BundleOracle.BasedPath':pkey,'BundleOracle.Endpoints':ikey,
          'BundleOracle.ordered':keys['ordered endpoints'],'BundleOracle.reversePath':rkey,
          'BundleOracle.ScalarMap':skey,'BundleOracle.SizedVector':vkey,
          'BundleOracle.scalarMap':keys['scalar map'],'BundleOracle.sizedVector':keys['sized vector']}
-mapping['BundleOracle.nativeIdentity']=env.data['functions']['opaque endpoints']['lean'].split()[0]
+mapping['BundleOracle.nativeIdentity']=env.data['functions']['opaque endpoints']['native_binding']
+for oracle,name in [('carrierType','Type'),('realType','Real'),('naturalType','Natural'),
+                    ('conditionType','Proposition'),('topologyType','Topology'),
+                    ('pathType','Path'),('vectorType','Vector')]:
+    mapping['BundleOracle.'+oracle]=env.data['types'][name]['native_binding']
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
 open Lean Elab Command
@@ -62,49 +66,56 @@ elab "same_target " a:ident b:ident : command => do
 '''
 expected='''
 namespace BundleOracle
+noncomputable abbrev carrierType : Type 1 := Type
+noncomputable abbrev realType : Type := ℝ
+noncomputable abbrev naturalType : Type := ℕ
+noncomputable abbrev conditionType : Sort 1 := Prop
+noncomputable abbrev topologyType (X : Type) : Type := TopologicalSpace X
+noncomputable abbrev pathType (X : Type) (t : topologyType X) (x y : X) : Type := @Path X t x y
+noncomputable abbrev vectorType (n : Nat) (T : Type) : Type := Fin n → T
 structure BasedPath (X : Type) : Type where
-  topology : TopologicalSpace X
+  topology : topologyType X
   start : X
   finish : X
-  path : @Path X topology start finish
+  path : pathType X topology start finish
 structure Endpoints : Type where
-  lower : ℝ
-  upper : ℝ
+  lower : realType
+  upper : realType
 structure ScalarMap : Type where
-  map : ℝ → ℝ
+  map : realType → realType
 structure SizedVector : Type where
-  size : ℕ
-  vector : Fin size → ℝ
-noncomputable def scalarMap (f : ℝ → ℝ) : ScalarMap := @ScalarMap.mk f
-noncomputable def sizedVector (n : ℕ) (v : Fin n → ℝ) : SizedVector := @SizedVector.mk n v
-noncomputable def makePath (X : Type) (t : TopologicalSpace X) (x y : X)
-    (p : @Path X t x y) : BasedPath X := @BasedPath.mk X t x y p
-noncomputable def endpoints (a b : ℝ) : Endpoints := @Endpoints.mk a b
-noncomputable def reversePath {X : Type} (t : TopologicalSpace X) (x y : X)
-    (p : @Path X t x y) : @Path X t y x := @Path.symm X t x y p
-noncomputable def reverse (X : Type) (P : BasedPath X) : BasedPath X :=
+  size : naturalType
+  vector : vectorType size realType
+noncomputable def scalarMap (f : realType → realType) : ScalarMap := @ScalarMap.mk f
+noncomputable def sizedVector (n : naturalType) (v : vectorType n realType) : SizedVector := @SizedVector.mk n v
+noncomputable def makePath (X : Type) (t : topologyType X) (x y : X)
+    (p : pathType X t x y) : BasedPath X := @BasedPath.mk X t x y p
+noncomputable def endpoints (a b : realType) : Endpoints := @Endpoints.mk a b
+noncomputable def reversePath {X : Type} (t : topologyType X) (x y : X)
+    (p : pathType X t x y) : pathType X t y x := @Path.symm X t x y p
+noncomputable def reverse (X : carrierType) (P : BasedPath X) : BasedPath X :=
   @makePath X P.topology P.finish P.start
     (@reversePath X P.topology P.start P.finish P.path)
-noncomputable def ordered (I : Endpoints) : Prop := I.lower < I.upper
-noncomputable def shift (I : Endpoints) (s : ℝ) : Endpoints :=
+noncomputable def ordered (I : Endpoints) : conditionType := I.lower < I.upper
+noncomputable def shift (I : Endpoints) (s : realType) : Endpoints :=
   @endpoints (I.lower+s) (I.upper+s)
-def constructorStatement : Prop := ∀ (a b : ℝ),
+def constructorStatement : Prop := ∀ (a b : realType),
   let I : Endpoints := @endpoints a b
   I.lower=a ∧ I.upper=b
-def shiftStatement : Prop := ∀ (I : Endpoints) (s : ℝ), ordered I → ordered (shift I s)
-def pathStatement : Prop := ∀ (X : Type) (P : BasedPath X),
-  @Exists (@Path X P.topology P.start P.finish) (fun p => p=P.path)
-def reverseStatement : Prop := ∀ (X : Type) (P : BasedPath X), reverse X (reverse X P) = P
-def functionStatement : Prop := ∀ (f : ℝ → ℝ) (x : ℝ),
+def shiftStatement : Prop := ∀ (I : Endpoints) (s : realType), ordered I → ordered (shift I s)
+def pathStatement : Prop := ∀ (X : carrierType) (P : BasedPath X),
+  @Exists (pathType X P.topology P.start P.finish) (fun p => p=P.path)
+def reverseStatement : Prop := ∀ (X : carrierType) (P : BasedPath X), reverse X (reverse X P) = P
+def functionStatement : Prop := ∀ (f : realType → realType) (x : realType),
   let P : ScalarMap := scalarMap f
   P.map x = f x
 def dimensionStatement : Prop := ∀ (V : SizedVector),
-  @Exists (Fin V.size → ℝ) (fun v => v=V.vector)
+  @Exists (vectorType V.size realType) (fun v => v=V.vector)
 noncomputable def nativeIdentity (I : Endpoints) : Endpoints := I
-def computedStatement : Prop := ∀ (a b : ℝ), a=a
-def authoredProjectionStatement : Prop := ∀ (I : Endpoints) (s : ℝ), I.lower+s=I.lower+s
+def computedStatement : Prop := ∀ (a b : realType), a=a
+def authoredProjectionStatement : Prop := ∀ (I : Endpoints) (s : realType), I.lower+s=I.lower+s
 def opaqueStatement : Prop := ∀ (I : Endpoints), (@nativeIdentity I).lower=I.lower
-def computedDependentStatement : Prop := ∀ (X : Type) (P : BasedPath X), P.path=P.path
+def computedDependentStatement : Prop := ∀ (X : carrierType) (P : BasedPath X), P.path=P.path
 end BundleOracle
 '''
 checks=[]

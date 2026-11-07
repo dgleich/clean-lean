@@ -6112,6 +6112,10 @@
     "docs/binding-oracle-migration.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "studies/topology/binding-migration.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

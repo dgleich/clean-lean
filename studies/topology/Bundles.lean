@@ -19,132 +19,132 @@ Basic topology with explicit carrier types and topologies.
    This first module is restricted to carrier types in Lean Type 0.
 -/
 
-noncomputable def cleanType_Type_c1fed1af64ab6f12e0ed  : Type 1 :=
+noncomputable abbrev cleanType_Type_c1fed1af64ab6f12e0ed  : Type 1 :=
   Type
 
-noncomputable def cleanType_Natural_469c53b6dafb7a218246  : Type :=
+noncomputable abbrev cleanType_Natural_469c53b6dafb7a218246  : Type :=
   ℕ
 
-noncomputable def cleanType_Real_107b6641a486642ad8e1  : Type :=
+noncomputable abbrev cleanType_Real_107b6641a486642ad8e1  : Type :=
   ℝ
 
-noncomputable def cleanType_Complex_2d7f06a08f8ab1e3f46d  : Type :=
+noncomputable abbrev cleanType_Complex_2d7f06a08f8ab1e3f46d  : Type :=
   ℂ
 
-noncomputable def cleanType_Proposition_ae4a13d2f060407bce35  : Sort 1 :=
+noncomputable abbrev cleanType_Proposition_ae4a13d2f060407bce35  : Sort 1 :=
   Prop
 
-noncomputable def cleanType_Matrix_61d617e3f5143c327dd3 (p0 : Nat) (p1 : Nat) (p2 : Type) : Type :=
+noncomputable abbrev cleanType_Matrix_61d617e3f5143c327dd3 (p0 : Nat) (p1 : Nat) (p2 : Type) : Type :=
   Matrix (Fin p0) (Fin p1) p2
 
-noncomputable def cleanType_Vector_b5a130b68abf7f0646e8 (p0 : Nat) (p1 : Type) : Type :=
+noncomputable abbrev cleanType_Vector_b5a130b68abf7f0646e8 (p0 : Nat) (p1 : Type) : Type :=
   Fin p0 → p1
 
-noncomputable def cleanType_Vertex_460956e39f5b9ffca091 (p0 : Nat) : Type :=
+noncomputable abbrev cleanType_Vertex_460956e39f5b9ffca091 (p0 : Nat) : Type :=
   Fin p0
 
-noncomputable def cleanType_Graph_7bde0ce024ce143f369b (p0 : Nat) : Type :=
+noncomputable abbrev cleanType_Graph_7bde0ce024ce143f369b (p0 : Nat) : Type :=
   SimpleGraph (Fin p0)
 
-noncomputable def cleanType_List_530f2b2df99696550311 (p0 : Type) : Type :=
+noncomputable abbrev cleanType_List_530f2b2df99696550311 (p0 : Type) : Type :=
   List (p0)
 
-noncomputable def cleanType_Set_6e300741358eee425e81 (p0 : Type) : Type :=
+noncomputable abbrev cleanType_Set_6e300741358eee425e81 (p0 : Type) : Type :=
   Set (p0)
 
-noncomputable def cleanType_Function_9d746dbeb0e035328deb (p0 : Type) (p1 : Type) : Type :=
+noncomputable abbrev cleanType_Function_9d746dbeb0e035328deb (p0 : Type) (p1 : Type) : Type :=
   (p0) → (p1)
 
-noncomputable def cleanType_Topology_2eca621ea710e87cf174 (X : Type) : Type :=
+noncomputable abbrev cleanType_Topology_2eca621ea710e87cf174 (X : Type) : Type :=
   TopologicalSpace X
 
-noncomputable def cleanNotation_set_of_25534029a1fdae044ce8 {X : Type} (condition : (X) → (Prop)) : Set (X) :=
+noncomputable def cleanNotation_set_of_2c71fd475f49a65bd03e {X : Type} (condition : (X) → ((_root_.cleanType_Proposition_ae4a13d2f060407bce35))) : (_root_.cleanType_Set_6e300741358eee425e81 (X)) :=
   setOf condition
 
-noncomputable def cleanDefine_open_in_04a39275b76e933d604a {X : Type} (S : Set (X)) (t : TopologicalSpace X) : Prop :=
+noncomputable def cleanDefine_open_in_2f000176928f8b3f5fc4 {X : Type} (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))) (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   @IsOpen X t S
 
-noncomputable def cleanDefine_inverse_image_b2385c49c1629ae08495 {X : Type} {Y : Type} (f : (X) → (Y)) (S : Set (Y)) : Set (X) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : X) => ((f clean_bound_0) ∈ S))))
+noncomputable def cleanDefine_inverse_image_eb657a3c1d0219ea719b {X : Type} {Y : Type} (f : (X) → (Y)) (S : (_root_.cleanType_Set_6e300741358eee425e81 (Y))) : (_root_.cleanType_Set_6e300741358eee425e81 (X)) :=
+  (_root_.cleanNotation_set_of_2c71fd475f49a65bd03e ((fun (clean_bound_0 : X) => ((f clean_bound_0) ∈ S))))
 
-noncomputable def cleanDefine_image_3f2870b8ed865dc98807 {X : Type} {Y : Type} (f : (X) → (Y)) (S : Set (X)) : Set (Y) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : Y) => (@Exists (X) (fun (clean_bound_1 : X) => ((clean_bound_1 ∈ S) ∧ ((f clean_bound_1) = clean_bound_0)))))))
+noncomputable def cleanDefine_image_869a575587985294ee29 {X : Type} {Y : Type} (f : (X) → (Y)) (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))) : (_root_.cleanType_Set_6e300741358eee425e81 (Y)) :=
+  (_root_.cleanNotation_set_of_2c71fd475f49a65bd03e ((fun (clean_bound_0 : Y) => (@Exists (X) (fun (clean_bound_1 : X) => ((clean_bound_1 ∈ S) ∧ ((f clean_bound_1) = clean_bound_0)))))))
 
 noncomputable def cleanDefine_compose_maps_b7e7219a131a4bb5245c {X : Type} {Y : Type} {Z : Type} (g : (Y) → (Z)) (f : (X) → (Y)) : (X) → (Z) :=
   (fun (clean_bound_0 : X) => (g (f clean_bound_0)))
 
-noncomputable def cleanDefine_continuous_between_fee422b0843f4b1d9573 {X : Type} {Y : Type} (f : (X) → (Y)) (t : TopologicalSpace X) (u : TopologicalSpace Y) : Prop :=
-  (∀ (clean_bound_0 : Set (Y)), ((cleanDefine_open_in_04a39275b76e933d604a (clean_bound_0) (u)) → (cleanDefine_open_in_04a39275b76e933d604a ((cleanDefine_inverse_image_b2385c49c1629ae08495 (f) (clean_bound_0))) (t))))
+noncomputable def cleanDefine_continuous_between_3b927933ead621e0bfe9 {X : Type} {Y : Type} (f : (X) → (Y)) (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (u : (_root_.cleanType_Topology_2eca621ea710e87cf174 (Y))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (∀ (clean_bound_0 : (_root_.cleanType_Set_6e300741358eee425e81 (Y))), ((_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 (clean_bound_0) (u)) → (_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 ((_root_.cleanDefine_inverse_image_eb657a3c1d0219ea719b (f) (clean_bound_0))) (t))))
 
-noncomputable def cleanDefine_selected_elements_be59cb3b891978bdf75e {X : Type} (S : Set (X)) (condition : (X) → (Prop)) : Set (X) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : X) => ((clean_bound_0 ∈ S) ∧ (condition clean_bound_0)))))
+noncomputable def cleanDefine_selected_elements_b4d39602cd1cf697afb5 {X : Type} (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))) (condition : (X) → ((_root_.cleanType_Proposition_ae4a13d2f060407bce35))) : (_root_.cleanType_Set_6e300741358eee425e81 (X)) :=
+  (_root_.cleanNotation_set_of_2c71fd475f49a65bd03e ((fun (clean_bound_0 : X) => ((clean_bound_0 ∈ S) ∧ (condition clean_bound_0)))))
 
-noncomputable def cleanDefine_intersection_family_21668a57bd46a5fc2395 {I : Type} {X : Type} (sets : (I) → (Set (X))) : Set (X) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : X) => (∀ (clean_bound_1 : I), (clean_bound_0 ∈ (sets clean_bound_1))))))
+noncomputable def cleanDefine_intersection_family_7482d46b5fb61bd1ecae {I : Type} {X : Type} (sets : (I) → ((_root_.cleanType_Set_6e300741358eee425e81 (X)))) : (_root_.cleanType_Set_6e300741358eee425e81 (X)) :=
+  (_root_.cleanNotation_set_of_2c71fd475f49a65bd03e ((fun (clean_bound_0 : X) => (∀ (clean_bound_1 : I), (clean_bound_0 ∈ (sets clean_bound_1))))))
 
-noncomputable def cleanType_Element_f6cf8dd1e8f2bae54be4 (X : Type) (S : Set (X)) : Type :=
+noncomputable abbrev cleanType_Element_4fb2f1b669ed36f80886 (X : Type) (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))) : Type :=
   {x : X // x ∈ S}
 
-noncomputable def cleanType_Path_3fdd593c9b34e872c4b4 (X : Type) (t : TopologicalSpace X) (x : X) (y : X) : Type :=
+noncomputable abbrev cleanType_Path_2e5bf3c806cfad5a1ae9 (X : Type) (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (x : X) (y : X) : Type :=
   @Path X t x y
 
-noncomputable def cleanNotation_underlying_point_158884de113671a93ba6 {X : Type} (S : Set (X)) (x : {x : X // x ∈ S}) : X :=
+noncomputable def cleanNotation_underlying_point_5fc735e8b58c86463a25 {X : Type} (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))) (x : (_root_.cleanType_Element_4fb2f1b669ed36f80886 (X) (S))) : X :=
   x.val
 
-noncomputable def cleanNotation_constant_path_79f5a6b7ce858e190d0b {X : Type} (t : TopologicalSpace X) (x : X) : @Path X t x x :=
+noncomputable def cleanNotation_constant_path_e6a080b4f4baea9e3c6a {X : Type} (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (x : X) : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (x) (x)) :=
   @Path.refl X t x
 
-noncomputable def cleanNotation_reverse_path_43d430a43539939bcf2c {X : Type} (t : TopologicalSpace X) (x : X) (y : X) (p : @Path X t x y) : @Path X t y x :=
+noncomputable def cleanNotation_reverse_path_bccacbe82db41fbe7c6d {X : Type} (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (x : X) (y : X) (p : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (x) (y))) : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (y) (x)) :=
   @Path.symm X t x y p
 
-noncomputable def cleanNotation_join_paths_32898d58a46eb9c632f2 {X : Type} (t : TopologicalSpace X) (x : X) (y : X) (z : X) (p : @Path X t x y) (q : @Path X t y z) : @Path X t x z :=
+noncomputable def cleanNotation_join_paths_413579dc3782617ff91d {X : Type} (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (x : X) (y : X) (z : X) (p : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (x) (y))) (q : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (y) (z))) : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (x) (z)) :=
   @Path.trans X t x y z p q
 
-noncomputable def cleanDefine_reverse_twice_70df96ff552a5e9ef886 {X : Type} (t : TopologicalSpace X) (x : X) (y : X) (p : @Path X t x y) : @Path X t x y :=
-  (@cleanNotation_reverse_path_43d430a43539939bcf2c (X) (t) (y) (x) ((@cleanNotation_reverse_path_43d430a43539939bcf2c (X) (t) (x) (y) (p))))
+noncomputable def cleanDefine_reverse_twice_19c7d7336839bf577a5b {X : Type} (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (x : X) (y : X) (p : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (x) (y))) : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) (t) (x) (y)) :=
+  (@_root_.cleanNotation_reverse_path_bccacbe82db41fbe7c6d (X) (t) (y) (x) ((@_root_.cleanNotation_reverse_path_bccacbe82db41fbe7c6d (X) (t) (x) (y) (p))))
 
 /--
 A topology, two points, and a path between them, on a fixed carrier.
 -/
-structure cleanStructure_BasedPath_af4022cf2eeed1e2d1ab («X» : Type) : Type where
-  «topology» : TopologicalSpace «X»
+structure cleanStructure_BasedPath_70f574d7589934963ee1 («X» : Type) : Type where
+  «topology» : (_root_.cleanType_Topology_2eca621ea710e87cf174 («X»))
   «start» : «X»
   «finish» : «X»
-  «path» : @Path «X» «topology» «start» «finish»
+  «path» : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 («X») («topology») («start») («finish»))
 
-noncomputable def cleanConstructor_based_path_68c2fc8490e4ebc630bb («X» : Type) («topology» : TopologicalSpace «X») («start» : «X») («finish» : «X») («path» : @Path «X» «topology» «start» «finish») : cleanStructure_BasedPath_af4022cf2eeed1e2d1ab («X») :=
-  @cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.mk «X» «topology» «start» «finish» «path»
+noncomputable def cleanConstructor_based_path_2b5edffd368145e026ec («X» : Type) («topology» : (_root_.cleanType_Topology_2eca621ea710e87cf174 («X»))) («start» : «X») («finish» : «X») («path» : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 («X») («topology») («start») («finish»))) : _root_.cleanStructure_BasedPath_70f574d7589934963ee1 («X») :=
+  @_root_.cleanStructure_BasedPath_70f574d7589934963ee1.mk «X» «topology» «start» «finish» «path»
 
-noncomputable def cleanDefine_reversed_bundle_9779f436492a7430ddec  (X : Type) (P : cleanStructure_BasedPath_af4022cf2eeed1e2d1ab (X)) : cleanStructure_BasedPath_af4022cf2eeed1e2d1ab (X) :=
-  (@cleanConstructor_based_path_68c2fc8490e4ebc630bb (X) ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«topology» (X) (P))) ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«finish» (X) (P))) ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«start» (X) (P))) ((@cleanNotation_reverse_path_43d430a43539939bcf2c (X) ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«topology» (X) (P))) ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«start» (X) (P))) ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«finish» (X) (P))) ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«path» (X) (P))))))
+noncomputable def cleanDefine_reversed_bundle_89d7b5d246c5c673d41c  (X : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)) (P : _root_.cleanStructure_BasedPath_70f574d7589934963ee1 (X)) : _root_.cleanStructure_BasedPath_70f574d7589934963ee1 (X) :=
+  (@_root_.cleanConstructor_based_path_2b5edffd368145e026ec (X) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«topology» (X) (P))) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«finish» (X) (P))) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«start» (X) (P))) ((@_root_.cleanNotation_reverse_path_bccacbe82db41fbe7c6d (X) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«topology» (X) (P))) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«start» (X) (P))) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«finish» (X) (P))) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«path» (X) (P))))))
 
-structure cleanStructure_Endpoints_2512a023e0474ce195ac  : Type where
-  «lower» : ℝ
-  «upper» : ℝ
+structure cleanStructure_Endpoints_7a6ba0b879274641120c  : Type where
+  «lower» : (_root_.cleanType_Real_107b6641a486642ad8e1)
+  «upper» : (_root_.cleanType_Real_107b6641a486642ad8e1)
 
-noncomputable def cleanConstructor_endpoints_ae57156441e5057814f6 («lower» : ℝ) («upper» : ℝ) : cleanStructure_Endpoints_2512a023e0474ce195ac :=
-  @cleanStructure_Endpoints_2512a023e0474ce195ac.mk «lower» «upper»
+noncomputable def cleanConstructor_endpoints_3622a2317e61075ae5a0 («lower» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («upper» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c :=
+  @_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.mk «lower» «upper»
 
-noncomputable def cleanDefine_ordered_endpoints_867d201d7c772f8385d6  (I : cleanStructure_Endpoints_2512a023e0474ce195ac) : Prop :=
-  ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) < (@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» (I)))
+noncomputable def cleanDefine_ordered_endpoints_e18d07991fd919237102  (I : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» (I)) < (@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» (I)))
 
-noncomputable def cleanDefine_shifted_endpoints_0341e7d28e14c6ec5711  (I : cleanStructure_Endpoints_2512a023e0474ce195ac) (s : ℝ) : cleanStructure_Endpoints_2512a023e0474ce195ac :=
-  (@cleanConstructor_endpoints_ae57156441e5057814f6 (((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) + s)) (((@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» (I)) + s)))
+noncomputable def cleanDefine_shifted_endpoints_ea3398852390cb480b6d  (I : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c) (s : (_root_.cleanType_Real_107b6641a486642ad8e1)) : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c :=
+  (@_root_.cleanConstructor_endpoints_3622a2317e61075ae5a0 (((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» (I)) + s)) (((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» (I)) + s)))
 
-structure cleanStructure_ScalarMap_b571a474391ee4a1048f  : Type where
-  «map» : (ℝ) → (ℝ)
+structure cleanStructure_ScalarMap_54cbe725f12fda5c0d93  : Type where
+  «map» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))
 
-noncomputable def cleanConstructor_scalar_map_f78247db9d7c5f5369a0 («map» : (ℝ) → (ℝ)) : cleanStructure_ScalarMap_b571a474391ee4a1048f :=
-  @cleanStructure_ScalarMap_b571a474391ee4a1048f.mk «map»
+noncomputable def cleanConstructor_scalar_map_33b9c976a3a5618354af («map» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) : _root_.cleanStructure_ScalarMap_54cbe725f12fda5c0d93 :=
+  @_root_.cleanStructure_ScalarMap_54cbe725f12fda5c0d93.mk «map»
 
-structure cleanStructure_SizedVector_e3bb6d8f3a27db756907  : Type where
-  «size» : ℕ
-  «vector» : Fin «size» → ℝ
+structure cleanStructure_SizedVector_5330c22ed683e2bafdc3  : Type where
+  «size» : (_root_.cleanType_Natural_469c53b6dafb7a218246)
+  «vector» : (_root_.cleanType_Vector_b5a130b68abf7f0646e8 («size») ((_root_.cleanType_Real_107b6641a486642ad8e1)))
 
-noncomputable def cleanConstructor_sized_vector_236d49ac38f05d98affb («size» : ℕ) («vector» : Fin «size» → ℝ) : cleanStructure_SizedVector_e3bb6d8f3a27db756907 :=
-  @cleanStructure_SizedVector_e3bb6d8f3a27db756907.mk «size» «vector»
+noncomputable def cleanConstructor_sized_vector_bfaf63c6661b235d273b («size» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («vector» : (_root_.cleanType_Vector_b5a130b68abf7f0646e8 («size») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) : _root_.cleanStructure_SizedVector_5330c22ed683e2bafdc3 :=
+  @_root_.cleanStructure_SizedVector_5330c22ed683e2bafdc3.mk «size» «vector»
 
-noncomputable def cleanNotation_opaque_endpoints_d1fd4290aaef6a02d3f2  (I : cleanStructure_Endpoints_2512a023e0474ce195ac) : cleanStructure_Endpoints_2512a023e0474ce195ac :=
+noncomputable def cleanNotation_opaque_endpoints_df879bc887dc13a99748  (I : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c) : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c :=
   I
 
 
@@ -161,9 +161,9 @@ reference: endpoint constructor
 relationship: original
 -/
 def endpoint_constructor : Prop :=
-  ∀ (a b : ℝ),
-  let I : cleanStructure_Endpoints_2512a023e0474ce195ac := (@cleanConstructor_endpoints_ae57156441e5057814f6 (a) (b));
-  (((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) = a) ∧ ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«upper» (I)) = b))
+  ∀ (a b : (_root_.cleanType_Real_107b6641a486642ad8e1)),
+  let I : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c := (@_root_.cleanConstructor_endpoints_3622a2317e61075ae5a0 (a) (b));
+  (((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» (I)) = a) ∧ ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«upper» (I)) = b))
 
 /--
 source: topology
@@ -171,10 +171,10 @@ reference: translating ordered endpoints
 relationship: original
 -/
 def shifting_endpoints_preserves_order : Prop :=
-  ∀ (I : cleanStructure_Endpoints_2512a023e0474ce195ac),
-  ∀ (s : ℝ),
-  ∀ («ordering_of_I» : (cleanDefine_ordered_endpoints_867d201d7c772f8385d6 (I))),
-  (cleanDefine_ordered_endpoints_867d201d7c772f8385d6 ((cleanDefine_shifted_endpoints_0341e7d28e14c6ec5711 (I) (s))))
+  ∀ (I : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c),
+  ∀ (s : (_root_.cleanType_Real_107b6641a486642ad8e1)),
+  ∀ («ordering_of_I» : (_root_.cleanDefine_ordered_endpoints_e18d07991fd919237102 (I))),
+  (_root_.cleanDefine_ordered_endpoints_e18d07991fd919237102 ((_root_.cleanDefine_shifted_endpoints_ea3398852390cb480b6d (I) (s))))
 
 /--
 source: topology
@@ -182,9 +182,9 @@ reference: dependent path projection
 relationship: original
 -/
 def bundled_path_has_its_declared_endpoints : Prop :=
-  ∀ (X : Type),
-  ∀ (P : cleanStructure_BasedPath_af4022cf2eeed1e2d1ab (X)),
-  (@Exists (@Path X (@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«topology» (X) (P)) (@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«start» (X) (P)) (@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«finish» (X) (P))) (fun (clean_bound_0 : @Path X (@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«topology» (X) (P)) (@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«start» (X) (P)) (@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«finish» (X) (P))) => (clean_bound_0 = (@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«path» (X) (P)))))
+  ∀ (X : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ (P : _root_.cleanStructure_BasedPath_70f574d7589934963ee1 (X)),
+  (@Exists ((_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«topology» (X) (P))) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«start» (X) (P))) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«finish» (X) (P))))) (fun (clean_bound_0 : (_root_.cleanType_Path_2e5bf3c806cfad5a1ae9 (X) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«topology» (X) (P))) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«start» (X) (P))) ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«finish» (X) (P))))) => (clean_bound_0 = (@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«path» (X) (P)))))
 
 /--
 source: topology
@@ -192,9 +192,9 @@ reference: bundled path involution
 relationship: original
 -/
 def reversing_a_bundled_path_twice : Prop :=
-  ∀ (X : Type),
-  ∀ (P : cleanStructure_BasedPath_af4022cf2eeed1e2d1ab (X)),
-  ((@cleanDefine_reversed_bundle_9779f436492a7430ddec (X) ((@cleanDefine_reversed_bundle_9779f436492a7430ddec (X) (P)))) = P)
+  ∀ (X : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ (P : _root_.cleanStructure_BasedPath_70f574d7589934963ee1 (X)),
+  ((@_root_.cleanDefine_reversed_bundle_89d7b5d246c5c673d41c (X) ((@_root_.cleanDefine_reversed_bundle_89d7b5d246c5c673d41c (X) (P)))) = P)
 
 /--
 source: topology
@@ -202,10 +202,10 @@ reference: function field application
 relationship: original
 -/
 def function_field_application : Prop :=
-  ∀ (f : (ℝ) → (ℝ)),
-  ∀ (x : ℝ),
-  let P : cleanStructure_ScalarMap_b571a474391ee4a1048f := (@cleanConstructor_scalar_map_f78247db9d7c5f5369a0 (f));
-  (((@cleanStructure_ScalarMap_b571a474391ee4a1048f.«map» (P)) x) = (f x))
+  ∀ (f : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))),
+  ∀ (x : (_root_.cleanType_Real_107b6641a486642ad8e1)),
+  let P : _root_.cleanStructure_ScalarMap_54cbe725f12fda5c0d93 := (@_root_.cleanConstructor_scalar_map_33b9c976a3a5618354af (f));
+  (((@_root_.cleanStructure_ScalarMap_54cbe725f12fda5c0d93.«map» (P)) x) = (f x))
 
 /--
 source: topology
@@ -213,8 +213,8 @@ reference: natural field dependency
 relationship: original
 -/
 def vector_field_dimensions : Prop :=
-  ∀ (V : cleanStructure_SizedVector_e3bb6d8f3a27db756907),
-  (@Exists (Fin (@cleanStructure_SizedVector_e3bb6d8f3a27db756907.«size» (V)) → ℝ) (fun (clean_bound_0 : Fin (@cleanStructure_SizedVector_e3bb6d8f3a27db756907.«size» (V)) → ℝ) => (clean_bound_0 = (@cleanStructure_SizedVector_e3bb6d8f3a27db756907.«vector» (V)))))
+  ∀ (V : _root_.cleanStructure_SizedVector_5330c22ed683e2bafdc3),
+  (@Exists ((_root_.cleanType_Vector_b5a130b68abf7f0646e8 ((@_root_.cleanStructure_SizedVector_5330c22ed683e2bafdc3.«size» (V))) ((_root_.cleanType_Real_107b6641a486642ad8e1)))) (fun (clean_bound_0 : (_root_.cleanType_Vector_b5a130b68abf7f0646e8 ((@_root_.cleanStructure_SizedVector_5330c22ed683e2bafdc3.«size» (V))) ((_root_.cleanType_Real_107b6641a486642ad8e1)))) => (clean_bound_0 = (@_root_.cleanStructure_SizedVector_5330c22ed683e2bafdc3.«vector» (V)))))
 
 /--
 source: topology
@@ -222,7 +222,7 @@ reference: constructor field computation
 relationship: original
 -/
 def computed_constructor_projection : Prop :=
-  ∀ (a b : ℝ),
+  ∀ (a b : (_root_.cleanType_Real_107b6641a486642ad8e1)),
   (a = a)
 
 /--
@@ -231,9 +231,9 @@ reference: translated endpoints
 relationship: original
 -/
 def authored_record_projection : Prop :=
-  ∀ (I : cleanStructure_Endpoints_2512a023e0474ce195ac),
-  ∀ (s : ℝ),
-  (((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) + s) = ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)) + s))
+  ∀ (I : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c),
+  ∀ (s : (_root_.cleanType_Real_107b6641a486642ad8e1)),
+  (((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» (I)) + s) = ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» (I)) + s))
 
 /--
 source: topology
@@ -241,8 +241,8 @@ reference: native identity adapter
 relationship: original
 -/
 def opaque_record_projection : Prop :=
-  ∀ (I : cleanStructure_Endpoints_2512a023e0474ce195ac),
-  ((@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» ((cleanNotation_opaque_endpoints_d1fd4290aaef6a02d3f2 (I)))) = (@cleanStructure_Endpoints_2512a023e0474ce195ac.«lower» (I)))
+  ∀ (I : _root_.cleanStructure_Endpoints_7a6ba0b879274641120c),
+  ((@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» ((_root_.cleanNotation_opaque_endpoints_df879bc887dc13a99748 (I)))) = (@_root_.cleanStructure_Endpoints_7a6ba0b879274641120c.«lower» (I)))
 
 /--
 source: topology
@@ -250,9 +250,9 @@ reference: dependent constructor projection
 relationship: original
 -/
 def computed_dependent_field : Prop :=
-  ∀ (X : Type),
-  ∀ (P : cleanStructure_BasedPath_af4022cf2eeed1e2d1ab (X)),
-  ((@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«path» (X) (P)) = (@cleanStructure_BasedPath_af4022cf2eeed1e2d1ab.«path» (X) (P)))
+  ∀ (X : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ (P : _root_.cleanStructure_BasedPath_70f574d7589934963ee1 (X)),
+  ((@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«path» (X) (P)) = (@_root_.cleanStructure_BasedPath_70f574d7589934963ee1.«path» (X) (P)))
 
 end CleanStatements
 

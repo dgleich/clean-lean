@@ -390,3 +390,13 @@ exact targets and seven proofs cover that slice; the production files here and
 the larger homology/well-group modules are not yet migrated. The agreement harness
 now explicitly imports Mathlib.Topology.Continuous for continuous_def.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Working-compiler topology binding checks
+
+The [binding migration report](binding-migration.md) records 69 exact native
+targets and 21 proofs across the foundation, bundle and indexed-type studies,
+plus 23 focused Python tests. These checks run on the integrated compiler;
+declared-operator integration and broader native-study migration remain pending.
+:::

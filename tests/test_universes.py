@@ -45,9 +45,13 @@ class FixedUniverses(unittest.TestCase):
         self.assertEqual(Expressions(e,local).parse('identity diagram(X)').type,Type('TopologicalDiagram'))
         with self.assertRaisesRegex(CleanError,'index mismatch'):
             Expressions(e,local).parse('topological diagram(X,Y,identity continuous map(X))')
-    def test_higher_universe_does_not_enable_type_fields(self):
+    def test_carrier_field_requires_sufficient_universe(self):
         e=Environment();load_module(ROOT/'library/topology/spaces.clean',e)
-        with self.assertRaisesRegex(CleanError,'Carrier-type fields'):
-            declare('Structure Carrier():',['Universe: 1','Let carrier: Type','Constructor: carrier'],e)
+        declare('Structure Carrier():',['Universe: 1','Let carrier: Type','Constructor: carrier'],e)
+        self.assertEqual(e.data['types']['Carrier']['universe'],1)
+        self.assertEqual(e.structures['Carrier']['fields'],[('carrier',Type('Type'))])
+        with self.assertRaisesRegex(CleanError,'exceeds declared Universe 0'):
+            declare('Structure SmallCarrier():',['Universe: 0','Let carrier: Type','Constructor: small carrier'],e)
+        self.assertNotIn('SmallCarrier',e.structures)
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
