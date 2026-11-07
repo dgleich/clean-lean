@@ -26,7 +26,7 @@ class FixedUniverses(unittest.TestCase):
         type_declaration('Type Higher():',['Universe: 2','Means: Type 1','Render latex: H'],e)
         self.assertIn(': Type 2 :=\n  Type 1',next(iter(e.notation_definitions.values())))
     def test_alias_rejects_universe(self):
-        with self.assertRaisesRegex(CleanError,'alias accepts only'):
+        with self.assertRaisesRegex(CleanError,'Type alias accepts'):
             type_declaration('Type T():',['Equals: Real','Universe: 0'],Environment())
     def test_default_structure_target_is_preserved(self):
         a,b=Environment(),Environment()

@@ -84,8 +84,10 @@ additional local LaTeX check and the four native targets passed in the final lea
 run. The isolated compiler also regenerated all 92 curated corpus proof fixtures,
 and Lean checked the resulting file. The [LaTeX specimen](Prototype.pdf) was
 compiled twice and visually inspected. These bounded checks do not replace the
-full study migration. Both the older main full-suite process and a separate full-suite run of this
-isolated compiler remain pending; neither is counted as a pass.
+full study migration. The older main full suite completed with 724 passing tests
+and one outdated diagnostic expectation, subsequently corrected and checked
+separately. The isolated compiler's full-suite run remains pending and is not
+counted as a pass.
 
 This representation distinguishes locals from module type constructors and
 retains the existing selected Lean binder identity. It is **not** a complete

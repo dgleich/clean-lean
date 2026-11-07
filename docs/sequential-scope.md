@@ -62,7 +62,11 @@ snapshot reuse and independence, document-wide result-name collision, nested imp
 result. Together with module, bibliography, Context and literate tests, 63 tests pass.
 An additional 161 dependent-type, structure, alias and evidence tests pass. The
 92-proof corpus, interval-basis proofs and isolated operator prototype also recheck.
-The current full Python suite remains pending.
+The subsequent full Python run completed 725 tests in 6875.593 seconds: 724 passed,
+and one failed because the alias/universe rejection test still expected an older
+diagnostic string. The compiler rejected the invalid declaration as required.
+The stale expectation was corrected and its focused universe test group rerun;
+this is not a claim of a second complete 725-test run.
 
 The [study](../studies/sequential-scope/README.md) checks the source item sequence,
 expression trees, four exact Lean targets and two proofs. Its absolute-value theorem
