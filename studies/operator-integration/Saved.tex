@@ -1,0 +1,30 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{saved equality}\cleanattribution{[Bound operator study, fixed operator selection]}
+Let $n$ be a natural number.
+Assume $n=n$ (\texttt{h}).
+Let $q = \operatorname{retain\ equation}(n, h)$.
+Then \[n=n.\]
+\end{cleanresult}
+
+\begin{cleanresult}{implication application}\cleanattribution{[Bound operator study, implication authored as a quantified condition]}
+Let $P$ and $Q$ be conditions.
+Assume $P\text{ implies }Q$ (\texttt{h}).
+Assume $P$ (\texttt{p}).
+Let $q = h(p)$.
+Then \[Q.\]
+\end{cleanresult}
+
+\begin{cleanresult}{saved quantified annotation}\cleanattribution{[Bound operator study, fixed operator inside a binder domain]}
+Let $n$ be a natural number.
+Assume $\left(\text{for every }v : \mathbb{R}^{n+n},\; v=v\right)$ (\texttt{h}).
+Let $q = \operatorname{keep\ quantified}(n, h)$.
+Then \[\left(\text{for every }v : \mathbb{R}^{n+n},\; v=v\right).\]
+\end{cleanresult}
+
+\paragraph{Grouping checks.}
+The operator and named negation forms have the same rendering:
+\[\text{not }\left(P\text{ implies }Q\right).\]
+A right-nested named sum preserves its parentheses:
+\[n+\left(n+n\right).\]
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -2008,6 +2008,34 @@
         "Full declaration identity/serialization and broader studies",
         "Main integration"
       ]
+    },
+    {
+      "id": "operator_binding_composition",
+      "status": "isolated-prototype",
+      "environment": "Eight patches through studies/operator-integration/prototype.patch; pinned Lean and Mathlib; explicit Dispatch fixture declarations; no numeric operands.",
+      "source": "A^B",
+      "expected_tree": [
+        "Operator",
+        "^",
+        [
+          "Local",
+          "A"
+        ],
+        [
+          "Local",
+          "B"
+        ]
+      ],
+      "expected_lean": "Selected root-qualified choose carrier binding applied to A and B; exact generated-name mapping in verify_dispatch.py.",
+      "checks": [
+        "studies/operator-integration/verify_prototype.py"
+      ],
+      "pending": [
+        "Production integration",
+        "Explicit foundation and numeric literal migration",
+        "Broader exact-target and corpus migration",
+        "Overloaded generated-global collision fixtures"
+      ]
     }
   ]
 }

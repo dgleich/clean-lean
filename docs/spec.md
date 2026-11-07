@@ -920,3 +920,19 @@ constructors and projections. Local applications remain local. It checks both
 authored bodies and theorem uses against deliberate generated-name collisions;
 source grammar is unchanged and main integration remains pending.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Compose operator selection with binding identity
+
+The isolated [operator integration study](../studies/operator-integration/README.md)
+combines declared operators with the seven binding repairs. A concrete module type
+cannot match a same-spelled local carrier. Known sort mismatches reject only the
+candidate; incomplete checks and foreign dependent mismatches propagate. Selection
+requires exactly one applicable declaration, independent of candidate order.
+Retained ModuleCalls keep their selected root-qualified target and presentation.
+The neutral grammar still determines the parse before candidate checking.
+Twenty-six exact targets and four proofs cover this slice. Production integration,
+explicit foundation migration, numeric literals and broader operator/corpus
+oracles remain pending; earlier built-in regression counts do not apply here.
+:::

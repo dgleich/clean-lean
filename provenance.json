@@ -5812,6 +5812,90 @@
     "studies/qualified-globals/prototype.patch": {
       "origin": "llm-assisted",
       "mode": "manifest"
+    },
+    "studies/operator-integration/Saved.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/operator-integration/SavedVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/operator-integration/Saved.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/operator-integration/verify_saved.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/operator-integration/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/operator-integration/Dispatch.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/operator-integration/verify_dispatch.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/operator-integration/verify_prototype.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/operator-integration/prototype.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/operator-integration/DispatchVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/operator-integration/Specimen.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/operator-integration/Specimen.pdf": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
     }
   }
 }

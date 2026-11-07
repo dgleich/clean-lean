@@ -1,0 +1,103 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated operator/binding composition
+Import Lean Mathlib.Data.Real.Basic
+Source local:
+  Kind: other
+  Label: Bound operator study
+  Title: Declaration-scoped operator selection in conditions and annotations
+
+Type Type():
+  Means: Type
+  Render latex: \mathsf{{Type}}
+  Describe: a type
+  Describe plural: types
+Type Proposition():
+  Means: Prop
+  Render latex: condition
+  Describe: a condition
+  Describe plural: conditions
+Type Natural():
+  Means: Nat
+  Render latex: \mathbb{{N}}
+  Describe: a natural number
+  Describe plural: natural numbers
+Type Real():
+  Means: Real
+  Render latex: \mathbb{{R}}
+  Describe: a real number
+  Describe plural: real numbers
+Type Function(T: Type,U: Type):
+  Means: (T) → (U)
+  Render latex: {T}\to {U}
+Type Vector(n: Natural,T: Type):
+  Means: Fin n → T
+  Render latex: {T}^{{{n}}}
+
+Condition equal(x,y):
+  Let T: Type
+  Let x,y: T
+  Infix: =
+  From Lean: x=y
+  Render latex: {x}={y}
+
+Condition implication(p: Proposition,q: Proposition):
+  Infix: →
+  Holds when: for every (h: (p), q)
+  Render: {p} implies {q}
+
+Condition negation(p: Proposition):
+  Prefix: not
+  From Lean: ¬p
+  Render latex: \text{{not }}{p}
+
+Notation sum(x: Natural,y: Natural): Natural:
+  Infix: +
+  Means: x+y
+  Render latex: {x}+{y}
+
+Define retain equation(x,h):
+  Let T: Type
+  Let x: T
+  Let h: (x=x)
+  Returns: (x=x)
+  Equals: h
+
+Define keep quantified(n,h):
+  Let n: Natural
+  Let h: (for every (v: Vector((n+n),Real), equal(v,v)))
+  Returns: (for every (v: Vector((n+n),Real), equal(v,v)))
+  Equals: h
+
+-- These deliberately make freshly written natural equality/addition ambiguous.
+-- Earlier declarations must retain their already selected generic equality/sum.
+Condition natural equality(x: Natural,y: Natural):
+  Infix: =
+  From Lean: x=y
+  Render latex: {x}={y}
+Define another sum(x: Natural,y: Natural): Natural:
+  Infix: +
+  Equals: x+y
+  Render latex: {x}+{y}
+
+Result saved equality:
+  Attribution: local; fixed operator selection; original
+  Let n: Natural
+  Assume h: equal(n,n)
+  Let q = retain equation(n,h)
+  Conclude: equal(n,n)
+
+Result implication application:
+  Attribution: local; implication authored as a quantified condition; original
+  Let P,Q: Proposition
+  Assume h: P → Q
+  Assume p: P
+  Let q = h(p)
+  Conclude: Q
+
+Result saved quantified annotation:
+  Attribution: local; fixed operator inside a binder domain; original
+  Let n: Natural
+  Assume h: for every (v: Vector((sum(n,n)),Real), equal(v,v))
+  Let q = keep quantified(n,h)
+  Conclude: for every (v: Vector((sum(n,n)),Real), equal(v,v))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -1,0 +1,533 @@
+--- a/grammar/clean.lark
++++ b/grammar/clean.lark
+@@ -85,7 +85,7 @@
+ DECL: /(?i:Notation|Define|Condition)(?!\w)/
+ LET: /(?i:Let)(?!\w)/
+ DEFINE: /(?i:Define)(?!\w)/
+-FIELD: /(?i:Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
++FIELD: /(?i:Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
+ IFF: "↔"
+ IMPLIES: "→"
+ OR: /(?i:or)(?=\W)/ | "∨"
+@@ -124,7 +124,7 @@
+ ATTRIBUTION_LINE: /(?i:Attribution)[ ]*:[^\n]*/
+ CONCLUDE_LINE: /(?i:Conclude)(?!\w)[^\n]*/
+ EXPR_FIELD_LINE: /(?i:Equals|Holds when)[ ]*:[^\n]*/
+-FIELD_LINE: /(?i:Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
++FIELD_LINE: /(?i:Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
+ EXPR_LINE: /\S[^\n]*/
+ _NL: /\n[ ]*/
+ %declare _INDENT _DEDENT
+--- a/cleanlang/indices.py
++++ b/cleanlang/indices.py
+@@ -56,7 +56,7 @@
+             from .type_values import substitute
+             return substitute(node,bindings,env,locals)
+         if node[0]=='Local' and node[1] in bindings:return reference(bindings[node[1]])
+-        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],node[3]]
++        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],*node[3:]]
+         if node[0]=='Call':
+             args=[replace(a) for a in node[2]]
+             value=bindings.get(node[1])
+--- a/cleanlang/modules.py
++++ b/cleanlang/modules.py
+@@ -156,7 +156,7 @@
+     if list(types)!=params or 'returns' not in values:
+         raise CleanError('Declare parameters in header order and provide Returns')
+     implementations = set(values) & ({'equals', 'from lean'} if authored else {'means'})
+-    allowed = {'returns', 'render', 'render latex'} | ({'equals', 'from lean', 'attribution'} if authored else {'means'})
++    allowed = {'returns', 'render', 'render latex', 'infix', 'prefix'} | ({'equals', 'from lean', 'attribution'} if authored else {'means'})
+     if len(implementations) != 1 or values.keys() - allowed:
+         raise CleanError('Provide exactly one Equals or From Lean' if authored else 'Provide Means')
+     renders = set(values)&{'render','render latex'}
+@@ -164,6 +164,10 @@
+         raise CleanError('Provide exactly one Render or Render latex field')
+     result = env.type(values['returns'],local)
+     dependent=any(has_value_indices(t) for t in [result,*types.values()]) or Type('Type') in types.values()
++    for fixity in ('infix','prefix'):
++        if fixity in values:
++            from .operator_bindings import validate
++            validate(values[fixity],len(params),fixity)
+     implementation = next(iter(implementations))
+     expression = None
+     if implementation == 'equals':
+@@ -198,6 +202,11 @@
+         from .dependent_functions import occurs
+         if not any(occurs(t,n) for t in types.values()):
+             raise CleanError('Implicit parameter is absent from argument types: '+n)
++    bound_body=None
++    if authored and expression:
++        from .bound_calls import bind as bind_calls,UnclosedBinding
++        try:bound_body=bind_calls(expression.tree,env,local,binders=True)
++        except UnclosedBinding:pass
+     key=add_definition(env,'cleanDefine_' if authored else 'cleanNotation_',name,body)
+     env.data['functions'][name]={'params':[pattern(types[p]) for p in params], 'returns':pattern(result),
+         'native_binding':key,'lean':'_root_.'+key+''.join(' ({'+str(i)+'})' for i in range(len(params))), 'latex':latex,
+@@ -208,14 +217,16 @@
+         env.data['functions'][name]['dependent_signature']={
+             'implicit':list(implicit.items()),'parameters':list(types.items()),
+             'result':result,'key':key}
+-    bound_body=None
+-    if authored and expression:
+-        from .bound_calls import bind as bind_calls,UnclosedBinding
+-        try:bound_body=bind_calls(expression.tree,env,local,binders=True)
+-        except UnclosedBinding:pass
++    from .operator_bindings import scope_snapshot
++    operator_scope=scope_snapshot(env)
++    for fixity in ('infix','prefix'):
++        if fixity in values:
++            from .operator_bindings import declare
++            declare(env,values[fixity],name,fixity)
+     if authored:
+         env.definitions[name] = {'key': key, 'parameters': list(local), 'implementation': implementation,
+             'tree': expression.tree if expression else None, 'bound_tree':bound_body,
++            'operator_scope':operator_scope,
+             'body': values[implementation], 'returns': str(result), 'attribution': attribution}
+
+
+@@ -233,7 +244,7 @@
+     parameters=', '.join(n+(': '+t if t is not None else '') for n,t in parameter_fields)
+     values = fields_map([f for f in fields if not re.match(r'Let\b',f,re.I)])
+     if 'returns' in values: raise CleanError('Condition already specifies a condition result; omit Returns')
+-    if set(values) - {'holds when','from lean','assumption name','render','render latex','attribution'}:
++    if set(values) - {'holds when','from lean','assumption name','render','render latex','attribution','infix','prefix'}:
+         raise CleanError('Unknown Condition field')
+     if len(set(values) & {'holds when','from lean'}) != 1:
+         raise CleanError('Condition requires exactly one Holds when or From Lean')
+--- a/cleanlang/structures.py
++++ b/cleanlang/structures.py
+@@ -48,6 +48,8 @@
+         return Expressions(env,locals).elaborate(tree[2][position])
+     definition=env.definitions.get(tree[1])
+     if not definition or definition['implementation']!='equals':return None
++    from .operator_bindings import scope_unchanged
++    if not scope_unchanged(env,definition) and not (tree[0]=='ModuleCall' and definition.get('bound_tree') is not None):return None
+     signature=env.data['functions'][tree[1]]['signature_tree']
+     parameters=signature[2]
+     if any(p[3]=='implicit' for p in parameters):return None
+@@ -60,7 +62,7 @@
+             from .type_values import substitute
+             return substitute(node,{n:Expressions(env,locals).elaborate(t) for n,t in bindings.items()},env,locals)
+         if node[0]=='Local':return bindings.get(node[1],node)
+-        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],node[3]]
++        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],*node[3:]]
+         if node[0]=='Call':
+             args=[replace(a) for a in node[2]]
+             if node[1] in bindings:
+--- a/cleanlang/syntax.py
++++ b/cleanlang/syntax.py
+@@ -62,6 +62,9 @@
+     """Canonical, fully grouped source for binder-free index expressions."""
+     from .core import CleanError
+     kind=tree[0]
++    if kind=='ModuleCall' and len(tree)>4:
++        from .bound_calls import source_operator
++        return source_operator(tree,expression_spelling)
+     if kind in ('Local','Decimal'):return tree[1]
+     if kind=='TypeValue':return 'type('+tree[1]+')'
+     if kind in ('Call','ModuleCall'):return tree[1]+'('+','.join(map(expression_spelling,tree[2]))+')'
+@@ -244,6 +247,9 @@
+     """Canonical source for scoped condition expressions; no environment lookup."""
+     from .core import CleanError
+     kind=tree[0]
++    if kind=='ModuleCall' and len(tree)>4:
++        from .bound_calls import source_operator
++        return source_operator(tree,condition_spelling)
+     if kind in ('Local','Decimal'):return tree[1]
+     if kind=='TypeValue':return 'type('+tree[1]+')'
+     if kind in ('Call','ModuleCall'):return tree[1]+'('+','.join(map(condition_spelling,tree[2]))+')'
+--- a/cleanlang/beta_indices.py
++++ b/cleanlang/beta_indices.py
+@@ -31,7 +31,7 @@
+                         from .type_values import substitute as replace_type
+                         return replace_type(body,{name:Expressions(environment,locals).elaborate(actual)},environment,locals)
+                     if body[0]=='Local':return actual if body[1]==name else body
+-                    if body[0]=='ModuleCall':return [body[0],body[1],[substitute(a) for a in body[2]],body[3]]
++                    if body[0]=='ModuleCall':return [body[0],body[1],[substitute(a) for a in body[2]],*body[3:]]
+                     if body[0]=='Call':
+                         arguments=[substitute(a) for a in body[2]]
+                         if body[1]==name:
+@@ -44,7 +44,7 @@
+                     return body
+                 return reduce(substitute(function[3]))
+             return ['Apply',function,args]
+-        if tree[0]=='ModuleCall':return [tree[0],tree[1],[reduce(a) for a in tree[2]],tree[3]]
++        if tree[0]=='ModuleCall':return [tree[0],tree[1],[reduce(a) for a in tree[2]],*tree[3:]]
+         if tree[0]=='Call':return ['Call',tree[1],[reduce(a) for a in tree[2]]]
+         if tree[0]=='Projection':return ['Projection',reduce(tree[1]),tree[2]]
+         if tree[0]=='Operator':return ['Operator',tree[1],reduce(tree[2]),reduce(tree[3])]
+--- a/cleanlang/quantified_beta.py
++++ b/cleanlang/quantified_beta.py
+@@ -24,7 +24,7 @@
+             body=walk(tree[3],{**scope,tree[1]:value})
+             return [kind,tree[1],tree[2],body]
+         if kind=='Lambda':return tree
+-        if kind=='ModuleCall':rebuilt=[kind,tree[1],[walk(a,scope) for a in tree[2]],tree[3]]
++        if kind=='ModuleCall':rebuilt=[kind,tree[1],[walk(a,scope) for a in tree[2]],*tree[3:]]
+         elif kind=='Call':rebuilt=[kind,tree[1],[walk(a,scope) for a in tree[2]]]
+         elif kind=='Apply':rebuilt=[kind,walk(tree[1],scope),[walk(a,scope) for a in tree[2]]]
+         elif kind=='Projection':rebuilt=[kind,walk(tree[1],scope),tree[2]]
+--- a/cleanlang/conditions.py
++++ b/cleanlang/conditions.py
+@@ -9,6 +9,9 @@
+ def source_expression(tree):
+     """Canonical label spelling from normalized expression trees; no target-text parsing."""
+     kind=tree[0]
++    if kind=='ModuleCall' and len(tree)>4:
++        from .bound_calls import source_operator
++        return source_operator(tree,source_expression)
+     if kind=='Local': return tree[1]
+     if kind=='TypeValue': return 'type('+tree[1]+')'
+     if kind=='Decimal': return tree[1].lstrip('0') or '0'
+--- /dev/null
++++ b/cleanlang/operator_bindings.py
+@@ -0,0 +1,113 @@
++# generated: gpt-6 2026-11-07 role=assisted; isolated prototype
++import re
++from dataclasses import replace
++from .core import CleanError,SignatureMismatch,NUM,Type,LocalType,split,Expressions
++ALIASES={'!=':'≠','<=':'≤','>=':'≥','and':'∧','or':'∨'}
++TOKENS={'↔','→','∨','∧','=','≠','<','>','≤','≥','∈','⊆','∣','+','-','∪','∩','*','/','^'}
++def token(text,fixity='infix'):
++    if fixity=='prefix':
++        result='¬' if text.lower()=='not' else text
++        if result not in {'-','¬'}:raise CleanError('Prefix requires one supported operator token')
++        return result
++    result=ALIASES.get(text.lower(),text)
++    if result not in TOKENS:raise CleanError('Infix requires one supported operator token')
++    return result
++
++def validate(text,arity,fixity='infix'):
++    token(text,fixity)
++    expected=1 if fixity=='prefix' else 2
++    if arity!=expected:raise CleanError(fixity.title()+' requires exactly '+('one explicit operand' if expected==1 else 'two explicit operands'))
++
++def declare(env,text,name,fixity='infix'):
++    op=token(text,fixity)
++    attribute='prefix_overloads' if fixity=='prefix' else 'operator_overloads'
++    if not hasattr(env,attribute):setattr(env,attribute,{})
++    getattr(env,attribute).setdefault(op,[]).append(name)
++    env.data['functions'][name]['operator_presentation']=[fixity,text]
++
++def match(env,pattern,actual,bindings):
++    if pattern.startswith('$'):
++        if isinstance(actual,Type) and env.sort_level(actual)!=1:return False
++        if pattern in bindings:return bindings[pattern]==actual
++        bindings[pattern]=actual
++        return True
++    parsed=re.fullmatch(r'(\w+)(?:\((.*)\))?',pattern)
++    if parsed is None:raise CleanError('Invalid operator signature: '+pattern)
++    children=split(parsed[2] or '')
++    if not isinstance(actual,Type) or isinstance(actual,LocalType) or actual.name!=parsed[1] or len(actual.args)!=len(children):return False
++    for child,value in zip(children,actual.args):
++        if isinstance(value,Type) or child.startswith('$'):
++            if not match(env,child,value,bindings):return False
++        elif child!=value:return False
++    return True
++
++def apply(env,text,a,b,locals):
++    op=token(text)
++    if NUM in (a.type,b.type):raise CleanError('Operator numeral interpretation is not specified in this prototype')
++    result=select(env,op,[a,b],locals,getattr(env,'operator_overloads',{}))
++    result.operator_binding=(result.tree[1],env.data['functions'][result.tree[1]]['lean'],['infix',op])
++    result.tree=['Operator',op,a.tree,b.tree]
++    return result
++
++def apply_prefix(env,text,a,locals):
++    op=token(text,'prefix')
++    if a.type==NUM:raise CleanError('Operator numeral interpretation is not specified in this prototype')
++    result=select(env,op,[a],locals,getattr(env,'prefix_overloads',{}))
++    result.operator_binding=(result.tree[1],env.data['functions'][result.tree[1]]['lean'],['prefix',text])
++    result.tree=['Unary',text,a.tree]
++    return result
++
++def select(env,op,args,locals,overloads):
++    candidates=[];checked={}
++    for name in overloads.get(op,[]):
++        spec=env.data['functions'][name];bindings={}
++        if 'dependent_signature' in spec:
++            owner=object()
++            try:checked[name]=env.dependent_call(name,spec,args,dict(locals),mismatch_owner=owner)
++            except SignatureMismatch as error:
++                if error.owner is not owner:raise
++                continue
++            candidates.append(name)
++        elif all(match(env,formal,actual.type,bindings) for formal,actual in zip(spec['params'],args)):
++            candidates.append(name)
++    if not candidates:raise CleanError('No declared meaning for operator '+op)
++    if len(candidates)>1:raise CleanError('Ambiguous operator '+op+': '+', '.join(sorted(candidates)))
++    selected=candidates[0]
++    return checked[selected] if selected in checked else env.call(selected,args,locals)
++
++def scope_snapshot(env):
++    return tuple((fixity,tuple(sorted((op,tuple(sorted(env.data['functions'][name]['lean'].split()[0]
++                        for name in names))) for op,names in getattr(env,attribute,{}).items())))
++                 for fixity,attribute in [('infix','operator_overloads'),('prefix','prefix_overloads')])
++
++def scope_unchanged(env,definition):
++    return definition.get('operator_scope',scope_snapshot(env))==scope_snapshot(env)
++
++
++def present(env,name,args,result,presentation=None):
++    """One precedence-aware renderer for named, operator and stored adapter calls."""
++    spec=env.data['functions'][name]
++    presentation=presentation or spec.get('operator_presentation')
++    if presentation is None:return result
++    fixity,text=presentation
++    op=token(text,fixity)
++    if fixity=='prefix':
++        if len(args)!=1:raise CleanError('Bound prefix operator requires one operand')
++        precedence=7 if op=='-' else 5
++        rendered=[replace(args[0],tex=r'\left('+args[0].tex+r'\right)') if args[0].precedence<=precedence else args[0]]
++    else:
++        if len(args)!=2:raise CleanError('Bound infix operator requires two operands')
++        precedence=Expressions.PREC.get(op,5)
++        right_associative=op in ('^','→')
++        rendered=[]
++        for right,value in enumerate(args):
++            needs=value.precedence<precedence or value.precedence==precedence and bool(right)!=right_associative
++            rendered.append(replace(value,tex=r'\left('+value.tex+r'\right)') if needs else value)
++    result.tex=spec['latex'].format(*(a.tex for a in rendered))
++    result.precedence=precedence
++    return result
++
++
++def apply_bound(env,name,args,locals,presentation):
++    """Instantiate one retained adapter, preserving its original presentation."""
++    return present(env,name,args,env.call(name,args,locals),presentation)
+--- a/cleanlang/hygiene.py
++++ b/cleanlang/hygiene.py
+@@ -97,7 +97,7 @@
+         if kind=='Local':return mapping.get(node[1],node)
+         if kind=='Decimal':return node
+         if kind=='TypeValue':return ['TypeValue',annotation(node[1],mapping,callheads)]
+-        if kind=='ModuleCall':return [kind,node[1],[expr(a,mapping,callheads) for a in node[2]],node[3]]
++        if kind=='ModuleCall':return [kind,node[1],[expr(a,mapping,callheads) for a in node[2]],*node[3:]]
+         if kind=='Call':
+             args=[expr(a,mapping,callheads) for a in node[2]]
+             if node[1] in mapping and (node[1] in callheads or is_call_head(node[1])):
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -5,6 +5,12 @@
+ from .attribution import Sources, compact, normalize
+
+ class CleanError(ValueError): pass
++
++class SignatureMismatch(CleanError):
++    def __init__(self,message,owner=None):
++        super().__init__(message)
++        self.owner=owner
++
+ ID = r'[^\W\d]\w*'
+
+ def comment_lines(text):
+@@ -155,6 +161,7 @@
+     inferred_args: tuple = field(default=(),compare=False,repr=False)
+     # Typed children are reusable only with a traversal-local freshness witness.
+     checked_args: object = field(default=None,compare=False,repr=False)
++    operator_binding: object = field(default=None,compare=False,repr=False)
+ @dataclass
+ class Clause:
+     kind: str
+@@ -386,7 +393,7 @@
+         if p.startswith('$'): return bind[p]
+         m=re.fullmatch(r'(\w+)(?:\((.*)\))?',p)
+         return Type(m[1],tuple(self.instantiate(a,bind) for a in split(m[2] or '')))
+-    def dependent_call(self, name, spec, args, locals):
++    def dependent_call(self, name, spec, args, locals, mismatch_owner=None):
+         """Ordered structural substitution; never ask Lean to choose an index."""
+         signature=spec['dependent_signature']
+         implicit=dict(signature['implicit'])
+@@ -396,7 +403,7 @@
+
+         def bind(n,value):
+             if n in substitutions and substitutions[n]!=value:
+-                raise CleanError('Inconsistent dependent argument: '+n)
++                raise SignatureMismatch('Inconsistent dependent argument: '+n,mismatch_owner)
+             substitutions[n]=value
+
+         def index(n,scope):
+@@ -432,10 +439,10 @@
+             from .dependent_functions import DependentFunctionType,substitute,fresh_source,fresh_bound
+             if isinstance(pattern,DependentFunctionType) or isinstance(actual,DependentFunctionType) and self.is_function_type(pattern):
+                 if not self.is_function_type(pattern) or not self.is_function_type(actual):
+-                    raise CleanError('Dependent function type mismatch')
++                    raise SignatureMismatch('Dependent function type mismatch',mismatch_owner)
+                 pconstructor=pattern.constructor if isinstance(pattern,DependentFunctionType) else pattern.name
+                 aconstructor=actual.constructor if isinstance(actual,DependentFunctionType) else actual.name
+-                if pconstructor!=aconstructor:raise CleanError('Dependent function type mismatch')
++                if pconstructor!=aconstructor:raise SignatureMismatch('Dependent function type mismatch',mismatch_owner)
+                 match(pattern.args[0],actual.args[0],scope)
+                 shared=fresh_source('clean_comparison_binder',self,locals,
+                                     {**substitutions,**actuals,**scope,'__pattern':pattern,'__actual':actual})
+@@ -457,25 +464,27 @@
+                     del locals[shared]
+             elif isinstance(pattern,DimensionIndex) and pattern.name in implicit:
+                 if implicit[pattern.name]!=NAT or not isinstance(actual,DimensionIndex):
+-                    raise CleanError('Expected a natural dimension: '+pattern.name)
++                    raise SignatureMismatch('Expected a natural dimension: '+pattern.name,mismatch_owner)
+                 bind(pattern.name,actual)
+             elif isinstance(pattern,ValueIndex):
+                 if replace(pattern,scope)!=actual:
+-                    raise CleanError('Dependent index mismatch: '+pattern.name)
++                    raise SignatureMismatch('Dependent index mismatch: '+pattern.name,mismatch_owner)
+             elif isinstance(pattern,Type):
+                 if isinstance(pattern,LocalType) and pattern.name in implicit:
+                     if implicit[pattern.name]!=Type('Type') or not isinstance(actual,Type) or self.is_proof_type(actual):
+-                        raise CleanError('Expected a type argument: '+pattern.name)
+-                    self.require_type_argument(actual)
++                        raise SignatureMismatch('Expected a type argument: '+pattern.name,mismatch_owner)
++                    level=self.sort_level(actual)
++                    if level!=1:
++                        raise SignatureMismatch('Type parameter requires Lean Type 0; got Type '+str(level-1),mismatch_owner)
+                     bind(pattern.name,actual)
+                 elif isinstance(pattern,LocalType) and pattern.name in substitutions:
+-                    if substitutions[pattern.name]!=actual:raise CleanError('Dependent type mismatch: '+pattern.name)
++                    if substitutions[pattern.name]!=actual:raise SignatureMismatch('Dependent type mismatch: '+pattern.name,mismatch_owner)
+                 else:
+                     expected=replace(pattern if isinstance(pattern,LocalType) else Type(pattern.name),scope)
+                     if not isinstance(actual,Type) or isinstance(expected,LocalType)!=isinstance(actual,LocalType) or (isinstance(expected,LocalType) and expected!=actual) or expected.name!=actual.name or len(pattern.args)!=len(actual.args):
+-                        raise CleanError(f'Expected {replace(pattern,scope)}, got {actual}')
++                        raise SignatureMismatch(f'Expected type constructor {expected.name} with {len(pattern.args)} arguments, got {actual}',mismatch_owner)
+                     for p,a in zip(pattern.args,actual.args):match(p,a,scope)
+-            elif replace(pattern,scope)!=actual:raise CleanError('Dimension mismatch')
++            elif replace(pattern,scope)!=actual:raise SignatureMismatch('Dimension mismatch',mismatch_owner)
+
+         for n,t in parameters:
+             match(t,actuals[n].type)
+@@ -493,9 +502,14 @@
+                            v.lean if isinstance(v,ValueIndex) else locals[v].lean if v in locals else v)
+         targets.extend(a.lean for a in args)
+         target='(@_root_.'+signature['key']+''.join(' ('+v+')' for v in targets)+')'
+-        return Expr(target,spec['latex'].format(*(a.tex for a in args)),replace(signature['result']),
++        from .operator_bindings import present
++        return present(self,name,args,Expr(target,spec['latex'].format(*(a.tex for a in args)),replace(signature['result']),
+                     tree=['Call',name,[a.tree for a in args]],
+-                    inferred_args=tuple((n,substitutions[n]) for n in implicit),checked_args=tuple(args))
++                    inferred_args=tuple((n,substitutions[n]) for n in implicit),checked_args=tuple(args)))
++
++    def operator(self,op,a,b,locals):
++        from .operator_bindings import apply
++        return apply(self,op,a,b,locals)
+
+     def call(self,name,args,locals=None):
+         if name not in self.data['functions']: raise CleanError('Unknown function: '+name)
+@@ -503,7 +517,8 @@
+         if len(args)!=len(s['params']): raise CleanError('Wrong number of arguments for '+name)
+         if 'dependent_signature' in s:return self.dependent_call(name,s,args,locals or {})
+         for p,a in zip(s['params'],args): self.match(p,a.type,bind)
+-        return Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]],inferred_args=tuple((p[1],bind['$'+p[1]]) for p in s.get('signature_tree',[None,None,[]])[2] if p[3]=='implicit'),checked_args=tuple(args))
++        from .operator_bindings import present
++        return present(self,name,args,Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]],inferred_args=tuple((p[1],bind['$'+p[1]]) for p in s.get('signature_tree',[None,None,[]])[2] if p[3]=='implicit'),checked_args=tuple(args)))
+
+ class Expressions:
+     # Presentation/continuation precedence; syntax precedence lives in grammar/clean.lark.
+@@ -541,14 +556,10 @@
+         if kind=='Projection':
+             from .structures import project
+             return project(self.reg,self._elaborate(tree[1]),tree[2],self.env)
+-        if kind=='Operator':return binary(tree[1],self._elaborate(tree[2]),self._elaborate(tree[3]))
++        if kind=='Operator':return self.reg.operator(tree[1],self._elaborate(tree[2]),self._elaborate(tree[3]),self.env)
+         if kind=='Unary':
+-            tok=tree[1];a=self._elaborate(tree[2])
+-            if a.type==Type('Type'):raise CleanError('Type-valued operands do not support unary operators')
+-            if tok!='-' and a.type!=PROP:raise CleanError('Not requires a proposition')
+-            inner=('('+a.tex+')') if a.precedence < 8 else a.tex
+-            tx=('-'+inner) if tok=='-' else (r'\text{not }('+a.tex+')')
+-            return Expr('('+('-' if tok=='-' else '¬')+a.lean+')',tx,a.type,7 if tok=='-' else 5,['Unary',tok,a.tree])
++            from .operator_bindings import apply_prefix
++            return apply_prefix(self.reg,tree[1],self._elaborate(tree[2]),self.env)
+         if kind=='ModuleCall':
+             from .bound_calls import elaborate
+             return elaborate(tree,self.reg,self.env,[self._elaborate(a) for a in tree[2]])
+--- a/cleanlang/conversion.py
++++ b/cleanlang/conversion.py
+@@ -58,6 +58,8 @@
+         return Expressions(env,locals).elaborate(tree[2][pos])
+     definition=env.definitions.get(tree[1])
+     if not definition or definition['implementation']!='equals':return None
++    from .operator_bindings import scope_unchanged
++    if not scope_unchanged(env,definition) and not (tree[0]=='ModuleCall' and definition.get('bound_tree') is not None):return None
+     parameters=env.data['functions'][tree[1]]['signature_tree'][2]
+     body=definition.get('bound_tree') or definition['tree']
+     bindings=dict(zip((p[1] for p in parameters if p[3]=='explicit'),
+@@ -93,14 +95,10 @@
+         if local is None or local.local_normal is None:return expression
+         return _normal_form(local.local_normal,env,locals) if local.local_expand and not shadowed_globals(env,locals) else local.local_normal
+     if kind in ('Decimal','Lambda','Forall','Exists'):return expression
+-    if kind=='Operator':
+-        if fresh and expression.checked_args is not None:
+-            a,b=expression.checked_args
+-            return binary(tree[1],_normal_form(a,env,locals,fresh=True),_normal_form(b,env,locals,fresh=True))
+-        return binary(tree[1],normal(tree[2]),normal(tree[3]))
++    if kind=='Operator':return env.operator(tree[1],normal(tree[2]),normal(tree[3]),locals)
+     if kind=='Unary':
+-        a=normal(tree[2]);op='-' if tree[1]=='-' else '¬'
+-        return Expr('('+op+a.lean+')',expression.tex,expression.type,tree=['Unary',tree[1],a.tree])
++        from .operator_bindings import apply_prefix
++        return apply_prefix(env,tree[1],normal(tree[2]),locals)
+     if kind=='Apply':
+         f=normal(tree[1]);args=[normal(a) for a in tree[2]]
+         result=Expr('('+f.lean+' '+args[0].lean+')',expression.tex,expression.type,
+@@ -152,6 +150,8 @@
+     else:checked=expression if reuse else env.call(name,args,locals)
+     definition=env.definitions.get(name)
+     if definition and definition['implementation']=='equals':
++        from .operator_bindings import scope_unchanged
++        if not scope_unchanged(env,definition) and not (kind=='ModuleCall' and definition.get('bound_tree') is not None):return checked
+         parameters=env.data['functions'][name]['signature_tree'][2]
+         implicit={p[1] for p in parameters if p[3]=='implicit'}
+         body=definition.get('bound_tree') or definition['tree']
+--- a/cleanlang/bound_calls.py
++++ b/cleanlang/bound_calls.py
+@@ -1,6 +1,6 @@
+ # generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+ """Internal module-call binding for checked computed indices."""
+-from .core import CleanError,Expr,texid
++from .core import CleanError,Expr,texid,Expressions
+
+
+ class UnclosedBinding(CleanError):
+@@ -17,7 +17,7 @@
+     kind=tree[0]
+     if kind=='ModuleCall':
+         if tree[3]!=identity(env,tree[1]):raise CleanError('Changed bound module callable: '+tree[1])
+-        return [kind,tree[1],[bind(a,env,locals,binders=binders) for a in tree[2]],tree[3]]
++        return [kind,tree[1],[bind(a,env,locals,binders=binders) for a in tree[2]],*tree[3:]]
+     if kind=='Call':
+         args=[bind(a,env,locals,binders=binders) for a in tree[2]]
+         if tree[1] in locals and env.is_function_type(locals[tree[1]].type):
+@@ -25,8 +25,12 @@
+         return ['ModuleCall',tree[1],args,identity(env,tree[1])]
+     if kind=='Projection':return [kind,bind(tree[1],env,locals,binders=binders),tree[2]]
+     if kind=='Apply':return [kind,bind(tree[1],env,locals,binders=binders),[bind(a,env,locals,binders=binders) for a in tree[2]]]
+-    if kind=='Operator':return [kind,tree[1],bind(tree[2],env,locals,binders=binders),bind(tree[3],env,locals,binders=binders)]
+-    if kind=='Unary':return [kind,tree[1],bind(tree[2],env,locals,binders=binders)]
++    if kind in ('Operator','Unary'):
++        checked=Expressions(env,locals).elaborate(tree)
++        if checked.operator_binding is None:raise CleanError('Missing checked operator binding')
++        name,target,presentation=checked.operator_binding
++        actuals=tree[2:] if kind=='Operator' else [tree[2]]
++        return ['ModuleCall',name,[bind(a,env,locals,binders=binders) for a in actuals],target,presentation]
+     if kind in ('Lambda','Forall','Exists') and binders:
+         # Domain binding remains source-based; reject embedded calls rather than
+         # silently closing a body while leaving its domain's calls unbound.
+@@ -45,6 +49,16 @@
+
+ def elaborate(tree,env,locals,arguments):
+     if tree[3]!=identity(env,tree[1]):raise CleanError('Changed bound module callable: '+tree[1])
+-    result=env.call(tree[1],arguments,locals)
+-    result.tree=['ModuleCall',tree[1],[a.tree for a in arguments],tree[3]]
++    if len(tree)>4:
++        from .operator_bindings import apply_bound
++        result=apply_bound(env,tree[1],arguments,locals,tree[4])
++    else:result=env.call(tree[1],arguments,locals)
++    result.tree=['ModuleCall',tree[1],[a.tree for a in arguments],*tree[3:]]
+     return result
++
++
++def source_operator(tree,spell):
++    fixity,text=tree[4]
++    args=tree[2]
++    if fixity=='prefix':return '('+text+' '+spell(args[0])+')'
++    return '('+spell(args[0])+' '+text+' '+spell(args[1])+')'
