@@ -5764,6 +5764,54 @@
     "studies/native-type-bindings/prototype.patch": {
       "origin": "llm-assisted",
       "mode": "manifest"
+    },
+    "studies/qualified-globals/PrototypeVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/qualified-globals/verify_bindings.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/qualified-globals/Statements.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/qualified-globals/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/qualified-globals/Definitions.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/qualified-globals/verify_prototype.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/qualified-globals/prototype.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
     }
   }
 }

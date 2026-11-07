@@ -1,0 +1,73 @@
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -492,7 +492,7 @@
+             targets.append(self.render_type(v,'lean',locals) if isinstance(v,Type) else
+                            v.lean if isinstance(v,ValueIndex) else locals[v].lean if v in locals else v)
+         targets.extend(a.lean for a in args)
+-        target='(@'+signature['key']+''.join(' ('+v+')' for v in targets)+')'
++        target='(@_root_.'+signature['key']+''.join(' ('+v+')' for v in targets)+')'
+         return Expr(target,spec['latex'].format(*(a.tex for a in args)),replace(signature['result']),
+                     tree=['Call',name,[a.tree for a in args]],
+                     inferred_args=tuple((n,substitutions[n]) for n in implicit),checked_args=tuple(args))
+--- a/cleanlang/modules.py
++++ b/cleanlang/modules.py
+@@ -200,7 +200,7 @@
+             raise CleanError('Implicit parameter is absent from argument types: '+n)
+     key=add_definition(env,'cleanDefine_' if authored else 'cleanNotation_',name,body)
+     env.data['functions'][name]={'params':[pattern(types[p]) for p in params], 'returns':pattern(result),
+-        'lean':key+''.join(' ({'+str(i)+'})' for i in range(len(params))), 'latex':latex,
++        'native_binding':key,'lean':'_root_.'+key+''.join(' ({'+str(i)+'})' for i in range(len(params))), 'latex':latex,
+         'signature_tree':['Signature', name,
+             [['Parameter', n, str(v.type), 'implicit' if n in implicit else 'explicit'] for n,v in local.items()],
+             str(result)]}
+--- a/cleanlang/structures.py
++++ b/cleanlang/structures.py
+@@ -91,7 +91,7 @@
+              for a in base.type.args]
+     for name,typ in spec['fields']:
+         result_type=substitute_type(typ,bindings,env,locals)
+-        target='(@'+spec['key']+'.«'+name+'»'+''.join(' ('+v+')' for v in targets)+' ('+base.lean+'))'
++        target='(@_root_.'+spec['key']+'.«'+name+'»'+''.join(' ('+v+')' for v in targets)+' ('+base.lean+'))'
+         tex=base.tex+r'.\mathrm{'+textext(name)+'}'
+         value=Expr(target,tex,result_type,tree=['Projection',base.tree,name])
+         if name==field:return value
+@@ -152,7 +152,7 @@
+     stem=''.join(c if c.isascii() and (c.isalnum() or c=='_') else f'_u{ord(c):x}_' for c in name)
+     key='cleanStructure_'+stem+'_'+hashlib.sha256((name+body).encode()).hexdigest()[:20]
+     if key in env.notation_definitions:raise CleanError('Generated structure identifier collision')
+-    spec={'args':kinds,'lean':key+''.join(' ({'+str(i)+'})' for i in range(len(params))),
++    spec={'args':kinds,'lean':'_root_.'+key+''.join(' ({'+str(i)+'})' for i in range(len(params))),
+           'latex':template(values.get('render latex',r'\operatorname{{'+name+'}}'),pnames)}
+     spec['parameter_names']=pnames
+     spec['parameter_types']=[t for _,t in params]
+@@ -169,16 +169,16 @@
+     result=env.type(name+'('+','.join(pnames)+')' if pnames else name,local)
+     allparams=params+members
+     csig=' '.join('(«'+n+'» : '+('Type' if t==Type('Type') else env.render_type(t,'lean',local))+')' for n,t in allparams)
+-    cbody=csig+' : '+env.render_type(result,'lean',local)+' :=\n  @'+key+'.mk'+''.join(' «'+n+'»' for n,_ in allparams)
++    cbody=csig+' : '+env.render_type(result,'lean',local)+' :=\n  @_root_.'+key+'.mk'+''.join(' «'+n+'»' for n,_ in allparams)
+     ckey=add_definition(env,'cleanConstructor_',constructor,cbody)
+     env.data['functions'][constructor]={'params':[str(t) for _,t in allparams], 'returns':str(result),
+-        'lean':ckey+''.join(' ({'+str(i)+'})' for i in range(len(allparams))),
++        'native_binding':ckey,'lean':'_root_.'+ckey+''.join(' ({'+str(i)+'})' for i in range(len(allparams))),
+         'latex':r'\operatorname{{'+textext(constructor).replace(' ',r'\ ')+'}}('+', '.join('{'+str(i)+'}' for i in range(len(allparams)))+')',
+         'dependent_signature':{'implicit':[],'parameters':allparams,'result':result,'key':ckey},
+         'signature_tree':['Constructor',constructor,name,[[n,str(t)] for n,t in allparams]]}
+     env.definitions[constructor]={'key':ckey,'parameters':list(local),'implementation':'generated constructor',
+                                   'tree':env.data['functions'][constructor]['signature_tree'],
+-                                  'body':'@'+key+'.mk','returns':str(result),'attribution':None}
++                                  'body':'@_root_.'+key+'.mk','returns':str(result),'attribution':None}
+     return key
+
+ # generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md
+--- a/tests/test_structures.py
++++ b/tests/test_structures.py
+@@ -39,7 +39,7 @@
+                             ['Projection',['Name','P'],'start'],['Projection',['Name','P'],'finish']]])
+     def test_projection_target(self):
+         self.assertEqual(self.expr('I.lower').type,Type('Real'))
+-        self.assertEqual(self.expr('I.lower').lean,'(@'+self.e.structures['Endpoints']['key']+'.«lower» (I))')
++        self.assertEqual(self.expr('I.lower').lean,'(@_root_.'+self.e.structures['Endpoints']['key']+'.«lower» (I))')
+     def test_dependent_field_type(self):
+         expected=self.e.type('Path(X,P.topology,P.start,P.finish)',self.local)
+         self.assertEqual(self.expr('P.path').type,expected)

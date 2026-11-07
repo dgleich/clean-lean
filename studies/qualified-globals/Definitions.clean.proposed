@@ -1,0 +1,44 @@
+-- generated: gpt-6 2026-11-07 role=assisted; generated-global collision study
+Import Lean Mathlib.Data.Real.Basic
+
+Type Type():
+  Means: Type
+  Render latex: \mathsf{{Type}}
+Type Scalar():
+  Means: Real
+  Render latex: \mathbb{{R}}
+Type Natural():
+  Means: Nat
+  Render latex: \mathbb{{N}}
+Type Vector(n: Natural,T: Type):
+  Means: Fin n → T
+  Render latex: {T}^{{{n}}}
+Type Function(T: Type,U: Type):
+  Means: (T) → (U)
+  Render latex: {T}\to {U}
+
+Define identity(x: Scalar): Scalar:
+  Equals: x
+
+Notation square(x: Scalar): Scalar:
+  Means: x*x
+  Render latex: {x}^2
+
+Define vector identity(n: Natural,v: Vector(n,Scalar)): Vector(n,Scalar):
+  Equals: v
+
+Structure Box():
+  Let value: Scalar
+  Constructor: box
+
+Structure VectorBundle():
+  Let size: Natural
+  Let value: Vector(size,Scalar)
+  Constructor: vector bundle
+
+Source local:
+  Kind: other
+  Label: Generated global identity study
+  Title: Generated declaration names cannot be captured by local parameters
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -1980,6 +1980,34 @@
         "Complete declaration identity, metadata migration and serialization",
         "Operator composition, literal policy and broader study checks"
       ]
+    },
+    {
+      "id": "qualified_generated_globals",
+      "status": "partial",
+      "environment": "Seven isolated patches through qualified globals; explicit scalar/vector and authored record modules; built-in operators retained.",
+      "source_fragment": "Let generated_identity_name: Function(Scalar,Scalar)\nLet x: Scalar\nConclude: identity(x)=x\n",
+      "expected_tree": [
+        "Call",
+        "identity",
+        [
+          [
+            "Local",
+            "x"
+          ]
+        ]
+      ],
+      "expected_lean": "The selected generated identity is referenced as _root_.<declaration>; its body is independently checked. A same-named local cannot capture callable, record, constructor or projection heads.",
+      "obligation": "Keep source resolution and argument order unchanged. Qualify generated global references at every emission site, including declaration bodies and dependent field types. Preserve local applications. Check deliberate collisions against independent elaborated targets.",
+      "checks": [
+        "studies/qualified-globals/verify_prototype.py",
+        "studies/qualified-globals/PrototypeVerified.lean"
+      ],
+      "pending": [
+        "Declared-operator composition and earlier type-oracle migration",
+        "Source-binder escaping, native import isolation and legacy metadata audit",
+        "Full declaration identity/serialization and broader studies",
+        "Main integration"
+      ]
     }
   ]
 }

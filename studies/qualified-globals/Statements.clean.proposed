@@ -1,0 +1,32 @@
+-- generated: gpt-6 2026-11-07 role=assisted; generated collision fixture
+Import "Definitions.clean.proposed"
+
+Define ignore shadow(cleanDefine_identity_d3c711f54a1b96c03825: Function(Scalar,Scalar),x: Scalar): Scalar:
+  Equals: identity(x)
+
+Result authored callable retains identity:
+  Attribution: local; authored callable collision; original
+  Let cleanDefine_identity_d3c711f54a1b96c03825: Function(Scalar,Scalar)
+  Let x: Scalar
+  Conclude: identity(x) = x
+
+Result native callable retains identity:
+  Attribution: local; notation collision; original
+  Let cleanNotation_square_5b28651c9960df914260: Function(Scalar,Scalar)
+  Let x: Scalar
+  Conclude: square(x) = x*x
+
+Result dependent callable retains identity:
+  Attribution: local; dependent callable collision; original
+  Let cleanDefine_vector_identity_7f6d6e51a2cebbc954e9: Function(k: Natural,Function(Vector(k,Scalar),Vector(k,Scalar)))
+  Let n: Natural
+  Let v: Vector(n,Scalar)
+  Conclude: vector identity(n,v) = v
+
+Result record type retains identity:
+  Attribution: local; record type collision; original
+  Let cleanStructure_Box_a69e0a7b39dc53d0cc1f: Type
+  Let b: Box
+  Conclude: b = b
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

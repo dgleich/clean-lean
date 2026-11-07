@@ -866,3 +866,16 @@ records the constructive rule, capture regression and oracle migration boundary.
 This does not establish native import isolation or finish the callable/record
 reference audit.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Qualify all generated callable and record references
+
+In the isolated [global-binding repair](../studies/qualified-globals/README.md),
+keep declaration-table keys bare and emit `_root_` references for their uses,
+including constructor bodies and dependent field types. Expose the callable key
+as metadata instead of recovering it from rendered text. Preserve local call
+semantics. Deliberate collisions must not change authored definition bodies or
+statement targets. Operator composition and source-binder escaping remain separate
+integration obligations.
+:::

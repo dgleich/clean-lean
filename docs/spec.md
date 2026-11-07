@@ -911,3 +911,12 @@ arrow interface remains structural, including proof-valued arguments. This is an
 isolated change to the specified Lean target, not a source grammar change or a
 claim that earlier inline-type oracles still pass.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The subsequent [qualified-global experiment](../studies/qualified-globals/README.md)
+extends absolute native references to generated callables, record types,
+constructors and projections. Local applications remain local. It checks both
+authored bodies and theorem uses against deliberate generated-name collisions;
+source grammar is unchanged and main integration remains pending.
+:::

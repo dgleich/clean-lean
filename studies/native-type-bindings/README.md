@@ -103,8 +103,9 @@ passing under this prototype. The local-type prototype's full suite continues
 separately and does not validate this additional change.
 
 Native imports are still gathered at the top of the emitted Lean file. This does
-not establish per-Clean-module native import/instance isolation. Generated
-callable and record references need the same root-qualification audit. Metadata
+not establish per-Clean-module native import/instance isolation. The subsequent [qualified-global experiment](../qualified-globals/README.md)
+extends the rule to generated callable and record references; it is not included
+in this six-patch stack. Metadata
 constructed outside authored declarations still has legacy fallback paths.
 Full declaration-owned identity, serialization, operator composition, literal
 interpretation, broader study validation and main integration remain open.
