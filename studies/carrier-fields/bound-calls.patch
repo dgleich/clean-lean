@@ -210,8 +210,8 @@ diff --git a/cleanlang/modules.py b/cleanlang/modules.py
 -            'tree': expression.tree if expression else None,
 +            'tree': expression.tree if expression else None, 'bound_tree':bound_body,
              'body': values[implementation], 'returns': str(result), 'attribution': attribution}
- 
- 
+
+
 diff --git a/cleanlang/quantified_beta.py b/cleanlang/quantified_beta.py
 --- a/cleanlang/quantified_beta.py
 +++ b/cleanlang/quantified_beta.py
