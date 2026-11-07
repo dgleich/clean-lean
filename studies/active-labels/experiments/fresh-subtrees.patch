@@ -14,7 +14,7 @@
                      tree=['Call',name,[a.tree for a in args]],
 -                    inferred_args=tuple((n,substitutions[n]) for n in implicit))
 +                    inferred_args=tuple((n,substitutions[n]) for n in implicit),checked_args=tuple(args))
- 
+
      def call(self,name,args,locals=None):
          if name not in self.data['functions']: raise CleanError('Unknown function: '+name)
 @@ -466,7 +467,7 @@
@@ -23,7 +23,7 @@
          for p,a in zip(s['params'],args): self.match(p,a.type,bind)
 -        return Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]],inferred_args=tuple((p[1],bind['$'+p[1]]) for p in s.get('signature_tree',[None,None,[]])[2] if p[3]=='implicit'))
 +        return Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]],inferred_args=tuple((p[1],bind['$'+p[1]]) for p in s.get('signature_tree',[None,None,[]])[2] if p[3]=='implicit'),checked_args=tuple(args))
- 
+
  class Expressions:
      # Presentation/continuation precedence; syntax precedence lives in grammar/clean.lark.
 --- a/cleanlang/conversion.py
@@ -31,7 +31,7 @@
 @@ -81,10 +81,10 @@
      if value.type!=expression.type:return None
      return _producer_field(value,field,env,locals)
- 
+
 -def _normal_form(expression,environment,locals):
 +def _normal_form(expression,environment,locals,*,fresh=False):
      env=environment
