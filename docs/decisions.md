@@ -685,3 +685,16 @@ lambda bodies opaque and retain the authored Lean term. Do not broaden ordinary
 computed indices or use extensional equality. Explicit choice wrappers expose
 Lean's noncomputable foundation; set-specific helpers are authored in Clean.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Keep checked-subtree reuse inside a fresh traversal
+
+Retain typed call arguments as nonsemantic metadata, trusted only when comparison
+has just elaborated the call in its current scope. Public entries and stored local
+definitions do not carry that freshness witness. Compare complete argument terms,
+types, inferred metadata and presentation before retaining a checked call; changed
+arguments take the ordinary recheck path. The freshness audit and preservation
+argument are in fresh-checked-subtrees.md. This replaces repeated work without
+adopting the rejected cross-scope tree-only reuse rule.
+:::

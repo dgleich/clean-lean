@@ -278,3 +278,24 @@ postfix targets/five proofs. The 92-statement corpus was regenerated and passes 
 kernel. The isolated generic generated Lean matches the tracked baseline apart
 from provenance comments. The current full suite remains pending.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Fresh-subtree reuse after scope audit
+
+The [audit](../../docs/fresh-checked-subtrees.md) traces the two freshness-producing
+paths and the conservative public/stored-value/reduction entries. Main now retains
+typed call children and reuses only freshly checked calls with unchanged complete
+arguments. It passes 285 focused tests plus 56 scoped-family/evidence tests.
+The twelve-call changed-scope regression requires at most twelve module-call
+checks, versus 78 in the prior compiler, and preserves the current type/target.
+Choice (seven targets/three proofs), postfix (eight/five), and generic subtype
+(ten/three) native checks pass. The proof corpus was regenerated and checked.
+
+The declaration-token-cache-only full suite was stopped as superseded, status 130,
+without a summary. One new current full suite is running. The isolated interval
+verifier uses the now-integrated subtree algorithm and remains live; its source
+has not changed. The older plain translation, earlier-proof verifier, and
+call-index-only experiment also remain live. No complete interval artifact or
+full-suite success is yet claimed.
+:::

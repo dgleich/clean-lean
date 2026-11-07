@@ -62,8 +62,8 @@ optimization has been integrated.
 
 ## Fresh checked subtrees prototype
 
-`fresh-subtrees.patch`, based on `9169d78`, is a separate unintegrated prototype.
-It is not the rejected tree-only cache. It retains typed call arguments as private
+`fresh-subtrees.patch`, based on `9169d78`, records the initially isolated prototype,
+now integrated after the audit below. It is not the rejected tree-only cache. It retains typed call arguments as private
 `Expr` metadata and introduces a private freshness flag in comparison traversal.
 Public comparison entry points and stored local-definition expansion start without
 that flag. The flag is set only for synchronous elaboration within the traversal
@@ -95,4 +95,16 @@ rule that earlier checked expressions do not become trusted merely because their
 source trees are unchanged. In particular, selected record fields can lose typed
 argument metadata and must use the recheck path. No new syntax, implicit proof
 selection, or change to authored emitted terms is intended by this prototype.
+:::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The fresh-subtree prototype has now been integrated after the
+[freshness-path audit](../../../docs/fresh-checked-subtrees.md). The historical
+patch above remains a record of the isolated candidate. Main passes 285 focused
+tests, including a twelve-call changed-scope regression: the previous implementation
+made 78 module-call checks, while the new rule requires at most twelve and preserves
+the current target/type. Choice, postfix and generic native checks pass. The full
+suite and interval stress run are still pending. The older tree-only and call-index
+cache patches remain unintegrated.
 :::

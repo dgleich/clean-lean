@@ -4948,6 +4948,10 @@
     "studies/active-labels/experiments/fresh-subtrees.patch": {
       "origin": "llm-assisted",
       "mode": "manifest"
+    },
+    "docs/fresh-checked-subtrees.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

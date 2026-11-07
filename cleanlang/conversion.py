@@ -81,10 +81,10 @@ def _producer_field(expression,field,env,locals):
     if value.type!=expression.type:return None
     return _producer_field(value,field,env,locals)
 
-def _normal_form(expression,environment,locals):
+def _normal_form(expression,environment,locals,*,fresh=False):
     env=environment
     elaborate=lambda tree:Expressions(env,locals).elaborate(tree)
-    def normal(tree):return _normal_form(elaborate(tree),env,locals)
+    def normal(tree):return _normal_form(elaborate(tree),env,locals,fresh=True)
     tree=expression.tree
     if not tree:return expression
     kind=tree[0]
@@ -121,12 +121,28 @@ def _normal_form(expression,environment,locals):
         if result.tree==['Projection',base.tree,tree[2]]:return result
         return _normal_form(result,env,locals)
     if kind!='Call':return expression
-    name=tree[1];args=[comparison_normal_form(elaborate(a),env,locals) for a in tree[2]]
+    name=tree[1]
+    # Only a synchronous elaboration in this traversal establishes freshness.
+    # Public entry points and stored local definitions never set this flag.
+    typed=expression.checked_args if fresh and expression.checked_args is not None else tuple(elaborate(a) for a in tree[2])
+    from .beta_indices import has_binder
+    args=[]
+    for argument in typed:
+        value=_normal_form(argument,env,locals,fresh=True)
+        args.append(argument if has_binder(value.tree) else value)
     if name in locals and env.is_function_type(locals[name].type):
         head=normal(['Local',name])
         return Expr('('+head.lean+' '+args[0].lean+')',expression.tex,expression.type,
                     tree=['Apply',head.tree,[a.tree for a in args]])
-    checked=env.call(name,args,locals)
+    def unchanged(a,b):
+        return (a.tree==b.tree and a.lean==b.lean and a.tex==b.tex and
+                a.precedence==b.precedence and a.type==b.type and
+                env.render_type(a.type,'lean',locals)==env.render_type(b.type,'lean',locals) and
+                a.inferred_args==b.inferred_args)
+    reuse=(fresh and expression.checked_args is not None and
+           len(args)==len(expression.checked_args) and
+           all(unchanged(a,b) for a,b in zip(args,expression.checked_args)))
+    checked=expression if reuse else env.call(name,args,locals)
     definition=env.definitions.get(name)
     if definition and definition['implementation']=='equals':
         parameters=env.data['functions'][name]['signature_tree'][2]

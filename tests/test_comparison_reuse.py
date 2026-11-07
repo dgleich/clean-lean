@@ -47,6 +47,23 @@ class ComparisonReuse(unittest.TestCase):
         self.bind('second','B')
         self.check_current_binding()
 
+    def test_nested_recheck_is_linear_and_uses_current_scope(self):
+        depth=12
+        source='retain('*depth+'x'+')'*depth
+        original=Expressions(self.env,self.local).parse(source)
+        self.bind('second','B')
+        call=self.env.call
+        calls=[]
+        def counted(*args,**kwargs):
+            calls.append(args[0])
+            return call(*args,**kwargs)
+        self.env.call=counted
+        try:normalized=comparison_normal_form(original,self.env,self.local)
+        finally:self.env.call=call
+        self.assertLessEqual(len(calls),depth)
+        self.assertEqual(normalized.lean,Expressions(self.env,self.local).parse(source).lean)
+        self.assertEqual(normalized.type,self.env.type('B',self.local))
+
     def test_same_tree_different_value(self):
         self.bind('second','A')
         self.check_current_binding()

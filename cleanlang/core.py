@@ -146,6 +146,8 @@ class Expr:
     local_expand: bool = False
     # Ordered, checked implicit arguments; comparison metadata, not source syntax.
     inferred_args: tuple = field(default=(),compare=False,repr=False)
+    # Typed children are reusable only with a traversal-local freshness witness.
+    checked_args: object = field(default=None,compare=False,repr=False)
 @dataclass
 class Clause:
     kind: str
@@ -458,7 +460,7 @@ class Environment:
         target='(@'+signature['key']+''.join(' ('+v+')' for v in targets)+')'
         return Expr(target,spec['latex'].format(*(a.tex for a in args)),replace(signature['result']),
                     tree=['Call',name,[a.tree for a in args]],
-                    inferred_args=tuple((n,substitutions[n]) for n in implicit))
+                    inferred_args=tuple((n,substitutions[n]) for n in implicit),checked_args=tuple(args))
 
     def call(self,name,args,locals=None):
         if name not in self.data['functions']: raise CleanError('Unknown function: '+name)
@@ -466,7 +468,7 @@ class Environment:
         if len(args)!=len(s['params']): raise CleanError('Wrong number of arguments for '+name)
         if 'dependent_signature' in s:return self.dependent_call(name,s,args,locals or {})
         for p,a in zip(s['params'],args): self.match(p,a.type,bind)
-        return Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]],inferred_args=tuple((p[1],bind['$'+p[1]]) for p in s.get('signature_tree',[None,None,[]])[2] if p[3]=='implicit'))
+        return Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]],inferred_args=tuple((p[1],bind['$'+p[1]]) for p in s.get('signature_tree',[None,None,[]])[2] if p[3]=='implicit'),checked_args=tuple(args))
 
 class Expressions:
     # Presentation/continuation precedence; syntax precedence lives in grammar/clean.lark.
