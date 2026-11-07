@@ -22,15 +22,22 @@ read-only-use symlink; Lean runs only on the generated fixture in the temporary
 copy. The patch intentionally omits generated_parser.py; the pinned generator
 produces it from the patched grammar.
 
-The prototype passes five independent canonical native targets and one proof,
+The prototype passes fifteen independent canonical native targets and two proofs,
 plus source-tree and dispatch checks. It verifies that renaming Scalar to Matrix
 does not activate mathematical behavior based on the new display name; ambiguity
 is rejected in either candidate order; missing declarations do not fall back to
 built-in meanings; an interrupted candidate is not discarded; invalid arity does
 not publish a partial callable; and operator rendering preserves grouping.
 
+[LinearAlgebra.clean.proposed](LinearAlgebra.clean.proposed) adds matrix/vector
+and scalar operations using inferred dimensions. [Statements.clean.proposed](Statements.clean.proposed)
+states their multiplication/application law. The native fixture checks all selected
+dimensions, adapters and application trees. Direct candidate mismatches are distinct
+from nested errors, which must propagate even when another candidate succeeds.
+
 This is an intermediate implementation step. It deliberately rejects unresolved
-numeric operands and dependent operator signatures. Unary operators, declared
+numeric operands. Dependent matching uses the existing bounded callable rule;
+proof-family and module-scope interactions still need a wider overload audit. Unary operators, declared
 fixity/precedence, isolated module scope, the full foundation migration, editor
 support and broad conformance remain unfinished. The main compiler's behavior and
 current validation jobs are unchanged by this study.

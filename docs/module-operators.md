@@ -55,16 +55,24 @@ this draft does not discharge the catalog's factorial/postfix examples.
    one fresh substitution map per candidate. Matching is structural and ordered;
    repeated variables must denote equal types/indices. No coercion, native proof
    search, implicit instance search or result-type preference selects a candidate.
-   The prototype permits first-order signatures supported by the existing generic
-   matcher and rejects declarations requiring the dependent-signature path.
-4. A structural mismatch returns false. Errors establishing a candidate's domain
-   or an interrupted analysis propagate; they are not treated as mismatches.
+   First-order signatures use structural pattern matching. Dependent signatures
+   use the existing checked dependent-call rule with a fresh substitution map and
+   a private copy of the caller scope. This includes its ordered dimension/index
+   inference and callable-evidence comparison; no new mathematical inference is
+   introduced. Keep a successful dependent result rather than checking it again
+   after selection.
+4. A structural mismatch returns false. A dependent match's direct operand
+   mismatch is tagged with that match's identity and may reject only that
+   candidate. A mismatch from nested elaboration has a different identity and
+   propagates. Unresolved inference, invalid domain/sort analysis and interruption
+   also propagate; they are not treated as mismatches.
    Thus one success plus one unfinished candidate is not unique success.
 5. Zero matching declarations is a binding error. Two or more is semantic
    ambiguity, even if their native bodies are definitionally equal. There is no
    first-match, specificity, import-order or display-name priority. Names are
    sorted only when formatting the ambiguity diagnostic.
-6. For the unique declaration, invoke the existing checked callable rule. Emit
+6. For the unique declaration, use its saved dependent-call result, or invoke
+   the existing checked callable rule once for a first-order signature. Emit
    that notation's generated Lean wrapper and its selected arguments. Failure
    at this stage is an error, with no fallback to another binding. Retain the
    original Operator source tree as provenance; do not turn binding into parsing.
@@ -94,20 +102,27 @@ or change the emitted Lean expression.
 [The study](../studies/module-operators/README.md) contains a patch, proposed Clean
 source and a driver that applies the patch to a temporary copy, regenerates the
 parser with strict checks, then runs independent binding and Lean-target fixtures.
-The prototype passes five canonical targets and one proof. Tests exercise missing
+The prototype passes fifteen canonical targets and two proofs. Tests exercise missing
 bindings, ambiguous bindings in both orders, invalid arity without partial
 publication, unequal operand types, grouping, literals rejected explicitly, and
 an interrupted competing candidate. A zero-argument type named Matrix, meaning
 Real, behaves exactly like the same declaration named Scalar; it does not trigger
-the old matrix-product code.
+the old matrix-product code. The additional Grid/Column module declares matrix
+multiplication, matrix-vector application, scalar multiplication and column
+equality. The statement `(A*B)*x = A*(B*x)` selects those meanings with explicit
+inferred dimensions and is proved using Mathlib's multiplication/application law.
+Wrong dimensions, two dependent matches and foreign/interrupted candidate errors
+have separate negative checks.
 
 Before main integration:
 
 - Specify and implement numeral interpretations/defaults and unary bindings.
   Fully remove the old numeric and operator paths; do not add an implicit legacy
   fallback when a declaration is missing.
-- Extend candidate matching to the needed dependent signatures with explicit
-  incomplete/error outcomes and independent matrix/vector/dimension oracles.
+- Complete the dependent-overload audit beyond the matrix/vector dimension
+  fixtures, including proof-family and captured-scope interactions under candidate
+  reordering. The existing bounded dependent-call profile remains the boundary;
+  general higher-order inference or universes are not claimed.
 - Specify module-owned binding identity and import scope. This prototype still
   uses the existing flattened module environment; it is not evidence of module
   independence or a finished one-semantic-space architecture.

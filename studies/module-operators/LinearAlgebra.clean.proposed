@@ -1,0 +1,61 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated prototype only
+Import "Operators.clean.proposed"
+Import Lean Mathlib.LinearAlgebra.Matrix.NonsingularInverse
+
+Type Natural():
+  Means: Nat
+  Render latex: \mathbb{{N}}
+
+Type Grid(m: Natural,n: Natural):
+  Means: Matrix (Fin m) (Fin n) Real
+  Render latex: \mathbb{{R}}^{{{m}\times {n}}}
+
+Type Column(n: Natural):
+  Means: Fin n → Real
+  Render latex: \mathbb{{R}}^{{{n}}}
+
+Notation grid product(A,B):
+  Let m,n,p: Natural
+  Let A: Grid(m,n)
+  Let B: Grid(n,p)
+  Returns: Grid(m,p)
+  Infix: *
+  Means: A*B
+  Render latex: {A}\,{B}
+
+Notation grid application(A,x):
+  Let m,n: Natural
+  Let A: Grid(m,n)
+  Let x: Column(n)
+  Returns: Column(m)
+  Infix: *
+  Means: Matrix.mulVec A x
+  Render latex: {A}\,{x}
+
+Notation scale grid(s,A):
+  Let m,n: Natural
+  Let s: Scalar
+  Let A: Grid(m,n)
+  Returns: Grid(m,n)
+  Infix: *
+  Means: s • A
+  Render latex: {s}\,{A}
+
+Notation scale column(s,x):
+  Let n: Natural
+  Let s: Scalar
+  Let x: Column(n)
+  Returns: Column(n)
+  Infix: *
+  Means: s • x
+  Render latex: {s}\,{x}
+
+Notation column equality(x,y):
+  Let n: Natural
+  Let x,y: Column(n)
+  Returns: Proposition
+  Infix: =
+  Means: x=y
+  Render latex: {x}={y}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

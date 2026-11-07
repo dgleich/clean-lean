@@ -35,7 +35,7 @@
      dependent=any(has_value_indices(t) for t in [result,*types.values()]) or Type('Type') in types.values()
 +    if 'infix' in values:
 +        from .operator_bindings import validate
-+        validate(values['infix'],len(params),dependent)
++        validate(values['infix'],len(params))
      implementation = next(iter(implementations))
      expression = None
      if implementation == 'equals':
@@ -51,7 +51,83 @@
              'tree': expression.tree if expression else None,
 --- a/cleanlang/core.py
 +++ b/cleanlang/core.py
-@@ -441,6 +441,10 @@
+@@ -5,6 +5,12 @@
+ from .attribution import Sources, compact, normalize
+
+ class CleanError(ValueError): pass
++
++class SignatureMismatch(CleanError):
++    def __init__(self,message,owner=None):
++        super().__init__(message)
++        self.owner=owner
++
+ ID = r'[^\W\d]\w*'
+
+ def comment_lines(text):
+@@ -330,7 +336,7 @@
+         if p.startswith('$'): return bind[p]
+         m=re.fullmatch(r'(\w+)(?:\((.*)\))?',p)
+         return Type(m[1],tuple(self.instantiate(a,bind) for a in split(m[2] or '')))
+-    def dependent_call(self, name, spec, args, locals):
++    def dependent_call(self, name, spec, args, locals, mismatch_owner=None):
+         """Ordered structural substitution; never ask Lean to choose an index."""
+         signature=spec['dependent_signature']
+         implicit=dict(signature['implicit'])
+@@ -340,7 +346,7 @@
+
+         def bind(n,value):
+             if n in substitutions and substitutions[n]!=value:
+-                raise CleanError('Inconsistent dependent argument: '+n)
++                raise SignatureMismatch('Inconsistent dependent argument: '+n,mismatch_owner)
+             substitutions[n]=value
+
+         def index(n):
+@@ -373,10 +379,10 @@
+             from .dependent_functions import DependentFunctionType,substitute,fresh_source,fresh_bound
+             if isinstance(pattern,DependentFunctionType) or isinstance(actual,DependentFunctionType) and self.is_function_type(pattern):
+                 if not self.is_function_type(pattern) or not self.is_function_type(actual):
+-                    raise CleanError('Dependent function type mismatch')
++                    raise SignatureMismatch('Dependent function type mismatch',mismatch_owner)
+                 pconstructor=pattern.constructor if isinstance(pattern,DependentFunctionType) else pattern.name
+                 aconstructor=actual.constructor if isinstance(actual,DependentFunctionType) else actual.name
+-                if pconstructor!=aconstructor:raise CleanError('Dependent function type mismatch')
++                if pconstructor!=aconstructor:raise SignatureMismatch('Dependent function type mismatch',mismatch_owner)
+                 match(pattern.args[0],actual.args[0])
+                 shared=fresh_source('clean_comparison_binder',self,locals,
+                                     {**substitutions,**actuals,'__pattern':pattern,'__actual':actual})
+@@ -396,25 +402,25 @@
+                     del locals[shared]
+             elif isinstance(pattern,DimensionIndex) and pattern.name in implicit:
+                 if implicit[pattern.name]!=NAT or not isinstance(actual,DimensionIndex):
+-                    raise CleanError('Expected a natural dimension: '+pattern.name)
++                    raise SignatureMismatch('Expected a natural dimension: '+pattern.name,mismatch_owner)
+                 bind(pattern.name,actual)
+             elif isinstance(pattern,ValueIndex):
+                 if replace(pattern)!=actual:
+-                    raise CleanError('Dependent index mismatch: '+pattern.name)
++                    raise SignatureMismatch('Dependent index mismatch: '+pattern.name,mismatch_owner)
+             elif isinstance(pattern,Type):
+                 if pattern.name in implicit and not pattern.args:
+                     if implicit[pattern.name]!=Type('Type') or not isinstance(actual,Type) or self.is_proof_type(actual):
+-                        raise CleanError('Expected a type argument: '+pattern.name)
++                        raise SignatureMismatch('Expected a type argument: '+pattern.name,mismatch_owner)
+                     self.require_type_argument(actual)
+                     bind(pattern.name,actual)
+                 elif not pattern.args and pattern.name in substitutions:
+-                    if substitutions[pattern.name]!=actual:raise CleanError('Dependent type mismatch: '+pattern.name)
++                    if substitutions[pattern.name]!=actual:raise SignatureMismatch('Dependent type mismatch: '+pattern.name,mismatch_owner)
+                 else:
+                     expected=replace(Type(pattern.name))
+                     if not isinstance(actual,Type) or expected.name!=actual.name or len(pattern.args)!=len(actual.args):
+-                        raise CleanError(f'Expected {replace(pattern)}, got {actual}')
++                        raise SignatureMismatch(f'Expected {replace(pattern)}, got {actual}',mismatch_owner)
+                     for p,a in zip(pattern.args,actual.args):match(p,a)
+-            elif replace(pattern)!=actual:raise CleanError('Dimension mismatch')
++            elif replace(pattern)!=actual:raise SignatureMismatch('Dimension mismatch',mismatch_owner)
+
+         for n,t in parameters:
+             match(t,actuals[n].type)
+@@ -441,6 +447,10 @@
                      tree=['Call',name,[a.tree for a in args]],
                      inferred_args=tuple((n,substitutions[n]) for n in implicit))
 
@@ -62,7 +138,7 @@
      def call(self,name,args,locals=None):
          if name not in self.data['functions']: raise CleanError('Unknown function: '+name)
          s=self.data['functions'][name]; bind={}
-@@ -482,7 +486,7 @@
+@@ -482,7 +492,7 @@
          if kind=='Projection':
              from .structures import project
              return project(self.reg,self._elaborate(tree[1]),tree[2],self.env)
@@ -84,11 +160,11 @@
          return Expr('('+op+a.lean+')',expression.tex,expression.type,tree=['Unary',tree[1],a.tree])
 --- a/cleanlang/operator_bindings.py
 +++ b/cleanlang/operator_bindings.py
-@@ -0,0 +1,58 @@
+@@ -0,0 +1,66 @@
 +# generated: gpt-6 2026-11-07 role=assisted; isolated prototype
 +import re
 +from dataclasses import replace
-+from .core import CleanError,NUM,Type,split,Expressions
++from .core import CleanError,SignatureMismatch,NUM,Type,split,Expressions
 +ALIASES={'!=':'≠','<=':'≤','>=':'≥','and':'∧','or':'∨'}
 +TOKENS={'↔','→','∨','∧','=','≠','<','>','≤','≥','∈','⊆','∣','+','-','∪','∩','*','/','^'}
 +def token(text):
@@ -96,10 +172,9 @@
 +    if result not in TOKENS:raise CleanError('Infix requires one supported operator token')
 +    return result
 +
-+def validate(text,arity,dependent):
++def validate(text,arity):
 +    token(text)
 +    if arity!=2:raise CleanError('Infix requires exactly two explicit operands')
-+    if dependent:raise CleanError('Dependent operator signatures are outside this prototype')
 +
 +def declare(env,text,name):
 +    op=token(text)
@@ -125,13 +200,6 @@
 +def apply(env,text,a,b,locals):
 +    op=token(text)
 +    if NUM in (a.type,b.type):raise CleanError('Operator numeral interpretation is not specified in this prototype')
-+    candidates=[]
-+    for name in getattr(env,'operator_overloads',{}).get(op,[]):
-+        spec=env.data['functions'][name];bindings={}
-+        if all(match(env,formal,actual.type,bindings) for formal,actual in zip(spec['params'],(a,b))):
-+            candidates.append(name)
-+    if not candidates:raise CleanError('No declared meaning for operator '+op)
-+    if len(candidates)>1:raise CleanError('Ambiguous operator '+op+': '+', '.join(sorted(candidates)))
 +    precedence=Expressions.PREC.get(op,Expressions.PREC.get({'∧':'and','∨':'or'}.get(op,op),5))
 +    right_associative=op in ('^','→')
 +    def grouped(value,right):
@@ -139,7 +207,23 @@
 +        if value.precedence<precedence or (value.precedence==precedence and equal_needs_group):
 +            return replace(value,tex=r'\left('+value.tex+r'\right)')
 +        return value
-+    result=env.call(candidates[0],[grouped(a,False),grouped(b,True)],locals)
++    args=[grouped(a,False),grouped(b,True)]
++    candidates=[];checked={}
++    for name in getattr(env,'operator_overloads',{}).get(op,[]):
++        spec=env.data['functions'][name];bindings={}
++        if 'dependent_signature' in spec:
++            owner=object()
++            try:checked[name]=env.dependent_call(name,spec,args,dict(locals),mismatch_owner=owner)
++            except SignatureMismatch as error:
++                if error.owner is not owner:raise
++                continue
++            candidates.append(name)
++        elif all(match(env,formal,actual.type,bindings) for formal,actual in zip(spec['params'],args)):
++            candidates.append(name)
++    if not candidates:raise CleanError('No declared meaning for operator '+op)
++    if len(candidates)>1:raise CleanError('Ambiguous operator '+op+': '+', '.join(sorted(candidates)))
++    selected=candidates[0]
++    result=checked[selected] if selected in checked else env.call(selected,args,locals)
 +    result.precedence=precedence
 +    result.tree=['Operator',op,a.tree,b.tree]
 +    return result

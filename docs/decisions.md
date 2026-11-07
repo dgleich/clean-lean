@@ -604,3 +604,17 @@ Do not retain built-in fallback behavior for missing binary bindings. The
 dependent-signature, precedence and module-scope gates. This is not main syntax
 or a completed one-semantic-space migration.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Dependent operator candidates
+
+Extend the isolated Infix prototype using the existing dependent-call matcher.
+Tag direct signature mismatches with the current candidate attempt, discard only
+those mismatches, and propagate nested or unfinished analysis. Preserve successful
+checked results through unique-candidate selection. Matrix/vector and scalar
+operations use declared signatures, with explicit inferred dimensions and no
+Matrix/Vector display-name dispatch. Fifteen exact targets and two proofs pass;
+literals, declared fixity, module-owned scope and the wider dependent-overload
+audit remain integration gates.
+:::

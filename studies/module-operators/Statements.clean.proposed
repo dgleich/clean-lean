@@ -1,0 +1,16 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated prototype only
+Import "LinearAlgebra.clean.proposed"
+Source mathlib:
+  Kind: other
+  Label: mathlib
+  Title: Pinned Mathlib matrix multiplication laws
+
+Result grid product application:
+  Attribution: mathlib; Matrix.mulVec_mulVec; adapted
+  Let m,n,p: Natural
+  Let A: Grid(m,n)
+  Let B: Grid(n,p)
+  Let x: Column(p)
+  Conclude: (A*B)*x = A*(B*x)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

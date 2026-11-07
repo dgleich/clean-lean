@@ -805,7 +805,7 @@ prototype with broad regression validation pending.
 
 The [module-operator migration draft](module-operators.md) proposes Infix metadata
 on existing Notation/Define declarations. Its parser and binder are exercised in
-an isolated patch, not enabled syntax. Literal policy, dependent candidate matching,
+an isolated patch, not enabled syntax. Literal policy, the wider dependent-overload audit,
 declared fixity and module scope remain integration gates; existing main-compiler
 operator dispatch is not presented as the completed architecture.
 :::
