@@ -852,3 +852,17 @@ source strings. Retain semantic annotations when reifying inferred types. This
 repairs the demonstrated counterexamples without claiming full module-owned
 identity, opaque native-template hygiene or main integration.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Bind opaque native type adapters once
+
+Prototype references to root-qualified generated type abbreviations rather than
+inlining their Means bodies. Check each adapter body independently as well as its
+uses. Abbreviation transparency preserves Mathlib instance synthesis. Keep the
+existing declared arrow protocol structural so its proof and higher-sort arguments
+do not pass through a Type-0-only helper. The [native binding study](../studies/native-type-bindings/README.md)
+records the constructive rule, capture regression and oracle migration boundary.
+This does not establish native import isolation or finish the callable/record
+reference audit.
+:::

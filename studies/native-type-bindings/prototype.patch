@@ -1,0 +1,121 @@
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -311,7 +311,16 @@
+               texid(a) if target=='latex' and not a.isdigit() else a for a in t.args]
+         if t.name not in self.data['types']:
+             return bindings[t.name].lean if target=='lean' and t.name in bindings else t.name
+-        return self.data['types'][t.name][target].format(*args)
++        spec=self.data['types'][t.name]
++        if target=='lean' and 'native_binding' in spec:
++            if spec['lean']!=spec['native_template']:
++                raise CleanError('Changed bound native type: '+t.name)
++            if self.notation_definitions.get(spec['native_binding'])!=spec['native_declaration']:
++                raise CleanError('Changed or missing bound native type declaration: '+t.name)
++            if self.is_function_type(t) and len(args)==2:
++                return '('+args[0]+') → ('+args[1]+')'
++            return '(_root_.'+spec['native_binding']+''.join(' ('+a+')' for a in args)+')'
++        return spec[target].format(*args)
+     def is_function_type(self,t):
+         if isinstance(t,LocalType):return False
+         if isinstance(t,ProofType):
+--- a/cleanlang/modules.py
++++ b/cleanlang/modules.py
+@@ -108,7 +108,11 @@
+     env.data['types'][name] = spec
+     signature=' '.join(f'({n} : '+('Type' if t==Type('Type') else 'Nat' if t==NAT else env.render_type(t,'lean'))+')' for n,t in zip(names,parameter_types))
+     sort=universe_sort(level) if level!=default_level else {'Prop':'Sort 1', 'Type':'Type 1'}.get(values['means'],'Type')
+-    add_definition(env, 'cleanType_', name, f'{signature} : {sort} :=\n  {values["means"]}')
++    key=add_definition(env, 'cleanType_', name, f'{signature} : {sort} :=\n  {values["means"]}')
++    env.notation_definitions[key]=env.notation_definitions[key].replace('noncomputable def ', 'noncomputable abbrev ', 1)
++    spec['native_binding']=key
++    spec['native_template']=spec['lean']
++    spec['native_declaration']=env.notation_definitions[key]
+
+
+ def signature_fields(header, fields):
+--- a/tests/test_type_expressions.py
++++ b/tests/test_type_expressions.py
+@@ -23,7 +23,8 @@
+   self.local['x']=Expr('x','x',Type('Real'),tree=['Local','x'])
+   for source in ['type(Big)','type(Type)','type((x = x))']:
+    with self.assertRaises(CleanError):self.expr(source)
+-  self.assertEqual(self.expr('type(Proposition)').lean,'Prop')
++  key=self.e.data['types']['Proposition']['native_binding']
++  self.assertEqual(self.expr('type(Proposition)').lean,f'(_root_.{key})')
+  def test_explicit_constructor(self):
+   declare('Structure Box(T: Type):',['Let value: T','Constructor: box value'],self.e)
+   self.local['x']=Expr('x','x',Type('Real'),tree=['Local','x'])
+@@ -102,8 +103,9 @@
+     self.expr(source)
+   self.local['U']=Expr('U','U',Type('Type'),tree=['Local','U'])
+   with self.assertRaisesRegex(CleanError,'Type-valued operands'):self.expr('U+U')
+-  self.assertEqual(self.expr('type(Real)=type(Complex)').lean,'(ℝ = ℂ)')
+-  self.assertEqual(self.expr('type(Real)!=type(Complex)').lean,'(ℝ ≠ ℂ)')
++  real=self.e.data['types']['Real']['native_binding'];complex=self.e.data['types']['Complex']['native_binding']
++  self.assertEqual(self.expr('type(Real)=type(Complex)').lean,f'((_root_.{real}) = (_root_.{complex}))')
++  self.assertEqual(self.expr('type(Real)!=type(Complex)').lean,f'((_root_.{real}) ≠ (_root_.{complex}))')
+  def test_computed_type_is_an_explicit_carrier(self):
+   declare('Structure Box(T: Type):',['Let value: T','Constructor: box value'],self.e)
+   notation('Define real carrier(): Type:', ['Equals: type(Real)'],self.e,authored=True)
+--- a/tests/test_dependent_functions.py
++++ b/tests/test_dependent_functions.py
+@@ -15,7 +15,8 @@
+         a=self.typ('Function(n: Natural,Vector(n,Real))')
+         b=self.typ('Function(k: Natural,Vector(k,Real))')
+         self.assertEqual(a,b);self.assertEqual(hash(a),hash(b))
+-        self.assertEqual(self.e.render_type(a,'lean'),'(clean_pi_bound_0 : ℕ) → (Fin clean_pi_bound_0 → ℝ)')
++        nat,vector,real=[self.e.data['types'][n]['native_binding'] for n in ['Natural','Vector','Real']]
++        self.assertEqual(self.e.render_type(a,'lean'),f'(clean_pi_bound_0 : (_root_.{nat})) → ((_root_.{vector} (clean_pi_bound_0) ((_root_.{real}))))')
+     def test_nested_alpha(self):
+         a=self.typ('Function(n: Natural,Function(m: Natural,Matrix(n,m,Real)))')
+         b=self.typ('Function(i: Natural,Function(j: Natural,Matrix(i,j,Real)))')
+@@ -52,7 +53,8 @@
+         local={'z':Expr('clean_pi_bound_0','z',NAT)}
+         t=self.typ('Function(n: Natural,Matrix(n,z,Real))',local)
+         self.assertEqual(t.bound,'clean_pi_bound_1')
+-        self.assertIn('Fin clean_pi_bound_0',self.e.render_type(t,'lean'))
++        matrix=self.e.data['types']['Matrix']['native_binding']
++        self.assertIn(matrix+' (clean_pi_bound_1) (clean_pi_bound_0)',self.e.render_type(t,'lean'))
+     def test_scope_and_module_gate(self):
+         for s in ['Matrix(n: Natural,Real)','Function(T: Type,T)',
+                   'Function(n: Natural,Function(n: Natural,Vector(n,Real)))',
+--- a/tests/test_sequential_scope.py
++++ b/tests/test_sequential_scope.py
+@@ -35,7 +35,8 @@
+   second=RESULT.replace('first','second').replace('  Let T: Type\n','')
+   rs,e=self.load(BASE+SOURCE+RESULT+LATE+second)
+   target=lean(rs,e,[])
+-  self.assertIn('∀ (x : T)',target);self.assertIn('∀ (x : Real)',target)
++  key=e.data['types']['T']['native_binding']
++  self.assertIn('∀ (x : T)',target);self.assertIn(f'∀ (x : (_root_.{key}))',target)
+   self.assertIsNot(rs[0].environment,rs[1].environment)
+  def test_adjacent_results_share_snapshot_not_mutable_loader(self):
+   rs,e=self.load(BASE+SOURCE+RESULT+RESULT.replace('first','second'))
+@@ -54,6 +55,7 @@
+   first,a=self.load(BASE+SOURCE+RESULT)
+   second,b=self.load(BASE+SOURCE+LATE+RESULT.replace('first','second').replace('  Let T: Type\n',''))
+   target=lean([*first,*second],combine([a,b]),[])
+-  self.assertIn('∀ (x : T)',target);self.assertIn('∀ (x : Real)',target)
++  key=b.data['types']['T']['native_binding']
++  self.assertIn('∀ (x : T)',target);self.assertIn(f'∀ (x : (_root_.{key}))',target)
+
+ # generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+--- a/tests/test_quantifiers.py
++++ b/tests/test_quantifiers.py
+@@ -56,12 +56,14 @@
+             self.parse('for every (x: Real,x=x)')
+     def test_dependent_domain_renaming(self):
+         e=self.parse("for every (n: Natural, for every (x: Vector(n,Real), x=x))")
+-        self.assertIn("Fin clean_bound_0",e.lean)
++        key=self.env.data['types']['Vector']['native_binding']
++        self.assertIn(key+' (clean_bound_0)',e.lean)
+         self.assertNotIn("Fin n",e.lean)
+
+     def test_type_template_constants_are_not_local_names(self):
+         e=self.parse('for every (Fin: Natural, for every (x: Vector(Fin,Real), x=x))')
+-        self.assertIn('Fin clean_bound_0',e.lean)
++        key=self.env.data['types']['Vector']['native_binding']
++        self.assertIn(key+' (clean_bound_0)',e.lean)
+         self.assertNotIn('clean_bound_0 clean_bound_0',e.lean)
+
+     def test_study_and_universe_binding(self):

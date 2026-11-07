@@ -1,0 +1,52 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated native type binding study
+Import Lean Mathlib.Data.Real.Basic
+
+Type Type():
+  Means: Type
+  Render latex: \mathsf{{Type}}
+  Describe: a type
+Type Proposition():
+  Means: Prop
+  Render latex: condition
+Type Natural():
+  Means: Nat
+  Render latex: \mathbb{{N}}
+Type NativeReal():
+  Means: Real
+  Render latex: \mathbb{{R}}
+Type NativeList(T: Type):
+  Means: List T
+  Render latex: \operatorname{{List}}({T})
+Type Function(T: Type,U: Type):
+  Means: (T) → (U)
+  Render latex: {T}\to {U}
+
+Source local:
+  Kind: other
+  Label: Native type binding study
+  Title: Native adapters retain their declaration scope
+
+Result native constant retains scope:
+  Attribution: local; constant capture regression; original
+  Let Real: Type
+  Let x: NativeReal
+  Conclude: x = x
+
+Result native constructor retains scope:
+  Attribution: local; constructor capture regression; original
+  Let List: Type
+  Let x: NativeList(NativeReal)
+  Conclude: x = x
+
+Result proof arrow remains structural:
+  Attribution: local; declared arrow interface; original
+  Let p,q: Proposition
+  Let f: Function((p),(q))
+  Conclude: f = f
+
+Result native instances remain available:
+  Attribution: local; reducible native binding; original
+  Let n: Natural
+  Conclude: n+n = n+n
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

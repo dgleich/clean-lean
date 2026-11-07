@@ -901,3 +901,13 @@ annotation reification and rendering. It changes no source grammar. Main remains
 unrepaired; native adapter scope, operator composition and broader identity
 conformance remain open.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The [native type binding experiment](../studies/native-type-bindings/README.md)
+emits root-qualified references to declaration-scoped reducible abbreviations
+instead of copying opaque type bodies into caller scopes. The declared structural
+arrow interface remains structural, including proof-valued arguments. This is an
+isolated change to the specified Lean target, not a source grammar change or a
+claim that earlier inline-type oracles still pass.
+:::

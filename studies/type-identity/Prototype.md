@@ -98,7 +98,9 @@ without checked templates still has a textual fallback; this is migration debt.
 
 Opaque native adapter templates may contain unqualified Lean names. Preventing a
 later Lean binder from capturing those names remains an independent requirement;
-these fixtures use the explicit `ℝ` template. Operator composition, full corpus
+these fixtures use the explicit `ℝ` template. A subsequent [native binding experiment](../native-type-bindings/README.md)
+addresses opaque type adapters with root-qualified abbreviations and changes the
+canonical target rule. It is not part of this five-patch stack. Operator composition, full corpus
 and study validation, universe polymorphism and main integration remain pending.
 No topology paper theorem is proved merely by repairing these type references.
 :::

@@ -972,6 +972,16 @@ Conclude: x = x</code></pre></section><section><h3>Required Lean target</h3><pre
 <p>The current translator instead uses <code>x : ℝ</code>. Both statements compile, but their canonical elaborated targets differ. The <a href="../studies/type-identity/README.md">type-identity study</a> supplies six failing semantic checks and an independent failing native-target check. Local references must be distinguished from module type heads in substitution, alias expansion and rendering; the complete internal identity mechanism remains unfinished.</p>
 <p>The <a href="../studies/type-identity/Prototype.md">isolated local-type repair</a> now passes these gates. It retains the local Lean binder, substitutes checked alias bodies, and reifies inferred module types as semantic annotations. Four additional exact targets and three proofs cover local and quantified carriers, aliases and reification. Main integration, declared-operator composition and native-adapter scope remain pending.</p>
 </section>
+<section class="mapping" id="native-type-bindings" data-status="proposed">
+<h2>Native type adapters and lexical scope</h2>
+<p><strong>Isolated experiment.</strong> A type adapter with <code>Means: Real</code> must retain the global real-number type even when a theorem declares a local named Real.</p>
+<div class="pair"><section><h3>Clean fragment</h3><pre><code>Let Real: Type
+Let x: NativeReal
+Conclude: x = x</code></pre></section><section><h3>Schematic Lean binding</h3><pre><code>noncomputable abbrev cleanType_NativeReal_id : Type := Real
+-- id stands for the generated identifier suffix.
+∀ (Real : Type) (x : _root_.cleanType_NativeReal_id), x = x</code></pre></section></div>
+<p>The <a href="../studies/native-type-bindings/README.md">native binding study</a> independently checks the adapter bodies and their uses. Root qualification prevents capture by local generated-name collisions; reducible abbreviations preserve instance synthesis. The existing declared arrow interface still emits structural arrows, including <code>p → q</code> for proof domains and codomains. Main integration and migration of earlier inline-type target oracles remain pending.</p>
+</section>
 <section class="mapping" id="carrier-fields" data-status="proposed">
 <h2>Structures with carrier fields</h2>
 <p><strong>Isolated prototype; not enabled in main.</strong> An ordered <code>Let carrier: Type</code> field with <code>Universe: 1</code> allows later fields to use that carrier. <code>P.carrier</code> in a type annotation selects the checked record projection; it does not insert a coercion.</p>

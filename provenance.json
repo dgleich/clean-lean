@@ -5716,6 +5716,54 @@
         "% ",
         ""
       ]
+    },
+    "studies/native-type-bindings/check_capture.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/native-type-bindings/PrototypeVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/native-type-bindings/verify_bindings.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/native-type-bindings/Statements.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/native-type-bindings/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/native-type-bindings/verify_prototype.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/native-type-bindings/prototype.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
     }
   }
 }

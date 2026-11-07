@@ -1957,6 +1957,29 @@
         "Name",
         "Real"
       ]
+    },
+    {
+      "id": "native_type_binding_scope",
+      "status": "partial",
+      "environment": "Six isolated patches through native type bindings, pinned Lean/Mathlib, explicit type adapters; built-in operators remain in this experiment.",
+      "source_fragment": "Type NativeReal():\n  Means: Real\n  Render latex: R\n\nLet Real: Type\nLet x: NativeReal\nConclude: x=x\n",
+      "expected_tree": [
+        "Name",
+        "NativeReal"
+      ],
+      "expected_lean": "The generated NativeReal abbreviation has body Real; the statement uses its _root_-qualified reference. Type arguments follow declaration order. The declared arrow interface emits a structural Pi/arrow from checked arguments.",
+      "obligation": "Prevent use-site capture of opaque native type bodies, including generated-global-name collisions. Preserve instance synthesis through reducible type bindings. Check independent native adapter bodies and statement targets. Retain proof-valued arrow arguments without textual substitution into native bodies.",
+      "checks": [
+        "studies/native-type-bindings/verify_prototype.py",
+        "studies/native-type-bindings/check_capture.py",
+        "studies/native-type-bindings/PrototypeVerified.lean"
+      ],
+      "pending": [
+        "Main integration and migration of prior inline-type exact oracles",
+        "Generated callable/record qualification and native import-scope audit",
+        "Complete declaration identity, metadata migration and serialization",
+        "Operator composition, literal policy and broader study checks"
+      ]
     }
   ]
 }
