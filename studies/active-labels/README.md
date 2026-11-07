@@ -31,7 +31,10 @@ rendering of these aliases remains a readability gap.
 
 Validation is in progress. Grammar/layout checks pass for all new declarations,
 and the support record and both maps have loaded. The full equivalence assembly
-has not yet returned a translation result. Python verifier/test files compile. `verify.py` specifies eleven independent canonical
+has not yet returned a translation result. The instrumented verifier terminated
+with exit status 139 (segmentation fault) during translation; no native checks or
+proofs completed in that run. Its cause is not established. The separate plain
+translation job remains active. Python verifier/test files compile. `verify.py` specifies eleven independent canonical
 body/type comparisons and one constructor-type comparison, plus four proof
 obligations. Its expected expressions retain the native wrapper applications and
 proof arguments. These planned checks are not a passing result until the verifier
