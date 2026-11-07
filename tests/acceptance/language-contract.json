@@ -1894,10 +1894,11 @@
         "studies/carrier-fields/verify_operators.py",
         "studies/carrier-fields/check_capture.py",
         "studies/carrier-fields/verify_bound_calls.py",
-        "studies/carrier-fields/verify_proof_bindings.py"
+        "studies/carrier-fields/verify_proof_bindings.py",
+        "studies/carrier-fields/verify_annotations.py"
       ],
       "pending": [
-        "Callable capture repaired in isolated bound-call/proof-binding patches; structural annotations, composition and integration remain open",
+        "Binding and nested annotations repaired in isolated patch stack; operator composition, complete identity/closure audit and integration remain open",
         "Main integration and complete carrier-consumer audit",
         "Full corpus and study validation",
         "Universe polymorphism and native module-scope policy"

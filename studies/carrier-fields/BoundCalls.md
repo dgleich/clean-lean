@@ -44,7 +44,7 @@ substitution must preserve the stored identity. Proof-index storage has its own 
 The subsequent [proof-binding extension](ProofBindings.md) covers saved conditions
 and quantified proof bodies.
 
-Type expressions embedded as source strings remain a structural gap. Plain TypeValue
+At this two-patch stage, type expressions embedded as source strings remain a structural gap. Plain TypeValue
 annotations without call heads retain their current handling; a computed call nested
 inside a TypeValue is explicitly rejected by this prototype. Such annotations need
 binding-aware structural type storage before integration. This is a known regression
@@ -71,7 +71,8 @@ source, applies both patches, regenerates/checks the grammar, and runs:
 The first fixture attempt omitted `noncomputable` on six expected/actual definitions;
 Lean rejected code generation. The fixture was corrected without changing proofs.
 
-This repair remains isolated pending structural annotations, integration of the
-proof-binding extension, operator composition, a complete consumer audit and full corpus/study validation. It does not
+The subsequent [checked-annotation extension](AnnotatedTypes.md) retains semantic
+types and removes the nested-call rejection in its isolated stack. This repair remains
+isolated pending integration of those extensions, operator composition, a complete consumer audit and full corpus/study validation. It does not
 establish complete language conformance.
 :::

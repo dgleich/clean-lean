@@ -1,0 +1,318 @@
+diff --git a/cleanlang/annotations.py b/cleanlang/annotations.py
+new file mode 100644
+--- /dev/null
++++ b/cleanlang/annotations.py
+@@ -0,0 +1,84 @@
++# generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
++"""Checked annotations retain types and their free local references."""
++class Annotation(str):
++    def __new__(cls,source,typ,names=()):
++        value=super().__new__(cls,source)
++        value.typ=typ
++        value.names=frozenset(names)
++        return value
++    def __setattr__(self,name,value):
++        if hasattr(self,name):raise AttributeError('Checked annotations are immutable')
++        object.__setattr__(self,name,value)
++    def __reduce__(self):return (Annotation,(str(self),self.typ,self.names))
++    def __eq__(self,other):
++        return isinstance(other,Annotation) and str(self)==str(other) and self.typ==other.typ and self.names==other.names
++    def __ne__(self,other):return not self==other
++    def __hash__(self):return hash((str(self),self.typ,self.names))
++
++
++def references(value,locals):
++    from .core import Type,ValueIndex,Expr
++    from .dependent_functions import index_tree,DependentFunctionType
++    def tree_names(tree):
++        kind=tree[0]
++        if kind=='Local':return {tree[1]}
++        if kind=='Decimal':return set()
++        if kind=='TypeValue':
++            if isinstance(tree[1],Annotation):return set(tree[1].names)
++            from .core import ID
++            import re
++            return set(re.findall(ID,tree[1])).intersection(locals)
++        if kind in ('Call','ModuleCall'):
++            args=set().union(*(tree_names(a) for a in tree[2]))
++            return args|({tree[1]} if kind=='Call' and tree[1] in locals else set())
++        if kind=='Apply':return tree_names(tree[1])|set().union(*(tree_names(a) for a in tree[2]))
++        if kind=='Projection':return tree_names(tree[1])
++        if kind=='Operator':return tree_names(tree[2])|tree_names(tree[3])
++        if kind=='Unary':return tree_names(tree[2])
++        if kind in ('Forall','Exists','Lambda'):
++            domain=set(tree[2].names) if isinstance(tree[2],Annotation) else set()
++            return domain|tree_names(tree[3]).difference({tree[1]})
++        from .core import CleanError
++        raise CleanError('Uncovered annotation-reference constructor: '+kind)
++    if isinstance(value,DependentFunctionType):
++        return references(value.domain,locals)|references(value.codomain,locals).difference({value.binder})
++    if isinstance(value,Type):
++        names=set().union(*(references(a,locals) for a in value.args))
++        if not value.args and value.name in locals and locals[value.name].type==Type('Type'):names.add(value.name)
++        return names
++    if isinstance(value,ValueIndex):return tree_names(index_tree(value))
++    if isinstance(value,Expr):return tree_names(value.tree)
++    return {value} if isinstance(value,str) and value in locals else set()
++
++
++def checked(source,env,locals):
++    value=env.type(source,locals,phrases=False)
++    # Rebinding a saved annotation must not discover new free names from display text.
++    names=source.names if isinstance(source,Annotation) else references(value,locals)
++    return Annotation(str(source),value,names)
++
++
++def replace(annotation,bindings,env,locals):
++    from .dependent_functions import substitute
++    selected={n:v for n,v in bindings.items() if n in annotation.names}
++    value=substitute(annotation.typ,selected,env,locals)
++    candidates=set(annotation.names).difference(selected)
++    for actual in selected.values():candidates.update(references(actual,locals))
++    return Annotation(str(value),value,candidates)
++
++
++def resolve(annotation,env,locals):
++    from .core import Expressions
++    bindings={n:Expressions(env,locals).elaborate(['Local',n]) for n in sorted(annotation.names) if n in locals}
++    value=replace(annotation,bindings,env,locals).typ
++    validate(value,env,locals)
++    return value
++
++
++def validate(typ,env,locals):
++    from .core import Type,ValueIndex
++    from .dependent_functions import index_tree
++    from .bound_calls import bind
++    if isinstance(typ,Type):
++        for arg in typ.args:validate(arg,env,locals)
++    elif isinstance(typ,ValueIndex):bind(index_tree(typ),env,locals,binders=True)
+diff --git a/cleanlang/binder_keys.py b/cleanlang/binder_keys.py
+--- a/cleanlang/binder_keys.py
++++ b/cleanlang/binder_keys.py
+@@ -33,3 +33,3 @@
+     def collect(value):
+-        if isinstance(value,str):texts.append(value)
++        if isinstance(value,str):texts.append(str(value))
+         elif isinstance(value,dict):
+@@ -51,2 +51,4 @@
+         def reserve(value):
++            from .annotations import Annotation
++            if isinstance(value,Annotation):self.reserve_type(value.typ)
+             if isinstance(value,str):self.reserved.update(re.findall(ID,value))
+diff --git a/cleanlang/bound_calls.py b/cleanlang/bound_calls.py
+--- a/cleanlang/bound_calls.py
++++ b/cleanlang/bound_calls.py
+@@ -32,9 +32,10 @@
+         # silently closing a body while leaving its domain's calls unbound.
+-        check_annotation(tree[2])
+-        domain=env.type(tree[2],locals,phrases=False)
++        from .annotations import checked
++        annotation=checked(tree[2],env,locals)
++        domain=annotation.typ
+         value=Expr(tree[1],texid(tree[1]),domain,tree=['Local',tree[1]])
+-        return [kind,tree[1],tree[2],bind(tree[3],env,{**locals,tree[1]:value},binders=True)]
++        return [kind,tree[1],annotation,bind(tree[3],env,{**locals,tree[1]:value},binders=True)]
+     if kind=='TypeValue':
+-        check_annotation(tree[1])
+-        return tree
++        from .annotations import checked
++        return [kind,checked(tree[1],env,locals)]
+     if kind in ('Local','Decimal'):return tree
+@@ -42,10 +43,2 @@
+     raise UnclosedBinding('Bound callable prototype does not close '+kind)
+-
+-
+-def check_annotation(source):
+-    from .syntax import parse,type_tree
+-    def has_call(node):
+-        return isinstance(node,list) and (bool(node) and node[0] in ('Call','ModuleCall') or any(has_call(a) for a in node))
+-    if has_call(type_tree(parse(source,'type_ref'))):
+-        raise UnclosedBinding('Bound callable prototype requires structural type annotations for nested calls')
+
+diff --git a/cleanlang/conversion.py b/cleanlang/conversion.py
+--- a/cleanlang/conversion.py
++++ b/cleanlang/conversion.py
+@@ -52,3 +52,3 @@
+     tree=expression.tree
+-    if not tree or tree[0]!='Call':return None
++    if not tree or tree[0] not in ('Call','ModuleCall'):return None
+     spec=env.structures.get(expression.type.name)
+@@ -61,3 +61,3 @@
+     parameters=env.data['functions'][tree[1]]['signature_tree'][2]
+-    body=definition['tree']
++    body=definition.get('bound_tree') or definition['tree']
+     bindings=dict(zip((p[1] for p in parameters if p[3]=='explicit'),
+@@ -76,3 +76,3 @@
+     except UnrepresentableSubstitution:return None
+-    if expanded[0]=='Call' and expanded[1]==spec['constructor']:
++    if expanded[0] in ('Call','ModuleCall') and expanded[1]==spec['constructor']:
+         pos=len(spec['parameters'])+[n for n,_ in spec['fields']].index(field)
+diff --git a/cleanlang/core.py b/cleanlang/core.py
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -210,2 +210,4 @@
+     def type(self,s,env=None,phrases=True,trail=(),*,presentation=None):
++        from .annotations import Annotation,resolve
++        if isinstance(s,Annotation):return resolve(s,self,env or {})
+         s=re.sub(r'^(a|an)\s+','',s.strip(),flags=re.I)
+@@ -486,2 +488,3 @@
+     def _elaborate(self,tree):
++        from .annotations import Annotation
+         kind=tree[0]
+@@ -493,3 +496,3 @@
+             self.reg.require_type_argument(value)
+-            return Expr(self.reg.render_type(value,'lean',self.env),self.reg.render_type(value,'latex',self.env),Type('Type'),tree=['TypeValue',str(value)])
++            return Expr(self.reg.render_type(value,'lean',self.env),self.reg.render_type(value,'latex',self.env),Type('Type'),tree=['TypeValue',tree[1] if isinstance(tree[1],Annotation) else str(value)])
+         if kind=='Decimal':return Expr(tree[1],tree[1],NUM,tree=tree)
+@@ -553,3 +556,3 @@
+                      self.reg.render_type(domain,'latex')+r',\; '+body.tex+r'\right)')
+-                return Expr(target,tex,PROP,tree=[kind,name,str(domain),body.tree])
++                return Expr(target,tex,PROP,tree=[kind,name,tree[2] if isinstance(tree[2],Annotation) else str(domain),body.tree])
+             if body.type==NUM:
+@@ -560,3 +563,3 @@
+                         r'\left('+texid(name)+r' \mapsto '+body.tex+r'\right)',result,
+-                        tree=['Lambda',name,str(domain),body.tree])
++                        tree=['Lambda',name,tree[2] if isinstance(tree[2],Annotation) else str(domain),body.tree])
+         raise CleanError('Unknown syntax constructor: '+kind)
+diff --git a/cleanlang/dependent_functions.py b/cleanlang/dependent_functions.py
+--- a/cleanlang/dependent_functions.py
++++ b/cleanlang/dependent_functions.py
+@@ -10,3 +10,4 @@
+     from .syntax import parse,expression_tree
+-    return json.loads(index.syntax) if isinstance(index,ComputedIndex) else expression_tree(parse(index.name,'expression'))
++    if isinstance(index,ComputedIndex):return index.resolved if index.resolved is not None else json.loads(index.syntax)
++    return expression_tree(parse(index.name,'expression'))
+
+diff --git a/cleanlang/hygiene.py b/cleanlang/hygiene.py
+--- a/cleanlang/hygiene.py
++++ b/cleanlang/hygiene.py
+@@ -75,2 +75,21 @@
+         raise UnrepresentableSubstitution('Unsupported type syntax: '+kind)
++    bound_values={}
++    def annotation(source,mapping,callheads):
++        from .annotations import Annotation,replace
++        if not isinstance(source,Annotation):return typ(type_tree(parse(source,'type_ref')),mapping,callheads,type_bindings)
++        from .core import Expressions,Expr
++        replacements={}
++        scope=dict(locals)
++        # Fresh binder references have not yet entered the caller's semantic scope.
++        for name,tree in mapping.items():
++            if name in bindings and tree==bindings[name].tree:replacements[name]=bindings[name]
++            elif tree[0]=='Local':
++                from .dependent_functions import tree_names
++                original=bound_values.get(name) or locals.get(name)
++                if original is not None:
++                    value=Expr(tree[1],tree[1],original.type,tree=tree)
++                    scope[tree[1]]=value;replacements[name]=value
++                else:replacements[name]=tree[1]
++            else:replacements[name]=Expressions(environment,scope).elaborate(tree)
++        return replace(source,{**replacements,**type_bindings},environment,scope)
+     def expr(node,mapping,callheads):
+@@ -79,3 +98,3 @@
+         if kind=='Decimal':return node
+-        if kind=='TypeValue':return ['TypeValue',typ(type_tree(parse(node[1],'type_ref')),mapping,callheads,type_bindings)]
++        if kind=='TypeValue':return ['TypeValue',annotation(node[1],mapping,callheads)]
+         if kind=='ModuleCall':return [kind,node[1],[expr(a,mapping,callheads) for a in node[2]],node[3]]
+@@ -92,4 +111,11 @@
+         if kind in ('Lambda','Forall','Exists'):
+-            domain=typ(type_tree(parse(node[2],'type_ref')),mapping,callheads,type_bindings);name=fresh()
+-            body=expr(node[3],{**mapping,node[1]:['Local',name]},callheads|{node[1]})
++            domain=annotation(node[2],mapping,callheads);name=fresh()
++            from .annotations import Annotation
++            from .core import Expr
++            previous=bound_values.get(node[1])
++            if isinstance(domain,Annotation):bound_values[node[1]]=Expr(name,name,domain.typ,tree=['Local',name])
++            try:body=expr(node[3],{**mapping,node[1]:['Local',name]},callheads|{node[1]})
++            finally:
++                if previous is None:bound_values.pop(node[1],None)
++                else:bound_values[node[1]]=previous
+             return [kind,name,domain,body]
+diff --git a/cleanlang/indices.py b/cleanlang/indices.py
+--- a/cleanlang/indices.py
++++ b/cleanlang/indices.py
+@@ -3,3 +3,3 @@
+ import json
+-from dataclasses import dataclass
++from dataclasses import dataclass,field
+ from .core import ValueIndex, Type, CleanError
+@@ -9,2 +9,3 @@
+     syntax: str
++    resolved: object = field(default=None,kw_only=True,compare=False,repr=False)
+
+@@ -34,3 +35,3 @@
+     return ComputedIndex('('+expression_spelling(tree)+')',expression.lean,expression.tex,
+-                         json.dumps(tree,ensure_ascii=False,separators=(',',':')),comparison=comparison)
++                         json.dumps(tree,ensure_ascii=False,separators=(',',':')),comparison=comparison,resolved=tree)
+
+@@ -42,6 +43,7 @@
+     from .syntax import parse,expression_tree
+-    tree=json.loads(index.syntax) if isinstance(index,ComputedIndex) else expression_tree(parse(index.name,'expression'))
++    from .dependent_functions import index_tree
++    tree=index_tree(index)
+     def reference(value):
+         if isinstance(value,Expr):return value.tree
+-        if isinstance(value,ComputedIndex):return json.loads(value.syntax)
++        if isinstance(value,ComputedIndex):return index_tree(value)
+         if isinstance(value,ValueIndex):return expression_tree(parse(value.name,'expression'))
+@@ -101,2 +103,2 @@
+     name=expression.tree[1] if expression.tree[0]=='Decimal' else value.name
+-    return DimensionIndex(name,value.lean,value.tex,syntax,comparison=value.comparison)
++    return DimensionIndex(name,value.lean,value.tex,syntax,comparison=value.comparison,resolved=value.resolved if isinstance(value,ComputedIndex) else expression.tree)
+diff --git a/cleanlang/modules.py b/cleanlang/modules.py
+--- a/cleanlang/modules.py
++++ b/cleanlang/modules.py
+@@ -201,6 +201,3 @@
+         from .bound_calls import bind as bind_calls,UnclosedBinding
+-        try:
+-            def has_type_value(tree):
+-                return isinstance(tree,list) and (bool(tree) and tree[0]=='TypeValue' or any(has_type_value(a) for a in tree))
+-            if not has_type_value(expression.tree):bound_body=bind_calls(expression.tree,env,local)
++        try:bound_body=bind_calls(expression.tree,env,local,binders=True)
+         except UnclosedBinding:pass
+diff --git a/cleanlang/proof_types.py b/cleanlang/proof_types.py
+--- a/cleanlang/proof_types.py
++++ b/cleanlang/proof_types.py
+@@ -23,3 +23,3 @@
+                       json.dumps(tree,ensure_ascii=False),tuple(locals.items()),
+-                      comparison=index_comparison(comparison,env,locals,_fresh=_fresh))
++                      comparison=index_comparison(comparison,env,locals,_fresh=_fresh),resolved=tree)
+
+@@ -32,5 +32,5 @@
+     from .conversion import _normal_form
+-    from .dependent_functions import fresh_bound,inferred_type
++    from .dependent_functions import fresh_bound,inferred_type,index_tree
+     scope=dict(saved.scope)
+-    tree=substitute(json.loads(saved.syntax),{},env,scope)
++    tree=substitute(index_tree(saved),{},env,scope)
+     condition=_normal_form(Expressions(env,scope).elaborate(tree),env,scope,fresh=True)
+@@ -56,3 +56,3 @@
+     captured=dict(saved.scope)
+-    used=tree_names(json.loads(saved.syntax))
++    used=tree_names(index_tree(saved))
+     for name in sorted(used.intersection(captured).intersection(locals).difference(bindings)):
+@@ -68,3 +68,3 @@
+     types={k:v for k,v in bindings.items() if isinstance(v,Type)}
+-    tree=substitute(json.loads(saved.syntax),values,env,scope,types)
++    tree=substitute(index_tree(saved),values,env,scope,types)
+     tree=substitute(tree,{},env,scope)
+diff --git a/cleanlang/structures.py b/cleanlang/structures.py
+--- a/cleanlang/structures.py
++++ b/cleanlang/structures.py
+@@ -40,5 +40,5 @@
+     tree=base.tree
+-    if not tree or tree[0]!='Call':return None
++    if not tree or tree[0] not in ('Call','ModuleCall'):return None
+     # A local function wins over a module callable, even if names coincide.
+-    if tree[1] in locals and env.is_function_type(locals[tree[1]].type):return None
++    if tree[0]=='Call' and tree[1] in locals and env.is_function_type(locals[tree[1]].type):return None
+     spec=env.structures[base.type.name]
+@@ -52,3 +52,3 @@
+     if any(p[3]=='implicit' for p in parameters):return None
+-    body=definition['tree']
++    body=definition.get('bound_tree') or definition['tree']
+     from .beta_indices import has_binder
+@@ -61,2 +61,3 @@
+         if node[0]=='Local':return bindings.get(node[1],node)
++        if node[0]=='ModuleCall':return [node[0],node[1],[replace(a) for a in node[2]],node[3]]
+         if node[0]=='Call':

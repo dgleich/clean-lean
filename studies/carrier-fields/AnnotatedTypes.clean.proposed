@@ -1,0 +1,32 @@
+-- generated: gpt-6 2026-11-07 role=assisted; isolated annotation prototype
+Import "../../library/types.clean"
+Source local:
+  Kind: other
+  Label: Checked annotation study
+  Title: Preserving callable and binder references inside type annotations
+
+Define count(n: Natural): Natural:
+  Equals: n
+
+-- Diagnostic function: its explicit type argument exposes annotation translation.
+Define marker(T: Type): Natural:
+  Equals: 0
+  Render latex: marker({T})
+
+Define mark vector(n: Natural): Natural:
+  Equals: marker(type(Vector((count(n)),Real)))
+
+Define keep law(n,h):
+  Let n: Natural
+  Let h: (for every (v: Vector((count(n)),Real), for every (p: (v=v), p=p)))
+  Returns: (for every (v: Vector((count(n)),Real), for every (p: (v=v), p=p)))
+  Equals: h
+
+Result quantified annotation retained:
+  Attribution: local; dependent annotation binding; original
+  Let n: Natural
+  Assume h: for every (v: Vector((count(n)),Real), for every (p: (v=v), p=p))
+  Let count: Function(Natural,Natural)
+  Conclude: keep law(n,h) = h
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

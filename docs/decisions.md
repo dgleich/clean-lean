@@ -800,3 +800,16 @@ parameters as substitutable references. The [proof-binding study](../studies/car
 specifies the rule and native evidence. Structural annotation storage remains required
 before integration; unsupported annotation calls are not an approved final limitation.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Preserve semantic types inside stored annotations
+
+The isolated [annotation extension](../studies/carrier-fields/AnnotatedTypes.md) stores
+checked Type objects and free local references alongside display spelling. Substitute
+those semantic objects and reconnect their locals before emission; never reconstruct
+their meaning from display text in a different scope. Computed/proof indices retain an
+authoritative resolved tree. Source JSON alone is not a semantic serialization. This
+removes the earlier nested-call rejection in the isolated stack, while module/type-head
+identity, operator composition and full conformance remain open.
+:::

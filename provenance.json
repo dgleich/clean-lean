@@ -5552,6 +5552,38 @@
         "-- ",
         ""
       ]
+    },
+    "studies/carrier-fields/annotations.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/carrier-fields/verify_annotations.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/AnnotatedTypes.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/carrier-fields/AnnotatedTypesVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/carrier-fields/AnnotatedTypes.clean.proposed": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

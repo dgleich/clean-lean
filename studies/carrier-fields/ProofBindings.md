@@ -29,7 +29,7 @@ or a module declaration. A binder does not enter its own domain, escape its body
 change sibling scope. The parsed tree is unchanged: only the stored semantic tree
 contains ModuleCall or explicit local Apply nodes.
 
-Type annotations are still source strings. This experiment rejects calls nested in
+In this three-patch stage, type annotations are still source strings. This experiment rejects calls nested in
 those annotations rather than pretending their bindings are closed. The restriction
 is a known integration gap to remove with structural type storage, not an accepted
 restriction on the final language. It applies to binder domains as well as TypeValue
@@ -53,5 +53,7 @@ and regenerates/checks the parser strictly. It checks:
 
 The direct native and regression runs pass, and the fresh-copy driver passed the
 same checks. This does not establish full-suite or operator-composition conformance.
-Main source remains unchanged while the remaining closure boundaries are resolved.
+The subsequent [checked-annotation extension](AnnotatedTypes.md) removes the nested-call
+annotation rejection by preserving semantic types and free local references. Main
+source remains unchanged while the remaining closure boundaries are resolved.
 :::

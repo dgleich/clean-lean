@@ -53,6 +53,7 @@ share substitution machinery. Simply hiding caller locals would also hide locals
 needed by the call arguments and is insufficient.
 
 This report records the base prototype failure. The separate repair is not yet
-integrated: structural annotations, integration of the [proof-binding extension](ProofBindings.md),
-and the wider closure audit remain required.
+integrated: integration of the [proof-binding](ProofBindings.md) and
+[checked-annotation](AnnotatedTypes.md) extensions, operator composition and the
+wider identity/closure audit remain required.
 :::

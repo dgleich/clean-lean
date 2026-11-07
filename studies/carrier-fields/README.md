@@ -44,8 +44,9 @@ Main integration and full corpus/study validation remain required. The expanded
 [consumer audit](Audit.md) records a confirmed callable-capture failure that blocks
 integration. A subsequent [bound-call repair](BoundCalls.md) fixes the counterexample
 in isolation. The [proof-binding extension](ProofBindings.md) also preserves module
-conditions in saved and quantified proof types. Structural annotations and integration
-remain open.
+conditions in saved and quantified proof types. The [annotation extension](AnnotatedTypes.md)
+retains semantic types and reconnects their free local references during binder renaming.
+Operator composition, the wider identity audit and integration remain open.
 Composition with module operators passes five additional exact targets
 and three proofs; run `python3 studies/carrier-fields/verify_operators.py`. This is fixed Type-0 carriers in
 an explicitly higher-universe record; it is not general universe polymorphism,
