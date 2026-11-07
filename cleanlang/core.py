@@ -486,7 +486,9 @@ class Expressions:
         if kind=='Apply':
             function=self._elaborate(tree[1]);args=[self._elaborate(a) for a in tree[2]]
             from .dependent_functions import application
-            return application(function,args,self.reg,self.env,['Apply',function.tree,[a.tree for a in args]],function.tex+'('+args[0].tex+')' if args else '')
+            head=function.tex
+            if function.tree[0] in ('Operator','Unary'):head='('+head+')'
+            return application(function,args,self.reg,self.env,['Apply',function.tree,[a.tree for a in args]],head+'('+args[0].tex+')' if args else '')
         if kind=='Projection':
             from .structures import project
             return project(self.reg,self._elaborate(tree[1]),tree[2],self.env)

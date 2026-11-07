@@ -1622,6 +1622,40 @@
         "studies/interval-clipping/verify.py"
       ],
       "remaining": "General unresolved-parameter inference and module-owned binding identities remain unaudited. Native oracle covers the restricted-label compound-type construction, not every instance of this rule."
+    },
+    {
+      "id": "postfix_application_chain",
+      "status": "implemented-slice",
+      "environment": "Explicit function/evidence modules; f has Function(A,Function(B,C)). No new inference or overload selection in a postfix Apply.",
+      "source": "f(x)(y)",
+      "expected_tree": [
+        "Apply",
+        [
+          "Call",
+          "f",
+          [
+            [
+              "Local",
+              "x"
+            ]
+          ]
+        ],
+        [
+          [
+            "Local",
+            "y"
+          ]
+        ]
+      ],
+      "expected_lean": "(f x) y",
+      "expected_lean_type": "C",
+      "obligation": "One left-folded postfix tree, unchanged named-call normalization, one checked argument for each Apply; preserve dependent proof argument terms and reject incorrect arity/domain.",
+      "evidence": [
+        "tests/test_postfix_applications.py",
+        "tests/test_applied_indices.py",
+        "studies/postfix-applications/verify.py"
+      ],
+      "remaining": "Full-suite and general native-binding/operator/literal conformance are separate. Active-label stress translation remains incomplete."
     }
   ]
 }

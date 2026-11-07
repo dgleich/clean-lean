@@ -70,8 +70,7 @@ def expression_spelling(tree):
         if tree[1][0]=='Apply':base='('+base+')'
         return base+'.'+tree[2]
     if kind=='Apply':
-        if tree[1][0] not in ('Local','Projection'):raise CleanError('Computed index application requires a named function or field')
-        return expression_spelling(tree[1])+'('+','.join(map(expression_spelling,tree[2]))+')'
+        return '('+expression_spelling(tree[1])+')('+','.join(map(expression_spelling,tree[2]))+')'
     if kind=='Operator':return '('+expression_spelling(tree[2])+' '+tree[1]+' '+expression_spelling(tree[3])+')'
     if kind=='Unary':return '('+tree[1]+' '+expression_spelling(tree[2])+')'
     raise CleanError('Computed indices do not introduce binders')
@@ -86,12 +85,27 @@ def expression_tree(tree):
             op=str(c[i]).lower();op={'!=':'≠','<=':'≤','>=':'≥','and':'∧','or':'∨'}.get(op,op)
             result=['Operator',op,result,expression_tree(c[i+1])]
         return result
-    if kind=='projection':
-        result=expression_tree(c[0])
-        for field in c[1:]:
-            if isinstance(field,generated.Tree):
-                result=['Apply',result,[expression_tree(a) for a in field.children[0].children] if field.children else []]
-            else:result=['Projection',result,str(field)]
+    if kind=='postfix':
+        base=c[0]
+        suffixes=c[1:]
+        if base.data=='reference':
+            words=base.children[0].children
+            if len(words)>1:
+                if not suffixes or suffixes[0].data!='application_suffix':
+                    from .core import CleanError
+                    raise CleanError('A multiword expression name requires arguments')
+                first=suffixes[0]
+                args=[expression_tree(a) for a in first.children[0].children] if first.children else []
+                result=['Call',name(base.children[0]),args]
+                suffixes=suffixes[1:]
+            else:result=['Local',str(words[0])]
+        else:result=expression_tree(base)
+        for suffix in suffixes:
+            if suffix.data=='field_suffix':
+                result=['Projection',result,str(suffix.children[0])]
+            else:
+                args=[expression_tree(a) for a in suffix.children[0].children] if suffix.children else []
+                result=(['Call',result[1],args] if result[0]=='Local' else ['Apply',result,args])
         return result
     if kind=='group':return expression_tree(c[0])
     if kind=='local':return ['Local',str(c[0])]
@@ -238,8 +252,7 @@ def condition_spelling(tree):
         if tree[1][0]=='Apply':base='('+base+')'
         return base+'.'+tree[2]
     if kind=='Apply':
-        if tree[1][0] not in ('Local','Projection'):raise CleanError('Computed index application requires a named function or field')
-        return condition_spelling(tree[1])+'('+','.join(map(condition_spelling,tree[2]))+')'
+        return '('+condition_spelling(tree[1])+')('+','.join(map(condition_spelling,tree[2]))+')'
     if kind=='Operator':return '('+condition_spelling(tree[2])+' '+tree[1]+' '+condition_spelling(tree[3])+')'
     if kind=='Unary':return '('+tree[1]+' '+condition_spelling(tree[2])+')'
     if kind in ('Forall','Exists','Lambda'):

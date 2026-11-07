@@ -818,3 +818,16 @@ substitution twice. The constructive rule and remaining inference boundary are
 in [callable evidence](callable-evidence.md#comparing-instantiated-dependent-codomains).
 Parsing and emitted application arguments are unchanged.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Postfix application
+
+[Postfix application and field selection](postfix-applications.md) specifies the
+left-to-right suffix fold, the syntax-only multiword-reference guard, existing
+Call versus Apply normalization, known-function application and proof-index
+spelling. The implemented generated grammar accepts `f(x)(y)` and interleaved
+field selections. This preserves existing named-call trees and introduces no
+inferred currying or overload policy. Focused acceptance passes; broad validation
+and general conformance remain pending.
+:::

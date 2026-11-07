@@ -43,12 +43,22 @@ class AppliedIndices(unittest.TestCase):
     def test_bare_lambda_remains_rejected(self):
         with self.assertRaisesRegex(CleanError,'do not introduce binders'):
             index_value(self.expr('function(t: Real,t)'),self.e,self.local)
-    def test_quantified_body_remains_rejected(self):
-        with self.assertRaisesRegex(CleanError,'application requires a named function or field'):
-            self.expr('equality congruence(function(t: Real,for every (u: Real,t=u)),a,b,hab)')
-    def test_nested_lambda_remains_rejected(self):
-        with self.assertRaisesRegex(CleanError,'application requires a named function or field'):
-            self.expr('equality congruence(function(t: Real,function(u: Real,t+u)),a,b,hab)')
+    def test_quantified_body_application_is_preserved(self):
+        value=self.expr('equality congruence(function(t: Real,for every (u: Real,t=u)),a,b,hab)')
+        import json
+        tree=json.loads(value.type.args[0].syntax)
+        self.assertEqual(tree[2][0],'Apply')
+        self.assertEqual(tree[2][1][0],'Lambda')
+        self.assertEqual(tree[2][1][3][0],'Forall')
+        self.assertEqual(syntax.expression_tree(syntax.parse(syntax.condition_spelling(tree),'expression')),tree)
+    def test_nested_lambda_application_is_preserved(self):
+        value=self.expr('equality congruence(function(t: Real,function(u: Real,t+u)),a,b,hab)')
+        import json
+        tree=json.loads(value.type.args[0].syntax)
+        self.assertEqual(tree[2][0],'Apply')
+        self.assertEqual(tree[2][1][0],'Lambda')
+        self.assertEqual(tree[2][1][3][0],'Lambda')
+        self.assertEqual(syntax.expression_tree(syntax.parse(syntax.condition_spelling(tree),'expression')),tree)
     def test_named_function_stays_opaque(self):
         proof=self.expr('equality congruence(f,a,b,hab)')
         self.assertEqual(proof.type,self.e.type('Evidence((f(a)=f(b)))',self.local))

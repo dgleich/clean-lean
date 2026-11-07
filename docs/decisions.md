@@ -644,3 +644,18 @@ compound type arguments. Keep unresolved inference as an explicit remaining audi
 boundary. Clipped label records and their ordering evidence are authored in Clean;
 only natural-order operations and Fin order views are foundational Lean adapters.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Chained applications use one postfix fold
+
+Use one shared name production and fold argument-list/field suffixes from left to
+right. A multiword reference requires its first argument list in the same atom's
+suffix chain. A separate multiword grammar conflicted with assumption-label names
+and was rejected by strict generation. Preserve old Call trees for named calls;
+use existing Apply trees for returned functions. Check one determined function
+argument per Apply, retaining its exact term and dependent result substitution.
+Proof-index spelling may preserve applied functions containing binders, without
+adding reduction inside their bodies. The [contract](postfix-applications.md)
+records the acceptance evidence and remaining boundaries.
+:::

@@ -24,7 +24,7 @@ class ReviewTests(unittest.TestCase):
     def test_highlighting_preserves_text(self):
         import html
         for source in ['Let μ be a Complex','Define f(x):','Attribution: mathlib; x; direct',
-                       '  Equals: x + 2','  -- <&>','  From Lean: x + x']:
+                       '  Equals: x + 2','  Equals: p.action(x)(y)','  Equals: (function(x: Natural,x))(n)','  -- <&>','  From Lean: x + x']:
             with self.subTest(source=source):
                 self.assertEqual(html.unescape(re.sub('<[^>]*>','',review.highlight(source))),source)
 

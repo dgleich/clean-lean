@@ -1,0 +1,29 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{returned function application}\cleanattribution{[Postfix application, returned function]}
+Let $n$ and $m$ be natural numbers.
+Then \[T_{n}(m) = n + m.\]
+\end{cleanresult}
+
+\begin{cleanresult}{curried local application}\cleanattribution{[Postfix application, curried local]}
+Let $f$ be a function from $\mathbb{N}$ to $(\mathbb{N}\to \mathbb{N})$.
+Let $n$ and $m$ be natural numbers.
+Then \[f(n)(m) = f(n)(m).\]
+\end{cleanresult}
+
+\begin{cleanresult}{curried field application}\cleanattribution{[Postfix application, curried field]}
+Let $p$ be an element of $\operatorname{FunctionBox}$.
+Let $n$ and $m$ be natural numbers.
+Then \[p.\mathrm{action}(n)(m) = p.\mathrm{action}(n)(m).\]
+\end{cleanresult}
+
+\begin{cleanresult}{applied identity function}\cleanattribution{[Postfix application, applied lambda]}
+Let $n$ be a natural number.
+Then \[\left(x \mapsto x\right)(n) = n.\]
+\end{cleanresult}
+
+\begin{cleanresult}{interleaved returned field}\cleanattribution{[Postfix application, returned record field]}
+Let $n$, $m$, $x$ and $y$ be natural numbers.
+Then \[B_{n}(m).\mathrm{action}(x)(y) = n + m + x + y.\]
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

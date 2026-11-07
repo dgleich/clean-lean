@@ -1,0 +1,47 @@
+-- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
+Import "../../library/logic/equalities.clean"
+Source postfix:
+  Kind: other
+  Label: Postfix application
+  Title: Independent application fixtures
+
+Define add offset(n: Natural): Function(Natural,Natural):
+  Equals: function(x: Natural,n+x)
+  Render latex: T_{{{n}}}
+
+Structure FunctionBox():
+  Let action: Function(Natural,Function(Natural,Natural))
+  Constructor: curried box
+
+Define boxed offset(n: Natural): Function(Natural,FunctionBox):
+  Equals: function(m: Natural,curried box(function(x: Natural,function(y: Natural,n+m+x+y))))
+  Render latex: B_{{{n}}}
+
+Result returned function application:
+  Attribution: postfix; returned function; original
+  Let n,m: Natural
+  Conclude: add offset(n)(m) = n+m
+
+Result curried local application:
+  Attribution: postfix; curried local; original
+  Let f: Function(Natural,Function(Natural,Natural))
+  Let n,m: Natural
+  Conclude: f(n)(m) = f(n)(m)
+
+Result curried field application:
+  Attribution: postfix; curried field; original
+  Let p: FunctionBox
+  Let n,m: Natural
+  Conclude: p.action(n)(m) = p.action(n)(m)
+
+Result applied identity function:
+  Attribution: postfix; applied lambda; original
+  Let n: Natural
+  Conclude: (function(x: Natural,x))(n) = n
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Result interleaved returned field:
+  Attribution: postfix; returned record field; original
+  Let n,m,x,y: Natural
+  Conclude: boxed offset(n)(m).action(x)(y) = n+m+x+y

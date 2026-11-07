@@ -138,3 +138,36 @@ The fixed branch applies once every implicit parameter is determined; unresolved
 inference still needs a scope audit. Restricted labels do not yet establish
 restricted vertex bases or the pyramid extension theorem.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Postfix-application checkpoint
+
+The main parser now accepts repeated argument lists and interleaved field access.
+The isolated implementation passed 227 focused regressions. The main tree passes
+nine dedicated postfix tests and eight independently authored canonical native
+targets with five Lean proofs, including a returned record followed by field
+selection and application. Its generated parser passes the strict reproducibility
+check. The frozen postfix-source corpus regenerates and checks all 92 proof
+fixtures. The source-highlighting text-preservation check and reference HTML
+links/search/status/mobile checks pass. The five-example PDF was compiled twice
+and inspected on one page.
+
+A new full suite is running from `/tmp/clean-postfix-main`; its compiler snapshot
+includes this parser change. The older codomain suite remains a distinct run and
+does not validate the new grammar. The pre-postfix browser process was stopped
+because its compiler was superseded; a fresh browser inventory remains pending.
+
+The active-label verifier with repeated traceback instrumentation terminated with
+status 139 during translation. Its cause is not established. No native proof or
+canonical-target check completed in that run. The separate plain translation job
+remains active; neither run establishes the active-label existence theorem.
+
+Compiler hashes at this checkpoint:
+
+- `cleanlang/core.py`: `6a1826e627ddfa02665a85857d8cae9ac000a95c2ec783715bd88eaa597d5186`
+- `cleanlang/syntax.py`: `13b72d16063542a6fc6216312fdb5fa9ad35a82ef71638643658abe4bad994a0`
+- `cleanlang/generated_parser.py`: `87bd2cb7439ce8f00cc330a36fa88c715391707ff3626807385d5b0e3401efe3`
+
+This is another implemented acceptance slice, not complete language conformance.
+:::

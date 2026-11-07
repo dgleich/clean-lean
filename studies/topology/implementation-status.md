@@ -54,9 +54,15 @@ case's own limitations or substitute for its outstanding validation.
   run is pending. The 92-proof corpus recheck and rebased operator prototype
   (16 targets, two proofs) pass; earlier portfolio results do not validate
   this later compiler change.
-- The pre-fix browser build was stopped as superseded when the codomain compiler
-  and clipped-label source changed. Its replacement reports per-file progress.
-  Final source-hash and UI checks remain pending.
+- Chained application is now implemented. The isolated implementation passes 227
+  focused regressions; main passes eight exact targets, five proofs, nine postfix
+  tests, parser reproducibility and the 92-proof corpus recheck. A new frozen full
+  suite is pending. This does not validate general native-binding uniqueness.
+- The active-label study has authored maps and a support record, but its instrumented
+  verifier crashed during translation (status 139). The separate plain translation
+  remains active. Its existence theorem is not yet proved by completed validation.
+- The browser build using the pre-postfix compiler was stopped as superseded.
+  A new build, source-hash validation and UI checks remain pending.
 
 ## Mathematical constructions still missing
 

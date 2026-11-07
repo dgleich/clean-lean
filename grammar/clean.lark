@@ -13,13 +13,12 @@
 ?product: signed (MULTIPLY signed)* -> chain
 ?signed: MINUS signed -> unary
        | power
-?power: projection (POWER signed)? -> chain
-?projection: atom ("." ID)+ [field_arguments] -> projection
-           | atom
-field_arguments: "(" [arguments] ")"
+?power: postfix (POWER signed)? -> chain
+?postfix: atom postfix_suffix* -> postfix
+postfix_suffix: "." ID -> field_suffix
+              | "(" [arguments] ")" -> application_suffix
 ?atom: NUMBER -> decimal
-     | name "(" [arguments] ")" -> call
-     | ID -> local
+     | name -> reference
      | "(" expression ")" -> group
      | TYPE_VALUE "(" type_ref ")" -> type_value
      | FUNCTION "(" ID ":" type_ref "," expression ")" -> function
