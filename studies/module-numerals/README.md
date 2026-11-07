@@ -3,7 +3,7 @@
 # Explicit module-owned numeral prototype
 
 Status: isolated parser, native declaration and explicit expression prototype. The
-working compiler is unchanged. Ordinary unannotated numeral inference is pending.
+working compiler is unchanged. A fourth patch prototypes contextual inference; module-owned defaults remain pending.
 The normative proposal and remaining target obligations are in
 [the module numeral draft](../../docs/module-numerals.md).
 
@@ -23,7 +23,7 @@ by the parser-only stack’s declaration interpreter. The driver checks that
 boundary before applying the separate adapter patch.
 
 Reproduce from the pinned historical baseline plus the eight operator/binding
-patches and the three numeral patches:
+patches and the four numeral patches:
 
 ```sh
 python studies/module-numerals/verify_prototype.py
@@ -84,8 +84,25 @@ pdflatex -output-directory=/tmp studies/module-numerals/latex.tex
 
 Copy `/tmp/latex.pdf` to `Expressions.pdf` when regenerating the tracked specimen.
 
-Next steps include broad consumer regression, main integration and complete
-native identity/import/instance isolation.
-Expected-type propagation and module-declared defaults remain a later required
-step before ordinary unannotated numerals can migrate to this architecture.
+The fourth patch, `inference.patch`, completes unannotated expression-position
+numerals by exhaustive carrier assignment. `Common.clean.proposed` now holds the
+shared wrappers. `Inference.clean.proposed` uses ordinary `x + 1`, nested sums,
+renamed Counting numerals, named conditions and expected definition return types.
+The [inference specification](../../docs/numeral-inference.md) records the precise
+scope, owned-mismatch rule, conservative ambiguity policy and 4096-trial bound.
+Fresh reconstruction of all four layers passed on 2026-11-07: 28 parser tests,
+120 distinct exact-target cases and 26 proofs across the staged stack. The nineteen
+explicit-expression targets and two associated proofs are additionally repeated
+after inference is enabled. The fourth layer contributes fifteen exact targets
+and four proofs; all operator regressions pass on the final inference stack.
+
+The updated one-page PDF contains all six statements. It compiled twice and was
+visually inspected with no clipping, unresolved references or box warnings.
+Inferred numerals print without type annotations; explicit annotations remain
+visible. The leading-zero assumption cases intentionally retain their source digits.
+Native unused-variable and LaTeX package-path warnings are unchanged.
+
+Next steps include broad consumer regression, constraint pruning, main integration,
+module-declared defaults and complete native identity/import/instance isolation.
+Type-position dimension-literal migration remains a separate obligation.
 :::

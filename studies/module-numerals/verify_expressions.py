@@ -37,7 +37,9 @@ assert expr('real sum((1: Real),(2: Real))').lean==expr('(1: Real)+(2: Real)').l
 assert expr('negative((1: Real))').lean==expr('-(1: Real)').lean
 assert expr('(1: Counting)+(2: Counting)').type==Type('Counting')
 rejects(lambda:expr('(1: Real)+(2: Counting)'),'No declared meaning')
-rejects(lambda:expr('(1: Real)+2'),'numeral interpretation')
+if '--inferred' in sys.argv[2:]:
+    assert expr('(1: Real)+2').lean==expr('(1: Real)+(2: Real)').lean
+else:rejects(lambda:expr('(1: Real)+2'),'numeral interpretation')
 rejects(lambda:expr('(1: Function(Real,Real))'),'closed module')
 rejects(lambda:expr('(1: Proposition)'),'no Numerals')
 rejects(lambda:expr('(1: Missing)'),'Unknown type')
@@ -92,7 +94,7 @@ assert index_comparison(quantified,e,{}) is not None
 # Import the declarations through a separate file, keeping source metadata explicit.
 with tempfile.TemporaryDirectory(prefix='numeral-import-') as directory:
     folder=Path(directory)
-    common=(HERE/'Expressions.clean.proposed').read_text().split('Result addition with one:')[0]
+    common=(HERE/'Common.clean.proposed').read_text()
     common=common.replace('References: references.json','References: '+str(HERE/'references.json'))
     (folder/'Common.clean').write_text(common)
     (folder/'Statements.clean').write_text('Import "Common.clean"\nResult imported:\n  Attribution: local; imports; original\n  Conclude: (1: Alias)=(1: Real)\n')

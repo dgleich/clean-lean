@@ -7,7 +7,8 @@ still has display-name-based numeral handling. The [parser study](../studies/mod
 checks the annotation grammar, ASCII validation and metadata syntax. A subsequent
 patch emits declaration-owned adapters. The expression patch binds explicit
 numeral annotations to those adapters and preserves them through expression
-consumers. Unannotated numeral inference remains unsupported in the operator stack. The isolated declared-operator
+consumers. The subsequent [contextual inference prototype](numeral-inference.md) completes
+unannotated expression-position numerals without selecting a global default. The isolated declared-operator
 prototype rejects unresolved numeral operands. This proposal defines an explicit
 first step; it does not settle the implicit/default inference required for the
 broader corpus migration.
@@ -181,9 +182,11 @@ with the compiler integration.
 ## Still needed for the final architecture
 
 The desired everyday form remains `x + 1`, not mandatory annotations everywhere.
-Expected-type propagation, generic overload constraints, unannotated standalone
-numerals, negative literals, and module-declared defaults need an additional
-constructive policy. D20's historical Natural default cannot remain a privilege
+The [contextual inference rule](numeral-inference.md) now covers expected return
+types, generic call constraints and negative numeral expressions in the isolated
+stack. Unconstrained numerals remain ambiguous when multiple interpretations are
+declared. Module-declared defaults and broader type-position inference still need
+a constructive policy. D20's historical Natural default cannot remain a privilege
 of that display name. In particular, `1 + 2`, `x + 1`, overloaded calls receiving
 `1`, and `(1 + 2) + x` must each have a specified unique target or an explicit
 ambiguity error under a fixed environment. Do not use first-success elaboration

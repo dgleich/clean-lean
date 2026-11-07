@@ -960,7 +960,17 @@ accepted as conforming. Its isolated study now checks the grammar, ASCII validat
 native adapters and explicitly annotated applications. Bound numeral atoms retain
 the selected identity through substitution and comparison; the draft specifies
 the consumer and rendering rules. Full integration and complete native isolation
-remain pending, as do the subsequent expected-type/default rules
-needed for ordinary unannotated numerals. The historical display-name-based
+remain pending, as do module-owned defaults and type-position numeral inference. The historical display-name-based
 Natural default is not the final architecture.
+:::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The [contextual numeral completion rule](numeral-inference.md) defines exhaustive
+closed-carrier assignment for expression-position numerals. It parses once,
+checks all assignments, accepts exactly one, and propagates incomplete analysis
+and unowned errors. Declared return types constrain definition bodies. Inferred
+numerals retain their selected constructor while rendering without an explicit
+type annotation. This is isolated implementation evidence; defaults, type-position
+migration, native isolation and main integration remain open.
 :::

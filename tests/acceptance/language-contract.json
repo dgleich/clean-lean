@@ -2171,8 +2171,37 @@
       "pending": [
         "Main compiler and editor integration",
         "Broad consumer regression and full portfolio validation",
-        "Subsequent expected-type propagation and module-declared defaults",
+        "Module-declared defaults and type-position numeral inference",
         "Native import/instance isolation and full identity contract"
+      ]
+    },
+    {
+      "id": "contextual_numeral_completion",
+      "status": "partial",
+      "environment": "Explicit Real, Counting and Twin Numerals declarations; x: Real; declared Real and Counting addition; no default. See docs/numeral-inference.md.",
+      "source": "x + 1",
+      "expected_tree": [
+        "Operator",
+        "+",
+        [
+          "Local",
+          "x"
+        ],
+        [
+          "Decimal",
+          "1"
+        ]
+      ],
+      "expected_lean": "Root-qualified declared Real addition applied to x and the selected Real numeral constructor applied to Lean.Expr.lit (.natVal 1). The constructor is retained with inferred presentation.",
+      "checks": [
+        "studies/module-numerals/verify_inference.py (fifteen exact native targets, four proofs, exhaustive completion and owned-failure checks)",
+        "studies/module-numerals/verify_prototype.py (fresh staged reconstruction and explicit/operator regressions)"
+      ],
+      "pending": [
+        "Main compiler integration and broad portfolio validation",
+        "Constraint pruning and CLI resource-budget controls",
+        "Module-owned defaults and inference across type-annotation boundaries",
+        "Parameterized carriers and complete native import/identity/instance isolation"
       ]
     }
   ]

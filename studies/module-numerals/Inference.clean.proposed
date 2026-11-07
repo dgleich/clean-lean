@@ -1,0 +1,34 @@
+-- generated: gpt-6 2026-11-07 role=assisted
+Import "Common.clean.proposed"
+
+Define inferred one(): Real:
+  Attribution: local; contextual numeral; original
+  Equals: 1
+  Render latex: 1
+
+Define inferred counting one(): Counting:
+  Attribution: local; renamed numeral carrier; original
+  Equals: 1
+  Render latex: 1
+
+Result inferred real addition:
+  Attribution: mathlib; add_comm; specialized
+  Let x: Real
+  Conclude: x + 1 = 1 + x
+
+Result inferred nested addition:
+  Attribution: mathlib; add_comm; specialized
+  Let x: Real
+  Conclude: (1 + 2) + x = x + (1 + 2)
+
+Result inferred counting addition:
+  Attribution: mathlib; add_comm; specialized
+  Let n: Counting
+  Conclude: n + 1 = 1 + n
+
+Result inferred named assumption:
+  Attribution: local; contextual assumption; original
+  Assume nonnegative(1)
+  Conclude: nonnegative(001)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

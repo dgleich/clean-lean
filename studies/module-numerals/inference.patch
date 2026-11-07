@@ -1,0 +1,213 @@
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -205,7 +205,7 @@
+     return g.get(s, s if len(s)==1 and s.isascii() else r'\mathit{'+textext(s)+'}')
+
+ def compatible(a,b):
+-    return a==b or (a==NUM and b.name in ('Natural','Real','Complex','_number','Matrix','Vector')) or (b==NUM and a.name in ('Natural','Real','Complex','Matrix','Vector'))
++    return a==b
+
+ class Environment:
+     """Names introduced by explicit module declarations; initially empty."""
+@@ -377,18 +377,18 @@
+             return template.format(*args)
+         return ('elements of $' if plural else 'an element of $')+self.render_type(t,'latex')+'$'
+     def match(self,p,a,bind):
++        from .numeral_inference import mismatch
+         if p.startswith('$'):
+             if isinstance(a,Type):self.require_type_argument(a)
+-            if p in bind and bind[p]!=a: raise CleanError('Type or dimension mismatch: '+p)
++            if p in bind and bind[p]!=a: mismatch(self,'Type or dimension mismatch: '+p)
+             bind[p]=a; return
+         m=re.fullmatch(r'(\w+)(?:\((.*)\))?',p)
+         if not m: raise CleanError('Invalid notation signature: '+p)
+         ps=split(m[2] or '')
+-        if a==NUM and m[1] in ('Natural','Real','Complex'): return
+-        if not isinstance(a,Type) or isinstance(a,LocalType) or a.name!=m[1] or len(ps)!=len(a.args): raise CleanError(f'Expected {p}, got {a}')
++        if not isinstance(a,Type) or isinstance(a,LocalType) or a.name!=m[1] or len(ps)!=len(a.args): mismatch(self,f'Expected {p}, got {a}')
+         for p2,a2 in zip(ps,a.args):
+             if isinstance(a2,Type) or p2.startswith('$'): self.match(p2,a2,bind)
+-            elif p2!=a2: raise CleanError('Dimension mismatch')
++            elif p2!=a2: mismatch(self,'Dimension mismatch')
+     def instantiate(self,p,bind):
+         if p.startswith('$'): return bind[p]
+         m=re.fullmatch(r'(\w+)(?:\((.*)\))?',p)
+@@ -433,8 +433,6 @@
+             if isinstance(pattern,ProofType) != isinstance(actual,ProofType):
+                 pattern=callable_view(pattern,self) or pattern
+                 actual=callable_view(actual,self) or actual
+-            # Preserve concrete numeric argument compatibility on migrated dimension signatures.
+-            if actual==NUM and pattern in (NAT,Type('Real'),Type('Complex')):return
+             from .indices import DimensionIndex
+             from .dependent_functions import DependentFunctionType,substitute,fresh_source,fresh_bound
+             if isinstance(pattern,DependentFunctionType) or isinstance(actual,DependentFunctionType) and self.is_function_type(pattern):
+@@ -515,7 +513,7 @@
+         if name not in self.data['functions']: raise CleanError('Unknown function: '+name)
+         s=self.data['functions'][name]; bind={}
+         if len(args)!=len(s['params']): raise CleanError('Wrong number of arguments for '+name)
+-        if 'dependent_signature' in s:return self.dependent_call(name,s,args,locals or {})
++        if 'dependent_signature' in s:return self.dependent_call(name,s,args,locals or {},mismatch_owner=getattr(self,'_numeral_trial_owner',None))
+         for p,a in zip(s['params'],args): self.match(p,a.type,bind)
+         from .operator_bindings import present
+         return present(self,name,args,Expr('('+s['lean'].format(*(a.lean for a in args))+')',s['latex'].format(*(a.tex for a in args)),self.instantiate(s['returns'],bind),tree=['Call',name,[a.tree for a in args]],inferred_args=tuple((p[1],bind['$'+p[1]]) for p in s.get('signature_tree',[None,None,[]])[2] if p[3]=='implicit'),checked_args=tuple(args)))
+@@ -524,12 +522,12 @@
+     # Presentation/continuation precedence; syntax precedence lives in grammar/clean.lark.
+     PREC={'↔':1,'→':2,'or':3,'∨':3,'and':4,'∧':4,'=':5,'≠':5,'!=':5,'<':5,'>':5,'≤':5,'≥':5,'<=':5,'>=':5,'∈':5,'⊆':5,'∣':5,'+':6,'-':6,'∪':6,'∩':6,'*':7,'/':7,'^':8}
+     def __init__(self,reg,env): self.reg,self.env=reg,env
+-    def parse(self,s):
++    def parse(self,s,expected=None):
+         from .syntax import parse,expression_tree
+-        return self.elaborate(expression_tree(parse(s,'expression')))
+-    def elaborate(self,tree):
+-        self.bound_counter=0
+-        return self._elaborate(tree)
++        return self.elaborate(expression_tree(parse(s,'expression')),expected)
++    def elaborate(self,tree,expected=None):
++        from .numeral_inference import complete
++        return complete(tree,self.reg,self.env,expected)
+     def _elaborate(self,tree):
+         from .annotations import Annotation
+         kind=tree[0]
+@@ -730,7 +728,7 @@
+                     raise CleanError('Cannot use let x = Type; use let x: Type or let x be Type')
+                 value=Expressions(reg,env).elaborate(payload)
+                 if value.type==Type('Type'):raise CleanError('Type-valued local definitions are not implemented; use a top-level Type declaration')
+-                if value.type==NUM:value.type=NAT
++                if value.type==NUM:raise CleanError('Local definition requires a resolved numeral interpretation')
+                 if value.type==PROP:raise CleanError('Local condition abbreviations are not implemented; use a top-level Condition declaration')
+                 from .conversion import local_definition
+                 env[name]=local_definition(name,value,reg,env)
+--- a/cleanlang/dependent_functions.py
++++ b/cleanlang/dependent_functions.py
+@@ -192,7 +192,8 @@
+     from .proof_types import callable_view,compatible_evidence
+     typ=callable_view(function.type,env)
+     if typ is None or not env.is_function_type(typ) or len(args)!=1 or not compatible_evidence(args[0].type,typ.args[0],env,locals):
+-        raise CleanError('Function field argument mismatch' if tree[0]=='Apply' else 'Function argument mismatch')
++        from .numeral_inference import mismatch
++        mismatch(env,'Function field argument mismatch' if tree[0]=='Apply' else 'Function argument mismatch')
+     result=substitute(typ.codomain,{typ.binder:args[0]},env,locals) if isinstance(typ,DependentFunctionType) else typ.args[1]
+     return Expr('('+function.lean+' '+args[0].lean+')',tex,result,tree=tree)
+
+--- a/cleanlang/modules.py
++++ b/cleanlang/modules.py
+@@ -179,7 +179,7 @@
+     implementation = next(iter(implementations))
+     expression = None
+     if implementation == 'equals':
+-        expression = Expressions(env, local).parse(values[implementation])
++        expression = Expressions(env, local).parse(values[implementation],expected=result)
+         if not compatible(expression.type, result):
+             raise CleanError(f'Definition body has type {expression.type}; expected {result}')
+         meaning = expression.lean
+--- /dev/null
++++ b/cleanlang/numeral_inference.py
+@@ -0,0 +1,78 @@
++# generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
++"""Finite, exhaustive completion of expression-position numeral holes."""
++from itertools import product
++from .core import CleanError,SignatureMismatch,Expressions
++from .numerals import identity,digits
++
++class IncompleteNumeralAnalysis(CleanError):pass
++
++
++def mismatch(env,message):
++    owner=getattr(env,'_numeral_trial_owner',None)
++    if owner is None:raise CleanError(message)
++    raise SignatureMismatch(message,owner)
++
++
++def holes(tree):
++    found=[]
++    def visit(node,path):
++        kind=node[0]
++        if kind=='Decimal':digits(node[1]);found.append((path,node[1]));return
++        if kind in ('Local','TypeValue','NumeralAnnotation','BoundNumeral'):return
++        if kind in ('Call','ModuleCall'):
++            for i,arg in enumerate(node[2]):visit(arg,path+(2,i))
++        elif kind=='Apply':
++            visit(node[1],path+(1,))
++            for i,arg in enumerate(node[2]):visit(arg,path+(2,i))
++        elif kind=='Projection':visit(node[1],path+(1,))
++        elif kind=='Operator':visit(node[2],path+(2,));visit(node[3],path+(3,))
++        elif kind=='Unary':visit(node[2],path+(2,))
++        elif kind in ('Forall','Exists','Lambda'):visit(node[3],path+(3,))
++        else:raise IncompleteNumeralAnalysis('Uncovered numeral-hole constructor: '+kind)
++    visit(tree,())
++    return found
++
++
++def complete(tree,env,locals,expected=None,*,limit=4096):
++    if type(limit) is not int or limit<1:raise ValueError('Numeral trial limit must be a positive integer')
++    positions=holes(tree)
++    def evaluate(node):
++        worker=Expressions(env,dict(locals));worker.bound_counter=0
++        return worker._elaborate(node)
++    if not positions:
++        result=evaluate(tree)
++        if expected is not None and result.type!=expected:
++            mismatch(env,f'Expression has type {result.type}; expected {expected}')
++        return result
++    choices=[(name,identity(name,env)) for name,spec in env.data['types'].items() if 'numerals' in spec]
++    choices.sort(key=lambda item:tuple(item[1]))
++    if not choices:raise CleanError('No declared numeral interpretation')
++    count=1
++    for _ in positions:
++        count*=len(choices)
++        if count>limit:raise IncompleteNumeralAnalysis(f'Incomplete numeral analysis: more than {limit} assignments')
++    owner=object();missing=object();previous=getattr(env,'_numeral_trial_owner',missing)
++    successes=[]
++    def rebuild(node,path,replacements):
++        if path in replacements:return replacements[path]
++        if isinstance(node,list):return [rebuild(v,path+(i,),replacements) for i,v in enumerate(node)]
++        return node
++    try:
++        env._numeral_trial_owner=owner
++        for assignment in product(choices,repeat=len(positions)):
++            replacements={path:['BoundNumeral',text,name,snapshot,'inferred']
++                for (path,text),(name,snapshot) in zip(positions,assignment)}
++            candidate=rebuild(tree,(),replacements)
++            try:
++                result=evaluate(candidate)
++                if expected is not None and result.type!=expected:continue
++            except SignatureMismatch as error:
++                if error.owner is not owner:raise
++                continue
++            successes.append(result)
++    finally:
++        if previous is missing:del env._numeral_trial_owner
++        else:env._numeral_trial_owner=previous
++    if not successes:raise CleanError('No consistent numeral interpretation')
++    if len(successes)!=1:raise CleanError(f'Ambiguous numeral interpretation: {len(successes)} assignments')
++    return successes[0]
+--- a/cleanlang/numerals.py
++++ b/cleanlang/numerals.py
+@@ -22,6 +22,7 @@
+
+ def spelling(tree,*,canonical_digits=False):
+     value=digits(tree[1]) if canonical_digits else tree[1]
++    if len(tree)>4 and tree[4]=='inferred':return value
+     carrier=type_source(tree[2]) if tree[0]=='NumeralAnnotation' else tree[2]
+     return '('+value+': '+carrier+')'
+
+@@ -55,5 +56,5 @@
+     bound=bind(tree,env,locals)
+     typ=Type(bound[2]);constructor=bound[3][3]
+     lean='(_root_.'+constructor+' (nat_lit '+digits(bound[1])+'))'
+-    tex=r'\left('+bound[1]+r' \: : \: '+env.render_type(typ,'latex')+r'\right)'
++    tex=bound[1] if len(bound)>4 and bound[4]=='inferred' else r'\left('+bound[1]+r' \: : \: '+env.render_type(typ,'latex')+r'\right)'
+     return Expr(lean,tex,typ,tree=bound)
+--- a/cleanlang/operator_bindings.py
++++ b/cleanlang/operator_bindings.py
+@@ -70,7 +70,9 @@
+             candidates.append(name)
+         elif all(match(env,formal,actual.type,bindings) for formal,actual in zip(spec['params'],args)):
+             candidates.append(name)
+-    if not candidates:raise CleanError('No declared meaning for operator '+op)
++    if not candidates:
++        from .numeral_inference import mismatch
++        mismatch(env,'No declared meaning for operator '+op)
+     if len(candidates)>1:raise CleanError('Ambiguous operator '+op+': '+', '.join(sorted(candidates)))
+     selected=candidates[0]
+     return checked[selected] if selected in checked else env.call(selected,args,locals)

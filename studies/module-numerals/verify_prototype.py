@@ -27,8 +27,11 @@ with tempfile.TemporaryDirectory(prefix='clean-numeral-parser-') as td:
     subprocess.run([sys.executable,str(HERE/'verify_adapters.py'),str(dest)],cwd=dest,check=True)
     subprocess.run(['git','apply',str(HERE/'expressions.patch')],cwd=dest,check=True)
     subprocess.run([sys.executable,str(HERE/'verify_expressions.py'),str(dest)],cwd=dest,check=True)
+    subprocess.run(['git','apply',str(HERE/'inference.patch')],cwd=dest,check=True)
+    subprocess.run([sys.executable,str(HERE/'verify_inference.py'),str(dest)],cwd=dest,check=True)
+    subprocess.run([sys.executable,str(HERE/'verify_expressions.py'),str(dest),'--inferred'],cwd=dest,check=True)
     for verifier in ['verify_saved.py','verify_dispatch.py','verify_foundations.py','verify_topology.py']:
         subprocess.run([sys.executable,str(ROOT/'studies/operator-integration'/verifier),str(dest)],cwd=dest,check=True)
-print('Isolated numeral expression checks and operator regressions passed; main integration and implicit numerals remain pending')
+print('Isolated numeral inference, explicit-expression and operator checks passed; main integration and module defaults remain pending')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
