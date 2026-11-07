@@ -15,6 +15,7 @@ def tree_names(tree):
     kind=tree[0]
     if kind=='Local':return {tree[1]}
     if kind=='Decimal':return set()
+    if kind=='TypeValue':return set(re.findall(ID,tree[1]))
     if kind=='Call':return {tree[1]}|set().union(*(tree_names(a) for a in tree[2]))
     if kind=='Projection':return tree_names(tree[1])
     if kind=='Apply':return tree_names(tree[1])|set().union(*(tree_names(a) for a in tree[2]))
@@ -153,7 +154,9 @@ def substitute(typ,bindings,env,locals):
         if not typ.args and typ.name in bindings:
             value=bindings[typ.name]
             if isinstance(value,Type):return value
-            if isinstance(value,Expr) and value.type==Type('Type') and value.tree[0]=='Local':return Type(value.tree[1])
+            if isinstance(value,Expr) and value.type==Type('Type'):
+                if value.tree[0]=='Local':return Type(value.tree[1])
+                if value.tree[0]=='TypeValue':return env.type(value.tree[1],locals,phrases=False)
             raise CleanError('Expected a named type argument: '+typ.name)
         return Type(typ.name,tuple(substitute(a,bindings,env,locals) for a in typ.args))
     return bindings.get(typ,typ)

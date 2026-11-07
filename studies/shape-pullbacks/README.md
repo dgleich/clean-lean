@@ -69,8 +69,8 @@ These short forms have checked native targets. The later
 [inferred-argument conversion rule](../../docs/inferred-argument-conversion.md)
 allows their named Type parameters to participate in authored expansion. A projected
 module from the short pullback now compares equally to the explicit implementation
-and its selected underlying object. Compound types used as values still have no
-source expression in this profile and remain opaque. The separate
+and its selected underlying object. The later explicit type-expression rule
+also allows compound types to enter authored expansion. The separate
 [inferred-conversion study](../inferred-conversion/README.md) checks the new rule.
 
 ## What remains for interval-basis restriction

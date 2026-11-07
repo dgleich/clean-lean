@@ -51,12 +51,13 @@ def projection_reduction(env, base, field, locals):
     parameters=signature[2]
     if any(p[3]=='implicit' for p in parameters):return None
     body=definition['tree']
-    def has_binder(node):
-        return isinstance(node,list) and (bool(node) and node[0] in ('Lambda','Forall','Exists')
-            or any(has_binder(child) for child in node))
+    from .beta_indices import has_binder
     if has_binder(body):return None
     bindings=dict(zip((p[1] for p in parameters),tree[2]))
     def replace(node):
+        if node[0]=='TypeValue':
+            from .type_values import substitute
+            return substitute(node,{n:Expressions(env,locals).elaborate(t) for n,t in bindings.items()},env,locals)
         if node[0]=='Local':return bindings.get(node[1],node)
         if node[0]=='Call':
             args=[replace(a) for a in node[2]]

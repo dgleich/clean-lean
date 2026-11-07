@@ -41,11 +41,13 @@ def substitute_index(index,bindings,env,locals):
         if isinstance(value,ComputedIndex):return json.loads(value.syntax)
         if isinstance(value,ValueIndex):return expression_tree(parse(value.name,'expression'))
         if isinstance(value,Type):
-            if value.args or value.name not in locals:
-                raise CleanError('Computed index needs a named type argument: '+str(value))
-            return ['Local',value.name]
+            from .inferred_conversion import reify
+            return reify(value,env,locals).tree
         return expression_tree(parse(str(value),'expression'))
     def replace(node):
+        if node[0]=='TypeValue':
+            from .type_values import substitute
+            return substitute(node,bindings,env,locals)
         if node[0]=='Local' and node[1] in bindings:return reference(bindings[node[1]])
         if node[0]=='Call':
             args=[replace(a) for a in node[2]]

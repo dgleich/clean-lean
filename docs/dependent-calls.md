@@ -167,3 +167,12 @@ natural-dimension representation and uses this structured call path for every
 dimension-bearing signature. Its ordered representative-selection and concrete
 numeric-argument rules replace the corresponding original restrictions above.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The later [explicit type-expression rule](type-expressions.md) also admits
+`type(T)` at an explicit Type parameter. The enclosed type is checked at Type 0
+and substituted structurally, including dependent arrows and computed dimensions.
+The original named-carrier-only rule is superseded on this point; no arbitrary
+computed type or universe inference is added.
+:::

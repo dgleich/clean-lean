@@ -1321,7 +1321,6 @@
         "studies/shape-pullbacks/verify.py"
       ],
       "pending": [
-        "Compound type values in inferred-body conversion",
         "Subpath interval clipping and basis reindexing",
         "Pyramid construction and extension proof"
       ]
@@ -1356,8 +1355,36 @@
         "studies/inferred-conversion/verify.py"
       ],
       "pending": [
-        "Compound types used as values",
         "General higher-order conversion"
+      ]
+    },
+    {
+      "id": "explicit_type_expressions",
+      "status": "implemented-slice",
+      "specification": "docs/type-expressions.md",
+      "source_fragment": "pack(type(Vector(n,Real)),v)",
+      "expected_tree": [
+        "Call",
+        "pack",
+        [
+          [
+            "TypeValue",
+            "Vector(n,Real)"
+          ],
+          [
+            "Local",
+            "v"
+          ]
+        ]
+      ],
+      "checks": [
+        "tests/test_type_expressions.py",
+        "studies/type-expressions/verify.py"
+      ],
+      "pending": [
+        "General universe polymorphism",
+        "Type-valued local definitions",
+        "Callable named universal evidence"
       ]
     }
   ]

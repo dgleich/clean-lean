@@ -512,8 +512,22 @@ are recorded in the inferred-conversion study.
 
 The [integration draft](type-expressions.md) chooses `type(T)` as an explicit,
 case-insensitive expression atom containing existing type syntax. It addresses
-concrete carrier arguments needed for finite zigzag restrictions. The prototype
-is isolated while the previous compiler snapshot completes validation. The draft
+concrete carrier arguments needed for finite zigzag restrictions. The initial prototype
+was isolated while the previous compiler snapshot completed validation. The draft
 records the reserved-word change, Type 0 gate, structural substitution and all
 expression-consumer obligations. It is not yet repository-supported syntax.
+:::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Explicit type expressions
+
+[Type expressions](type-expressions.md) adds `type(T)` as a case-insensitive
+expression atom containing existing type syntax, with one TypeValue tree and the
+resolved Type 0 Lean target. `type` is reserved in expression names. The explicit
+foundational Type binding moves into the shared types module. Hygienic substitution,
+owned binder comparison, automatic condition naming and editor highlighting cover
+the new node. Local type definitions and arbitrary computed types remain rejected.
+The earlier compound-type-as-value opacity boundary is superseded; full validation
+status is recorded in the type-expression study.
 :::

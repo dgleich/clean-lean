@@ -5,7 +5,7 @@ syntax sync fromstart
 syntax match cleanMathNumber '\<\d\+\>'
 syntax match cleanMathOperator '[+*/^=<>−-]\|[↔→≤≥≠∧∨¬∈⊆∪∩∣]'
 syntax match cleanMathDelimiter '[().,:;]'
-syntax match cleanMathLogic '\c\<\%(and\|or\|not\|function\|for\|every\|there\|exists\)\>'
+syntax match cleanMathLogic '\c\<\%(and\|or\|not\|function\|type\|for\|every\|there\|exists\)\>'
 syntax match cleanMathSignature '(.*\ze:\s*$' contained
 syntax match cleanMathKeyword '\c^ *\%(Condition\|Holds when\|Let\|Define\|Assume\|Conclude\|Returns\|Equals\|Alias\|Phrase\|Result\|Theorem\|Context\|Notation\|Condition\|Structure\|Type\|Source\)\>' containedin=ALLBUT,cleanMathComment,cleanMathOpaque,cleanMathLean,cleanMathImport,cleanMathText,cleanMathTriple,cleanMathDoc
 syntax match cleanMathDeclaration '\c^ *\%(Result\|Theorem\|Context\|Define\|Notation\|Condition\|Structure\|Type\|Source\)\>.*:$' contains=cleanMathKeyword,cleanMathDelimiter,cleanMathSignature

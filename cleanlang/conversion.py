@@ -120,10 +120,7 @@ def _normal_form(expression,environment,locals):
 def local_definition(name,value,environment,locals):
     """Freeze a binder-free definition's comparison value in its earlier scope."""
     from .core import texid
-    def has_binder(node):
-        if not isinstance(node,list):return False
-        if node and isinstance(node[0],str) and node[0] in ('Lambda','Forall','Exists'):return True
-        return any(has_binder(child) for child in node)
+    from .beta_indices import has_binder
     result=Expr(name,texid(name),value.type)
     if not has_binder(value.tree):
         normal=_normal_form(value,environment,locals)

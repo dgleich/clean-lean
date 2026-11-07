@@ -378,6 +378,6 @@ It does not yet restrict interval bases: arbitrary shape maps can make interval
 preimages disconnected. Subpath inclusion, clipping/removing empty intervals and
 basis reindexing are the next concrete data requirements. The short inferred-type
 interfaces now compare through named Type parameters under the
-[inferred-argument rule](../../docs/inferred-argument-conversion.md); compound types
-used as values remain an open boundary. No paper theorem is claimed by these laws.
+[inferred-argument rule](../../docs/inferred-argument-conversion.md); explicit type expressions now
+cover compound types used as values. No paper theorem is claimed by these laws.
 :::

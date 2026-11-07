@@ -245,3 +245,12 @@ The implementation now applies the existing structural index-substitution rule
 instead of treating P.space as an unresolved standalone binder. The well-group
 study checks the resulting record and projection signatures against native Lean.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The later [explicit type-expression rule](type-expressions.md) also admits
+`type(T)` at an explicit Type parameter. The enclosed type is checked at Type 0
+and substituted structurally, including dependent arrows and computed dimensions.
+The original named-carrier-only rule is superseded on this point; no arbitrary
+computed type or universe inference is added.
+:::

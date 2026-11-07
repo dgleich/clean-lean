@@ -10,6 +10,12 @@ Import Lean Mathlib.Analysis.Calculus.Deriv.Basic
 Import Lean Mathlib.Data.List.Sort
 Import Lean Mathlib.Data.Nat.GCD.Basic
 
+Type Type():
+  Means: Type
+  Render latex: \mathrm{{Type}}
+  Describe: a type
+  Describe plural: types
+
 Type Natural():
     Means: ℕ
     Render latex: \mathbb{{N}}

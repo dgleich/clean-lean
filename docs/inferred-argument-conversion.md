@@ -87,3 +87,11 @@ compound type expressions used as values and general higher-order conversion rem
 outside this slice. The short pullback example does not prove interval restriction
 or the pyramid theorem. See the study README for validation status.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The later [explicit type-expression rule](type-expressions.md) supersedes the
+compound-type-as-value opacity boundary described above. Checked inferred types
+now reify to a named local where available or to TypeValue, including dependent
+carriers. Other comparison boundaries remain in force.
+:::

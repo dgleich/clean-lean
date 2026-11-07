@@ -63,7 +63,7 @@
 
 (defconst clean-math-font-lock-keywords
   `(("\\b[0-9]+\\b" . font-lock-constant-face)
-    ("\\b\\(and\\|or\\|not\\|function\\|for\\|every\\|there\\|exists\\)\\b" . font-lock-keyword-face)
+    ("\\b\\(and\\|or\\|not\\|function\\|type\\|for\\|every\\|there\\|exists\\)\\b" . font-lock-keyword-face)
     (,(concat "^ *" clean-math--keyword) . font-lock-keyword-face)
     ("^ *\\(Result\\|Theorem\\|Context\\|Define\\|Notation\\|Condition\\|Structure\\|Type\\|Source\\) +\\(.+\\): *$"
      (1 font-lock-keyword-face t) (2 font-lock-function-name-face t))

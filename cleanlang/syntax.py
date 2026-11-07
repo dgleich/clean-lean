@@ -63,6 +63,7 @@ def expression_spelling(tree):
     from .core import CleanError
     kind=tree[0]
     if kind in ('Local','Decimal'):return tree[1]
+    if kind=='TypeValue':return 'type('+tree[1]+')'
     if kind=='Call':return tree[1]+'('+','.join(map(expression_spelling,tree[2]))+')'
     if kind=='Projection':
         base=expression_spelling(tree[1])
@@ -94,6 +95,7 @@ def expression_tree(tree):
         return result
     if kind=='group':return expression_tree(c[0])
     if kind=='local':return ['Local',str(c[0])]
+    if kind=='type_value':return ['TypeValue',type_spelling(c[1])]
     if kind=='decimal':return ['Decimal',str(c[0])]
     if kind=='call':return ['Call',name(c[0]),[expression_tree(x) for x in c[1].children] if len(c)>1 else []]
     if kind=='unary':return ['Unary','-' if str(c[0])=='-' else 'not',expression_tree(c[1])]

@@ -4,9 +4,12 @@ from .hygiene import UnrepresentableSubstitution
 
 def reify(value,environment,locals):
     if isinstance(value,Type):
-        if value.args or value.name not in locals or locals[value.name].type!=Type('Type'):
-            raise UnrepresentableSubstitution('Inferred type has no named local expression')
-        return Expressions(environment,locals).elaborate(['Local',value.name])
+        if not value.args and value.name in locals and locals[value.name].type==Type('Type'):
+            return Expressions(environment,locals).elaborate(['Local',value.name])
+        from .hygiene import substitute
+        tree=substitute(['TypeValue','clean_actual_type'],{},environment,locals,{'clean_actual_type':value})
+        result=Expressions(environment,locals).elaborate(tree)
+        return result
     from .core import ValueIndex
     from .dependent_functions import index_tree
     from .syntax import parse,expression_tree
@@ -32,6 +35,7 @@ def value_names(tree):
     kind=tree[0]
     if kind=='Local':return {tree[1]}
     if kind=='Decimal':return set()
+    if kind=='TypeValue':return type_values(type_tree(parse(tree[1],'type_ref')))
     if kind=='Call':return {tree[1]}|set().union(*(value_names(a) for a in tree[2]))
     if kind=='Projection':return value_names(tree[1])
     if kind=='Apply':return value_names(tree[1])|set().union(*(value_names(a) for a in tree[2]))

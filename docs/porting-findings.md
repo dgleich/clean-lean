@@ -453,8 +453,9 @@ The isolated type-expression prototype can author a finite subpath inclusion usi
 explicit Fin offset, bound-cast and equality-cast wrappers, plus Nat association
 and monotonicity facts. Its vertex/edge functions, restricted directions and
 certified shape map are authored in Clean. Lean checks the two endpoint laws,
-including zero-edge subpaths. This construction is not yet a checked repository
-study and has not been compared against independent exact native targets.
+including zero-edge subpaths. Its initial inclusion prototype passed eleven exact native targets outside the
+repository. Integration as a repository study and the restricted-zigzag acceptance
+checks remain pending.
 
 The exercise exposed a separate interface boundary: evidence for a named condition
 whose body is universally quantified is not automatically callable as a dependent
@@ -464,4 +465,18 @@ mathematical bodies; direct use of a named universal certificate needs a precise
 proof-elimination or conversion rule. This is recorded as unfinished language work,
 not hidden behind a study-specific native adapter. Interval clipping, removal of
 empty labels, basis reindexing and the paper's extension theorem remain separate.
+:::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Explicit type expressions
+
+[Type expressions](type-expressions.md) adds `type(T)` as a case-insensitive
+expression atom containing existing type syntax, with one TypeValue tree and the
+resolved Type 0 Lean target. `type` is reserved in expression names. The explicit
+foundational Type binding moves into the shared types module. Hygienic substitution,
+owned binder comparison, automatic condition naming and editor highlighting cover
+the new node. Local type definitions and arbitrary computed types remain rejected.
+The earlier compound-type-as-value opacity boundary is superseded; full validation
+status is recorded in the type-expression study.
 :::

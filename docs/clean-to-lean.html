@@ -888,8 +888,19 @@ Let N = pull back diagram(field,Q,R,f,M)</code></pre>
 
 Conclude: apply endomap(repeat map(x),y) = x</code></pre>
 <p>The schematic Lean definition is <code>def repeatMap {T : Type} (x : T) : T → T := fun _ => x</code>. For real x,y the proposition retains <code>@applyMap ℝ (@repeatMap ℝ x) y = x</code>. The generated study records actual wrapper names and exact targets.</p>
-<p>Type annotations accept checked primitive, compound and dependent types, with fresh binders and simultaneous substitution. Type-valued expression positions require a named Type local; compound type values still leave the wrapper opaque. Inferred natural dimensions retain their checked source trees and literal types. No equality-assumption rewriting or proof search is added.</p>
+<p>Type annotations accept checked primitive, compound and dependent types, with fresh binders and simultaneous substitution. Type-valued expression positions accept named Type locals or the later explicit type-expression form. Inferred natural dimensions retain their checked source trees and literal types. No equality-assumption rewriting or proof search is added.</p>
 <p><a href="inferred-argument-conversion.md">Normative comparison rule</a> · <a href="../studies/inferred-conversion/README.md">Acceptance study and validation status</a>. Ten exact targets and six proofs exercise the rule; full regression validation is recorded separately.</p>
+</section>
+<section class="mapping" id="type-expressions" data-status="implemented">
+<h2>Explicit type expressions</h2>
+<p><strong>Implemented prototype; validation status is in the linked study.</strong> Use <code>type(T)</code> to pass a concrete type to a declared Type parameter. The parser produces TypeValue before resolving T. Type constructors remain module-declared.</p>
+<pre><code>pack(type(Real),x)
+pack(type(Vector(n,Real)),v)
+pack(type(Function(k: Natural,Vector(k,Real))),f)</code></pre>
+<p>Schematic Lean applications are <code>pack ℝ x</code>, <code>pack (Fin n → ℝ) v</code>, and <code>pack ((k : ℕ) → Fin k → ℝ) f</code>. Existing projection-reduction rules still apply. These are explanatory spellings; the study compares exact generated wrappers and native targets.</p>
+<p>The selected type must inhabit Lean Type 0. The foundational Type binding now comes from the shared types module. Proof types and higher-universe carriers are rejected; Prop itself is a Type 0 carrier. Built-in type-valued operators are limited to equality and disequality. Type-valued local definitions remain unsupported. Inferred compound carriers use the same checked syntax internally.</p>
+<p>Substitution descends into type indices and freshens dependent binders. Automatic assumption names retain <code>type(...)</code>, with existing punctuation encoding and collision rejection. LaTeX uses the ordinary mathematical type rendering.</p>
+<p><a href="type-expressions.md">Normative rules and consumer audit</a> · <a href="../studies/type-expressions/README.md">Eight exact native targets and three proofs</a>.</p>
 </section>
 </main>
 <script>

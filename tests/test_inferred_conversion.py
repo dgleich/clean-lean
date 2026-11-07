@@ -20,8 +20,8 @@ class InferredConversion(unittest.TestCase):
    ['Call','apply endomap',[['Call','constant map',[['Local','x']]],['Local','z']]])
  def test_computed_index_counts_as_value_position(self):
   from cleanlang.inferred_conversion import value_names
-  self.assertEqual(value_names(['Lambda','x','Vector((size of type(T)),Real)',['Local','x']]),
-   {'size of type','T','x'})
+  self.assertEqual(value_names(['Lambda','x','Vector((carrier size(T)),Real)',['Local','x']]),
+   {'carrier size','T','x'})
   self.assertNotIn('T',value_names(['Lambda','x','Function(T,Real)',['Local','x']]))
  def test_annotation_substitution_independent_tree(self):
   from cleanlang.hygiene import substitute
@@ -69,9 +69,9 @@ class InferredConversion(unittest.TestCase):
  def test_named_type_value_legacy_call(self):
   self.box();self.bind('U','Type');self.bind('x','U')
   self.assertEqual(self.normal('box(x).value').lean,'x')
- def test_nonnamed_type_value_stays_opaque(self):
+ def test_nonnamed_type_value_expands(self):
   self.box();self.bind('x','Real')
-  self.assertEqual(self.normal('box(x).value').lean,self.expr('box(x).value').lean)
+  self.assertEqual(self.normal('box(x).value').lean,'x')
  def test_named_type_in_dependent_call(self):
   load_module(ROOT/'library/diagrams/pullbacks.clean',self.e)
   for n,t in [('K','Type'),('field','FieldStructure(K)'),('V','Type'),('E','Type'),('W','Type'),('F','Type'),

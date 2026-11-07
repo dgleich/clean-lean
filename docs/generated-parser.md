@@ -88,7 +88,8 @@ Keyword lookaheads use that boundary instead of unsupported regex end/word ancho
 the adapter removes it if an opaque token consumes it. It is never part of a Lean
 body, template, name, or mathematical expression. Full documents already end in a newline.
 
-Expression words `and`, `or`, `not`, and `function` are case-insensitive reserved
+Expression words `and`, `or`, `not`, `function`, `type`, `for`, `every`,
+`there`, and `exists` are case-insensitive reserved
 keywords. They cannot be variable names or words within a callable name. This resolves
 the old environment-dependent ambiguity between, for example, a call named
 `not positive` and negation of `positive(x)`. Such declarations now fail syntactically;
@@ -214,4 +215,13 @@ envelopes, then validated by the structural type grammar. Strict LALR and lexer
 checks still pass without conflict defaults. No new keyword or lexical highlighting
 category is required. Semantic elaboration remains explicitly disabled; see the
 [dependent-function contract](dependent-function-types.md).
+:::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+`type(T)` is an expression atom containing the existing type_ref grammar. Its
+TypeValue AST is selected syntactically. No environment lookup or successful type
+check selects between this node and a Call. Reserving the expression word `type`
+does not reserve TYPE_ID names inside type syntax. See [the mapping and scope
+contract](type-expressions.md).
 :::

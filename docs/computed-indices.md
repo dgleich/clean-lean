@@ -169,3 +169,12 @@ use the prescribed contraction. This resolves generic congrArg on record-field
 functions without admitting bare lambdas, quantifiers or general local-alias conversion.
 There is no grammar change or implicit proof search.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+The later [explicit type-expression rule](type-expressions.md) also admits
+`type(T)` at an explicit Type parameter. The enclosed type is checked at Type 0
+and substituted structurally, including dependent arrows and computed dimensions.
+The original named-carrier-only rule is superseded on this point; no arbitrary
+computed type or universe inference is added.
+:::

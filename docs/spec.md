@@ -753,3 +753,17 @@ matcher's selected arguments. Compound types used as values remain opaque; this
 is not a new type-expression syntax. Native acceptance and full regression status
 are recorded in the inferred-conversion study.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Explicit type expressions
+
+[Type expressions](type-expressions.md) adds `type(T)` as a case-insensitive
+expression atom containing existing type syntax, with one TypeValue tree and the
+resolved Type 0 Lean target. `type` is reserved in expression names. The explicit
+foundational Type binding moves into the shared types module. Hygienic substitution,
+owned binder comparison, automatic condition naming and editor highlighting cover
+the new node. Local type definitions and arbitrary computed types remain rejected.
+The earlier compound-type-as-value opacity boundary is superseded; full validation
+status is recorded in the type-expression study.
+:::

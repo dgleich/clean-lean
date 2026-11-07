@@ -1,0 +1,62 @@
+Import "../../library/types.clean"
+
+Source typeExpressions:
+  Kind: other
+  Label: Type expressions
+  Title: Clean type-expression acceptance examples
+
+Structure Box(T: Type):
+  Let value: T
+  Constructor: box value
+  Render latex: \operatorname{{Box}}({T})
+  Describe: a box of values of type ${T}$
+
+Define pack(T,x):
+  Let T: Type
+  Let x: T
+  Returns: Box(T)
+  Equals: box value(T,x)
+  Render latex: \operatorname{{box}}_{{{T}}}({x})
+
+Define inferred box(x):
+  Let T: Type
+  Let x: T
+  Returns: Box(T)
+  Equals: pack(T,x)
+  Render latex: \operatorname{{box}}({x})
+
+Define real box(x):
+  Let x: Real
+  Returns: Box(Real)
+  Equals: pack(type(Real),x)
+
+Define vector box(n,v):
+  Let n: Natural
+  Let v: Vector(n,Real)
+  Returns: Box(Vector(n,Real))
+  Equals: pack(type(Vector(n,Real)),v)
+
+Define family box(f):
+  Let f: Function(k: Natural,Vector(k,Real))
+  Returns: Box(Function(k: Natural,Vector(k,Real)))
+  Equals: pack(type(Function(k: Natural,Vector(k,Real))),f)
+
+Result real box value:
+  Attribution: typeExpressions; explicit carrier specimen; original
+  Let x: Real
+  Conclude: real box(x).value = x
+
+Result function box value:
+  Attribution: typeExpressions; inferred compound carrier specimen; original
+  Let f: Function(k: Natural,Vector(k,Real))
+  Let g: Function(k: Natural,Vector(k,Real))
+  Assume same: inferred box(f) = pack(type(Function(k: Natural,Vector(k,Real))),g)
+  Conclude: f = g
+
+Result vector box value:
+  Attribution: typeExpressions; indexed carrier specimen; original
+  Let n: Natural
+  Let v: Vector(n,Real)
+  Conclude: vector box(n,v).value = v
+
+-- generated: gpt-6 2026-11-07 role=assisted; LLM-authored portions; see PROVENANCE.md

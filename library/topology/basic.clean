@@ -6,12 +6,6 @@ Import Lean Mathlib.Topology.Basic
     Mathematical preimages, images, composition, and continuity are authored here.
     This first module is restricted to carrier types in Lean Type 0. -/
 
-Type Type():
-  Means: Type
-  Render latex: \mathrm{{Type}}
-  Describe: a type
-  Describe plural: types
-
 Type Topology(X: Type):
   Means: TopologicalSpace X
   Render latex: \operatorname{{Topology}}({X})

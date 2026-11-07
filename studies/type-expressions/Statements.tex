@@ -1,0 +1,20 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{real box value}\cleanattribution{[Type expressions, explicit carrier specimen]}
+Let $x$ be a real number.
+Then \[\operatorname{real\ box}(x).\mathrm{value} = x.\]
+\end{cleanresult}
+
+\begin{cleanresult}{function box value}\cleanattribution{[Type expressions, inferred compound carrier specimen]}
+Let $f$ be a function assigning to each $k : \mathbb{N}$ a value of type $\mathbb{R}^{k}$.
+Let $g$ be a function assigning to each $k : \mathbb{N}$ a value of type $\mathbb{R}^{k}$.
+Assume $\operatorname{box}(f) = \operatorname{box}_{\prod_{k:\mathbb{N}} \mathbb{R}^{k}}(g)$ (\texttt{same}).
+Then \[f = g.\]
+\end{cleanresult}
+
+\begin{cleanresult}{vector box value}\cleanattribution{[Type expressions, indexed carrier specimen]}
+Let $n$ be a natural number.
+Let $v$ be a vector of length $n$ over $\mathbb{R}$.
+Then \[\operatorname{vector\ box}(n, v).\mathrm{value} = v.\]
+\end{cleanresult}
+
+% generated: gpt-6 2026-11-07 role=assisted; LLM-authored portions; see PROVENANCE.md

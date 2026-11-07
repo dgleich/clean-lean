@@ -4006,6 +4006,96 @@
     "docs/type-expressions.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "cleanlang/type_values.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-07"
+    },
+    "tests/test_type_expressions.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-07"
+    },
+    "studies/type-expressions/verify.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-07"
+    },
+    "studies/type-expressions/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown",
+      "model": "gpt-6",
+      "date": "2026-11-07"
+    },
+    "studies/type-expressions/Statements.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-07"
+    },
+    "studies/type-expressions/Generated.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-07"
+    },
+    "studies/type-expressions/Verified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-07"
+    },
+    "studies/type-expressions/Statements.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-07"
+    },
+    "studies/type-expressions/latex.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-07"
+    },
+    "studies/type-expressions/Statements.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar"
     }
   }
 }

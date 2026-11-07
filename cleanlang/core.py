@@ -411,9 +411,14 @@ class Environment:
             match(t,actuals[n].type)
             if t==Type('Type'):
                 from .structures import reference_name
-                ref=reference_name(actuals[n].tree)
-                if ref is None:raise CleanError('Type argument must be a named local')
-                bind(n,Type(ref))
+                if actuals[n].tree[0]=='TypeValue':
+                    value=self.type(actuals[n].tree[1],locals,phrases=False)
+                    self.require_type_argument(value)
+                    bind(n,value)
+                else:
+                    ref=reference_name(actuals[n].tree)
+                    if ref is None:raise CleanError('Type argument must be a named local or type expression')
+                    bind(n,Type(ref))
         for n in implicit:
             if n not in substitutions:raise CleanError('Cannot infer implicit parameter: '+n)
         targets=[]
@@ -447,6 +452,13 @@ class Expressions:
         return self._elaborate(tree)
     def _elaborate(self,tree):
         kind=tree[0]
+        if kind=='TypeValue':
+            sort=self.reg.data['types'].get('Type',{})
+            if sort.get('args')!=[] or sort.get('lean','').strip()!='Type' or sort.get('universe')!=1:
+                raise CleanError('Type expressions require the foundational Type binding to Lean Type')
+            value=self.reg.type(tree[1],self.env,phrases=False)
+            self.reg.require_type_argument(value)
+            return Expr(self.reg.render_type(value,'lean',self.env),self.reg.render_type(value,'latex',self.env),Type('Type'),tree=['TypeValue',str(value)])
         if kind=='Decimal':return Expr(tree[1],tree[1],NUM,tree=tree)
         if kind=='Local':
             if tree[1] not in self.env:raise CleanError('Unknown name: '+tree[1])
@@ -464,6 +476,7 @@ class Expressions:
         if kind=='Operator':return binary(tree[1],self._elaborate(tree[2]),self._elaborate(tree[3]))
         if kind=='Unary':
             tok=tree[1];a=self._elaborate(tree[2])
+            if a.type==Type('Type'):raise CleanError('Type-valued operands do not support unary operators')
             if tok!='-' and a.type!=PROP:raise CleanError('Not requires a proposition')
             inner=('('+a.tex+')') if a.precedence < 8 else a.tex
             tx=('-'+inner) if tok=='-' else (r'\text{not }('+a.tex+')')
@@ -512,6 +525,8 @@ class Expressions:
 
 def binary(op,a,b):
     op={'!=':'≠','<=':'≤','>=':'≥','and':'∧','or':'∨'}.get(op,op)
+    if Type('Type') in (a.type,b.type) and op not in ('=','≠'):
+        raise CleanError('Type-valued operands support only equality and disequality')
     t=a.type if a.type!=NUM else b.type; lop=op
     if op in ('∧','∨','↔','→'):
         if a.type!=PROP or b.type!=PROP: raise CleanError('Logical operator requires propositions')
@@ -628,6 +643,7 @@ def _parse_flat(text,reg):
                 if payload[0] in ('Local','Call') and (payload[1] in reg.data['types'] or payload[1] in reg.data['aliases']):
                     raise CleanError('Cannot use let x = Type; use let x: Type or let x be Type')
                 value=Expressions(reg,env).elaborate(payload)
+                if value.type==Type('Type'):raise CleanError('Type-valued local definitions are not implemented; use a top-level Type declaration')
                 if value.type==NUM:value.type=NAT
                 if value.type==PROP:raise CleanError('Local condition abbreviations are not implemented; use a top-level Condition declaration')
                 from .conversion import local_definition

@@ -1,11 +1,10 @@
 :::llm gpt-6 2026-11-06 role=assisted
 
-# Explicit type expressions — integration draft
+# Explicit type expressions
 
-Status: isolated implementation prototype, **not supported by the repository
-compiler yet**. The inferred-argument-conversion implementation remains the current
-contract. This draft removes its compound-type-as-value boundary and supplies the
-concrete type arguments needed by finite zigzag restriction constructors.
+Status: implemented prototype; full integration validation is in progress. This
+rule extends inferred-argument conversion with explicit compound type values and
+supplies concrete type arguments needed by finite zigzag restriction constructors.
 
 ## Authored form and unique parse
 
@@ -50,15 +49,21 @@ instance choices. The expression's type is the parameter sort Type. Its LaTeX is
 the enclosed type's ordinary mathematical rendering, without the syntactic marker.
 
 `type(Real)` therefore emits ℝ; `type(Vector(n,Real))` emits `Fin n → ℝ`.
-Dependent arrows retain their native Pi binders. A proof type such as
+Dependent arrows retain their native Pi binders. Type-valued operands support
+only equality and disequality among the built-in operators. Arithmetic, order,
+powers and unary operators on them are rejected, including on named Type locals.
+Other constructions must use explicitly declared functions. A proof type such as
 `type((x = x))` is rejected, as is a declared Type 1 module-object carrier.
 `type(Proposition)` is different: Prop itself inhabits Type 0 and can be supplied
 as a carrier. This distinction follows Lean's sorts, not the displayed word.
 
 At an explicit Type parameter, substitute the checked enclosed type structurally.
-Named Type locals retain their current meaning. Calls returning Type, arbitrary
-computed type values, Type-valued local definitions and general universe parameters
-remain outside this extension. No type inference trial chooses between expression
+Named Type locals retain their current meaning. At an explicit Type parameter,
+a call returning Type is rejected even when it computes a known type. Such calls
+may still be ordinary expressions in contexts that already accept Type-valued
+terms, such as equality; this rule does not make them usable as carrier annotations
+or as explicit Type arguments. Type-valued local definitions and general universe
+parameters remain outside this extension. No type inference trial chooses between expression
 and type syntax. `type(marker(3))` is a type-constructor lookup, never evaluation
 of a Natural-returning function.
 
@@ -107,7 +112,7 @@ definitional equality: the independently authored oracle must select that x.
 
 ## Current prototype evidence and remaining gates
 
-The isolated generated parser passes strict LALR and lexer checks. Fourteen focused
+The isolated generated parser passes strict LALR and lexer checks. Nineteen focused
 prototype tests cover the independent tree, universe checks, constructor typing,
 inferred compound expansion, nested dimension substitution, dependent comparison
 keys, local type-definition rejection, meta-sort inference and actual automatic
@@ -117,11 +122,12 @@ replacing the old zigzag-opacity assertion with an independent expected target
 function. The authored projection and its ordinary comparison form are still
 checked separately; whole-index comparison now materializes that function.
 
-The native prototype passes five exact targets and two proofs: explicit packing,
-inferred packing, a concrete Real constructor, its reduced field equation and an
-inferred dependent-carrier equality. These are isolated experiments, not yet
-repository acceptance artifacts. Integration requires preserving them, completing this audit,
+The native prototype passes eight exact targets and three proofs: explicit packing,
+inferred packing, concrete Real, vector and dependent-family constructors, their reduced field
+equations and an inferred dependent-carrier equality. The
+[type-expression study](../studies/type-expressions/README.md) preserves these
+acceptance artifacts. Remaining validation includes
 updating the normative references and acceptance catalog, running the full suite
 and corpus, inspecting the rendered specimens, and refreshing the review browser.
-No integration or general conformance claim is made by this draft.
+This slice does not claim general universe polymorphism or callable universal evidence.
 :::

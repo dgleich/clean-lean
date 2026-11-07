@@ -64,7 +64,7 @@ class DiagramDefinitions(unittest.TestCase):
         from cleanlang.syntax import parse,expression_tree
         self.assertEqual(expression_tree(parse('constant diagram(field,Q,M)','expression')),
           ['Call','constant diagram',[['Local','field'],['Local','Q'],['Local','M']]])
-    def test_opaque_shape_projection(self):
+    def test_materialized_shape_projection(self):
         from cleanlang.conversion import comparison_normal_form,index_comparison
         from cleanlang.syntax import parse,expression_tree
         local={}
@@ -75,4 +75,5 @@ class DiagramDefinitions(unittest.TestCase):
         self.assertEqual(value.tree,['Projection',['Call','zigzag shape',
             [['Local','n'],['Local','d']]],'target'])
         self.assertEqual(comparison_normal_form(value,self.e,local).lean,value.lean)
-        self.assertEqual(index_comparison(value,self.e,local),value.lean)
+        expected=Expressions(self.e,local).parse('function(e: Vertex(n),select value(d(e),right vertex(n,e),left vertex(n,e)))')
+        self.assertEqual(index_comparison(value,self.e,local),index_comparison(expected,self.e,local))

@@ -10,6 +10,7 @@ def source_expression(tree):
     """Canonical label spelling from normalized expression trees; no target-text parsing."""
     kind=tree[0]
     if kind=='Local': return tree[1]
+    if kind=='TypeValue': return 'type('+tree[1]+')'
     if kind=='Decimal': return tree[1].lstrip('0') or '0'
     if kind=='Call': return tree[1]+'('+', '.join(map(source_expression,tree[2]))+')'
     if kind=='Projection': return source_expression(tree[1])+'.'+tree[2]

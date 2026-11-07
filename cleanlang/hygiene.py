@@ -1,7 +1,7 @@
 # generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
 """Simultaneous source substitution with fresh expression and type binders."""
 import re
-from .core import ID,CleanError
+from .core import ID,CleanError,Type
 from .dependent_functions import tree_names
 from .syntax import parse,type_tree,expression_spelling
 
@@ -15,7 +15,10 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
     Inserted trees are never recursively substituted. Freshen every traversed
     binder, including binders in domain annotations, before inserting arguments.
     """
-    type_bindings=type_bindings or {}
+    type_bindings=dict(type_bindings or {})
+    for n,value in bindings.items():
+        if value.type==Type('Type') and value.tree[0]=='TypeValue':
+            type_bindings[n]=environment.type(value.tree[1],locals,phrases=False)
     occupied=set(locals)|set(environment.data['types'])|set(environment.data['aliases'])|set(environment.data['functions'])|tree_names(tree)
     replacements={n:v.tree for n,v in bindings.items()}
     heads={n for n,v in bindings.items() if environment.is_function_type(v.type)}
@@ -65,6 +68,7 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
         kind=node[0]
         if kind=='Local':return mapping.get(node[1],node)
         if kind=='Decimal':return node
+        if kind=='TypeValue':return ['TypeValue',typ(type_tree(parse(node[1],'type_ref')),mapping,callheads,type_bindings)]
         if kind=='Call':
             args=[expr(a,mapping,callheads) for a in node[2]]
             if node[1] in mapping and node[1] in callheads:
