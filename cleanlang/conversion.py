@@ -42,6 +42,45 @@ def index_comparison(expression,environment,locals):
         else:environment._comparison_pool=previous
 
 
+
+def _producer_field(expression,field,env,locals):
+    """Select a checked authored producer field before normalizing sibling fields."""
+    from .hygiene import substitute,UnrepresentableSubstitution
+    from .dependent_functions import tree_names
+    from .inferred_conversion import reify,value_names
+    if shadowed_globals(env,locals):return None
+    tree=expression.tree
+    if not tree or tree[0]!='Call':return None
+    spec=env.structures.get(expression.type.name)
+    if spec is None:return None
+    if tree[1]==spec['constructor']:
+        pos=len(spec['parameters'])+[n for n,_ in spec['fields']].index(field)
+        return Expressions(env,locals).elaborate(tree[2][pos])
+    definition=env.definitions.get(tree[1])
+    if not definition or definition['implementation']!='equals':return None
+    parameters=env.data['functions'][tree[1]]['signature_tree'][2]
+    body=definition['tree']
+    bindings=dict(zip((p[1] for p in parameters if p[3]=='explicit'),
+                      (Expressions(env,locals).elaborate(a) for a in tree[2])))
+    inferred=dict(expression.inferred_args);required=tree_names(body);values=value_names(body);types={}
+    try:
+        for p in parameters:
+            n=p[1]
+            if p[3]!='implicit' or n not in required:continue
+            actual=inferred[n]
+            if isinstance(actual,Type):
+                types[n]=actual
+                if n in values:bindings[n]=reify(actual,env,locals)
+            else:bindings[n]=reify(actual,env,locals)
+        expanded=substitute(body,bindings,env,locals,types)
+    except UnrepresentableSubstitution:return None
+    if expanded[0]=='Call' and expanded[1]==spec['constructor']:
+        pos=len(spec['parameters'])+[n for n,_ in spec['fields']].index(field)
+        return Expressions(env,locals).elaborate(expanded[2][pos])
+    value=Expressions(env,locals).elaborate(expanded)
+    if value.type!=expression.type:return None
+    return _producer_field(value,field,env,locals)
+
 def _normal_form(expression,environment,locals):
     env=environment
     elaborate=lambda tree:Expressions(env,locals).elaborate(tree)
@@ -68,6 +107,9 @@ def _normal_form(expression,environment,locals):
     if kind=='Projection':
         from .structures import project,projection_reduction
         from .beta_indices import has_binder
+        selected=_producer_field(elaborate(tree[1]),tree[2],env,locals)
+        if selected is not None and selected.type==expression.type:
+            return _normal_form(selected,env,locals)
         base=normal(tree[1])
         if has_binder(base.tree):
             selected=projection_reduction(env,base,tree[2],locals)

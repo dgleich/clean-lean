@@ -1,0 +1,61 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{assumed subpath inclusion}\cleanattribution{[Subpath restrictions, inclusion from named universal assumptions]}
+Let $n$, $a$ and $m$ be natural numbers.
+Let $h$ be evidence that $a + m \le n$.
+Let $d$ be a function from $\{0,\ldots,n-1\}$ to $\{\mathrm{false},\mathrm{true}\}$.
+Assume $\operatorname{subpath\ sources\ preserved}(n, a, m, h, d)$ (\texttt{hs}).
+Assume $\operatorname{subpath\ targets\ preserved}(n, a, m, h, d)$ (\texttt{ht}).
+Then \[\left(\text{there exists }i : \operatorname{ShapeMap}(Q_{d|_{a,m}},Q_{d}),\; \left(\text{for every }v : \{0,\ldots,m + 1-1\},\; i.\mathrm{vertices}(v) = a+v\right)\right).\]
+\end{cleanresult}
+
+\begin{cleanresult}{subpath sources}\cleanattribution{[Subpath restrictions, endpoint preservation]}
+Let $n$, $a$ and $m$ be natural numbers.
+Let $h$ be evidence that $a + m \le n$.
+Let $d$ be a function from $\{0,\ldots,n-1\}$ to $\{\mathrm{false},\mathrm{true}\}$.
+Then \[\operatorname{subpath\ sources\ preserved}(n, a, m, h, d).\]
+\end{cleanresult}
+
+\begin{cleanresult}{subpath targets}\cleanattribution{[Subpath restrictions, endpoint preservation]}
+Let $n$, $a$ and $m$ be natural numbers.
+Let $h$ be evidence that $a + m \le n$.
+Let $d$ be a function from $\{0,\ldots,n-1\}$ to $\{\mathrm{false},\mathrm{true}\}$.
+Then \[\operatorname{subpath\ targets\ preserved}(n, a, m, h, d).\]
+\end{cleanresult}
+
+\begin{cleanresult}{subpath inclusion exists}\cleanattribution{[Subpath restrictions, unconditional finite subpath inclusion]}
+Let $n$, $a$ and $m$ be natural numbers.
+Let $h$ be evidence that $a + m \le n$.
+Let $d$ be a function from $\{0,\ldots,n-1\}$ to $\{\mathrm{false},\mathrm{true}\}$.
+Then \[\left(\text{there exists }i : \operatorname{ShapeMap}(Q_{d|_{a,m}},Q_{d}),\; \left(\text{for every }v : \{0,\ldots,m + 1-1\},\; i.\mathrm{vertices}(v) = a+v\right)\right).\]
+\end{cleanresult}
+
+\begin{cleanresult}{restricted zigzag object}\cleanattribution{[Subpath restrictions, restriction objects]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $n$, $a$ and $m$ be natural numbers.
+Let $h$ be evidence that $a + m \le n$.
+Let $d$ be a function from $\{0,\ldots,n-1\}$ to $\{\mathrm{false},\mathrm{true}\}$.
+Assume $\operatorname{subpath\ sources\ preserved}(n, a, m, h, d)$ (\texttt{hs}).
+Assume $\operatorname{subpath\ targets\ preserved}(n, a, m, h, d)$ (\texttt{ht}).
+Let $Z$ be a module diagram on $Q_{d}$.
+Let $v$ be a vertex in $\{0,\ldots,m + 1-1\}$.
+Then \[Z|_{[a,a+m]}.\mathrm{object}(v) = Z.\mathrm{object}(a+v).\]
+\end{cleanresult}
+
+\begin{cleanresult}{restricted zigzag arrow}\cleanattribution{[Subpath restrictions, restriction arrows with endpoint transports]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $n$, $a$ and $m$ be natural numbers.
+Let $h$ be evidence that $a + m \le n$.
+Let $d$ be a function from $\{0,\ldots,n-1\}$ to $\{\mathrm{false},\mathrm{true}\}$.
+Assume $\operatorname{subpath\ sources\ preserved}(n, a, m, h, d)$ (\texttt{hs}).
+Assume $\operatorname{subpath\ targets\ preserved}(n, a, m, h, d)$ (\texttt{ht}).
+Let $Z$ be a module diagram on $Q_{d}$.
+Let $e$ be a vertex in $\{0,\ldots,m-1\}$.
+Let $Q = Q_{d|_{a,m}}$.
+Let $R = Q_{d}$.
+Let $i = \iota_{a,m}$.
+Then \[Z|_{[a,a+m]}.\mathrm{arrow}(e) = (i^{*}Z)(e).\]
+\end{cleanresult}
+
+% generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

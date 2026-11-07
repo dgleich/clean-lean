@@ -36,17 +36,17 @@ targets, proofs and TeX. Its current target is nineteen exact comparisons and si
 proofs. Exact comparisons retain constants, implicit arguments and proof terms;
 they do not merely ask for definitional equality.
 
-Current checkpoint: the version before the arrow extension passed seventeen
-exact targets and five proofs, including unconditional endpoint preservation,
-existence of the inclusion and the object formula. The current library passes
-six structural/negative tests. The expanded arrow verifier is still running, so
-the nineteen-target result is pending. Generated artifacts will be committed
-when that run finishes; the source snapshot records this intermediate step.
+Current checkpoint: all nineteen exact targets and six proofs pass, including
+unconditional endpoint preservation, the inclusion, and the object and arrow
+formulas. Comparison now selects the requested authored field before expanding
+sibling fields; generated Lean retains the original projections and wrappers.
+The focused producer-field tests pass. Full regression and the complete native
+portfolio for the new comparison rule remain pending.
 
-The earlier fully expanded arrow statement is also still being evaluated in an
-isolated snapshot. Its elapsed runtime is not evidence of success or failure.
-The readable named-arrow statement is a separate source specimen with its own
-independent native oracle.
+Earlier slow executions of the named and fully expanded arrow statements were
+stopped after the replacement passed the independent native oracle. Those earlier
+runs are superseded, not successful checks. The generated files here come from
+the validated current named-arrow statement.
 
 This study does not yet restrict interval bases, clip interval labels, remove
 empty supports, reindex surviving basis vectors or prove the paper's pyramid

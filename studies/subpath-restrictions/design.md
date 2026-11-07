@@ -178,3 +178,18 @@ statement. The [source study](README.md) now records the current intermediate
 checkpoint; its expanded native run remains pending. The contract and acceptance catalog describe implemented behavior but
 are not themselves evidence that these remaining gates passed.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Subpath arrow checkpoint
+
+The reusable modules and arrow statement now pass nineteen exact native targets
+and six proofs. Requested-field selection during comparison avoids expanding
+irrelevant diagram fields while preserving emitted Lean projections. This
+supersedes the preceding paragraph's pending subpath-arrow validation status.
+The generated Lean, proof-bearing Lean and inspected one-page PDF are included.
+The new compiler snapshot is running the full tests and native portfolio; the
+review browser is being rebuilt for the current sources. Those wider checks are
+still pending. Interval-basis restriction and the paper's extension theorem
+remain unfinished mathematics.
+:::

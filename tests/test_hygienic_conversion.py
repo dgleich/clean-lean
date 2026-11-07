@@ -128,3 +128,58 @@ class FrozenResolution(unittest.TestCase):
         self.assertNotIn('other',result.lean)
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+# generated: gpt-6 2026-11-07 role=assisted
+class SelectedProducerField(unittest.TestCase):
+    def setUp(self):
+        from cleanlang.structures import declare
+        from cleanlang.modules import notation
+        self.e=Environment();load_module(ROOT/'library/types.clean',self.e)
+        declare('Structure FieldPair(T: Type):',[
+            'Let item: T','Let action: Function(T,T)','Constructor: field pair'],self.e)
+        notation('Define field producer(x):',[
+            'Let T: Type','Let x: T','Returns: FieldPair(T)',
+            'Equals: field pair(T,x,function(y: T,x))'],self.e,authored=True)
+        notation('Define field wrapper(x):',[
+            'Let T: Type','Let x: T','Returns: FieldPair(T)',
+            'Equals: field producer(x)'],self.e,authored=True)
+        notation('Notation native producer(x):',[
+            'Let T: Type','Let x: T','Returns: FieldPair(T)',
+            'Means: nativeFieldProducer x','Render latex: native({x})'],self.e)
+        self.local={'x':Expr('x','x',Type('Real'),tree=['Local','x'])}
+    def test_selects_field_without_elaborating_constructor_siblings(self):
+        from cleanlang.conversion import _producer_field
+        from unittest.mock import patch
+        original=Expressions.elaborate
+        value=Expressions(self.e,self.local).parse('field producer(x)')
+        def checked(instance,tree):
+            if tree[0]=='Call' and tree[1]=='field pair':
+                raise AssertionError('Unselected constructor fields were elaborated')
+            return original(instance,tree)
+        with patch.object(Expressions,'elaborate',checked):
+            selected=_producer_field(value,'item',self.e,self.local)
+        self.assertEqual(selected.tree,['Local','x'])
+        self.assertEqual(selected.lean,'x')
+    def test_wrapped_field_compares_without_changing_emission(self):
+        value=Expressions(self.e,self.local).parse('field wrapper(x).item')
+        before=value.lean
+        self.assertIn('cleanDefine_field_wrapper',before)
+        self.assertEqual(comparison_normal_form(value,self.e,self.local).lean,'x')
+        self.assertEqual(Expressions(self.e,self.local).parse('field wrapper(x).item').lean,before)
+    def test_native_producer_stays_opaque(self):
+        from cleanlang.conversion import _producer_field
+        value=Expressions(self.e,self.local).parse('native producer(x)')
+        self.assertIsNone(_producer_field(value,'item',self.e,self.local))
+    def test_shadowed_module_stays_opaque(self):
+        from cleanlang.conversion import _producer_field
+        value=Expressions(self.e,self.local).parse('field producer(x)')
+        shadow={**self.local,'Vector':Expr('Vector','Vector',Type('Type'),tree=['Local','Vector'])}
+        self.assertIsNone(_producer_field(value,'item',self.e,shadow))
+    def test_function_field_retains_capture_free_binder(self):
+        self.local['y']=Expr('y','y',Type('Real'),tree=['Local','y'])
+        value=Expressions(self.e,self.local).parse('field producer(x).action(y)')
+        self.assertEqual(comparison_normal_form(value,self.e,self.local).lean,'x')
+    def test_original_call_still_checks_unused_actuals(self):
+        from cleanlang.core import CleanError
+        with self.assertRaises(CleanError):
+            Expressions(self.e,self.local).parse('field pair(type(Real),x,x).item')

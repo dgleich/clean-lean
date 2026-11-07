@@ -158,3 +158,47 @@ does not solve the subpath arrow's repeated dependent normalization: an isolated
 20-second profile still exhausted its diagnostic budget. That diagnostic is
 incomplete analysis, not acceptance evidence for the arrow theorem.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Selecting producer fields before sibling normalization
+
+Implemented prototype: when comparing a projection of an already checked call,
+first attempt to select its field through authored producers. This supersedes
+step 2's unconditional normalization of the whole base before field selection.
+It does not change source projection emission in `structures.project`.
+
+1. Preserve the existing shadowed-module guard. Only a checked Call returning a
+   declared structure participates. Native definitions and other expression forms
+   return no selection and use the previous comparison procedure.
+2. For the structure's generated constructor, select the field argument at its
+   declaration-order position after the explicit structure parameters. Elaborate
+   that argument. The original constructor application was already checked, so
+   this does not permit ill-typed unselected arguments.
+3. For an authored Equals producer, elaborate its explicit actuals and take its
+   implicit actuals from the checked call's stored inference metadata. Reify only
+   required implicit formals using the existing inferred-argument rule. Perform
+   simultaneous hygienic substitution over the entire body, retaining reservation
+   and traversal of all argument and binder names.
+4. If the substituted body is the expected constructor Call, select its field
+   before elaborating sibling fields. Otherwise elaborate the substituted body,
+   require its determined type to equal the producer's type, and repeat selection
+   through that checked expression. Authored declarations have no recursive or
+   forward references; native producers remain opaque.
+5. Accept a selected field only when its determined type equals the original
+   projection's type, then apply the existing normalizer to that field. An absent
+   selection or unrepresentable substitution uses the previous comparison path.
+   Other elaboration errors remain errors; no alternative meaning is searched.
+
+No grammar, AST or emitted Lean call changes. The rule specifies a single ordered
+comparison procedure, including checked inference, declaration positions, hygienic
+fresh names and type-equality gates. It neither inspects native bodies nor adds
+proof search, arithmetic rewriting or a cache. The subpath study's nineteen
+independent canonical targets and six proofs pass under this rule. Focused tests
+cover selected fields, untouched emissions, shadowing, opaque native producers,
+capture and rejection of an invalid unselected constructor argument. Full-suite
+and broader native validation of this optimization remain pending.
+
+The earlier subpath executions were stopped after this replacement passed the
+independent oracle. They were superseded, not counted as completed validations.
+:::

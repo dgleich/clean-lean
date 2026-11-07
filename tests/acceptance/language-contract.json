@@ -1453,6 +1453,77 @@
         "tests/test_callable_evidence.py",
         "studies/callable-evidence/verify.py"
       ]
+    },
+    {
+      "id": "selected_authored_producer_field",
+      "status": "implemented-slice",
+      "specification": "docs/hygienic-producer-conversion.md",
+      "environment": "Explicit subpath modules; all endpoint evidence and the ambient diagram are checked actuals.",
+      "source_fragment": "restricted zigzag(field,n,a,m,h,d,hs,ht,Z).arrow(e)",
+      "expected_tree": [
+        "Apply",
+        [
+          "Projection",
+          [
+            "Call",
+            "restricted zigzag",
+            [
+              [
+                "Local",
+                "field"
+              ],
+              [
+                "Local",
+                "n"
+              ],
+              [
+                "Local",
+                "a"
+              ],
+              [
+                "Local",
+                "m"
+              ],
+              [
+                "Local",
+                "h"
+              ],
+              [
+                "Local",
+                "d"
+              ],
+              [
+                "Local",
+                "hs"
+              ],
+              [
+                "Local",
+                "ht"
+              ],
+              [
+                "Local",
+                "Z"
+              ]
+            ]
+          ],
+          "arrow"
+        ],
+        [
+          [
+            "Local",
+            "e"
+          ]
+        ]
+      ],
+      "checks": [
+        "tests/test_hygienic_conversion.py",
+        "studies/subpath-restrictions/verify.py"
+      ],
+      "obligation": "Select fields only for comparison, preserve emitted projections and stored implicit arguments, compare nineteen independently authored native targets and kernel-check six proofs. Reject invalid constructor actuals before selection; preserve native opacity and shadowing.",
+      "pending": [
+        "Full regression and native portfolio for the selection rule",
+        "Final acceptance audit"
+      ]
     }
   ]
 }

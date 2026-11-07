@@ -576,3 +576,18 @@ existing positional substitution rule without changing syntax or selected Lean
 terms. The subpath arrow performance problem remains open; this optimization is
 not evidence that its native validation has completed.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+## Select the requested producer field during comparison
+
+Normalize a checked producer projection by selecting its field through authored
+Equals wrappers before expanding sibling fields. The existing whole-base route
+repeatedly unfolded transported diagram arrows even when only the object family
+was needed. Selection reuses checked implicit arguments and hygienic substitution;
+its exact ordering and type gates are specified in the hygienic-conversion document.
+No expression cache is added and emitted Lean projections stay unchanged. The
+subpath oracle now passes nineteen canonical targets and six proofs; the prior
+slow executions are superseded, not recorded as successful. Full-suite validation
+of this change remains pending.
+:::

@@ -790,3 +790,13 @@ a local arity or type error does not select the module callable instead.
 The [study](../studies/callable-evidence/README.md) records validation and remaining
 gates. This prototype's integration is not a completed conformance claim.
 :::
+
+:::llm gpt-6 2026-11-07 role=assisted
+
+Comparison of a checked producer projection now first selects the requested field
+through authored Equals wrappers, before normalizing sibling constructor fields.
+The ordered selection, inference reuse, type gates and opacity rules are specified
+in [hygienic conversion](hygienic-producer-conversion.md#selecting-producer-fields-before-sibling-normalization).
+Source parsing and emitted projection terms are unchanged. This is an implemented
+prototype with broad regression validation pending.
+:::
