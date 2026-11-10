@@ -140,3 +140,11 @@ production checks. The proof-equality module is explicit; other tests that requi
 it still need to import it. General proof-sort equality inference remains outside
 this concrete interface.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Additional isolated validation: the existing curated corpus was regenerated using
+this patch, and all 92 proof fixtures passed Lean. A complete eighteen-verifier
+topology run is now in progress against the same isolated compiler/library.
+Neither result replaces production full-regression completion or integration.
+:::
