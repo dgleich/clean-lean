@@ -2591,6 +2591,39 @@
         "Mayer-Vietoris connecting maps, degree shifts, endpoint/augmentation hypotheses, excision and exactness proof",
         "General universe and native-environment isolation obligations remain unchanged"
       ]
+    },
+    {
+      "id": "binary_coefficient_module_product",
+      "status": "implemented-slice",
+      "environment": "Explicit library/algebra/module_products.clean; fixed field value and Type-0 coefficient carriers.",
+      "source": "module product(field,M,N)",
+      "expected_tree": [
+        "Call",
+        "module product",
+        [
+          [
+            "Local",
+            "field"
+          ],
+          [
+            "Local",
+            "M"
+          ],
+          [
+            "Local",
+            "N"
+          ]
+        ]
+      ],
+      "expected_lean": "Declared module-product wrapper with explicit field,M,N and inferred K; native body locally installs the field and uses ModuleCat.of K (M.carrier × N.carrier). Inclusion/projection preserve this product wrapper in their types.",
+      "checks": [
+        "tests/test_module_products.py: independent call tree, map endpoints, wrong-middle-module and nonmodule rejection",
+        "studies/topology/verify_module_products.py: five exact native targets and two kernel-checked proofs"
+      ],
+      "pending": [
+        "Other structural maps, universal property and infinite direct sums are outside this slice",
+        "Actual Mayer-Vietoris inclusion-induced maps, connecting map and exactness proof remain missing"
+      ]
     }
   ]
 }

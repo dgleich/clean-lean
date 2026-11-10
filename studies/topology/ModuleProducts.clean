@@ -1,0 +1,22 @@
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+Import "../../library/algebra/module_products.clean"
+Source products:
+  Kind: other
+  Label: Mathlib linear map products
+  Title: Mathlib linear map products
+
+Result binary module sequence is exact:
+  Attribution: products; LinearMap.inl and LinearMap.snd; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: CoefficientModule(K,field)
+  Conclude: exact(left inclusion(field,M,N),right projection(field,M,N))
+
+Result right projection is onto:
+  Attribution: products; LinearMap.snd; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: CoefficientModule(K,field)
+  Conclude: onto(right projection(field,M,N))
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -1311,3 +1311,14 @@ adapter uses the supplied field instance and Mathlib's zero linear map.
 The checked criterion identifies exactness before that map with surjectivity;
 interior exactness alone continues to make no endpoint claim.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Binary coefficient-module products are explicit imports from
+`library/algebra/module_products.clean`. `module product(field,M,N)` has carrier
+M × N and is rendered as the binary direct sum. `left inclusion` and `right
+projection` have that same declared product as their middle module. Native bodies
+install only the supplied field and use Mathlib's product module and linear maps.
+The range/kernel and onto conditions remain authored Clean definitions. This
+adds no syntax or automatic coercion; the actual Mayer–Vietoris maps remain open.
+:::

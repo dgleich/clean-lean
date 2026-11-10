@@ -1,0 +1,29 @@
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+Import "exact_sequences.clean"
+Import Lean Mathlib.LinearAlgebra.Prod
+
+Notation module product(field,M,N):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: CoefficientModule(K,field)
+  Returns: CoefficientModule(K,field)
+  Means: (letI : Field K := field; ModuleCat.of K (M.carrier × N.carrier))
+  Render latex: ({M} \oplus {N})
+
+Notation left inclusion(field,M,N):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: CoefficientModule(K,field)
+  Returns: ModuleMap(K,field,M,(module product(field,M,N)))
+  Means: (letI : Field K := field; ModuleCat.ofHom (LinearMap.inl K M.carrier N.carrier))
+  Render latex: \iota_1
+
+Notation right projection(field,M,N):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: CoefficientModule(K,field)
+  Returns: ModuleMap(K,field,(module product(field,M,N)),N)
+  Means: (letI : Field K := field; ModuleCat.ofHom (LinearMap.snd K M.carrier N.carrier))
+  Render latex: \pi_2
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

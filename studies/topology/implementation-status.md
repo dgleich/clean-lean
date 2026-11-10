@@ -82,7 +82,7 @@ is still in progress; the older counts below retain their historical scope.
 | Interlevel, Theorem 1 | Explicit diagrams, interval bases, subpath restrictions, endpoint clipping, surviving-label support and restricted label records, and a checked generic basis-reindexing wrapper | Full generated-target comparison for the native-checked surviving active-label equivalence; basis reindexing and compatibility, pyramid construction, exact-diamond basis flips and extension proof |
 | Interlevel, Theorem 3 | Actual singular-homology, submodule, perturbation and shifted-image foundations | Assemble the level-set specialization and prove the two-extreme-perturbation formula with justified cover hypotheses |
 | Interlevel, Theorem 4 | A translated two-image candidate over actual relative objects; checked supporting inclusion maps | Reverse inclusion and the cover/excision audit; no proof is claimed by translating the candidate |
-| Mayer–Vietoris | Graded objects/maps, ordinary/relative chains, and the [checked exact-pair/interior/terminal interface](exact-sequences.md) | Connecting maps, degree shifts, actual homology endpoint/augmentation data, excision and the actual long-exact-sequence construction/proof |
+| Mayer–Vietoris | Graded objects/maps, ordinary/relative chains, [binary module sums](module-products.md), and the [checked exact-pair/interior/terminal interface](exact-sequences.md) | Connecting maps, degree shifts, actual homology endpoint/augmentation data, excision and the actual long-exact-sequence construction/proof |
 
 These missing mathematical objects are not supplied by opaque names or assumptions
 of the desired conclusion. Conversely, a missing paper proof does not establish a

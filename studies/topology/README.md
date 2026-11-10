@@ -406,3 +406,14 @@ targets and 89 proofs across all eighteen topology verifiers,
 plus 23 focused Python tests. These checks run on the integrated compiler;
 declared-operator integration and broader native-study migration remain pending.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Exact sequences and binary module sums
+
+The [exact-sequence study](exact-sequences.md) supplies authored range/kernel,
+interior and terminal conditions. The [binary module product study](module-products.md)
+adds the middle module needed for binary sums, with checked inclusion/projection
+maps and supporting exactness/surjectivity proofs. These are reusable foundations;
+the actual Mayer–Vietoris construction remains incomplete.
+:::
