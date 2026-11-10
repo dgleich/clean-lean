@@ -23,23 +23,8 @@ def index_comparison(expression,environment,locals,*,_fresh=False):
     Whole-tree elaboration assigns fresh compiler binder identities in one scope.
     The resulting template is never fed back as an authored actual argument.
     """
-    result=_normal_form(expression,environment,locals,fresh=_fresh)
-    from .beta_indices import has_binder
-    if not has_binder(result.tree):return result.lean
-    from .binder_keys import Pool,key
-    previous=getattr(environment,'_comparison_pool',None)
-    pool=previous if previous is not None else Pool(environment,locals,result.tree)
-    before=set(pool.owned)
-    environment._comparison_pool=pool
-    try:
-        result=Expressions(environment,locals).elaborate(result.tree)
-        if result.type!=expression.type:
-            from .core import CleanError
-            raise CleanError('Index comparison requires an unchanged determined type')
-        return key(result.lean,pool.owned-before)
-    finally:
-        if previous is None:del environment._comparison_pool
-        else:environment._comparison_pool=previous
+    from .contextual_keys import comparison_key
+    return comparison_key(expression,environment,locals,fresh=_fresh)
 
 
 

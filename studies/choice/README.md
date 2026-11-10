@@ -30,3 +30,15 @@ corpus. The PDF was compiled twice and inspected without layout/reference errors
 Reference links/search/mobile/no-JavaScript and strict parser checks pass. The
 full suite and review-browser snapshot refresh remain pending.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The contextual-call comparison repair is now integrated. Regeneration on the
+working compiler passes all seven exact targets and three proofs using independent
+wrapper-aware native oracles. Generated Lean now includes the explicit module
+wrappers introduced since the older snapshot. The current module rendering uses
+membership symbols; quantifiers remain English. The PDF was compiled twice and
+visually inspected as one landscape page, with no overflow or unresolved references.
+The only LaTeX warning is the existing `latex/clean` package-name warning.
+Full integration regression remains pending; earlier counts above are historical.
+:::

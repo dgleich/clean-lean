@@ -160,3 +160,52 @@ checked declaration identities and arguments. Exact target checks and choice
 proofs pass in that checkout. Production integration and broader acceptance are
 pending; the earlier four-case failure report above remains historical evidence.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Integrated contextual call congruence
+
+The working compiler now implements the contextual comparison rule. The failure
+reports above describe the pre-integration state; the historical study remains
+pinned and reproducible. This repair changes comparison keys, not parsing,
+overload selection or emitted theorem expressions.
+
+Given a successfully elaborated expression in a fixed explicit environment:
+
+1. Establish a scoped comparison identity pool and elaborate the original tree
+   within it. A synchronous freshness witness permits reuse only for a binder-free
+   tree; stored checked-argument metadata alone does not provide that witness.
+2. Apply the existing ordered normalizer and require the determined type to remain
+   unchanged. Its hidden-binder argument barrier remains in force.
+3. For a selected module call/operator, validate its declaration identity and
+   recursively compute comparison templates for the freshly checked explicit
+   arguments. A local callable or other expression retains its checked template.
+4. Reconstruct the selected native application using its declared template and
+   ordered checked implicit arguments. Before inserting expanded child templates,
+   require reconstruction with the original arguments to match the checked target
+   exactly. Reject stale identities, changed types and mismatched templates.
+5. Insert child comparison templates only into that validated application. Preserve
+   its implicit arguments; never feed the templates back into elaboration,
+   inference, overload selection or emitted source expressions. Abstract owned
+   binder identities by the existing ScopedKey rule and restore the caller's pool
+   on success or failure.
+
+Each step is fixed by the checked tree, declaration telescope and existing
+normalization order. There is no search for a different overload or native-body
+unfolding. This is a limited congruence rule for supported call positions, not
+complete Lean definitional equality. Comparison of additional dependent implicit
+or projection/application contexts and resource accounting still require audit.
+Independent target checks are needed because successful comparison alone does not
+establish that emitted Lean is unchanged or uniquely specified.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Integration validation: 108 focused tests passed in 22.686 seconds, followed by
+three minimal canonical-target comparisons and two equivalence proofs, and seven
+choice canonical targets with three proofs. The 92-proof corpus regenerated and
+Lean checked successfully; its tracked artifact is unchanged. The isolated stack
+already passed all eighteen topology verifiers with 37 unchanged Lean artifacts.
+The working compiler still requires a fresh full regression; the old production
+run's 29 failures and 27 errors describe the prior compiler and loaded tests.
+:::

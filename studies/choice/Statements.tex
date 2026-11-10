@@ -2,21 +2,21 @@
 \begin{cleanresult}{chosen element is a member}\cleanattribution{[Lean, Classical.choose\_spec]}
 Let $A$ be a type.
 Let $S$ be a subset of $A$.
-Assume $\left(\text{there exists }x : A,\; x \text{ belongs to } S\right)$ (\texttt{inhabited}).
-Then \[\operatorname{choose}(S,\mathit{inhabited}) \text{ belongs to } S.\]
+Assume $\left(\text{there exists }x : A,\; x\in S\right)$ (\texttt{inhabited}).
+Then \[\operatorname{choose}(S,\mathit{inhabited})\in S.\]
 \end{cleanresult}
 
 \begin{cleanresult}{choice from an applied condition}\cleanattribution{[Lean, Classical.choose\_spec]}
 Let $A$ be a type.
 Let $S$ be a subset of $A$.
-Assume $\left(\text{there exists }x : A,\; \left(y \mapsto y \text{ belongs to } S\right)(x)\right)$ (\texttt{inhabited}).
-Then \[\operatorname{choose}(S,\mathit{inhabited}) \text{ belongs to } S.\]
+Assume $\left(\text{there exists }x : A,\; \left(y \mapsto y\in S\right)(x)\right)$ (\texttt{inhabited}).
+Then \[\operatorname{choose}(S,\mathit{inhabited})\in S.\]
 \end{cleanresult}
 
 \begin{cleanresult}{choice with a universal condition}\cleanattribution{[Lean, Classical.choose\_spec]}
 Let $A$ be a type.
-Assume $\left(\text{there exists }x : A,\; \left(\text{for every }y : A,\; y = x\right)\right)$ (\texttt{inhabited}).
-Then \[\left(\text{for every }y : A,\; y = \operatorname{choose}(\mathit{inhabited})\right).\]
+Assume $\left(\text{there exists }x : A,\; \left(\text{for every }y : A,\; y=x\right)\right)$ (\texttt{inhabited}).
+Then \[\left(\text{for every }y : A,\; y=\operatorname{choose}(\mathit{inhabited})\right).\]
 \end{cleanresult}
 
 % generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

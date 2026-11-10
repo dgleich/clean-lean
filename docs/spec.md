@@ -1238,3 +1238,14 @@ remain free. The isolated implementation now checks this rule through dependent
 function, quantified condition and record-field examples. Production integration
 and the wider acceptance obligations remain pending.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The working compiler now uses the [contextual call congruence rule](proof-beta-comparison.md#integrated-contextual-call-congruence).
+After fresh checking and ordered normalization, it validates a fixed native call
+shell and inserts comparison templates for its explicit arguments. Implicit
+arguments and declaration identity stay fixed; the templates are never elaborated
+as authored arguments. The existing hidden-binder barrier and emitted expressions
+remain unchanged. This resolves the recorded choice-helper comparison boundary;
+full regression and broader dependent-context audits remain separate obligations.
+:::

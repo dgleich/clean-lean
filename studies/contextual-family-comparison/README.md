@@ -2,7 +2,9 @@
 
 # Contextual function-family comparison experiment
 
-**Isolated prototype; the working compiler is unchanged.** The production defect
+**Historical isolated prototype; the repair is now integrated in the working compiler.**
+The validation narrative below records the experiment before integration. See the
+[integrated rule](../../docs/proof-beta-comparison.md#integrated-contextual-call-congruence). The production defect
 and minimal source are documented in
 [proof-beta-comparison.md](../../docs/proof-beta-comparison.md#open-contextual-family-comparison-regression).
 The expanded production regression has six tests: four positive comparison/hash
