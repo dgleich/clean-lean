@@ -1265,3 +1265,13 @@ local tokens must be reserved before choosing the first fresh name. For a pool
 that allocates no binder, the scan is unnecessary. The study records the equivalence
 argument and collision/count tests; production remains eager pending integration.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [retained-value codec experiment](../studies/bound-tree-codec/README.md#version-1-data-contract)
+uses a versioned envelope and closed explicit record tags to preserve checked
+annotations, local/module type distinctions, retained indices and captured scopes.
+It is an isolated data representation, not a new source grammar or an environment
+loader. Decoding grants no freshness or validity: restored trees must be checked
+against the explicit environment. Integration into index storage remains pending.
+:::

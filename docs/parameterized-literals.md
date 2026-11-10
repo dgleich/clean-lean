@@ -401,6 +401,12 @@ combines a dependent record, a dimension-indexed function and a condition over a
 projected dimension. Independent native oracles retain every declared wrapper.
 This is evidence about the isolated composed stack, not production literal support.
 
+A [versioned retained-value codec experiment](../studies/bound-tree-codec/README.md)
+now tags checked Annotation/Type/index/expression records explicitly. It preserves
+complete retained values through serialization and re-elaboration, including
+computed/proof-index substitution. It does not yet replace index `syntax` storage
+or provide an environment snapshot, and its decoder is not a semantic validator.
+
 ## Acceptance obligations
 
 | Input or interaction | Required outcome |
