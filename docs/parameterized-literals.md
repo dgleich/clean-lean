@@ -289,6 +289,98 @@ retained bindings, all expression consumers and actual `x != 0` translation rema
 required. The current child-independent pruning algorithm is still not justified
 for these contextual rows and must not be reused unchanged.
 
+## Retained literal representation: proposed next step
+
+The annotation prototype establishes selection and native calls, but its ModuleCall
+desugaring loses the authored literal. A distinct internal BoundLiteral form is
+needed before claiming full preservation. The following is a logical record, not
+an implemented AST or finalized serialization schema:
+
+```text
+BoundLiteral(
+  canonical_digits,
+  original_digit_spelling,
+  constructor_binding,
+  ordered_formal_actuals,
+  checked_carrier_annotation,
+  origin = explicit | inferred | defaulted)
+```
+
+`constructor_binding` must identify the selected declaration, its literal attachment,
+formal telescope, result pattern and native wrapper declaration. It is a snapshot,
+not a request to search current declarations again. `ordered_formal_actuals` includes
+**all** implicit and explicit actuals in declaration order, with their checked
+binding trees. The annotation retains its determined carrier and free caller
+identities. Display names alone cannot identify a constructor, type or dimension.
+
+Replay validates the saved binding and parameter telescope, checks each recovered
+argument in order, and checks the instantiated result against the saved carrier.
+It emits the saved root-qualified constructor applied explicitly to all ordered
+arguments. If a body or binding changed, report an error; do not choose another
+literal candidate. Adding an unrelated competing literal does not change a stored
+selection, although parsing the same new source may now be ambiguous. The existing
+prototype already demonstrates that stability through ordinary retained calls.
+
+Substitution must traverse both the ordered actual trees and the carrier annotation
+with the same capture-free mapping, using the annotation's captured identities.
+Then recheck agreement of the constructor result and substituted carrier. Neither
+substitution nor beta comparison runs literal candidate selection or defaults.
+The explicit vector-zero case substituting caller n by caller m must therefore
+emit exactly the declared zero constructor applied to m, even if a new competitor
+was imported in the meantime.
+
+For surface spelling, explicit/defaulted literals retain a type annotation using
+the existing numeral-annotation syntax. Inferred literals spell the original digits
+without an inserted annotation. After substitution, use the deterministic spelling
+of the substituted checked carrier rather than stale source names. Leading-zero
+spelling may remain in presentation; matching and native application use canonical
+digits. LaTeX should follow the existing explicit/inferred/defaulted numeral policy;
+the constructor's Render field remains the rendering of its ordinary named call.
+This rendering choice is proposed and recorded for later review.
+
+Comparison uses the instantiated native call under existing bounded conversion,
+not the digit spelling, origin tag or LaTeX. Free-reference collection must include
+both actuals and annotation references, excluding the constructor's bound formals.
+Automatic assumption names use the literal's deterministic source spelling and
+continue to reject naming collisions. A closed retained literal contains no
+unresolved numeral holes; a stored actual containing one is invalid binding data.
+
+Persistence must round-trip the binding, ordered actuals, typed annotation and scope
+identities. JSON encoding that silently converts an Annotation subclass to a plain
+string is insufficient. The current resolved in-memory tree is not evidence that
+its diagnostic syntax JSON preserves every binding. A versioned encoding and
+round-trip oracle remain acceptance blockers; no fallback may reselect the literal.
+
+### Consumer audit required before integration
+
+The source audit identifies these paths. Each must implement the new constructor
+or explicitly reject it at a documented boundary; silently returning an unchanged
+unknown node is not coverage.
+
+| Consumer | Required treatment |
+|---|---|
+| `core.Expressions`, `numerals`, proposed exact-literal elaborator | Validate and replay the saved selection; emit one fully explicit target |
+| `bound_calls` | Freeze/revalidate the complete literal binding without a new lookup |
+| `syntax` expression/condition spelling | Preserve deterministic literal and annotation spelling |
+| `conditions` automatic naming | Use that spelling; retain duplicate/encoded-name collision checks |
+| `annotations` references/replace/resolve | Visit actuals and captured carrier references; preserve identities |
+| `dependent_functions` names/occurrence/type keys | Include true free identities; never expose constructor formals |
+| `hygiene` | Simultaneously substitute actuals and carrier under fresh binders |
+| `indices` substitution and persistence | Retain the binding and serialize it faithfully |
+| `proof_types` | Preserve literal origin in stored proof conditions and captured scopes |
+| `beta_indices`, `quantified_beta` | Traverse/recheck actuals while preserving the literal binding |
+| `conversion` and the contextual-key prototype | Compare the fixed native application without reselecting meaning |
+| `inferred_conversion` reification/value names | Reify the stored binding and its free values without source guessing |
+| `numeral_inference` | Treat a complete BoundLiteral as selected, not a fresh candidate hole |
+| `structures`, `carrier_types`, `type_values` | Handle or explicitly reject literal values in projections/carrier positions |
+
+The [annotation study's additional tests](../studies/literal-annotations/test_annotations.py)
+check stability under a new competitor, dimension substitution, an authored body's
+saved selection, and rejection of deleted/changed call targets. A separate check
+records the current named-call spelling as a **known limitation**, not the desired
+final result. These checks use the existing ModuleCall machinery and do not establish
+BoundLiteral support in the consumers above.
+
 ## Acceptance obligations
 
 | Input or interaction | Required outcome |

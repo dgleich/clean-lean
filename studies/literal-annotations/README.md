@@ -94,3 +94,22 @@ The patched annotation engine is intentionally not a drop-in production feature.
 Its passing checks establish the implemented slice, not completion of
 [the parameterized-literal contract](../../docs/parameterized-literals.md).
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Retained-selection interaction checks
+
+Six additional cases bring the focused annotation tests to 24. They verify that
+adding a competitor makes new source ambiguous but leaves the retained original
+constructor unchanged; substitution changes n to m without selection; an authored
+body keeps its saved constructor; deleted/changed constructors reject; and current
+source spelling exposes the named-call desugaring gap. All 24 pass on the isolated
+prototype. A third canonical native target checks the substituted dimension call.
+
+No compiler change was needed for these cases: ordinary ModuleCall retention already
+supplies that slice. They do not close the representation gap. The proposed
+[BoundLiteral record and consumer audit](../../docs/parameterized-literals.md#retained-literal-representation-proposed-next-step)
+specify the next work, including synchronized annotation substitution and faithful
+serialization. The native checks cover three exact targets and two coordinate proofs.
+:::

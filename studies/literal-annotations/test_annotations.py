@@ -89,6 +89,54 @@ class ExactLiteralPrototype(unittest.TestCase):
    with self.subTest(source=source),self.assertRaises(CleanError):self.load(source)
  def test_duplicate_field_rejected(self):
   with self.assertRaisesRegex(CleanError,'Duplicate'):self.load(SOURCE.replace('Literal: 0','Literal: 0\n  Literal: 0'))
+ def test_retained_selection_survives_later_competitor(self):
+  from cleanlang.modules import notation
+  e=self.load();scope=self.scope(e)
+  original=Expressions(e,scope).parse('(0: Vector(n,Complex))')
+  notation('Notation alternative zero(n):',[
+   'Let n: Natural','Returns: Vector(n,Complex)','Means: fun _ => (0 : Complex)',
+   'Literal: 0','Render latex: 0'],e)
+  with self.assertRaisesRegex(CleanError,'Ambiguous'):
+   Expressions(e,scope).parse('(0: Vector(n,Complex))')
+  self.assertEqual(Expressions(e,scope).elaborate(original.tree).lean,original.lean)
+ def test_substitution_changes_dimension_without_reselecting(self):
+  from cleanlang.hygiene import substitute
+  e=self.load();scope=self.scope(e)
+  original=Expressions(e,scope).parse('(0: Vector(n,Complex))')
+  changed=substitute(original.tree,{'n':scope['m']},e,scope)
+  value=Expressions(e,scope).elaborate(changed)
+  self.assertEqual(value.tree[2],[['Local','m']])
+  self.assertEqual(value.type,e.type('Vector(m,Complex)',scope))
+  self.assertEqual(value.lean,Expressions(e,scope).parse('vector zero(m)').lean)
+ def test_authored_body_keeps_selected_constructor(self):
+  from cleanlang.modules import notation
+  from cleanlang.conversion import comparison_normal_form
+  e=self.load();scope=self.scope(e)
+  notation('Define selected zero(n: Natural): Vector(n,Complex):',
+   ['Equals: (0: Vector(n,Complex))'],e,authored=True)
+  notation('Notation competitor(n: Natural): Vector(n,Complex):',
+   ['Means: fun _ => (0 : Complex)','Literal: 0','Render latex: 0'],e)
+  value=Expressions(e,scope).parse('selected zero(n)')
+  reduced=comparison_normal_form(value,e,scope)
+  self.assertEqual(reduced.lean,Expressions(e,scope).parse('vector zero(n)').lean)
+ def test_deleted_retained_constructor_rejects(self):
+  e=self.load();scope=self.scope(e)
+  original=Expressions(e,scope).parse('(0: Vector(n,Complex))')
+  del e.data['functions']['vector zero']
+  with self.assertRaisesRegex(CleanError,'Missing bound module callable'):
+   Expressions(e,scope).elaborate(original.tree)
+ def test_changed_retained_constructor_rejects(self):
+  e=self.load();scope=self.scope(e)
+  original=Expressions(e,scope).parse('(0: Vector(n,Complex))')
+  e.data['functions']['vector zero']['lean']='changed target'
+  with self.assertRaisesRegex(CleanError,'Changed bound module callable'):
+   Expressions(e,scope).elaborate(original.tree)
+ def test_current_desugaring_exposes_named_spelling_gap(self):
+  from cleanlang.syntax import condition_spelling
+  e=self.load();scope=self.scope(e)
+  value=Expressions(e,scope).parse('(0: Vector(n,Complex))')
+  # This records the prototype limitation; it is not the desired final spelling.
+  self.assertEqual(condition_spelling(value.tree),'vector zero(n)')
  def test_changed_declared_constructor_rejects(self):
   e=self.load();e.data['functions']['vector zero']['lean']='changed target'
   with self.assertRaisesRegex(CleanError,'Changed literal'):Expressions(e,self.scope(e)).parse('(0: Vector(n,Complex))')

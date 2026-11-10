@@ -1211,3 +1211,14 @@ so literal-surface preservation, the full binding snapshot, unannotated inferenc
 consumer coverage and broader validation remain pending. This is not integrated
 or a conformance claim for the full parameterized-literal proposal.
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [retained-literal proposal](parameterized-literals.md#retained-literal-representation-proposed-next-step)
+now distinguishes saved constructor selection from literal-surface preservation.
+It requires all ordered actuals, a checked carrier annotation, origin/spelling,
+synchronized substitution and a faithful versioned encoding. A consumer audit is
+recorded. Six new tests validate existing retained-call behavior in the annotation
+prototype; they do not implement BoundLiteral or remove its acceptance blockers.
+:::
