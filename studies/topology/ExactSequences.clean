@@ -29,3 +29,27 @@ Result exact sequence interior at each position:
   Conclude: exact pair at(field,S,n)
 
 -- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Result exactness before a zero map:
+  Attribution: exactness; LinearMap.exact_zero_iff_surjective; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N,P: CoefficientModule(K,field)
+  Let f: ModuleMap(K,field,M,N)
+  Conclude: exact(f,module zero map(field,N,P)) ↔ onto(f)
+
+Result terminal exactness includes the interior:
+  Attribution: topology; terminal exactness definition; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ModuleSequence(K,field)
+  Assume exactness: exact sequence ending in zero(field,S)
+  Conclude: exact sequence interior(field,S)
+
+Result terminal exactness covers degree zero:
+  Attribution: topology; terminal exactness definition; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ModuleSequence(K,field)
+  Assume exactness: exact sequence ending in zero(field,S)
+  Conclude: onto(S.arrow(0))

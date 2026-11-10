@@ -12,7 +12,7 @@ source=lean(results,env,['Lean']);(HERE/'ExactSequences.lean').write_text(source
 f=lambda name:env.data['functions'][name]['native_binding']
 t=lambda name:env.data['types'][name]['native_binding']
 mapping={key:t(name) for key,name in [('TYPE','Type'),('NAT','Natural'),('PROP','Proposition'),('FIELD','FieldStructure'),('MOD','CoefficientModule'),('MAP','ModuleMap'),('SUB','ModuleSubspace'),('ELEM','ModuleElement')]}
-mapping.update({key:f(name) for key,name in [('KERNEL','module map kernel'),('ZERO','module zero element'),('RANGE','module map range'),('EQ','equal'),('PAIR','exact pair'),('SHORT','exact'),('AT','exact pair at'),('EXACT','exact sequence interior'),('ADD','natural sum'),('VALUE','module map value')]})
+mapping.update({key:f(name) for key,name in [('KERNEL','module map kernel'),('ZERO','module zero element'),('RANGE','module map range'),('EQ','equal'),('PAIR','exact pair'),('SHORT','exact'),('AT','exact pair at'),('EXACT','exact sequence interior'),('ADD','natural sum'),('VALUE','module map value'),('ZEROMAP','module zero map'),('ONTO','onto'),('ENDED','exact sequence ending in zero'),('AND','conjunction'),('IFF','logical equivalence')]})
 mapping['SEQ']=env.structures['ModuleSequence']['key'];mapping['NUM']=env.data['types']['Natural']['numerals']['native_binding']
 oracles='''
 namespace ExactSequenceOracle
@@ -37,6 +37,18 @@ def vanishes : Prop := ∀ (K : TYPE) (field : FIELD K) (M N P : MOD K field)
  SHORT f g → EQ (VALUE field N P g (VALUE field M N f x)) (ZERO field P)
 def eachPosition : Prop := ∀ (K : TYPE) (field : FIELD K) (S : SEQ K field) (n : NAT),
  EXACT field S → AT field S n
+noncomputable def zeroMap {K : Type} (field : FIELD K) (M N : MOD K field) : MAP K field M N :=
+ (letI : Field K := field; ModuleCat.ofHom (0 : M.carrier →ₗ[K] N.carrier))
+def onto {K : Type} {field : FIELD K} {M N : MOD K field} (f : MAP K field M N) : PROP :=
+ ∀ y : ELEM K field N, ∃ x : ELEM K field M, EQ (VALUE field M N f x) y
+def ended {K : Type} (field : FIELD K) (S : SEQ K field) : PROP :=
+ AND (EXACT field S) (ONTO (S.arrow (NUM (nat_lit 0))))
+def zeroCriterion : Prop := ∀ (K : TYPE) (field : FIELD K) (M N P : MOD K field) (f : MAP K field M N),
+ IFF (SHORT f (ZEROMAP field N P)) (ONTO f)
+def terminalInterior : Prop := ∀ (K : TYPE) (field : FIELD K) (S : SEQ K field),
+ ENDED field S → EXACT field S
+def terminalOnto : Prop := ∀ (K : TYPE) (field : FIELD K) (S : SEQ K field),
+ ENDED field S → ONTO (S.arrow (NUM (nat_lit 0)))
 end ExactSequenceOracle
 
 theorem exactPairMathlibAgreement {K : Type} (field : FIELD K) (M N P : MOD K field)
@@ -54,15 +66,37 @@ theorem exactMapsVanish : CleanStatements.exact_maps_vanish_on_the_image := by
 theorem exactSequenceAtPosition : CleanStatements.exact_sequence_interior_at_each_position := by
  intro K field S n h
  exact h n
+
+theorem ontoMathlibAgreement {K : Type} (field : FIELD K) (M N : MOD K field) (f : MAP K field M N) :
+ ONTO f ↔ Function.Surjective f.hom := by rfl
+
+theorem zeroMapExactness {K : Type} (field : FIELD K) (M N P : MOD K field) (f : MAP K field M N) :
+ PAIR field M N P f (ZEROMAP field N P) ↔ ONTO f := by
+ letI : Field K := field
+ rw [exactPairMathlibAgreement]
+ change Function.Exact f.hom (0 : N.carrier →ₗ[K] P.carrier) ↔ Function.Surjective f.hom
+ exact LinearMap.exact_zero_iff_surjective P.carrier f.hom
+
+theorem zeroCriterionChecked : CleanStatements.exactness_before_a_zero_map := by
+ intro K field M N P f
+ exact zeroMapExactness field M N P f
+
+theorem terminalInteriorChecked : CleanStatements.terminal_exactness_includes_the_interior := by
+ intro K field S h
+ exact h.1
+
+theorem terminalOntoChecked : CleanStatements.terminal_exactness_covers_degree_zero := by
+ intro K field S h
+ exact h.2
 '''
 for key,value in mapping.items():oracles=re.sub(r'\b'+key+r'\b',value,oracles)
 comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_basic_targets.py').read_text()).body
  if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))
-pairs=[(f(name),'ExactSequenceOracle.'+oracle) for name,oracle in [('module map kernel','kernel'),('module zero element','zero'),('exact pair','pair'),('exact','short'),('exact pair at','atPosition'),('exact sequence interior','sequence'),('module sequence','makeSequence')]]
-pairs += [('CleanStatements.exact_maps_vanish_on_the_image','ExactSequenceOracle.vanishes'),('CleanStatements.exact_sequence_interior_at_each_position','ExactSequenceOracle.eachPosition')]
+pairs=[(f(name),'ExactSequenceOracle.'+oracle) for name,oracle in [('module map kernel','kernel'),('module zero element','zero'),('exact pair','pair'),('exact','short'),('exact pair at','atPosition'),('exact sequence interior','sequence'),('module sequence','makeSequence'),('module zero map','zeroMap'),('onto','onto'),('exact sequence ending in zero','ended')]]
+pairs += [('CleanStatements.exact_maps_vanish_on_the_image','ExactSequenceOracle.vanishes'),('CleanStatements.exact_sequence_interior_at_each_position','ExactSequenceOracle.eachPosition'),('CleanStatements.exactness_before_a_zero_map','ExactSequenceOracle.zeroCriterion'),('CleanStatements.terminal_exactness_includes_the_interior','ExactSequenceOracle.terminalInterior'),('CleanStatements.terminal_exactness_covers_degree_zero','ExactSequenceOracle.terminalOnto')]
 verified=source+oracles+comparison+'\n'.join('same_basic_target '+a+' '+b for a,b in pairs)+'\n'
 p=HERE/'ExactSequencesVerified.lean';p.write_text(verified)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(p)],cwd=ROOT,check=True)
-print('Nine exact sequence targets, a Mathlib agreement proof and two statement proofs passed.')
+print('Fifteen exact sequence targets, three agreement/criterion proofs and five statement proofs passed.')
 
 # generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

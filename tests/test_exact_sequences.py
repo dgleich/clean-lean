@@ -21,7 +21,7 @@ class ExactSequences(unittest.TestCase):
     ['arrow','Function(n: Natural,ModuleMap(K,field,((object)((n + 1))),((object)(n))))']],
    'module sequence'])
  def test_exactness_definitions_are_authored(self):
-  for name in ['exact pair','exact','exact pair at','exact sequence interior']:
+  for name in ['exact pair','exact','exact pair at','exact sequence interior','onto','exact sequence ending in zero']:
    with self.subTest(name=name):self.assertEqual(self.env.definitions[name]['implementation'],'equals')
  def test_arrow_direction_and_middle_object(self):
   arrow=self.expr('S.arrow(n)')
@@ -30,6 +30,24 @@ class ExactSequences(unittest.TestCase):
  def test_conditions_and_local_position(self):
   for text in ['exact pair(field,M,N,P,f,g)','exact(f,g)','exact pair at(field,S,n)','exact sequence interior(field,S)']:
    with self.subTest(text=text):self.assertEqual(self.expr(text).type,Type('Proposition'))
+ def test_endpoint_conditions(self):
+  for text in ['onto(f)','exact sequence ending in zero(field,S)']:
+   with self.subTest(text=text):self.assertEqual(self.expr(text).type,Type('Proposition'))
+  with self.assertRaises(CleanError):self.expr('onto(n)')
+ def test_terminal_tree_requires_both_clauses(self):
+  tree=self.env.definitions['exact sequence ending in zero']['tree']
+  self.assertEqual(tree[:2],['Operator','∧'])
+  self.assertEqual(tree[2],['Call','exact sequence interior',[['Local','field'],['Local','S']]])
+  self.assertEqual(tree[3][:2],['Call','onto'])
+  application=tree[3][2][0]
+  self.assertEqual(application[:2],['Apply',['Projection',['Local','S'],'arrow']])
+  self.assertEqual(len(application[2]),1)
+  self.assertEqual(application[2][0][:3],['BoundNumeral','0','Natural'])
+  self.assertEqual(application[2][0][-1],'inferred')
+ def test_zero_map_endpoints(self):
+  self.assertEqual(self.expr('module zero map(field,N,P)').type,self.env.type('ModuleMap(K,field,N,P)',self.scope))
+  self.assertEqual(self.expr('exact(f,module zero map(field,N,P))').type,Type('Proposition'))
+  with self.assertRaises(CleanError):self.expr('exact(g,module zero map(field,M,N))')
  def test_noncomposable_pair_rejects(self):
   with self.assertRaises(CleanError):self.expr('exact pair(field,M,N,P,g,f)')
  def test_kernel_lives_in_domain(self):

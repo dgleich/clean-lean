@@ -362,6 +362,15 @@ noncomputable def cleanDefine_exact_pair_at_7aa740bb698f9959a08e {K : Type} (fie
 noncomputable def cleanDefine_exact_sequence_interior_e96d5e1de470d9c05974 {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (S : _root_.cleanStructure_ModuleSequence_23f5156e3d7cd1b21f71 (K) (field)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   (∀ (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)), (@_root_.cleanDefine_exact_pair_at_7aa740bb698f9959a08e (K) (field) (S) (clean_bound_0)))
 
+noncomputable def cleanNotation_module_zero_map_77b77786d34ab8aa0534 {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (M : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (N : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (M) (N)) :=
+  (letI : Field K := field; ModuleCat.ofHom (0 : M.carrier →ₗ[K] N.carrier))
+
+noncomputable def cleanDefine_onto_2272460b6a00937af032 {K : Type} {field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))} {M : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))} {N : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))} (f : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (M) (N))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (∀ (clean_bound_0 : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) (N))), (@Exists ((_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) (M))) (fun (clean_bound_1 : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) (M))) => (_root_.cleanDefine_equal_59dc0f11ba9b345348cf ((@_root_.cleanNotation_module_map_value_d59145d0b679c3ce3011 (K) (field) (M) (N) (f) (clean_bound_1))) (clean_bound_0)))))
+
+noncomputable def cleanDefine_exact_sequence_ending_in_zero_df52af1d66969622d038 {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (S : _root_.cleanStructure_ModuleSequence_23f5156e3d7cd1b21f71 (K) (field)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((@_root_.cleanDefine_exact_sequence_interior_e96d5e1de470d9c05974 (K) (field) (S))) ((@_root_.cleanDefine_onto_2272460b6a00937af032 (K) (field) (((@_root_.cleanStructure_ModuleSequence_23f5156e3d7cd1b21f71.«object» (K) (field) (S)) (_root_.cleanNotation_natural_sum_884ddbcff666dc390f99 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))))) (((@_root_.cleanStructure_ModuleSequence_23f5156e3d7cd1b21f71.«object» (K) (field) (S)) (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0)))) (((@_root_.cleanStructure_ModuleSequence_23f5156e3d7cd1b21f71.«arrow» (K) (field) (S)) (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0)))))))
+
 
 open scoped Matrix
 
@@ -397,6 +406,42 @@ def exact_sequence_interior_at_each_position : Prop :=
   ∀ (n : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
   ∀ («exactness» : (@_root_.cleanDefine_exact_sequence_interior_e96d5e1de470d9c05974 (K) (field) (S))),
   (@_root_.cleanDefine_exact_pair_at_7aa740bb698f9959a08e (K) (field) (S) (n))
+
+/--
+source: exactness
+reference: LinearMap.exact_zero_iff_surjective
+relationship: specialized
+-/
+def exactness_before_a_zero_map : Prop :=
+  ∀ (K : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))),
+  ∀ (M N P : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))),
+  ∀ (f : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (M) (N))),
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((@_root_.cleanDefine_exact_b7fa96484fe39f8c9b3d (K) (field) (M) (N) (P) (f) ((@_root_.cleanNotation_module_zero_map_77b77786d34ab8aa0534 (K) (field) (N) (P))))) ((@_root_.cleanDefine_onto_2272460b6a00937af032 (K) (field) (M) (N) (f))))
+
+/--
+source: topology
+reference: terminal exactness definition
+relationship: original
+-/
+def terminal_exactness_includes_the_interior : Prop :=
+  ∀ (K : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))),
+  ∀ (S : _root_.cleanStructure_ModuleSequence_23f5156e3d7cd1b21f71 (K) (field)),
+  ∀ («exactness» : (@_root_.cleanDefine_exact_sequence_ending_in_zero_df52af1d66969622d038 (K) (field) (S))),
+  (@_root_.cleanDefine_exact_sequence_interior_e96d5e1de470d9c05974 (K) (field) (S))
+
+/--
+source: topology
+reference: terminal exactness definition
+relationship: original
+-/
+def terminal_exactness_covers_degree_zero : Prop :=
+  ∀ (K : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))),
+  ∀ (S : _root_.cleanStructure_ModuleSequence_23f5156e3d7cd1b21f71 (K) (field)),
+  ∀ («exactness» : (@_root_.cleanDefine_exact_sequence_ending_in_zero_df52af1d66969622d038 (K) (field) (S))),
+  (@_root_.cleanDefine_onto_2272460b6a00937af032 (K) (field) (((@_root_.cleanStructure_ModuleSequence_23f5156e3d7cd1b21f71.«object» (K) (field) (S)) (_root_.cleanNotation_natural_sum_884ddbcff666dc390f99 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))))) (((@_root_.cleanStructure_ModuleSequence_23f5156e3d7cd1b21f71.«object» (K) (field) (S)) (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0)))) (((@_root_.cleanStructure_ModuleSequence_23f5156e3d7cd1b21f71.«arrow» (K) (field) (S)) (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0)))))
 
 end CleanStatements
 

@@ -1300,3 +1300,14 @@ quantifies those pairs and deliberately makes no degree-zero endpoint assertion.
 This adds no new syntax or builtin equality/zero/sequence rule. The actual
 Mayer–Vietoris construction and proof remain separate mathematical obligations.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The separate authored condition `exact sequence ending in zero(field,S)` is
+`exact sequence interior(field,S) and onto(S.arrow(0))`. Here `onto(f)` means
+that every codomain element has a preimage. It adds exactness at degree zero
+without storing a zero object in the sequence record. The explicit zero-map
+adapter uses the supplied field instance and Mathlib's zero linear map.
+The checked criterion identifies exactness before that map with surjectivity;
+interior exactness alone continues to make no endpoint claim.
+:::

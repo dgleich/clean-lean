@@ -64,3 +64,29 @@ Condition exact sequence interior(field,S):
   Render latex: \text{{interior exactness of }}{S}
 
 -- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Notation module zero map(field,M,N):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: CoefficientModule(K,field)
+  Returns: ModuleMap(K,field,M,N)
+  Means: (letI : Field K := field; ModuleCat.ofHom (0 : M.carrier →ₗ[K] N.carrier))
+  Render latex: 0
+
+Condition onto(f):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: CoefficientModule(K,field)
+  Let f: ModuleMap(K,field,M,N)
+  Holds when:
+    for every(y: ModuleElement(K,field,N),
+      there exists(x: ModuleElement(K,field,M),module map value(field,M,N,f,x) = y))
+  Assumption name: surjectivity of {f}
+  Render latex: {f}\text{{ is onto}}
+
+Condition exact sequence ending in zero(field,S):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ModuleSequence(K,field)
+  Holds when: exact sequence interior(field,S) and onto(S.arrow(0))
+  Render latex: {S}\text{{ is exact and ends in zero}}

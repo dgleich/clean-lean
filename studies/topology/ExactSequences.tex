@@ -19,4 +19,28 @@ Assume $\text{interior exactness of }S$ (\texttt{exactness}).
 Then \[\operatorname{exact}_{n+1}(S).\]
 \end{cleanresult}
 
+\begin{cleanresult}{exactness before a zero map}\cleanattribution{[Mathlib exact pairs, LinearMap.exact\_zero\_iff\_surjective]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $M$, $N$ and $P$ be elements of $\operatorname{Mod}_{K}$.
+Let $f$ be a linear map from $M$ to $N$.
+Then \[\operatorname{exact}(f,0)\text{ if and only if }f\text{ is onto}.\]
+\end{cleanresult}
+
+\begin{cleanresult}{terminal exactness includes the interior}\cleanattribution{[Topology foundations, terminal exactness definition]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $S$ be a sequence of modules over $K$.
+Assume $S\text{ is exact and ends in zero}$ (\texttt{exactness}).
+Then \[\text{interior exactness of }S.\]
+\end{cleanresult}
+
+\begin{cleanresult}{terminal exactness covers degree zero}\cleanattribution{[Topology foundations, terminal exactness definition]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $S$ be a sequence of modules over $K$.
+Assume $S\text{ is exact and ends in zero}$ (\texttt{exactness}).
+Then \[S.\mathrm{arrow}(0)\text{ is onto}.\]
+\end{cleanresult}
+
 % generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
