@@ -1,0 +1,262 @@
+--- a/cleanlang/annotations.py
++++ b/cleanlang/annotations.py
+@@ -21,6 +21,9 @@
+     from .dependent_functions import index_tree,DependentFunctionType
+     def tree_names(tree):
+         kind=tree[0]
++        if kind=='BoundLiteral':
++            from .literal_binding import names
++            return names(tree,tree_names)
+         if kind=='Local':return {tree[1]}
+         if kind in ('Decimal','BoundNumeral'):return set()
+         if kind=='NumeralAnnotation':
+--- a/cleanlang/beta_indices.py
++++ b/cleanlang/beta_indices.py
+@@ -21,12 +21,20 @@
+     def reduce(tree):
+         if not isinstance(tree,list) or not tree:return tree
+         if tree[0] in ('Lambda','Forall','Exists'):return tree
++        if tree[0]=='BoundLiteral':
++            from .literal_binding import rebuild
++            return rebuild(tree,reduce)
+         if tree[0]=='Apply':
+             function=reduce(tree[1]);args=[reduce(a) for a in tree[2]]
+             if (function[0]=='Lambda' and len(args)==1 and
+                 not has_binder(function[3]) and not has_binder(args[0])):
+                 name=function[1];actual=args[0]
+                 def substitute(body):
++                    if body[0]=='BoundLiteral':
++                        from .literal_binding import rebuild
++                        from .annotations import replace
++                        value=Expressions(environment,locals).elaborate(actual)
++                        return rebuild(body,substitute,replace(body[6],{name:value},environment,locals))
+                     if body[0]=='TypeValue':
+                         from .type_values import substitute as replace_type
+                         return replace_type(body,{name:Expressions(environment,locals).elaborate(actual)},environment,locals)
+--- a/cleanlang/bound_calls.py
++++ b/cleanlang/bound_calls.py
+@@ -15,6 +15,10 @@
+ 
+ def bind(tree,env,locals,*,binders=False):
+     kind=tree[0]
++    if kind=='BoundLiteral':
++        from .literal_binding import call
++        call(tree,env,locals)
++        return tree
+     if kind in ('NumeralAnnotation','BoundNumeral'):
+         from .numerals import bind as numeral
+         return numeral(tree,env,locals)
+--- a/cleanlang/conditions.py
++++ b/cleanlang/conditions.py
+@@ -9,6 +9,9 @@
+ def source_expression(tree):
+     """Canonical label spelling from normalized expression trees; no target-text parsing."""
+     kind=tree[0]
++    if kind=='BoundLiteral':
++        from .literal_binding import spelling
++        return spelling(tree,canonical=True)
+     if kind in ('NumeralAnnotation','BoundNumeral'):
+         from .numerals import spelling
+         return spelling(tree,canonical_digits=True)
+--- a/cleanlang/conversion.py
++++ b/cleanlang/conversion.py
+@@ -90,6 +90,9 @@
+     tree=expression.tree
+     if not tree:return expression
+     kind=tree[0]
++    if kind=='BoundLiteral':
++        from .literal_binding import call
++        return _normal_form(call(tree,env,locals),env,locals,fresh=True)
+     if kind=='Local':
+         local=locals.get(tree[1])
+         if local is None or local.local_normal is None:return expression
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -556,6 +556,9 @@
+             value=self.reg.type(tree[1],self.env,phrases=False)
+             self.reg.require_type_argument(value)
+             return Expr(self.reg.render_type(value,'lean',self.env),self.reg.render_type(value,'latex',self.env),Type('Type'),tree=['TypeValue',tree[1] if isinstance(tree[1],Annotation) else str(value)])
++        if kind=='BoundLiteral':
++            from .literal_binding import elaborate
++            return elaborate(tree,self.reg,self.env)
+         if kind in ('NumeralAnnotation','BoundNumeral'):
+             from .numerals import elaborate
+             return elaborate(tree,self.reg,self.env)
+--- a/cleanlang/dependent_functions.py
++++ b/cleanlang/dependent_functions.py
+@@ -14,6 +14,9 @@
+ 
+ def tree_names(tree):
+     kind=tree[0]
++    if kind=='BoundLiteral':
++        from .literal_binding import names
++        return names(tree,tree_names)
+     if kind=='Local':return {tree[1]}
+     if kind in ('Decimal','BoundNumeral'):return set()
+     if kind=='NumeralAnnotation':
+--- a/cleanlang/exact_literals.py
++++ b/cleanlang/exact_literals.py
+@@ -68,7 +68,8 @@
+         inferred=dict(value.inferred_args)
+         if any(inferred.get(p[1])!=bindings[p[1]] for p in signature if p[3]=='implicit'):continue
+         from .bound_calls import bind,identity
+-        value.tree=['ModuleCall',name,[bind(arg.tree,env,locals,binders=True) for arg in args],identity(env,name)]
++        from .literal_binding import make,elaborate
++        value=elaborate(make(tree,name,bindings,env,locals),env,locals)
+         matches.append(value)
+     # Existing all-numeral carriers have equal priority with exact attachments.
+     from .numerals import bind
+--- a/cleanlang/hygiene.py
++++ b/cleanlang/hygiene.py
+@@ -94,6 +94,9 @@
+         return replace(source,{**replacements,**type_bindings},environment,scope)
+     def expr(node,mapping,callheads):
+         kind=node[0]
++        if kind=='BoundLiteral':
++            from .literal_binding import rebuild
++            return rebuild(node,lambda value:expr(value,mapping,callheads),annotation(node[6],mapping,callheads))
+         if kind=='Local':return mapping.get(node[1],node)
+         if kind=='Decimal':return node
+         if kind=='BoundNumeral':
+--- a/cleanlang/indices.py
++++ b/cleanlang/indices.py
+@@ -52,6 +52,10 @@
+             return reify(value,env,locals).tree
+         return expression_tree(parse(str(value),'expression'))
+     def replace(node):
++        if node[0]=='BoundLiteral':
++            from .literal_binding import rebuild
++            from .annotations import replace as replace_annotation
++            return rebuild(node,replace,replace_annotation(node[6],bindings,env,locals))
+         if node[0]=='TypeValue':
+             from .type_values import substitute
+             return substitute(node,bindings,env,locals)
+--- a/cleanlang/inferred_conversion.py
++++ b/cleanlang/inferred_conversion.py
+@@ -36,6 +36,9 @@
+         if node[0]=='BoundTypeApply':return type_values(node[3])|type_values(node[4])
+         return set()
+     kind=tree[0]
++    if kind=='BoundLiteral':
++        from .literal_binding import names
++        return names(tree,value_names)
+     if kind=='Local':return {tree[1]}
+     if kind in ('Decimal','BoundNumeral'):return set()
+     if kind=='NumeralAnnotation':
+--- /dev/null
++++ b/cleanlang/literal_binding.py
+@@ -0,0 +1,69 @@
++# generated: gpt-6 2026-11-10 role=assisted; isolated prototype
++"""In-memory retained literal prototype. Portable serialization is not implemented."""
++from .core import CleanError,Expressions
++from .annotations import Annotation,checked
++
++def snapshot(name,env):
++    spec=env.data['functions'].get(name)
++    if spec is None or 'literal' not in spec:raise CleanError('Missing literal declaration: '+name)
++    data=spec['literal'];key=spec['native_binding']
++    return [key,spec['lean'],env.notation_definitions.get(key),data['digits'],
++            repr(spec['signature_tree']),repr(spec.get('dependent_signature')),
++            repr(data['result']),list(data['parameters'])]
++
++def make(source,name,bindings,env,locals):
++    from .inferred_conversion import reify
++    from .bound_calls import bind
++    from .numerals import digits,type_source
++    spec=env.data['functions'][name]
++    arguments=[[p[1],p[3],bind(reify(bindings[p[1]],env,locals).tree,env,locals,binders=True)]
++               for p in spec['signature_tree'][2]]
++    return ['BoundLiteral',digits(source[1]),source[1],name,snapshot(name,env),arguments,
++            checked(type_source(source[2]),env,locals),'explicit']
++
++def rebuild(tree,visit,annotation=None):
++    return [*tree[:5],[[name,visibility,visit(value)] for name,visibility,value in tree[5]],
++            tree[6] if annotation is None else annotation,tree[7]]
++
++def names(tree,visit):
++    if not isinstance(tree[6],Annotation):raise CleanError('Literal annotation lost its checked binding')
++    return set(tree[6].names)|set().union(*(visit(value) for _,_,value in tree[5]))
++
++def spelling(tree,canonical=False):
++    value=tree[1] if canonical else tree[2]
++    return value if tree[7]=='inferred' else '('+value+': '+str(tree[6])+')'
++
++def call(tree,env,locals):
++    if len(tree)!=8 or tree[7] not in ('explicit','inferred','defaulted'):
++        raise CleanError('Malformed literal binding')
++    if tree[4]!=snapshot(tree[3],env):raise CleanError('Changed retained literal declaration: '+tree[3])
++    if not isinstance(tree[6],Annotation):raise CleanError('Literal annotation lost its checked binding')
++    from .numerals import digits
++    if tree[1]!=digits(tree[2]) or tree[1]!=env.data['functions'][tree[3]]['literal']['digits']:
++        raise CleanError('Changed retained literal digits')
++    from .numeral_inference import holes
++    if any(holes(value) for _,_,value in tree[5]):raise CleanError('Unresolved literal constructor argument')
++    signature=env.data['functions'][tree[3]]['signature_tree'][2]
++    if [(a,b) for a,b,_ in tree[5]]!=[(p[1],p[3]) for p in signature]:
++        raise CleanError('Changed literal parameter telescope')
++    arguments=[(n,v,Expressions(env,locals).elaborate(t)) for n,v,t in tree[5]]
++    explicit=[value for _,visibility,value in arguments if visibility=='explicit']
++    result=env.call(tree[3],explicit,locals)
++    from .inferred_conversion import reify
++    inferred=dict(result.inferred_args)
++    for name,visibility,value in arguments:
++        if visibility=='implicit':
++            expected=reify(inferred[name],env,locals)
++            if value.type!=expected.type or value.lean!=expected.lean:
++                raise CleanError('Changed recovered literal argument: '+name)
++    target=env.type(tree[6],locals,phrases=False)
++    if result.type!=target:raise CleanError('Literal result differs from checked carrier')
++    from .bound_calls import identity
++    result.tree=['ModuleCall',tree[3],[a.tree for a in explicit],identity(env,tree[3])]
++    return result
++
++def elaborate(tree,env,locals):
++    result=call(tree,env,locals)
++    result.tree=tree
++    result.tex=tree[2] if tree[7]=='inferred' else r'\left('+tree[2]+r'\: : \: '+env.render_type(result.type,'latex')+r'\right)'
++    return result
+--- a/cleanlang/numeral_inference.py
++++ b/cleanlang/numeral_inference.py
+@@ -18,7 +18,7 @@
+     def visit(node,path):
+         kind=node[0]
+         if kind=='Decimal':digits(node[1]);found.append((path,node[1]));return
+-        if kind in ('Local','TypeValue','NumeralAnnotation','BoundNumeral'):return
++        if kind in ('Local','TypeValue','NumeralAnnotation','BoundNumeral','BoundLiteral'):return
+         if kind in ('Call','ModuleCall'):
+             for i,arg in enumerate(node[2]):visit(arg,path+(2,i))
+         elif kind=='Apply':
+--- a/cleanlang/quantified_beta.py
++++ b/cleanlang/quantified_beta.py
+@@ -24,6 +24,9 @@
+             body=walk(tree[3],{**scope,tree[1]:value})
+             return [kind,tree[1],tree[2],body]
+         if kind=='Lambda':return tree
++        if kind=='BoundLiteral':
++            from .literal_binding import rebuild
++            return rebuild(tree,lambda value:walk(value,scope))
+         if kind=='ModuleCall':rebuilt=[kind,tree[1],[walk(a,scope) for a in tree[2]],*tree[3:]]
+         elif kind=='Call':rebuilt=[kind,tree[1],[walk(a,scope) for a in tree[2]]]
+         elif kind=='Apply':rebuilt=[kind,walk(tree[1],scope),[walk(a,scope) for a in tree[2]]]
+--- a/cleanlang/syntax.py
++++ b/cleanlang/syntax.py
+@@ -62,6 +62,9 @@
+     """Canonical, fully grouped source for binder-free index expressions."""
+     from .core import CleanError
+     kind=tree[0]
++    if kind=='BoundLiteral':
++        from .literal_binding import spelling
++        return spelling(tree)
+     if kind in ('NumeralAnnotation','BoundNumeral'):
+         from .numerals import spelling
+         return spelling(tree)
+@@ -257,6 +260,9 @@
+     """Canonical source for scoped condition expressions; no environment lookup."""
+     from .core import CleanError
+     kind=tree[0]
++    if kind=='BoundLiteral':
++        from .literal_binding import spelling
++        return spelling(tree)
+     if kind in ('NumeralAnnotation','BoundNumeral'):
+         from .numerals import spelling
+         return spelling(tree)

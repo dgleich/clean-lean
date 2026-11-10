@@ -1219,6 +1219,11 @@ The [retained-literal proposal](parameterized-literals.md#retained-literal-repre
 now distinguishes saved constructor selection from literal-surface preservation.
 It requires all ordered actuals, a checked carrier annotation, origin/spelling,
 synchronized substitution and a faithful versioned encoding. A consumer audit is
-recorded. Six new tests validate existing retained-call behavior in the annotation
-prototype; they do not implement BoundLiteral or remove its acceptance blockers.
+recorded. The first annotation experiment tests retained-call behavior only. A
+[second isolated experiment](../studies/literal-retention/README.md) implements an
+in-memory BoundLiteral, preserving annotated spelling and updating constructor
+actuals and the checked carrier together during substitution. Its replay checks
+the saved declaration rather than reselecting. Portable serialization, a complete
+environment snapshot, joint inference and full consumer coverage remain blockers;
+production behavior is unchanged.
 :::

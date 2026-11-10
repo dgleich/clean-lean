@@ -381,6 +381,19 @@ records the current named-call spelling as a **known limitation**, not the desir
 final result. These checks use the existing ModuleCall machinery and do not establish
 BoundLiteral support in the consumers above.
 
+## In-memory retained-literal experiment
+
+The [second isolated prototype](../studies/literal-retention/README.md) implements
+the logical record above for explicit annotations. It preserves original digits,
+canonicalizes digits for automatic names, and substitutes constructor actuals and
+checked carrier annotations together. Beta reduction and comparison lower to the
+saved constructor, not a fresh candidate search. It rejects lost checked metadata
+and changed declarations or result carriers. These are in-memory checks: the
+Python-representation snapshot is not a portable or complete environment encoding.
+The study driver records regression and independently specified native targets.
+Production, unannotated inference and the remaining acceptance obligations below
+are unchanged.
+
 ## Acceptance obligations
 
 | Input or interaction | Required outcome |
