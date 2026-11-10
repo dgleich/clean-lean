@@ -56,6 +56,143 @@
          self.assertEqual(self.expr('reversed bundle(Y,Q)').type,self.local['Q'].type)
          with self.assertRaises(CleanError):self.expr('reversed bundle(X,Q)')
      def test_two_records_are_not_interchanged(self):
+--- a/tests/test_linear_spaces.py
++++ b/tests/test_linear_spaces.py
+@@ -23,7 +23,7 @@
+         self.assertEqual(self.e.notation_definitions[key].split(':=\n',1)[1],
+                          '  @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action\n')
+     def test_carrier_has_vector_type(self):
+-        self.assertEqual(self.expr('subspace carrier(f,L,U)').type,Type('Set',(LocalType('V',(), 'V'),)))
++        self.assertEqual(self.expr('subspace carrier(f,L,U)').type,Type('Set',(LocalType('V',(), 'V',0,self.e.data['types']['Type']['native_binding']),)))
+     def test_different_module_bundle_is_rejected(self):
+         with self.assertRaisesRegex(CleanError,'index mismatch'):
+             self.expr('subspace carrier(f,M,U)')
+@@ -36,7 +36,7 @@
+     def test_intersection_retains_ambient_type(self):
+         self.assertEqual(self.expr('intersection of subspaces(f,L,A,spaces)').type,self.local['U'].type)
+     def test_wrong_index_set_rejected(self):
+-        self.local['B']=Expr('B','B',Type('Set',(LocalType('V',(), 'V'),)))
++        self.local['B']=Expr('B','B',Type('Set',(LocalType('V',(), 'V',0,self.e.data['types']['Type']['native_binding']),)))
+         with self.assertRaisesRegex(CleanError,'Inconsistent'):
+             self.expr('intersection of subspaces(f,L,B,spaces)')
+     def test_intersection_is_authored_not_an_adapter(self):
+--- a/tests/test_value_indices.py
++++ b/tests/test_value_indices.py
+@@ -10,7 +10,7 @@
+ class ValueIndices(unittest.TestCase):
+     def setUp(self):
+         self.e=Environment();load_module(ROOT/'library/topology/indexed.clean',self.e)
+-        X=LocalType('X',(), 'X')
++        X=LocalType('X',(), 'X',0,self.e.data['types']['Type']['native_binding'])
+         self.locals={'X':Expr('X','X',Type('Type')),
+                      't':Expr('t','t',Type('Topology',(X,))),
+                      'x':Expr('x','x',X),'y':Expr('y','y',X),
+@@ -34,7 +34,7 @@
+             with self.subTest(source=source),self.assertRaises(CleanError):syntax.parse(source,'type_ref')
+     def test_binding_and_explicit_target(self):
+         t=self.e.type('Path(X,t,x,y)',self.locals)
+-        self.assertEqual(t,Type('Path',(LocalType('X',(), 'X'),ValueIndex('t','t','t'),ValueIndex('x','x','x'),ValueIndex('y','y','y'))))
++        self.assertEqual(t,Type('Path',(LocalType('X',(), 'X',0,self.e.data['types']['Type']['native_binding']),ValueIndex('t','t','t'),ValueIndex('x','x','x'),ValueIndex('y','y','y'))))
+         key=self.e.data['types']['Path']['native_binding']
+         self.assertEqual(self.e.render_type(t,'lean'),f'(_root_.{key} (X) (t) (x) (y))')
+     def test_prose_equivalence(self):
+@@ -81,7 +81,7 @@
+         notation('Notation forget(S,x):',['Let X: Type','Let S: Set(X)','Let x: Element(X,S)',
+             'Returns: X','Means: x.val','Render latex: {x}'],self.e)
+         locals={**self.locals,'a':Expr('a','a',self.e.type('Element(X,S)',self.locals))}
+-        self.assertEqual(Expressions(self.e,locals).parse('forget(S,a)').type,LocalType('X',(), 'X'))
++        self.assertEqual(Expressions(self.e,locals).parse('forget(S,a)').type,LocalType('X',(), 'X',0,self.e.data['types']['Type']['native_binding']))
+     def test_real_study_parses_and_renders(self):
+         e=Environment();rs=load_document(ROOT/'studies/topology/ValueIndices.clean',e)
+         self.assertEqual(len(rs),4)
+--- a/studies/carrier-fields/BoundOperators.clean.proposed
++++ b/studies/carrier-fields/BoundOperators.clean.proposed
+@@ -6,6 +6,8 @@
+   Title: Declaration-scoped operator selection in conditions and annotations
+ 
+ Type Type():
++  Universe: 1
++  Classifies: 0
+   Means: Type
+   Render latex: \mathsf{{Type}}
+   Describe: a type
+--- a/studies/carrier-fields/OperatorBundle.clean.proposed
++++ b/studies/carrier-fields/OperatorBundle.clean.proposed
+@@ -2,6 +2,8 @@
+ Import Lean Mathlib.Topology.Basic
+ 
+ Type Type():
++  Universe: 1
++  Classifies: 0
+   Means: Type
+   Render latex: \mathsf{{Type}}
+ Type Proposition():
+--- a/studies/module-numerals/Common.clean.proposed
++++ b/studies/module-numerals/Common.clean.proposed
+@@ -14,6 +14,8 @@
+   Title: Explicit module-owned numeral constructors
+ 
+ Type Type():
++  Universe: 1
++  Classifies: 0
+   Means: Type
+   Render latex: Type
+ Type Proposition():
+--- a/studies/native-type-bindings/Statements.clean.proposed
++++ b/studies/native-type-bindings/Statements.clean.proposed
+@@ -2,6 +2,8 @@
+ Import Lean Mathlib.Data.Real.Basic
+ 
+ Type Type():
++  Universe: 1
++  Classifies: 0
+   Means: Type
+   Render latex: \mathsf{{Type}}
+   Describe: a type
+--- a/studies/operator-integration/Dispatch.clean.proposed
++++ b/studies/operator-integration/Dispatch.clean.proposed
+@@ -2,6 +2,8 @@
+ Import Lean Mathlib.Data.Real.Basic
+ 
+ Type Type():
++  Universe: 1
++  Classifies: 0
+   Means: Type
+   Render latex: Type
+ Type Proposition():
+--- a/studies/operator-integration/Saved.clean.proposed
++++ b/studies/operator-integration/Saved.clean.proposed
+@@ -6,6 +6,8 @@
+   Title: Declaration-scoped operator selection in conditions and annotations
+ 
+ Type Type():
++  Universe: 1
++  Classifies: 0
+   Means: Type
+   Render latex: \mathsf{{Type}}
+   Describe: a type
+--- a/studies/operator-integration/foundations/Logic.clean.proposed
++++ b/studies/operator-integration/foundations/Logic.clean.proposed
+@@ -2,6 +2,8 @@
+ Import Lean Mathlib.Logic.Basic
+ 
+ Type Type():
++  Universe: 1
++  Classifies: 0
+   Means: Type
+   Render latex: \mathsf{{Type}}
+   Describe: a type
+--- a/studies/qualified-globals/Definitions.clean.proposed
++++ b/studies/qualified-globals/Definitions.clean.proposed
+@@ -2,6 +2,8 @@
+ Import Lean Mathlib.Data.Real.Basic
+ 
+ Type Type():
++  Universe: 1
++  Classifies: 0
+   Means: Type
+   Render latex: \mathsf{{Type}}
+ Type Scalar():
 --- a/studies/type-identity/Foundation.clean.proposed
 +++ b/studies/type-identity/Foundation.clean.proposed
 @@ -2,6 +2,8 @@

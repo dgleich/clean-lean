@@ -2858,17 +2858,56 @@
       "expected_lean": "PROPOSED: native TopologicalSpace carrier term checked against the explicitly selected Classifies:1 classifier. No translation implementation or canonical target comparison exists yet.",
       "checks": [
         "studies/universe-classifiers/test_syntax.py: independent explicit and nested trees, old tree preservation and malformed-form rejection",
-        "studies/universe-classifiers/verify.py: strict generated parser, 45 tests and handwritten native feasibility with three proofs",
+        "studies/universe-classifiers/verify.py: strict generated parser, reproducibility, selected regressions and handwritten native feasibility with three proofs",
         "studies/universe-classifiers/test_metadata.py: twelve declaration, alias identity and rejection checks",
         "studies/universe-classifiers/check_metadata_targets.py: three independent exact declaration types/bodies",
         "studies/universe-classifiers/test_carriers.py: fifteen document, implicit inference, level/identity, substitution and rejection checks",
-        "studies/universe-classifiers/check_carrier_targets.py: five exact native targets and one topology-object identity proof"
+        "studies/universe-classifiers/check_carrier_targets.py: five exact native targets and one topology-object identity proof",
+        "studies/universe-classifiers/carrier-fixtures.patch: thirteen fixtures migrated without weakening assertions; extra 29 regression checks pass",
+        "studies/operator-integration/verify_foundations.py, verify_saved.py, verify_dispatch.py: 67 exact native targets and ten proofs on the migrated classifier stack"
       ],
       "pending": [
         "Complete explicit carrier arguments, first-class type expressions and classifier ambiguity selection",
         "Audit and update all local-type, substitution, inference, comparison, literal and storage consumers",
         "Independent canonical Clean-to-Lean targets and required negative semantic cases",
         "Editor/browser coverage and full regression"
+      ]
+    },
+    {
+      "id": "closed_universe_implicit_carrier",
+      "status": "isolated-prototype",
+      "environment": "Pinned dde5d8e with the classifier syntax, metadata, carrier and fixture patches. See studies/universe-classifiers/verify.py.",
+      "source": "CarrierExample.clean: equal large(retain twice(X),X), with X: TopologicalSpace and generic implicit A: LargeTypes (Classifies: 1).",
+      "expected_tree": [
+        "Call",
+        "equal large",
+        [
+          [
+            "Call",
+            "retain twice",
+            [
+              [
+                "Local",
+                "X"
+              ]
+            ]
+          ],
+          [
+            "Local",
+            "X"
+          ]
+        ]
+      ],
+      "expected_lean": "CarrierTargets.lean compares the generated classifier, two authored generic operations, equality and theorem against independent native oracles. Generic binders are {A : Type 1}; the theorem explicitly instantiates A with the declared TopologicalSpace wrapper.",
+      "checks": [
+        "studies/universe-classifiers/check_carrier_targets.py: independent conclusion tree, five canonical native targets and a kernel-checked identity proof",
+        "studies/universe-classifiers/test_carriers.py: exact-level rejection, ordinary-bundle rejection, aliases, repeated-argument agreement and substitution identity",
+        "studies/universe-classifiers/verify.py: 249 selected tests plus native foundation, saved-expression and dispatch checks"
+      ],
+      "pending": [
+        "Explicit generic carrier arguments and first-class type-value elaboration",
+        "Carrier-valued dependent fields/callables, classifier ambiguity selection and storage schema migration",
+        "Full regression on the latest fixture snapshot and production integration"
       ]
     }
   ]

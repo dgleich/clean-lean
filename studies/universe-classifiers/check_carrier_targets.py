@@ -6,6 +6,7 @@ from cleanlang.core import Environment,lean
 from cleanlang.modules import load_document
 HERE=Path(__file__).resolve().parent
 env=Environment();results=load_document(HERE/'CarrierExample.clean',env)
+assert results[0].conclusion.tree == ['Call','equal large',[['Call','retain twice',[['Local','X']]],['Local','X']]]
 source=lean(results,env,['Lean'])
 keys={name:env.data['functions'][name]['native_binding'] for name in ('retain','retain twice','equal large')}
 space=env.data['types']['TopologicalSpace']['native_binding']

@@ -223,10 +223,33 @@ checks were subsequently added; all 15 dedicated carrier tests passed in 0.292
 seconds. The fully Clean-authored retain specimen was independently regenerated
 and passed its five exact targets and proof. Unrestricted regression is running
 on the earlier specimen/test snapshot; its result remains pending.
-The full fixture audit also found manual LocalType values in test_linear_spaces
-and test_value_indices and standalone Type declarations in other historical
-studies. Their migration remains pending; selected-suite results must not be
-reported as complete regression coverage.
+The fixture patch now covers thirteen files: the four regression files with
+manual LocalType values and nine standalone study foundations declaring Type.
+It supplies closed level zero and the selected classifier identity, and adds
+explicit Universe/Classifies fields to the foundations. No mathematical assertion
+or rejection expectation is removed. The additional linear-space, value-index and
+standard-operator groups pass 29 tests in 7.219 seconds.
+
+Native validation on the migrated stack additionally passes 38 exact foundation
+targets/six proofs, 17 saved-expression targets/three proofs, and 12 dispatch
+targets/one proof. These checks cover retained meanings, generic carrier calls,
+ambiguity/order independence and incomplete-analysis rejection. The verifier now
+includes all three native suites and the extra regression groups. A fresh pinned
+reproduction passed all 249 selected tests in 81.525 seconds. The acceptance
+catalog separates this checked implicit-carrier specimen from the still-pending
+explicit type-value expression, and the native driver also checks its independent
+source conclusion tree.
+
+Three older historical verifiers remain unsuitable as green current-compiler
+evidence without further migration. Native-type-bindings and qualified-globals
+fail for a missing explicit equality operator on both the working compiler and
+this stack. The older carrier-fields bound-operator verifier produces the same
+six canonical/missing-target errors on the metadata-only baseline and this stack;
+its inline native expectations predate the integrated wrapper targets. These
+failures were not hidden or converted to passing checks. The contemporary saved-
+expression verifier above has independent wrapper-aware targets and passes.
+Unrestricted regression is still pending on the earlier fixture snapshot; none
+of these selected results claims a complete full-suite pass.
 No production compiler integration or full language conformance is claimed.
 
 Lexical Classifies highlighting is provided for VSCode/TextMate, Vim, Emacs and

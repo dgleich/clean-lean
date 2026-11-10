@@ -1414,3 +1414,15 @@ Explicit carrier arguments, higher computed carriers, type values, dependent
 carrier fields/callables and storage migration remain incomplete; this is isolated
 validation, not production integration or full classifier conformance.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Classifier fixture migration remains isolated from the production compiler. Four
+manual LocalType regression fixtures now supply their level and classifier identity;
+nine study foundations explicitly declare Classifies: 0. Existing assertions are
+preserved. Wrapper-aware foundation, saved-expression and dispatch oracles pass
+on the migrated stack. Older native-type/qualified-global scripts lack explicit
+equality imports, and the older bound-operator script has pre-wrapper oracles;
+these failures also occur on their checked baselines and are not classifier passes.
+Full regression on the latest fixture set remains unestablished.
+:::
