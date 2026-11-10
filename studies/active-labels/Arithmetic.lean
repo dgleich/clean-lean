@@ -699,6 +699,7 @@ private theorem support_exists (I : Type) (n a m : ℕ) (h : a+m ≤ n) (L : cle
    omega
  exact ⟨⟨survives,active,original⟩⟩
 
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
 
 theorem active_labels_exist : existsStatement := by
  intro I n a m h L v
