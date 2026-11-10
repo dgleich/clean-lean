@@ -27,8 +27,8 @@
 +++ b/cleanlang/dependent_functions.py
 @@ -44,11 +44,20 @@
      return typ==name
- 
- 
+
+
 +def direct_index_name(typ):
 +    from .proof_types import ProofIndex
 +    if type(typ) is ValueIndex:return typ.name
@@ -46,7 +46,7 @@
 +    if isinstance(typ,ValueIndex):return direct_index_name(typ)==name
      if isinstance(typ,Type):return any(direct_index_occurs(a,name) for a in typ.args)
      return False
- 
+
 --- a/cleanlang/inferred_conversion.py
 +++ b/cleanlang/inferred_conversion.py
 @@ -17,7 +17,9 @@
@@ -69,7 +69,7 @@
 -  From Lean: x → y
 +  Holds when: for every (h: (x),y)
    Render latex: {x}\text{{ implies }}{y}
- 
+
  Condition logical equivalence(x,y):
 --- /dev/null
 +++ b/library/logic/proof_equality.clean
@@ -127,7 +127,7 @@
 +    '  Assume h: p → q\n  Assume k: p\n  Let proof = h(k)\n  Conclude: q\n')
 +   with self.assertRaisesRegex(CleanError,'Unknown function: h'):load_document(p,Environment())
  if __name__=='__main__':unittest.main(verbosity=2)
- 
+
  # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
 --- /dev/null
 +++ b/tests/test_inferred_conditions.py
