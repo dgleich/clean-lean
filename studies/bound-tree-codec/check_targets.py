@@ -1,22 +1,28 @@
 # generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
 from pathlib import Path
-import ast,os,subprocess,tempfile
-from codec import dumps,loads
+import argparse,ast,os,subprocess,tempfile
+from dataclasses import replace
+from cleanlang.retained_codec import dumps,loads
 import test_retention
 from cleanlang.core import Expressions,lean
 from cleanlang.indices import index_value,substitute_index
 from cleanlang.dependent_functions import index_tree
 from cleanlang.proof_types import index
+parser=argparse.ArgumentParser()
+parser.add_argument('--payload-only',action='store_true')
+options=parser.parse_args()
 ROOT=test_retention.ROOT
 fixture=test_retention.ExactLiteralPrototype();env=fixture.load();scope=fixture.scope(env)
 f=lambda name:env.data['functions'][name]['native_binding']
 t=lambda name:env.data['types'][name]['native_binding']
 vector=Expressions(env,scope).parse('(0: Vector(n,Complex))')
 saved=loads(dumps(index_value(vector,env,scope)))
+if options.payload_only:saved=replace(saved,resolved=None)
 restored=Expressions(env,scope).elaborate(index_tree(saved))
 changed=Expressions(env,scope).elaborate(index_tree(substitute_index(saved,{'n':scope['m']},env,scope)))
 condition=Expressions(env,scope).parse('for every(k: Natural,(0: Vector(k,Complex))=(0: Vector(k,Complex)))')
 proof=loads(dumps(index(condition,env,scope)))
+if options.payload_only:proof=replace(proof,resolved=None)
 quantified=Expressions(env,scope).elaborate(index_tree(proof))
 comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_basic_targets.py').read_text()).body
  if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))

@@ -1,0 +1,101 @@
+--- a/cleanlang/indices.py
++++ b/cleanlang/indices.py
+@@ -11,6 +11,7 @@
+ 
+ 
+ def index_value(expression,environment=None,locals=None):
++    from .retained_codec import dumps
+     from .structures import reference_name
+     from .syntax import expression_spelling
+     if environment is not None:
+@@ -33,7 +34,7 @@
+     ref=reference_name(tree)
+     if ref is not None:return ValueIndex(ref,expression.lean,expression.tex,comparison=comparison)
+     return ComputedIndex('('+expression_spelling(tree)+')',expression.lean,expression.tex,
+-                         json.dumps(tree,ensure_ascii=False,separators=(',',':')),comparison=comparison,resolved=tree)
++                         dumps(tree),comparison=comparison,resolved=tree)
+ 
+ 
+ def substitute_index(index,bindings,env,locals):
+@@ -90,6 +91,7 @@
+ 
+ 
+ def dimension_index(expression,environment,locals):
++    from .retained_codec import dumps
+     from .core import NAT,NUM
+     if expression.type==NUM and expression.tree[0]=='Decimal':
+         from .core import Expr
+@@ -103,6 +105,6 @@
+     if negative(comparison_normal_form(expression,environment,locals).tree):
+         raise CleanError('Natural dimensions do not support unary negation')
+     value=index_value(expression,environment,locals)
+-    syntax=value.syntax if isinstance(value,ComputedIndex) else json.dumps(expression.tree,ensure_ascii=False,separators=(',',':'))
++    syntax=value.syntax if isinstance(value,ComputedIndex) else dumps(expression.tree)
+     name=expression.tree[1] if expression.tree[0]=='Decimal' else value.name
+     return DimensionIndex(name,value.lean,value.tex,syntax,comparison=value.comparison,resolved=value.resolved if isinstance(value,ComputedIndex) else expression.tree)
+--- a/cleanlang/proof_types.py
++++ b/cleanlang/proof_types.py
+@@ -11,6 +11,7 @@
+ 
+ 
+ def index(expression,env,locals,*,_fresh=False):
++    from .retained_codec import dumps
+     from .beta_indices import contract_index
+     expression=contract_index(expression,env,locals)
+     from .conversion import index_comparison
+@@ -20,7 +21,7 @@
+     from .bound_calls import bind,_bind_checked
+     tree=_bind_checked(expression,env,locals,binders=True) if _fresh else bind(expression.tree,env,locals,binders=True)
+     return ProofIndex('('+condition_spelling(expression.tree)+')',expression.lean,expression.tex,
+-                      json.dumps(tree,ensure_ascii=False),tuple(locals.items()),
++                      dumps(tree),tuple(locals.items()),
+                       comparison=index_comparison(comparison,env,locals,_fresh=_fresh),resolved=tree)
+ 
+ 
+--- a/cleanlang/dependent_functions.py
++++ b/cleanlang/dependent_functions.py
+@@ -6,9 +6,10 @@
+ 
+ 
+ def index_tree(index):
++    from .retained_codec import loads
+     from .indices import ComputedIndex
+     from .syntax import parse,expression_tree
+-    if isinstance(index,ComputedIndex):return index.resolved if index.resolved is not None else json.loads(index.syntax)
++    if isinstance(index,ComputedIndex):return loads(index.syntax)
+     return expression_tree(parse(index.name,'expression'))
+ 
+ 
+--- a/tests/test_applied_indices.py
++++ b/tests/test_applied_indices.py
+@@ -45,7 +45,8 @@
+             index_value(self.expr('function(t: Real,t)'),self.e,self.local)
+     def assert_preserved_application(self,body,binder,operation,symbol):
+         value=self.expr('equality congruence(function(t: Real,'+body+'),a,b,hab)')
+-        tree=json.loads(value.type.args[0].syntax)
++        from cleanlang.retained_codec import loads
++        tree=loads(value.type.args[0].syntax)
+         # Independently specify both the retained identity-bearing tree and its
+         # source projection. Printed source cannot encode declaration identities.
+         def branch(offset,argument,bound):
+@@ -55,7 +56,9 @@
+             inner=(['ModuleCall',operation,operands,
+                     self.e.data['functions'][operation]['lean'],['infix',symbol]]
+                    if bound else ['Operator',symbol,*operands])
+-            return ['Apply',['Lambda',t,'Real',[binder,u,'Real',inner]],[['Local',argument]]]
++            from cleanlang.annotations import Annotation
++            annotation=Annotation('Real',self.e.type('Real')) if bound else 'Real'
++            return ['Apply',['Lambda',t,annotation,[binder,u,annotation,inner]],[['Local',argument]]]
+         expected=['ModuleCall','equal',[branch(0,'a',True),branch(2,'b',True)],
+                   self.e.data['functions']['equal']['lean'],['infix','=']]
+         self.assertEqual(tree,expected)
+@@ -77,7 +80,8 @@
+                   attachment['native_binding'],attachment['native_declaration'],attachment['payload']]
+         expected=['BoundNumeral','1','Real',identity,'inferred']
+         self.assertEqual(value.resolved,expected)
+-        self.assertEqual(json.loads(value.syntax),expected)
++        from cleanlang.retained_codec import loads
++        self.assertEqual(loads(value.syntax),expected)
+         target='(_root_.'+attachment['native_binding']+' (nat_lit 1))'
+         self.assertEqual(value.lean,target)
+         self.assertEqual(value.comparison,target)

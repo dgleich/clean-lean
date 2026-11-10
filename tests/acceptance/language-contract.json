@@ -2483,7 +2483,7 @@
         "studies/literal-annotations/verify.py: isolated partial annotation prototype; full literal representation and unannotated inference pending",
         "studies/literal-retention/verify.py: second isolated in-memory representation; annotated substitution and canonical targets checked, portable encoding and joint inference pending",
         "studies/literal-retention/check_interfaces.py: three exact authored dependent-record/function/condition targets and two proofs on the composed prototype",
-        "studies/bound-tree-codec/verify.py: isolated explicit record encoding, restored-index targets and proofs; production storage and environment closure pending"
+        "studies/bound-tree-codec/verify.py: isolated versioned index payloads with cache-independent restoration, exact targets and proofs; production integration and environment closure pending"
       ],
       "pending": [
         "Production construction and eligibility checking for the specified determined-carrier pattern calculus",

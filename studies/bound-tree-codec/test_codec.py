@@ -1,6 +1,6 @@
 # generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
 import json,unittest
-from codec import dumps,loads
+from cleanlang.retained_codec import dumps,loads
 import test_retention
 from cleanlang.annotations import Annotation
 from cleanlang.core import Type,LocalType,Expr,Expressions,CleanError,ProofType

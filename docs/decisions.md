@@ -1275,3 +1275,13 @@ It is an isolated data representation, not a new source grammar or an environmen
 loader. Decoding grants no freshness or validity: restored trees must be checked
 against the explicit environment. Integration into index storage remains pending.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [isolated index-storage boundary](../studies/bound-tree-codec/README.md#index-payload-authority)
+now stores versioned checked-tree payloads for computed, dimension and proof
+indices. Tree retrieval decodes the payload rather than trusting the optional
+`resolved` cache; old raw-list JSON and unsupported versions reject. This makes
+payload authority deterministic and preserves checked annotations after cache
+removal. Production integration and complete decoded-record validation remain open.
+:::

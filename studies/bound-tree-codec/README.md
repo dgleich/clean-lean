@@ -4,8 +4,9 @@
 
 This isolated experiment preserves checked annotations instead of letting JSON
 silently turn their string subclass into plain text. It does not change production
-storage. The input/output is a complete retained value (tree, index or captured
-expression), not just an index's historical `syntax` string.
+storage. The codec accepts complete retained values (trees, indices or captured
+expressions). A subsequent storage patch uses it for the expression payload inside
+each computed, dimension or proof index.
 
 ## Version 1 data contract
 
@@ -71,14 +72,38 @@ LAKE=lake python3 studies/bound-tree-codec/verify.py
 ```
 
 The pinned driver exports compiler 9e1ba7e, applies the annotation and retention
-patches, checks strict parser regeneration, runs the 13 codec and 35 retention
-tests and checks the native targets. Production remains unchanged.
+patches, installs the codec and applies `storage.patch`. It checks strict parser
+regeneration, codec/retention/storage/applied-index/quantified-beta tests, then
+replays the native specimens with their `resolved` fields removed. Production
+remains unchanged. `--whole-values-only` reproduces the first experiment without
+the storage patch or payload-only replay.
 
-Current ComputedIndex/ProofIndex constructors still write the old lossy JSON tree
-to `syntax` while retaining a checked `resolved` tree in memory. This experiment
-encodes the **whole index**, including `resolved`; dropping that field and decoding
-only the old string is still unsupported. Integrating a versioned storage boundary,
-legacy-data policy, complete validation of decoded records, resource accounting,
-full consumer coverage and export/import of the explicit environment remain work.
+## Index payload authority
+
+ComputedIndex, DimensionIndex and ProofIndex constructors now encode their checked
+expression tree in `syntax` with the version-1 envelope. `index_tree` decodes that
+payload unconditionally. The existing `resolved` field remains available for
+inspection, but it no longer overrides stored expression meaning. Six tests cover
+restoration without that field, literal and dimension substitution, quantified
+proof annotations, type-valued indices, conflicting cached trees and rejection of
+legacy/unknown-version payloads. A future cache optimization must validate that it
+represents this same payload; cache state must not select a different expression.
+
+Old raw-list JSON is rejected, even when it looks parseable. No compatibility
+fallback may recover a lost checked annotation by re-resolving its display text.
+This is an experimental internal format change; there are no released persisted
+project files to migrate. Two existing applied-index oracles now use the codec and
+explicitly expect Annotation values, retaining their independently written tree
+shapes and native target checks.
+
+The final storage-driver run completed with exit 0 on 2026-11-10: strict parser
+regeneration/check, 76 tests in 12.980 seconds, three exact targets and two proofs
+replayed with the index caches removed. The existing unused-variable warning is
+nonfatal. No production compiler file changed in this experiment.
+
+This representation boundary is still not an environment loader or a semantic
+validator for arbitrary decoded records. The checked replay paths, native binding
+snapshot coverage, consistency of other captured/comparison metadata, resource
+accounting, complete consumer coverage and production integration remain work.
 No persistent project-file format or paper-theorem proof is claimed here.
 :::

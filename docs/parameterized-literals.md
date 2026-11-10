@@ -404,8 +404,10 @@ This is evidence about the isolated composed stack, not production literal suppo
 A [versioned retained-value codec experiment](../studies/bound-tree-codec/README.md)
 now tags checked Annotation/Type/index/expression records explicitly. It preserves
 complete retained values through serialization and re-elaboration, including
-computed/proof-index substitution. It does not yet replace index `syntax` storage
-or provide an environment snapshot, and its decoder is not a semantic validator.
+computed/proof-index substitution. The follow-up isolated storage patch writes that envelope to index `syntax` and
+decodes it as the authoritative expression, including when a cached tree exists.
+Production storage is unchanged; the codec provides no environment snapshot and
+its decoder is not a semantic validator.
 
 ## Acceptance obligations
 
