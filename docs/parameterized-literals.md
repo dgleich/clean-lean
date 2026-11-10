@@ -394,6 +394,13 @@ The study driver records regression and independently specified native targets.
 Production, unannotated inference and the remaining acceptance obligations below
 are unchanged.
 
+The retained-literal driver now pins the comparison-integrated compiler revision
+9e1ba7e; `--historical` preserves the earlier failing baseline. Its
+[authored interface specimen](../studies/literal-retention/Interfaces.clean)
+combines a dependent record, a dimension-indexed function and a condition over a
+projected dimension. Independent native oracles retain every declared wrapper.
+This is evidence about the isolated composed stack, not production literal support.
+
 ## Acceptance obligations
 
 | Input or interaction | Required outcome |

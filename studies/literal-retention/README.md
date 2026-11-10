@@ -29,10 +29,14 @@ dependent functions and quantified conditions. These are narrow checks, not full
 python3 studies/literal-retention/verify.py
 ```
 
-The driver exports pinned baseline `027659500545c3290457a62d96389137879cdc6d`,
+The driver exports pinned comparison-integrated baseline
+`9e1ba7e91a9dbc135fed3ad7564107137aa7e9ff`,
 applies the first annotation study patch followed by this incremental patch,
 regenerates/checks the parser, runs focused and existing regression tests, and
 checks the Lean targets using the repository's pinned dependencies.
+Use `--historical` to reproduce baseline `027659500545c3290457a62d96389137879cdc6d`
+and its recorded choice-module setup error. The repair is part of the explicitly
+named new baseline, not an unrecorded extra patch.
 
 ## Recorded validation
 
@@ -60,10 +64,52 @@ and one class-setup error: `test_quantified_beta` cannot load `choice.clean` on
 this baseline because of the already documented contextual-family comparison
 bug. All 35 retention tests and 23 hygiene tests also pass independently. Strict
 parser regeneration/check passed. Five exact native target comparisons and two
-coordinate proofs passed after the regression run. The driver deliberately
-returns exit 1 while this setup error remains; it now runs independent native
-checks before reporting the aggregate failure. The separate contextual-family
-repair is not silently applied to this study.
+coordinate proofs passed after the regression run. The historical driver deliberately
+returns exit 1 on that baseline; it now runs independent native
+checks before reporting the aggregate failure. The newer default baseline includes the integrated contextual-family repair.
+
+## Authored dependent interfaces
+
+[Interfaces.clean](Interfaces.clean) is an executable specimen for the patched
+compiler. It declares the zero adapters explicitly, then authors a record, a
+family of vectors and a condition entirely in Clean:
+
+```text
+Structure SizedVector():
+  Let size: Natural
+  Let vector: Vector(size,Complex)
+  Constructor: sized vector
+
+Define zero bundle(n: Natural): SizedVector:
+  Equals: sized vector(n,(0: Vector(n,Complex)))
+
+Define zero family(): Function(n: Natural,Vector(n,Complex)):
+  Equals: function(n: Natural,(0: Vector(n,Complex)))
+
+Condition zero bundle contents(V: SizedVector):
+  Holds when: V.vector = (0: Vector(V.size,Complex))
+```
+
+The literal is resolved from its declared result carrier; `V.size` is recovered as
+an ordinary checked projection. There is no special handling for these names.
+`check_interfaces.py` independently writes the native record constructor, dependent
+function and condition targets, and proves zero-bundle contents and coordinate
+zero for the family. Its condition oracle retains the explicit Proposition wrapper;
+a raw `Prop` return type is definitionally equal but fails the exact-target test.
+
+Production still has no `Literal:` attachment: these interfaces must be run through
+the pinned study driver. This specimen tests composition of existing structures,
+dependent functions and conditions with the proposed literal feature, not a new
+syntax or a proof of the topology paper's theorems.
+
+## Composed-stack validation
+
+The default pinned driver completed with exit 0 on 2026-11-10: strict parser
+regeneration/check, 162 tests in 38.846 seconds, eight exact native target
+comparisons and four proofs. This includes the formerly blocked quantified-beta
+suite. Lean emitted only existing unused-variable warnings. The main compiler's
+full regression and the separate contextual prototype regression are still live;
+these results do not stand in for either full run.
 
 ## Remaining requirements
 

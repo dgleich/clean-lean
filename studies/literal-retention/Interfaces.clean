@@ -1,0 +1,29 @@
+-- generated: gpt-6 2026-11-10 role=assisted; experimental syntax
+Import "../../library/operators.clean"
+
+-- These native adapters supply zero; the definitions below are authored in Clean.
+Notation vector zero(n: Natural): Vector(n,Complex):
+  Means: fun _ => (0 : Complex)
+  Literal: 0
+  Render latex: 0
+
+Notation matrix zero(m: Natural,n: Natural): Matrix(m,n,Complex):
+  Means: fun _ _ => (0 : Complex)
+  Literal: 0
+  Render latex: 0
+
+Structure SizedVector():
+  Let size: Natural
+  Let vector: Vector(size,Complex)
+  Constructor: sized vector
+
+Define zero bundle(n: Natural): SizedVector:
+  Equals: sized vector(n,(0: Vector(n,Complex)))
+
+Define zero family(): Function(n: Natural,Vector(n,Complex)):
+  Equals: function(n: Natural,(0: Vector(n,Complex)))
+
+Condition zero bundle contents(V: SizedVector):
+  Holds when: V.vector = (0: Vector(V.size,Complex))
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

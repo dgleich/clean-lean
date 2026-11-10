@@ -1,9 +1,13 @@
 # generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
 """Reproduce the in-memory retained-literal prototype; production stays unchanged."""
 from pathlib import Path
-import os,subprocess,sys,tempfile
+import argparse,os,subprocess,sys,tempfile
 ROOT=Path(__file__).resolve().parents[2]
-BASE='027659500545c3290457a62d96389137879cdc6d'
+parser=argparse.ArgumentParser()
+parser.add_argument('--historical',action='store_true',help='Reproduce the pre-comparison-repair baseline and its known choice setup error')
+args=parser.parse_args()
+BASE='027659500545c3290457a62d96389137879cdc6d' if args.historical else '9e1ba7e91a9dbc135fed3ad7564107137aa7e9ff'
+print('Retained-literal baseline:',BASE,flush=True)
 with tempfile.TemporaryDirectory(prefix='clean-literal-annotation-study-') as directory:
  target=Path(directory);sys.path.insert(0,str(ROOT/'tools'))
  import study_checkout
@@ -15,7 +19,7 @@ with tempfile.TemporaryDirectory(prefix='clean-literal-annotation-study-') as di
  failures=[]
  for args in [['tools/generate_parser.py'],['tools/generate_parser.py','--check'],
               ['-m','unittest','test_retention','test_generated_parser','test_numeral_pruning','test_compact_signatures','test_applied_indices','test_hygienic_conversion','test_quantified_beta','test_structures','-v'],
-              ['studies/literal-retention/check_targets.py']]:
+              ['studies/literal-retention/check_targets.py'],['studies/literal-retention/check_interfaces.py']]:
   result=subprocess.run([sys.executable,*args],cwd=target,env=env)
   if result.returncode:
    if args[0]=='tools/generate_parser.py':raise SystemExit(result.returncode)
