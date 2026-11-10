@@ -142,3 +142,13 @@ The current integrated revision now passes all 18 topology verifiers in addition
 to its focused and 92-proof corpus checks. Full regression and the specialized
 active-label translation remain running; neither is counted as passed.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The live production regression has now completed all four `test_active_labels`
+cases successfully: authored maps/equivalence, opposite carrier directions,
+rejection of reversed source labels and the independent source tree. It continues
+through the remaining suite. This removes the former setup failure on the current
+compiler; it is not a completed full-suite result. The separate specialized
+statement translation and canonical comparison remain pending.
+:::

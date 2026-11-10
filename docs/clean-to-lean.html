@@ -1148,5 +1148,19 @@ checked when closing operator bindings. No grammar or Lean-target policy changes
 <a href="../tools/check_fresh_operator_targets.py">three independent canonical
 condition/evidence targets</a>. Binder scopes use the existing binding path.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-10" role="assisted">
+<section class="mapping" id="parameterized-literals" data-status="proposed">
+<h2>Parameterized zero: design, not implemented</h2>
+<p>The <a href="parameterized-literals.md">proposed contract</a> associates
+<code>Literal: 0</code> with an ordinary declared constructor. An explicitly typed
+<code>(0: Vector(n,Complex))</code> would map to a fully applied constructor call,
+schematically <code>@declaredVectorZero n</code>, preserving its bound identity.
+No display name supplies the meaning of zero.</p>
+<p>The required ordinary form <code>x != 0</code> needs a new, precise joint
+constraint/default rule. The current child-independent numeral pruning cannot be
+assumed sound under parent-driven inference. This remains an acceptance blocker.
+The <a href="../studies/parameterized-literals/README.md">native design example</a>
+compiles; that does not establish Clean syntax or target conformance.</p>
+</section></llm>
 </body>
 </html>

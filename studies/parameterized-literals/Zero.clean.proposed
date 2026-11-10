@@ -1,0 +1,37 @@
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+-- Proposed Literal metadata. This file is NOT accepted by the current compiler.
+Import "../../library/operators.clean"
+
+Notation complex vector zero(n):
+  Let n: Natural
+  Returns: Vector(n,Complex)
+  Means: fun _ => (0 : Complex)
+  Literal: 0
+  Render latex: 0_{{{n}}}
+
+Notation complex matrix zero(m,n):
+  Let m,n: Natural
+  Returns: Matrix(m,n,Complex)
+  Means: fun _ _ => (0 : Complex)
+  Literal: 0
+  Render latex: 0_{{{m}\times {n}}}
+
+Source design:
+  Kind: other
+  Label: Parameterized zero design
+  Title: Explicit literal interpretation without type-name dispatch
+
+Result vector zero witness:
+  Attribution: design; equality reflexivity; original
+  Let n: Natural
+  Conclude: (0: Vector(n,Complex)) = complex vector zero(n)
+
+Result matrix zero witness:
+  Attribution: design; equality reflexivity; original
+  Let m,n: Natural
+  Conclude: (0: Matrix(m,n,Complex)) = complex matrix zero(m,n)
+
+-- Required inferred use: x != 0 for x: Vector(n,Complex), with n recovered
+-- from the equality operator's shared type, not guessed from names in scope.
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -2449,6 +2449,41 @@
         "Full working-checkout regression, corpus and topology reruns",
         "General native isolation and universe obligations remain open"
       ]
+    },
+    {
+      "id": "parameterized_exact_literals",
+      "status": "proposed",
+      "environment": "Explicit constructor attachments and fixed module identities; not implemented",
+      "source": "(0: Vector(n,Complex))",
+      "expected_tree": [
+        "NumeralAnnotation",
+        "0",
+        [
+          "Apply",
+          "Vector",
+          [
+            [
+              "Name",
+              "n"
+            ],
+            [
+              "Name",
+              "Complex"
+            ]
+          ]
+        ]
+      ],
+      "expected_lean": "Proposed fully applied root-qualified zero constructor with caller n. Actual wrapper identities and canonical checks are pending. Never emit a bare Lean zero to delegate interpretation.",
+      "checks": [
+        "studies/parameterized-literals/NativeExample.lean: native design example only, two coordinate proofs"
+      ],
+      "pending": [
+        "Formal attachment pattern grammar and eligibility checker",
+        "Joint constraint/default calculus including unresolved competing candidates",
+        "Implementation of metadata and retained literal bindings across all consumers",
+        "Canonical annotated and inferred vector/matrix targets, negative and capture cases",
+        "Parser/lexical metadata checks, editor metadata highlighting, LaTeX and complete regression"
+      ]
     }
   ]
 }

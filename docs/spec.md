@@ -1155,3 +1155,14 @@ Thirteen focused tests, three canonical targets and three proofs pass directly;
 broader regression and study validation remain pending. Parameterized literal
 carriers and full native environment isolation are not solved by this change.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+[Parameterized exact literals](parameterized-literals.md) are a proposed next
+step for ordinary vector/matrix zero. The design attaches `Literal: 0` to a named
+constructor and specifies an explicit-annotation target as a fully applied call
+with parameters recovered from its result pattern. It does not add a registry or
+special-case type names. The joint constraint/default calculus for unannotated
+uses remains an acceptance blocker. This is not implemented or claimed fully
+specified; the current closed-carrier numeral rules are unchanged.
+:::
