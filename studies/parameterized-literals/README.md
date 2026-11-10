@@ -41,3 +41,23 @@ This is design evidence for one component. It does not parse `Literal`, generate
 Lean, infer unannotated zeros, apply defaults, or check the native wrapper. The
 compiler imports none of this code. The full extension remains unimplemented.
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Joint constraints and simultaneous defaults
+
+`constraint_model.py` explores a finite declaration-row solver with structural
+unification and simultaneous defaults. Eighteen tests check operand-order
+independence, dimension recovery, unresolved competitors, conflicting defaults,
+identity ambiguity and incomplete-analysis propagation. Run both design models:
+
+```sh
+python3 -m unittest discover -s studies/parameterized-literals -p 'test_*model.py' -v
+```
+
+All 38 tests pass. The model takes already constructed symbolic rows; it does not
+extract rows from Clean types, check dependent proof arguments, parse literal
+metadata, or emit Lean. It is evidence for the proposed policy, not an implemented
+inference feature. See the [detailed policy](../../docs/parameterized-literals.md#executable-joint-constraint-experiment).
+:::

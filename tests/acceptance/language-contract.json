@@ -2477,7 +2477,8 @@
       "expected_lean": "Proposed fully applied root-qualified zero constructor with caller n. Actual wrapper identities and canonical checks are pending. Never emit a bare Lean zero to delegate interpretation.",
       "checks": [
         "studies/parameterized-literals/NativeExample.lean: native design example only, two coordinate proofs",
-        "studies/parameterized-literals/test_pattern_model.py: twenty symbolic design-model tests only"
+        "studies/parameterized-literals/test_pattern_model.py: twenty symbolic design-model tests only",
+        "studies/parameterized-literals/test_constraint_model.py: eighteen symbolic constraint/default tests only"
       ],
       "pending": [
         "Production construction and eligibility checking for the specified determined-carrier pattern calculus",

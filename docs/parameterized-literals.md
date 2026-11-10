@@ -219,6 +219,73 @@ children are checked independently of parent expected types; this extension woul
 change that boundary and therefore needs a new equivalence argument or a different
 solver. Reusing its current pruning rule unchanged would be unjustified.
 
+### Executable joint-constraint experiment
+
+The [symbolic constraint model](../studies/parameterized-literals/constraint_model.py)
+now exercises one proposed selection policy. It consumes a finite, exhaustive list
+of declaration-choice rows. It is not connected to Clean parsing or elaboration,
+and does not yet specify how dependent Clean signatures generate those rows.
+It therefore does not discharge the blockers above.
+
+Each row contains:
+
+- The ordered identities of its selected literal/callable declarations. Distinct
+  choices remain distinct interpretations even if native bodies coincide.
+- A carrier term for each source literal position, in AST order.
+- All arguments needed by its emitted constructor applications, in declaration
+  telescope order, including implicit arguments and evidence.
+- Structural equations relating the selected signatures, actual operand types,
+  annotations and root expected type.
+
+The model distinguishes type metavariables and index metavariables, rigid binding
+atoms, and rigid declared carrier constructors applied to ordered slot terms.
+Metavariable identities must be fresh per declaration occurrence and row; source
+spellings are not identities. A caller dimension such as n is a rigid binding
+atom, never an unknown natural number to search for. Computed indices must arrive
+as already determined rigid terms: this model neither inverts arithmetic nor
+implements the production comparison relation for those indices.
+
+For each row, ordinary sorted first-order unification substitutes metavariables,
+checks occurrences, and decomposes equal carrier constructors. Different rigid
+heads, arities, sorts or rigid atoms refute the row. Variables may remain after
+unification; that is a partial solution, not a reason to discard a candidate.
+This experiment assumes every row was validated for names, declaration identity,
+parameter eligibility and scope before solving. Arbitrary elaboration failures
+cannot be reclassified as unification mismatches.
+
+Defaults are computed from the same complete pre-default solution set. For each
+literal position, do nothing if every surviving row gives the same determined
+carrier. Otherwise, if any surviving carrier can unify with the explicit default,
+add that carrier-equality restriction at the position. Apply all such restrictions
+simultaneously to every row. A row is removed only when the added equations refute
+it. If no row remains, report conflicting defaults. No restriction may choose a
+free dimension, and two constructors at the same preferred carrier remain distinct.
+
+After defaults, unresolved metavariables in any remaining carrier or required
+emitted argument produce underdetermination. With all arguments determined, more
+than one row is ambiguity; exactly one yields its selected declaration identities
+and ordered arguments. Incomplete declaration enumeration or a resource-limit
+failure is reported before accepting any candidate. The model caps row count and
+per-row equation steps separately; a production resource-accounting rule is still
+needed for row construction and delayed dependent checks.
+
+For `x != 0`, the equality signature contributes a common carrier variable T,
+`T = Vector(caller_n,Complex)` from x, and `T = Vector(literal_n,Complex)` from a
+vector-zero candidate. Unification recovers literal_n = caller_n. Reversing the
+operand order changes equation order but not the resulting determined argument.
+For bare zero, an unconstrained literal_n remains unresolved. A declared Natural
+default may rule out that vector family in favor of an actual Natural candidate;
+it cannot manufacture a vector dimension when no default-compatible row exists.
+
+Eighteen independent row tests cover these cases, rectangular/square dimensions,
+conflicting simultaneous defaults, distinct declaration identities, evidence
+arguments, occurs/sort checks and incomplete analysis. Together with the earlier
+pattern model, 38 design tests pass. These are not canonical Lean-target checks.
+Production row extraction, computed-index comparison, dependent proof constraints,
+retained bindings, all expression consumers and actual `x != 0` translation remain
+required. The current child-independent pruning algorithm is still not justified
+for these contextual rows and must not be reused unchanged.
+
 ## Acceptance obligations
 
 | Input or interaction | Required outcome |

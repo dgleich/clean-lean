@@ -1185,3 +1185,14 @@ re-elaborating expanded children as dependent actuals. The ordinary hidden-binde
 guard and emitted Lean remain unchanged. This is an isolated prototype, not an
 integrated rule; full validation and consumer/resource audits remain pending.
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [parameterized-literal selection experiment](parameterized-literals.md#executable-joint-constraint-experiment)
+now models finite declaration rows, sorted structural unification, unresolved
+competitors and simultaneous defaults. Eighteen new symbolic tests pass. This
+clarifies a proposed selection policy; production row extraction, dependent
+constraints, resource accounting and canonical target checks remain blockers.
+No production literal behavior changes.
+:::
