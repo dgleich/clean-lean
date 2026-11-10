@@ -2241,8 +2241,8 @@
     },
     {
       "id": "infer_dependent_value_parameter",
-      "status": "proposed",
-      "environment": "Explicit FieldStructure and CoefficientModule modules; see docs/inferred-value-parameters.md. Current compiler rejects the declaration.",
+      "status": "partial",
+      "environment": "Explicit FieldStructure and CoefficientModule modules; docs/inferred-value-parameters.md specifies the working direct-index inference slice.",
       "source": "Condition same module(M,N):\n  Let K: Type\n  Let field: FieldStructure(K)\n  Let M,N: CoefficientModule(K,field)\n  Infix: =\n  From Lean: M = N\n  Render latex: {M}={N}\n",
       "expected_tree": [
         "Signature",
@@ -2275,13 +2275,17 @@
         ],
         "Proposition"
       ],
-      "expected_lean": "Schematic: sameModule {K : Type} {field : FieldStructureWrapper K} (M N : CoefficientModuleWrapper K field) : PropositionWrapper := Eq M N. Application to M,N over F,f explicitly supplies @sameModule F f M N. Canonical oracle pending.",
-      "checks": [],
+      "expected_lean": "Schematic: sameModule {K : Type} {field : FieldStructureWrapper K} (M N : CoefficientModuleWrapper K field) : PropositionWrapper := Eq M N. Application to M,N over F,f explicitly supplies @sameModule F f M N. Canonical declarations and dependent applications are checked by the tools and study listed below.",
+      "checks": [
+        "tests/test_inferred_values.py (eleven focused cases)",
+        "tools/check_inferred_value_targets.py (five canonical checks and two proofs)",
+        "studies/topology/verify_relative.py (28 canonical checks, four proofs and standalone chain-module compilation)"
+      ],
       "pending": [
-        "Implement checked direct-index inference and all expression consumers",
-        "Independent canonical declaration/application/type oracles and kernel checks",
-        "Conflict, capture, ambiguity, missing-index and incomplete-analysis negatives",
-        "Existing-inference and full-regression validation"
+        "Comprehensive consumer and layout interactions",
+        "Explicit incomplete-analysis injection for the new path",
+        "Full regression completion and fixes",
+        "Native import/instance isolation and general universe-polymorphic signatures"
       ]
     }
   ]

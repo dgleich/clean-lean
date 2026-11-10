@@ -16,12 +16,14 @@ mapping={}
 for oracle,name in [('Complex','ModuleChainComplex'),('Map','ChainMap'),
                     ('carrierType','Type'),('fieldType','FieldStructure'),('naturalType','Natural'),
                     ('spaceType','TopologicalSpace'),('continuousType','ContinuousMap'),
-                    ('moduleType','CoefficientModule')]:
+                    ('moduleType','CoefficientModule'),('conditionType','Proposition')]:
     mapping['RelativeOracle.'+oracle]=typekey(name)
 for oracle,name in [('cokernel','chain cokernel'),('projection','chain cokernel projection'),
  ('compose','compose chain maps'),('zeroMap','zero chain map'),('homology','chain homology'),
  ('singular','singular chains'),('induced','induced chain map'),('inclusion','pair chain inclusion'),
  ('relativeChains','relative chains'),('relativeHomology','relative homology')]:
+    mapping['RelativeOracle.'+oracle]=function(name)
+for oracle,name in [('equal','equal'),('moduleEqual','same module'),('complexEqual','same chain complex')]:
     mapping['RelativeOracle.'+oracle]=function(name)
 # Lean shares extracted instance proofs with the earlier homology adapter.
 # Explicitly compare these helpers; do not erase or unfold arbitrary proof terms.
@@ -85,6 +87,12 @@ noncomputable abbrev Map (K : Type) (field : fieldType K)
   (C D : Complex K field) : Type :=
   letI : Field K := field
   @Quiver.Hom (ChainComplex (ModuleCat.{0} K) ℕ) inferInstance C D
+noncomputable abbrev conditionType : Sort 1 := Prop
+noncomputable def equal {T : Type} (x y : T) : conditionType := x=y
+noncomputable def moduleEqual {K : Type} {field : fieldType K}
+    (M N : moduleType K field) : conditionType := M=N
+noncomputable def complexEqual {K : Type} {field : fieldType K}
+    (C D : Complex K field) : conditionType := C=D
 noncomputable def cokernel {K : Type} (field : fieldType K) (C D : COMPLEX)
   (f : MAP(C,D)) : COMPLEX :=
   letI : Field K := field
@@ -122,15 +130,15 @@ noncomputable def relativeHomology {K : Type} (field : fieldType K) (H : THEORY 
   (Q : PAIR X) : MODULE := @homology K field (@relativeChains K field H X Q) H.degree
 
 def quotientStatement : Prop := ∀ (K : carrierType) (field : fieldType K) (C D : COMPLEX) (f : MAP(C,D)),
-  @compose K field C D (@cokernel K field C D f) (@projection K field C D f) f =
-    @zeroMap K field C (@cokernel K field C D f)
+  equal (@compose K field C D (@cokernel K field C D f) (@projection K field C D f) f)
+    (@zeroMap K field C (@cokernel K field C D f))
 def agreementStatement : Prop := ∀ (K : carrierType) (field : fieldType K) (H : THEORY K field) (X : spaceType),
-  @homology K field (@singular K field H X) H.degree = @ABSOLUTE K field H X
+  @moduleEqual K field (@homology K field (@singular K field H X) H.degree) (@ABSOLUTE K field H X)
 def relativeChainStatement : Prop := ∀ (K : carrierType) (field : fieldType K) (H : THEORY K field) (X : spaceType) (Q : PAIR X),
-  @relativeChains K field H X Q = @cokernel K field (@singular K field H (@SUBSPACE X Q.relative))
-    (@singular K field H (@SUBSPACE X Q.ambient)) (@inclusion K field H X Q)
+  @complexEqual K field (@relativeChains K field H X Q) (@cokernel K field (@singular K field H (@SUBSPACE X Q.relative))
+    (@singular K field H (@SUBSPACE X Q.ambient)) (@inclusion K field H X Q))
 def relativeHomologyStatement : Prop := ∀ (K : carrierType) (field : fieldType K) (H : THEORY K field) (X : spaceType) (Q : PAIR X),
-  @relativeHomology K field H X Q = @homology K field (@relativeChains K field H X Q) H.degree
+  @moduleEqual K field (@relativeHomology K field H X Q) (@homology K field (@relativeChains K field H X Q) H.degree)
 end RelativeOracle
 '''
 # Expand only independently specified native abbreviations, never generated bodies.

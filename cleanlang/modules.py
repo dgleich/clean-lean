@@ -156,7 +156,7 @@ def notation(header, fields, env, *, authored=False):
         for n in names:
             if n in local: raise CleanError('Duplicate parameter: '+n)
             if n not in params:
-                if types or t not in (NAT,Type('Type')): raise CleanError('Implicit dimensions/types must precede arguments')
+                if types: raise CleanError('Implicit parameters must precede arguments')
                 implicit[n] = t
             else: types[n] = t
             local[n] = Expr(n,n,t)
@@ -208,6 +208,10 @@ def notation(header, fields, env, *, authored=False):
     # Every implicit parameter must be inferable from argument types.
     for n in implicit:
         from .dependent_functions import occurs
+        if implicit[n] not in (NAT,Type('Type')):
+            from .dependent_functions import direct_index_occurs
+            if not any(direct_index_occurs(t,n) for t in types.values()):
+                raise CleanError('Implicit value parameter needs a direct argument-type index: '+n)
         if not any(occurs(t,n) for t in types.values()):
             raise CleanError('Implicit parameter is absent from argument types: '+n)
     bound_body=None

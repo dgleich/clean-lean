@@ -2,8 +2,9 @@
 
 # Inferring value parameters from dependent operand types
 
-Status: proposed semantics, not implemented or accepted as conforming. This is a
-separate requirement from general universe-polymorphic carrier signatures.
+Status: implemented slice in the working compiler, with focused and native
+validation below. Full conformance remains unproven. This is separate from general
+universe-polymorphic carrier signatures.
 
 ## The concrete missing interface
 
@@ -23,14 +24,14 @@ Condition same module(M,N):
   Render latex: {M}={N}
 ```
 
-This declaration is currently rejected: `field` is absent from the header, and
-only Type and Natural parameters may currently be implicit. Adding `field` to
+This declaration is now supported. Previously, `field` was rejected because only
+Type and Natural parameters could be implicit. Adding `field` to
 the header would produce a three-argument function, which cannot be attached to
 binary `=`. A concrete module equality needs no new universe inference: its
 carrier and universe are already declared. General sort-polymorphic equality,
 including equality of proofs, remains separate work.
 
-## Proposed declaration and scope rule
+## Declaration and scope rule
 
 There is no grammar or layout delta. Existing signature syntax parses once;
 parameter classification happens after parsing. Header names are explicit
@@ -40,7 +41,7 @@ in the preceding telescope; forward references and recursive parameter types
 are rejected. Multiple names in one Let share a type resolved before introducing
 any of those names. Keyword capitalization and continuation are unchanged.
 
-The proposed extension permits a non-Type, non-Natural implicit parameter only
+The extension permits a non-Type, non-Natural implicit parameter only
 when it has a direct, recoverable occurrence as an index in an explicit operand's
 type. An occurrence beneath an arbitrary function application is insufficient.
 For example, matching `CoefficientModule(K,field)` against
@@ -48,7 +49,7 @@ For example, matching `CoefficientModule(K,field)` against
 Matching `Family(transform(field))` is not permission to invert `transform`.
 Parameters occurring only in a return type or native body remain errors.
 
-## Proposed inference and target construction
+## Inference and target construction
 
 1. Elaborate the explicit operands under the existing expression rules. Preserve
    their checked types, source binding identities, and retained module calls.
@@ -62,8 +63,8 @@ Parameters occurring only in a return type or native body remain errors.
    types reject this declaration as a candidate. A value hidden behind an opaque
    native reduction cannot be recovered by asking Lean to guess it.
 4. Repeated occurrences must agree under the existing specified Clean type/index
-   comparison. Preserve the first occurrence in the specified traversal as the
-   emitted term; this is source-order selection of a representation of an agreed
+   comparison. For newly supported value parameters, preserve the first occurrence in the
+   specified traversal as the emitted term; this is source-order selection of a representation of an agreed
    index, not selection among distinct operator meanings. No proof-irrelevance
    rule, coercion, or typeclass search is added. Different field structures must
    not be identified merely because they have the same type.
@@ -98,13 +99,14 @@ Resource exhaustion remains incomplete analysis.
 The implementation must preserve inferred values in declaration snapshots,
 `inferred_args`, authored conversion, binder substitution, dependent callable
 matching, bound-call closure, and fresh-scope rechecking. Both local and computed
-actual indices need their checked trees and types. Merely lifting the declaration
-restriction is insufficient: the current dependent matcher does not bind arbitrary
-implicit ValueIndex parameters. Rendering must keep authored operands readable;
+actual indices need their checked trees and types. The declaration checker requires a direct value-index occurrence; the dependent
+matcher recovers that index, rechecks its term/type, and emits the checked term.
+Inferred-argument reification preserves the recovered value type instead of
+forcing it to Natural. Rendering must keep authored operands readable;
 inferred fields are already stated by their operand types and are not additional
 assumptions. Operator spelling and LaTeX precedence remain unchanged.
 
-## Acceptance still required
+## Acceptance coverage and remaining requirements
 
 - Independent signature tree and canonical declaration/application/type oracles
   for module equality and chain-complex equality; kernel checks of relative
@@ -122,6 +124,30 @@ assumptions. Operator spelling and LaTeX precedence remain unchanged.
 - Existing Type/Natural inference, explicit proof arguments, numeral completion,
   renderer/editor behavior, and the full regression suite must be revalidated.
 
-These are pending obligations, not passing tests. The current failure is a
-language-interface gap, not a missing mathematical theorem or a parsing ambiguity.
+The list above is the full required coverage, not a blanket claim of passing.
+Current evidence:
+
+- `tests/test_inferred_values.py`: eleven passing tests cover the signature/tree
+  oracle, explicit application spelling, equal/conflicting field indices,
+  same-named caller locals, computed values and first-occurrence preservation,
+  dependent callable operands and escaping binders, absent/non-direct indices,
+  competing overloads, changed public scope and poisoned inference metadata,
+  wrong recovered types, retained calls after a competing declaration, and the
+  existing fresh-binder restriction.
+- `tools/check_inferred_value_targets.py`: five independent canonical checks of
+  declaration types/bodies and computed/callable applications, plus two proofs.
+- `studies/topology/verify_relative.py`: 28 independent targets and four proofs,
+  including both concrete equality adapters; the standalone chain module also
+  compiles. Its PDF compiled twice and was visually inspected. A long attribution
+  produces an underfull-box warning; no unresolved references occur.
+- 55 focused tests pass, including the eleven above and existing family, scope,
+  hygiene and space-equality checks. All 92 curated corpus proofs pass Lean.
+
+The complete regression run is pending. Comprehensive consumer interactions,
+layout variants for the new signatures, explicit incomplete-analysis injection,
+and native import/instance isolation are not fully validated by this checkpoint.
+The former same-module declaration failure is resolved; general sort/universe
+polymorphism, including generic proof equality, remains unfinished. The old
+Type/Natural representative-selection behavior is unchanged; the first-occurrence
+rule applies to the newly supported value parameters.
 :::

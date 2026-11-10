@@ -70,3 +70,12 @@ Condition belongs to module subspace(field,M,x,U):
   Let U: ModuleSubspace(K,field,M)
   Holds when: x ∈ module subspace carrier(field,M,U)
   Render: {x} belongs to {U}
+
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+Condition same module(M,N):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: CoefficientModule(K,field)
+  Infix: =
+  From Lean: M = N
+  Render latex: {M}={N}

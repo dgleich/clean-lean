@@ -1002,3 +1002,18 @@ arguments. It is not implemented or accepted as conforming; its canonical and
 interaction checks are pending in the acceptance catalog. This does not add
 general universe/sort polymorphism or implicit proof search.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [inferred-value parameter rule](inferred-value-parameters.md) now has a working
+implementation. A typed Let absent from a callable header may bind a value when
+it precedes explicit operands and occurs directly in an operand's type index.
+The matcher recovers the first agreed index in the specified traversal, checks
+its dependent type, rechecks the full operand telescope and supplies every Lean
+argument explicitly. It does not invert computed patterns or search for proofs.
+Type/Natural inference retains its previous representation rule. Existing fresh
+binder restrictions remain in force. Syntax productions, layout and highlighting
+are unchanged; the acceptance catalog records the new semantic slice and its
+remaining conformance obligations. Explicit same-module and same-chain-complex
+operators now use this capability in the algebra modules.
+:::

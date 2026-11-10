@@ -6420,6 +6420,22 @@
     "docs/inferred-value-parameters.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "tests/test_inferred_values.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/check_inferred_value_targets.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

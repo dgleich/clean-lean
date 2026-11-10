@@ -44,6 +44,15 @@ def occurs(typ,name):
     return typ==name
 
 
+def direct_index_occurs(typ,name):
+    """Infer a value from a type slot, never invert an expression in that slot."""
+    if isinstance(typ,DependentFunctionType):
+        return direct_index_occurs(typ.domain,name) or (typ.binder!=name and direct_index_occurs(typ.codomain,name))
+    if type(typ) is ValueIndex:return typ.name==name
+    if isinstance(typ,Type):return any(direct_index_occurs(a,name) for a in typ.args)
+    return False
+
+
 def declaration_names(env):
     """Reuse only a pure token scan of an identical immutable text snapshot."""
     texts=tuple(env.notation_definitions.values())

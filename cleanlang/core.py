@@ -404,7 +404,7 @@ class Environment:
         def bind(n,value):
             if n in substitutions and substitutions[n]!=value:
                 raise SignatureMismatch('Inconsistent dependent argument: '+n,mismatch_owner)
-            substitutions[n]=value
+            if n not in substitutions or implicit.get(n) in (NAT,Type('Type')):substitutions[n]=value
 
         def index(n,scope):
             from .indices import index_value, substitute_index
@@ -464,6 +464,10 @@ class Environment:
                 if implicit[pattern.name]!=NAT or not isinstance(actual,DimensionIndex):
                     raise SignatureMismatch('Expected a natural dimension: '+pattern.name,mismatch_owner)
                 bind(pattern.name,actual)
+            elif type(pattern) is ValueIndex and pattern.name in implicit and pattern.name not in scope:
+                if not isinstance(actual,ValueIndex):
+                    raise SignatureMismatch('Expected an indexed value: '+pattern.name,mismatch_owner)
+                bind(pattern.name,actual)
             elif isinstance(pattern,ValueIndex):
                 if replace(pattern,scope)!=actual:
                     raise SignatureMismatch('Dependent index mismatch: '+pattern.name,mismatch_owner)
@@ -493,10 +497,24 @@ class Environment:
                 bind(n,value)
         for n in implicit:
             if n not in substitutions:raise CleanError('Cannot infer implicit parameter: '+n)
+        # New value parameters are recovered from typed operand indices. Recheck
+        # their terms in the caller scope and their dependent types in telescope
+        # order; no native metavariable or typeclass search selects an argument.
+        from .inferred_conversion import reify
+        inferred_targets={}
+        for n,t in signature['implicit']:
+            if t not in (NAT,Type('Type')):
+                value=reify(substitutions[n],self,locals)
+                inferred_targets[n]=value.lean
+                if not compatible(value.type,replace(t)):
+                    raise SignatureMismatch('Inferred value has the wrong dependent type: '+n,mismatch_owner)
+        # With every inferred value fixed, verify the complete operand telescope.
+        if any(t not in (NAT,Type('Type')) for _,t in signature['implicit']):
+            for n,t in parameters:match(t,actuals[n].type)
         targets=[]
         for n,t in signature['implicit']:
             v=substitutions[n]
-            targets.append(self.render_type(v,'lean',locals) if isinstance(v,Type) else
+            targets.append(inferred_targets[n] if n in inferred_targets else self.render_type(v,'lean',locals) if isinstance(v,Type) else
                            v.lean if isinstance(v,ValueIndex) else locals[v].lean if v in locals else v)
         targets.extend(a.lean for a in args)
         target='(@_root_.'+signature['key']+''.join(' ('+v+')' for v in targets)+')'

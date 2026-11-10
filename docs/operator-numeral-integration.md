@@ -162,3 +162,16 @@ The relative-homology failure additionally exposes the need for
 for modules must recover their field structure from their types. This is now a
 specified proposal with pending acceptance cases, not an implemented feature.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The relative-homology obstacle is resolved for its concrete carriers by
+[direct inferred values](inferred-value-parameters.md) and two explicit equality
+adapters. This is a working compiler change, not a return to builtin equality.
+The recovered field is type-checked and explicitly supplied in the Lean target.
+Relative homology passes 28 canonical checks and four proofs; additional inference
+checks cover computed values, dependent callable arguments and capture/conflict
+rejection. Fifty-five focused tests and the 92 corpus proofs pass. The fresh full
+regression is still running; the earlier run of the initial inference revision
+was deliberately terminated after source changes and is not counted as passing.
+:::

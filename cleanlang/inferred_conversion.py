@@ -16,11 +16,12 @@ def reify(value,environment,locals):
     elif isinstance(value,str):tree=expression_tree(parse(value,'expression'))
     else:raise UnrepresentableSubstitution('Inferred argument has no source expression')
     result=Expressions(environment,locals).elaborate(tree)
-    from .indices import dimension_index
-    checked=dimension_index(result,environment,locals)
+    from .indices import dimension_index,DimensionIndex,index_value
+    checked=(dimension_index(result,environment,locals) if isinstance(value,(DimensionIndex,str))
+             else index_value(result,environment,locals))
     if isinstance(value,ValueIndex) and checked!=value:
-        raise UnrepresentableSubstitution('Inferred dimension changed in the current scope')
-    return Expr(result.lean,result.tex,NAT,result.precedence,result.tree)
+        raise UnrepresentableSubstitution('Inferred argument changed in the current scope')
+    return result
 
 
 def value_names(tree):

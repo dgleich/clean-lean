@@ -336,3 +336,26 @@ for the constructive rule and pending checks. Merely adding a binary adapter is
 not possible under the present signature restriction. This is language work;
 the research-proof limitations remain separately unchanged.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Relative homology now passes 28 canonical target checks and four proofs after
+implementing [direct inferred value parameters](../../docs/inferred-value-parameters.md).
+Explicit `same module` and `same chain complex` conditions recover their field
+structure from the two operand types. Independent native expectations retain
+these adapters and explicitly supplied field arguments. The standalone chain
+module compiles with its own imports. The regenerated one-page PDF compiled
+twice and was visually inspected; a long attribution causes an underfull-box
+warning, with no unresolved references.
+
+This brings cumulative post-operator migration coverage to fourteen of eighteen
+verifiers, 398 summed per-verifier target checks and 71 proofs, with repeated
+foundational checks counted. The previous thirteen were validated before this
+new inference implementation and have not all been rerun on it. Relative maps,
+well groups, shifted perturbations and extreme images are still unmigrated.
+The new implementation additionally passes eleven focused inference tests, five
+independent native inference targets and two proofs outside the topology totals.
+All 92 curated corpus proofs pass. The complete current regression run is pending;
+its previous incomplete attempt was stopped after the implementation changed.
+Research theorem gaps and general universe-polymorphic equality remain open.
+:::

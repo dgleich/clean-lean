@@ -72,3 +72,12 @@ Notation induced chain homology map(field,C,D,f,n):
   Returns: ModuleMap(K,field,(chain homology(field,C,n)),(chain homology(field,D,n)))
   Means: (letI : Field K := field; (HomologicalComplex.homologyFunctor (ModuleCat.{0} K) (ComplexShape.down ℕ) n).map f)
   Render latex: H_{{{n}}}({f})
+
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+Condition same chain complex(C,D):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Infix: =
+  From Lean: C = D
+  Render latex: {C}={D}
