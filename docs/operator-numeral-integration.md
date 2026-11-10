@@ -139,3 +139,12 @@ declared operators: evidence, homology, local names and chain squares. They add
 verifiers revalidated and the eight still pending. This does not establish full
 compiler conformance or prove the research theorems.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Pair composition adds 24 canonical checks and six proofs, bringing current
+topology revalidation to eleven of eighteen verifiers. Its proof parameters and
+results retain explicit equality/subset wrappers; native adapter bodies and
+extracted proof auxiliaries remain independently checked. This checkpoint changes
+verification expectations and generated artifacts, not language semantics.
+:::

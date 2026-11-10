@@ -284,3 +284,22 @@ of shared adapters. Eight remain pending: interlevel, relative, relative maps,
 compact image, pair composition, well groups, shifted perturbations and extreme
 images. The previously documented missing research proofs remain missing.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Pair composition now passes 24 canonical target checks and six Lean proofs.
+The independent expectations retain declared equality and subset operators in
+proof parameter/result types, including congruence, subset transport and pair
+composition. The native transport body still uses its explicitly specified
+`Eq.rec` motive. Extracted auxiliary proofs are compared structurally as before.
+Identity, associativity and the underlying continuous identity maps all pass.
+The one-page specimen compiled twice and was visually inspected; the package-name
+warning remains, with no box or unresolved-reference warnings.
+
+Eleven of eighteen topology verifiers are now revalidated: 291 summed
+per-verifier target checks and 53 proofs (including repeated adapter checks).
+The seven pending verifiers are interlevel, relative, relative maps, compact
+image, well groups, shifted perturbations and extreme images. No compiler syntax
+changed in this checkpoint, and the previously reported full-suite failure and
+research-proof gaps remain open.
+:::

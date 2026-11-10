@@ -12,12 +12,14 @@ source=lean(results,env,['Lean'])
 (here/'PairComposition.tex').write_text(latex(results,env))
 function=lambda n:env.data['functions'][n]['native_binding']
 mapping={}
-for oracle,name in [('setType','Set'),('spaceType','TopologicalSpace'),('pointType','Point')]:
+for oracle,name in [('setType','Set'),('spaceType','TopologicalSpace'),('pointType','Point'),('conditionType','Proposition')]:
     mapping['PairCompositionOracle.'+oracle]=env.data['types'][name]['native_binding']
 for oracle,name in [('congruence','equality congruence'),('reflexivity','equality reflexivity'),
  ('subsetRefl','subset reflexivity'),('subsetTrans','subset transitivity'),('replaceTarget','replace subset target'),
  ('ambientEq','pair ambient equality'),('relativeEq','pair relative equality'),
  ('identity','identity pair inclusion'),('compose','compose pair inclusions')]:
+    mapping['PairCompositionOracle.'+oracle]=function(name)
+for oracle,name in [('equal','equal'),('subset','set subset'),('both','conjunction')]:
     mapping['PairCompositionOracle.'+oracle]=function(name)
 # Lean extracts these explicit proof arguments into auxiliary theorems. Map the
 # independently authored auxiliaries and compare their types and bodies too.
@@ -69,19 +71,23 @@ namespace PairCompositionOracle
 noncomputable abbrev setType (X : Type) : Type := Set X
 noncomputable abbrev spaceType : Type 1 := TopCat.{0}
 noncomputable abbrev pointType (X : spaceType) : Type := TopCat.carrier X
-noncomputable def congruence {X Y : Type} (f : X → Y) (x y : X) (h : x=y) : f x=f y := congrArg f h
-noncomputable def reflexivity {X : Type} (x : X) : x=x := Eq.refl x
-noncomputable def subsetRefl {X : Type} (S : setType X) : S ⊆ S := Set.Subset.refl S
-noncomputable def subsetTrans {X : Type} (S T U : setType X) (h : S ⊆ T) (k : T ⊆ U) : S ⊆ U := Set.Subset.trans h k
-noncomputable def replaceTarget {X : Type} (S T U : setType X) (h : S ⊆ T) (e : T=U) : S ⊆ U :=
+noncomputable abbrev conditionType : Sort 1 := Prop
+noncomputable def equal {T : Type} (x y : T) : conditionType := x=y
+noncomputable def subset {T : Type} (A B : setType T) : conditionType := A ⊆ B
+noncomputable def both (x y : conditionType) : conditionType := x ∧ y
+noncomputable def congruence {X Y : Type} (f : X → Y) (x y : X) (h : equal x y) : equal (f x) (f y) := congrArg f h
+noncomputable def reflexivity {X : Type} (x : X) : equal x x := Eq.refl x
+noncomputable def subsetRefl {X : Type} (S : setType X) : subset S S := Set.Subset.refl S
+noncomputable def subsetTrans {X : Type} (S T U : setType X) (h : subset S T) (k : subset T U) : subset S U := Set.Subset.trans h k
+noncomputable def replaceTarget {X : Type} (S T U : setType X) (h : subset S T) (e : equal T U) : subset S U :=
   @Eq.rec (Set X) T (fun V _ => S ⊆ V) h U e
-noncomputable def ambientEq (X : spaceType) (P Q : PAIR X) (h : P=Q) : P.ambient=Q.ambient :=
+noncomputable def ambientEq (X : spaceType) (P Q : PAIR X) (h : equal P Q) : equal P.ambient Q.ambient :=
   @congruence (PAIR X) (setType (pointType X)) (fun T : PAIR X => T.ambient) P Q h
-noncomputable def relativeEq (X : spaceType) (P Q : PAIR X) (h : P=Q) : P.relative=Q.relative :=
+noncomputable def relativeEq (X : spaceType) (P Q : PAIR X) (h : equal P Q) : equal P.relative Q.relative :=
   @congruence (PAIR X) (setType (pointType X)) (fun T : PAIR X => T.relative) P Q h
 noncomputable def identity (X : spaceType) (P : PAIR X) : INCLUSION X :=
   @PAIRINCLUSION X P P (@subsetRefl (pointType X) P.ambient) (@subsetRefl (pointType X) P.relative)
-noncomputable def compose (X : spaceType) (Q R : INCLUSION X) (middle : Q.target=R.source) : INCLUSION X :=
+noncomputable def compose (X : spaceType) (Q R : INCLUSION X) (middle : equal Q.target R.source) : INCLUSION X :=
   @PAIRINCLUSION X Q.source R.target
     (@subsetTrans (pointType X) Q.source.ambient R.source.ambient R.target.ambient
       (@replaceTarget (pointType X) Q.source.ambient Q.target.ambient R.source.ambient Q.ambient
@@ -89,19 +95,19 @@ noncomputable def compose (X : spaceType) (Q R : INCLUSION X) (middle : Q.target
     (@subsetTrans (pointType X) Q.source.relative R.source.relative R.target.relative
       (@replaceTarget (pointType X) Q.source.relative Q.target.relative R.source.relative Q.relative
         (@relativeEq X Q.target R.source middle)) R.relative)
-def identityEndpoints : Prop := ∀ (X : spaceType) (P : PAIR X), P=P ∧ P=P
-def compositionEndpoints : Prop := ∀ (X : spaceType) (Q R : INCLUSION X), Q.target=R.source →
-  Q.source=Q.source ∧ R.target=R.target
+def identityEndpoints : Prop := ∀ (X : spaceType) (P : PAIR X), both (equal P P) (equal P P)
+def compositionEndpoints : Prop := ∀ (X : spaceType) (Q R : INCLUSION X), equal Q.target R.source →
+  both (equal Q.source Q.source) (equal R.target R.target)
 def sourceIdentity : Prop := ∀ (X : spaceType) (Q : INCLUSION X),
-  @compose X (@identity X Q.source) Q (@reflexivity (PAIR X) Q.source) = Q
+  equal (@compose X (@identity X Q.source) Q (@reflexivity (PAIR X) Q.source)) Q
 def targetIdentity : Prop := ∀ (X : spaceType) (Q : INCLUSION X),
-  @compose X Q (@identity X Q.target) (@reflexivity (PAIR X) Q.target) = Q
+  equal (@compose X Q (@identity X Q.target) (@reflexivity (PAIR X) Q.target)) Q
 def associativity : Prop := ∀ (X : spaceType) (Q R S : INCLUSION X)
-  (first : Q.target=R.source) (second : R.target=S.source),
-  @compose X (@compose X Q R first) S second = @compose X Q (@compose X R S second) first
+  (first : equal Q.target R.source) (second : equal R.target S.source),
+  equal (@compose X (@compose X Q R first) S second) (@compose X Q (@compose X R S second) first)
 def continuousIdentity : Prop := ∀ (X : spaceType) (P : PAIR X),
-  @AMBIENT X (@identity X P) = @CONTID (@SUBSPACE X P.ambient) ∧
-  @RELATIVE X (@identity X P) = @CONTID (@SUBSPACE X P.relative)
+  both (equal (@AMBIENT X (@identity X P)) (@CONTID (@SUBSPACE X P.ambient)))
+    (equal (@RELATIVE X (@identity X P)) (@CONTID (@SUBSPACE X P.relative)))
 end PairCompositionOracle
 '''
 substitutions={'PAIR':env.structures['TopologicalPair']['key'],'INCLUSION':env.structures['PairInclusion']['key']}
