@@ -34,10 +34,10 @@ elab "same_basic_target " a:ident b:ident : command => do
 '''
 
 def source(name,body):
-    return f'Import "{ROOT / "library/types.clean"}"\nSource local:\n  Kind: other\n  Label: Local\n  Title: Independent identity acceptance\n'+body
+    return f'Import "{ROOT / "library/operators.clean"}"\nSource local:\n  Kind: other\n  Label: Local\n  Title: Independent identity acceptance\n'+body
 
 def generate():
-    imports=[];bodies=[];shared=None;real=None
+    imports=[];bodies=[];shared=None;real=None;equal=None;proposition=None
     with tempfile.TemporaryDirectory() as td:
         for i,(local,body) in enumerate(VARIANTS):
             p=Path(td)/'Identity.clean';p.write_text(source(local,body))
@@ -51,6 +51,7 @@ def generate():
             assert (clause.kind,clause.names,clause.value)==('let',[local],Type('Real'))
             assert r.conclusion.tree==['Operator','=', ['Local',local],['Local',local]]
             assert r.conclusion.type==Type('Proposition')
+            assert r.conclusion.operator_binding[0]=='equal'
             text=lean(results,env,['Lean']);lines=text.splitlines()
             for line in lines:
                 if line.startswith('import ') and line not in imports:imports.append(line)
@@ -60,6 +61,8 @@ def generate():
             if shared is None:
                 shared = declarations
                 real = env.data['types']['Real']['native_binding']
+                equal = env.data['functions']['equal']['native_binding']
+                proposition = env.data['types']['Proposition']['native_binding']
             else:
                 assert declarations == shared
                 assert env.data['types']['Real']['native_binding'] == real
@@ -68,7 +71,11 @@ def generate():
     target='\n'.join(imports)+'\n'+COMPARISON+shared+'\n'.join(bodies)
     target+='\ndef basic_real_expected : Type := ℝ\n'
     target+=f'same_basic_target {real} basic_real_expected\n'
-    target+=f'\ndef basic_expected : Prop := ∀ (x : _root_.{real}), @Eq.{{1}} _root_.{real} x x\n'
+    target+=f'\ndef basic_proposition_expected : Type := Prop\n'
+    target+=f'same_basic_target {proposition} basic_proposition_expected\n'
+    target+=f'\nnoncomputable def basic_equal_expected {{T : Type}} (x y : T) : _root_.{proposition} := @Eq.{{1}} T x y\n'
+    target+=f'same_basic_target {equal} basic_equal_expected\n'
+    target+=f'\ndef basic_expected : Prop := ∀ (x : _root_.{real}), @_root_.{equal} _root_.{real} x x\n'
     for i in range(len(VARIANTS)):
         target+=f'same_basic_target BasicCase{i}.CleanStatements.identity basic_expected\n'
     target+='''
@@ -83,6 +90,6 @@ same_basic_target basic_alias basic_expected
 if __name__=='__main__':
     path=ROOT/'generated/BasicAcceptance.lean';path.write_text(generate())
     subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-    print('Four identity trees, four statement targets and one Real adapter target passed; alias mismatch rejected')
+    print('Four identity trees, four statement targets and three adapter targets passed; alias mismatch rejected')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

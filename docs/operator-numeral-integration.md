@@ -273,3 +273,16 @@ It does not establish full language conformance or prove the two-image candidate
 or the other outstanding paper theorems. The complete Python regression remains
 running; its current result must not be described as passing.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The basic identity acceptance checker now imports `library/operators.clean`
+explicitly and retains the selected equality declaration in its expected target.
+It independently checks the Real and Proposition type adapters and the generic
+Type-0 equality adapter before comparing the four spelling/layout variants of
+`x=x`. Four normalized statement trees and seven canonical declaration targets
+pass; the deliberately definitionally equal alias is still rejected. This replaces
+the obsolete built-in equality oracle without weakening structural comparison.
+The production compiler and mathematical library are unchanged by this migration.
+Full regression, native import isolation and complete conformance remain open.
+:::

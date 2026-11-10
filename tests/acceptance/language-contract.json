@@ -6,7 +6,7 @@
     {
       "id": "identity_proposition",
       "status": "implemented-slice",
-      "environment": "Explicit library/types.clean module and a local Source declaration; Real maps to Lean Real and Proposition maps to Prop. Equality uses the current fixed built-in Eq rule; a module-declared equality mechanism is not claimed.",
+      "environment": "Explicit library/operators.clean import (which imports types.clean) and a local Source declaration. Real, Proposition and equality are declaration-scoped bindings; no built-in mathematical equality is used.",
       "source": "Result identity:\n  Attribution: local; identity; original\n  Let x: Real\n  Conclude: x = x\n",
       "expected_tree": [
         "Result",
@@ -41,15 +41,15 @@
           ]
         ]
       ],
-      "expected_lean": "∀ (x : Real), @Eq.{1} Real x x",
+      "expected_lean": "With independently checked binding names abbreviated: ∀ (x : RealAdapter), @equalAdapter RealAdapter x x. RealAdapter has body ℝ; PropositionAdapter has body Prop; equalAdapter {T : Type} (x y : T) : PropositionAdapter has body @Eq.{1} T x y.",
       "expected_lean_type": "Prop",
-      "obligation": "Check the independent normalized statement tree and canonical native declaration type/body for renamed locals, case-insensitive keywords, prose type spelling, 2/3/4-space indentation, multiline conclusion, grouping and a trailing comment. Reject a definitionally equal alias as a different canonical target.",
+      "obligation": "Check the independent normalized statement tree and canonical native declaration type/body for renamed locals, case-insensitive keywords, prose type spelling, 2/3/4-space indentation, multiline conclusion, grouping and a trailing comment. Independently compare Real, Proposition and declared equality adapter bodies and types. Reject a definitionally equal alias as a different canonical target.",
       "checks": [
         "tools/check_basic_targets.py",
         "generated/BasicAcceptance.lean"
       ],
       "pending": [
-        "General module-declared operator/native-adapter elaboration contract",
+        "Full native import/instance isolation and general elaboration contract",
         "Full language conformance audit"
       ]
     },
