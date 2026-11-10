@@ -1357,3 +1357,14 @@ It does not assert exactness, a connecting map, or excision without hypotheses.
 The four new native primitives provide explicit set-containment evidence;
 all four mathematical map/module constructions are Clean definitions.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [stable comparison-argument prototype](../studies/stable-comparison-arguments/README.md)
+restricts repeated-normalization reuse to freshly checked native-call trees whose
+leaves are plain locals without normal expressions or decimals. Authored definitions,
+binders, projections, applications and operators remain on the existing path.
+The root is still rechecked and normalized, and every materialized call still
+validates its declaration identity and native template. The private reuse witness
+is synchronous and does not survive the comparison. Production remains unchanged.
+:::

@@ -2729,6 +2729,74 @@
         "Excision/cover hypotheses and exactness proof",
         "Explicit union-to-ambient identification when stating the target as homology of X"
       ]
+    },
+    {
+      "id": "stable_native_comparison_arguments",
+      "status": "isolated-prototype",
+      "environment": "Pinned a759a317cf1fe4a54b6fb791c09668100f49425a plus stable-comparison-arguments patch; fixed explicit environment and local scope during one synchronous comparison.",
+      "source": "retain(retain(retain(retain(retain(retain(retain(retain(x))))))))",
+      "expected_tree": [
+        "Call",
+        "retain",
+        [
+          [
+            "Call",
+            "retain",
+            [
+              [
+                "Call",
+                "retain",
+                [
+                  [
+                    "Call",
+                    "retain",
+                    [
+                      [
+                        "Call",
+                        "retain",
+                        [
+                          [
+                            "Call",
+                            "retain",
+                            [
+                              [
+                                "Call",
+                                "retain",
+                                [
+                                  [
+                                    "Call",
+                                    "retain",
+                                    [
+                                      [
+                                        "Local",
+                                        "x"
+                                      ]
+                                    ]
+                                  ]
+                                ]
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "expected_lean": "Unchanged selected native call chain; comparison key equals the checked native expression. Root and public entry still recheck; native identities and call shells remain validated.",
+      "checks": [
+        "studies/stable-comparison-arguments/test_stable_arguments.py: eight normalizations instead of production 36, same exact key; scope, metadata, identity and alias regressions",
+        "studies/stable-comparison-arguments/verify.py: 114 focused tests, ten independent exact targets and five proofs"
+      ],
+      "pending": [
+        "Production integration and broader regression",
+        "Full active-label module-load performance remains unverified",
+        "No memoization or reuse across traversals is authorized by this rule"
+      ]
     }
   ]
 }
