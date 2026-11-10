@@ -1070,3 +1070,15 @@ and unresolved interaction checks. It also authors finite-vertex order using
 natural coordinate order. Neither change is integrated; source grammar and
 highlighting are unchanged.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+[Projection dependency closure](../studies/projection-dependencies/README.md)
+proposes instantiating only the transitive predecessors needed by a selected
+field's checked type. The full structure declaration is still validated; required
+carriers, value indices and proof dependencies are substituted in declaration
+order. The emitted root-qualified projection is unchanged, and no cross-scope
+cache is added. The pinned isolated driver checks 55 tests, four canonical targets
+and two proofs independently of numeral pruning. Production integration and
+broader annotation/capture/native-isolation obligations remain open.
+:::

@@ -2408,6 +2408,29 @@
         "Production integration and full regression",
         "Parameterized/vector/matrix numeral carriers remain a separate gap"
       ]
+    },
+    {
+      "id": "projection_dependency_closure",
+      "status": "isolated-prototype",
+      "environment": "Pinned e9760aa plus studies/projection-dependencies/prototype.patch alone; explicit proof_equality import in the fixtures.",
+      "source_fragment": "Structure Choice():\n  Universe: 1\n  Let carrier: Type\n  Let value: carrier\n  Let count: Natural\n  Constructor: choice\n\nLet c: Choice\nConclude: c.count = c.count",
+      "expected_tree": [
+        "Projection",
+        [
+          "Local",
+          "c"
+        ],
+        "count"
+      ],
+      "expected_lean": "Root-qualified Choice.count applied explicitly to c, with the declared Natural adapter as its type; projecting value instead retains Choice.carrier c. Transitive proof/value/function indices remain explicit.",
+      "checks": [
+        "studies/projection-dependencies/verify.py: 55 focused tests, four canonical targets, two proofs"
+      ],
+      "pending": [
+        "Production integration and full corpus/topology/regression runs",
+        "Complete capture/annotation interactions and native binding isolation",
+        "End-to-end active-label study validation"
+      ]
     }
   ]
 }
