@@ -92,7 +92,7 @@ noncomputable def cleanDefine_disjunction_2a3db8ccf67a84818535  (x : (_root_.cle
 noncomputable def cleanDefine_implication_9c70b95b865a68fb6e58  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x → y
 
-noncomputable def cleanDefine_equivalence_cad7bc5ebe96d36e4136  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+noncomputable def cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x ↔ y
 
 noncomputable def cleanDefine_negation_7efde94db326666449aa  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
@@ -625,7 +625,7 @@ def relative_homology_image_membership : Prop :=
   ∀ (x : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«target» (X) (Q))))))),
   let f : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«source» (X) (Q))))) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«target» (X) (Q)))))) := (@_root_.cleanDefine_relative_homology_map_ba573a68c3f5e3877a20 (K) (field) (H) (X) (Q) («h»));
   let U : (_root_.cleanType_ModuleSubspace_3c17b4583cdbf46f50ae (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«target» (X) (Q)))))) := (@_root_.cleanDefine_relative_homology_image_108fb35f76a7e136b6fb (K) (field) (H) (X) (Q) («h»));
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«target» (X) (Q))))) (x) (U))) ((@Exists ((_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«source» (X) (Q))))))) (fun (clean_bound_0 : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«source» (X) (Q))))))) => (_root_.cleanDefine_equal_59dc0f11ba9b345348cf ((@_root_.cleanNotation_module_map_value_d59145d0b679c3ce3011 (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«source» (X) (Q))))) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«target» (X) (Q))))) (f) (clean_bound_0))) (x))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«target» (X) (Q))))) (x) (U))) ((@Exists ((_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«source» (X) (Q))))))) (fun (clean_bound_0 : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«source» (X) (Q))))))) => (_root_.cleanDefine_equal_59dc0f11ba9b345348cf ((@_root_.cleanNotation_module_map_value_d59145d0b679c3ce3011 (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«source» (X) (Q))))) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«target» (X) (Q))))) (f) (clean_bound_0))) (x))))))
 
 end CleanStatements
 
@@ -637,7 +637,7 @@ private def canonicalName (n : Name) : Name := Id.run do
   if n == `RelativeMapOracle.homologyMap then return `cleanDefine_relative_homology_map_ba573a68c3f5e3877a20
   if n == `RelativeMapOracle.image then return `cleanDefine_relative_homology_image_108fb35f76a7e136b6fb
   if n == `RelativeMapOracle.equal then return `cleanDefine_equal_59dc0f11ba9b345348cf
-  if n == `RelativeMapOracle.equivalent then return `cleanDefine_equivalence_cad7bc5ebe96d36e4136
+  if n == `RelativeMapOracle.equivalent then return `cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb
   match n with
   | .str p s => return .str (canonicalName p) s
   | .num p i => return .num (canonicalName p) i
@@ -720,7 +720,7 @@ same_target cleanDefine_relative_chain_map_feba7c582421cfc27cf9 RelativeMapOracl
 same_target cleanDefine_relative_homology_map_ba573a68c3f5e3877a20 RelativeMapOracle.homologyMap
 same_target cleanDefine_relative_homology_image_108fb35f76a7e136b6fb RelativeMapOracle.image
 same_target cleanDefine_equal_59dc0f11ba9b345348cf RelativeMapOracle.equal
-same_target cleanDefine_equivalence_cad7bc5ebe96d36e4136 RelativeMapOracle.equivalent
+same_target cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb RelativeMapOracle.equivalent
 same_target CleanStatements.pair_chain_commutativity RelativeMapOracle.commutationStatement
 same_target CleanStatements.relative_quotient_maps_commute RelativeMapOracle.quotientStatement
 same_target CleanStatements.relative_homology_image_membership RelativeMapOracle.imageStatement

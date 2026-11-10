@@ -77,7 +77,7 @@ noncomputable def cleanDefine_disjunction_2a3db8ccf67a84818535  (x : (_root_.cle
 noncomputable def cleanDefine_implication_9c70b95b865a68fb6e58  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x → y
 
-noncomputable def cleanDefine_equivalence_cad7bc5ebe96d36e4136  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+noncomputable def cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x ↔ y
 
 noncomputable def cleanDefine_negation_7efde94db326666449aa  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
@@ -303,7 +303,7 @@ def image_membership : Prop :=
   ∀ (f : (X) → (Y)),
   ∀ (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))),
   ∀ (y : Y),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (y) ((_root_.cleanDefine_image_2da051e82d83c8057192 (f) (S))))) ((@Exists (X) (fun (clean_bound_0 : X) => (_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (clean_bound_0) (S))) ((_root_.cleanDefine_equal_59dc0f11ba9b345348cf ((f clean_bound_0)) (y))))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (y) ((_root_.cleanDefine_image_2da051e82d83c8057192 (f) (S))))) ((@Exists (X) (fun (clean_bound_0 : X) => (_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (clean_bound_0) (S))) ((_root_.cleanDefine_equal_59dc0f11ba9b345348cf ((f clean_bound_0)) (y))))))))
 
 /--
 source: topology
@@ -330,7 +330,7 @@ def family_intersection_membership : Prop :=
   ∀ (I X : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
   ∀ (sets : (I) → ((_root_.cleanType_Set_6e300741358eee425e81 (X)))),
   ∀ (x : X),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (x) ((_root_.cleanDefine_intersection_family_892b3d89c4dc28f0effe (sets))))) ((∀ (clean_bound_0 : I), (_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (x) ((sets clean_bound_0))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (x) ((_root_.cleanDefine_intersection_family_892b3d89c4dc28f0effe (sets))))) ((∀ (clean_bound_0 : I), (_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (x) ((sets clean_bound_0))))))
 
 end CleanStatements
 

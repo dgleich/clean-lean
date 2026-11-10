@@ -16,3 +16,5 @@ class EquivalenceNames(unittest.TestCase):
    self.assertEqual(len(e.data['functions']['equivalence']['signature_tree'][2]),6)
    self.assertEqual(len(e.data['functions']['logical equivalence']['signature_tree'][2]),2)
    self.assertNotEqual(e.data['functions']['equivalence']['native_binding'],e.data['functions']['logical equivalence']['native_binding'])
+
+# generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

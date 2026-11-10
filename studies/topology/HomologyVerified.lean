@@ -84,7 +84,7 @@ noncomputable def cleanDefine_disjunction_2a3db8ccf67a84818535  (x : (_root_.cle
 noncomputable def cleanDefine_implication_9c70b95b865a68fb6e58  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x → y
 
-noncomputable def cleanDefine_equivalence_cad7bc5ebe96d36e4136  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+noncomputable def cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x ↔ y
 
 noncomputable def cleanDefine_negation_7efde94db326666449aa  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
@@ -378,6 +378,9 @@ noncomputable def cleanNotation_module_subspace_carrier_0c98b2b061cbada2721f {K 
 noncomputable def cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (M : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (x : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) (M))) (U : (_root_.cleanType_ModuleSubspace_3c17b4583cdbf46f50ae (K) (field) (M))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   (_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (x) ((@_root_.cleanNotation_module_subspace_carrier_0c98b2b061cbada2721f (K) (field) (M) (U))))
 
+noncomputable def cleanDefine_same_module_e02a08d57e6a128abb90 {K : Type} {field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))} (M : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (N : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  M = N
+
 structure cleanStructure_HomologyTheory_f4058490561c3b80c6d9 («K» : Type) («field» : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf («K»))) : Type 1 where
   «coefficients» : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 («K») («field»))
   «degree» : (_root_.cleanType_Natural_469c53b6dafb7a218246)
@@ -472,7 +475,7 @@ def homology_image_membership : Prop :=
   ∀ (x : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanNotation_homology_module_0623b9da21d8ff427c7d (K) (field) (H) (Y))))),
   let h : ((_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanNotation_homology_module_0623b9da21d8ff427c7d (K) (field) (H) (X))))) → ((_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanNotation_homology_module_0623b9da21d8ff427c7d (K) (field) (H) (Y))))) := (@_root_.cleanDefine_induced_homology_map_6a00940d673663e6165b (K) (field) (H) (X) (Y) (f));
   let U : (_root_.cleanType_ModuleSubspace_3c17b4583cdbf46f50ae (K) (field) ((@_root_.cleanNotation_homology_module_0623b9da21d8ff427c7d (K) (field) (H) (Y)))) := (@_root_.cleanDefine_homology_image_e6a3638ecb5732b0e74f (K) (field) (H) (X) (Y) (f));
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) ((@_root_.cleanNotation_homology_module_0623b9da21d8ff427c7d (K) (field) (H) (Y))) (x) (U))) ((@Exists ((_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanNotation_homology_module_0623b9da21d8ff427c7d (K) (field) (H) (X))))) (fun (clean_bound_0 : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanNotation_homology_module_0623b9da21d8ff427c7d (K) (field) (H) (X))))) => (_root_.cleanDefine_equal_59dc0f11ba9b345348cf ((h clean_bound_0)) (x))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) ((@_root_.cleanNotation_homology_module_0623b9da21d8ff427c7d (K) (field) (H) (Y))) (x) (U))) ((@Exists ((_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanNotation_homology_module_0623b9da21d8ff427c7d (K) (field) (H) (X))))) (fun (clean_bound_0 : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanNotation_homology_module_0623b9da21d8ff427c7d (K) (field) (H) (X))))) => (_root_.cleanDefine_equal_59dc0f11ba9b345348cf ((h clean_bound_0)) (x))))))
 
 /--
 source: topology
@@ -519,7 +522,7 @@ private def canonicalName (n : Name) : Name := Id.run do
   if n == `HomologyOracle.compose then return `cleanNotation_compose_continuous_maps_f3da5f5645c1a654d6b9
   if n == `HomologyOracle.equal then return `cleanDefine_equal_59dc0f11ba9b345348cf
   if n == `HomologyOracle.member then return `cleanDefine_set_member_d7f862196f8cd9ab892e
-  if n == `HomologyOracle.equivalent then return `cleanDefine_equivalence_cad7bc5ebe96d36e4136
+  if n == `HomologyOracle.equivalent then return `cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb
   match n with
   | .str p s => return .str (canonicalName p) s
   | .num p i => return .num (canonicalName p) i
@@ -675,7 +678,7 @@ same_target cleanNotation_identity_continuous_map_3328841a46298311ee43 HomologyO
 same_target cleanNotation_compose_continuous_maps_f3da5f5645c1a654d6b9 HomologyOracle.compose
 same_target cleanDefine_equal_59dc0f11ba9b345348cf HomologyOracle.equal
 same_target cleanDefine_set_member_d7f862196f8cd9ab892e HomologyOracle.member
-same_target cleanDefine_equivalence_cad7bc5ebe96d36e4136 HomologyOracle.equivalent
+same_target cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb HomologyOracle.equivalent
 same_target cleanStructure_HomologyTheory_f4058490561c3b80c6d9.mk HomologyOracle.Theory.mk
 same_target cleanStructure_HomologyTheory_f4058490561c3b80c6d9.coefficients HomologyOracle.Theory.coefficients
 same_target cleanStructure_HomologyTheory_f4058490561c3b80c6d9.degree HomologyOracle.Theory.degree

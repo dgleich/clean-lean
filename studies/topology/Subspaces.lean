@@ -79,7 +79,7 @@ noncomputable def cleanDefine_disjunction_2a3db8ccf67a84818535  (x : (_root_.cle
 noncomputable def cleanDefine_implication_9c70b95b865a68fb6e58  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x → y
 
-noncomputable def cleanDefine_equivalence_cad7bc5ebe96d36e4136  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+noncomputable def cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x ↔ y
 
 noncomputable def cleanDefine_negation_7efde94db326666449aa  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
@@ -331,7 +331,7 @@ def indexed_intersection_membership : Prop :=
   ∀ (A : (_root_.cleanType_Set_6e300741358eee425e81 (I))),
   ∀ (S : (I) → ((_root_.cleanType_Subspace_dc5ab31620781ca45e7b (K) (f) (V) (L)))),
   ∀ (x : V),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((@_root_.cleanDefine_belongs_to_subspace_1343338f28b5d525ee95 (K) (V) (f) (L) (x) ((@_root_.cleanDefine_intersection_of_subspaces_b8a6bebf6e350e62c1d5 (K) (V) (I) (f) (L) (A) (S))))) ((∀ (clean_bound_0 : I), (_root_.cleanDefine_implication_9c70b95b865a68fb6e58 ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (clean_bound_0) (A))) ((@_root_.cleanDefine_belongs_to_subspace_1343338f28b5d525ee95 (K) (V) (f) (L) (x) ((S clean_bound_0))))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((@_root_.cleanDefine_belongs_to_subspace_1343338f28b5d525ee95 (K) (V) (f) (L) (x) ((@_root_.cleanDefine_intersection_of_subspaces_b8a6bebf6e350e62c1d5 (K) (V) (I) (f) (L) (A) (S))))) ((∀ (clean_bound_0 : I), (_root_.cleanDefine_implication_9c70b95b865a68fb6e58 ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (clean_bound_0) (A))) ((@_root_.cleanDefine_belongs_to_subspace_1343338f28b5d525ee95 (K) (V) (f) (L) (x) ((S clean_bound_0))))))))
 
 /--
 source: mathlib

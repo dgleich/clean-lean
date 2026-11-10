@@ -437,3 +437,19 @@ audit remain open. The four new proofs establish intersection membership,
 existence of extreme certificates, independence of certificate choice and forward
 containment only. Other previously documented paper-theorem gaps remain open.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+All eighteen topology verifiers now pass in one sequential run against compiler
+and library revision `5525280`: 483 summed canonical target checks and 89 proofs,
+excluding repeated supporting-proof runs. Each verifier completed with exit zero.
+All 92 curated corpus proofs also pass. Regenerated Lean artifacts are recorded
+with this checkpoint; after provenance restoration, the TeX sources are unchanged,
+so the existing inspected PDFs remain applicable. Shared adapter checks recur in
+several verifiers and are not 483 distinct mathematical results.
+
+This supersedes the earlier cumulative-only qualification for that revision.
+It does not establish full language conformance or prove the two-image candidate
+or the other outstanding paper theorems. The complete Python regression remains
+running; its current result must not be described as passing.
+:::

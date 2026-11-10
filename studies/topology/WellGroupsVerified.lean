@@ -94,7 +94,7 @@ noncomputable def cleanDefine_disjunction_2a3db8ccf67a84818535  (x : (_root_.cle
 noncomputable def cleanDefine_implication_9c70b95b865a68fb6e58  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x → y
 
-noncomputable def cleanDefine_equivalence_cad7bc5ebe96d36e4136  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+noncomputable def cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x ↔ y
 
 noncomputable def cleanDefine_negation_7efde94db326666449aa  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
@@ -942,7 +942,7 @@ def relative_homology_image_membership : Prop :=
   ∀ (x : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«target» (X) (Q))))))),
   let f : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«source» (X) (Q))))) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«target» (X) (Q)))))) := (@_root_.cleanDefine_relative_homology_map_ba573a68c3f5e3877a20 (K) (field) (H) (X) (Q) («h»));
   let U : (_root_.cleanType_ModuleSubspace_3c17b4583cdbf46f50ae (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«target» (X) (Q)))))) := (@_root_.cleanDefine_relative_homology_image_108fb35f76a7e136b6fb (K) (field) (H) (X) (Q) («h»));
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«target» (X) (Q))))) (x) (U))) ((@Exists ((_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«source» (X) (Q))))))) (fun (clean_bound_0 : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«source» (X) (Q))))))) => (_root_.cleanDefine_equal_59dc0f11ba9b345348cf ((@_root_.cleanNotation_module_map_value_d59145d0b679c3ce3011 (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«source» (X) (Q))))) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«target» (X) (Q))))) (f) (clean_bound_0))) (x))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«target» (X) (Q))))) (x) (U))) ((@Exists ((_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«source» (X) (Q))))))) (fun (clean_bound_0 : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«source» (X) (Q))))))) => (_root_.cleanDefine_equal_59dc0f11ba9b345348cf ((@_root_.cleanNotation_module_map_value_d59145d0b679c3ce3011 (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«source» (X) (Q))))) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) (X) ((@_root_.cleanStructure_PairInclusion_ee25aff32607b8147010.«target» (X) (Q))))) (f) (clean_bound_0))) (x))))))
 
 /--
 source: topology
@@ -955,7 +955,7 @@ def module_family_intersection_membership : Prop :=
   ∀ (M : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))),
   ∀ (spaces : (I) → ((_root_.cleanType_ModuleSubspace_3c17b4583cdbf46f50ae (K) (field) (M)))),
   ∀ (x : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) (M))),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) (M) (x) ((@_root_.cleanDefine_intersection_of_module_family_e81cd54fe6924716cee9 (K) (I) (field) (M) (spaces))))) ((∀ (clean_bound_0 : I), (@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) (M) (x) ((spaces clean_bound_0))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) (M) (x) ((@_root_.cleanDefine_intersection_of_module_family_e81cd54fe6924716cee9 (K) (I) (field) (M) (spaces))))) ((∀ (clean_bound_0 : I), (@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) (M) (x) ((spaces clean_bound_0))))))
 
 /--
 source: interlevel
@@ -1020,7 +1020,7 @@ def relative_well_group_membership : Prop :=
   ∀ (r : (_root_.cleanType_Real_107b6641a486642ad8e1)),
   ∀ («nesting» : (@_root_.cleanDefine_nested_pair_081cfd12251352debe01 ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanDefine_expanded_pair_2dec3ae65a0c9ba0325d (P) (r))))),
   ∀ (x : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanDefine_perturbation_target_a0ccda5ff92664e2a1ab (P) (r) («nesting»))))))),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanDefine_perturbation_target_a0ccda5ff92664e2a1ab (P) (r) («nesting»))))) (x) ((@_root_.cleanDefine_relative_well_group_f975d6f365bea2a93d2d (K) (field) (H) (P) (r) («nesting»))))) ((∀ (clean_bound_0 : _root_.cleanStructure_CertifiedPerturbation_de9d548e62b72879b227 (K) (field) (H) (P) (r) («nesting»)), (@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanDefine_perturbation_target_a0ccda5ff92664e2a1ab (P) (r) («nesting»))))) (x) ((@_root_.cleanDefine_perturbation_homology_image_dab92c65ffcc3396d959 (K) (field) (H) (P) (r) («nesting») (clean_bound_0)))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanDefine_perturbation_target_a0ccda5ff92664e2a1ab (P) (r) («nesting»))))) (x) ((@_root_.cleanDefine_relative_well_group_f975d6f365bea2a93d2d (K) (field) (H) (P) (r) («nesting»))))) ((∀ (clean_bound_0 : _root_.cleanStructure_CertifiedPerturbation_de9d548e62b72879b227 (K) (field) (H) (P) (r) («nesting»)), (@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) ((@_root_.cleanDefine_relative_homology_8c8536140623f5a9ca6d (K) (field) (H) ((@_root_.cleanStructure_InterlevelProblem_bd437b0a9a6bb0556cbc.«space» (P))) ((@_root_.cleanDefine_perturbation_target_a0ccda5ff92664e2a1ab (P) (r) («nesting»))))) (x) ((@_root_.cleanDefine_perturbation_homology_image_dab92c65ffcc3396d959 (K) (field) (H) (P) (r) («nesting») (clean_bound_0)))))))
 
 end CleanStatements
 
@@ -1038,7 +1038,7 @@ private def canonicalName (n : Name) : Name := Id.run do
   if n == `WellOracle.well then return `cleanDefine_relative_well_group_f975d6f365bea2a93d2d
   if n == `WellOracle.equal then return `cleanDefine_equal_59dc0f11ba9b345348cf
   if n == `WellOracle.subset then return `cleanDefine_set_subset_a67e41d93cfd162885cf
-  if n == `WellOracle.equivalent then return `cleanDefine_equivalence_cad7bc5ebe96d36e4136
+  if n == `WellOracle.equivalent then return `cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb
   if n == `WellOracle.atMost then return `cleanDefine_real_at_most_51ad2818948d6e758423
   if n == `WellOracle.atLeast then return `cleanDefine_real_at_least_6add8f72594b91ec8f2f
   if n == `WellOracle.numeral then return `cleanNumeral_Real_1f10813a9ce4dc61fe3e
@@ -1154,7 +1154,7 @@ same_target cleanDefine_perturbation_homology_image_dab92c65ffcc3396d959 WellOra
 same_target cleanDefine_relative_well_group_f975d6f365bea2a93d2d WellOracle.well
 same_target cleanDefine_equal_59dc0f11ba9b345348cf WellOracle.equal
 same_target cleanDefine_set_subset_a67e41d93cfd162885cf WellOracle.subset
-same_target cleanDefine_equivalence_cad7bc5ebe96d36e4136 WellOracle.equivalent
+same_target cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb WellOracle.equivalent
 same_target cleanDefine_real_at_most_51ad2818948d6e758423 WellOracle.atMost
 same_target cleanDefine_real_at_least_6add8f72594b91ec8f2f WellOracle.atLeast
 same_target cleanNumeral_Real_1f10813a9ce4dc61fe3e WellOracle.numeral

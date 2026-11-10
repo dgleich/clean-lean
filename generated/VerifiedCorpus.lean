@@ -70,7 +70,7 @@ noncomputable def cleanDefine_disjunction_2a3db8ccf67a84818535  (x : (_root_.cle
 noncomputable def cleanDefine_implication_9c70b95b865a68fb6e58  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x → y
 
-noncomputable def cleanDefine_equivalence_cad7bc5ebe96d36e4136  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+noncomputable def cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x ↔ y
 
 noncomputable def cleanDefine_negation_7efde94db326666449aa  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
@@ -407,7 +407,7 @@ relationship: specialized
 def insertion_sort_membership : Prop :=
   ∀ (xs : (_root_.cleanType_List_530f2b2df99696550311 ((_root_.cleanType_Natural_469c53b6dafb7a218246)))),
   ∀ (a : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((_root_.cleanDefine_list_member_a533590d6d1f9d128c19 (a) ((_root_.cleanNotation_insertionSort_054943e1f7dcf8820dd0 (xs))))) ((_root_.cleanDefine_list_member_a533590d6d1f9d128c19 (a) (xs))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((_root_.cleanDefine_list_member_a533590d6d1f9d128c19 (a) ((_root_.cleanNotation_insertionSort_054943e1f7dcf8820dd0 (xs))))) ((_root_.cleanDefine_list_member_a533590d6d1f9d128c19 (a) (xs))))
 
 /--
 source: mathlib
@@ -437,7 +437,7 @@ relationship: specialized
 def ordered_insert_membership : Prop :=
   ∀ (xs : (_root_.cleanType_List_530f2b2df99696550311 ((_root_.cleanType_Natural_469c53b6dafb7a218246)))),
   ∀ (a b : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((_root_.cleanDefine_list_member_a533590d6d1f9d128c19 (b) ((_root_.cleanNotation_insert_601c7aa53134eb475439 (a) (xs))))) ((_root_.cleanDefine_disjunction_2a3db8ccf67a84818535 ((_root_.cleanDefine_equal_59dc0f11ba9b345348cf (b) (a))) ((_root_.cleanDefine_list_member_a533590d6d1f9d128c19 (b) (xs))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((_root_.cleanDefine_list_member_a533590d6d1f9d128c19 (b) ((_root_.cleanNotation_insert_601c7aa53134eb475439 (a) (xs))))) ((_root_.cleanDefine_disjunction_2a3db8ccf67a84818535 ((_root_.cleanDefine_equal_59dc0f11ba9b345348cf (b) (a))) ((_root_.cleanDefine_list_member_a533590d6d1f9d128c19 (b) (xs))))))
 
 /--
 source: mathlib
@@ -527,7 +527,7 @@ relationship: specialized
 -/
 def euclidean_coprime_reduction : Prop :=
   ∀ (a b k : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((_root_.cleanDefine_coprime_34ae954d5e1846c7a656 (a) ((_root_.cleanNotation_natural_sum_884ddbcff666dc390f99 (b) ((_root_.cleanNotation_natural_product_0c2b2fc759f8d93a79af (k) (a))))))) ((_root_.cleanDefine_coprime_34ae954d5e1846c7a656 (a) (b))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((_root_.cleanDefine_coprime_34ae954d5e1846c7a656 (a) ((_root_.cleanNotation_natural_sum_884ddbcff666dc390f99 (b) ((_root_.cleanNotation_natural_product_0c2b2fc759f8d93a79af (k) (a))))))) ((_root_.cleanDefine_coprime_34ae954d5e1846c7a656 (a) (b))))
 
 /--
 source: mathlib
@@ -537,7 +537,7 @@ relationship: specialized
 def euclidean_coprime_subtraction : Prop :=
   ∀ (a b : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
   ∀ («ordered» : (_root_.cleanDefine_natural_at_most_0a7e9519b4591123e4b5 (a) (b))),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((_root_.cleanDefine_coprime_34ae954d5e1846c7a656 ((_root_.cleanNotation_natural_difference_c3d4d46094b9cc0fc4c2 (b) (a))) (a))) ((_root_.cleanDefine_coprime_34ae954d5e1846c7a656 (b) (a))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((_root_.cleanDefine_coprime_34ae954d5e1846c7a656 ((_root_.cleanNotation_natural_difference_c3d4d46094b9cc0fc4c2 (b) (a))) (a))) ((_root_.cleanDefine_coprime_34ae954d5e1846c7a656 (b) (a))))
 
 /--
 source: mathlib
@@ -569,7 +569,7 @@ relationship: specialized
 def coprime_product_divisibility : Prop :=
   ∀ (a b k : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
   ∀ («cop» : (_root_.cleanDefine_coprime_34ae954d5e1846c7a656 (k) (b))),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((_root_.cleanDefine_natural_divides_2611187ff6f65c3a68d5 (k) ((_root_.cleanNotation_natural_product_0c2b2fc759f8d93a79af (a) (b))))) ((_root_.cleanDefine_natural_divides_2611187ff6f65c3a68d5 (k) (a))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((_root_.cleanDefine_natural_divides_2611187ff6f65c3a68d5 (k) ((_root_.cleanNotation_natural_product_0c2b2fc759f8d93a79af (a) (b))))) ((_root_.cleanDefine_natural_divides_2611187ff6f65c3a68d5 (k) (a))))
 
 /--
 source: mathlib
@@ -840,7 +840,7 @@ def adjacency_commutes : Prop :=
   ∀ (n : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
   ∀ (G : (_root_.cleanType_Graph_7bde0ce024ce143f369b (n))),
   ∀ (u v : (_root_.cleanType_Vertex_460956e39f5b9ffca091 (n))),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (u) (v))) ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (v) (u))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (u) (v))) ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (v) (u))))
 
 /--
 source: mathlib
@@ -874,7 +874,7 @@ def union_adjacency : Prop :=
   ∀ (n : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
   ∀ (G H : (_root_.cleanType_Graph_7bde0ce024ce143f369b (n))),
   ∀ (u v : (_root_.cleanType_Vertex_460956e39f5b9ffca091 (n))),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) ((@_root_.cleanNotation_union_acbfc234fe4f905e5a99 (n) (G) (H))) (u) (v))) ((_root_.cleanDefine_disjunction_2a3db8ccf67a84818535 ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (u) (v))) ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (H) (u) (v))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) ((@_root_.cleanNotation_union_acbfc234fe4f905e5a99 (n) (G) (H))) (u) (v))) ((_root_.cleanDefine_disjunction_2a3db8ccf67a84818535 ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (u) (v))) ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (H) (u) (v))))))
 
 /--
 source: mathlib
@@ -885,7 +885,7 @@ def intersection_adjacency : Prop :=
   ∀ (n : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
   ∀ (G H : (_root_.cleanType_Graph_7bde0ce024ce143f369b (n))),
   ∀ (u v : (_root_.cleanType_Vertex_460956e39f5b9ffca091 (n))),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) ((@_root_.cleanNotation_intersection_baf68ef5876ec2eba6e8 (n) (G) (H))) (u) (v))) ((_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (u) (v))) ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (H) (u) (v))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) ((@_root_.cleanNotation_intersection_baf68ef5876ec2eba6e8 (n) (G) (H))) (u) (v))) ((_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (u) (v))) ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (H) (u) (v))))))
 
 /--
 source: mathlib
@@ -896,7 +896,7 @@ def complement_adjacency : Prop :=
   ∀ (n : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
   ∀ (G : (_root_.cleanType_Graph_7bde0ce024ce143f369b (n))),
   ∀ (u v : (_root_.cleanType_Vertex_460956e39f5b9ffca091 (n))),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) ((@_root_.cleanNotation_complement_24d2562fbaf4a9029656 (n) (G))) (u) (v))) ((_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((_root_.cleanDefine_unequal_d9953e236b6d48fdc435 (u) (v))) ((_root_.cleanDefine_negation_7efde94db326666449aa ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (u) (v))))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) ((@_root_.cleanNotation_complement_24d2562fbaf4a9029656 (n) (G))) (u) (v))) ((_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((_root_.cleanDefine_unequal_d9953e236b6d48fdc435 (u) (v))) ((_root_.cleanDefine_negation_7efde94db326666449aa ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (u) (v))))))))
 
 /--
 source: mathlib
@@ -929,7 +929,7 @@ def neighbor_membership : Prop :=
   ∀ (n : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
   ∀ (G : (_root_.cleanType_Graph_7bde0ce024ce143f369b (n))),
   ∀ (u v : (_root_.cleanType_Vertex_460956e39f5b9ffca091 (n))),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (v) ((@_root_.cleanNotation_neighbors_9e6108ee5a27908a65ed (n) (G) (u))))) ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (u) (v))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (v) ((@_root_.cleanNotation_neighbors_9e6108ee5a27908a65ed (n) (G) (u))))) ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (u) (v))))
 
 /--
 source: mathlib
@@ -962,7 +962,7 @@ def common_neighbors_membership : Prop :=
   ∀ (n : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
   ∀ (G : (_root_.cleanType_Graph_7bde0ce024ce143f369b (n))),
   ∀ (u v w : (_root_.cleanType_Vertex_460956e39f5b9ffca091 (n))),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (w) ((@_root_.cleanDefine_commonNeighbors_9512a69ab2c7d9d18f28 (n) (G) (u) (v))))) ((_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (u) (w))) ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (v) (w))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (w) ((@_root_.cleanDefine_commonNeighbors_9512a69ab2c7d9d18f28 (n) (G) (u) (v))))) ((_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (u) (w))) ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) (G) (v) (w))))))
 
 /--
 source: mathlib
@@ -1054,7 +1054,7 @@ def nonadjacency_symmetry : Prop :=
   ∀ (n : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
   ∀ (G : (_root_.cleanType_Graph_7bde0ce024ce143f369b (n))),
   ∀ (u v : (_root_.cleanType_Vertex_460956e39f5b9ffca091 (n))),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((@_root_.cleanDefine_nonadjacent_4c0e2458d8fa8674d260 (n) (G) (u) (v))) ((@_root_.cleanDefine_nonadjacent_4c0e2458d8fa8674d260 (n) (G) (v) (u))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((@_root_.cleanDefine_nonadjacent_4c0e2458d8fa8674d260 (n) (G) (u) (v))) ((@_root_.cleanDefine_nonadjacent_4c0e2458d8fa8674d260 (n) (G) (v) (u))))
 
 /--
 source: mathlib
@@ -1076,7 +1076,7 @@ def complement_from_nonadjacency : Prop :=
   ∀ (n : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
   ∀ (G : (_root_.cleanType_Graph_7bde0ce024ce143f369b (n))),
   ∀ (u v : (_root_.cleanType_Vertex_460956e39f5b9ffca091 (n))),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) ((@_root_.cleanNotation_complement_24d2562fbaf4a9029656 (n) (G))) (u) (v))) ((_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((_root_.cleanDefine_unequal_d9953e236b6d48fdc435 (u) (v))) ((@_root_.cleanDefine_nonadjacent_4c0e2458d8fa8674d260 (n) (G) (u) (v))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((@_root_.cleanNotation_adjacent_7f8bc3e1774e1d75bf2c (n) ((@_root_.cleanNotation_complement_24d2562fbaf4a9029656 (n) (G))) (u) (v))) ((_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((_root_.cleanDefine_unequal_d9953e236b6d48fdc435 (u) (v))) ((@_root_.cleanDefine_nonadjacent_4c0e2458d8fa8674d260 (n) (G) (u) (v))))))
 
 /--
 source: mathlib

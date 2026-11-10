@@ -79,7 +79,7 @@ noncomputable def cleanDefine_disjunction_2a3db8ccf67a84818535  (x : (_root_.cle
 noncomputable def cleanDefine_implication_9c70b95b865a68fb6e58  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x → y
 
-noncomputable def cleanDefine_equivalence_cad7bc5ebe96d36e4136  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+noncomputable def cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x ↔ y
 
 noncomputable def cleanDefine_negation_7efde94db326666449aa  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
@@ -305,7 +305,7 @@ def image_membership : Prop :=
   ∀ (f : (X) → (Y)),
   ∀ (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))),
   ∀ (y : Y),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (y) ((_root_.cleanDefine_image_2da051e82d83c8057192 (f) (S))))) ((@Exists (X) (fun (clean_bound_0 : X) => (_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (clean_bound_0) (S))) ((_root_.cleanDefine_equal_59dc0f11ba9b345348cf ((f clean_bound_0)) (y))))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (y) ((_root_.cleanDefine_image_2da051e82d83c8057192 (f) (S))))) ((@Exists (X) (fun (clean_bound_0 : X) => (_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (clean_bound_0) (S))) ((_root_.cleanDefine_equal_59dc0f11ba9b345348cf ((f clean_bound_0)) (y))))))))
 
 /--
 source: topology
@@ -332,7 +332,7 @@ def family_intersection_membership : Prop :=
   ∀ (I X : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
   ∀ (sets : (I) → ((_root_.cleanType_Set_6e300741358eee425e81 (X)))),
   ∀ (x : X),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (x) ((_root_.cleanDefine_intersection_family_892b3d89c4dc28f0effe (sets))))) ((∀ (clean_bound_0 : I), (_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (x) ((sets clean_bound_0))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (x) ((_root_.cleanDefine_intersection_family_892b3d89c4dc28f0effe (sets))))) ((∀ (clean_bound_0 : I), (_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (x) ((sets clean_bound_0))))))
 
 end CleanStatements
 
@@ -396,13 +396,13 @@ same_basic_target cleanDefine_intersection_family_892b3d89c4dc28f0effe expected_
 noncomputable def expected_topology_binding_13  : Prop := ∀ (X Y : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (f : X → Y) (S T : _root_.cleanType_Set_6e300741358eee425e81 Y), @_root_.cleanDefine_equal_59dc0f11ba9b345348cf (_root_.cleanType_Set_6e300741358eee425e81 X) (@_root_.cleanDefine_inverse_image_22bc73bac0cb61752f41 X Y f (@_root_.cleanNotation_set_intersection_855b89f2e32edc747a4a Y S T)) (@_root_.cleanNotation_set_intersection_855b89f2e32edc747a4a X (@_root_.cleanDefine_inverse_image_22bc73bac0cb61752f41 X Y f S) (@_root_.cleanDefine_inverse_image_22bc73bac0cb61752f41 X Y f T))
 same_basic_target CleanStatements.inverse_image_intersection expected_topology_binding_13
 
-noncomputable def expected_topology_binding_14  : Prop := ∀ (X Y : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (f : X → Y) (S : _root_.cleanType_Set_6e300741358eee425e81 X) (y : Y), _root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 (@_root_.cleanDefine_set_member_d7f862196f8cd9ab892e Y y (@_root_.cleanDefine_image_2da051e82d83c8057192 X Y f S)) (∃ x : X, _root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 (@_root_.cleanDefine_set_member_d7f862196f8cd9ab892e X x S) (@_root_.cleanDefine_equal_59dc0f11ba9b345348cf Y (f x) y))
+noncomputable def expected_topology_binding_14  : Prop := ∀ (X Y : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (f : X → Y) (S : _root_.cleanType_Set_6e300741358eee425e81 X) (y : Y), _root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb (@_root_.cleanDefine_set_member_d7f862196f8cd9ab892e Y y (@_root_.cleanDefine_image_2da051e82d83c8057192 X Y f S)) (∃ x : X, _root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 (@_root_.cleanDefine_set_member_d7f862196f8cd9ab892e X x S) (@_root_.cleanDefine_equal_59dc0f11ba9b345348cf Y (f x) y))
 same_basic_target CleanStatements.image_membership expected_topology_binding_14
 
 noncomputable def expected_topology_binding_15  : Prop := ∀ (X Y Z : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (t : _root_.cleanType_Topology_2eca621ea710e87cf174 X) (u : _root_.cleanType_Topology_2eca621ea710e87cf174 Y) (v : _root_.cleanType_Topology_2eca621ea710e87cf174 Z) (f : X → Y) (g : Y → Z) (_ : @_root_.cleanDefine_continuous_between_97c36c9607d00442c387 X Y f t u) (_ : @_root_.cleanDefine_continuous_between_97c36c9607d00442c387 Y Z g u v), @_root_.cleanDefine_continuous_between_97c36c9607d00442c387 X Z (@_root_.cleanDefine_compose_maps_b7e7219a131a4bb5245c X Y Z g f) t v
 same_basic_target CleanStatements.continuous_composition expected_topology_binding_15
 
-noncomputable def expected_topology_binding_16  : Prop := ∀ (I X : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (sets : I → _root_.cleanType_Set_6e300741358eee425e81 X) (x : X), _root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 (@_root_.cleanDefine_set_member_d7f862196f8cd9ab892e X x (@_root_.cleanDefine_intersection_family_892b3d89c4dc28f0effe I X sets)) (∀ i : I, @_root_.cleanDefine_set_member_d7f862196f8cd9ab892e X x (sets i))
+noncomputable def expected_topology_binding_16  : Prop := ∀ (I X : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (sets : I → _root_.cleanType_Set_6e300741358eee425e81 X) (x : X), _root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb (@_root_.cleanDefine_set_member_d7f862196f8cd9ab892e X x (@_root_.cleanDefine_intersection_family_892b3d89c4dc28f0effe I X sets)) (∀ i : I, @_root_.cleanDefine_set_member_d7f862196f8cd9ab892e X x (sets i))
 same_basic_target CleanStatements.family_intersection_membership expected_topology_binding_16
 
 noncomputable def expected_topology_binding_17 {X : Type} (x y : X) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := x=y
@@ -418,7 +418,7 @@ noncomputable def expected_topology_binding_20 (p q : _root_.cleanType_Propositi
 same_basic_target cleanDefine_conjunction_41680d3b84ab96b0cab9 expected_topology_binding_20
 
 noncomputable def expected_topology_binding_21 (p q : _root_.cleanType_Proposition_ae4a13d2f060407bce35) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := p ↔ q
-same_basic_target cleanDefine_equivalence_cad7bc5ebe96d36e4136 expected_topology_binding_21
+same_basic_target cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb expected_topology_binding_21
 
 noncomputable def expected_topology_binding_22 (p q : _root_.cleanType_Proposition_ae4a13d2f060407bce35) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := p → q
 same_basic_target cleanDefine_implication_9c70b95b865a68fb6e58 expected_topology_binding_22

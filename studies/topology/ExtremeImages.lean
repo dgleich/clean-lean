@@ -94,7 +94,7 @@ noncomputable def cleanDefine_disjunction_2a3db8ccf67a84818535  (x : (_root_.cle
 noncomputable def cleanDefine_implication_9c70b95b865a68fb6e58  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x → y
 
-noncomputable def cleanDefine_equivalence_cad7bc5ebe96d36e4136  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+noncomputable def cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x ↔ y
 
 noncomputable def cleanDefine_negation_7efde94db326666449aa  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
@@ -796,7 +796,7 @@ def binary_module_intersection_membership : Prop :=
   ∀ (M : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))),
   ∀ (U V : (_root_.cleanType_ModuleSubspace_3c17b4583cdbf46f50ae (K) (field) (M))),
   ∀ (x : (_root_.cleanType_ModuleElement_0c3dbc92ed35f00927af (K) (field) (M))),
-  (_root_.cleanDefine_equivalence_cad7bc5ebe96d36e4136 ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) (M) (x) ((@_root_.cleanDefine_intersection_of_module_subspaces_079c3fadb07d20639a84 (K) (field) (M) (U) (V))))) ((_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) (M) (x) (U))) ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) (M) (x) (V))))))
+  (_root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) (M) (x) ((@_root_.cleanDefine_intersection_of_module_subspaces_079c3fadb07d20639a84 (K) (field) (M) (U) (V))))) ((_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) (M) (x) (U))) ((@_root_.cleanDefine_belongs_to_module_subspace_91c638861de4a497c6ac (K) (field) (M) (x) (V))))))
 
 /--
 source: interlevel
