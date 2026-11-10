@@ -6704,6 +6704,16 @@
         "-- ",
         ""
       ]
+    },
+    "studies/active-labels/ArithmeticSupport.lean.in": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

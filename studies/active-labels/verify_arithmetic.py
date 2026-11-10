@@ -13,13 +13,13 @@ from cleanlang.modules import load_module
 
 def render_arithmetic(e):
     """Instantiate independent proof templates with this environment's bindings."""
-    f=lambda name:e.data['functions'][name]['lean'].split()[0]
+    f=lambda name:e.data['functions'][name]['native_binding']
     module=ast.parse((HERE/'verify.py').read_text())
     literals={t.id:ast.literal_eval(n.value) for n in module.body if isinstance(n,ast.Assign) and isinstance(n.value,ast.Constant) and isinstance(n.value.value,str) for t in n.targets if isinstance(t,ast.Name)}
-    expected=literals['expected'];proofs=literals['proofs']
+    expected=literals['expected']
     sets=expected[expected.index('noncomputable def old'):expected.index('noncomputable def supportConstructor')]
     existence=expected[expected.index('def existsStatement'):expected.index('end ActiveOracle')]
-    support=proofs[proofs.index('private theorem support_exists'):proofs.index('theorem active_labels_checked')]
+    support=(HERE/'ArithmeticSupport.lean.in').read_text()
     extra='\nnamespace Arithmetic\n'+sets+existence+support+r'''
 theorem active_labels_exist : existsStatement := by
  intro I n a m h L v
@@ -39,6 +39,10 @@ end Arithmetic
     keys={k:f(v) for k,v in [('VALUE','element value'),('ELEMENT','element from membership'),('SUR','surviving interval labels'),('AT','interval labels at'),('RESTRICT','restricted interval labels'),('SUBPATH','subpath vertex'),('EVAL','equivalence forward'),('GEQUIV','subtype restriction equivalence')]}
     keys.update(OLD='Arithmetic.old',NEW='Arithmetic.new',LABELS=e.structures['IntervalLabels']['key'],SUPPORT=e.structures['SubtypeRestrictionSupport']['key'])
     unfold=[keys['OLD'],keys['NEW']]+[f(n) for n in ['surviving interval labels','interval labels at','set of','restricted interval labels','interval labels','clipped vertex','natural minimum','bounded vertex','vertex number','subpath vertex','offset vertex','widen vertex','transport vertex','selected value','element value','element from membership']]
+    # Unfold the declared mathematical adapters in the proof, not in the target oracle.
+    unfold += [f(name) for name in ['set member','conjunction','natural sum',
+                                   'natural difference','natural at most','vertex at most']]
+    unfold += [e.data['types']['Natural']['numerals']['native_binding']]
     extra=extra.replace('UNFOLD',', '.join(unfold+['Set.mem_setOf_eq','Fin.le_iff_val_le_val']))
     extra=extra.replace('SUPPORT I n a m h L v','SUPPORT I (SUR I n a m L) (OLD I n a m h L v) (NEW I n a m L v)')
     for key,value in keys.items():extra=re.sub(r'\b'+key+r'\b',value,extra)

@@ -1,0 +1,38 @@
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+-- The vertex bound is derived, not assumed. change checks each natural goal definitionally.
+private theorem support_exists (I : Type) (n a m : ℕ) (h : a+m ≤ n) (L : LABELS I n) (v : Fin (m+1)) :
+ Nonempty (SUPPORT I n a m h L v) := by
+ let survives : ∀ x : {i : I // i ∈ OLD I n a m h L v}, VALUE (OLD I n a m h L v) x ∈ SUR I n a m L := by
+   intro x
+   have hx := x.property
+   simp only [UNFOLD] at *
+   try simp only [Fin.val_mk, Fin.coe_natAdd, Fin.coe_castLE, Fin.coe_cast] at *
+   change (L.lower x.val).val ≤ a + v.val ∧ a + v.val ≤ (L.upper x.val).val at hx
+   change (L.lower x.val).val ≤ a + m ∧ a ≤ (L.upper x.val).val
+   have hv : v.val ≤ m := Nat.le_of_lt_succ v.isLt
+   omega
+ let active : ∀ x : {i : I // i ∈ OLD I n a m h L v},
+     ELEMENT (SUR I n a m L) (VALUE (OLD I n a m h L v) x) (survives x) ∈ NEW I n a m L v := by
+   intro x
+   have hx := x.property
+   simp only [UNFOLD] at *
+   try simp only [Fin.val_mk, Fin.coe_natAdd, Fin.coe_castLE, Fin.coe_cast] at *
+   change (L.lower x.val).val ≤ a + v.val ∧ a + v.val ≤ (L.upper x.val).val at hx
+   change min m ((L.lower x.val).val - a) ≤ v.val ∧ v.val ≤ min m ((L.upper x.val).val - a)
+   have hv : v.val ≤ m := Nat.le_of_lt_succ v.isLt
+   omega
+ let original : ∀ y : {j : {i : I // i ∈ SUR I n a m L} // j ∈ NEW I n a m L v},
+     VALUE (SUR I n a m L) (VALUE (NEW I n a m L v) y) ∈ OLD I n a m h L v := by
+   intro y
+   have hs := y.val.property
+   have hy := y.property
+   simp only [UNFOLD] at *
+   try simp only [Fin.val_mk, Fin.coe_natAdd, Fin.coe_castLE, Fin.coe_cast] at *
+   change (L.lower y.val.val).val ≤ a + m ∧ a ≤ (L.upper y.val.val).val at hs
+   change min m ((L.lower y.val.val).val - a) ≤ v.val ∧ v.val ≤ min m ((L.upper y.val.val).val - a) at hy
+   change (L.lower y.val.val).val ≤ a + v.val ∧ a + v.val ≤ (L.upper y.val.val).val
+   have hv : v.val ≤ m := Nat.le_of_lt_succ v.isLt
+   omega
+ exact ⟨⟨survives,active,original⟩⟩
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

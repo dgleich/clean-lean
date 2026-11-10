@@ -120,3 +120,30 @@ jobs are not evidence about these new runs. The current interval source still
 must produce its complete Generated.lean artifact before its specialized canonical
 expectations and arithmetic proofs can be migrated and checked.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Current arithmetic support proof
+
+The arithmetic driver has also been renewed on the current compiler. Its proof
+unfolds the explicitly declared membership, conjunction, natural arithmetic,
+vertex order and numeral adapters. It then uses Lean `change` to state each
+natural-number obligation explicitly and derives `v.val ≤ m` from `v.isLt`.
+The derived inequality is not a new hypothesis. `omega` checks the three
+support fields, and subtype extensionality supplies the inverse laws.
+
+The reusable proof is in [ArithmeticSupport.lean.in](ArithmeticSupport.lean.in).
+Regenerating [Arithmetic.lean](Arithmetic.lean) with `verify_arithmetic.py` passes
+the Lean kernel for support existence and the native active-label equivalence
+existence theorem. No axiom, placeholder proof or added support assumption is used.
+These are proofs for the driver's independently authored native old/new active-set
+expressions. They still do not establish equality with every specialized generated
+Clean target; that comparison awaits the full interval translation and its oracle
+migration. The generic Clean theorem comparison above is separately checked.
+
+The failed initial rerun left the declared operations opaque to the arithmetic
+tactic. Unfolding alone still left the proof unsuccessful; explicitly checking the
+natural goal shapes and deriving the vertex bound made all three obligations
+close. Only the proof driver and its generated artifact changed. The compiler,
+Clean definitions and mathematical theorem assumptions remained fixed throughout.
+:::
