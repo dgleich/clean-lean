@@ -1,0 +1,24 @@
+--- a/cleanlang/binder_keys.py
++++ b/cleanlang/binder_keys.py
+@@ -56,7 +56,8 @@
+                 for k,v in value.items():reserve(k);reserve(v)
+             elif isinstance(value,(tuple,list)):
+                 for v in value:reserve(v)
+-        self.reserved.update(environment_tokens(environment));reserve(tree)
++        self._pending_environment=environment
++        reserve(tree)
+         self.reserve_locals(locals)
+     def reserve_locals(self,locals):
+         for name,value in locals.items():
+@@ -73,6 +74,11 @@
+             for arg in typ.args:self.reserve_type(arg)
+         elif isinstance(typ,ValueIndex):self.reserved.update(re.findall(ID,typ.lean))
+     def fresh(self,locals):
++        # Most comparisons allocate no binder. Scan the fixed declaration
++        # environment only when a comparison-owned identity is actually needed.
++        if self._pending_environment is not None:
++            self.reserved.update(environment_tokens(self._pending_environment))
++            self._pending_environment=None
+         self.reserve_locals(locals)
+         while 'clean_comparison_identity_'+str(self.counter) in self.reserved:self.counter+=1
+         name='clean_comparison_identity_'+str(self.counter);self.counter+=1

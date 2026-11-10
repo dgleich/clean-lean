@@ -1255,3 +1255,13 @@ operator rules; it adds no parser production, universe inference rule or native
 special case. See [the carrier-equality contract](type-expressions.md#explicit-carrier-equality-module).
 Generic equality on arbitrary higher-universe values remains unsupported.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+An [isolated reservation optimization](../studies/lazy-comparison-reservation/README.md)
+defers the environment-token scan until the first comparison binder allocation.
+The fixed-environment comparison contract is unchanged: all environment, tree and
+local tokens must be reserved before choosing the first fresh name. For a pool
+that allocates no binder, the scan is unnecessary. The study records the equivalence
+argument and collision/count tests; production remains eager pending integration.
+:::
