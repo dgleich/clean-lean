@@ -60,7 +60,7 @@ collision checks, dependent types or negative assertions were weakened.
 A focused run of `test_dependent_functions`, `test_postfix_applications`,
 `test_function_expressions`, `test_compact_signatures` and `test_layout` passes
 69 tests in 3.754 seconds. These are fixture changes only. The longer regression
-started before this migration and is still live; its earlier failures remain
+started before this migration and has now finished; its earlier failures remain
 part of that run's evidence.
 
 Two investigated failures are not resolved by importing operators:
@@ -78,4 +78,23 @@ Two investigated failures are not resolved by importing operators:
 
 These findings distinguish explicit-import debt from remaining semantic work.
 They do not establish correctness of all dependent-function or universe cases.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Completed production regression at 674d38b
+
+The long run completed with exit 1: 787 tests in 5046.047 seconds, 29 failures
+and 27 errors. Compiler/library sources stayed at 674d38b throughout. Test modules
+were loaded before the later fixture migrations, so this result is not a fresh
+full-suite assessment of those migrations. It proves neither current conformance
+nor that all 56 reported failures/errors remain unresolved.
+
+The report includes the similarity/vector-zero fixture failures, the Type-0
+restriction on projected-condition equality, the choice-module comparison failure,
+and old literal/dimension/operator-import expectations. Focused migration results
+are documented separately. The review navigation test eventually completed; the
+process was allowed to finish rather than restarted on an observation timeout.
+The contextual-family experiment has its own still-running full-suite job and is
+not integrated based on this production run.
 :::

@@ -12,10 +12,17 @@ with tempfile.TemporaryDirectory(prefix='clean-literal-annotation-study-') as di
  for patch in [ROOT/'studies/literal-annotations/prototype.patch',Path(__file__).with_name('prototype.patch')]:
   subprocess.run(['git','apply',str(patch)],cwd=target,check=True)
  env=os.environ.copy();env['PYTHONPATH']=os.pathsep.join([str(target/'studies/literal-retention'),str(target/'tests'),str(target)])
+ failures=[]
  for args in [['tools/generate_parser.py'],['tools/generate_parser.py','--check'],
-              ['-m','unittest','test_retention','test_generated_parser','test_numeral_pruning','test_compact_signatures','test_applied_indices','-v'],
+              ['-m','unittest','test_retention','test_generated_parser','test_numeral_pruning','test_compact_signatures','test_applied_indices','test_hygienic_conversion','test_quantified_beta','test_structures','-v'],
               ['studies/literal-retention/check_targets.py']]:
-  subprocess.run([sys.executable,*args],cwd=target,env=env,check=True)
+  result=subprocess.run([sys.executable,*args],cwd=target,env=env)
+  if result.returncode:
+   if args[0]=='tools/generate_parser.py':raise SystemExit(result.returncode)
+   failures.append((args,result.returncode))
+ if failures:
+  print('Study checks failed:',failures)
+  raise SystemExit(1)
 print('Isolated retained-literal checks passed; portable serialization and unannotated inference remain pending.')
 
 # generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

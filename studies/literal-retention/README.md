@@ -17,10 +17,11 @@ Automatic assumption names canonicalize leading zeros; authored spelling retains
 The experiment updates expression elaboration/binding, source and condition
 spelling, free-name collection, hygiene/index substitution, beta reduction,
 quantified traversal, numeral-hole discovery and comparison normalization.
-Its 31 focused cases include synchronized substitution, later competitors,
+Its 35 focused cases include synchronized substitution, later competitors,
 changed declarations/digits/carriers, lost annotation metadata and beta reduction.
 The native checker independently specifies three constructor targets and proves
-two coordinate equalities. These are narrow checks, not full conformance evidence.
+two coordinate equalities. Two additional canonical targets cover capture-free
+dependent functions and quantified conditions. These are narrow checks, not full conformance evidence.
 
 ## Reproduce
 
@@ -40,6 +41,29 @@ and reproducibility check, 82 tests (31 retention cases plus 51 existing parser,
 numeral, compact-signature and applied-index tests), three exact Lean target
 comparisons, and two coordinate proofs. The test phase took 21.526 seconds. Lean
 reported one unused-variable warning. This does not replace a full-suite run.
+
+## Binder and record follow-up
+
+A consumer audit exposed a real scope failure: freshening a function or quantifier
+binder with an ordinary textual domain did not register that binder's checked
+type. An annotated literal depending on it then failed with an unknown fresh name.
+The prototype now records every traversed binder domain and resolves the enclosing
+domains in order when a checked annotation needs their semantic scope. It restores
+the previous scope on exit. Raw syntax-only substitution remains syntactic; this
+applies to all checked domains, not a special case for Natural.
+
+Four additional tests cover lambda and quantifier freshening, capture avoidance
+when a free matrix dimension has the same spelling as a bound dimension, and
+substitution/projection through a dependent record field. The driver also includes
+existing hygienic-conversion, quantified-beta and structure regressions. The final pinned run executed 152 tests in 25.863 seconds with no test failures
+and one class-setup error: `test_quantified_beta` cannot load `choice.clean` on
+this baseline because of the already documented contextual-family comparison
+bug. All 35 retention tests and 23 hygiene tests also pass independently. Strict
+parser regeneration/check passed. Five exact native target comparisons and two
+coordinate proofs passed after the regression run. The driver deliberately
+returns exit 1 while this setup error remains; it now runs independent native
+checks before reporting the aggregate failure. The separate contextual-family
+repair is not silently applied to this study.
 
 ## Remaining requirements
 

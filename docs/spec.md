@@ -1227,3 +1227,14 @@ the saved declaration rather than reselecting. Portable serialization, a complet
 environment snapshot, joint inference and full consumer coverage remain blockers;
 production behavior is unchanged.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [retained-literal scope experiment](../studies/literal-retention/README.md#binder-and-record-follow-up)
+requires every freshened function/quantifier binder to enter the substitution
+scope with its checked domain, including ordinary textual domains. Body annotations
+and constructor actuals use that same fresh binder; an unrelated free actual must
+remain free. The isolated implementation now checks this rule through dependent
+function, quantified condition and record-field examples. Production integration
+and the wider acceptance obligations remain pending.
+:::

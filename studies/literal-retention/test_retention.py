@@ -181,6 +181,51 @@ class ExactLiteralPrototype(unittest.TestCase):
   value=Expressions(e,scope).parse('(function(k: Natural,(0: Vector(k,Complex))))(n)')
   normal=comparison_normal_form(value,e,scope)
   self.assertEqual(normal.lean,Expressions(e,scope).parse('vector zero(n)').lean)
+ def test_literal_under_freshened_lambda(self):
+  from cleanlang.hygiene import substitute
+  from cleanlang.dependent_functions import tree_names
+  e=self.load();scope=self.scope(e)
+  value=Expressions(e,scope).parse('function(k: Natural,(0: Vector(k,Complex)))')
+  changed=substitute(value.tree,{},e,scope)
+  self.assertEqual(changed[1],'clean_conversion_bound_0')
+  self.assertEqual(changed[3][6].names,frozenset({changed[1]}))
+  from cleanlang.annotations import references
+  self.assertEqual(references(Expressions(e,scope).elaborate(changed),scope),set())
+  self.assertEqual(Expressions(e,scope).elaborate(changed).lean,value.lean)
+ def test_literal_under_freshened_quantifiers(self):
+  from cleanlang.hygiene import substitute
+  e=self.load();scope=self.scope(e)
+  for quantifier in ['for every','there exists']:
+   with self.subTest(quantifier=quantifier):
+    value=Expressions(e,scope).parse(quantifier+' (k: Natural,(0: Vector(k,Complex))=(0: Vector(k,Complex)))')
+    changed=substitute(value.tree,{},e,scope)
+    self.assertEqual(Expressions(e,scope).elaborate(changed).lean,value.lean)
+ def test_literal_substitution_avoids_binder_capture(self):
+  from cleanlang.hygiene import substitute
+  from cleanlang.dependent_functions import tree_names
+  e=self.load();scope=self.scope(e)
+  value=Expressions(e,scope).parse('function(k: Natural,(0: Matrix(n,k,Complex)))')
+  caller={**scope,'k':Expr('k','k',e.type('Natural'),tree=['Local','k'])}
+  changed=substitute(value.tree,{'n':caller['k']},e,caller)
+  from cleanlang.annotations import references
+  self.assertEqual(references(Expressions(e,caller).elaborate(changed),caller),{'k'})
+  self.assertEqual([a[2] for a in changed[3][5]],[['Local','k'],['Local','clean_conversion_bound_0']])
+  result=Expressions(e,caller).elaborate(changed)
+  expected=Expressions(e,caller).parse('function(j: Natural,matrix zero(k,j))')
+  self.assertEqual(result.lean,expected.lean)
+ def test_record_field_literal_substitution(self):
+  from cleanlang.structures import declare
+  from cleanlang.hygiene import substitute
+  e=self.load();scope=self.scope(e)
+  declare('Structure SizedVector():',['Let size: Natural','Let vector: Vector(size,Complex)','Constructor: sized vector'],e)
+  value=Expressions(e,scope).parse('sized vector(n,(0: Vector(n,Complex)))')
+  changed=substitute(value.tree,{'n':scope['m']},e,scope)
+  result=Expressions(e,scope).elaborate(changed)
+  expected=Expressions(e,scope).parse('sized vector(m,vector zero(m))')
+  self.assertEqual(result.lean,expected.lean)
+  projection=Expressions(e,scope).elaborate(['Projection',changed,'vector'])
+  self.assertEqual(projection.tree[0],'BoundLiteral')
+  self.assertEqual(projection.tree[6].names,frozenset({'m'}))
  def test_changed_declared_constructor_rejects(self):
   e=self.load();e.data['functions']['vector zero']['lean']='changed target'
   with self.assertRaisesRegex(CleanError,'Changed literal'):Expressions(e,self.scope(e)).parse('(0: Vector(n,Complex))')
