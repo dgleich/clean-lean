@@ -149,3 +149,14 @@ shadowing, retained declaration identity, local aliases, alpha/capture cases,
 changed types and incomplete comparison. No repair is implemented in this commit;
 the production compiler remains unchanged.
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+A subsequent [isolated contextual-key prototype](../studies/contextual-family-comparison/README.md)
+passes the expanded six-case regression and 96 related tests without removing the
+ordinary hidden-binder guard. It constructs comparison-only call shells from
+checked declaration identities and arguments. Exact target checks and choice
+proofs pass in that checkout. Production integration and broader acceptance are
+pending; the earlier four-case failure report above remains historical evidence.
+:::

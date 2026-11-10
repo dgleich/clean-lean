@@ -1,0 +1,172 @@
+--- a/cleanlang/conversion.py
++++ b/cleanlang/conversion.py
+@@ -23,23 +23,8 @@
+     Whole-tree elaboration assigns fresh compiler binder identities in one scope.
+     The resulting template is never fed back as an authored actual argument.
+     """
+-    result=_normal_form(expression,environment,locals,fresh=_fresh)
+-    from .beta_indices import has_binder
+-    if not has_binder(result.tree):return result.lean
+-    from .binder_keys import Pool,key
+-    previous=getattr(environment,'_comparison_pool',None)
+-    pool=previous if previous is not None else Pool(environment,locals,result.tree)
+-    before=set(pool.owned)
+-    environment._comparison_pool=pool
+-    try:
+-        result=Expressions(environment,locals).elaborate(result.tree)
+-        if result.type!=expression.type:
+-            from .core import CleanError
+-            raise CleanError('Index comparison requires an unchanged determined type')
+-        return key(result.lean,pool.owned-before)
+-    finally:
+-        if previous is None:del environment._comparison_pool
+-        else:environment._comparison_pool=previous
++    from .contextual_keys import comparison_key
++    return comparison_key(expression,environment,locals,fresh=_fresh)
+ 
+ 
+ 
+--- /dev/null
++++ b/cleanlang/contextual_keys.py
+@@ -0,0 +1,60 @@
++# generated: gpt-6 2026-11-10 role=assisted; isolated prototype; see PROVENANCE.md
++"""Isolated comparison-emission experiment. Never feeds expanded arguments to calls."""
++from .core import Expressions,Type,ValueIndex,CleanError,NAT
++from .binder_keys import Pool,key
++
++def comparison_key(expression,env,locals,*,fresh=False):
++    from .conversion import _normal_form
++    from .bound_calls import identity
++    from .inferred_conversion import reify
++    pool=getattr(env,'_comparison_pool',None)
++    previous=pool
++    if pool is None:pool=Pool(env,locals,expression.tree)
++    before=set(pool.owned);env._comparison_pool=pool
++    def emit(value):
++        original=value
++        value=_normal_form(value,env,locals,fresh=True)
++        if value.type!=original.type:raise CleanError('Contextual comparison changed a type')
++        tree=value.tree;kind=tree[0]
++        if kind not in ('Call','ModuleCall','Operator','Unary'):return value.lean
++        if kind in ('Operator','Unary'):
++            if value.operator_binding is None:raise CleanError('Missing operator binding')
++            name,target,_=value.operator_binding
++        else:
++            name=tree[1]
++            if kind=='Call' and name in locals and env.is_function_type(locals[name].type):return value.lean
++            target=tree[3] if kind=='ModuleCall' else identity(env,name)
++        if target!=identity(env,name):raise CleanError('Changed comparison callable')
++        spec=env.data['functions'][name]
++        if value.checked_args is None:raise CleanError('Missing freshly checked call arguments')
++        arguments=[emit(arg) for arg in value.checked_args]
++        if 'dependent_signature' not in spec:
++            raw='('+spec['lean'].format(*(a.lean for a in value.checked_args))+')'
++            if raw!=value.lean:raise CleanError('Unchecked comparison call template')
++            return '('+spec['lean'].format(*arguments)+')'
++        signature=spec['dependent_signature'];inferred=dict(value.inferred_args);implicit=[]
++        for n,t in signature['implicit']:
++            v=inferred[n]
++            if t not in (NAT,Type('Type')):rendered=reify(v,env,locals).lean
++            elif isinstance(v,Type):rendered=env.render_type(v,'lean',locals)
++            elif isinstance(v,ValueIndex):rendered=v.lean
++            elif v in locals:rendered=locals[v].lean
++            else:rendered=v
++            implicit.append(rendered)
++        def template(args):return '(@_root_.'+signature['key']+''.join(' ('+v+')' for v in implicit+args)+')'
++        if template([a.lean for a in value.checked_args])!=value.lean:
++            raise CleanError('Unchecked dependent comparison call template')
++        return template(arguments)
++    try:
++        # Allocate binder identities over the complete original expression first.
++        from .beta_indices import has_binder
++        checked=expression if fresh and not has_binder(expression.tree) else Expressions(env,locals).elaborate(expression.tree)
++        if checked.type!=expression.type:raise CleanError('Comparison expression type changed')
++        result=emit(checked)
++        owned=pool.owned-before
++        import re
++        from .core import ID
++        return key(result,owned) if any(t in owned for t in re.findall(ID,result)) else result
++    finally:
++        if previous is None:del env._comparison_pool
++        else:env._comparison_pool=previous
+--- a/tests/test_contextual_family_comparison.py
++++ b/tests/test_contextual_family_comparison.py
+@@ -1,7 +1,7 @@
+ # generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+ """Regression: authored function aliases beneath an opaque native application.
+ 
+-The two positive equivalence assertions currently fail. Do not weaken them or
++The positive equivalence and hash assertions currently fail. Do not weaken them or
+ remove the dependent-index hidden-binder guard just to satisfy this specimen.
+ """
+ from pathlib import Path
+@@ -35,6 +35,16 @@
+     def test_outer_authored_definition_matches_explicit_function(self):
+         self.assertEqual(self.proof('sampled(a) = a'),
+                          self.proof('sample(function(z: Real,a)) = a'))
++    def test_equivalence_hashes_agree(self):
++        named=self.proof('sampled(a) = a')
++        explicit=self.proof('sample(function(z: Real,a)) = a')
++        self.assertEqual(hash(named),hash(explicit))
++    def test_sibling_expansions_keep_free_arguments(self):
++        named=self.proof('sampled(a) + sampled(b) = a')
++        explicit=self.proof('sample(function(x: Real,a)) + sample(function(y: Real,b)) = a')
++        swapped=self.proof('sample(function(x: Real,b)) + sample(function(y: Real,a)) = a')
++        self.assertEqual(named,explicit)
++        self.assertNotEqual(named,swapped)
+     def test_free_variables_stay_distinct(self):
+         self.assertNotEqual(self.proof('sampled(a) = a'),self.proof('sampled(b) = a'))
+     def test_emission_preserves_authored_calls(self):
+--- a/studies/choice/verify.py
++++ b/studies/choice/verify.py
+@@ -6,26 +6,28 @@
+ from cleanlang.core import Environment,lean,latex
+ from cleanlang.modules import load_document
+ e=Environment();rs=load_document(HERE/'Statements.clean',e)
+-f=lambda n:e.data['functions'][n]['lean'].split()[0]
++f=lambda n:e.data['functions'][n]['native_binding']
+ s=lean(rs,e,['Lean']);(HERE/'Generated.lean').write_text(s);(HERE/'Statements.tex').write_text(latex(rs,e))
+ expected=r'''
+ namespace ChoiceOracle
+-noncomputable def choose {A : Type} (condition : A → Prop) (h : ∃ x : A, condition x) : A :=
++noncomputable def choose {A : Type} (condition : A → PROPOSITION) (h : ∃ x : A, condition x) : A :=
+  Classical.choose h
+-noncomputable def satisfies {A : Type} (condition : A → Prop) (h : ∃ x : A, condition x) : condition (CHOOSE condition h) :=
++noncomputable def satisfies {A : Type} (condition : A → PROPOSITION) (h : ∃ x : A, condition x) : condition (CHOOSE condition h) :=
+  Classical.choose_spec h
+-noncomputable def element {A : Type} (S : Set A) (h : ∃ x : A, x ∈ S) : A :=
+- CHOOSE (fun x : A => x ∈ S) h
+-noncomputable def membership {A : Type} (S : Set A) (h : ∃ x : A, x ∈ S) : ELEMENT S h ∈ S :=
+- SATISFIES (fun x : A => x ∈ S) h
+-def statement : Prop := ∀ (A : Type) (S : Set A) (inhabited : ∃ x : A, x ∈ S), ELEMENT S inhabited ∈ S
+-def appliedStatement : Prop := ∀ (A : Type) (S : Set A)
+- (inhabited : ∃ x : A, (fun y : A => y ∈ S) x), ELEMENT S inhabited ∈ S
+-def universalStatement : Prop := ∀ (A : Type) (inhabited : ∃ x : A, ∀ y : A, y = x),
+- ∀ y : A, y = CHOOSE (fun x : A => ∀ z : A, z = x) inhabited
++noncomputable def element {A : Type} (S : SET A) (h : ∃ x : A, MEM x S) : A :=
++ CHOOSE (fun x : A => MEM x S) h
++noncomputable def membership {A : Type} (S : SET A) (h : ∃ x : A, MEM x S) : MEM (ELEMENT S h) S :=
++ SATISFIES (fun x : A => MEM x S) h
++def statement : Prop := ∀ (A : TYPE) (S : SET A) (inhabited : ∃ x : A, MEM x S), MEM (ELEMENT S inhabited) S
++def appliedStatement : Prop := ∀ (A : TYPE) (S : SET A)
++ (inhabited : ∃ x : A, (fun y : A => MEM y S) x), MEM (ELEMENT S inhabited) S
++def universalStatement : Prop := ∀ (A : TYPE) (inhabited : ∃ x : A, ∀ y : A, EQ y x),
++ ∀ y : A, EQ y (CHOOSE (fun x : A => ∀ z : A, EQ z x) inhabited)
+ end ChoiceOracle
+ '''
+ keys={'CHOOSE':f('choose witness'),'SATISFIES':f('chosen witness satisfies'),'ELEMENT':f('choose element'),'MEMBER':f('chosen element belongs')}
++keys.update({k:e.data['types'][n]['native_binding'] for k,n in [('TYPE','Type'),('SET','Set'),('PROPOSITION','Proposition')]})
++keys.update(MEM=f('set member'),EQ=f('equal'))
+ for key,value in keys.items():expected=re.sub(r'\b'+key+r'\b',value,expected)
+ comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_basic_targets.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))
+ pairs=[(f(n),v) for n,v in [('choose witness','choose'),('chosen witness satisfies','satisfies'),('choose element','element'),('chosen element belongs','membership')]]
+--- a/tools/check_contextual_family_targets.py
++++ b/tools/check_contextual_family_targets.py
+@@ -30,6 +30,6 @@
+ with tempfile.TemporaryDirectory(prefix='clean-contextual-targets-') as directory:
+  path=Path(directory)/'Checks.lean';path.write_text(lean([],e,['Lean'])+comparison+''.join(checks))
+  subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
+-print('Three exact emitted targets and two Lean equivalence proofs passed; Clean comparison regressions remain failing.')
++print('Three exact emitted targets and two Lean equivalence proofs passed; this driver does not check Clean comparison success.')
+ 
+ # generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -30,6 +30,6 @@ theorem outer_equivalence (a : {real}) : actualOuter a = actualExplicit a := by 
 with tempfile.TemporaryDirectory(prefix='clean-contextual-targets-') as directory:
  path=Path(directory)/'Checks.lean';path.write_text(lean([],e,['Lean'])+comparison+''.join(checks))
  subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Three exact emitted targets and two Lean equivalence proofs passed; Clean comparison regressions remain failing.')
+print('Three exact emitted targets and two Lean equivalence proofs passed; this driver does not check Clean comparison success.')
 
 # generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

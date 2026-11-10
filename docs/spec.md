@@ -1177,3 +1177,14 @@ symbolic model passes twenty tests. This is design evidence only: production
 pattern construction, declaration checking, binding and joint inference remain
 unimplemented. No existing Clean syntax or literal interpretation changes.
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [contextual family-key experiment](../studies/contextual-family-comparison/README.md)
+specifies a proposed comparison-only congruence step: validate the original checked
+call shell, retain inferred arguments, and insert child comparison templates without
+re-elaborating expanded children as dependent actuals. The ordinary hidden-binder
+guard and emitted Lean remain unchanged. This is an isolated prototype, not an
+integrated rule; full validation and consumer/resource audits remain pending.
+:::
