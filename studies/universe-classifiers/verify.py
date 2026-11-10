@@ -1,0 +1,17 @@
+# generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+"""Syntax and native feasibility only; classifier elaboration is unimplemented."""
+from pathlib import Path
+import os,subprocess,sys,tempfile
+ROOT=Path(__file__).resolve().parents[2]
+BASE='dde5d8ef4d76763b41d28c6c452f48c9129c6bdb'
+with tempfile.TemporaryDirectory(prefix='clean-classifier-syntax-') as directory:
+ target=Path(directory);sys.path.insert(0,str(ROOT/'tools'));import study_checkout
+ study_checkout.BASE_COMMIT=BASE;study_checkout.create_study_checkout(target,ROOT)
+ subprocess.run(['git','apply',str(Path(__file__).with_name('syntax.patch'))],cwd=target,check=True)
+ env={**os.environ,'PYTHONPATH':os.pathsep.join([str(target/'studies/universe-classifiers'),str(target/'tests'),str(target)])}
+ for args in [['tools/generate_parser.py'],['tools/generate_parser.py','--check'],['-m','unittest','test_syntax','test_generated_parser','test_type_expressions','-v']]:
+  subprocess.run([sys.executable,*args],cwd=target,env=env,check=True)
+ subprocess.run([os.environ.get('LAKE','lake'),'env','lean','studies/universe-classifiers/Targets.lean'],cwd=target,check=True)
+print('Classifier syntax and native feasibility passed; no Clean-to-Lean classifier elaboration is implemented.')
+
+# generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

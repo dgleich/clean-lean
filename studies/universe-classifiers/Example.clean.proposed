@@ -1,0 +1,24 @@
+-- generated: gpt-6 2026-11-10 role=assisted; proposed, not accepted by production
+Type LargeTypes():
+  Universe: 2
+  Classifies: 1
+  Means: Type 1
+  Render latex: \operatorname{{Types}}_1
+
+Condition equal large(x,y):
+  Let A: LargeTypes
+  Let x,y: A
+  Infix: =
+  From Lean: x = y
+
+-- An ordinary topology bundle has Universe: 1 but is not a classifier.
+Result topology object reflexivity:
+  Attribution: local; equality reflexivity; original
+  Let X: TopologicalSpace
+  Conclude: X = X
+
+-- Explicit classifier resolves a type value even if multiple classifiers exist.
+Define topology carrier(): LargeTypes:
+  Equals: type(TopologicalSpace : LargeTypes)
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

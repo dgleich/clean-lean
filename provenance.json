@@ -7564,6 +7564,58 @@
         "# ",
         ""
       ]
+    },
+    "studies/universe-classifiers/README.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "markdown"
+    },
+    "studies/universe-classifiers/Example.clean.proposed": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/Targets.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/syntax.patch": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "manifest"
+    },
+    "studies/universe-classifiers/test_syntax.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/verify.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

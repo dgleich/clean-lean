@@ -1,0 +1,29 @@
+--- a/grammar/clean.lark
++++ b/grammar/clean.lark
+@@ -22,6 +22,7 @@
+      | "(" expression ")" -> group
+      | "(" NUMBER ":" type_ref ")" -> numeral_annotation
+      | TYPE_VALUE "(" type_ref ")" -> type_value
++     | TYPE_VALUE "(" type_ref ":" type_ref ")" -> classified_type_value
+      | FUNCTION "(" ID ":" type_ref "," expression ")" -> function
+      | FOR EVERY "(" ID ":" type_ref "," expression ")" -> universal
+      | THERE EXISTS "(" ID ":" type_ref "," expression ")" -> existential
+@@ -90,7 +91,7 @@
+ DECL: /(?i:Notation|Define|Condition)(?!\w)/
+ LET: /(?i:Let)(?!\w)/
+ DEFINE: /(?i:Define)(?!\w)/
+-FIELD: /(?i:Numerals|Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
++FIELD: /(?i:Classifies|Numerals|Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
+ IFF: "↔"
+ IMPLIES: "→"
+ OR: /(?i:or)(?=\W)/ | "∨"
+--- a/cleanlang/syntax.py
++++ b/cleanlang/syntax.py
+@@ -115,6 +115,7 @@
+         return result
+     if kind=='group':return expression_tree(c[0])
+     if kind=='local':return ['Local',str(c[0])]
++    if kind=='classified_type_value':return ['ClassifiedTypeValue',type_spelling(c[1]),type_spelling(c[2])]
+     if kind=='type_value':return ['TypeValue',type_spelling(c[1])]
+     if kind=='numeral_annotation':
+         digits=str(c[0])

@@ -1376,3 +1376,16 @@ dependent record dimensions. These checks validate only the isolated composition
 production integration, full-suite results, stored-record semantic validation and
 the remaining universe/native-environment obligations are still pending.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [closed-universe classifier proposal](../studies/universe-classifiers/README.md)
+distinguishes the universe of an ordinary object from a declaration whose elements
+are carrier types. `Classifies: k` and `type(T : C)` have an isolated syntax prototype;
+semantic implementation is pending. The proposal specifies exact closed levels,
+explicit native correspondence, alias identity and ambiguity between classifier
+candidates. It audits the current Type-0 assumptions across inference, local types,
+dependent fields/callables, conversion and storage. Native feasibility examples
+are not translator conformance evidence. General universe polymorphism remains
+outside this proposed closed-level mechanism.
+:::

@@ -2844,6 +2844,28 @@
         "Stored-record semantic validation and native-environment contract",
         "General universe and unannotated joint inference obligations remain separate"
       ]
+    },
+    {
+      "id": "closed_universe_classifier_syntax",
+      "status": "isolated-prototype",
+      "environment": "Pinned dde5d8e syntax patch only; classifier semantics are proposed and not implemented.",
+      "source": "type(TopologicalSpace : LargeTypes)",
+      "expected_tree": [
+        "ClassifiedTypeValue",
+        "TopologicalSpace",
+        "LargeTypes"
+      ],
+      "expected_lean": "PROPOSED: native TopologicalSpace carrier term checked against the explicitly selected Classifies:1 classifier. No translation implementation or canonical target comparison exists yet.",
+      "checks": [
+        "studies/universe-classifiers/test_syntax.py: independent explicit and nested trees, old tree preservation and malformed-form rejection",
+        "studies/universe-classifiers/verify.py: strict generated parser, 45 tests and handwritten native feasibility with three proofs"
+      ],
+      "pending": [
+        "Implement classifier declaration validation and closed-level carrier binding",
+        "Audit and update all local-type, substitution, inference, comparison, literal and storage consumers",
+        "Independent canonical Clean-to-Lean targets and required negative semantic cases",
+        "Editor/browser coverage and full regression"
+      ]
     }
   ]
 }
