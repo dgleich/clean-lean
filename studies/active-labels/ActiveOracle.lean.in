@@ -1,0 +1,42 @@
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+-- Independent shapes for the specialized Clean targets; identifiers are supplied by the driver.
+namespace ActiveOracle
+noncomputable def old (I : TYPE) (n a m : NAT) (h : LE (ADD a m) n)
+ (L : LABELS I n) (v : VERTEX (ADD m (NUM (nat_lit 1)))) : SET I :=
+ AT I n L (SUBPATH n a m h v)
+noncomputable def new (I : TYPE) (n a m : NAT) (L : LABELS I n)
+ (v : VERTEX (ADD m (NUM (nat_lit 1)))) : SET (EL I (SUR I n a m L)) :=
+ AT (EL I (SUR I n a m L)) m (RESTRICT I n a m L) v
+noncomputable def forward (I : TYPE) (n a m : NAT) (h : LE (ADD a m) n)
+ (L : LABELS I n) (v : VERTEX (ADD m (NUM (nat_lit 1))))
+ (support : SUPPORT I (SUR I n a m L) (OLD I n a m h L v) (NEW I n a m L v))
+ (x : EL I (OLD I n a m h L v)) : EL (EL I (SUR I n a m L)) (NEW I n a m L v) :=
+ GFORWARD I (SUR I n a m L) (OLD I n a m h L v) (NEW I n a m L v) support x
+noncomputable def backward (I : TYPE) (n a m : NAT) (h : LE (ADD a m) n)
+ (L : LABELS I n) (v : VERTEX (ADD m (NUM (nat_lit 1))))
+ (support : SUPPORT I (SUR I n a m L) (OLD I n a m h L v) (NEW I n a m L v))
+ (y : EL (EL I (SUR I n a m L)) (NEW I n a m L v)) : EL I (OLD I n a m h L v) :=
+ GBACKWARD I (SUR I n a m L) (OLD I n a m h L v) (NEW I n a m L v) support y
+noncomputable def equivalence (I : TYPE) (n a m : NAT) (h : LE (ADD a m) n)
+ (L : LABELS I n) (v : VERTEX (ADD m (NUM (nat_lit 1))))
+ (support : SUPPORT I (SUR I n a m L) (OLD I n a m h L v) (NEW I n a m L v))
+ (left : ∀ x : EL I (OLD I n a m h L v), EQ (BACKWARD I n a m h L v support (FORWARD I n a m h L v support x)) x)
+ (right : ∀ y : EL (EL I (SUR I n a m L)) (NEW I n a m L v), EQ (FORWARD I n a m h L v support (BACKWARD I n a m h L v support y)) y) :
+ EQUIVALENCE (EL I (OLD I n a m h L v)) (EL (EL I (SUR I n a m L)) (NEW I n a m L v)) :=
+ GEQUIV I (SUR I n a m L) (OLD I n a m h L v) (NEW I n a m L v) support left right
+
+def leftStatement : Prop := ∀ (I : TYPE) (n a m : NAT) (h : LE (ADD a m) n)
+ (L : LABELS I n) (v : VERTEX (ADD m (NUM (nat_lit 1))))
+ (support : SUPPORT I (SUR I n a m L) (OLD I n a m h L v) (NEW I n a m L v))
+ (x : EL I (OLD I n a m h L v)), EQ (BACKWARD I n a m h L v support (FORWARD I n a m h L v support x)) x
+def rightStatement : Prop := ∀ (I : TYPE) (n a m : NAT) (h : LE (ADD a m) n)
+ (L : LABELS I n) (v : VERTEX (ADD m (NUM (nat_lit 1))))
+ (support : SUPPORT I (SUR I n a m L) (OLD I n a m h L v) (NEW I n a m L v))
+ (y : EL (EL I (SUR I n a m L)) (NEW I n a m L v)), EQ (FORWARD I n a m h L v support (BACKWARD I n a m h L v support y)) y
+def existsStatement : Prop := ∀ (I : TYPE) (n a m : NAT) (h : LE (ADD a m) n)
+ (L : LABELS I n) (v : VERTEX (ADD m (NUM (nat_lit 1)))),
+ ∃ e : EQUIVALENCE (EL I (OLD I n a m h L v)) (EL (EL I (SUR I n a m L)) (NEW I n a m L v)),
+ ∀ x : EL I (OLD I n a m h L v), EQ (VALUE (SUR I n a m L) (VALUE (NEW I n a m L v) (EVAL e x))) (VALUE (OLD I n a m h L v) x)
+end ActiveOracle
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

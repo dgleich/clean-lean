@@ -147,3 +147,29 @@ natural goal shapes and deriving the vertex bound made all three obligations
 close. Only the proof driver and its generated artifact changed. The compiler,
 Clean definitions and mathematical theorem assumptions remained fixed throughout.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Prepared specialized target expectations
+
+[ActiveOracle.lean.in](ActiveOracle.lean.in) independently specifies the five
+specialized definitions (old/new active sets, restriction, restoration and
+assembled equivalence) and three theorem propositions using the explicit native
+wrapper identities. Natural index arithmetic retains the declared addition and
+numeral constructors. Expected terms are not extracted from generated bodies.
+
+`LAKE=lake python3 studies/active-labels/verify_expected.py` first regenerates and
+checks the arithmetic foundation, then type-checks these prospective targets and
+proves both round trips and existence for their native definitions. All three
+preview proofs pass. The existence proof reuses the checked arithmetic theorem;
+it introduces no support assumption.
+
+This is **not** a canonical comparison with the specialized Clean output. The
+preview maps its specialized names to its own independently authored definitions,
+so it checks the consistency and mathematics of the expected side only. The
+remaining acceptance step must map those names to the corresponding generated
+Clean declarations and compare both types and bodies structurally, then run the
+proofs against the generated theorem propositions. The current full translation
+is still running and has not yet produced its complete artifact. This preview
+does not replace or restart that run.
+:::
