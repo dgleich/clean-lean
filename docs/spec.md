@@ -1322,3 +1322,14 @@ install only the supplied field and use Mathlib's product module and linear maps
 The range/kernel and onto conditions remain authored Clean definitions. This
 adds no syntax or automatic coercion; the actual Mayer–Vietoris maps remain open.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Module-map pairing and merging are explicit Mathlib adapters with different
+signatures: pairing shares a domain; merging shares a codomain and adds the two
+images. `signed pair(f,g)` is authored in Clean as pairing f with the negative
+of g. Its implicit field and module arguments come from checked map types.
+The signed-square result uses the supplied equality h ∘ f = k ∘ g to prove
+[h,k] ∘ (f,−g) = 0. It asserts composition-to-zero, not exactness. Independent
+native targets cover the adapters, authored body and theorem statement.
+:::

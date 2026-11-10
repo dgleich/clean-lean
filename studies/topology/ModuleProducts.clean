@@ -20,3 +20,17 @@ Result right projection is onto:
   Conclude: onto(right projection(field,M,N))
 
 -- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Result signed square composes to zero:
+  Attribution: products; signed pair cancellation; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let L,M,N,P: CoefficientModule(K,field)
+  Let f: ModuleMap(K,field,L,M)
+  Let g: ModuleMap(K,field,L,N)
+  Let h: ModuleMap(K,field,M,P)
+  Let k: ModuleMap(K,field,N,P)
+  Assume commutes: module composition(field,L,M,P,f,h) = module composition(field,L,N,P,g,k)
+  Conclude:
+    module composition(field,L,module product(field,M,N),P,
+      signed pair(f,g),merge module maps(field,M,N,P,h,k)) = module zero map(field,L,P)

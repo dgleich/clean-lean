@@ -672,3 +672,15 @@ extension. No new policy was silently inferred from the mathematical notation.
 Numeric operands, general algebraic structures and topology/homology interfaces
 remain outside this foundation slice. Main compiler migration is still pending.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The signed-square specimen in `studies/topology/ModuleProducts.clean` exposes a
+layout gap: `Assume commutes:` followed by an indented expression is rejected by
+the document grammar, which currently accepts `ASSUME_LINE _NL`. The same
+proposition works inline. A future assumption-block form needs explicit grammar,
+layout, comma-list and colon-label rules plus an independently expected tree and
+target. No implementation or conformance claim is made for that form here.
+The map-building operations needed for this specimen do work through ordinary
+explicit modules and authored definitions; no new mathematical keyword was needed.
+:::

@@ -2618,11 +2618,40 @@
       "expected_lean": "Declared module-product wrapper with explicit field,M,N and inferred K; native body locally installs the field and uses ModuleCat.of K (M.carrier × N.carrier). Inclusion/projection preserve this product wrapper in their types.",
       "checks": [
         "tests/test_module_products.py: independent call tree, map endpoints, wrong-middle-module and nonmodule rejection",
-        "studies/topology/verify_module_products.py: five exact native targets and two kernel-checked proofs"
+        "studies/topology/verify_module_products.py: ten exact native targets and three kernel-checked proofs including signed-square cancellation"
       ],
       "pending": [
         "Other structural maps, universal property and infinite direct sums are outside this slice",
         "Actual Mayer-Vietoris inclusion-induced maps, connecting map and exactness proof remain missing"
+      ]
+    },
+    {
+      "id": "authored_signed_module_pair",
+      "status": "implemented-slice",
+      "environment": "Explicit module_products.clean; f:L→M and g:L→N over the same supplied field.",
+      "source": "signed pair(f,g)",
+      "expected_tree": [
+        "Call",
+        "signed pair",
+        [
+          [
+            "Local",
+            "f"
+          ],
+          [
+            "Local",
+            "g"
+          ]
+        ]
+      ],
+      "expected_lean": "Authored signed-pair wrapper, with inferred K,field,L,M,N and explicit f,g. Its body calls declared pair module maps on f and declared negative module map on g.",
+      "checks": [
+        "tests/test_module_products.py: independent authored-body tree, application tree, dependent endpoints and incompatible map rejection",
+        "studies/topology/verify_module_products.py: independent paired, merged, negative and signed targets, square statement target and cancellation proof"
+      ],
+      "pending": [
+        "Induction of these maps from actual topology inclusions and Mayer-Vietoris exactness remain unproved",
+        "Indented Assume name: blocks remain unsupported; this specimen uses an inline assumption"
       ]
     }
   ]

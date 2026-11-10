@@ -1,5 +1,6 @@
 -- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
 Import "exact_sequences.clean"
+Import "graded_maps.clean"
 Import Lean Mathlib.LinearAlgebra.Prod
 
 Notation module product(field,M,N):
@@ -27,3 +28,42 @@ Notation right projection(field,M,N):
   Render latex: \pi_2
 
 -- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Notation pair module maps(field,L,M,N,f,g):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let L,M,N: CoefficientModule(K,field)
+  Let f: ModuleMap(K,field,L,M)
+  Let g: ModuleMap(K,field,L,N)
+  Returns: ModuleMap(K,field,L,(module product(field,M,N)))
+  Means: (letI : Field K := field; ModuleCat.ofHom (f.hom.prod g.hom))
+  Render latex: ({f},{g})
+
+Notation merge module maps(field,M,N,P,h,k):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N,P: CoefficientModule(K,field)
+  Let h: ModuleMap(K,field,M,P)
+  Let k: ModuleMap(K,field,N,P)
+  Returns: ModuleMap(K,field,(module product(field,M,N)),P)
+  Means: (letI : Field K := field; ModuleCat.ofHom (h.hom.coprod k.hom))
+  Render latex: [{h},{k}]
+
+Notation negative module map(field,M,N,f):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: CoefficientModule(K,field)
+  Let f: ModuleMap(K,field,M,N)
+  Returns: ModuleMap(K,field,M,N)
+  Means: (letI : Field K := field; ModuleCat.ofHom (-f.hom))
+  Render latex: -{f}
+
+Define signed pair(f,g):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let L,M,N: CoefficientModule(K,field)
+  Let f: ModuleMap(K,field,L,M)
+  Let g: ModuleMap(K,field,L,N)
+  Returns: ModuleMap(K,field,L,(module product(field,M,N)))
+  Equals: pair module maps(field,L,M,N,f,negative module map(field,L,N,g))
+  Render latex: ({f},-{g})

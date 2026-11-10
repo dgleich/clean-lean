@@ -372,6 +372,33 @@ noncomputable def cleanDefine_onto_2272460b6a00937af032 {K : Type} {field : (_ro
 noncomputable def cleanDefine_exact_sequence_ending_in_zero_df52af1d66969622d038 {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (S : _root_.cleanStructure_ModuleSequence_23f5156e3d7cd1b21f71 (K) (field)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   (_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((@_root_.cleanDefine_exact_sequence_interior_e96d5e1de470d9c05974 (K) (field) (S))) ((@_root_.cleanDefine_onto_2272460b6a00937af032 (K) (field) (((@_root_.cleanStructure_ModuleSequence_23f5156e3d7cd1b21f71.«object» (K) (field) (S)) (_root_.cleanNotation_natural_sum_884ddbcff666dc390f99 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))))) (((@_root_.cleanStructure_ModuleSequence_23f5156e3d7cd1b21f71.«object» (K) (field) (S)) (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0)))) (((@_root_.cleanStructure_ModuleSequence_23f5156e3d7cd1b21f71.«arrow» (K) (field) (S)) (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0)))))))
 
+structure cleanStructure_GradedModule_4e52f71cb062f2010cae («K» : Type) («field» : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf («K»))) : Type 1 where
+  «component» : ((_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_CoefficientModule_79514ce65e42b4219878 («K») («field»)))
+
+noncomputable def cleanConstructor_graded_module_f18663848933026544e1 («K» : Type) («field» : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf («K»))) («component» : ((_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_CoefficientModule_79514ce65e42b4219878 («K») («field»)))) : _root_.cleanStructure_GradedModule_4e52f71cb062f2010cae («K») («field») :=
+  @_root_.cleanStructure_GradedModule_4e52f71cb062f2010cae.mk «K» «field» «component»
+
+noncomputable def cleanDefine_component_module_62544f8701c4206d87f6 {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (M : _root_.cleanStructure_GradedModule_4e52f71cb062f2010cae (K) (field)) (p : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field)) :=
+  ((@_root_.cleanStructure_GradedModule_4e52f71cb062f2010cae.«component» (K) (field) (M)) p)
+
+structure cleanStructure_GradedMap_cef77a5beb9385857123 («K» : Type) («field» : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf («K»))) («M» : _root_.cleanStructure_GradedModule_4e52f71cb062f2010cae («K») («field»)) («N» : _root_.cleanStructure_GradedModule_4e52f71cb062f2010cae («K») («field»)) : Type where
+  «component» : (clean_pi_bound_1 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 («K») («field») (((@_root_.cleanStructure_GradedModule_4e52f71cb062f2010cae.«component» («K») («field») («M»)) clean_pi_bound_1)) (((@_root_.cleanStructure_GradedModule_4e52f71cb062f2010cae.«component» («K») («field») («N»)) clean_pi_bound_1))))
+
+noncomputable def cleanConstructor_graded_map_2dd61dc3853227ee1295 («K» : Type) («field» : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf («K»))) («M» : _root_.cleanStructure_GradedModule_4e52f71cb062f2010cae («K») («field»)) («N» : _root_.cleanStructure_GradedModule_4e52f71cb062f2010cae («K») («field»)) («component» : (clean_pi_bound_1 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 («K») («field») (((@_root_.cleanStructure_GradedModule_4e52f71cb062f2010cae.«component» («K») («field») («M»)) clean_pi_bound_1)) (((@_root_.cleanStructure_GradedModule_4e52f71cb062f2010cae.«component» («K») («field») («N»)) clean_pi_bound_1))))) : _root_.cleanStructure_GradedMap_cef77a5beb9385857123 («K») («field») («M») («N») :=
+  @_root_.cleanStructure_GradedMap_cef77a5beb9385857123.mk «K» «field» «M» «N» «component»
+
+noncomputable def cleanNotation_module_identity_db2143c0391459c1a649 {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (M : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (M) (M)) :=
+  @CategoryTheory.CategoryStruct.id (@ModuleCat.{0,0} K field.toRing) (@ModuleCat.moduleCategory.{0,0} K field.toRing).toCategoryStruct M
+
+noncomputable def cleanNotation_module_composition_540bbd166f48e5aeba29 {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (M : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (N : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (P : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (f : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (M) (N))) (g : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (N) (P))) : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (M) (P)) :=
+  @CategoryTheory.CategoryStruct.comp (@ModuleCat.{0,0} K field.toRing) (@ModuleCat.moduleCategory.{0,0} K field.toRing).toCategoryStruct M N P f g
+
+noncomputable def cleanDefine_graded_identity_f0a140a8a2156b23d4cc {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (M : _root_.cleanStructure_GradedModule_4e52f71cb062f2010cae (K) (field)) : _root_.cleanStructure_GradedMap_cef77a5beb9385857123 (K) (field) (M) (M) :=
+  (@_root_.cleanConstructor_graded_map_2dd61dc3853227ee1295 (K) (field) (M) (M) ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_module_identity_db2143c0391459c1a649 (K) (field) (((@_root_.cleanStructure_GradedModule_4e52f71cb062f2010cae.«component» (K) (field) (M)) clean_bound_0))))))
+
+noncomputable def cleanDefine_graded_composition_6a5c5dcfd639c948aaf7 {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (M : _root_.cleanStructure_GradedModule_4e52f71cb062f2010cae (K) (field)) (N : _root_.cleanStructure_GradedModule_4e52f71cb062f2010cae (K) (field)) (P : _root_.cleanStructure_GradedModule_4e52f71cb062f2010cae (K) (field)) (f : _root_.cleanStructure_GradedMap_cef77a5beb9385857123 (K) (field) (M) (N)) (g : _root_.cleanStructure_GradedMap_cef77a5beb9385857123 (K) (field) (N) (P)) : _root_.cleanStructure_GradedMap_cef77a5beb9385857123 (K) (field) (M) (P) :=
+  (@_root_.cleanConstructor_graded_map_2dd61dc3853227ee1295 (K) (field) (M) (P) ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_module_composition_540bbd166f48e5aeba29 (K) (field) (((@_root_.cleanStructure_GradedModule_4e52f71cb062f2010cae.«component» (K) (field) (M)) clean_bound_0)) (((@_root_.cleanStructure_GradedModule_4e52f71cb062f2010cae.«component» (K) (field) (N)) clean_bound_0)) (((@_root_.cleanStructure_GradedModule_4e52f71cb062f2010cae.«component» (K) (field) (P)) clean_bound_0)) (((@_root_.cleanStructure_GradedMap_cef77a5beb9385857123.«component» (K) (field) (M) (N) (f)) clean_bound_0)) (((@_root_.cleanStructure_GradedMap_cef77a5beb9385857123.«component» (K) (field) (N) (P) (g)) clean_bound_0))))))
+
 noncomputable def cleanNotation_module_product_2b8332ad177f6804ae52 {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (M : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (N : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field)) :=
   (letI : Field K := field; ModuleCat.of K (M.carrier × N.carrier))
 
@@ -380,6 +407,18 @@ noncomputable def cleanNotation_left_inclusion_1c1de41245abb50ac7ae {K : Type} (
 
 noncomputable def cleanNotation_right_projection_f807ba35ded39db28e3c {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (M : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (N : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) ((@_root_.cleanNotation_module_product_2b8332ad177f6804ae52 (K) (field) (M) (N))) (N)) :=
   (letI : Field K := field; ModuleCat.ofHom (LinearMap.snd K M.carrier N.carrier))
+
+noncomputable def cleanNotation_pair_module_maps_03ec468cb25325a7fe1c {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (L : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (M : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (N : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (f : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (L) (M))) (g : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (L) (N))) : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (L) ((@_root_.cleanNotation_module_product_2b8332ad177f6804ae52 (K) (field) (M) (N)))) :=
+  (letI : Field K := field; ModuleCat.ofHom (f.hom.prod g.hom))
+
+noncomputable def cleanNotation_merge_module_maps_55f201a50aea52cac405 {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (M : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (N : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (P : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (h : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (M) (P))) (k : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (N) (P))) : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) ((@_root_.cleanNotation_module_product_2b8332ad177f6804ae52 (K) (field) (M) (N))) (P)) :=
+  (letI : Field K := field; ModuleCat.ofHom (h.hom.coprod k.hom))
+
+noncomputable def cleanNotation_negative_module_map_021d40d10b0a413f0594 {K : Type} (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))) (M : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (N : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))) (f : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (M) (N))) : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (M) (N)) :=
+  (letI : Field K := field; ModuleCat.ofHom (-f.hom))
+
+noncomputable def cleanDefine_signed_pair_f1a4fb6858ee12ea1aed {K : Type} {field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))} {L : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))} {M : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))} {N : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))} (f : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (L) (M))) (g : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (L) (N))) : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (L) ((@_root_.cleanNotation_module_product_2b8332ad177f6804ae52 (K) (field) (M) (N)))) :=
+  (@_root_.cleanNotation_pair_module_maps_03ec468cb25325a7fe1c (K) (field) (L) (M) (N) (f) ((@_root_.cleanNotation_negative_module_map_021d40d10b0a413f0594 (K) (field) (L) (N) (g))))
 
 
 open scoped Matrix
@@ -410,6 +449,22 @@ def right_projection_is_onto : Prop :=
   ∀ (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))),
   ∀ (M N : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))),
   (@_root_.cleanDefine_onto_2272460b6a00937af032 (K) (field) ((@_root_.cleanNotation_module_product_2b8332ad177f6804ae52 (K) (field) (M) (N))) (N) ((@_root_.cleanNotation_right_projection_f807ba35ded39db28e3c (K) (field) (M) (N))))
+
+/--
+source: products
+reference: signed pair cancellation
+relationship: original
+-/
+def signed_square_composes_to_zero : Prop :=
+  ∀ (K : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))),
+  ∀ (L M N P : (_root_.cleanType_CoefficientModule_79514ce65e42b4219878 (K) (field))),
+  ∀ (f : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (L) (M))),
+  ∀ (g : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (L) (N))),
+  ∀ (h : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (M) (P))),
+  ∀ (k : (_root_.cleanType_ModuleMap_9bf239ee5af2145b9b57 (K) (field) (N) (P))),
+  ∀ («commutes» : (_root_.cleanDefine_equal_59dc0f11ba9b345348cf ((@_root_.cleanNotation_module_composition_540bbd166f48e5aeba29 (K) (field) (L) (M) (P) (f) (h))) ((@_root_.cleanNotation_module_composition_540bbd166f48e5aeba29 (K) (field) (L) (N) (P) (g) (k))))),
+  (_root_.cleanDefine_equal_59dc0f11ba9b345348cf ((@_root_.cleanNotation_module_composition_540bbd166f48e5aeba29 (K) (field) (L) ((@_root_.cleanNotation_module_product_2b8332ad177f6804ae52 (K) (field) (M) (N))) (P) ((@_root_.cleanDefine_signed_pair_f1a4fb6858ee12ea1aed (K) (field) (L) (M) (N) (f) (g))) ((@_root_.cleanNotation_merge_module_maps_55f201a50aea52cac405 (K) (field) (M) (N) (P) (h) (k))))) ((@_root_.cleanNotation_module_zero_map_77b77786d34ab8aa0534 (K) (field) (L) (P))))
 
 end CleanStatements
 
