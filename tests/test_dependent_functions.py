@@ -134,7 +134,7 @@ Source tests:
   Title: Dependent assumption naming
 Condition preserves family(f: Function(Function(n: Natural,Vector(n,Real)),Function(n: Natural,Vector(n,Real)))):
   Holds when: 0 = 0
-'''.replace('COMMON',str(ROOT/'library/types.clean'))
+'''.replace('COMMON',str(ROOT/'library/operators.clean'))
     RESULT='''Result example:
   Attribution: tests; naming; original
   Assume ASSUMPTIONS

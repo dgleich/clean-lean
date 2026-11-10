@@ -29,6 +29,7 @@ class FunctionExpressions(unittest.TestCase):
         self.assertIn('(clean_bound_0 clean_bound_1)',e.lean)
 
     def test_sibling_scope_and_deterministic_freshness(self):
+        load_module(ROOT/'library/operators.clean',self.env)
         local={'clean_bound_0':Expr('clean_bound_0','z',Type('Real'))}
         e=self.parse('FUNCTION(x: Real, x + clean_bound_0)',local)
         real=self.env.data['types']['Real']['native_binding']

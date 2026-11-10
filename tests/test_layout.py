@@ -197,7 +197,7 @@ class LayoutTests(unittest.TestCase):
     def test_module_widths_continued_signature_and_opaque_render(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            (root / 'vocabulary.clean').write_text(f'''Import "{ROOT / 'library/types.clean'}"
+            (root / 'vocabulary.clean').write_text(f'''Import "{ROOT / 'library/operators.clean'}"
 Import "{ROOT / 'library/sources.clean'}"
 Notation identity(x):
    Let x: Vector(

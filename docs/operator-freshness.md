@@ -45,3 +45,37 @@ new freshness cases were added and the four existing freshness cases now run
 successfully with their explicit operator import. The suite as a whole still
 fails; these counts are not a full conformance claim.
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Additional explicit-fixture migration
+
+The dependent-assumption, postfix-application, compact-signature and module-layout
+fixtures now import their operator declarations explicitly. The sibling-lambda
+scope test imports operators locally, preserving the separate types-only tests
+that intentionally reject undeclared mathematics. No expected names, source trees,
+collision checks, dependent types or negative assertions were weakened.
+
+A focused run of `test_dependent_functions`, `test_postfix_applications`,
+`test_function_expressions`, `test_compact_signatures` and `test_layout` passes
+69 tests in 3.754 seconds. These are fixture changes only. The longer regression
+started before this migration and is still live; its earlier failures remain
+part of that run's evidence.
+
+Two investigated failures are not resolved by importing operators:
+
+- The projected-condition naming fixture concludes `P = P` for a universe-1
+  InterlevelProblem. The declared general equality has a Type-0 parameter, so it
+  cannot instantiate that carrier. General universe support remains a language
+  gap; no weaker conclusion or ad hoc test-only equality was substituted.
+- Loading `library/logic/choice.clean` fails at `chosen element belongs`. Its
+  produced evidence index contains an applied lambda around `choose witness`,
+  while the declared index uses the Clean-authored `choose element`. Conversion
+  rejects their expected correspondence. The quantified-beta tests cannot run
+  until that conversion problem is resolved. A fresh isolated reproduction
+  confirms the failure; it is not counted as obsolete test expectations.
+
+These findings distinguish explicit-import debt from remaining semantic work.
+They do not establish correctness of all dependent-function or universe cases.
+:::

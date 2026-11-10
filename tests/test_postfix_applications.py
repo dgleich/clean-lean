@@ -28,6 +28,7 @@ class PostfixApplications(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.e=Environment();load_module(ROOT/'library/logic/evidence.clean',cls.e)
+        load_module(ROOT/'library/operators.clean',cls.e)
     def locals(self,items):
         result={}
         for n,t in items:result[n]=Expr(n,n,self.e.type(t,result),tree=['Local',n])

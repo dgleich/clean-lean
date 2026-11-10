@@ -5,7 +5,7 @@ from cleanlang.core import Environment, CleanError, lean
 from cleanlang.modules import load_module, signature_fields
 
 ROOT=Path(__file__).resolve().parents[1]
-IMPORT=f'Import "{ROOT}/library/types.clean"\n'
+IMPORT=f'Import "{ROOT}/library/operators.clean"\n'
 
 class CompactSignatureTests(unittest.TestCase):
     def load(self,source):
