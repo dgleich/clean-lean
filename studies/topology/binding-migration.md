@@ -413,3 +413,27 @@ coverage is not an all-verifier rerun on the latest compiler. The two-image
 candidate remains unproved. The generated parser also matches the grammar under
 strict LALR and lexer checks; no grammar change was made in this checkpoint.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Extreme images now passes 28 canonical targets, four new proofs and twenty-six
+supporting proofs. Expected terms retain declared equality, logical/set/order
+operations, real negation and the real numeral constructor. Two linear-arithmetic
+steps explicitly expose the order wrappers and use `Nat.cast_zero`; the structural
+target comparisons are unchanged. The extreme-image and candidate specimens each
+compiled twice without box or unresolved-reference warnings; both pages were
+visually inspected.
+
+All eighteen verifiers have now been migrated and passed at their recorded
+checkpoints: 483 summed per-verifier target checks and 89 proofs, excluding
+repeated supporting-proof runs from that proof count. Shared adapter checks are
+counted separately by each verifier. This is cumulative migration evidence, not
+an all-eighteen rerun on one final compiler revision. The broader regression
+remains active and full conformance is not established.
+
+The two-image candidate is checked as a proposition definition, not a theorem or
+axiom. Its reverse inclusion and the closed-cover/singular-homology applicability
+audit remain open. The four new proofs establish intersection membership,
+existence of extreme certificates, independence of certificate choice and forward
+containment only. Other previously documented paper-theorem gaps remain open.
+:::

@@ -205,3 +205,27 @@ A separately diagnosed library conflict remains: the logical `equivalence`
 declaration collides with the existing type-equivalence constructor in
 `library/logic/equivalences.clean`; this needs an explicit naming correction.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The equivalence naming conflict has been tested in an isolated copy of the
+current compiler/library. Changing only the standard operator declaration header
+from `Condition equivalence(x,y)` to `Condition logical equivalence(x,y)` allows
+all fourteen tests in `test_equivalence_operations` and `test_basis_reindexing`
+to pass. Generated Lean containing both modules also compiles with the pinned
+Mathlib environment. The mathematical `equivalence(A,B,f,g,left,right)` constructor
+is preserved. This evidence supports a library naming correction, not new
+callable-name overloading. The working library has not yet been renamed, to keep
+the active topology/full-regression runs on a consistent environment.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Extreme-image validation now passes 28 canonical targets, four new proofs and
+twenty-six supporting proofs. All eighteen topology verifiers have cumulatively
+passed after migration; they have not all been rerun against one final compiler
+revision. The two-image equality remains an unproved proposition. The broader
+regression and complete conformance remain unfinished. The isolated equivalence
+rename also passes a direct coexistence test in both import orders, in addition
+to the fourteen module tests and native module compilation reported above.
+:::

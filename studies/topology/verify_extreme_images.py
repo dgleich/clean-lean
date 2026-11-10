@@ -19,6 +19,9 @@ mapping={'ExtremeOracle.Extreme':env.structures['ExtremePerturbations']['key']}
 for oracle,name in [('intersection','intersection of module subspaces'),('included','module subspace included'),
  ('scalars','scalar coefficient module'),('scalarTheory','scalar homology'),('compact','compact space'),('extreme','extreme perturbations'),('image','extreme pair image')]:
     mapping['ExtremeOracle.'+oracle]=function(name)
+for oracle,name in [('equal','equal'),('conjoin','conjunction'),('disjoin','disjunction'),('subset','set subset'),('negative','real negative'),('atMost','real at most'),('atLeast','real at least'),('less','real less'),('equivalent','equivalence')]:
+    mapping['ExtremeOracle.'+oracle]=function(name)
+mapping['ExtremeOracle.numeral']=env.data['types']['Real']['numerals']['native_binding']
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
 open Lean Elab Command
@@ -62,10 +65,29 @@ elab "same_target " a:ident b:ident : command => do
 '''
 expected=r'''
 namespace ExtremeOracle
+noncomputable def equal {T : Type} (x y : T) : CONDITIONTYPE := x=y
+noncomputable def conjoin (x y : CONDITIONTYPE) : CONDITIONTYPE := x ∧ y
+noncomputable def disjoin (x y : CONDITIONTYPE) : CONDITIONTYPE := x ∨ y
+noncomputable def subset {T : Type} (A B : SETTYPE T) : CONDITIONTYPE := A ⊆ B
+noncomputable def negative (x : REALTYPE) : REALTYPE := -x
+noncomputable def atMost (x y : REALTYPE) : CONDITIONTYPE := x ≤ y
+noncomputable def atLeast (x y : REALTYPE) : CONDITIONTYPE := x ≥ y
+noncomputable def less (x y : REALTYPE) : CONDITIONTYPE := x < y
+noncomputable def equivalent (x y : CONDITIONTYPE) : CONDITIONTYPE := x ↔ y
+noncomputable def numeral (digits : Nat) : REALTYPE := (fun n : Nat => (n : Real)) digits
+local infix:50 " =ₑ " => equal
+local infixr:35 " ∧ₑ " => conjoin
+local infixr:30 " ∨ₑ " => disjoin
+local infix:50 " ⊆ₑ " => subset
+local prefix:75 "-ₑ" => negative
+local infix:50 " ≤ₑ " => atMost
+local infix:50 " ≥ₑ " => atLeast
+local infix:50 " <ₑ " => less
+local infix:20 " ↔ₑ " => equivalent
 noncomputable def intersection {K : Type} (field : FIELDTYPE K) (M : MODULE) (U V : SUB_M) : SUB_M :=
-  @INF K field M (@SETOF SUB_M (fun W => W=U ∨ W=V))
+  @INF K field M (@SETOF SUB_M (fun W => W=ₑU ∨ₑ W=ₑV))
 noncomputable def included {K : Type} (field : FIELDTYPE K) (M : MODULE) (U V : SUB_M) : CONDITIONTYPE :=
-  @CARRIER K field M U ⊆ @CARRIER K field M V
+  @CARRIER K field M U ⊆ₑ @CARRIER K field M V
 noncomputable def scalars {K : Type} (field : FIELDTYPE K) : MODULE :=
   letI : Field K := field
   ModuleCat.of K K
@@ -76,27 +98,27 @@ structure Extreme (K : Type) (field : FIELDTYPE K) (H : THEORY K field) (P : PRO
   (nesting : NESTING) where
   top : CERTIFIED K field H P r nesting
   bottom : CERTIFIED K field H P r nesting
-  topShift : top.data.map = @SHIFT P r
-  bottomShift : bottom.data.map = @SHIFT P (-r)
+  topShift : top.data.map =ₑ @SHIFT P r
+  bottomShift : bottom.data.map =ₑ @SHIFT P (-ₑr)
 noncomputable def extreme (K : Type) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (top bottom : CERTIFIED K field H P r nesting)
-  (topShift : top.data.map = @SHIFT P r) (bottomShift : bottom.data.map = @SHIFT P (-r)) : Extreme K field H P r nesting :=
+  (topShift : top.data.map =ₑ @SHIFT P r) (bottomShift : bottom.data.map =ₑ @SHIFT P (-ₑr)) : Extreme K field H P r nesting :=
   @Extreme.mk K field H P r nesting top bottom topShift bottomShift
 noncomputable def image {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (E : Extreme K field H P r nesting) : SUB_TARGET :=
   @intersection K field TARGET_MODULE
     (@SHIFTIMAGE K field H P r nesting r E.top E.topShift)
-    (@SHIFTIMAGE K field H P r nesting (-r) E.bottom E.bottomShift)
+    (@SHIFTIMAGE K field H P r nesting (-ₑr) E.bottom E.bottomShift)
 def membershipStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (M : MODULE) (U V : SUB_M)
   (x : ELEMENTTYPE K field M),
-  @BELONGS K field M x (@intersection K field M U V) ↔
-    (@BELONGS K field M x U ∧ @BELONGS K field M x V)
+  @BELONGS K field M x (@intersection K field M U V) ↔ₑ
+    (@BELONGS K field M x U ∧ₑ @BELONGS K field M x V)
 def existenceStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE),
-  P.interval.lower ≤ P.interval.upper → r ≥ 0 → ∀ (nesting : NESTING),
-  ∃ E : Extreme K field H P r nesting, E.top.data.map = @SHIFT P r ∧ E.bottom.data.map = @SHIFT P (-r)
+  P.interval.lower ≤ₑ P.interval.upper → r ≥ₑ numeral (nat_lit 0) → ∀ (nesting : NESTING),
+  ∃ E : Extreme K field H P r nesting, E.top.data.map =ₑ @SHIFT P r ∧ₑ E.bottom.data.map =ₑ @SHIFT P (-ₑr)
 def independenceStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (E F : Extreme K field H P r nesting),
-  @image K field H P r nesting E = @image K field H P r nesting F
+  @image K field H P r nesting E =ₑ @image K field H P r nesting F
 def containmentStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (E : Extreme K field H P r nesting),
   @included K field TARGET_MODULE (@WELL K field H P r nesting) (@image K field H P r nesting E)
@@ -104,9 +126,9 @@ def containmentStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (
 def candidateStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (p : NATURALTYPE),
   let H : THEORY K field := @scalarTheory K field p
   ∀ (P : PROBLEM) (r : REALTYPE),
-  @compact P.space → P.interval.lower < P.interval.upper → r ≥ 0 → ∀ (nesting : NESTING)
+  @compact P.space → P.interval.lower <ₑ P.interval.upper → r ≥ₑ numeral (nat_lit 0) → ∀ (nesting : NESTING)
   (E : Extreme K field H P r nesting),
-  @WELL K field H P r nesting = @image K field H P r nesting E
+  @WELL K field H P r nesting =ₑ @image K field H P r nesting E
 end ExtremeOracle
 '''
 sub=lambda m:f'(SUBSPACETYPE K field {m})'
@@ -120,7 +142,7 @@ for key,name in [('INF','module subspace infimum'),('SETOF','set of'),('CARRIER'
  ('SHIFT','shifted perturbation'),('SHIFTIMAGE','shifted pair image'),('BELONGS','belongs to module subspace'),
  ('WELL','relative well group'),('RELHOMOLOGY','relative homology'),('TARGET','perturbation target'),
  ('NESTED','nested pair'),('EXPANDED','expanded pair'),('THEORYCTOR','homology theory')]:subs[key]=function(name)
-for placeholder,name in [('FIELDTYPE','FieldStructure'),('NATURALTYPE','Natural'),('REALTYPE','Real'),
+for placeholder,name in [('SETTYPE','Set'),('FIELDTYPE','FieldStructure'),('NATURALTYPE','Natural'),('REALTYPE','Real'),
  ('SPACETYPE','TopologicalSpace'),('CARRIERTYPE','Type'),('ELEMENTTYPE','ModuleElement'),
  ('CONDITIONTYPE','Proposition'),('SUBSPACETYPE','ModuleSubspace'),('MODULETYPE','CoefficientModule')]:
     subs[placeholder]='_root_.'+env.data['types'][name]['native_binding']
@@ -152,8 +174,10 @@ theorem binary_module_intersection_membership : CleanStatements.binary_module_in
     · exact hV
 theorem extreme_perturbations_have_certificates : CleanStatements.extreme_perturbations_have_certificates := by
   intro K field H P r order radius nesting
-  obtain ⟨top,ht⟩ := ShiftProofs.shifted_perturbations_have_certificates K field H P r r order radius (by linarith) le_rfl nesting
-  obtain ⟨bottom,hb⟩ := ShiftProofs.shifted_perturbations_have_certificates K field H P (-r) r order radius le_rfl (by linarith) nesting
+  have nonnegative : 0 ≤ r := by
+    simpa only [ATLEAST, NUMERAL, Nat.cast_zero] using radius
+  obtain ⟨top,ht⟩ := ShiftProofs.shifted_perturbations_have_certificates K field H P r r order radius (by change -r ≤ r; linarith) le_rfl nesting
+  obtain ⟨bottom,hb⟩ := ShiftProofs.shifted_perturbations_have_certificates K field H P (-r) r order radius le_rfl (by change -r ≤ r; linarith) nesting
   exact ⟨⟨top,bottom,ht,hb⟩,ht,hb⟩
 theorem extreme_image_certificate_independence : CleanStatements.extreme_image_certificate_independence := by
   intro K field H P r nesting E F
@@ -169,6 +193,7 @@ theorem well_group_lies_in_both_extreme_images : CleanStatements.well_group_lies
     ShiftProofs.well_group_lies_in_every_shifted_image K field H P (-r) r nesting E.bottom E.bottomShift x member⟩
 end ExtremeProofs
 '''
+proofs=proofs.replace('ATLEAST',function('real at least')).replace('NUMERAL',env.data['types']['Real']['numerals']['native_binding'])
 proofs=proofs.replace('INTERSECT',function('intersection of module subspaces')).replace('TARGET_MODULE',target)
 for key in sorted(subs,key=len,reverse=True):proofs=proofs.replace(key,subs[key])
 path=here/'ExtremeImagesVerified.lean'
