@@ -2686,6 +2686,49 @@
         "Editor/browser block-header verification",
         "Unnamed assumption blocks and block lists are not specified by this change"
       ]
+    },
+    {
+      "id": "inclusion_induced_mayer_vietoris_maps",
+      "status": "implemented-slice",
+      "environment": "Explicit topology/mayer_vietoris_maps.clean; actual Mathlib singular homology at the chosen degree and coefficient module.",
+      "source": "intersection homology map(field,H,X,U,V)",
+      "expected_tree": [
+        "Call",
+        "intersection homology map",
+        [
+          [
+            "Local",
+            "field"
+          ],
+          [
+            "Local",
+            "H"
+          ],
+          [
+            "Local",
+            "X"
+          ],
+          [
+            "Local",
+            "U"
+          ],
+          [
+            "Local",
+            "V"
+          ]
+        ]
+      ],
+      "expected_lean": "Authored signed pair of inclusion-induced maps from intersection homology to each subset; explicit containment witnesses and declared module product. Union map merges actual induced maps; the composite theorem concludes zero without an assumed commuting square.",
+      "checks": [
+        "tests/test_mayer_vietoris_maps.py: independent authored-body tree, dependent endpoints, incorrect-evidence and reversed-composition rejection",
+        "studies/topology/verify_mayer_vietoris_maps.py: nine independent exact native targets and a proof via singular-homology functoriality",
+        "studies/topology/MayerVietorisMaps.pdf: generated statement and explicit scope limitation"
+      ],
+      "pending": [
+        "Degree-lowering connecting map and long-sequence assembly",
+        "Excision/cover hypotheses and exactness proof",
+        "Explicit union-to-ambient identification when stating the target as homology of X"
+      ]
     }
   ]
 }

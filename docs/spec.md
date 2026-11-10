@@ -1345,3 +1345,15 @@ The pinned prototype regenerates the strict parser and checks independent trees
 and a native target. Production integration remains pending. The study documents
 layout, header diagnostic locations, uniqueness and the exact desugaring rule.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [inclusion-induced topology maps](../studies/topology/mayer-vietoris-maps.md)
+are authored in `mayer_vietoris_maps.clean` using existing subset, continuous-map,
+homology and module-product interfaces. The target is homology of the union,
+not implicitly the ambient space. The checked statement asserts composition of
+the signed intersection map with the union map is zero for arbitrary subsets.
+It does not assert exactness, a connecting map, or excision without hypotheses.
+The four new native primitives provide explicit set-containment evidence;
+all four mathematical map/module constructions are Clean definitions.
+:::

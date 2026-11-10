@@ -1,0 +1,84 @@
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+Import "homology.clean"
+Import "pairs.clean"
+Import "../algebra/module_products.clean"
+
+Notation intersection into left(U,V):
+  Let T: Type
+  Let U,V: Set(T)
+  Returns: Evidence(((U ∩ V) ⊆ U))
+  Means: Set.inter_subset_left
+  Render latex: \operatorname{{interLeft}}({U},{V})
+
+Notation intersection into right(U,V):
+  Let T: Type
+  Let U,V: Set(T)
+  Returns: Evidence(((U ∩ V) ⊆ V))
+  Means: Set.inter_subset_right
+  Render latex: \operatorname{{interRight}}({U},{V})
+
+Notation left into union(U,V):
+  Let T: Type
+  Let U,V: Set(T)
+  Returns: Evidence((U ⊆ (U ∪ V)))
+  Means: Set.subset_union_left
+  Render latex: \operatorname{{unionLeft}}({U},{V})
+
+Notation right into union(U,V):
+  Let T: Type
+  Let U,V: Set(T)
+  Returns: Evidence((V ⊆ (U ∪ V)))
+  Means: Set.subset_union_right
+  Render latex: \operatorname{{unionRight}}({U},{V})
+
+Define subset homology(field,H,X,S):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let S: Set(Point(X))
+  Returns: CoefficientModule(K,field)
+  Equals: homology module(field,H,subspace(X,S))
+  Render latex: {H}({S})
+
+Define inclusion homology(field,H,X,S,T,h):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let S,T: Set(Point(X))
+  Let h: Evidence((S ⊆ T))
+  Returns: ModuleMap(K,field,(subset homology(field,H,X,S)),(subset homology(field,H,X,T)))
+  Equals: homology linear map(field,H,subspace(X,S),subspace(X,T),subspace inclusion(X,S,T,h))
+  Render latex: (\iota_{{{S},{T}}})_*
+
+Define intersection homology map(field,H,X,U,V):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let U,V: Set(Point(X))
+  Returns: ModuleMap(K,field,(subset homology(field,H,X,(U ∩ V))),
+    (module product(field,subset homology(field,H,X,U),subset homology(field,H,X,V))))
+  Equals:
+    signed pair(inclusion homology(field,H,X,U ∩ V,U,intersection into left(U,V)),
+      inclusion homology(field,H,X,U ∩ V,V,intersection into right(U,V)))
+  Render latex: \alpha_{{{U},{V}}}
+
+Define union homology map(field,H,X,U,V):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let U,V: Set(Point(X))
+  Returns: ModuleMap(K,field,
+    (module product(field,subset homology(field,H,X,U),subset homology(field,H,X,V))),
+    (subset homology(field,H,X,(U ∪ V))))
+  Equals:
+    merge module maps(field,subset homology(field,H,X,U),subset homology(field,H,X,V),
+      subset homology(field,H,X,U ∪ V),
+      inclusion homology(field,H,X,U,U ∪ V,left into union(U,V)),
+      inclusion homology(field,H,X,V,U ∪ V,right into union(U,V)))
+  Render latex: \beta_{{{U},{V}}}
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

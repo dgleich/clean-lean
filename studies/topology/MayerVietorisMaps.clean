@@ -1,0 +1,22 @@
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+Import "../../library/topology/mayer_vietoris_maps.clean"
+Source construction:
+  Kind: other
+  Label: Singular homology inclusion maps
+  Title: Signed intersection and union maps
+
+Result intersection then union vanishes:
+  Attribution: construction; functoriality and signed cancellation; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let U,V: Set(Point(X))
+  Conclude:
+    module composition(field,subset homology(field,H,X,U ∩ V),
+      module product(field,subset homology(field,H,X,U),subset homology(field,H,X,V)),
+      subset homology(field,H,X,U ∪ V),
+      intersection homology map(field,H,X,U,V),union homology map(field,H,X,U,V)) =
+      module zero map(field,subset homology(field,H,X,U ∩ V),subset homology(field,H,X,U ∪ V))
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -417,3 +417,10 @@ adds the middle module needed for binary sums, with checked inclusion/projection
 maps and supporting exactness/surjectivity proofs. These are reusable foundations;
 the actual Mayer–Vietoris construction remains incomplete.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [inclusion-induced map study](mayer-vietoris-maps.md) now constructs the two
+maps through H(U) ⊕ H(V) from actual continuous subset inclusions, and proves their
+composite is zero. The connecting map and exactness remain open.
+:::
