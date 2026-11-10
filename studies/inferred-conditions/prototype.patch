@@ -1,0 +1,290 @@
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -434,7 +434,7 @@
+                 pattern=callable_view(pattern,self) or pattern
+                 actual=callable_view(actual,self) or actual
+             from .indices import DimensionIndex
+-            from .dependent_functions import DependentFunctionType,substitute,fresh_source,fresh_bound
++            from .dependent_functions import DependentFunctionType,substitute,fresh_source,fresh_bound,direct_index_name
+             if isinstance(pattern,DependentFunctionType) or isinstance(actual,DependentFunctionType) and self.is_function_type(pattern):
+                 if not self.is_function_type(pattern) or not self.is_function_type(actual):
+                     raise SignatureMismatch('Dependent function type mismatch',mismatch_owner)
+@@ -464,10 +464,10 @@
+                 if implicit[pattern.name]!=NAT or not isinstance(actual,DimensionIndex):
+                     raise SignatureMismatch('Expected a natural dimension: '+pattern.name,mismatch_owner)
+                 bind(pattern.name,actual)
+-            elif type(pattern) is ValueIndex and pattern.name in implicit and pattern.name not in scope:
++            elif isinstance(pattern,ValueIndex) and direct_index_name(pattern) in implicit and direct_index_name(pattern) not in scope:
+                 if not isinstance(actual,ValueIndex):
+-                    raise SignatureMismatch('Expected an indexed value: '+pattern.name,mismatch_owner)
+-                bind(pattern.name,actual)
++                    raise SignatureMismatch('Expected an indexed value: '+direct_index_name(pattern),mismatch_owner)
++                bind(direct_index_name(pattern),actual)
+             elif isinstance(pattern,ValueIndex):
+                 if replace(pattern,scope)!=actual:
+                     raise SignatureMismatch('Dependent index mismatch: '+pattern.name,mismatch_owner)
+--- a/cleanlang/dependent_functions.py
++++ b/cleanlang/dependent_functions.py
+@@ -44,11 +44,20 @@
+     return typ==name
+ 
+ 
++def direct_index_name(typ):
++    from .proof_types import ProofIndex
++    if type(typ) is ValueIndex:return typ.name
++    if isinstance(typ,ProofIndex):
++        tree=index_tree(typ)
++        if tree[0]=='Local':return tree[1]
++    return None
++
++
+ def direct_index_occurs(typ,name):
+     """Infer a value from a type slot, never invert an expression in that slot."""
+     if isinstance(typ,DependentFunctionType):
+         return direct_index_occurs(typ.domain,name) or (typ.binder!=name and direct_index_occurs(typ.codomain,name))
+-    if type(typ) is ValueIndex:return typ.name==name
++    if isinstance(typ,ValueIndex):return direct_index_name(typ)==name
+     if isinstance(typ,Type):return any(direct_index_occurs(a,name) for a in typ.args)
+     return False
+ 
+--- a/cleanlang/inferred_conversion.py
++++ b/cleanlang/inferred_conversion.py
+@@ -17,7 +17,9 @@
+     else:raise UnrepresentableSubstitution('Inferred argument has no source expression')
+     result=Expressions(environment,locals).elaborate(tree)
+     from .indices import dimension_index,DimensionIndex,index_value
+-    checked=(dimension_index(result,environment,locals) if isinstance(value,(DimensionIndex,str))
++    from .proof_types import ProofIndex,index as proof_index
++    checked=(proof_index(result,environment,locals,_fresh=True) if isinstance(value,ProofIndex) else
++             dimension_index(result,environment,locals) if isinstance(value,(DimensionIndex,str))
+              else index_value(result,environment,locals))
+     if isinstance(value,ValueIndex) and checked!=value:
+         raise UnrepresentableSubstitution('Inferred argument changed in the current scope')
+--- a/library/operators.clean
++++ b/library/operators.clean
+@@ -32,7 +32,7 @@
+ Condition implication(x,y):
+   Let x,y: Proposition
+   Infix: →
+-  From Lean: x → y
++  Holds when: for every (h: (x),y)
+   Render latex: {x}\text{{ implies }}{y}
+ 
+ Condition logical equivalence(x,y):
+--- /dev/null
++++ b/library/logic/proof_equality.clean
+@@ -0,0 +1,9 @@
++-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
++Import "../operators.clean"
++Import "evidence.clean"
++Condition same evidence(h,k):
++  Let p: Proposition
++  Let h,k: Evidence(p)
++  Infix: =
++  From Lean: h = k
++  Render latex: {h}={k}
+--- a/tests/test_callable_evidence.py
++++ b/tests/test_callable_evidence.py
+@@ -6,7 +6,8 @@
+ from cleanlang.core import Environment,CleanError,lean
+ from cleanlang.modules import load_document
+ from cleanlang.syntax import expression_tree,parse,condition_spelling
+-BASE=f'''Import "{ROOT / 'library/logic/evidence.clean'}"
++BASE=f'''Import "{ROOT / 'library/logic/proof_equality.clean'}"
++Import "{ROOT / 'library/logic/evidence.clean'}"
+ Source test:
+   Kind: other
+   Label: test
+@@ -59,14 +60,15 @@
+   from cleanlang.core import Expr,Expressions,proof_type,NAT
+   from cleanlang.modules import load_module
+   from cleanlang.indices import substitute_index
+-  e=Environment();load_module(ROOT/'library/logic/evidence.clean',e)
++  e=Environment();load_module(ROOT/'library/logic/proof_equality.clean',e);load_module(ROOT/'library/logic/evidence.clean',e)
+   old={'n':Expr('first','n',NAT,tree=['Local','n'])}
+   saved=proof_type(Expressions(e,old).parse('n = n'),e,old).args[0]
+   current={'n':Expr('second','n',NAT,tree=['Local','n'])}
+   with self.assertRaisesRegex(CleanError,'Captured proof scope conflict'):
+    substitute_index(saved,{},e,current)
+   changed=substitute_index(saved,{'n':current['n']},e,current)
+-  self.assertEqual(changed.lean,'(second = second)')
++  key=e.data['functions']['equal']['native_binding']
++  self.assertEqual(changed.lean,f'(_root_.{key} (second) (second))')
+  def test_nested_function_domain_accepts_evidence(self):self.load('', '  Let n: Natural\n  Assume r: for every (h: Function(x: Natural,Function(y: Natural,Evidence((x+y = y+x)))),n = n)\n  Assume h: for every (x: Natural,for every (y: Natural,x+y = y+x))\n  Let p = r(h)\n  Conclude: p = p\n')
+  def test_ambiguous_arrow_bindings_rejected(self):
+   definitions='Type OtherFunction(A: Type,B: Type):\n  Means: (A) → (B)\n  Render latex: F({A},{B})\n'
+@@ -83,6 +85,15 @@
+   definitions='Condition constant law(n,value):\n  Let n: Natural\n  Let value: Function(Natural,Natural)\n  Holds when: for every (x: Natural,value(x) = n)\nStructure Constant(n: Natural):\n  Let value: Function(Natural,Natural)\n  Let law: Evidence((constant law(n,value)))\n  Constructor: constant\n'
+   with self.assertRaisesRegex(CleanError,'Dependent index mismatch'):
+    self.load(definitions,'  Let n,m: Natural\n  Assume h: for every (x: Natural,m = m)\n  Let c = constant(m,function(x: Natural,n),function(x: Natural,h(x)))\n  Conclude: c = c\n')
++ def test_arrow_token_does_not_make_an_opaque_condition_callable(self):
++  with tempfile.TemporaryDirectory() as td:
++   p=Path(td)/'FalseArrow.clean'
++   p.write_text(f'Import "{ROOT / "library/logic/evidence.clean"}"\n'+
++    'Condition misleading arrow(p,q):\n  Let p,q: Proposition\n  Infix: →\n  From Lean: p ∧ q\n'+
++    'Source test:\n  Kind: other\n  Label: test\n  Title: test\n'+
++    'Result specimen:\n  Attribution: test; specimen; original\n  Let p,q: Proposition\n'+
++    '  Assume h: p → q\n  Assume k: p\n  Let proof = h(k)\n  Conclude: q\n')
++   with self.assertRaisesRegex(CleanError,'Unknown function: h'):load_document(p,Environment())
+ if __name__=='__main__':unittest.main(verbosity=2)
+ 
+ # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+--- /dev/null
++++ b/tests/test_inferred_conditions.py
+@@ -0,0 +1,92 @@
++# generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
++"""Recover conditions from proof types without solving for proofs or conditions."""
++from pathlib import Path
++import tempfile,unittest
++from cleanlang.core import Environment,Expr,Expressions,CleanError,PROP,lean
++from cleanlang.modules import load_module
++from cleanlang.conversion import comparison_normal_form
++ROOT=Path(__file__).resolve().parents[1]
++RECOVER='''Define condition of(h):
++  Let p: Proposition
++  Let h: Evidence(p)
++  Returns: Proposition
++  Equals: p
++'''
++class InferredConditions(unittest.TestCase):
++ def load(self,extra=''):
++  e=Environment()
++  with tempfile.TemporaryDirectory() as d:
++   p=Path(d)/'Example.clean';p.write_text('Import "'+str(ROOT/'library/logic/proof_equality.clean')+'"\n'+extra)
++   load_module(p,e)
++  return e
++ def scope(self,e,entries=None):
++  s={}
++  for n,t in entries or [('p','Proposition'),('q','Proposition'),('h','Evidence(p)'),('k','Evidence(p)'),('j','Evidence(q)')]:
++   s[n]=Expr(n,n,e.type(t,s),tree=['Local',n])
++  return s
++ def test_signature_tree_and_explicit_target(self):
++  e=self.load();s=self.scope(e);spec=e.data['functions']['same evidence']
++  self.assertEqual(spec['signature_tree'],['Signature','same evidence',[
++   ['Parameter','p','Proposition','implicit'],['Parameter','h','((p))','explicit'],['Parameter','k','((p))','explicit']],'Proposition'])
++  got=Expressions(e,s).parse('h=k')
++  self.assertEqual(got.tree,['Operator','=', ['Local','h'],['Local','k']])
++  self.assertEqual(got.lean,f"(@_root_.{spec['native_binding']} (p) (h) (k))")
++  self.assertEqual(got.type,PROP)
++  self.assertEqual(got.lean,Expressions(e,s).parse('same evidence(h,k)').lean)
++  e.operator_overloads['='].reverse()
++  self.assertEqual(got.lean,Expressions(e,s).parse('h=k').lean)
++ def test_different_conditions_do_not_unify(self):
++  e=self.load();s=self.scope(e)
++  with self.assertRaisesRegex(CleanError,'Inconsistent dependent argument'):Expressions(e,s).parse('same evidence(h,j)')
++  with self.assertRaisesRegex(CleanError,'No declared meaning'):Expressions(e,s).parse('h=j')
++ def test_quantified_condition_and_authored_recovery(self):
++  e=self.load(RECOVER);s=self.scope(e,[('h','Evidence((for every (x: Natural,x=x)))')])
++  value=Expressions(e,s).parse('condition of(h)')
++  self.assertEqual(comparison_normal_form(value,e,s).tree,value.tree)  # Existing hidden-binder boundary.
++  equality=Expressions(e,s).parse('h=h')
++  self.assertIn('∀',equality.lean)
++ def test_recovered_caller_binding_and_poisoned_metadata(self):
++  e=self.load(RECOVER);s=self.scope(e)
++  value=Expressions(e,s).parse('condition of(h)');value.inferred_args=(('p','wrong'),)
++  self.assertEqual(comparison_normal_form(value,e,s).tree,['Local','p'])
++  s['p']=Expr('changed','p',PROP,tree=['Local','p'])
++  with self.assertRaisesRegex(CleanError,'changed in the current scope'):Expressions(e,s).parse('h=h')
++ def test_computed_condition_preserves_first_operand(self):
++  e=self.load(RECOVER);s=self.scope(e)
++  s['r']=Expr('r','r',e.type('Evidence((condition of(h)))',s),tree=['Local','r'])
++  first=Expressions(e,s).parse('condition of(h)').lean
++  key=e.data['functions']['same evidence']['native_binding']
++  self.assertEqual(Expressions(e,s).parse('r=h').lean,f'(@_root_.{key} ({first}) (r) (h))')
++  self.assertEqual(Expressions(e,s).parse('h=r').lean,f'(@_root_.{key} (p) (h) (r))')
++ def test_no_inverse_condition_inference(self):
++  with self.assertRaisesRegex(CleanError,'direct'):
++   self.load('Define invalid(h):\n  Let p: Proposition\n  Let h: Evidence((p and p))\n  Returns: Proposition\n  Equals: p\n')
++ def test_missing_condition_is_not_guessed(self):
++  with self.assertRaisesRegex(CleanError,'direct'):
++   self.load('Define invalid(h):\n  Let p: Proposition\n  Let h: Natural\n  Returns: Proposition\n  Equals: p\n')
++ def test_competing_meanings_remain_ambiguous(self):
++  e=self.load('Condition other evidence(h,k):\n  Let p: Proposition\n  Let h,k: Evidence(p)\n  Infix: =\n  From Lean: True\n  Render latex: {h}={k}\n');s=self.scope(e)
++  with self.assertRaisesRegex(CleanError,'Ambiguous'):Expressions(e,s).parse('h=k')
++ def test_equality_is_explicitly_imported(self):
++  e=Environment();load_module(ROOT/'library/operators.clean',e);load_module(ROOT/'library/logic/evidence.clean',e)
++  s=self.scope(e)
++  with self.assertRaisesRegex(CleanError,'No declared meaning'):Expressions(e,s).parse('h=h')
++ def test_no_recovery_of_a_bound_condition(self):
++  e=self.load('Define invalid(f):\n  Let p: Proposition\n  Let f: Function(q: Proposition,Evidence(p))\n  Returns: Proposition\n  Equals: p\n')
++  s=self.scope(e,[('f','Function(q: Proposition,Evidence(q))')])
++  with self.assertRaisesRegex(CleanError,'binder cannot escape'):Expressions(e,s).parse('invalid(f)')
++
++ def test_bound_equality_keeps_selected_declaration(self):
++  from cleanlang.bound_calls import bind
++  from cleanlang.modules import notation
++  e=self.load();s=self.scope(e)
++  tree=bind(Expressions(e,s).parse('h=k').tree,e,s)
++  original=Expressions(e,s).elaborate(tree).lean
++  notation('Notation later(h,k):',['Let p: Proposition','Let h,k: Evidence(p)',
++   'Returns: Proposition','Infix: =','Means: k = h','Render latex: {h}={k}'],e)
++  with self.assertRaisesRegex(CleanError,'Ambiguous'):Expressions(e,s).parse('h=k')
++  self.assertEqual(Expressions(e,s).elaborate(tree).lean,original)
++ def test_recovery_checks_changed_condition_type(self):
++  e=self.load();s=self.scope(e)
++  s['p']=Expr('p','p',e.type('Natural'),tree=['Local','p'])
++  with self.assertRaises(CleanError):Expressions(e,s).parse('same evidence(h,k)')
+--- /dev/null
++++ b/tools/check_inferred_condition_targets.py
+@@ -0,0 +1,61 @@
++# generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
++"""Independent canonical oracles for recovering conditions from proof operands."""
++from pathlib import Path
++import ast,os,subprocess,sys,tempfile
++ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
++from cleanlang.core import Environment,Expr,Expressions,lean
++from cleanlang.modules import load_module
++SOURCE='''Define condition of(h):
++  Let p: Proposition
++  Let h: Evidence(p)
++  Returns: Proposition
++  Equals: p
++'''
++comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_basic_targets.py').read_text()).body
++ if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))
++with tempfile.TemporaryDirectory(prefix='clean-inferred-conditions-') as directory:
++ path=Path(directory)/'Example.clean';path.write_text('Import "'+str(ROOT/'library/logic/proof_equality.clean')+'"\n'+SOURCE)
++ e=Environment();load_module(path,e)
++ key=lambda name:e.data['functions'][name]['native_binding']
++ same,recover,implication=map(key,['same evidence','condition of','implication'])
++ prop=e.data['types']['Proposition']['native_binding']
++ scope={}
++ for name,source in [('p','Proposition'),('h','Evidence(p)'),('k','Evidence(p)'),('r','Evidence((condition of(h)))')]:
++  scope[name]=Expr(name,name,e.type(source,scope),tree=['Local',name])
++ direct=Expressions(e,scope).parse('h=k').lean
++ computed=Expressions(e,scope).parse('r=h').lean
++ quantified_scope={'h':Expr('h','h',e.type('Evidence((for every (p: Proposition,p)))',{}),tree=['Local','h'])}
++ quantified=Expressions(e,quantified_scope).parse('h=h').lean
++ imp_scope={}
++ for name,source in [('p','Proposition'),('q','Proposition'),('h','Evidence((p → q))'),('k','Evidence(p)')]:
++  imp_scope[name]=Expr(name,name,e.type(source,imp_scope),tree=['Local',name])
++ applied=Expressions(e,imp_scope).parse('h(k)').lean
++ expected=f'''
++noncomputable def expectedSame {{p : {prop}}} (h k : p) : {prop} := h = k
++noncomputable def expectedRecover {{p : {prop}}} (h : p) : {prop} := p
++same_basic_target {same} expectedSame
++same_basic_target {recover} expectedRecover
++noncomputable def expectedImplication (x y : {prop}) : {prop} := x → y
++same_basic_target {implication} expectedImplication
++noncomputable def actualApplied (p q : {prop}) (h : {implication} p q) (k : p) : q := {applied}
++noncomputable def expectedApplied (p q : {prop}) (h : {implication} p q) (k : p) : q := h k
++same_basic_target actualApplied expectedApplied
++theorem implicationApplies (p q : {prop}) (h : {implication} p q) (k : p) : q := actualApplied p q h k
++noncomputable def actualDirect (p : {prop}) (h k : p) : {prop} := {direct}
++noncomputable def expectedDirect (p : {prop}) (h k : p) : {prop} := @{same} p h k
++same_basic_target actualDirect expectedDirect
++noncomputable def actualComputed (p : {prop}) (h : p) (r : @{recover} p h) : {prop} := {computed}
++noncomputable def expectedComputed (p : {prop}) (h : p) (r : @{recover} p h) : {prop} :=
++  @{same} (@{recover} p h) r h
++same_basic_target actualComputed expectedComputed
++noncomputable def actualQuantified (h : ∀ p : {prop}, p) : {prop} := {quantified}
++noncomputable def expectedQuantified (h : ∀ p : {prop}, p) : {prop} :=
++  @{same} (∀ p : {prop}, p) h h
++same_basic_target actualQuantified expectedQuantified
++theorem proofsEqual (p : {prop}) (h k : p) : actualDirect p h k := by rfl
++theorem recoverCondition (p : {prop}) (h : p) : @{recover} p h = p := by rfl
++theorem computedProofsEqual (p : {prop}) (h : p) (r : @{recover} p h) : actualComputed p h r := by rfl
++'''
++ native=Path(directory)/'Checks.lean';native.write_text(lean([],e,['Lean'])+comparison+expected)
++ subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(native)],cwd=ROOT,check=True)
++print('Seven canonical inferred-condition/implication targets and four proofs passed.')

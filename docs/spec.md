@@ -1032,3 +1032,17 @@ operand containing a binder is not published as a new authored call argument.
 No grammar or native unfolding rule changes. Focused evidence and outstanding
 full validation are recorded in the report and acceptance catalog.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+[Condition-index inference](../studies/inferred-conditions/README.md) extends the
+specified direct-index rule to a proof type whose formal condition is exactly a
+retained local implicit parameter. The actual condition is rechecked with the
+binder-aware proof-index rules, must have the declared type, and is supplied
+explicitly in the Lean target. Repeated occurrences agree and retain the first
+representation; computed formal conditions are not inverted. The isolated patch
+adds an explicit proof-equality module and authors implication as a universal
+condition over evidence, using existing syntax. No display-name or arrow-token
+semantic dispatch is added. Production integration and broader regression remain
+pending; focused and canonical results are recorded in the study.
+:::

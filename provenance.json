@@ -6456,6 +6456,28 @@
         "# ",
         ""
       ]
+    },
+    "studies/inferred-conditions/README.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown",
+      "model": "gpt-6",
+      "date": "2026-11-10"
+    },
+    "studies/inferred-conditions/prototype.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest",
+      "model": "gpt-6",
+      "date": "2026-11-10"
+    },
+    "studies/inferred-conditions/verify.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-10"
     }
   }
 }

@@ -2319,6 +2319,47 @@
         "Independent native checks of all comparison interactions",
         "Complete native binding isolation and conformance"
       ]
+    },
+    {
+      "id": "inferred_condition_from_evidence",
+      "status": "isolated-prototype",
+      "environment": "Pinned study baseline 5525280 plus studies/inferred-conditions/prototype.patch; explicit proof_equality module.",
+      "source": "Condition same evidence(h,k):\n  Let p: Proposition\n  Let h,k: Evidence(p)\n  Infix: =\n  From Lean: h = k\n",
+      "expected_tree": [
+        "Signature",
+        "same evidence",
+        [
+          [
+            "Parameter",
+            "p",
+            "Proposition",
+            "implicit"
+          ],
+          [
+            "Parameter",
+            "h",
+            "((p))",
+            "explicit"
+          ],
+          [
+            "Parameter",
+            "k",
+            "((p))",
+            "explicit"
+          ]
+        ],
+        "Proposition"
+      ],
+      "expected_lean": "For h,k : p, emits the selected root-qualified same-evidence constant explicitly applied to p, h, k. The condition is recovered from the first agreed operand index and rechecked; distinct conditions do not unify.",
+      "checks": [
+        "studies/inferred-conditions/verify.py: 58 focused tests; seven canonical type/body checks; four proofs",
+        "The patch contains independently authored tree/target expectations, negative inference and ambiguity cases, freshness and retained-binding checks."
+      ],
+      "pending": [
+        "Production integration and corpus/topology regeneration",
+        "Complete full regression on the integrated implementation",
+        "General universe/sort polymorphism and native import/instance isolation"
+      ]
     }
   ]
 }

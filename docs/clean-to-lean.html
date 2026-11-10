@@ -1030,6 +1030,24 @@ Conclude: x = x</code></pre></section><section><h3>Schematic Lean binding</h3><p
 <p>The isolated <code>Prefix: -</code> and <code>Prefix: not</code> fields bind one explicit operand, with optional inferred parameters. For example, <code>scalar opposite(x: Scalar)</code> with <code>Means: -x</code> declares a wrapper equivalent to <code>def scalar_opposite (x : Real) := -x</code>; <code>-x</code> then selects that wrapper. Prefix and infix minus coexist. The source parser fixes grouping before overload selection, and comparison normalization uses the same declared prefix. The prefix fixture checks eleven exact targets and a double-opposite proof within the total above. Neither metadata field is enabled in main.</p>
 <p>Literal policy, declared precedence, module-owned scope, editor support and the full foundation migration remain unfinished. See <a href="module-operators.md">the draft contract</a> and <a href="../studies/module-operators/README.md">the isolated executable study</a>.</p>
 </section></llm>
+
+<llm model="gpt-6" date="2026-11-10" role="assisted">
+<section id="inferred-conditions" class="mapping" data-status="proposed">
+<header><h2>Recovering conditions from proof operands</h2><span class="badge proposed">Isolated prototype</span></header>
+<p>An explicit proof-equality module can recover the condition already present in each operand's type.</p>
+<div class="pair"><section><h3>Clean</h3><pre><code>Condition same evidence(h,k):
+  Let p: Proposition
+  Let h,k: Evidence(p)
+  Infix: =
+  From Lean: h = k</code></pre></section>
+<section><h3>Lean equivalent (names abbreviated)</h3><pre><code>noncomputable def sameEvidence {p : Prop}
+    (h k : p) : Prop := h = k
+-- For h k : p, the selected application is:
+@sameEvidence p h k</code></pre></section></div>
+<p class="notes">Only a direct local formal condition is recoverable; computed patterns are not inverted. Actual conditions may contain quantifiers. Repeated occurrences must agree, caller bindings are rechecked, and all arguments are supplied explicitly. The prototype also authors implication as <code>for every (h: (p),q)</code>, so the existing quantified callable view applies. Neither the arrow token nor a display name determines that behavior. Production integration is pending. See the <a href="../studies/inferred-conditions/README.md">constructive rule, patch, and independent checks</a>.</p>
+</section>
+</llm>
+
 </main>
 <script>
 (() => {
