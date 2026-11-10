@@ -6,6 +6,10 @@ The study now has a working Clean foundation, generated Lean statements, and
 kernel-checked foundation proofs. The five paper/classical theorem targets remain
 pending; they are not included in the verified theorem count.
 
+The new [exact-pair and sequence-interior module](exact-sequences.md) provides
+authored exactness conditions, a dependent sequence record, nine exact native
+checks and three supporting/agreement proofs. It does not construct Mayer–Vietoris.
+
 See the [implementation and acceptance audit](implementation-status.md) for the
 current interface inventory, failed and pending validation, and the separate
 mathematical construction obligations. Historical counts below describe their

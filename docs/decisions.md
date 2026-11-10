@@ -1285,3 +1285,15 @@ indices. Tree retrieval decodes the payload rather than trusting the optional
 payload authority deterministic and preserves checked annotations after cache
 removal. Production integration and complete decoded-record validation remain open.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [exact-sequence foundation](../studies/topology/exact-sequences.md) uses existing
+explicit modules, dependent records, callable signatures and conditions. `exact(f,g)`
+is an authored condition with field and module parameters recovered from map types.
+`ModuleSequence.arrow(n)` has domain object(n+1) and codomain object(n); `exact pair
+at(field,S,n)` checks the two arrows around object(n+1). `exact sequence interior`
+quantifies those pairs and deliberately makes no degree-zero endpoint assertion.
+This adds no new syntax or builtin equality/zero/sequence rule. The actual
+Mayer–Vietoris construction and proof remain separate mathematical obligations.
+:::

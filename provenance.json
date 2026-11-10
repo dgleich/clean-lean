@@ -7174,6 +7174,98 @@
       "model": "gpt-6",
       "date": "2026-11-10",
       "mode": "manifest"
+    },
+    "library/algebra/exact_sequences.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "tests/test_exact_sequences.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/topology/ExactSequences.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/ExactSequences.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/ExactSequencesVerified.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/ExactSequences.tex": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/topology/ExactSequences.pdf": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "manifest"
+    },
+    "studies/topology/exact-sequences-latex.tex": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/topology/verify_exact_sequences.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/topology/exact-sequences.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "markdown"
     }
   }
 }

@@ -2562,6 +2562,35 @@
       "pending": [
         "General universe-polymorphic equality is not provided by this module"
       ]
+    },
+    {
+      "id": "module_sequence_interior_exactness",
+      "status": "implemented-slice",
+      "environment": "Explicit library/algebra/exact_sequences.clean import; existing Type-0 coefficient carriers and Universe-1 module bundles.",
+      "source": "exact(f,g)",
+      "expected_tree": [
+        "Call",
+        "exact",
+        [
+          [
+            "Local",
+            "f"
+          ],
+          [
+            "Local",
+            "g"
+          ]
+        ]
+      ],
+      "expected_lean": "Authored exact wrapper with determined implicit K, field, M, N and P and explicit f,g; its body calls the authored range=kernel condition. Sequence arrow n maps object(n+1) to object(n); interior exactness concerns the middle object(n+1), without a degree-zero endpoint claim.",
+      "checks": [
+        "tests/test_exact_sequences.py: independent structure tree, arrow orientation, kernel ambient module, authored definitions and noncomposable rejection",
+        "studies/topology/verify_exact_sequences.py: nine exact targets, Function.Exact agreement and two statement proofs"
+      ],
+      "pending": [
+        "Mayer-Vietoris connecting maps, degree shifts, endpoint/augmentation hypotheses, excision and exactness proof",
+        "General universe and native-environment isolation obligations remain unchanged"
+      ]
     }
   ]
 }

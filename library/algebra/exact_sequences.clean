@@ -1,0 +1,66 @@
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+Import "module_spaces.clean"
+Import Lean Mathlib.Algebra.Exact
+
+Notation module map kernel(field,M,N,f):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: CoefficientModule(K,field)
+  Let f: ModuleMap(K,field,M,N)
+  Returns: ModuleSubspace(K,field,M)
+  Means: LinearMap.ker (@ModuleCat.Hom.hom K field.toRing M N f)
+  Render latex: \operatorname{{ker}}({f})
+
+Notation module zero element(field,M):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Returns: ModuleElement(K,field,M)
+  Means: (0 : M.carrier)
+  Render latex: 0
+
+Condition exact pair(field,M,N,P,f,g):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N,P: CoefficientModule(K,field)
+  Let f: ModuleMap(K,field,M,N)
+  Let g: ModuleMap(K,field,N,P)
+  Holds when: module map range(field,M,N,f) = module map kernel(field,N,P,g)
+  Render latex: \operatorname{{exact}}({f},{g})
+
+Condition exact(f,g):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N,P: CoefficientModule(K,field)
+  Let f: ModuleMap(K,field,M,N)
+  Let g: ModuleMap(K,field,N,P)
+  Holds when: exact pair(field,M,N,P,f,g)
+  Assumption name: exactness of {f} and {g}
+  Render latex: \operatorname{{exact}}({f},{g})
+
+Structure ModuleSequence(K: Type,field: FieldStructure(K)):
+  Universe: 1
+  Let object: Function(Natural,CoefficientModule(K,field))
+  Let arrow: Function(n: Natural,ModuleMap(K,field,(object(n+1)),(object(n))))
+  Constructor: module sequence
+  Render latex: \operatorname{{Sequence}}_{{{K}}}
+  Describe: a sequence of modules over ${K}$
+  Describe plural: sequences of modules over ${K}$
+
+Condition exact pair at(field,S,n):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ModuleSequence(K,field)
+  Let n: Natural
+  Holds when:
+    exact pair(field,S.object((n+1)+1),S.object(n+1),S.object(n),S.arrow(n+1),S.arrow(n))
+  Render latex: \operatorname{{exact}}_{{{n}+1}}({S})
+
+Condition exact sequence interior(field,S):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ModuleSequence(K,field)
+  Holds when: for every(n: Natural,exact pair at(field,S,n))
+  Render latex: \text{{interior exactness of }}{S}
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

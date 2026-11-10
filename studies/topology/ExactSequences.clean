@@ -1,0 +1,31 @@
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+Import "Common.clean"
+Import "../../library/algebra/exact_sequences.clean"
+
+Source exactness:
+  Kind: other
+  Label: Mathlib exact pairs
+  Title: Mathlib.Algebra.Exact
+
+Result exact maps vanish on the image:
+  Attribution: exactness; Function.Exact.apply_apply_eq_zero; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N,P: CoefficientModule(K,field)
+  Let f: ModuleMap(K,field,M,N)
+  Let g: ModuleMap(K,field,N,P)
+  Let x: ModuleElement(K,field,M)
+  Assume exact(f,g)
+  Conclude:
+    module map value(field,N,P,g,module map value(field,M,N,f,x)) = module zero element(field,P)
+
+Result exact sequence interior at each position:
+  Attribution: topology; exact sequence definition; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ModuleSequence(K,field)
+  Let n: Natural
+  Assume exactness: exact sequence interior(field,S)
+  Conclude: exact pair at(field,S,n)
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
