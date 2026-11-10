@@ -2,8 +2,8 @@
 
 # Project only the fields needed by a dependent type
 
-Status: isolated implementation experiment; production integration and broad
-conformance remain pending. No source grammar, layout, keyword or operator changes.
+Status: implemented slice in the working compiler; broad conformance remains
+pending. The pinned experiment below remains available for historical reproduction. No source grammar, layout, keyword or operator changes.
 The intended Lean expression and its type are unchanged.
 
 A record projection currently substitutes every preceding field before reaching
@@ -95,4 +95,14 @@ if its active-label cases finish. The separate 55-test driver above uses existin
 modules and completes successfully. Full active-label/interval translation,
 additional capture/annotation interactions, topology/corpus reruns and production
 regression remain required before a broader conformance claim.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The patch is now integrated independently of numeral pruning and vertex order.
+Do not reapply the historical patch to the current compiler. The 55 focused tests
+also pass directly in the working checkout. Native, corpus, topology and complete
+regression checks are being renewed for this revision. The prior production run
+finished normally: 745 tests in 1513.821 seconds, with 33 failures and 46 errors.
+That result describes the preceding condition-inference revision, not this change.
 :::

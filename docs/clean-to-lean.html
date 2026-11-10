@@ -1059,10 +1059,10 @@ Conclude: x = x</code></pre></section><section><h3>Schematic Lean binding</h3><p
 
 
 <llm model="gpt-6" date="2026-11-10" role="assisted">
-<section id="projection-dependencies" class="mapping" data-status="proposed">
-<header><h2>Dependencies of a projected field</h2><span class="badge proposed">Isolated prototype</span></header>
+<section id="projection-dependencies" class="mapping" data-status="implemented">
+<header><h2>Dependencies of a projected field</h2><span class="badge implemented">Implemented slice</span></header>
 <p>For a record with fields <code>carrier: Type</code>, <code>value: carrier</code>, and <code>count: Natural</code>, projecting <code>c.count</code> need not instantiate the two preceding fields. Projecting <code>c.value</code> still needs <code>c.carrier</code>.</p>
-<p>The <a href="../studies/projection-dependencies/README.md">dependency-closure experiment</a> follows required predecessors transitively and substitutes them in declaration order. The Lean term stays the same explicit generated projection. It adds no grammar or cross-scope cache; independent canonical targets and changed-caller checks cover the restricted implementation. Production integration and wider conformance remain pending.</p>
+<p>The <a href="../studies/projection-dependencies/README.md">dependency-closure implementation</a> follows required predecessors transitively and substitutes them in declaration order. The Lean term stays the same explicit generated projection. It adds no grammar or cross-scope cache; independent canonical targets and changed-caller checks cover the restricted implementation. The slice is integrated; wider conformance remains pending.</p>
 </section>
 </llm>
 

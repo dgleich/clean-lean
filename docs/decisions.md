@@ -1082,3 +1082,15 @@ cache is added. The pinned isolated driver checks 55 tests, four canonical targe
 and two proofs independently of numeral pruning. Production integration and
 broader annotation/capture/native-isolation obligations remain open.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+[Projection dependency closure](../studies/projection-dependencies/README.md) is
+now integrated. Projection instantiates the selected field and the transitive
+predecessors occurring in its checked type, in declaration order. The full
+structure telescope remains checked at declaration time; required carrier,
+function, value and proof dependencies are retained. The emitted projection and
+its argument order are unchanged. No shared caller-scope cache or grammar change
+is introduced. Fifty-five focused checks pass on the working compiler. Broader
+native/topology/corpus validation and full regression remain pending.
+:::

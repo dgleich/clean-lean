@@ -6552,6 +6552,26 @@
         "# ",
         ""
       ]
+    },
+    "tests/test_projection_dependencies.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-10"
+    },
+    "tools/check_projection_dependency_targets.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-10"
     }
   }
 }

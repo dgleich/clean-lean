@@ -91,7 +91,17 @@ def project(env, base, field, locals):
     targets=[env.render_type(a,'lean',locals) if isinstance(a,Type) else
              a.lean if isinstance(a,ValueIndex) else locals[a].lean if a in locals else a
              for a in base.type.args]
-    for name,typ in spec['fields']:
+    # Recover exactly the preceding fields needed by the selected field type.
+    # Field telescopes are declaration-checked, so dependencies point backward.
+    from .dependent_functions import occurs
+    selected=next(i for i,(name,_) in enumerate(spec['fields']) if name==field)
+    needed={field}
+    for i in range(selected,-1,-1):
+        name,typ=spec['fields'][i]
+        if name in needed:
+            needed.update(n for n,_ in spec['fields'][:i] if occurs(typ,n))
+    for name,typ in spec['fields'][:selected+1]:
+        if name not in needed:continue
         result_type=substitute_type(typ,bindings,env,locals)
         target='(@_root_.'+spec['key']+'.«'+name+'»'+''.join(' ('+v+')' for v in targets)+' ('+base.lean+'))'
         tex=base.tex+r'.\mathrm{'+textext(name)+'}'
