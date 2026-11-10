@@ -68,3 +68,23 @@ def source_operator(tree,spell):
     args=tree[2]
     if fixity=='prefix':return '('+text+' '+spell(args[0])+')'
     return '('+spell(args[0])+' '+text+' '+spell(args[1])+')'
+
+
+def _bind_checked(expression,env,locals,*,binders=False):
+    """Close synchronously checked operands; never called for saved/public Exprs."""
+    tree=expression.tree
+    kind=tree[0]
+    if kind not in ('Call','ModuleCall','Operator','Unary') or expression.checked_args is None:
+        return bind(tree,env,locals,binders=binders)
+    args=[_bind_checked(a,env,locals,binders=binders) for a in expression.checked_args]
+    if kind in ('Operator','Unary'):
+        if expression.operator_binding is None:raise CleanError('Missing checked operator binding')
+        name,target,presentation=expression.operator_binding
+        if target!=identity(env,name):raise CleanError('Changed bound module callable: '+name)
+        return ['ModuleCall',name,args,target,presentation]
+    if kind=='ModuleCall':
+        if tree[3]!=identity(env,tree[1]):raise CleanError('Changed bound module callable: '+tree[1])
+        return [kind,tree[1],args,*tree[3:]]
+    if tree[1] in locals and env.is_function_type(locals[tree[1]].type):
+        return ['Apply',['Local',tree[1]],args]
+    return ['ModuleCall',tree[1],args,identity(env,tree[1])]

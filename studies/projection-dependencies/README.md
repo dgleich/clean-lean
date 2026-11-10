@@ -115,3 +115,15 @@ regression finished normally with 750 tests in 345.098 seconds, 33 failures and
 46 errors. These counts do not establish general conformance; the test suite
 still fails. All 18 topology verifiers also passed on this revision.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The combined numeral-pruning/projection diagnostic has now terminated normally:
+48 tests in 1560.663 seconds, with one error solely from the nonexistent
+`test_carrier_fields` module. Its actual active-label and structure cases passed;
+the combined command did not pass. The older pruning-only diagnostic was
+explicitly stopped as superseded after more than 36 minutes, without a result.
+These measurements belong to temporary experimental stacks, not the production
+compiler. A subsequent traversal-local operator change is being validated
+separately; do not attribute this completed diagnostic to that later change.
+:::

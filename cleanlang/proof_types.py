@@ -17,8 +17,8 @@ def index(expression,env,locals,*,_fresh=False):
     from .syntax import condition_spelling
     from .quantified_beta import comparison_expression
     comparison=comparison_expression(expression,env,locals)
-    from .bound_calls import bind
-    tree=bind(expression.tree,env,locals,binders=True)
+    from .bound_calls import bind,_bind_checked
+    tree=_bind_checked(expression,env,locals,binders=True) if _fresh else bind(expression.tree,env,locals,binders=True)
     return ProofIndex('('+condition_spelling(expression.tree)+')',expression.lean,expression.tex,
                       json.dumps(tree,ensure_ascii=False),tuple(locals.items()),
                       comparison=index_comparison(comparison,env,locals,_fresh=_fresh),resolved=tree)

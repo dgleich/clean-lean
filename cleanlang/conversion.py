@@ -100,13 +100,15 @@ def _normal_form(expression,environment,locals,*,fresh=False):
         # Operators are declared calls too. Do not publish a hidden binder as
         # an authored operand when normalizing a definition inside the call.
         from .beta_indices import has_binder
-        def operand(tree):
-            actual=elaborate(tree)
+        trees=tree[2:]
+        typed=expression.checked_args if fresh and expression.checked_args is not None else tuple(elaborate(t) for t in trees)
+        args=[]
+        for actual in typed:
             value=_normal_form(actual,env,locals,fresh=True)
-            return actual if has_binder(value.tree) else value
-        if kind=='Operator':return env.operator(tree[1],operand(tree[2]),operand(tree[3]),locals)
+            args.append(actual if has_binder(value.tree) else value)
+        if kind=='Operator':return env.operator(tree[1],args[0],args[1],locals)
         from .operator_bindings import apply_prefix
-        return apply_prefix(env,tree[1],operand(tree[2]),locals)
+        return apply_prefix(env,tree[1],args[0],locals)
     if kind=='Apply':
         f=normal(tree[1]);args=[normal(a) for a in tree[2]]
         result=Expr('('+f.lean+' '+args[0].lean+')',expression.tex,expression.type,

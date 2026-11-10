@@ -1097,3 +1097,32 @@ its argument order are unchanged. No shared caller-scope cache or grammar change
 is introduced. Fifty-five focused checks pass on the working compiler. Broader
 native/topology/corpus validation and full regression remain pending.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Traversal-local operator operands
+
+A checked condition may reuse its checked operand expressions only during the
+same synchronous elaboration in the same environment and local scope. This is
+an internal witness, not a property inferred from an Expr having metadata.
+Public comparison/index entry points and stored expressions do not acquire it.
+For fresh infix/prefix comparison, normalize the checked operands; preserve the
+original operand if normalization exposes a hidden binder; then rerun the normal
+overload selection on the resulting operands. For nonfresh input, elaborate the
+source operands before that process. No operator selection is bypassed.
+
+For fresh condition binding, recursively close checked Call, ModuleCall, Operator
+and Unary arguments. A selected operator becomes a retained ModuleCall carrying
+its checked name, declaration identity and presentation. Validate retained and
+selected identities against the current declaration before retaining them.
+Other constructors use the existing checked binding path; entering a binder does
+not inherit a witness for a different scope. Public binding still checks source
+operators. No cross-call cache is introduced.
+
+The syntax tree, overload policy and emitted Lean term are unchanged. This rule
+changes repeated checking, not the set or priority of interpretations. The
+existing deterministic traversal and overload-ambiguity checks still apply;
+incomplete analyses propagate. Seven freshness tests and 75 related binding,
+proof and inference tests pass in isolation. Three independent canonical Lean
+condition/evidence targets pass. Full working-checkout validation is pending.
+:::

@@ -6658,6 +6658,22 @@
         "# ",
         ""
       ]
+    },
+    "tools/check_fresh_operator_targets.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "docs/operator-freshness.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "markdown"
     }
   }
 }

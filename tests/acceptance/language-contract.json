@@ -2433,6 +2433,22 @@
         "Complete capture/annotation interactions and native binding isolation",
         "End-to-end active-label study validation"
       ]
+    },
+    {
+      "id": "fresh_operator_operands",
+      "status": "implemented-slice",
+      "environment": "Explicit proof_equality module; traversal-local witness only",
+      "syntax": "Existing Operator, Unary, Call and ModuleCall trees; no new production",
+      "semantics": "Recheck public operands; within synchronous checked scope reuse checked children, rerun overload selection after normalization, retain selected declaration identity on binding",
+      "checks": [
+        "tests/test_fresh_conditions.py: seven cases",
+        "tools/check_fresh_operator_targets.py: three independent canonical Lean targets",
+        "75 related binding, proof and inference tests"
+      ],
+      "pending": [
+        "Full working-checkout regression, corpus and topology reruns",
+        "General native isolation and universe obligations remain open"
+      ]
     }
   ]
 }

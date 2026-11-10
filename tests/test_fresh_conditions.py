@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 class FreshConditions(unittest.TestCase):
  def setUp(self):
-  self.e=Environment();load_module(ROOT/'library/logic/evidence.clean',self.e)
+  self.e=Environment();load_module(ROOT/'library/logic/proof_equality.clean',self.e)
   notation('Notation retain(x):',['Let A: Type','Let x: A','Returns: A','Means: x','Render latex: {x}'],self.e)
   self.scope={'A':Expr('A','A',Type('Type')),'B':Expr('B','B',Type('Type'))}
   self.bind('first','A')
@@ -27,6 +27,31 @@ class FreshConditions(unittest.TestCase):
   finally:self.e.call=original
   self.assertEqual(len(calls),depth)
   self.assertIn('first',proof.args[0].lean)
+ def test_nested_operator_operands_are_checked_once(self):
+  original=self.e.call;calls=[]
+  def counted(name,*args,**kwargs):
+   if name=='retain':calls.append(name)
+   return original(name,*args,**kwargs)
+  self.e.call=counted
+  try:
+   self.e.type('(not (retain(x) = x) or (x = retain(retain(x))))',self.scope)
+  finally:self.e.call=original
+  self.assertEqual(calls,['retain']*3)
+ def test_fresh_binding_keeps_selected_declaration_identity(self):
+  from cleanlang.bound_calls import _bind_checked
+  from cleanlang.core import CleanError
+  expression=Expressions(self.e,self.scope).parse('retain(x) = x')
+  name=expression.operator_binding[0]
+  self.e.data['functions'][name]['lean']='changed_operator'
+  with self.assertRaisesRegex(CleanError,'Changed bound module callable'):
+   _bind_checked(expression,self.e,self.scope)
+ def test_fresh_and_public_binding_have_same_retained_tree(self):
+  from cleanlang.bound_calls import bind,_bind_checked,identity
+  expression=Expressions(self.e,self.scope).parse('retain(x) = x')
+  name,target,presentation=expression.operator_binding
+  expected=['ModuleCall',name,[['ModuleCall','retain',[['Local','x']],identity(self.e,'retain')],['Local','x']],target,presentation]
+  self.assertEqual(_bind_checked(expression,self.e,self.scope),expected)
+  self.assertEqual(bind(expression.tree,self.e,self.scope),expected)
  def test_public_condition_index_rechecks_changed_values_and_types(self):
   source='retain(retain(x)) = x'
   old=Expressions(self.e,self.scope).parse(source)
