@@ -2,8 +2,8 @@
 
 # Proposal: explicit closed-universe carrier classifiers
 
-Status: proposed semantics with a checked syntax prototype and native feasibility
-examples. **Carrier-classifier elaboration is not implemented**, and this is not a
+Status: isolated syntax and declaration-metadata prototype with checked native
+declaration targets and native feasibility examples. **Carrier-classifier elaboration is not implemented**, and this is not a
 Clean-to-Lean conformance claim. It is not part of the composed-language stack.
 
 The concrete gap is equality of a universe-1 topology object. Clean's general
@@ -148,11 +148,33 @@ Editor/browser coverage and full regression are also pending.
 
 Validation on 2026-11-10: the pinned reproduction passed strict parser generation,
 reproducibility checking and 45 syntax/existing type-value tests in 24.085 seconds.
-The native file compiled with its three proofs. The prototype does not validate
-Classifies metadata semantically or elaborate ClassifiedTypeValue; those checks
-remain required before any language-acceptance claim.
+The native file compiled with its three proofs. That initial run covered syntax only. The metadata extension below adds
+declaration validation; elaborating ClassifiedTypeValue remains pending.
 
-Reproduce syntax and native feasibility only:
+## Declaration metadata implementation
+
+The isolated `metadata.patch` validates Classifies before installing a declaration.
+It rejects parameters, missing/wrong successor universes, noncanonical levels,
+nonprimitive or mismatched native bodies, and Numerals on classifiers. Invalid
+classifier metadata leaves both the type table and native declarations unchanged.
+`classifier_metadata(env, spelling)` resolves a closed type reference through
+transparent aliases and returns `(native_binding, classified_level)`, or None for
+an ordinary type. It does not classify by display name or universe alone. Distinct
+native declarations retain distinct identities; aliases resolve to the same one.
+This query does not yet select candidates for unannotated type expressions.
+
+The extension adds negative and identity tests plus three independently written
+native declaration oracles at classified levels 0, 1 and 2. Exact comparisons check
+both elaborated declaration types and bodies. This does not validate generic
+carrier bindings, first-class type expressions, higher-universe inference,
+structures or stored local types. Those remain the next implementation boundary;
+the working compiler is unchanged. The expanded pinned reproduction passed
+76 selected tests in 29.745 seconds, strict parser generation/reproducibility,
+three exact declaration targets and the three native feasibility proofs.
+Full unittest discovery is running separately in the isolated metadata checkout;
+its result remains pending.
+
+Reproduce the syntax, declaration metadata and native checks:
 
 ```sh
 LAKE=lake python3 studies/universe-classifiers/verify.py

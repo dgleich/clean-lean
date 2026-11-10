@@ -7616,6 +7616,42 @@
         "# ",
         ""
       ]
+    },
+    "studies/universe-classifiers/metadata.patch": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "manifest"
+    },
+    "studies/universe-classifiers/test_metadata.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/check_metadata_targets.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/MetadataTargets.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

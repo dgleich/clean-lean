@@ -1382,10 +1382,22 @@ the remaining universe/native-environment obligations are still pending.
 The [closed-universe classifier proposal](../studies/universe-classifiers/README.md)
 distinguishes the universe of an ordinary object from a declaration whose elements
 are carrier types. `Classifies: k` and `type(T : C)` have an isolated syntax prototype;
-semantic implementation is pending. The proposal specifies exact closed levels,
+declaration validation is now prototyped, while carrier elaboration remains pending.
+The proposal specifies exact closed levels,
 explicit native correspondence, alias identity and ambiguity between classifier
 candidates. It audits the current Type-0 assumptions across inference, local types,
 dependent fields/callables, conversion and storage. Native feasibility examples
 are not translator conformance evidence. General universe polymorphism remains
 outside this proposed closed-level mechanism.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The closed-universe classifier study now includes isolated declaration validation
+and a resolved metadata query. Classifies requires a closed declaration, explicit
+successor Universe, the corresponding primitive Type body and no Numerals.
+Transparent aliases preserve the native classifier identity; ordinary types do
+not become classifiers because of their name or universe. Three independent
+native declaration targets cover levels 0–2. Carrier binding, type-value
+elaboration, inference, storage and production integration remain pending.
 :::

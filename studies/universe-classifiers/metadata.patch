@@ -1,0 +1,66 @@
+--- a/cleanlang/modules.py
++++ b/cleanlang/modules.py
+@@ -65,6 +65,43 @@
+ 
+ def universe_sort(level):
+     return 'Type' if level==0 else 'Type '+str(level)
++
++
++def classifier_level(values, names):
++    """Validate classification before installing any declaration in the environment."""
++    if 'classifies' not in values:
++        return None
++    raw=values['classifies']
++    if not re.fullmatch(r'0|[1-9][0-9]*',raw):
++        raise CleanError('Classifies requires a nonnegative decimal integer without leading zeros')
++    try:level=int(raw)
++    except ValueError as e:
++        raise CleanError('Incomplete classifier analysis: integer exceeds runtime limit') from e
++    if names:
++        raise CleanError('Classifies requires a closed zero-parameter Type declaration')
++    if 'universe' not in values or universe_level(values)!=level+1:
++        raise CleanError('Classifies requires explicit Universe equal to the classified level plus one')
++    primitive=re.fullmatch(r'Type(?:\s+(0|[1-9][0-9]*))?',values['means'])
++    if primitive is None or (primitive[1] or '0')!=raw:
++        raise CleanError('Classifies requires Means to be the corresponding primitive Type level')
++    if 'numerals' in values:
++        raise CleanError('Classifiers cannot have Numerals')
++    return level
++
++
++def classifier_metadata(env, spelling):
++    """Query a closed type reference; transparent aliases preserve resolved identity.
++
++    This is declaration metadata only, not permission to elaborate a carrier binder.
++    Ordinary carriers return None, irrespective of their display name or universe.
++    """
++    resolved=env.type(spelling,phrases=False)
++    if not isinstance(resolved,Type) or resolved.args:
++        return None
++    spec=env.data['types'].get(resolved.name,{})
++    if 'classifies' not in spec:
++        return None
++    return (spec['native_binding'],spec['classifies'])
+ 
+ 
+ def type_declaration(header, fields, env):
+@@ -96,8 +133,9 @@
+         env.data['types'][name] = spec
+         env.type(name+'('+','.join(names)+')' if names else name, local)
+         return
+-    if not {'means','render latex'} <= values.keys() or values.keys()-{'means','render latex','describe','describe plural','universe','numerals'}:
+-        raise CleanError('Type requires Means and Render latex; optional Describe, Describe plural, Universe and Numerals')
++    if not {'means','render latex'} <= values.keys() or values.keys()-{'means','render latex','describe','describe plural','universe','numerals','classifies'}:
++        raise CleanError('Type requires Means and Render latex; optional Describe, Describe plural, Universe, Numerals and Classifies')
++    classified=classifier_level(values,names)
+     default_level=1 if values['means']=='Type' else 0
+     level=universe_level(values,default_level)
+     if 'numerals' in values and (names or level!=0 or values['means'].strip() in ('Prop','Type')):
+@@ -105,6 +143,7 @@
+     spec={'args': kinds, 'lean': substitute(values['means'], names), 'latex': template(values['render latex'], names),
+           'parameter_names':names,'parameter_types':parameter_types}
+     spec['universe']=level
++    if classified is not None:spec['classifies']=classified
+     for src,dst in [('describe','prose'),('describe plural','prose_plural')]:
+         if src in values: spec[dst] = template(values[src], names)
+     env.data['types'][name] = spec
