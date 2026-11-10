@@ -1365,3 +1365,14 @@ The root is still rechecked and normalized, and every materialized call still
 validates its declaration identity and native template. The private reuse witness
 is synchronous and does not survive the comparison. Production remains unchanged.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [combined language study](../studies/composed-language/README.md) applies the
+literal, storage, comparison and named-assumption prototypes together on one
+pinned baseline. It regenerates the strict parser and includes cross-feature
+examples of retained vector zeros in named/inherited assumption blocks with
+dependent record dimensions. These checks validate only the isolated composition;
+production integration, full-suite results, stored-record semantic validation and
+the remaining universe/native-environment obligations are still pending.
+:::

@@ -2797,6 +2797,53 @@
         "Full active-label module-load performance remains unverified",
         "No memoization or reuse across traversals is authorized by this rule"
       ]
+    },
+    {
+      "id": "combined_retained_literal_assumption_block",
+      "status": "isolated-prototype",
+      "environment": "Pinned combined-language checkout with six explicitly ordered patches; explicit literal adapter imported from literal-retention/Interfaces.clean.",
+      "source": "Assume zero:\n  v = (0: Vector(n,Complex))",
+      "expected_tree": [
+        "Assumption",
+        "zero",
+        [
+          "Operator",
+          "=",
+          [
+            "Local",
+            "v"
+          ],
+          [
+            "NumeralAnnotation",
+            "0",
+            [
+              "Apply",
+              "Vector",
+              [
+                [
+                  "Name",
+                  "n"
+                ],
+                [
+                  "Name",
+                  "Complex"
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "expected_lean": "Named hypothesis over declared equality of v with the selected vector-zero adapter applied to n; no inferred scalar zero or discarded dimension. The inherited-context variant retains the projected record dimension.",
+      "checks": [
+        "studies/composed-language/test_interactions.py: selected literal, actuals, inherited context, payload authority and continued rejection of unannotated vector zero",
+        "studies/composed-language/check_interactions.py: two independently authored exact native statement targets and two proofs",
+        "studies/composed-language/verify.py: strict combined grammar, selected semantic portfolio and optional full suite"
+      ],
+      "pending": [
+        "Production integration and full-suite result",
+        "Stored-record semantic validation and native-environment contract",
+        "General universe and unannotated joint inference obligations remain separate"
+      ]
     }
   ]
 }

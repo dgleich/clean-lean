@@ -1,0 +1,24 @@
+-- generated: gpt-6 2026-11-10 role=assisted; isolated combined syntax
+Import "../literal-retention/Interfaces.clean"
+Source local:
+  Kind: other
+  Label: Combined language interfaces
+  Title: Explicit zero assumptions
+
+Result explicit vector zero assumption:
+  Attribution: local; identity; original
+  Let n: Natural
+  Let v: Vector(n,Complex)
+  Assume zero:
+    v = (0: Vector(n,Complex))
+  Conclude: v = (0: Vector(n,Complex))
+
+Context stored vector:
+  Let V: SizedVector
+  Assume zero contents:
+    V.vector = (0: Vector(V.size,Complex))
+  Result inherited zero assumption:
+    Attribution: local; identity; original
+    Conclude: V.vector = (0: Vector(V.size,Complex))
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
