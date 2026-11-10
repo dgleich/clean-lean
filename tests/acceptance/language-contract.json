@@ -2238,6 +2238,51 @@
         "Parameterized carriers, type-position inference and native import/identity/instance isolation",
         "Complete main regression and downstream library/oracle migration; current full run fails"
       ]
+    },
+    {
+      "id": "infer_dependent_value_parameter",
+      "status": "proposed",
+      "environment": "Explicit FieldStructure and CoefficientModule modules; see docs/inferred-value-parameters.md. Current compiler rejects the declaration.",
+      "source": "Condition same module(M,N):\n  Let K: Type\n  Let field: FieldStructure(K)\n  Let M,N: CoefficientModule(K,field)\n  Infix: =\n  From Lean: M = N\n  Render latex: {M}={N}\n",
+      "expected_tree": [
+        "Signature",
+        "same module",
+        [
+          [
+            "Parameter",
+            "K",
+            "Type",
+            "implicit"
+          ],
+          [
+            "Parameter",
+            "field",
+            "FieldStructure(K)",
+            "implicit"
+          ],
+          [
+            "Parameter",
+            "M",
+            "CoefficientModule(K,field)",
+            "explicit"
+          ],
+          [
+            "Parameter",
+            "N",
+            "CoefficientModule(K,field)",
+            "explicit"
+          ]
+        ],
+        "Proposition"
+      ],
+      "expected_lean": "Schematic: sameModule {K : Type} {field : FieldStructureWrapper K} (M N : CoefficientModuleWrapper K field) : PropositionWrapper := Eq M N. Application to M,N over F,f explicitly supplies @sameModule F f M N. Canonical oracle pending.",
+      "checks": [],
+      "pending": [
+        "Implement checked direct-index inference and all expression consumers",
+        "Independent canonical declaration/application/type oracles and kernel checks",
+        "Conflict, capture, ambiguity, missing-index and incomplete-analysis negatives",
+        "Existing-inference and full-regression validation"
+      ]
     }
   ]
 }

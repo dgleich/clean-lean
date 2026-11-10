@@ -148,3 +148,17 @@ results retain explicit equality/subset wrappers; native adapter bodies and
 extracted proof auxiliaries remain independently checked. This checkpoint changes
 verification expectations and generated artifacts, not language semantics.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Interlevel and compact image add 79 canonical checks and fourteen proofs to
+working-compiler validation, bringing topology to thirteen of eighteen verifiers.
+Interlevel retains declared scalar/logical/set operations and a real numeral
+constructor in its independent expected terms. Its suffixed oracle notation is
+local Lean test notation, not a Clean language extension.
+
+The relative-homology failure additionally exposes the need for
+[inferred value parameters](inferred-value-parameters.md): a two-operand equality
+for modules must recover their field structure from their types. This is now a
+specified proposal with pending acceptance cases, not an implemented feature.
+:::

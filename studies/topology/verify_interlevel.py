@@ -27,6 +27,13 @@ for oracle,actual in [('yes','true value'),('no','false value'),('ends','endpoin
  ('pair','space pair data'),('nested','nested pair'),('expandedPair','expanded pair'),
  ('shiftedPair','shifted pair'),('included','pair included in'),('evaluate','evaluate map'),
  ('value','real map value'),('bounded','bounded perturbation'),('perturbed','perturbed pair'),('certify','certify pair data'),('represents','has pair data'),('certifyInclusion','certify pair inclusion')]:mapping['InterlevelOracle.'+oracle]=function(actual)
+# These adapters are authored independently; local Lean notation below keeps the
+# mathematical oracle readable without erasing wrapper identities.
+for oracle,actual in [('equal','equal'),('conjoin','conjunction'),('disjoin','disjunction'),
+ ('member','set member'),('subset','set subset'),('add','real sum'),('subtract','real difference'),
+ ('negative','real negative'),('atMost','real at most'),('atLeast','real at least')]:
+    mapping['InterlevelOracle.'+oracle]=function(actual)
+mapping['InterlevelOracle.numeral']=env.data['types']['Real']['numerals']['native_binding']
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
 open Lean Elab Command
@@ -73,13 +80,34 @@ noncomputable abbrev conditionType : Sort 1 := Prop
 noncomputable abbrev spaceType : Type 1 := TopCat.{0}
 noncomputable abbrev pointType (X : spaceType) : Type := TopCat.carrier X
 noncomputable abbrev boolType : Type := Bool
+noncomputable def equal {T : Type} (x y : T) : conditionType := x=y
+noncomputable def conjoin (x y : conditionType) : conditionType := x ∧ y
+noncomputable def disjoin (x y : conditionType) : conditionType := x ∨ y
+noncomputable def member {T : Type} (x : T) (A : setType T) : conditionType := x ∈ A
+noncomputable def subset {T : Type} (A B : setType T) : conditionType := A ⊆ B
+noncomputable def add (x y : realType) : realType := x+y
+noncomputable def subtract (x y : realType) : realType := x-y
+noncomputable def negative (x : realType) : realType := -x
+noncomputable def atMost (x y : realType) : conditionType := x ≤ y
+noncomputable def atLeast (x y : realType) : conditionType := x ≥ y
+noncomputable def numeral (digits : Nat) : realType := (fun n : Nat => (n : Real)) digits
+local infix:50 " =ᵢ " => equal
+local infixr:35 " ∧ᵢ " => conjoin
+local infixr:30 " ∨ᵢ " => disjoin
+local infix:50 " ∈ᵢ " => member
+local infix:50 " ⊆ᵢ " => subset
+local infixl:65 " +ᵢ " => add
+local infixl:65 " -ᵢ " => subtract
+local prefix:75 "-ᵢ" => negative
+local infix:50 " ≤ᵢ " => atMost
+local infix:50 " ≥ᵢ " => atLeast
 noncomputable def yes : boolType := true
 noncomputable def no : boolType := false
 structure Ends : Type where
   lower : realType
   upper : realType
 noncomputable def ends (lower upper : realType) : Ends := @Ends.mk lower upper
-noncomputable def shift (I : Ends) (s : realType) : Ends := @ends (I.lower+s) (I.upper+s)
+noncomputable def shift (I : Ends) (s : realType) : Ends := @ends (I.lower+ᵢs) (I.upper+ᵢs)
 structure Selection : Type where
   lower : boolType
   upper : boolType
@@ -89,19 +117,19 @@ noncomputable def lowerOnly : Selection := @selection yes no
 noncomputable def upperOnly : Selection := @selection no yes
 noncomputable def both : Selection := @selection yes yes
 noncomputable def setOf {X : Type} (condition : X → conditionType) : setType X := _root_.setOf condition
-noncomputable def preimage {X Y : Type} (f : X → Y) (S : setType Y) : setType X := setOf (fun x : X => f x ∈ S)
+noncomputable def preimage {X Y : Type} (f : X → Y) (S : setType Y) : setType X := setOf (fun x : X => f x ∈ᵢ S)
 noncomputable def realMapType (X : spaceType) : Type :=
   @ContinuousMap X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace
 noncomputable def underlying (X : spaceType)
   (f : realMapType X) : pointType X → realType :=
   @ContinuousMap.toFun X.carrier ℝ X.str Real.pseudoMetricSpace.toUniformSpace.toTopologicalSpace f
-noncomputable def closed (I : Ends) : setType realType := setOf (fun x : realType => I.lower ≤ x ∧ x ≤ I.upper)
+noncomputable def closed (I : Ends) : setType realType := setOf (fun x : realType => I.lower ≤ᵢ x ∧ᵢ x ≤ᵢ I.upper)
 noncomputable def selected (I : Ends) (E : Selection) : setType realType :=
-  setOf (fun x : realType => (E.lower=yes ∧ x=I.lower) ∨ (E.upper=yes ∧ x=I.upper))
-noncomputable def expanded (I : Ends) (r : realType) : setType realType := setOf (fun x : realType => I.lower-r ≤ x ∧ x ≤ I.upper+r)
+  setOf (fun x : realType => (E.lower=ᵢyes ∧ᵢ x=ᵢI.lower) ∨ᵢ (E.upper=ᵢyes ∧ᵢ x=ᵢI.upper))
+noncomputable def expanded (I : Ends) (r : realType) : setType realType := setOf (fun x : realType => I.lower-ᵢr ≤ᵢ x ∧ᵢ x ≤ᵢ I.upper+ᵢr)
 noncomputable def boundary (I : Ends) (E : Selection) (r : realType) : setType realType :=
-  setOf (fun x : realType => ((E.lower=yes ∧ I.lower-r ≤ x) ∧ x ≤ I.lower+r) ∨
-                     ((E.upper=yes ∧ I.upper-r ≤ x) ∧ x ≤ I.upper+r))
+  setOf (fun x : realType => ((E.lower=ᵢyes ∧ᵢ I.lower-ᵢr ≤ᵢ x) ∧ᵢ x ≤ᵢ I.lower+ᵢr) ∨ᵢ
+                     ((E.upper=ᵢyes ∧ᵢ I.upper-ᵢr ≤ᵢ x) ∧ᵢ x ≤ᵢ I.upper+ᵢr))
 structure Problem : Type 1 where
   space : spaceType
   map : realMapType space
@@ -114,7 +142,7 @@ structure Pair (X : spaceType) : Type where
   ambient : setType (pointType X)
   relative : setType (pointType X)
 noncomputable def pair (X : spaceType) (ambient relative : setType (pointType X)) : Pair X := @Pair.mk X ambient relative
-noncomputable def nested (X : spaceType) (Q : Pair X) : conditionType := Q.relative ⊆ Q.ambient
+noncomputable def nested (X : spaceType) (Q : Pair X) : conditionType := Q.relative ⊆ᵢ Q.ambient
 noncomputable def expandedPair (P : Problem) (r : realType) : Pair P.space :=
   @pair P.space (preimage (@underlying P.space P.map) (expanded P.interval r))
                (preimage (@underlying P.space P.map) (boundary P.interval P.selection r))
@@ -122,7 +150,7 @@ noncomputable def shiftedPair (P : Problem) (t : realType) : Pair P.space :=
   @pair P.space (preimage (@underlying P.space P.map) (closed (shift P.interval t)))
                (preimage (@underlying P.space P.map) (selected (shift P.interval t) P.selection))
 noncomputable def included (X : spaceType) (Q R : Pair X) : conditionType :=
-  Q.ambient ⊆ R.ambient ∧ Q.relative ⊆ R.relative
+  Q.ambient ⊆ᵢ R.ambient ∧ᵢ Q.relative ⊆ᵢ R.relative
 
 noncomputable def evaluate {X Y : Type} (f : X → Y) (x : X) : Y := f x
 noncomputable def value (X : spaceType)
@@ -130,60 +158,60 @@ noncomputable def value (X : spaceType)
   evaluate (@underlying X f) x
 noncomputable def bounded (P : Problem)
   (h : realMapType P.space) (r : realType) : conditionType :=
-  ∀ x : pointType P.space, -r ≤ @value P.space h x - @value P.space P.map x ∧
-    @value P.space h x - @value P.space P.map x ≤ r
+  ∀ x : pointType P.space, -ᵢr ≤ᵢ @value P.space h x -ᵢ @value P.space P.map x ∧ᵢ
+    @value P.space h x -ᵢ @value P.space P.map x ≤ᵢ r
 noncomputable def perturbed (P : Problem)
   (h : realMapType P.space) : Pair P.space :=
   @pair P.space (preimage (@underlying P.space h) (closed P.interval))
                (preimage (@underlying P.space h) (selected P.interval P.selection))
 
-def choicesStatement : Prop := ∀ E : Selection, ((E=neither ∨ E=lowerOnly) ∨ E=upperOnly) ∨ E=both
-def endpointsStatement : Prop := ∀ (I : Ends) (E : Selection), I.lower ≤ I.upper → selected I E ⊆ closed I
-def expandedStatement : Prop := ∀ (P : Problem) (r : realType), P.interval.lower ≤ P.interval.upper → r ≥ 0 →
+def choicesStatement : Prop := ∀ E : Selection, ((E=ᵢneither ∨ᵢ E=ᵢlowerOnly) ∨ᵢ E=ᵢupperOnly) ∨ᵢ E=ᵢboth
+def endpointsStatement : Prop := ∀ (I : Ends) (E : Selection), I.lower ≤ᵢ I.upper → selected I E ⊆ᵢ closed I
+def expandedStatement : Prop := ∀ (P : Problem) (r : realType), P.interval.lower ≤ᵢ P.interval.upper → r ≥ᵢ numeral (nat_lit 0) →
   @nested P.space (@expandedPair P r)
-def shiftedStatement : Prop := ∀ (P : Problem) (t : realType), P.interval.lower ≤ P.interval.upper →
+def shiftedStatement : Prop := ∀ (P : Problem) (t : realType), P.interval.lower ≤ᵢ P.interval.upper →
   @nested P.space (@shiftedPair P t)
-def inclusionStatement : Prop := ∀ (P : Problem) (r t : realType), r ≥ 0 → (-r ≤ t ∧ t ≤ r) →
+def inclusionStatement : Prop := ∀ (P : Problem) (r t : realType), r ≥ᵢ numeral (nat_lit 0) → (-ᵢr ≤ᵢ t ∧ᵢ t ≤ᵢ r) →
   @included P.space (@shiftedPair P t) (@expandedPair P r)
 def perturbedStatement : Prop := ∀ (P : Problem)
   (h : realMapType P.space),
-  P.interval.lower ≤ P.interval.upper → @nested P.space (@perturbed P h)
+  P.interval.lower ≤ᵢ P.interval.upper → @nested P.space (@perturbed P h)
 def boundedStatement : Prop := ∀ (P : Problem)
   (h : realMapType P.space) (r : realType),
-  r ≥ 0 → @bounded P h r → @included P.space (@perturbed P h) (@expandedPair P r)
-noncomputable def certify (X : spaceType) (Q : Pair X) (h : Q.relative ⊆ Q.ambient) : CERTPAIR X :=
+  r ≥ᵢ numeral (nat_lit 0) → @bounded P h r → @included P.space (@perturbed P h) (@expandedPair P r)
+noncomputable def certify (X : spaceType) (Q : Pair X) (h : Q.relative ⊆ᵢ Q.ambient) : CERTPAIR X :=
   @CERTCONSTRUCTOR X Q.ambient Q.relative h
 noncomputable def certifyInclusion (X : spaceType) (S T : Pair X)
-  (s : S.relative ⊆ S.ambient) (t : T.relative ⊆ T.ambient)
-  (a : S.ambient ⊆ T.ambient) (b : S.relative ⊆ T.relative) : CERTINCLUSION X :=
+  (s : S.relative ⊆ᵢ S.ambient) (t : T.relative ⊆ᵢ T.ambient)
+  (a : S.ambient ⊆ᵢ T.ambient) (b : S.relative ⊆ᵢ T.relative) : CERTINCLUSION X :=
   @INCLUSIONCONSTRUCTOR X (@certify X S s) (@certify X T t) a b
 noncomputable def represents (X : spaceType) (Q : CERTPAIR X) (S : Pair X) : conditionType :=
-  Q.ambient=S.ambient ∧ Q.relative=S.relative
+  Q.ambient=ᵢS.ambient ∧ᵢ Q.relative=ᵢS.relative
 def certifiedExpandedStatement : Prop := ∀ (P : Problem) (r : realType),
-  P.interval.lower ≤ P.interval.upper → r ≥ 0 →
+  P.interval.lower ≤ᵢ P.interval.upper → r ≥ᵢ numeral (nat_lit 0) →
   let T : Pair P.space := @expandedPair P r;
   ∃ Q : CERTPAIR P.space, @represents P.space Q T
 def certifiedShiftStatement : Prop := ∀ (P : Problem) (r t : realType),
-  P.interval.lower ≤ P.interval.upper → r ≥ 0 → (-r ≤ t ∧ t ≤ r) →
+  P.interval.lower ≤ᵢ P.interval.upper → r ≥ᵢ numeral (nat_lit 0) → (-ᵢr ≤ᵢ t ∧ᵢ t ≤ᵢ r) →
   let S : Pair P.space := @shiftedPair P t;
   let T : Pair P.space := @expandedPair P r;
   ∃ Q : CERTINCLUSION P.space,
-    @represents P.space Q.source S ∧ @represents P.space Q.target T
+    @represents P.space Q.source S ∧ᵢ @represents P.space Q.target T
 def certifiedPerturbationStatement : Prop := ∀ (P : Problem)
   (h : realMapType P.space) (r : realType),
-  P.interval.lower ≤ P.interval.upper → r ≥ 0 → @bounded P h r →
+  P.interval.lower ≤ᵢ P.interval.upper → r ≥ᵢ numeral (nat_lit 0) → @bounded P h r →
   let S : Pair P.space := @perturbed P h;
   let T : Pair P.space := @expandedPair P r;
   ∃ Q : CERTINCLUSION P.space,
-    @represents P.space Q.source S ∧ @represents P.space Q.target T
+    @represents P.space Q.source S ∧ᵢ @represents P.space Q.target T
 
-def certifyStatement : Prop := ∀ (X : spaceType) (S : Pair X) (h : S.relative ⊆ S.ambient),
+def certifyStatement : Prop := ∀ (X : spaceType) (S : Pair X) (h : S.relative ⊆ᵢ S.ambient),
   @represents X (@certify X S h) S
 def certifyInclusionStatement : Prop := ∀ (X : spaceType) (S T : Pair X)
-  (s : S.relative ⊆ S.ambient) (t : T.relative ⊆ T.ambient)
-  (a : S.ambient ⊆ T.ambient) (b : S.relative ⊆ T.relative),
+  (s : S.relative ⊆ᵢ S.ambient) (t : T.relative ⊆ᵢ T.ambient)
+  (a : S.ambient ⊆ᵢ T.ambient) (b : S.relative ⊆ᵢ T.relative),
   let Q : CERTINCLUSION X := @certifyInclusion X S T s t a b;
-  @represents X Q.source S ∧ @represents X Q.target T
+  @represents X Q.source S ∧ᵢ @represents X Q.target T
 end InterlevelOracle
 '''
 expected=expected.replace('CERTPAIR',env.structures['TopologicalPair']['key']).replace('CERTINCLUSION',env.structures['PairInclusion']['key']).replace('CERTCONSTRUCTOR',function('topological pair')).replace('INCLUSIONCONSTRUCTOR',function('pair inclusion'))
@@ -205,6 +233,7 @@ proofs=r'''
 namespace InterlevelProofs
 theorem endpoint_choices_are_exhaustive : CleanStatements.endpoint_choices_are_exhaustive := by
   intro E
+  change ((E=NONE ∨ E=LOWER) ∨ E=UPPER) ∨ E=BOTH
   rcases E with ⟨l,u⟩
   cases l <;> cases u <;>
     first | exact Or.inl (Or.inl (Or.inl rfl)) | exact Or.inl (Or.inl (Or.inr rfl)) |
@@ -220,6 +249,7 @@ theorem selected_endpoints_lie_in_the_interval : CleanStatements.selected_endpoi
 
 theorem expanded_pair_is_nested : CleanStatements.expanded_pair_is_nested := by
   intro P r ho _hr x hx
+  change P.interval.lower ≤ P.interval.upper at ho
   change ((P.selection.lower=true ∧ P.interval.lower-r ≤ P.map x) ∧ P.map x ≤ P.interval.lower+r) ∨
     ((P.selection.upper=true ∧ P.interval.upper-r ≤ P.map x) ∧ P.map x ≤ P.interval.upper+r) at hx
   change P.interval.lower-r ≤ P.map x ∧ P.map x ≤ P.interval.upper+r
@@ -229,6 +259,7 @@ theorem expanded_pair_is_nested : CleanStatements.expanded_pair_is_nested := by
 
 theorem shifted_pair_is_nested : CleanStatements.shifted_pair_is_nested := by
   intro P t ho x hx
+  change P.interval.lower ≤ P.interval.upper at ho
   change (P.selection.lower=true ∧ P.map x=P.interval.lower+t) ∨
     (P.selection.upper=true ∧ P.map x=P.interval.upper+t) at hx
   change P.interval.lower+t ≤ P.map x ∧ P.map x ≤ P.interval.upper+t
@@ -238,6 +269,7 @@ theorem shifted_pair_is_nested : CleanStatements.shifted_pair_is_nested := by
 
 theorem shifted_pair_lies_in_expanded_pair : CleanStatements.shifted_pair_lies_in_expanded_pair := by
   intro P r t _hr ht
+  change -r ≤ t ∧ t ≤ r at ht
   constructor
   · intro x hx
     change P.interval.lower+t ≤ P.map x ∧ P.map x ≤ P.interval.upper+t at hx
@@ -255,6 +287,7 @@ theorem shifted_pair_lies_in_expanded_pair : CleanStatements.shifted_pair_lies_i
       exact ⟨⟨he,by linarith [ht.1]⟩,by linarith [ht.2]⟩
 theorem perturbed_pair_is_nested : CleanStatements.perturbed_pair_is_nested := by
   intro P h ho x hx
+  change P.interval.lower ≤ P.interval.upper at ho
   change (P.selection.lower=true ∧ h x=P.interval.lower) ∨
     (P.selection.upper=true ∧ h x=P.interval.upper) at hx
   change P.interval.lower ≤ h x ∧ h x ≤ P.interval.upper
@@ -314,6 +347,8 @@ theorem certification_preserves_inclusion_data : CleanStatements.certification_p
   exact ⟨⟨rfl,rfl⟩,⟨rfl,rfl⟩⟩
 end InterlevelProofs
 '''
+for token,name in [('NONE','no endpoints'),('LOWER','lower endpoint'),('UPPER','upper endpoint'),('BOTH','both endpoints')]:
+    proofs=proofs.replace(token,function(name))
 proofs=proofs.replace('EXPANDED',function('expanded pair')).replace('SHIFTED',function('shifted pair')).replace('PERTURBED',function('perturbed pair'))
 path=here/'InterlevelVerified.lean';path.write_text(source+comparison+expected+'\n'.join(checks)+'\n'+proofs)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)

@@ -303,3 +303,36 @@ image, well groups, shifted perturbations and extreme images. No compiler syntax
 changed in this checkpoint, and the previously reported full-suite failure and
 research-proof gaps remain open.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Interlevel now passes 77 canonical checks and twelve proofs. Its independent
+oracle declares scalar, logic, set and numeral adapters explicitly. Test-local
+Lean notation with distinct suffixed tokens keeps those wrappers visible in the
+expected expressions without competing with native Lean notation. These are
+oracle-only tokens, not proposed Clean syntax. The real zero uses the declared
+constructor with a primitive `nat_lit 0` payload. Native proof tactics expose
+wrapped order/equality with `change`; structural target checks do not unfold them.
+
+Compact image passes its two exact checks, its theorem and its native-statement
+equivalence with the unchanged verifier. The generated Lean imports the current
+explicit operators. Interlevel's three-page specimen and a temporary one-page
+compact-image rendering compiled twice and were visually inspected, with no box
+or unresolved-reference warnings. Compact image has no tracked PDF wrapper;
+its temporary rendering is not a new published artifact.
+
+Thirteen of eighteen topology verifiers now pass: 370 summed per-verifier target
+checks and 67 proofs, counting repeated foundational checks. Relative, relative
+maps, well groups, shifted perturbations and extreme images remain pending.
+The full regression result remains 44 failures and 71 errors; no compiler source
+changed in this checkpoint, so it was not rerun.
+
+A current run of `verify_relative.py` rejects undeclared equality on large
+parameterized carriers. Unlike bundled-space equality, its concrete adapter
+also needs a field-structure value inferred from operand types. A direct probe
+of the proposed `same module(M,N)` declaration rejects `field` as an unsupported
+implicit parameter. See the [inferred-value proposal](../../docs/inferred-value-parameters.md)
+for the constructive rule and pending checks. Merely adding a binary adapter is
+not possible under the present signature restriction. This is language work;
+the research-proof limitations remain separately unchanged.
+:::

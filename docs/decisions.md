@@ -989,3 +989,16 @@ first. This preserves the selected constructor across subsequent default scopes.
 The combined patch is reviewable separately while explicit library migration is
 pending; it does not change the working compiler yet.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [inferred value parameter proposal](inferred-value-parameters.md) records a
+newly exposed topology requirement: binary equality of parameterized Type-1
+modules/chain complexes needs the field structure inferred from operand types.
+Current implicit parameters remain restricted to Type and Natural. The proposal
+keeps existing syntax and specifies direct-index recovery, telescope type checks,
+repeated-index agreement, deterministic representation selection and explicit Lean
+arguments. It is not implemented or accepted as conforming; its canonical and
+interaction checks are pending in the acceptance catalog. This does not add
+general universe/sort polymorphism or implicit proof search.
+:::
