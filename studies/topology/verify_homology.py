@@ -28,6 +28,8 @@ for n,t in [('bundle','coefficient module'),('theory','homology theory'),
  ('linear','homology linear map'),('image','homology image'),
  ('identity','identity continuous map'),('compose','compose continuous maps')]:
     mapping['HomologyOracle.'+n]=function(t)
+for n,t in [('equal','equal'),('member','set member'),('equivalent','equivalence')]:
+    mapping['HomologyOracle.'+n]=function(t)
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
 open Lean Elab Command
@@ -76,6 +78,9 @@ noncomputable abbrev continuousType (X Y : spaceType) : Type :=
   @ContinuousMap X.carrier Y.carrier X.str Y.str
 noncomputable abbrev conditionType : Sort 1 := Prop
 noncomputable abbrev setType (X : Type) : Type := Set X
+noncomputable def equal {T : Type} (x y : T) : conditionType := x=y
+noncomputable def member {T : Type} (x : T) (A : setType T) : conditionType := x ∈ A
+noncomputable def equivalent (x y : conditionType) : conditionType := x ↔ y
 noncomputable def coefficientType (K : Type) (field : fieldType K) : Type 1 := @ModuleCat.{0,0} K field.toRing
 noncomputable def elementType (K : Type) (field : fieldType K) (M : coefficientType K field) : Type :=
   @ModuleCat.carrier K field.toRing M
@@ -107,7 +112,7 @@ noncomputable def carrier {K : Type} (field : fieldType K) (M : coefficientType 
 noncomputable def belongs {K : Type} (field : fieldType K) (M : coefficientType K field)
   (x : elementType K field M)
   (U : subspaceType K field M) : conditionType :=
-  x ∈ @carrier K field M U
+  member x (@carrier K field M U)
 noncomputable def linear {K : Type} (field : fieldType K) (H : Theory K field) (X Y : spaceType)
   (g : continuousType X Y) : mapType K field MX MY :=
   letI : Field K := field
@@ -138,24 +143,24 @@ noncomputable def classInSpace (K : Type) (field : fieldType K) (H : Theory K fi
   ClassInSpace K field H := @ClassInSpace.mk K field H space element
 
 def identityStatement : Prop := ∀ (K : carrierType) (field : fieldType K) (H : Theory K field)
-  (X : spaceType) (x : CX), @value K field H X X (@identity X) x=x
+  (X : spaceType) (x : CX), equal (@value K field H X X (@identity X) x) x
 def compositionStatement : Prop := ∀ (K : carrierType) (field : fieldType K) (H : Theory K field)
   (X Y Z : spaceType) (f : continuousType X Y)
   (g : continuousType Y Z) (x : CX),
-  @value K field H X Z (@compose X Y Z g f) x = @value K field H Y Z g (@value K field H X Y f x)
+  equal (@value K field H X Z (@compose X Y Z g f) x) (@value K field H Y Z g (@value K field H X Y f x))
 def applicationStatement : Prop := ∀ (K : carrierType) (field : fieldType K) (H : Theory K field)
   (X Y : spaceType) (f : continuousType X Y) (x : CX),
   let h : CX → CY := @induced K field H X Y f;
-  h x = @value K field H X Y f x
+  equal (h x) (@value K field H X Y f x)
 def rangeStatement : Prop := ∀ (K : carrierType) (field : fieldType K) (H : Theory K field)
   (X Y : spaceType) (f : continuousType X Y) (x : CY),
   let h : CX → CY := @induced K field H X Y f;
   let U : subspaceType K field MY := @image K field H X Y f;
-  @belongs K field MY x U ↔ @Exists CX (fun y => h y = x)
+  equivalent (@belongs K field MY x U) (@Exists CX (fun y => equal (h y) x))
 def fieldStatement : Prop := ∀ (K : carrierType) (field : fieldType K) (H : Theory K field)
   (P : ClassInSpace K field H),
   @Exists (elementType K field (@homology K field H (@ClassInSpace.space K field H P)))
-    (fun x => x = @ClassInSpace.element K field H P)
+    (fun x => equal x (@ClassInSpace.element K field H P))
 end HomologyOracle
 '''
 # Independently authored native class type; textual expansion only avoids repeating

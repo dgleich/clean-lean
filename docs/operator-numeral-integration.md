@@ -122,3 +122,20 @@ lambda, quantified and numeral-annotation branches. A fresh full run after these
 changes is underway; no full-suite pass is claimed. Proof-valued equality remains
 an observed unsupported case, distinct from the now-supported space equality.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The full run after the bundled-space and name-scanner changes finished with
+692 tests in 1398.891 seconds: 44 failures and 71 errors. This is a failed
+regression run, separate from the focused successes. Remaining failures include
+fixtures missing explicit operator imports, outdated native expectations and
+unsupported carrier cases; each needs diagnosis rather than blanket expectation
+replacement.
+
+Four more topology verifiers pass with independent expectations retaining the
+declared operators: evidence, homology, local names and chain squares. They add
+112 per-verifier canonical checks and 13 proofs. The
+[topology report](../studies/topology/binding-migration.md) records ten of eighteen
+verifiers revalidated and the eight still pending. This does not establish full
+compiler conformance or prove the research theorems.
+:::

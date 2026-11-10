@@ -18,8 +18,8 @@ def imageStatement : Prop := ∀ (K : CARRIER) (field : FIELD K) (H : THEORY K f
   let N : COEFFICIENT K field := @HOMOLOGY K field H X Q.target
   let f : MODULEMAP K field (@HOMOLOGY K field H X Q.source) (@HOMOLOGY K field H X Q.target) := @HMAP K field H X Q h
   let U : SUBMODULE K field (@HOMOLOGY K field H X Q.target) := @IMAGE K field H X Q h
-  ∀ (x : ELEMENT K field N), @BELONGS K field N x U ↔
-    Exists (fun (y : ELEMENT K field M) => @VALUE K field M N f y = x)
+  ∀ (x : ELEMENT K field N), EQUIVALENT (@BELONGS K field N x U)
+    (Exists (fun (y : ELEMENT K field M) => EQUAL (@VALUE K field M N f y) x))
 def quotientStatement : Prop := ∀ (K : CARRIER) (field : FIELD K) (H : THEORY K field)
   (X : SPACE) (Q : PAIR X) (h : @COMMUTES K field H X Q),
   let A : CHAINTYPE := ASOURCE
@@ -30,7 +30,7 @@ def quotientStatement : Prop := ∀ (K : CARRIER) (field : FIELD K) (H : THEORY 
   let p : MAPTYPE ASOURCE CSOURCE := @PROJECTION K field H X Q.source
   let q : MAPTYPE ATARGET CTARGET := @PROJECTION K field H X Q.target
   let g : MAPTYPE ASOURCE ATARGET := @AMBIENT K field H X Q
-  @COMPOSE K field A C D f p = @COMPOSE K field A B D q g
+  EQUAL (@COMPOSE K field A C D f p) (@COMPOSE K field A B D q g)
 end LocalNamesOracle
 '''
 # Local names remain in authored arguments; inferred map types retain their
@@ -44,7 +44,7 @@ subs={'THEORY':e.structures['HomologyTheory']['key'],'PAIR':e.structures['PairIn
 for token,name in [('COMMUTES','pair chain commutes'),('HOMOLOGY','relative homology'),('HMAP','relative homology map'),
  ('IMAGE','relative homology image'),('BELONGS','belongs to module subspace'),('VALUE','module map value'),
  ('CMAP','relative chain map'),('PROJECTION','relative chain projection'),('AMBIENT','ambient chain map'),
- ('COMPOSE','compose chain maps'),('SINGULAR','singular chains'),('SUBSPACE','subspace'),('CHAINS','relative chains')]:subs[token]='_root_.'+e.data['functions'][name]['native_binding']
+ ('EQUAL','equal'),('EQUIVALENT','equivalence'),('COMPOSE','compose chain maps'),('SINGULAR','singular chains'),('SUBSPACE','subspace'),('CHAINS','relative chains')]:subs[token]='_root_.'+e.data['functions'][name]['native_binding']
 for token,name in [('CARRIER','Type'),('FIELD','FieldStructure'),('SPACE','TopologicalSpace'),
                    ('COEFFICIENT','CoefficientModule'),('MODULEMAP','ModuleMap'),
                    ('ELEMENT','ModuleElement'),('SUBMODULE','ModuleSubspace'),
@@ -94,9 +94,18 @@ theorem quotient_commutation : CleanStatements.named_relative_quotient_maps_comm
   exact CategoryTheory.Limits.cokernel.π_desc _ _ _
 end LocalNamesProofs
 '''
+condition_type=e.data['types']['Proposition']['native_binding']
+eq=e.data['functions']['equal']['native_binding']
+iff=e.data['functions']['equivalence']['native_binding']
+comparison+=f"""
+noncomputable def expected_local_equal {{T : Type}} (x y : T) : _root_.{condition_type} := x=y
+noncomputable def expected_local_equivalent (x y : _root_.{condition_type}) : _root_.{condition_type} := x ↔ y
+same_target {eq} expected_local_equal
+same_target {iff} expected_local_equivalent
+"""
 comparison+=f'\nsame_target {chain_type} expected_local_chain_type\nsame_target {map_type} expected_local_chain_map\n'
 p=here/'LocalNamesVerified.lean';p.write_text(source+expected+comparison)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(p)],cwd=ROOT,check=True)
-print('Four exact local-name/chain-type targets and two proofs passed')
+print('Six exact local-name/chain-type/operator targets and two proofs passed')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

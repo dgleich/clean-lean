@@ -258,3 +258,29 @@ equality is not implemented: proof equality and other larger carriers still need
 eligible declarations or new carrier-signature support. See
 [the precise scope](../../docs/large-carrier-equality.md).
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Four further working-compiler verifiers now retain declared operator identities
+in their independently authored native expectations:
+
+| Verifier | Canonical target checks | Lean proofs |
+| --- | ---: | ---: |
+| Evidence | 46 | 4 |
+| Homology | 41 | 5 |
+| Local names | 6 | 2 |
+| Chain squares | 19 | 2 |
+
+The checks cover explicit inclusion evidence, induced homology maps, local
+names for dependent maps, and commuting quotient squares. Native adapter bodies
+remain separately checked; authored equality, conjunction, membership and subset
+expressions retain their declared wrappers. Proof scripts unfold equality where
+Lean tactics need it. Canonical comparisons remain structural.
+
+All four specimens compiled twice and their four pages were visually inspected.
+Ten of eighteen topology verifiers have now passed after operator integration:
+267 summed per-verifier target checks and 47 proofs, including repeated checks
+of shared adapters. Eight remain pending: interlevel, relative, relative maps,
+compact image, pair composition, well groups, shifted perturbations and extreme
+images. The previously documented missing research proofs remain missing.
+:::

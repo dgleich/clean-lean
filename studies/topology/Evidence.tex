@@ -2,18 +2,18 @@
 \begin{cleanresult}{assumed inclusion constructs certified data}\cleanattribution{[Topology foundations, certified inclusion constructor]}
 Let $X$ be a type.
 Let $S$ and $T$ be subsets of $X$.
-Assume $S \text{ is a subset of } T$ (\texttt{inclusion}).
+Assume $S\subseteq T$ (\texttt{inclusion}).
 Let $Q = \operatorname{certified\ inclusion}(X, S, T, \mathit{inclusion})$.
-Then \[Q.\mathrm{source} = S \text{ and } Q.\mathrm{target} = T.\]
+Then \[Q.\mathrm{source}=S\text{ and }Q.\mathrm{target}=T.\]
 \end{cleanresult}
 
 \begin{cleanresult}{inclusion preserves the underlying element}\cleanattribution{[Topology foundations, Set.inclusion underlying value]}
 Let $X$ be a type.
 Let $S$ and $T$ be subsets of $X$.
-Assume $S \text{ is a subset of } T$ (\texttt{inclusion}).
+Assume $S\subseteq T$ (\texttt{inclusion}).
 Let $x$ be an element of $S$.
 Let $f = \iota_{S,T}$.
-Then \[f(x) = x.\]
+Then \[f(x)=x.\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
 
@@ -22,14 +22,14 @@ Let $X$ be a type.
 Let $Q$ be a certified inclusion between subsets of $X$.
 Let $x$ be an element of $Q.\mathrm{source}$.
 Let $f = \iota_{Q}$.
-Then \[f(x) = x.\]
+Then \[f(x)=x.\]
 \par\smallskip{\footnotesize Adapted from the cited source.}
 \end{cleanresult}
 
 \begin{cleanresult}{pair inclusion square commutes}\cleanattribution{[Topology foundations, commuting square of subtype inclusions]}
 Let $X$ be a topological space.
 Let $Q$ be a certified inclusion between pairs in $X$.
-Then \[\operatorname{ambient\ composite}(X, Q) = \operatorname{relative\ composite}(X, Q).\]
+Then \[\operatorname{ambient\ composite}(X, Q)=\operatorname{relative\ composite}(X, Q).\]
 \end{cleanresult}
 
 % generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
