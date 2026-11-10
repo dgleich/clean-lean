@@ -106,3 +106,12 @@ regression checks are being renewed for this revision. The prior production run
 finished normally: 745 tests in 1513.821 seconds, with 33 failures and 46 errors.
 That result describes the preceding condition-inference revision, not this change.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Working-compiler validation completed: 55 focused tests, four canonical targets,
+two agreement proofs, and the 92-proof generated corpus passed. The complete
+regression finished normally with 750 tests in 345.098 seconds, 33 failures and
+46 errors. These counts do not establish general conformance; the test suite
+still fails. All 18 topology verifiers also passed on this revision.
+:::

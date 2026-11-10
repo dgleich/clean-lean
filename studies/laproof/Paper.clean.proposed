@@ -1,0 +1,139 @@
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+-- REVIEW DRAFT, NOT A COMPILABLE MODULE.
+-- Bounds.clean is implemented. IEEE754.clean below is an UNIMPLEMENTED interface.
+-- No theorem here is asserted as an axiom or presented as proved.
+Import "Bounds.clean"
+Import "IEEE754.clean"
+
+Text:
+  This mathematical companion separates exact list operations, numerical error
+  bounds, IEEE arithmetic, and program correctness. The first two layers are
+  implemented in the accompanying modules. The IEEE and C layers remain pending.
+
+-- Required interface: valid format(p,e); Float(p,e); value; finite;
+-- floating add, floating multiply, floating fma, floating zero.
+-- These must come from a verified IEEE model, not unconstrained parameters.
+-- The intended rounding mode and admissible precision/exponents must be pinned.
+
+Define real vector(x):
+  Let p,e: Natural
+  Let x: List(Float(p,e))
+  Returns: List(Real)
+  Equals: map(function(a: Float(p,e),value(a)),x)
+
+Define real matrix(A):
+  Let p,e: Natural
+  Let A: List(List(Float(p,e)))
+  Returns: List(List(Real))
+  Equals: map(function(row: List(Float(p,e)),real vector(row)),A)
+
+Define computed dot(x,y):
+  Let p,e: Natural
+  Let x,y: List(Float(p,e))
+  Returns: Float(p,e)
+  Equals: dot(floating add(p,e),floating multiply(p,e),floating zero(p,e),x,y)
+
+Define computed fused dot(x,y):
+  Let p,e: Natural
+  Let x,y: List(Float(p,e))
+  Returns: Float(p,e)
+  Equals: fused dot(floating fma(p,e),floating zero(p,e),x,y)
+
+Define computed sum(x):
+  Let p,e: Natural
+  Let x: List(Float(p,e))
+  Returns: Float(p,e)
+  Equals: vector sum(floating add(p,e),floating zero(p,e),x)
+
+Define computed matrix vector(A,x):
+  Let p,e: Natural
+  Let A: List(List(Float(p,e)))
+  Let x: List(Float(p,e))
+  Returns: List(Float(p,e))
+  Equals: matrix vector(floating add(p,e),floating multiply(p,e),floating zero(p,e),A,x)
+
+Text:
+  The conditions dot accuracy, sum accuracy and matrix vector accuracy are
+  defined in Bounds.clean. Their existential perturbations, length constraints
+  and entrywise inequalities are ordinary translated Clean mathematics.
+  The results below connect those conditions to concrete IEEE computations.
+
+Result dot mixed error:
+  Attribution: laproof; Theorem 1 (bfDOT); adapted
+  Let p,e: Natural
+  Assume format: valid format(p,e)
+  Let x,y: List(Float(p,e))
+  Assume dimensions: list length(x) = list length(y)
+  Assume finite vector x: all entries(finite(p,e),x)
+  Assume finite vector y: all entries(finite(p,e),y)
+  Assume finite output: finite(p,e)(computed dot(x,y))
+  Conclude:
+    dot accuracy(unit roundoff(p),underflow bound(p,e),
+      real vector(x),real vector(y),value(computed dot(x,y)))
+
+Result sum backward error:
+  Attribution: laproof; Theorem 2 (bSUM); adapted
+  Let p,e: Natural
+  Assume format: valid format(p,e)
+  Let x: List(Float(p,e))
+  Assume finite input: all entries(finite(p,e),x)
+  Assume finite output: finite(p,e)(computed sum(x))
+  Conclude: sum accuracy(unit roundoff(p),real vector(x),value(computed sum(x)))
+
+Result matrix vector mixed error:
+  Attribution: laproof; Theorem 3 (bfMV); adapted
+  Let p,e: Natural
+  Assume format: valid format(p,e)
+  Let A: List(List(Float(p,e)))
+  Let x: List(Float(p,e))
+  Assume dimensions:
+    all entries(function(row: List(Float(p,e)),list length(row) = list length(x)),A)
+  Assume finite vector: all entries(finite(p,e),x)
+  Assume finite matrix: all entries(function(row: List(Float(p,e)),all entries(finite(p,e),row)),A)
+  Assume finite output: all entries(finite(p,e),computed matrix vector(A,x))
+  Conclude:
+    matrix vector accuracy(unit roundoff(p),underflow bound(p,e),
+      real matrix(A),real vector(x),real vector(computed matrix vector(A,x)))
+
+Result matrix vector avoids overflow:
+  Attribution: laproof; Theorem 4 (finiteMV); adapted
+  Let p,e: Natural
+  Assume format: valid format(p,e)
+  Let A: List(List(Float(p,e)))
+  Let x: List(Float(p,e))
+  Assume finite vector: all entries(finite(p,e),x)
+  Assume finite matrix: all entries(function(row: List(Float(p,e)),all entries(finite(p,e),row)),A)
+  Assume safe entries:
+    safe matrix vector input(unit roundoff(p),underflow bound(p,e),e,real matrix(A),real vector(x))
+  Conclude: all entries(finite(p,e),computed matrix vector(A,x))
+
+Result fused dot mixed error:
+  Attribution: laproof; Section II.A(c); adapted
+  Let p,e: Natural
+  Assume format: valid format(p,e)
+  Let x,y: List(Float(p,e))
+  Assume dimensions: list length(x) = list length(y)
+  Assume finite vector x: all entries(finite(p,e),x)
+  Assume finite vector y: all entries(finite(p,e),y)
+  Assume finite output: finite(p,e)(computed fused dot(x,y))
+  Conclude:
+    dot accuracy(unit roundoff(p),underflow bound(p,e),
+      real vector(x),real vector(y),value(computed fused dot(x,y)))
+
+Text:
+  Equation (8) needs source reconciliation before its sharper forward bound is
+  adopted: the displayed two-argument h has no definition. The looser forward
+  condition in Bounds.clean follows the g(n,n) conclusion of Theorem 1.
+  The sparse bound must count support and connect skipped zeros to the floating
+  equivalence relation. Changing the traversal order is not automatically valid.
+
+Text:
+  The CSR layer needs a representation with row pointers, column indices and
+  values; dimension, monotonicity, index-range and row-order invariants; a pure
+  fused accumulator over each row segment; and equivalence to the dense fused
+  computation. The postcondition uses floating equivalence, not bitwise equality.
+  The C theorem additionally needs a memory model, permission shares, separation
+  assertions and preservation of the input arrays and untouched memory. None of
+  those obligations is discharged by the numerical bounds or list definitions.
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

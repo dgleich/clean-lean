@@ -1,0 +1,219 @@
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+Import "../../library/Common.clean"
+Import "../../library/analysis.clean"
+
+Source laproof:
+  Kind: other
+  Label: Kellison, Appel, Tekriwal and Bindel (2023)
+  Title: LAProof: A Library of Formal Proofs of Accuracy and Correctness for Linear Algebra Programs
+  Author: Ariel E. Kellison, Andrew W. Appel, Mohit Tekriwal, David Bindel
+  Url: https://www.cs.princeton.edu/~appel/papers/LAProof.pdf
+  Note: DOI 10.1109/ARITH58626.2023.00021; adaptations and unresolved source discrepancies are recorded in README.md
+
+-- Generic list primitives are the only new Lean adapters in this module.
+Notation zip with(f,x,y):
+  Let T,U,V: Type
+  Let f: Function(T,Function(U,V))
+  Let x: List(T)
+  Let y: List(U)
+  Returns: List(V)
+  Means: List.zipWith f x y
+  Render latex: \operatorname{{zipWith}}({f},{x},{y})
+
+Notation fold left(f,z,x):
+  Let T,U: Type
+  Let f: Function(U,Function(T,U))
+  Let z: U
+  Let x: List(T)
+  Returns: U
+  Means: List.foldl f z x
+  Render latex: \operatorname{{foldl}}({f},{z},{x})
+
+Notation fold right(f,z,x):
+  Let T,U: Type
+  Let f: Function(T,Function(U,U))
+  Let z: U
+  Let x: List(T)
+  Returns: U
+  Means: List.foldr f z x
+  Render latex: \operatorname{{foldr}}({f},{z},{x})
+
+Notation list transpose(A):
+  Let T: Type
+  Let A: List(List(T))
+  Returns: List(List(T))
+  Means: List.transpose A
+  Render latex: \operatorname{{transpose}}({A})
+
+-- u denotes unit roundoff, eta denotes the underflow error bound.
+Define accumulated rounding(u: Real,n: Natural): Real:
+  Equals: (1+u)^n-1
+  Render latex: h_{{{u}}}({n})
+
+Define accumulated underflow(u: Real,eta: Real,n: Natural,m: Natural): Real:
+  Equals: real index(n)*eta*(1+accumulated rounding(u,m))
+  Render latex: g_{{{u},{eta}}}({n},{m})
+
+Define unit roundoff(p: Natural): Real:
+  Equals: 1/(2^p)
+
+-- Division avoids subtraction of natural exponents.
+Define underflow bound(p: Natural,e: Natural): Real:
+  Equals: 4/((2^e)*(2^p))
+
+-- The explicit initial value specifies the empty-list case omitted in the paper.
+Define dot(add,mul,z,x,y):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let z: T
+  Let x,y: List(T)
+  Returns: T
+  Equals: fold left(add,z,zip with(mul,x,y))
+
+Define vector sum(add,z,x):
+  Let T: Type
+  Let add: Function(T,Function(T,T))
+  Let z: T
+  Let x: List(T)
+  Returns: T
+  Equals: fold right(add,z,x)
+
+Define vector add(add,x,y):
+  Let T: Type
+  Let add: Function(T,Function(T,T))
+  Let x,y: List(T)
+  Returns: List(T)
+  Equals: zip with(add,x,y)
+
+Define vector scale(mul,a,x):
+  Let T: Type
+  Let mul: Function(T,Function(T,T))
+  Let a: T
+  Let x: List(T)
+  Returns: List(T)
+  Equals: map(mul(a),x)
+
+Define vector axpby(add,mul,a,x,b,y):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let a: T
+  Let x: List(T)
+  Let b: T
+  Let y: List(T)
+  Returns: List(T)
+  Equals: vector add(add,vector scale(mul,a,x),vector scale(mul,b,y))
+
+Define matrix vector(add,mul,z,A,x):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let z: T
+  Let A: List(List(T))
+  Let x: List(T)
+  Returns: List(T)
+  Equals: map(function(row: List(T),dot(add,mul,z,row,x)),A)
+
+Define scaled matrix vector(add,mul,z,a,A,x):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let z,a: T
+  Let A: List(List(T))
+  Let x: List(T)
+  Returns: List(T)
+  Equals: vector scale(mul,a,matrix vector(add,mul,z,A,x))
+
+Define general matrix vector(add,mul,z,a,A,x,b,y):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let z,a: T
+  Let A: List(List(T))
+  Let x: List(T)
+  Let b: T
+  Let y: List(T)
+  Returns: List(T)
+  Equals: vector add(add,scaled matrix vector(add,mul,z,a,A,x),vector scale(mul,b,y))
+
+Define matrix scale(mul,a,A):
+  Let T: Type
+  Let mul: Function(T,Function(T,T))
+  Let a: T
+  Let A: List(List(T))
+  Returns: List(List(T))
+  Equals: map(function(row: List(T),vector scale(mul,a,row)),A)
+
+Define matrix add(add,A,B):
+  Let T: Type
+  Let add: Function(T,Function(T,T))
+  Let A,B: List(List(T))
+  Returns: List(List(T))
+  Equals: zip with(function(x: List(T),function(y: List(T),vector add(add,x,y))),A,B)
+
+-- Explicit row-major convention; not the untransposed MM snippet on page 5.
+Define matrix product(add,mul,z,A,B):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let z: T
+  Let A,B: List(List(T))
+  Returns: List(List(T))
+  Equals: map(function(row: List(T),map(function(column: List(T),dot(add,mul,z,row,column)),list transpose(B))),A)
+
+Define scaled matrix product(add,mul,z,a,A,B):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let z,a: T
+  Let A,B: List(List(T))
+  Returns: List(List(T))
+  Equals: matrix scale(mul,a,matrix product(add,mul,z,A,B))
+
+Define matrix axpby(add,mul,a,A,b,B):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let a: T
+  Let A: List(List(T))
+  Let b: T
+  Let B: List(List(T))
+  Returns: List(List(T))
+  Equals: matrix add(add,matrix scale(mul,a,A),matrix scale(mul,b,B))
+
+Define general matrix product(add,mul,z,a,A,X,b,Y):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let z,a: T
+  Let A,X: List(List(T))
+  Let b: T
+  Let Y: List(List(T))
+  Returns: List(List(T))
+  Equals: matrix axpby(add,mul,a,matrix product(add,mul,z,A,X),b,Y)
+
+Define fused dot(fma,z,x,y):
+  Let T: Type
+  Let fma: Function(T,Function(T,Function(T,T)))
+  Let z: T
+  Let x,y: List(T)
+  Returns: T
+  Equals:
+    fold left(function(s: T,function(step: Function(T,T),step(s))),z,
+      zip with(function(a: T,function(b: T,function(s: T,fma(a)(b)(s)))),x,y))
+
+Define exact sum(x: List(Real)): Real:
+  Equals: vector sum(function(a: Real,function(b: Real,a+b)),0,x)
+
+Define exact dot(x: List(Real),y: List(Real)): Real:
+  Equals: dot(function(a: Real,function(b: Real,a+b)),function(a: Real,function(b: Real,a*b)),0,x,y)
+
+Define absolute product sum(x: List(Real),y: List(Real)): Real:
+  Equals: exact sum(zip with(function(a: Real,function(b: Real,abs(a*b))),x,y))
+
+Define vector norm one(x: List(Real)): Real:
+  Equals: exact sum(map(function(a: Real,abs(a)),x))
+
+Define vector norm two(x: List(Real)): Real:
+  Equals: sqrt(exact dot(x,x))
+
+Condition floating equivalence(finite,value,x,y):
+  Let T: Type
+  Let finite: Function(T,Proposition)
+  Let value: Function(T,Real)
+  Let x,y: T
+  Holds when: (finite(x) and finite(y) and value(x) = value(y)) or (not finite(x) and not finite(y))
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

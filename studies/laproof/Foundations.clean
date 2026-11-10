@@ -1,0 +1,14 @@
+Import "CSR.clean"
+
+Result no accumulated rounding at zero:
+  Attribution: laproof; equation 4; adapted
+  Let u: Real
+  Conclude: accumulated rounding(u,0) = 0
+
+Result no accumulated underflow at zero:
+  Attribution: laproof; equation 5; adapted
+  Let u,eta: Real
+  Let m: Natural
+  Conclude: accumulated underflow(u,eta,0,m) = 0
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

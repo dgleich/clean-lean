@@ -1,0 +1,80 @@
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+Import "Bounds.clean"
+
+Notation initial indices(n: Natural): List(Natural):
+  Means: List.range n
+  Render latex: [0,\ldots,{n}-1]
+
+Notation list entry(x,i,fallback):
+  Let T: Type
+  Let x: List(T)
+  Let i: Natural
+  Let fallback: T
+  Returns: T
+  Means: List.getD x i fallback
+  Render latex: \operatorname{{getD}}({x},{i},{fallback})
+
+Structure CSR(T: Type):
+  Let rows,columns: Natural
+  Let values: List(T)
+  Let indices,pointers: List(Natural)
+  Constructor: csr storage
+  Render latex: \operatorname{{CSR}}({T})
+  Describe: compressed sparse row storage over ${T}$
+  Describe plural: compressed sparse row representations over ${T}$
+
+Define row start(C,i):
+  Let T: Type
+  Let C: CSR(T)
+  Let i: Natural
+  Returns: Natural
+  Equals: list entry(C.pointers,i,0)
+
+Define row positions(C,i):
+  Let T: Type
+  Let C: CSR(T)
+  Let i: Natural
+  Returns: List(Natural)
+  Equals: map(function(k: Natural,row start(C,i)+k),initial indices(row start(C,i+1)-row start(C,i)))
+
+Condition valid csr(C):
+  Let T: Type
+  Let C: CSR(T)
+  Holds when:
+    list length(C.pointers) = C.rows+1 and
+    list length(C.indices) = list length(C.values) and
+    row start(C,0) = 0 and row start(C,C.rows) = list length(C.values) and
+    all entries(function(i: Natural,row start(C,i) ≤ row start(C,i+1)),initial indices(C.rows)) and
+    all entries(function(j: Natural,j < C.columns),C.indices) and
+    all entries(function(i: Natural,
+      all entries(function(h: Natural,
+        all entries(function(k: Natural,
+          h < k → list entry(C.indices,h,0) < list entry(C.indices,k,0)),row positions(C,i))),row positions(C,i))),initial indices(C.rows))
+
+Define csr row(fma,z,C,x,i):
+  Let T: Type
+  Let fma: Function(T,Function(T,Function(T,T)))
+  Let z: T
+  Let C: CSR(T)
+  Let x: List(T)
+  Let i: Natural
+  Returns: T
+  Equals:
+    fold left(function(s: T,function(h: Natural,
+      fma(list entry(C.values,h,z))(list entry(x,list entry(C.indices,h,0),z))(s))),z,row positions(C,i))
+
+Define csr product(fma,z,C,x):
+  Let T: Type
+  Let fma: Function(T,Function(T,Function(T,T)))
+  Let z: T
+  Let C: CSR(T)
+  Let x: List(T)
+  Returns: List(T)
+  Equals: map(function(i: Natural,csr row(fma,z,C,x,i)),initial indices(C.rows))
+
+-- getD makes these functions total. Correct-use statements must assume valid csr,
+-- list length(x) = C.columns, and the appropriate floating finiteness conditions.
+-- Strict per-row column order forbids duplicates and fixes the accumulation order.
+-- This is a mathematical model, not a proof about pointer-based C execution.
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

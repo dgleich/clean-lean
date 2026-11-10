@@ -39,6 +39,7 @@ See the [typeset examples](generated/specimen.pdf),
 [Clean-to-Lean reference](docs/clean-to-lean.html),
 [Clean and Dafny comparison](docs/clean-and-dafny.html),
 [topology study and theorem comparisons](studies/topology/README.md),
+[LAProof in Clean: models, error bounds and pending IEEE theorems](studies/laproof/README.md),
 [checked zigzag bases](studies/zigzag-bases/README.md),
 [maps of diagrams](studies/diagram-maps/README.md),
 [changes of diagram shape](studies/shape-pullbacks/README.md), or
