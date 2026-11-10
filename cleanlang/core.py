@@ -434,7 +434,7 @@ class Environment:
                 pattern=callable_view(pattern,self) or pattern
                 actual=callable_view(actual,self) or actual
             from .indices import DimensionIndex
-            from .dependent_functions import DependentFunctionType,substitute,fresh_source,fresh_bound
+            from .dependent_functions import DependentFunctionType,substitute,fresh_source,fresh_bound,direct_index_name
             if isinstance(pattern,DependentFunctionType) or isinstance(actual,DependentFunctionType) and self.is_function_type(pattern):
                 if not self.is_function_type(pattern) or not self.is_function_type(actual):
                     raise SignatureMismatch('Dependent function type mismatch',mismatch_owner)
@@ -464,10 +464,10 @@ class Environment:
                 if implicit[pattern.name]!=NAT or not isinstance(actual,DimensionIndex):
                     raise SignatureMismatch('Expected a natural dimension: '+pattern.name,mismatch_owner)
                 bind(pattern.name,actual)
-            elif type(pattern) is ValueIndex and pattern.name in implicit and pattern.name not in scope:
+            elif isinstance(pattern,ValueIndex) and direct_index_name(pattern) in implicit and direct_index_name(pattern) not in scope:
                 if not isinstance(actual,ValueIndex):
-                    raise SignatureMismatch('Expected an indexed value: '+pattern.name,mismatch_owner)
-                bind(pattern.name,actual)
+                    raise SignatureMismatch('Expected an indexed value: '+direct_index_name(pattern),mismatch_owner)
+                bind(direct_index_name(pattern),actual)
             elif isinstance(pattern,ValueIndex):
                 if replace(pattern,scope)!=actual:
                     raise SignatureMismatch('Dependent index mismatch: '+pattern.name,mismatch_owner)

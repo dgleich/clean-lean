@@ -1,0 +1,11 @@
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+Import "../operators.clean"
+Import "evidence.clean"
+Condition same evidence(h,k):
+  Let p: Proposition
+  Let h,k: Evidence(p)
+  Infix: =
+  From Lean: h = k
+  Render latex: {h}={k}
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

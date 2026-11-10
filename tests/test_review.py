@@ -62,7 +62,7 @@ class ReviewTests(unittest.TestCase):
         sample=files['library/analysis.clean']
         self.assertIsNone(sample['error'])
         self.assertIn('cleanDefine_',sample['lean'])
-        self.assertEqual(sample['imports'][0]['path'],'library/types.clean')
+        self.assertEqual(sample['imports'][0]['path'],'library/operators.clean')
         self.assertTrue(any(s.get('leanName','').startswith('cleanDefine_') for s in sample['symbols']))
         self.assertEqual(len(sample['sha256']),64)
         for file in files.values():

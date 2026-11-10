@@ -32,7 +32,7 @@ Condition disjunction(x,y):
 Condition implication(x,y):
   Let x,y: Proposition
   Infix: →
-  From Lean: x → y
+  Holds when: for every (h: (x),y)
   Render latex: {x}\text{{ implies }}{y}
 
 Condition logical equivalence(x,y):

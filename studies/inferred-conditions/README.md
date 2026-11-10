@@ -2,7 +2,7 @@
 
 # Recovering a condition from a proof operand
 
-Status: isolated prototype; not yet integrated. This extends direct value inference
+Status: implemented slice in the working compiler; full conformance remains open. This extends direct value inference
 to condition indices. It adds no grammar, layout, keyword, or editor spelling.
 It does not implement general sort polymorphism or proof search.
 
@@ -131,12 +131,11 @@ Sixteen successfully translated callable-evidence specimens were also checked
 individually by Lean during development; this supplemental run is not part of
 the driver and does not claim proofs of the specimen statements.
 
-Integration is pending completion of the running production regression. Apply
-the compiler/library/test changes, classify the three new source files in the
-provenance inventory, migrate this status to implemented-slice, and rerun affected
-native/topology/corpus checks and full regression. Do not apply this patch to the
-older historical binding-study baseline or describe isolated results as passing
-production checks. The proof-equality module is explicit; other tests that require
+The compiler/library/test changes are now integrated and the new source files
+are classified in the provenance inventory. The pinned patch remains a historical
+reproduction artifact; do not reapply it to the working compiler or the older
+binding-study baseline. Integrated focused/native checks and full regression must
+be recorded separately from the isolated results above. The proof-equality module is explicit; other tests that require
 it still need to import it. General proof-sort equality inference remains outside
 this concrete interface.
 :::
@@ -147,4 +146,34 @@ Additional isolated validation: the existing curated corpus was regenerated usin
 this patch, and all 92 proof fixtures passed Lean. A complete eighteen-verifier
 topology run is now in progress against the same isolated compiler/library.
 Neither result replaces production full-regression completion or integration.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Integration began after the preceding production regression completed: 732 tests in 1549.119 seconds; `FAILED (failures=43, errors=64)`. That result describes the prior compiler, not this integration. The new working slice now supports direct condition-index inference and the explicit proof-equality module, and the standard implication is authored in Clean. No grammar or editor spelling changed. Integrated validation is pending.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Integrated condition inference passes 58 focused tests, seven independent
+canonical Lean checks and four proofs, plus all 92 curated corpus proofs.
+The complete eighteen-verifier topology run also passes: 483 summed target checks
+and 89 proofs, excluding repeated supporting proofs. The isolated run's compiler
+and library were compared byte for byte with the working implementation before
+provenance comments were restored. Direct working-checkout foundation and evidence
+runs additionally pass 23 and 46 targets and eleven proofs combined; their generated
+Lean artifacts match the isolated run exactly. The remaining regenerated Lean
+artifacts were copied only after that source and output identity check. LaTeX
+sources are unchanged after provenance restoration.
+
+Three stale fixture expectations were migrated to explicit operator bindings:
+the BibTeX import fixture, the evidence assumption's declared subset target,
+and the review navigation import. Eleven focused BibTeX/evidence tests pass;
+the full review fixture remains part of the next complete regression.
+
+The previous complete regression finished with 732 tests in 1549.119 seconds,
+43 failures and 64 errors. It was not interrupted. That is the pre-integration
+baseline, not a current pass. Vector/matrix numeral support, further fixture/oracle
+migration, general universe/sort polymorphism and full native isolation remain
+unfinished. The paper-theorem gaps and unproved two-image candidate are unchanged.
 :::

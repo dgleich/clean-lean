@@ -17,7 +17,9 @@ def reify(value,environment,locals):
     else:raise UnrepresentableSubstitution('Inferred argument has no source expression')
     result=Expressions(environment,locals).elaborate(tree)
     from .indices import dimension_index,DimensionIndex,index_value
-    checked=(dimension_index(result,environment,locals) if isinstance(value,(DimensionIndex,str))
+    from .proof_types import ProofIndex,index as proof_index
+    checked=(proof_index(result,environment,locals,_fresh=True) if isinstance(value,ProofIndex) else
+             dimension_index(result,environment,locals) if isinstance(value,(DimensionIndex,str))
              else index_value(result,environment,locals))
     if isinstance(value,ValueIndex) and checked!=value:
         raise UnrepresentableSubstitution('Inferred argument changed in the current scope')

@@ -6478,6 +6478,36 @@
       ],
       "model": "gpt-6",
       "date": "2026-11-10"
+    },
+    "library/logic/proof_equality.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-10"
+    },
+    "tests/test_inferred_conditions.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-10"
+    },
+    "tools/check_inferred_condition_targets.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-10"
     }
   }
 }

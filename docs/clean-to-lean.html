@@ -1032,8 +1032,8 @@ Conclude: x = x</code></pre></section><section><h3>Schematic Lean binding</h3><p
 </section></llm>
 
 <llm model="gpt-6" date="2026-11-10" role="assisted">
-<section id="inferred-conditions" class="mapping" data-status="proposed">
-<header><h2>Recovering conditions from proof operands</h2><span class="badge proposed">Isolated prototype</span></header>
+<section id="inferred-conditions" class="mapping" data-status="implemented">
+<header><h2>Recovering conditions from proof operands</h2><span class="badge implemented">Implemented slice</span></header>
 <p>An explicit proof-equality module can recover the condition already present in each operand's type.</p>
 <div class="pair"><section><h3>Clean</h3><pre><code>Condition same evidence(h,k):
   Let p: Proposition
@@ -1044,7 +1044,7 @@ Conclude: x = x</code></pre></section><section><h3>Schematic Lean binding</h3><p
     (h k : p) : Prop := h = k
 -- For h k : p, the selected application is:
 @sameEvidence p h k</code></pre></section></div>
-<p class="notes">Only a direct local formal condition is recoverable; computed patterns are not inverted. Actual conditions may contain quantifiers. Repeated occurrences must agree, caller bindings are rechecked, and all arguments are supplied explicitly. The prototype also authors implication as <code>for every (h: (p),q)</code>, so the existing quantified callable view applies. Neither the arrow token nor a display name determines that behavior. Production integration is pending. See the <a href="../studies/inferred-conditions/README.md">constructive rule, patch, and independent checks</a>.</p>
+<p class="notes">Only a direct local formal condition is recoverable; computed patterns are not inverted. Actual conditions may contain quantifiers. Repeated occurrences must agree, caller bindings are rechecked, and all arguments are supplied explicitly. The standard module authors implication as <code>for every (h: (p),q)</code>, so the existing quantified callable view applies. Neither the arrow token nor a display name determines that behavior. The slice is integrated; full conformance remains open. See the <a href="../studies/inferred-conditions/README.md">constructive rule, patch, and independent checks</a>.</p>
 </section>
 </llm>
 

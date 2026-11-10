@@ -99,7 +99,7 @@ class BibtexTests(unittest.TestCase):
         self.bib.write_text('@book{Paper:1,title={A}}')
         (self.root/'vocabulary.clean').write_text('iMPORT bIBtEX "refs.bib"\n')
         doc = self.root/'result.clean'
-        doc.write_text(f'''Import "{ROOT / 'library/types.clean'}"
+        doc.write_text(f'''Import "{ROOT / 'library/operators.clean'}"
 Import "vocabulary.clean"
 Result reflexivity:
   Attribution: Paper:1; Example 1; adapted

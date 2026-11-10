@@ -44,11 +44,20 @@ def occurs(typ,name):
     return typ==name
 
 
+def direct_index_name(typ):
+    from .proof_types import ProofIndex
+    if type(typ) is ValueIndex:return typ.name
+    if isinstance(typ,ProofIndex):
+        tree=index_tree(typ)
+        if tree[0]=='Local':return tree[1]
+    return None
+
+
 def direct_index_occurs(typ,name):
     """Infer a value from a type slot, never invert an expression in that slot."""
     if isinstance(typ,DependentFunctionType):
         return direct_index_occurs(typ.domain,name) or (typ.binder!=name and direct_index_occurs(typ.codomain,name))
-    if type(typ) is ValueIndex:return typ.name==name
+    if isinstance(typ,ValueIndex):return direct_index_name(typ)==name
     if isinstance(typ,Type):return any(direct_index_occurs(a,name) for a in typ.args)
     return False
 

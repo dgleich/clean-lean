@@ -6,7 +6,8 @@ sys.path.insert(0,str(ROOT))
 from cleanlang.core import Environment,CleanError,lean
 from cleanlang.modules import load_document
 from cleanlang.syntax import expression_tree,parse,condition_spelling
-BASE=f'''Import "{ROOT / 'library/logic/evidence.clean'}"
+BASE=f'''Import "{ROOT / 'library/logic/proof_equality.clean'}"
+Import "{ROOT / 'library/logic/evidence.clean'}"
 Source test:
   Kind: other
   Label: test
@@ -59,14 +60,15 @@ class CallableEvidence(unittest.TestCase):
   from cleanlang.core import Expr,Expressions,proof_type,NAT
   from cleanlang.modules import load_module
   from cleanlang.indices import substitute_index
-  e=Environment();load_module(ROOT/'library/logic/evidence.clean',e)
+  e=Environment();load_module(ROOT/'library/logic/proof_equality.clean',e);load_module(ROOT/'library/logic/evidence.clean',e)
   old={'n':Expr('first','n',NAT,tree=['Local','n'])}
   saved=proof_type(Expressions(e,old).parse('n = n'),e,old).args[0]
   current={'n':Expr('second','n',NAT,tree=['Local','n'])}
   with self.assertRaisesRegex(CleanError,'Captured proof scope conflict'):
    substitute_index(saved,{},e,current)
   changed=substitute_index(saved,{'n':current['n']},e,current)
-  self.assertEqual(changed.lean,'(second = second)')
+  key=e.data['functions']['equal']['native_binding']
+  self.assertEqual(changed.lean,f'(_root_.{key} (second) (second))')
  def test_nested_function_domain_accepts_evidence(self):self.load('', '  Let n: Natural\n  Assume r: for every (h: Function(x: Natural,Function(y: Natural,Evidence((x+y = y+x)))),n = n)\n  Assume h: for every (x: Natural,for every (y: Natural,x+y = y+x))\n  Let p = r(h)\n  Conclude: p = p\n')
  def test_ambiguous_arrow_bindings_rejected(self):
   definitions='Type OtherFunction(A: Type,B: Type):\n  Means: (A) → (B)\n  Render latex: F({A},{B})\n'
@@ -83,6 +85,15 @@ class CallableEvidence(unittest.TestCase):
   definitions='Condition constant law(n,value):\n  Let n: Natural\n  Let value: Function(Natural,Natural)\n  Holds when: for every (x: Natural,value(x) = n)\nStructure Constant(n: Natural):\n  Let value: Function(Natural,Natural)\n  Let law: Evidence((constant law(n,value)))\n  Constructor: constant\n'
   with self.assertRaisesRegex(CleanError,'Dependent index mismatch'):
    self.load(definitions,'  Let n,m: Natural\n  Assume h: for every (x: Natural,m = m)\n  Let c = constant(m,function(x: Natural,n),function(x: Natural,h(x)))\n  Conclude: c = c\n')
+ def test_arrow_token_does_not_make_an_opaque_condition_callable(self):
+  with tempfile.TemporaryDirectory() as td:
+   p=Path(td)/'FalseArrow.clean'
+   p.write_text(f'Import "{ROOT / "library/logic/evidence.clean"}"\n'+
+    'Condition misleading arrow(p,q):\n  Let p,q: Proposition\n  Infix: →\n  From Lean: p ∧ q\n'+
+    'Source test:\n  Kind: other\n  Label: test\n  Title: test\n'+
+    'Result specimen:\n  Attribution: test; specimen; original\n  Let p,q: Proposition\n'+
+    '  Assume h: p → q\n  Assume k: p\n  Let proof = h(k)\n  Conclude: q\n')
+   with self.assertRaisesRegex(CleanError,'Unknown function: h'):load_document(p,Environment())
 if __name__=='__main__':unittest.main(verbosity=2)
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

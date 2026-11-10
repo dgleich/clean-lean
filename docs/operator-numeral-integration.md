@@ -286,3 +286,28 @@ the obsolete built-in equality oracle without weakening structural comparison.
 The production compiler and mathematical library are unchanged by this migration.
 Full regression, native import isolation and complete conformance remain open.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Integrated condition inference passes 58 focused tests, seven independent
+canonical Lean checks and four proofs, plus all 92 curated corpus proofs.
+The complete eighteen-verifier topology run also passes: 483 summed target checks
+and 89 proofs, excluding repeated supporting proofs. The isolated run's compiler
+and library were compared byte for byte with the working implementation before
+provenance comments were restored. Direct working-checkout foundation and evidence
+runs additionally pass 23 and 46 targets and eleven proofs combined; their generated
+Lean artifacts match the isolated run exactly. The remaining regenerated Lean
+artifacts were copied only after that source and output identity check. LaTeX
+sources are unchanged after provenance restoration.
+
+Three stale fixture expectations were migrated to explicit operator bindings:
+the BibTeX import fixture, the evidence assumption's declared subset target,
+and the review navigation import. Eleven focused BibTeX/evidence tests pass;
+the full review fixture remains part of the next complete regression.
+
+The previous complete regression finished with 732 tests in 1549.119 seconds,
+43 failures and 64 errors. It was not interrupted. That is the pre-integration
+baseline, not a current pass. Vector/matrix numeral support, further fixture/oracle
+migration, general universe/sort polymorphism and full native isolation remain
+unfinished. The paper-theorem gaps and unproved two-image candidate are unchanged.
+:::

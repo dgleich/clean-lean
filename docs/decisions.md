@@ -1043,3 +1043,17 @@ condition over evidence, using existing syntax. No display-name or arrow-token
 semantic dispatch is added. Production integration and broader regression remain
 pending; focused and canonical results are recorded in the study.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [condition-inference slice](../studies/inferred-conditions/README.md) is now
+integrated. A formal proof-condition index that is exactly a local implicit
+parameter recovers the actual checked condition, including quantified conditions.
+The caller's scope and declared parameter type are rechecked; repeated occurrences
+must agree, the first agreed representation is emitted explicitly, and computed
+formal conditions are not inverted. The explicit `logic/proof_equality.clean`
+module declares equality of evidence. Standard implication is now authored in
+Clean as universal quantification over evidence, using the existing callable view.
+No grammar, layout, highlighting, display-name dispatch or proof search is added.
+Full conformance and the remaining native isolation/universe obligations stay open.
+:::
