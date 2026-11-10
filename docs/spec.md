@@ -1249,3 +1249,12 @@ as authored arguments. The existing hidden-binder barrier and emitted expression
 remain unchanged. This resolves the recorded choice-helper comparison boundary;
 full regression and broader dependent-context audits remain separate obligations.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+`library/logic/type_equality.clean` now supplies explicit equality/inequality
+conditions on Type-0 carriers. This uses existing condition, Type-parameter and
+operator rules; it adds no parser production, universe inference rule or native
+special case. See [the carrier-equality contract](type-expressions.md#explicit-carrier-equality-module).
+Generic equality on arbitrary higher-universe values remains unsupported.
+:::

@@ -61,7 +61,10 @@ class ValueIndices(unittest.TestCase):
         self.assertEqual(self.e.type('Element(X,S)',self.locals).name,'Element')
     def test_different_ambient_indices_are_rejected(self):
         a=self.e.type('Element(X,S)',self.locals);b=self.e.type('Element(X,T)',self.locals)
-        with self.assertRaisesRegex(CleanError,'Cannot compare'):
+        self.assertNotEqual(a,b)
+        same=Expressions(self.e,{'a':Expr('a','a',a),'b':Expr('b','b',a)}).parse('a=b')
+        self.assertEqual(same.type,Type('Proposition'))
+        with self.assertRaisesRegex(CleanError,'No declared meaning for operator ='):
             Expressions(self.e,{'a':Expr('a','a',a),'b':Expr('b','b',b)}).parse('a=b')
     def test_nested_quantifier_capture(self):
         e=Expressions(self.e,self.locals).parse('for every (z: X, there exists (p: Path(X,t,z,z), p=p))')

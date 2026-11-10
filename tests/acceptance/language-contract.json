@@ -2534,6 +2534,33 @@
         "Dependent implicit arguments and additional projection/application contexts audit",
         "Resource accounting and full native environment isolation"
       ]
+    },
+    {
+      "id": "explicit_carrier_equality",
+      "status": "implemented-slice",
+      "environment": "Explicit library/logic/type_equality.clean import; Type-0 carrier gate unchanged.",
+      "source": "type(Real) = type(Complex)",
+      "expected_tree": [
+        "Operator",
+        "=",
+        [
+          "TypeValue",
+          "Real"
+        ],
+        [
+          "TypeValue",
+          "Complex"
+        ]
+      ],
+      "expected_lean": "Root-qualified equal carriers wrapper applied explicitly to the Real and Complex carrier wrappers; no bare equality or hidden native overload choice. Independent exact definitions and uses in tools/check_type_equality_targets.py.",
+      "checks": [
+        "tests/test_type_expressions.py: import requirement, wrapper target, value overload selection, ambiguity and universe gate",
+        "tools/check_type_equality_targets.py: four exact targets and two proofs",
+        "tests/test_value_indices.py: same-carrier equality and rejection of different subtype carriers"
+      ],
+      "pending": [
+        "General universe-polymorphic equality is not provided by this module"
+      ]
     }
   ]
 }

@@ -49,10 +49,11 @@ instance choices. The expression's type is the parameter sort Type. Its LaTeX is
 the enclosed type's ordinary mathematical rendering, without the syntactic marker.
 
 `type(Real)` therefore emits ℝ; `type(Vector(n,Real))` emits `Fin n → ℝ`.
-Dependent arrows retain their native Pi binders. Type-valued operands support
-only equality and disequality among the built-in operators. Arithmetic, order,
-powers and unary operators on them are rejected, including on named Type locals.
-Other constructions must use explicitly declared functions. A proof type such as
+Dependent arrows retain their native Pi binders. Operators have no built-in
+Type-valued interpretation. Import `library/logic/type_equality.clean` to declare
+equality and inequality between Type-0 carriers. Arithmetic, order, powers and
+unary operations still lack a declared interpretation for such operands.
+Other constructions require explicit declarations. A proof type such as
 `type((x = x))` is rejected, as is a declared Type 1 module-object carrier.
 `type(Proposition)` is different: Prop itself inhabits Type 0 and can be supplied
 as a carrier. This distinction follows Lean's sorts, not the displayed word.
@@ -145,4 +146,46 @@ full suite completed all 584 tests successfully. The Python runner
 reported OK and its recorded process exit status was 0; the tool shell returned
 143 when reaped afterward, so the runner status was checked independently.
 This slice does not claim general universe polymorphism or callable universal evidence.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Explicit carrier equality module
+
+```text
+Import "library/logic/type_equality.clean"
+
+-- Both operands denote Type-0 carriers.
+-- In a theorem conclusion, for example:
+Conclude: type(Real) = type(Real)
+```
+
+The import declares `equal carriers(A: Type,B: Type)` and `unequal carriers` as
+ordinary conditions with infix `=` and `≠`. It translates to calls of those
+root-qualified wrappers, with both type arguments explicit; the wrapper bodies
+are Lean equality and inequality. The statements above are syntax fragments,
+not a complete attributed theorem file.
+
+The generic value equality remains in scope. It cannot instantiate its Type-0
+parameter with Type itself, so only the carrier overload applies to these inputs.
+Another applicable carrier declaration creates ambiguity; import order never
+selects between them. Without this module the operators on type values reject.
+This does not implement general universe polymorphism, equality on arbitrary
+Type-1 structure values, or an exception to the `type(...)` carrier gate.
+
+`tools/check_type_equality_targets.py` independently checks both wrapper definitions
+and both operator uses, and proves reflexivity and failure of self-inequality.
+The tests also check explicit import, ordinary-value selection and competing
+overload rejection. Subtype equality tests retain positive same-carrier and
+negative different-carrier cases; their diagnostics now describe declared
+operator selection rather than the removed built-in comparison branch.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Validation on 2026-11-10: 58 type-expression, value-index and dependent-function
+tests passed in 5.326 seconds. Four exact native targets and two proofs passed;
+the regenerated 92-proof corpus also passed Lean checking. The compiler is
+unchanged by this addition. The already-running full suites loaded earlier test
+modules, so their eventual results do not validate this fixture/module update.
 :::

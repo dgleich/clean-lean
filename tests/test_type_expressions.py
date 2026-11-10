@@ -10,7 +10,7 @@ from cleanlang.indices import index_value,substitute_index
 from cleanlang.conditions import source_expression,lean_name
 class TypeValues(unittest.TestCase):
  def setUp(self):
-  self.e=Environment();load_module(ROOT/'library/types.clean',self.e);self.local={}
+  self.e=Environment();load_module(ROOT/'library/logic/type_equality.clean',self.e);self.local={}
   notation('Notation marker(T):',['Let T: Type','Returns: Natural','Means: 0','Render latex: m({T})'],self.e)
  def expr(self,s):return Expressions(self.e,self.local).parse(s)
  def test_tree(self):
@@ -99,13 +99,32 @@ class TypeValues(unittest.TestCase):
  def test_type_operators_are_restricted(self):
   for source in ['type(Real)+type(Real)','type(Real)*type(Real)',
                  'type(Real)^2','type(Real)<type(Real)','-type(Real)']:
-   with self.subTest(source=source),self.assertRaisesRegex(CleanError,'Type-valued operands'):
+   with self.subTest(source=source),self.assertRaisesRegex(CleanError,'No (declared meaning for operator|consistent numeral interpretation)'):
     self.expr(source)
   self.local['U']=Expr('U','U',Type('Type'),tree=['Local','U'])
-  with self.assertRaisesRegex(CleanError,'Type-valued operands'):self.expr('U+U')
+  with self.assertRaisesRegex(CleanError,'No (declared meaning for operator|consistent numeral interpretation)'):self.expr('U+U')
   real=self.e.data['types']['Real']['native_binding'];complex=self.e.data['types']['Complex']['native_binding']
-  self.assertEqual(self.expr('type(Real)=type(Complex)').lean,f'((_root_.{real}) = (_root_.{complex}))')
-  self.assertEqual(self.expr('type(Real)!=type(Complex)').lean,f'((_root_.{real}) ≠ (_root_.{complex}))')
+  eq=self.e.data['functions']['equal carriers']['native_binding']
+  ne=self.e.data['functions']['unequal carriers']['native_binding']
+  self.assertEqual(self.expr('type(Real)=type(Complex)').lean,f'(@_root_.{eq} ((_root_.{real})) ((_root_.{complex})))')
+  self.assertEqual(self.expr('type(Real)!=type(Complex)').lean,f'(@_root_.{ne} ((_root_.{real})) ((_root_.{complex})))')
+ def test_carrier_equality_requires_explicit_module(self):
+  env=Environment();load_module(ROOT/'library/operators.clean',env)
+  with self.assertRaisesRegex(CleanError,'No declared meaning for operator ='):
+   Expressions(env,{}).parse('type(Real)=type(Real)')
+  load_module(ROOT/'library/logic/type_equality.clean',env)
+  self.assertEqual(Expressions(env,{}).parse('type(Real)=type(Real)').type,Type('Proposition'))
+ def test_carrier_overload_does_not_replace_value_equality(self):
+  self.local['x']=Expr('x','x',self.e.type('Real'),tree=['Local','x'])
+  value=self.expr('x=x')
+  self.assertEqual(value.operator_binding[0],'equal')
+  self.assertEqual(self.expr('type(Real)=type(Real)').operator_binding[0],'equal carriers')
+ def test_competing_carrier_equalities_are_ambiguous(self):
+  from cleanlang.modules import condition_declaration
+  condition_declaration('Condition other equality(A: Type,B: Type):',
+   ['Infix: =','From Lean: A = B'],self.e)
+  with self.assertRaisesRegex(CleanError,'Ambiguous'):
+   self.expr('type(Real)=type(Real)')
  def test_computed_type_is_an_explicit_carrier(self):
   declare('Structure Box(T: Type):',['Let value: T','Constructor: box value'],self.e)
   notation('Define real carrier(): Type:', ['Equals: type(Real)'],self.e,authored=True)
