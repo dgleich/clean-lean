@@ -77,3 +77,29 @@ also needs a broader audit of dependent implicit arguments, projection/applicati
 contexts outside the selected call cases, stale metadata and resource accounting.
 No completion or full language-conformance claim follows from these focused tests.
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Additional contract and corpus validation
+
+Six focused contract checks now cover public-entry rejection of stale checked
+argument metadata, original-expression preservation, validation of the native call
+shell, comparison-pool restoration after both success and failure, and rejection
+of changed retained declaration identities. All six pass in the isolated compiler.
+The pinned driver rerun passes all 108 tests in 22.482 seconds, followed by
+ten exact native checks and five Lean proofs.
+
+The isolated compiler regenerated all 92 corpus proof fixtures and Lean checked
+them successfully. The resulting VerifiedCorpus.lean is identical to the working
+artifact after removing provenance-marker lines; the comparison repair did not
+change those emitted statements or proofs. Existing unused-variable/simp warnings
+remain nonfatal. This is corpus evidence, not a claim that every native target is
+unchanged for every accepted Clean input.
+
+Both full regressions remain live: one on the unchanged production compiler and
+one on the isolated comparison prototype. A separate batch is checking all eighteen
+topology verifiers. The first 11 passed, including the extreme-image study; the
+batch has not yet finished. No slow job was restarted or counted as passed because
+an observation interval expired.
+:::

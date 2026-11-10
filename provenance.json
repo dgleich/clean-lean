@@ -6882,6 +6882,16 @@
       "model": "gpt-6",
       "date": "2026-11-10",
       "mode": "manifest"
+    },
+    "studies/contextual-family-comparison/test_contract.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }
