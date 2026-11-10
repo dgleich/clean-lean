@@ -1,0 +1,56 @@
+--- a/grammar/clean.lark
++++ b/grammar/clean.lark
+@@ -80,13 +80,13 @@
+ expression_line: EXPR_LINE _NL
+ result: RESULT_LINE _NL _INDENT result_field* conclusion _DEDENT
+ ?result_field: LET_LINE _NL -> result_let
+-             | ASSUME_LINE _NL -> result_assume
++             | ASSUME_LINE _NL (_INDENT expression_line+ _DEDENT)? -> result_assume
+              | ATTRIBUTION_LINE _NL (_INDENT attribution_entry+ _DEDENT)? -> attribution
+ conclusion: CONCLUDE_LINE _NL (_INDENT expression_line+ _DEDENT)?
+ attribution_entry: FIELD_LINE _NL
+ context: CONTEXT_LINE _NL _INDENT (context_clause | prose)* (result | context | documented_result) (result | context | prose | documented_result)* _DEDENT
+ ?context_clause: LET_LINE _NL -> context_let
+-               | ASSUME_LINE _NL -> context_assume
++               | ASSUME_LINE _NL (_INDENT expression_line+ _DEDENT)? -> context_assume
+ DECL: /(?i:Notation|Define|Condition)(?!\w)/
+ LET: /(?i:Let)(?!\w)/
+ DEFINE: /(?i:Define)(?!\w)/
+--- a/cleanlang/syntax.py
++++ b/cleanlang/syntax.py
+@@ -217,7 +217,23 @@
+             elif node.kind=='phrase_stmt':node.payload=parse(text,'phrase_line')
+             elif node.kind=='default_numerals_stmt':node.payload=parse(text,'default_numerals_line')
+             elif node.kind.endswith('_let'):node.payload=parse(text,'let_clause')
+-            elif node.kind.endswith('_assume'):node.payload=parse(text.split(None,1)[1],'assumptions')
++            elif node.kind.endswith('_assume'):
++                body=text.split(None,1)[1]
++                if node.children:
++                    if not body.endswith(':'):
++                        raise CleanError('Assumption block requires an empty named header')
++                    label=body[:-1].strip()
++                    # Validate the label using the existing name grammar, before binding.
++                    candidate=parse(label+': '+ ' '.join(c.text for c in node.children),'assumptions')
++                    if len(candidate.children)!=1:
++                        raise CleanError('A named assumption block contains one expression, not an assumption list')
++                    assumption=candidate.children[0]
++                    if len(assumption.children)!=2:
++                        raise CleanError('Assumption block requires a name')
++                    node.text=text+' '+ ' '.join(c.text for c in node.children)
++                    body=node.text.split(None,1)[1]
++                    node.children=[]
++                node.payload=parse(body,'assumptions')
+             elif node.kind in ('expression_field','conclusion'):
+                 import re
+                 body=(re.sub(r'^Conclude\b\s*:?\s*','',text,flags=re.I) if node.kind=='conclusion' else text.split(':',1)[1]).strip()
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -45,7 +45,7 @@
+             if conclusion_column is not None and column <= conclusion_column:
+                 conclusion_column = None
+             assumption_list = bool(re.match(r'Assume\b',stripped,re.I))
+-            if re.fullmatch(r'(?:Conclude|Equals|Holds when)\s*:', stripped, re.I):
++            if re.fullmatch(r'(?:Conclude|Equals|Holds when)\s*:', stripped, re.I) or re.fullmatch(r'Assume[ ]+[^:]+:', stripped, re.I):
+                 conclusion_column = column
+                 continue
+             expression = conclusion_column is not None or re.match(

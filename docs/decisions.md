@@ -1330,3 +1330,15 @@ The signed-square result uses the supplied equality h ∘ f = k ∘ g to prove
 [h,k] ∘ (f,−g) = 0. It asserts composition-to-zero, not exactness. Independent
 native targets cover the adapters, authored body and theorem statement.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [named-assumption block prototype](../studies/assumption-blocks/README.md)
+specifies one labelled expression beneath `Assume name:` in a Result or Context.
+It normalizes to the existing inline assumption before semantic processing;
+physical lines do not imply conjunction or a list. Top-level comma lists in this
+named block reject; nested call/binder commas retain their ordinary meaning.
+The pinned prototype regenerates the strict parser and checks independent trees
+and a native target. Production integration remains pending. The study documents
+layout, header diagnostic locations, uniqueness and the exact desugaring rule.
+:::

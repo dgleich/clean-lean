@@ -2653,6 +2653,39 @@
         "Induction of these maps from actual topology inclusions and Mayer-Vietoris exactness remain unproved",
         "Indented Assume name: blocks remain unsupported; this specimen uses an inline assumption"
       ]
+    },
+    {
+      "id": "named_assumption_block_prototype",
+      "status": "isolated-prototype",
+      "environment": "Pinned 8763d4689eb1aabbac58aa1de44208b072024d1b plus studies/assumption-blocks/prototype.patch; explicit standard module and local attribution source.",
+      "source": "Assume reflexive:\n  x = x",
+      "expected_tree": [
+        "Assumption",
+        "reflexive",
+        [
+          "Operator",
+          "=",
+          [
+            "Local",
+            "x"
+          ],
+          [
+            "Local",
+            "x"
+          ]
+        ]
+      ],
+      "expected_lean": "The exact existing inline hypothesis binder reflexive : declared equal x x; one normalized named assumption, with header source location preserved. No implicit conjunction/list.",
+      "checks": [
+        "studies/assumption-blocks/test_blocks.py: independent expression trees and source lines, context inheritance, continuation and negative cases",
+        "studies/assumption-blocks/verify.py: strict generated parser and 66 focused tests",
+        "studies/assumption-blocks/check_targets.py: three source layouts, one independent native target and one proof"
+      ],
+      "pending": [
+        "Production integration and full-suite validation",
+        "Editor/browser block-header verification",
+        "Unnamed assumption blocks and block lists are not specified by this change"
+      ]
     }
   ]
 }
