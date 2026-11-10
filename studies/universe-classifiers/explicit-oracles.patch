@@ -1,0 +1,13 @@
+--- a/studies/operator-integration/verify_dispatch.py
++++ b/studies/operator-integration/verify_dispatch.py
+@@ -69,8 +69,8 @@
+ # Independent selected declaration bodies and uses; no expected term is generated
+ # by the expression translator. Synthetic ^ and - meanings exercise dispatch.
+ bodies=[
+- ('choose carrier',f'(A B : {K})',K,'A'),
+- ('carrier witness',f'(A : {K}) (h : @{f("equal types")} A A)',K,'A'),
++ ('choose carrier','(A B : Type)',K,'A'),
++ ('carrier witness',f'(A : Type) (h : @{f("equal types")} A A)',K,'A'),
+  ('generic witness',f'{{T : Type}} (x : T) (h : @{f("equal")} T x x)','T','x'),
+  ('proof marker',f'(h : {f("truth")})',f'{f("truth")}','h')]
+ for i,(name,binders,typ,body) in enumerate(bodies):

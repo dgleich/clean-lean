@@ -1,0 +1,55 @@
+-- generated: gpt-6 2026-11-10 role=assisted; isolated explicit-carrier prototype
+Import "../../library/operators.clean"
+Source local:
+  Kind: other
+  Label: Local
+  Title: Explicit closed-universe carrier arguments
+
+Type SmallTypes():
+  Universe: 1
+  Classifies: 0
+  Means: Type
+  Render latex: \operatorname{{Types}}_0
+
+Type LargeTypes():
+  Universe: 2
+  Classifies: 1
+  Means: Type 1
+  Render latex: \operatorname{{Types}}_1
+
+Define retain small(A,x):
+  Let A: SmallTypes
+  Let x: A
+  Returns: A
+  Equals: x
+
+Define retain large(A,x):
+  Let A: LargeTypes
+  Let x: A
+  Returns: A
+  Equals: x
+
+Define retain large twice(A,x):
+  Let A: LargeTypes
+  Let x: A
+  Returns: A
+  Equals: retain large(A,retain large(A,x))
+
+Condition equal in(A,x,y):
+  Let A: LargeTypes
+  Let x,y: A
+  From Lean: x = y
+
+Result explicit small identity:
+  Attribution: local; identity; original
+  Let A: SmallTypes
+  Let x: A
+  Conclude: retain small(A,x) = x
+
+Result explicit large identity:
+  Attribution: local; identity; original
+  Let A: LargeTypes
+  Let x: A
+  Conclude: equal in(A,retain large twice(A,x),x)
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

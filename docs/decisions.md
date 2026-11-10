@@ -1426,3 +1426,16 @@ equality imports, and the older bound-operator script has pre-wrapper oracles;
 these failures also occur on their checked baselines and are not classifier passes.
 Full regression on the latest fixture set remains unestablished.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The classifier prototype now accepts explicit local carrier arguments. Callable
+parameter types resolve through declared metadata, including arbitrarily named
+level-zero classifiers. Both explicit and implicit generic parameters lower to
+primitive Type k; ordinary theorem binders and declared return types retain their
+native wrappers. Explicit arguments must have the selected classifier identity,
+and later arguments must inhabit the supplied carrier. This changes the canonical
+domain of old explicit Type parameters; two independent dispatch oracles are
+migrated accordingly. First-class higher type expressions, inferred higher-type
+reification, dependent carrier fields/callables and storage remain pending.
+:::

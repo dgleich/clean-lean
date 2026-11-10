@@ -2867,7 +2867,7 @@
         "studies/operator-integration/verify_foundations.py, verify_saved.py, verify_dispatch.py: 67 exact native targets and ten proofs on the migrated classifier stack"
       ],
       "pending": [
-        "Complete explicit carrier arguments, first-class type expressions and classifier ambiguity selection",
+        "Complete first-class type expressions and classifier ambiguity selection",
         "Audit and update all local-type, substitution, inference, comparison, literal and storage consumers",
         "Independent canonical Clean-to-Lean targets and required negative semantic cases",
         "Editor/browser coverage and full regression"
@@ -2902,12 +2902,57 @@
       "checks": [
         "studies/universe-classifiers/check_carrier_targets.py: independent conclusion tree, five canonical native targets and a kernel-checked identity proof",
         "studies/universe-classifiers/test_carriers.py: exact-level rejection, ordinary-bundle rejection, aliases, repeated-argument agreement and substitution identity",
-        "studies/universe-classifiers/verify.py: 249 selected tests plus native foundation, saved-expression and dispatch checks"
+        "studies/universe-classifiers/verify.py: 260 selected tests plus explicit-carrier, native foundation, saved-expression and dispatch checks"
       ],
       "pending": [
-        "Explicit generic carrier arguments and first-class type-value elaboration",
+        "Higher first-class type-value elaboration and inferred higher-carrier reification",
         "Carrier-valued dependent fields/callables, classifier ambiguity selection and storage schema migration",
         "Full regression on the latest fixture snapshot and production integration"
+      ]
+    },
+    {
+      "id": "closed_universe_explicit_carrier",
+      "status": "isolated-prototype",
+      "environment": "Pinned classifier stack plus explicit-carriers.patch and explicit-oracles.patch; production unchanged.",
+      "source": "ExplicitCarrierExample.clean: equal in(A,retain large twice(A,x),x), with A: LargeTypes and x: A.",
+      "expected_tree": [
+        "Call",
+        "equal in",
+        [
+          [
+            "Local",
+            "A"
+          ],
+          [
+            "Call",
+            "retain large twice",
+            [
+              [
+                "Local",
+                "A"
+              ],
+              [
+                "Local",
+                "x"
+              ]
+            ]
+          ],
+          [
+            "Local",
+            "x"
+          ]
+        ]
+      ],
+      "expected_lean": "ExplicitCarrierTargets.lean: explicit generic domain (A : Type 1), later x : A; theorem forall A retains the LargeTypes native wrapper. Calls carry the supplied A explicitly and preserve its classifier identity.",
+      "checks": [
+        "check_explicit_targets.py: two independent source trees, six exact native targets and two kernel-checked proofs",
+        "test_explicit_carriers.py: eleven alias, grouping, telescope, normalization, level and rejection cases",
+        "explicit-oracles.patch: two dispatch declaration expectations migrated to primitive Type domains"
+      ],
+      "pending": [
+        "Higher first-class type values and inferred higher-type reification",
+        "Carrier-valued dependent fields/callables and storage migration",
+        "Full regression and production integration"
       ]
     }
   ]

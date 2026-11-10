@@ -3,7 +3,7 @@
 # Proposal: explicit closed-universe carrier classifiers
 
 Status: isolated syntax and declaration-metadata prototype with checked native
-declaration targets, implicit generic calls and native feasibility examples. **Generic implicit carrier arguments are now prototyped; the full classifier
+declaration targets, implicit generic calls and native feasibility examples. **Generic implicit and explicit carrier arguments are now prototyped; the full classifier
 feature is not conforming or integrated.** It is not part of the composed-language stack.
 
 The concrete gap is equality of a universe-1 topology object. Clean's general
@@ -207,7 +207,7 @@ cover exact-level rejection, alias
 resolution, ordinary bundles rejected as carrier binders, local higher-carrier
 arguments, level/identity-sensitive keys and substitution.
 
-Remaining boundaries include explicit generic carrier parameters, higher computed
+Remaining boundaries include higher computed
 carriers, first-class type-value elaboration, classifier candidate ambiguity,
 carrier-valued dependent function binders, record fields/constructors and codec
 schema migration. Some legacy Type-name checks remain in those paths. The
@@ -257,6 +257,63 @@ the browser tokenizer. Native TextMate and Vim checks and five browser checks
 pass. The Emacs test is authored but native execution remains unavailable because
 the local runtime fails its own startup check. The complete browser snapshot has
 not been regenerated. Highlighting does not enable the syntax in production.
+
+## Explicit carrier arguments
+
+`explicit-carriers.patch` extends the same declaration rule to explicit generic
+parameters. [ExplicitCarrierExample.clean](ExplicitCarrierExample.clean) authors
+identity and composition directly in Clean:
+
+```clean
+Define retain large(A,x):
+  Let A: LargeTypes
+  Let x: A
+  Returns: A
+  Equals: x
+```
+
+The declaration lowers to `(A : Type 1) (x : A) : A`. Calling it with a local
+`A: LargeTypes` checks that classifier identity first, then checks the later
+argument against the supplied carrier. A different classifier at the same level
+is not silently converted. A transparent alias of LargeTypes is accepted because
+it resolves to the same identity. This mechanism works at level zero with any
+classifier name; it no longer depends on the spelling Type to recognize an
+explicit generic argument. Notation/Define parameter types now resolve through
+the explicit environment, so the word Type alone supplies no hidden foundation.
+
+Implicit and explicit generic parameters share one lowering rule: primitive
+Type k, with the corresponding Lean binder visibility. The declaration's return
+type and ordinary theorem binders retain their declared wrappers. This deliberately
+changes the canonical domain of old explicit Type parameters from the native
+classifier abbreviation to primitive Type. The two dispatch body oracles affected
+by this rule are migrated in `explicit-oracles.patch`; their initial two exact-
+target failures are recorded, not bypassed with definitional equality.
+
+The callable telescope is processed in order. Explicit carrier arguments bind
+their resolved checked carrier before later argument types are compared. Grouped
+Let parameters share a type resolved before introducing the group. Implicit
+parameters still precede explicit arguments in the declaration telescope. Compact
+and expanded signatures use the same processing. No new grammar production or
+parse-time type selection is introduced.
+
+Eleven dedicated tests cover levels 0–2, arbitrary names, aliases, mixed explicit/
+implicit parameters, grouped carriers, normalization, missing foundations and
+wrong carrier/classifier arguments. With existing dependent-call, record and
+small type-expression groups, 98 tests passed in 22.582 seconds. The independent
+native driver checks two conclusion trees, six exact declaration/theorem targets
+and two reflexivity proofs. It distinguishes primitive generic binders from
+wrapped statement binders in its handwritten oracles. The fresh pinned stack
+passed 260 selected tests in 91.449 seconds. The 92 generated corpus proofs also
+compile after the explicit-binder change. Unrestricted discovery is running in
+a separate checkout of this stack; its result remains pending.
+
+This implements explicit **locally supplied carrier values**. Constructing a
+higher carrier value with `type(T : C)`, reifying an inferred higher module type
+as a source expression, and carrier-valued dependent fields/callables remain
+pending. Their absence can still block conversion of an authored body that uses
+an inferred carrier in an explicit value position. Record/type-constructor
+parameter handling and the storage schema need their own full audit. This is
+still an isolated prototype, not production conformance.
 
 Reproduce the isolated stack and selected checks:
 

@@ -1,0 +1,34 @@
+--- a/cleanlang/modules.py
++++ b/cleanlang/modules.py
+@@ -191,7 +191,7 @@
+         clause_kind,names,text=let_clause(field)
+         if clause_kind!='let':raise CleanError('Declaration parameters require typed Let')
+         # The group type is resolved before introducing any member of the group.
+-        t = Type('Type') if text=='Type' else env.type(text,local)
++        t = env.type(text,local)
+         for n in names:
+             if n in local: raise CleanError('Duplicate parameter: '+n)
+             if n not in params:
+@@ -210,7 +210,7 @@
+     if len(renders)>1 or (not authored and not renders):
+         raise CleanError('Provide exactly one Render or Render latex field')
+     result = env.type(values['returns'],local)
+-    dependent=any(has_value_indices(t) for t in [result,*types.values()]) or Type('Type') in types.values() or any((info:=env.classifier_info(t)) is not None and info[1]>0 for t in [*implicit.values(),*types.values()])
++    dependent=any(has_value_indices(t) for t in [result,*types.values()]) or any(env.classifier_info(t) is not None for t in types.values()) or any((info:=env.classifier_info(t)) is not None and info[1]>0 for t in [*implicit.values(),*types.values()])
+     for fixity in ('infix','prefix'):
+         if fixity in values:
+             from .operator_bindings import validate
+@@ -234,8 +234,11 @@
+         latex = template(values[render],params,plain=render=='render')
+     else:
+         latex = r'\operatorname{{' + textext(name).replace(' ', r'\ ').replace('{','{{').replace('}','}}') + '}}(' + ', '.join('{'+str(i)+'}' for i in range(len(params))) + ')'
+-    signature=' '.join('{'+n+' : '+(universe_sort(info[1]) if (info:=env.classifier_info(t)) is not None else env.render_type(t,'lean'))+'}' for n,t in implicit.items())
+-    signature+=' '+ ' '.join(f'({p} : {env.render_type(types[p],"lean")})' for p in params)
++    def parameter_sort(t):
++        info=env.classifier_info(t)
++        return universe_sort(info[1]) if info is not None else env.render_type(t,'lean')
++    signature=' '.join('{'+n+' : '+parameter_sort(t)+'}' for n,t in implicit.items())
++    signature+=' '+ ' '.join('('+p+' : '+parameter_sort(types[p])+')' for p in params)
+     body=f'{signature} : {env.render_type(result,"lean")} :=\n  {meaning}'
+     # Install the name only after its body is resolved: no recursion/forward references.
+     def pattern(t):
