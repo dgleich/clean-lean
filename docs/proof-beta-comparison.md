@@ -94,3 +94,58 @@ separate. The one-page choice PDF was compiled twice and inspected; reference
 links, search, mobile width, no-JavaScript behavior and strict parser regeneration
 checks pass.
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Open contextual-family comparison regression
+
+The current compiler fails to compare an authored function alias with the same
+explicit function when either is an argument beneath another call. A minimal
+reproduction uses these declarations, with explicit operators/evidence imports:
+
+```clean
+Notation sample(f: Function(Real,Real)): Real:
+  Means: f 0
+  Render latex: sample({f})
+Define constant(x: Real): Function(Real,Real):
+  Equals: function(y: Real,x)
+Define sampled(x: Real): Real:
+  Equals: sample(constant(x))
+```
+
+The proof conditions `sample(constant(a)) = a`, `sampled(a) = a`, and
+`sample(function(z: Real,a)) = a` should compare compatibly under authored
+unfolding and alpha-renaming. The normalizer expands the named function, sees a
+binder in the expanded argument, and preserves the original argument at the
+call-reconstruction boundary. The explicit-lambda version retains a different
+key. The emitted terms themselves are correct.
+
+`tests/test_contextual_family_comparison.py` records four focused regressions:
+the two positive comparisons **fail**, while preservation of distinct free
+variables and distinct emitted source forms passes. The failures are intentional
+recorded defects, not skipped or expected-failure tests. The test fixture adds no
+mathematical axiom and does not replace the intended statement.
+
+`tools/check_contextual_family_targets.py` passes three independent exact native
+type/body comparisons and two Lean equality proofs between those propositions.
+The latter proofs use native definitional equality; they establish that these
+particular propositions agree, not that arbitrary native definition unfolding
+should become a Clean comparison rule. Clean must still treat the imported
+`sample` body as opaque, using only congruence at that application.
+
+This is the same boundary reached while loading `library/logic/choice.clean`:
+`chosen element belongs` compares an explicit predicate application to a condition
+using the authored `choose element`. It fails before quantified-beta tests can run.
+The failed load was reproduced in a clean exported checkout of `eb159c3`, separately
+from the running production regression.
+
+A repair must specify comparison congruence for hidden function expansions without
+publishing them as authored dependent-index arguments. Removing the hidden-binder
+guard globally is not an accepted repair: it protects computed indices that cannot
+represent binders and keeps source/native-adapter scope boundaries intact. Required
+interaction checks include dependent result indices, proof-valued arguments,
+shadowing, retained declaration identity, local aliases, alpha/capture cases,
+changed types and incomplete comparison. No repair is implemented in this commit;
+the production compiler remains unchanged.
+:::
