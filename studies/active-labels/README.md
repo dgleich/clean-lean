@@ -7,6 +7,10 @@ index type consists of labels active at the embedded vertex `a+v`. The new index
 type consists of surviving labels active at the restricted vertex `v`: a label,
 evidence of survival, and evidence of activity.
 
+The specialized Clean translation now passes fifteen exact target checks and four
+Lean proofs; see the current validation section at the end. Earlier progress
+sections below record the intermediate states.
+
 ## Checked generic construction
 
 `library/logic/subtype_restriction.clean` works with three explicit sets: `S` and
@@ -172,4 +176,37 @@ Clean declarations and compare both types and bodies structurally, then run the
 proofs against the generated theorem propositions. The current full translation
 is still running and has not yet produced its complete artifact. This preview
 does not replace or restart that run.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Current specialized validation
+
+The complete interval translation finished on compiler revision `674d38b`.
+[Generated.lean](Generated.lean) is its retained output. The original native
+verifier failed because its expectations used raw types/operators and its
+arithmetic proof omitted the derived vertex bound. The compiler and Clean
+sources were unchanged while migrating those checks.
+
+`verify.py --from-generated` now passes **fifteen exact checks and four proofs**
+in [Verified.lean](Verified.lean). Fourteen checks compare canonical types and
+bodies against independently authored GenericOracle and ActiveOracle templates;
+the fifteenth compares the support constructor's type, including binder details.
+The proof template constructs support from the interval bounds. Both round trips
+and the generated existence proposition are proved without new assumptions,
+axioms or placeholder proofs. The snapshot check deliberately avoids repeating
+the roughly half-hour translation; a normal invocation regenerates it first.
+
+The separate arithmetic driver was rerun successfully after its template lookup
+was updated. Its raw expected shapes remain a separate mathematical foundation;
+they are not used as canonical expected targets. Existing unused-simp warnings
+are nonfatal. The full Python regression remains running, with known failures;
+this result does not claim repository-wide conformance or any missing topology
+paper theorem.
+
+The statement PDF was compiled twice and visually checked (one landscape page).
+Its current notation suppresses subtype-value projections, so the final displayed
+`e(x) = x` means equality of underlying labels, not equality across distinct
+subtypes. The Clean and Lean expressions retain those projections explicitly;
+this rendering convention still needs a clearer mathematical presentation.
 :::

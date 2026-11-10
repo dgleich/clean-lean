@@ -1,0 +1,33 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{restoring a restricted label}\cleanattribution{[Interval restriction, original label round trip]}
+Let $I$ be a type.
+Let $n$, $a$ and $m$ be natural numbers.
+Assume $a+m\le n$ (\texttt{h}).
+Let $L$ be a family of ordered interval labels indexed by $I$ on vertices $0$ through $n$.
+Let $v$ be a vertex in $\{0,\ldots,m+1-1\}$.
+Let $\mathit{support}$ be evidence identifying $A(L,a+v)$ with the elements of $L|_{[a,a+m]}$ selected by $R(L,v)$.
+Let $x$ be an element of $A(L,a+v)$.
+Then \[\iota(\rho(x))=x.\]
+\end{cleanresult}
+
+\begin{cleanresult}{restricting a restored label}\cleanattribution{[Interval restriction, surviving label round trip]}
+Let $I$ be a type.
+Let $n$, $a$ and $m$ be natural numbers.
+Assume $a+m\le n$ (\texttt{h}).
+Let $L$ be a family of ordered interval labels indexed by $I$ on vertices $0$ through $n$.
+Let $v$ be a vertex in $\{0,\ldots,m+1-1\}$.
+Let $\mathit{support}$ be evidence identifying $A(L,a+v)$ with the elements of $L|_{[a,a+m]}$ selected by $R(L,v)$.
+Let $y$ be an element of $R(L,v)$.
+Then \[\rho(\iota(y))=y.\]
+\end{cleanresult}
+
+\begin{cleanresult}{active labels correspond}\cleanattribution{[Interval restriction, value preserving equivalence]}
+Let $I$ be a type.
+Let $n$, $a$ and $m$ be natural numbers.
+Assume $a+m\le n$ (\texttt{h}).
+Let $L$ be a family of ordered interval labels indexed by $I$ on vertices $0$ through $n$.
+Let $v$ be a vertex in $\{0,\ldots,m+1-1\}$.
+Then \[\left(\text{there exists }e : A(L,a+v)\simeq R(L,v),\; \left(\text{for every }x : A(L,a+v),\; e(x)=x\right)\right).\]
+\end{cleanresult}
+
+% generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

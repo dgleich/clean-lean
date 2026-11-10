@@ -23,7 +23,9 @@ f=emitted_key
 keys={k:f(v) for k,v in [('VALUE','element value'),('MEMBER','element membership'),('ELEMENT','element from membership'),('OLD','original active labels'),('NEW','restricted active labels'),('SUR','surviving interval labels'),('AT','interval labels at'),('RESTRICT','restricted interval labels'),('SUBPATH','subpath vertex'),('FORWARD','restrict active label'),('BACKWARD','restore active label'),('EQUIV','equivalence'),('LABEL_EQUIV','active label equivalence'),('EVAL','equivalence forward')]}
 keys.update({k:f(v) for k,v in [('GFORWARD','restrict element'),('GBACKWARD','restore element'),('GEQUIV','subtype restriction equivalence')]})
 keys.update(LABELS=emitted_key('IntervalLabels',True),SUPPORT=emitted_key('SubtypeRestrictionSupport',True))
-expected=r'''
+# Raw native arithmetic foundation retained for verify_arithmetic.py only.
+# Canonical target expectations below come from the independent wrapper templates.
+ARITHMETIC_EXPECTED=r'''
 namespace ActiveOracle
 noncomputable def value {A : Type} (S : Set A) (x : {a : A // a ∈ S}) : A := x.val
 noncomputable def member {A : Type} (S : Set A) (x : {a : A // a ∈ S}) : VALUE S x ∈ S := x.property
@@ -77,15 +79,26 @@ def existsStatement : Prop := ∀ (I : Type) (n a m : ℕ) (h : a+m ≤ n) (L : 
  VALUE (SUR I n a m L) (VALUE (NEW I n a m L v) (EVAL e x)) = VALUE (OLD I n a m h L v) x
 end ActiveOracle
 '''
+def emitted_type(name, prefix='cleanType_'):
+    matches=set(re.findall(r'\b'+prefix+re.escape(name)+r'_[0-9a-f]+\b',s))
+    if len(matches)!=1:raise ValueError('Expected exactly one binding for '+name)
+    return next(iter(matches))
+keys.update({k:emitted_type(n) for k,n in [('TYPE','Type'),('NAT','Natural'),
+    ('VERTEX','Vertex'),('SET','Set'),('EL','Element'),('EQUIVALENCE','Equivalence')]})
+keys.update({k:f(n) for k,n in [('MEM','set member'),('EQ','equal'),
+    ('LE','natural at most'),('ADD','natural sum')]})
+keys['NUM']=emitted_type('Natural','cleanNumeral_')
+expected=(HERE/'GenericOracle.lean.in').read_text()+(HERE/'ActiveOracle.lean.in').read_text()
 comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_basic_targets.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))
 pairs=[(f(n),v) for n,v in [('element value','value'),('element membership','member'),('element from membership','element'),('original active labels','old'),('restricted active labels','new'),('restrict active label','forward'),('restore active label','backward'),('active label equivalence','equivalence'),('restrict element','genericForward'),('restore element','genericBackward'),('subtype restriction equivalence','genericEquivalence')]]
 pairs += [('CleanStatements.'+n,v) for n,v in [('restoring_a_restricted_label','leftStatement'),('restricting_a_restored_label','rightStatement'),('active_labels_correspond','existsStatement')]]
-checks='\n'.join('same_basic_target '+a+' ActiveOracle.'+b for a,b in pairs)+'\n'
+generic={'value','member','element','genericForward','genericBackward','genericEquivalence'}
+checks='\n'.join('same_basic_target '+a+(' GenericOracle.' if b in generic else ' ActiveOracle.')+b for a,b in pairs)+'\n'
 ctor_check=r'''
 run_cmd do
  let env ← Lean.getEnv
  let some a := env.find? `SUPPORT.mk | throwError "Missing support constructor"
- let some b := env.find? `ActiveOracle.supportConstructor | throwError "Missing expected constructor"
+ let some b := env.find? `GenericOracle.supportConstructor | throwError "Missing expected constructor"
  unless a.levelParams == b.levelParams && Lean.Expr.equal (canonical a.type) (canonical b.type) do
    throwError "Support constructor type differs"
 '''
@@ -101,31 +114,6 @@ theorem restrict_checked : CleanStatements.restricting_a_restored_label := by
  apply Subtype.ext
  rfl
 
-private theorem support_exists (I : Type) (n a m : ℕ) (h : a+m ≤ n) (L : LABELS I n) (v : Fin (m+1)) :
- Nonempty (SUPPORT I n a m h L v) := by
- let survives : ∀ x : {i : I // i ∈ OLD I n a m h L v}, VALUE (OLD I n a m h L v) x ∈ SUR I n a m L := by
-   intro x
-   have hx := x.property
-   simp only [UNFOLD] at *
-   try simp only [Fin.val_mk, Fin.coe_natAdd, Fin.coe_castLE, Fin.coe_cast] at *
-   omega
- let active : ∀ x : {i : I // i ∈ OLD I n a m h L v},
-     ELEMENT (SUR I n a m L) (VALUE (OLD I n a m h L v) x) (survives x) ∈ NEW I n a m L v := by
-   intro x
-   have hx := x.property
-   simp only [UNFOLD] at *
-   try simp only [Fin.val_mk, Fin.coe_natAdd, Fin.coe_castLE, Fin.coe_cast] at *
-   omega
- let original : ∀ y : {j : {i : I // i ∈ SUR I n a m L} // j ∈ NEW I n a m L v},
-     VALUE (SUR I n a m L) (VALUE (NEW I n a m L v) y) ∈ OLD I n a m h L v := by
-   intro y
-   have hs := y.val.property
-   have hy := y.property
-   simp only [UNFOLD] at *
-   try simp only [Fin.val_mk, Fin.coe_natAdd, Fin.coe_castLE, Fin.coe_cast] at *
-   omega
- exact ⟨⟨survives,active,original⟩⟩
-
 theorem active_labels_checked : CleanStatements.active_labels_correspond := by
  intro I n a m h L v
  obtain ⟨support⟩ := support_exists I n a m h L v
@@ -135,7 +123,10 @@ theorem active_labels_checked : CleanStatements.active_labels_correspond := by
  intro x
  rfl
 '''
+proofs=(HERE/'ArithmeticSupport.lean.in').read_text()+proofs
 unfold=[f(n) for n in ['original active labels','restricted active labels','surviving interval labels','interval labels at','set of','restricted interval labels','interval labels','clipped vertex','natural minimum','bounded vertex','vertex number','subpath vertex','offset vertex','widen vertex','transport vertex','selected value','element value','element from membership']]
+unfold += [f(n) for n in ['set member','conjunction','natural sum','natural difference','natural at most','vertex at most']]
+unfold += [keys['NUM']]
 proofs=proofs.replace('UNFOLD',', '.join(unfold+['Set.mem_setOf_eq','Fin.le_iff_val_le_val']))
 extra=expected+comparison+checks+ctor_check+proofs
 extra=extra.replace('SUPPORT I n a m h L v','SUPPORT I (SUR I n a m L) (OLD I n a m h L v) (NEW I n a m L v)').replace('SUPPORT.mk I n a m h L v','SUPPORT.mk I (SUR I n a m L) (OLD I n a m h L v) (NEW I n a m L v)')

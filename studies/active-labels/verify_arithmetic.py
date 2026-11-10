@@ -16,7 +16,7 @@ def render_arithmetic(e):
     f=lambda name:e.data['functions'][name]['native_binding']
     module=ast.parse((HERE/'verify.py').read_text())
     literals={t.id:ast.literal_eval(n.value) for n in module.body if isinstance(n,ast.Assign) and isinstance(n.value,ast.Constant) and isinstance(n.value.value,str) for t in n.targets if isinstance(t,ast.Name)}
-    expected=literals['expected']
+    expected=literals['ARITHMETIC_EXPECTED']
     sets=expected[expected.index('noncomputable def old'):expected.index('noncomputable def supportConstructor')]
     existence=expected[expected.index('def existsStatement'):expected.index('end ActiveOracle')]
     support=(HERE/'ArithmeticSupport.lean.in').read_text()
