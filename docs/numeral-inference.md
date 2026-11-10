@@ -136,3 +136,16 @@ integration obligations. These examples do not establish complete inference for
 all dependent type positions or module-declared defaults. Research theorem gaps
 are unchanged by numeral inference.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The [local numeral-search experiment](../studies/numeral-pruning/README.md)
+proposes exhaustive child-assignment pruning before parent combinations. It
+preserves all viable child interpretations and applies defaults only to complete
+root solutions. Binder regions remain atomic. The resource boundary becomes a
+fixed limit on local combinations at each search node; unfinished checks still
+propagate as incomplete. The study specifies the compositionality assumptions
+and unresolved interaction checks. It also authors finite-vertex order using
+natural coordinate order. Neither change is integrated; source grammar and
+highlighting are unchanged.
+:::

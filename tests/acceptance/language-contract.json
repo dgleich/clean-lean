@@ -2363,6 +2363,51 @@
         "Integrated full-regression completion and remaining fixes",
         "General universe/sort polymorphism and native import/instance isolation"
       ]
+    },
+    {
+      "id": "local_exhaustive_numeral_pruning",
+      "status": "isolated-prototype",
+      "environment": "Pinned e9760aa plus studies/numeral-pruning/prototype.patch; explicit operators module, Natural default and local n : Natural.",
+      "source": "(n+1)+(n+1)",
+      "expected_tree": [
+        "Operator",
+        "+",
+        [
+          "Operator",
+          "+",
+          [
+            "Local",
+            "n"
+          ],
+          [
+            "Decimal",
+            "1"
+          ]
+        ],
+        [
+          "Operator",
+          "+",
+          [
+            "Local",
+            "n"
+          ],
+          [
+            "Decimal",
+            "1"
+          ]
+        ]
+      ],
+      "expected_lean": "Retains every selected natural-addition and natural-numeral adapter. No rewriting to a bare Lean literal or native addition. The longer nine-occurrence fixture has an independently assembled canonical target and a proof of its value at zero.",
+      "checks": [
+        "studies/numeral-pruning/verify.py: eight focused tests, three canonical checks and three proofs",
+        "Independent flat exhaustive solution comparison for small expressions; simultaneous defaults and parent-driven selection; incomplete/foreign errors and hole-free sibling errors"
+      ],
+      "pending": [
+        "Full consumer/binding/cache/capture validation and compositionality audit",
+        "Active-label/interval study completion and canonical oracle migration",
+        "Production integration and full regression",
+        "Parameterized/vector/matrix numeral carriers remain a separate gap"
+      ]
     }
   ]
 }

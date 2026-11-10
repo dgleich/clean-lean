@@ -1048,6 +1048,15 @@ Conclude: x = x</code></pre></section><section><h3>Schematic Lean binding</h3><p
 </section>
 </llm>
 
+
+<llm model="gpt-6" date="2026-11-10" role="assisted">
+<section id="numeral-pruning" class="mapping" data-status="proposed">
+<header><h2>Numerals in longer authored definitions</h2><span class="badge proposed">Isolated prototype</span></header>
+<p>The <a href="../studies/numeral-pruning/README.md">local search experiment</a> checks every viable child assignment before combining them, retaining ambiguity until the root. In <code>r = 1+1</code> for real <code>r</code>, a Natural default cannot prematurely select the inner sum. Binder bodies remain atomic; local exhaustion is reported as incomplete.</p>
+<p>Successful targets keep the same explicit numeral constructors and operator adapters. The proposed resource cap applies to local combinations rather than the raw product of every hole in the entire expression. The study also declares <code>u ≤ v</code> for finite vertices through the existing natural-coordinate projections and natural order, with no token-based meaning. Canonical targets and proofs cover the restricted experiment; production integration and wider consumer validation are pending.</p>
+</section>
+</llm>
+
 </main>
 <script>
 (() => {
