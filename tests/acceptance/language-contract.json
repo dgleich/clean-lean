@@ -2479,7 +2479,8 @@
       "checks": [
         "studies/parameterized-literals/NativeExample.lean: native design example only, two coordinate proofs",
         "studies/parameterized-literals/test_pattern_model.py: twenty symbolic design-model tests only",
-        "studies/parameterized-literals/test_constraint_model.py: eighteen symbolic constraint/default tests only"
+        "studies/parameterized-literals/test_constraint_model.py: eighteen symbolic constraint/default tests only",
+        "studies/literal-annotations/verify.py: isolated partial annotation prototype; full literal representation and unannotated inference pending"
       ],
       "pending": [
         "Production construction and eligibility checking for the specified determined-carrier pattern calculus",

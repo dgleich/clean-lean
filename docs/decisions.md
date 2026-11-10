@@ -1196,3 +1196,15 @@ clarifies a proposed selection policy; production row extraction, dependent
 constraints, resource accounting and canonical target checks remain blockers.
 No production literal behavior changes.
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+An [isolated typed-literal experiment](../studies/literal-annotations/README.md)
+adds the Literal declaration field and selection for determined annotations. It
+regenerates the parser with strict checks and validates explicit vector/matrix
+constructor targets. It currently desugars to ordinary retained ModuleCall nodes,
+so literal-surface preservation, the full binding snapshot, unannotated inference,
+consumer coverage and broader validation remain pending. This is not integrated
+or a conformance claim for the full parameterized-literal proposal.
+:::

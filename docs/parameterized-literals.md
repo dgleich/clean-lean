@@ -2,7 +2,10 @@
 
 # Parameterized literals: proposed declaration and inference contract
 
-**Design work, not implemented or accepted as fully specified.** The current
+**Not implemented in production or accepted as fully specified.**
+An [isolated typed-literal prototype](../studies/literal-annotations/README.md)
+now tests declaration selection and annotation targets, with explicit representation
+and inference gaps. The current
 compiler's closed-carrier numeral rule cannot express `(0: Vector(n,Complex))`
 or infer that interpretation in `x != 0`. Adding another closed carrier or
 replacing zero by a named function in every theorem would not solve that problem.
