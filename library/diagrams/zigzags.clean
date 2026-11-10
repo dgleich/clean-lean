@@ -31,6 +31,13 @@ Notation vertex number(n,v):
   Means: v.val
   Render latex: {v}
 
+Condition vertex at most(u,v):
+  Let n: Natural
+  Let u,v: Vertex(n)
+  Infix: ≤
+  Holds when: vertex number(n,u) ≤ vertex number(n,v)
+  Render latex: {u}\le {v}
+
 Define zigzag shape(n,d):
   Let n: Natural
   Let d: Function(Vertex(n),Boolean)

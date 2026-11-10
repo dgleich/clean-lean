@@ -65,10 +65,6 @@ def complete(tree,env,locals,expected=None,*,limit=4096):
     choices=[(name,identity(name,env)) for name,spec in env.data['types'].items() if 'numerals' in spec]
     choices.sort(key=lambda item:tuple(item[1]))
     if not choices:raise CleanError('No declared numeral interpretation')
-    count=1
-    for _ in positions:
-        count*=len(choices)
-        if count>limit:raise IncompleteNumeralAnalysis(f'Incomplete numeral analysis: more than {limit} assignments')
     owner=object();missing=object();previous=getattr(env,'_numeral_trial_owner',missing)
     successes=[]
     def rebuild(node,path,replacements):
@@ -77,17 +73,45 @@ def complete(tree,env,locals,expected=None,*,limit=4096):
         return node
     try:
         env._numeral_trial_owner=owner
-        for assignment in product(choices,repeat=len(positions)):
-            replacements={path:['BoundNumeral',text,name,snapshot,'inferred']
-                for (path,text),(name,snapshot) in zip(positions,assignment)}
-            candidate=rebuild(tree,(),replacements)
-            try:
-                result=evaluate(candidate)
-                if expected is not None and result.type!=expected:continue
-            except SignatureMismatch as error:
-                if error.owner is not owner:raise
-                continue
-            successes.append((result,tuple(name for name,_ in assignment),candidate))
+        def solutions(node):
+            local_positions=holes(node)
+            if not local_positions:return [(evaluate(node),(),node)]
+            kind=node[0]
+            # Binder bodies are checked as a whole, in the scope introduced by
+            # their own elaboration. Never inspect their locals in caller scope.
+            paths=([(2,i) for i in range(len(node[2]))] if kind in ('Call','ModuleCall') else
+                   [(1,)]+[(2,i) for i in range(len(node[2]))] if kind=='Apply' else
+                   [(2,),(3,)] if kind=='Operator' else
+                   [(2,)] if kind=='Unary' else [(1,)] if kind=='Projection' else [])
+            def at(path):
+                value=node
+                for step in path:value=value[step]
+                return value
+            parts=[solutions(at(path)) for path in paths]
+            widths=[len(part) for part in parts] if paths else [len(choices)]*len(local_positions)
+            count=1
+            for width in widths:count*=width
+            if count>limit:
+                raise IncompleteNumeralAnalysis(f'Incomplete numeral analysis: more than {limit} local assignments')
+            found=[]
+            assignments=product(*parts) if paths else product(choices,repeat=len(local_positions))
+            for assignment in assignments:
+                if paths:
+                    replacements={path:item[2] for path,item in zip(paths,assignment)}
+                    names=tuple(name for item in assignment for name in item[1])
+                else:
+                    replacements={path:['BoundNumeral',text,name,snapshot,'inferred']
+                        for (path,text),(name,snapshot) in zip(local_positions,assignment)}
+                    names=tuple(name for name,_ in assignment)
+                candidate=rebuild(node,(),replacements)
+                try:result=evaluate(candidate)
+                except SignatureMismatch as error:
+                    if error.owner is not owner:raise
+                    continue
+                found.append((result,names,candidate))
+            return found
+        successes=[item for item in solutions(tree)
+            if expected is None or item[0].type==expected]
     finally:
         if previous is missing:del env._numeral_trial_owner
         else:env._numeral_trial_owner=previous

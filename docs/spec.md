@@ -1126,3 +1126,32 @@ incomplete analyses propagate. Seven freshness tests and 75 related binding,
 proof and inference tests pass in isolation. Three independent canonical Lean
 condition/evidence targets pass. Full working-checkout validation is pending.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Local exhaustive numeral completion
+
+The [numeral-search rule](../studies/numeral-pruning/README.md#search-rule) is now
+integrated. For ordinary expression nodes, enumerate every successful child
+assignment in fixed AST order, then check all combinations at the parent. Never
+apply child defaults. Child checking receives no contextual expected type under
+the current checker; a future bidirectional checker must revisit this pruning
+argument. The complete root receives expected-type filtering and simultaneous
+default restrictions. Keep every successful assignment, even at the same type.
+
+Binder bodies remain atomic exhaustive regions with their own scope. The fixed
+resource limit caps each visited node's local Cartesian product after filtering,
+not the raw global assignment count. Exceeding it is incomplete analysis, never
+permission to choose a default. Hole-free children are still checked; an invalid
+sibling cannot suppress unknown-name or incomplete errors. Only search-owned
+signature mismatches eliminate assignments; other errors propagate, and the
+previous owner is restored on every exit. The emitted result is a fully rechecked
+whole expression. Source parsing, precedence, declared carrier identities and
+operator-selection ambiguity rules are unchanged.
+
+The zigzag module separately declares vertex order through natural coordinates.
+Its exact wrapper target is checked along with a nine-numeral expression.
+Thirteen focused tests, three canonical targets and three proofs pass directly;
+broader regression and study validation remain pending. Parameterized literal
+carriers and full native environment isolation are not solved by this change.
+:::

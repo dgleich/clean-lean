@@ -2,8 +2,8 @@
 
 # Numeral search for interval and subpath definitions
 
-Status: isolated prototype, not production behavior or full conformance.
-The patch changes the numeral search's resource boundary and adds an authored
+Status: integrated slice; full conformance and broad validation remain pending.
+The implementation changes the numeral search's resource boundary and adds an authored
 finite-vertex order. Grammar, precedence, layout, and editor spellings are unchanged.
 
 The active-label study first fails because `lower(i) ≤ upper(i)` has finite-vertex
@@ -32,7 +32,7 @@ carrier choices before checking any surrounding expression and exceeds 4096
 assignments. This is correctly reported as incomplete analysis, but prevents
 ordinary authored definitions from being used.
 
-## Proposed search rule
+## Search rule
 
 Keep the existing numeral atoms, explicit adapters, expected-type rule and final
 simultaneous-default rule. Replace flat whole-expression enumeration by the
@@ -52,7 +52,7 @@ following fixed traversal:
 4. Treat a lambda, universal condition, or existential condition as an atomic
    search region. Enumerate and check all its hole assignments as a complete
    binder expression, so its body is never checked in a scope missing its bound
-   variable. Decomposition beneath binders is not implemented in this prototype.
+   variable. Decomposition beneath binders is not implemented.
 5. A numeric leaf enumerates the explicit closed-carrier constructors in their
    existing stable order. Explicitly annotated and retained numeral atoms keep
    their selected declarations.
@@ -104,10 +104,34 @@ revision, applies the patch, and runs those checks. This leaves production files
 unchanged. `--active-labels` additionally runs the larger active-label test group;
 that group is not claimed passing by the focused results above.
 
-The initial active-label load with the first pruning version remains under
-investigation. Its version preceded the final explicit check of hole-free
-siblings and cannot validate the final patch. Full active-label/interval study
-translation, native oracle migration, general performance, production integration
-and full regression are pending. The prototype does not solve vector/matrix
-numerals or parameterized literal carriers. Paper-theorem proof gaps are unchanged.
+The historical active-label diagnostics and their terminal outcomes are recorded
+in the integration checkpoint below. Current active-label/interval study
+translation, native oracle migration, general performance and full regression
+remain pending. The implementation does not solve vector/matrix numerals or
+parameterized literal carriers. Paper-theorem proof gaps are unchanged.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Integration checkpoint
+
+The working compiler now applies the search rule above, and the zigzag module
+contains the Clean-authored vertex order. Thirteen focused tests pass directly:
+the original eight plus an independent exhaustive comparison across 29 additional
+small expressions, root expected-type filtering for three carriers, unknown-name
+propagation from a second sibling, the atomic binder resource boundary, and
+restoration of an existing search owner. Three canonical Lean targets and three
+proofs also pass directly. The 92-proof corpus also passes directly. The production full regression and
+topology checks have been started; their final results are pending.
+
+The earlier combined numeral-pruning/projection experiment terminated with 48
+tests in 1560.663 seconds and one error from a nonexistent test module. Its actual
+active-label/structure cases passed, but its command did not. The superseded
+pruning-only diagnostic was stopped explicitly, without a passing result. These
+historical runs do not validate the current production compiler.
+
+The pinned patch driver below remains a historical eight-test reproduction and
+must not reapply its patch to the integrated compiler. Run the working tests and
+`tools/check_pruned_numeral_targets.py` directly for current evidence. The added
+five tests are production acceptance checks, not part of that historical patch.
 :::
