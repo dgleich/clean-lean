@@ -4,7 +4,7 @@
 (defconst clean-math--keyword
   (regexp-opt '("Condition" "Holds when" "Let" "Define" "Assume" "Conclude" "Returns" "Equals" "Alias" "Phrase" "Import" "Result" "Theorem" "Context" "Notation" "Structure" "Type" "Source") 'words))
 (defconst clean-math--metadata
-  (regexp-opt '("Universe" "Constructor" "Assumption name" "Render" "Render latex" "Describe" "Describe plural" "Attribution" "Kind" "Label" "Title" "Author" "Year" "Version" "Revision" "URL" "References" "source" "reference" "relationship" "scope" "changes" "note") t))
+  (regexp-opt '("Literal" "Universe" "Constructor" "Assumption name" "Render" "Render latex" "Describe" "Describe plural" "Attribution" "Kind" "Label" "Title" "Author" "Year" "Version" "Revision" "URL" "References" "source" "reference" "relationship" "scope" "changes" "note") t))
 (defvar-local clean-math--matched-face 'font-lock-comment-face)
 (defun clean-math--comment (limit)
   "Find line or nested block comments, preserving embedded fields and strings."
@@ -71,6 +71,8 @@
      (1 font-lock-keyword-face t) (2 font-lock-function-name-face t) (3 font-lock-type-face t))
     ("^ *\\(Let\\) +\\(.+?\\)\\(?: *:\\| +be +\\)\\(.+\\)$"
      (1 font-lock-keyword-face t) (2 font-lock-variable-name-face t) (3 font-lock-type-face t))
+    ("^ *\\(Assume\\) +\\([^:(),]+\\):"
+     (1 font-lock-keyword-face t) (2 font-lock-variable-name-face t))
     (,(concat "^ *" clean-math--metadata " *:.*$") (0 font-lock-string-face t) (1 font-lock-keyword-face t))
     ("^ *\\(Numerals\\|Means\\|From Lean\\) *:.*$" (0 font-lock-preprocessor-face t) (1 font-lock-keyword-face t))
     ("^ *\\(Default +numerals\\) *: *\\(.*\\)$" (1 font-lock-keyword-face t) (2 font-lock-type-face t))

@@ -51,6 +51,10 @@ const tm=require('vscode-textmate'),onig=require('vscode-oniguruma');
    if(opener.startsWith('"')) state=grammar.tokenizeLine('"""',state).ruleStack;
    assert(!grammar.tokenizeLine('Result real:',state).tokens[0].scopes.includes('markup.raw.clean'));
  }
+ has('  aSsUmE zero contents:','zero contents','entity.name.label.clean');
+ has('  lItErAl: 0','lItErAl','keyword.other.metadata.clean');
+ has('    v = (0: Vector(V.size,Complex))','0','constant.numeric.clean');
+ assert(!scopeAt('  Assume positive((0: Real))','Real').includes('entity.name.label.clean'));
  console.log('TextMate/Oniguruma scope checks passed');
 })().catch(e=>{console.error(e);process.exitCode=1;});
 

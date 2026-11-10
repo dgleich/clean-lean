@@ -9,9 +9,11 @@ syntax match cleanMathLogic '\c\<\%(and\|or\|not\|function\|type\|for\|every\|th
 syntax match cleanMathSignature '(.*\ze:\s*$' contained
 syntax match cleanMathKeyword '\c^ *\%(Condition\|Holds when\|Let\|Define\|Assume\|Conclude\|Returns\|Equals\|Alias\|Phrase\|Result\|Theorem\|Context\|Notation\|Condition\|Structure\|Type\|Source\)\>' containedin=ALLBUT,cleanMathComment,cleanMathOpaque,cleanMathLean,cleanMathImport,cleanMathText,cleanMathTriple,cleanMathDoc
 syntax match cleanMathDeclaration '\c^ *\%(Result\|Theorem\|Context\|Define\|Notation\|Condition\|Structure\|Type\|Source\)\>.*:$' contains=cleanMathKeyword,cleanMathDelimiter,cleanMathSignature
+syntax match cleanMathAssumption '\c^ *Assume \+[^:(),]\+:' contains=cleanMathKeyword,cleanMathDelimiter
+highlight default link cleanMathAssumption Identifier
 syntax match cleanMathTypedLet '\c^ *Let\>.*\%(:\|\<be\>\).*' contains=cleanMathKeyword,cleanMathDelimiter
-syntax match cleanMathMetadataKey '\c^ *\%(Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:' contained
-syntax match cleanMathOpaque '\c^ *\%(Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:.*$' contains=cleanMathMetadataKey
+syntax match cleanMathMetadataKey '\c^ *\%(Literal\|Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:' contained
+syntax match cleanMathOpaque '\c^ *\%(Literal\|Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:.*$' contains=cleanMathMetadataKey
 syntax match cleanMathLean '\c^ *\%(Numerals\|Means\|From Lean\)\s*:.*$'
 syntax match cleanMathDefaultKeyword '\c^ *Default \+numerals\>' contained
 syntax match cleanMathDefaultNumerals '\c^ *Default \+numerals *:.*$' contains=cleanMathDefaultKeyword,cleanMathDelimiter

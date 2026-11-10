@@ -116,3 +116,39 @@ an Emacs ERT case is supplied but remains unrun because Emacs is unavailable.
 Highlighting does not imply semantic support: the type checker still rejects the
 bound function-type form while its semantic implementation is pending.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Display of the pending language prototypes
+
+VS Code/TextMate, Vim and Emacs rules recognize `Literal:` metadata and named
+assumption labels, including a header such as `Assume zero contents:`. Digits and
+punctuation in `(0: Vector(V.size,Complex))` use the existing lexical rules;
+mathematical type names are not hardcoded. A colon inside a condition argument
+must not turn the argument into an assumption label. Comment and literate-text
+boundaries still take precedence.
+
+These display rules also cover experimental files. They do **not** imply that the
+production parser accepts literal metadata or indented assumption blocks. See the
+[combined prototype status](../studies/composed-language/README.md). No new
+experimental auto-indent rule or formatter is enabled by this highlighting change.
+
+Validation on 2026-11-10: native TextMate/Oniguruma and Vim checks passed, along
+with eleven browser-highlighter checks (four new cases and seven existing
+text-preservation, comment, escaping and prose regressions). The Emacs rules and ERT specimen were
+updated, but native Emacs validation remains pending: an unpacked temporary Emacs
+28.2 runtime crashed during a minimal startup check before loading this mode.
+That environment failure is not evidence that the mode works or fails. The runtime
+was kept outside the repository; no user editor configuration was modified.
+
+The offline browser consumes the TextMate match/capture rules. Its tokenizer was
+checked directly; this does not regenerate the full `docs/review.html` snapshot,
+whose repository-wide collection remains a separate pending task.
+
+```sh
+NODE_PATH=/path/to/node_modules node tools/check_textmate.cjs
+vim -Nu NONE -n -es -S tools/check_vim.vim
+emacs --batch -Q -l tools/check_emacs.el
+PYTHONPATH=tests:. python3 -m unittest test_editor_prototypes -v
+```
+:::

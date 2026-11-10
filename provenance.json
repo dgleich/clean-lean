@@ -7554,6 +7554,16 @@
         "-- ",
         ""
       ]
+    },
+    "tests/test_editor_prototypes.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

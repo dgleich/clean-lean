@@ -99,7 +99,8 @@ prototype checkout. At recording time its process was confirmed live; it had no
 final result. That run is not passing evidence and does not include the separate
 study tests unless explicitly invoked as above.
 
-Full-suite validation, editor/browser treatment of a block header, and production
-integration remain pending. The production topology specimen stays inline until
+Full-suite validation and production integration remain pending. Lexical editor
+rules now cover the block header; see [editor validation](../../editors/README.md).
+Native Emacs validation and full browser-snapshot regeneration remain pending. The production topology specimen stays inline until
 integration. A separate unlabelled block/list design is not silently introduced.
 :::

@@ -74,6 +74,18 @@
     (clean-math-mode) (font-lock-ensure)
     (goto-char (point-min)) (search-forward "Function")
     (should (eq (get-text-property (1- (point)) 'face) 'font-lock-type-face))))
+(ert-deftest clean-math-prototype-block-and-literal ()
+  (with-temp-buffer
+    (insert "  aSsUmE zero contents:\n    v = (0: Vector(V.size,Complex))\n  lItErAl: 0\n")
+    (clean-math-mode) (font-lock-ensure)
+    (goto-char (point-min)) (search-forward "aSsUmE")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-keyword-face))
+    (search-forward "zero contents")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-variable-name-face))
+    (search-forward "(0")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-constant-face))
+    (search-forward "lItErAl")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-keyword-face))))
 (ert-run-tests-batch-and-exit)
 
 ;; generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -96,7 +96,7 @@ structural decoder is not a complete semantic validator for arbitrary stored
 records. Exact retained-literal declaration snapshots still need their broader
 native-environment contract, and unannotated joint operator/literal inference
 remains unsupported. General universe and adapter-isolation obligations are not
-resolved by combining these patches. Editor/browser coverage of the new syntax
-is still pending. Missing mathematical constructions and paper proofs retain
+resolved by combining these patches. Lexical editor rules now cover the new forms; [native Emacs validation and full
+browser-snapshot regeneration](../../editors/README.md) remain pending. Missing mathematical constructions and paper proofs retain
 their separate entries in the topology implementation audit.
 :::
