@@ -35,7 +35,7 @@ Condition implication(x,y):
   From Lean: x → y
   Render latex: {x}\text{{ implies }}{y}
 
-Condition equivalence(x,y):
+Condition logical equivalence(x,y):
   Let x,y: Proposition
   Infix: ↔
   From Lean: x ↔ y

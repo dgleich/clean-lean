@@ -28,7 +28,7 @@ for n,t in [('bundle','coefficient module'),('theory','homology theory'),
  ('linear','homology linear map'),('image','homology image'),
  ('identity','identity continuous map'),('compose','compose continuous maps')]:
     mapping['HomologyOracle.'+n]=function(t)
-for n,t in [('equal','equal'),('member','set member'),('equivalent','equivalence')]:
+for n,t in [('equal','equal'),('member','set member'),('equivalent','logical equivalence')]:
     mapping['HomologyOracle.'+n]=function(t)
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''

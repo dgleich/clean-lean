@@ -15,7 +15,7 @@ mapping={}
 for oracle,name in [('projection','relative chain projection'),('commutes','pair chain commutes'),
  ('chainMap','relative chain map'),('homologyMap','relative homology map'),('image','relative homology image')]:
     mapping['RelativeMapOracle.'+oracle]=function(name)
-for oracle,name in [('equal','equal'),('equivalent','equivalence')]:
+for oracle,name in [('equal','equal'),('equivalent','logical equivalence')]:
     mapping['RelativeMapOracle.'+oracle]=function(name)
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''

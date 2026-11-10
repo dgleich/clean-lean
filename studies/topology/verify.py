@@ -21,7 +21,7 @@ K,P,S,T=('_root_.'+k(name) for name in ['Type','Proposition','Set','Topology'])
 setof,opn,pre_ref,img,compose,cont,selected,family=(ref(name) for name in
     ['set of','open in','inverse image','image','compose maps','continuous between',
      'selected elements','intersection family'])
-eq,member,inter,conj,iff,imp=(ref(name) for name in ['equal','set member','set intersection','conjunction','equivalence','implication'])
+eq,member,inter,conj,iff,imp=(ref(name) for name in ['equal','set member','set intersection','conjunction','logical equivalence','implication'])
 comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_basic_targets.py').read_text()).body
     if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))
 oracles='';count=0
@@ -54,7 +54,7 @@ for name,binders,typ,body in [
  ('set member',f'{{X : Type}} (x : X) (A : {S} X)',P,'x ∈ A'),
  ('set intersection',f'{{X : Type}} (A B : {S} X)',f'{S} X','A ∩ B'),
  ('conjunction',f'(p q : {P})',P,'p ∧ q'),
- ('equivalence',f'(p q : {P})',P,'p ↔ q'),
+ ('logical equivalence',f'(p q : {P})',P,'p ↔ q'),
  ('implication',f'(p q : {P})',P,'p → q')]:target(f(name),binders,typ,body)
 assert count==23
 proofs=f'''

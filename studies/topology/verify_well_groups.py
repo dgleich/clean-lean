@@ -19,7 +19,7 @@ for oracle,name in [('infimum','module subspace infimum'),('intersection','inter
  ('data','perturbation certificate'),('certified','certified perturbation'),('target','perturbation target'),
  ('inclusion','perturbation pair inclusion'),('image','perturbation homology image'),('well','relative well group')]:
     mapping['WellOracle.'+oracle]=function(name)
-for oracle,name in [('equal','equal'),('subset','set subset'),('equivalent','equivalence'),('atMost','real at most'),('atLeast','real at least')]:
+for oracle,name in [('equal','equal'),('subset','set subset'),('equivalent','logical equivalence'),('atMost','real at most'),('atLeast','real at least')]:
     mapping['WellOracle.'+oracle]=function(name)
 mapping['WellOracle.numeral']=env.data['types']['Real']['numerals']['native_binding']
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())

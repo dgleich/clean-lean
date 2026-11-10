@@ -229,3 +229,31 @@ regression and complete conformance remain unfinished. The isolated equivalence
 rename also passes a direct coexistence test in both import orders, in addition
 to the fourteen module tests and native module compilation reported above.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The naming correction is now in the working library: the `↔` adapter is named
+`logical equivalence`. The six-argument `equivalence` constructor for maps with
+inverse evidence keeps its existing name. Both declarations remain in the one
+explicit semantic namespace. No overload-resolution or parser rule changes.
+The new coexistence test checks both import orders and verifies that named
+`logical equivalence(p,q)` and `p ↔ q` select the same Lean binding while the
+type-equivalence constructor remains distinct. Thirty-one focused tests pass.
+
+The prior retained-comparison full run was deliberately stopped while still
+computing the review-page fixture before this library mutation; it is incomplete,
+not passing. Fresh full regression and all-eighteen topology runs are now underway
+on the renamed library. The topology run proceeds in dependency order and stops
+on the first failed verifier. Regenerated artifacts will be recorded as each
+checkpoint becomes available; the earlier cumulative validation does not prove
+this new library revision conforms.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Native validation of the working rename passes: the combined equivalence-operations
+and basis-reindexing module definitions compile, and an independently authored
+logical-equivalence adapter matches the generated declaration's canonical type
+and body. All 92 regenerated corpus proofs pass Lean. The longer topology and
+full-regression runs remain pending.
+:::

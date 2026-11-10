@@ -19,7 +19,7 @@ mapping={'ExtremeOracle.Extreme':env.structures['ExtremePerturbations']['key']}
 for oracle,name in [('intersection','intersection of module subspaces'),('included','module subspace included'),
  ('scalars','scalar coefficient module'),('scalarTheory','scalar homology'),('compact','compact space'),('extreme','extreme perturbations'),('image','extreme pair image')]:
     mapping['ExtremeOracle.'+oracle]=function(name)
-for oracle,name in [('equal','equal'),('conjoin','conjunction'),('disjoin','disjunction'),('subset','set subset'),('negative','real negative'),('atMost','real at most'),('atLeast','real at least'),('less','real less'),('equivalent','equivalence')]:
+for oracle,name in [('equal','equal'),('conjoin','conjunction'),('disjoin','disjunction'),('subset','set subset'),('negative','real negative'),('atMost','real at most'),('atLeast','real at least'),('less','real less'),('equivalent','logical equivalence')]:
     mapping['ExtremeOracle.'+oracle]=function(name)
 mapping['ExtremeOracle.numeral']=env.data['types']['Real']['numerals']['native_binding']
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())

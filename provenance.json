@@ -6448,6 +6448,14 @@
         "# ",
         ""
       ]
+    },
+    "tests/test_equivalence_names.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

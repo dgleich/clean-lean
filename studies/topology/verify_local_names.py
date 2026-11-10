@@ -44,7 +44,7 @@ subs={'THEORY':e.structures['HomologyTheory']['key'],'PAIR':e.structures['PairIn
 for token,name in [('COMMUTES','pair chain commutes'),('HOMOLOGY','relative homology'),('HMAP','relative homology map'),
  ('IMAGE','relative homology image'),('BELONGS','belongs to module subspace'),('VALUE','module map value'),
  ('CMAP','relative chain map'),('PROJECTION','relative chain projection'),('AMBIENT','ambient chain map'),
- ('EQUAL','equal'),('EQUIVALENT','equivalence'),('COMPOSE','compose chain maps'),('SINGULAR','singular chains'),('SUBSPACE','subspace'),('CHAINS','relative chains')]:subs[token]='_root_.'+e.data['functions'][name]['native_binding']
+ ('EQUAL','equal'),('EQUIVALENT','logical equivalence'),('COMPOSE','compose chain maps'),('SINGULAR','singular chains'),('SUBSPACE','subspace'),('CHAINS','relative chains')]:subs[token]='_root_.'+e.data['functions'][name]['native_binding']
 for token,name in [('CARRIER','Type'),('FIELD','FieldStructure'),('SPACE','TopologicalSpace'),
                    ('COEFFICIENT','CoefficientModule'),('MODULEMAP','ModuleMap'),
                    ('ELEMENT','ModuleElement'),('SUBMODULE','ModuleSubspace'),
@@ -96,7 +96,7 @@ end LocalNamesProofs
 '''
 condition_type=e.data['types']['Proposition']['native_binding']
 eq=e.data['functions']['equal']['native_binding']
-iff=e.data['functions']['equivalence']['native_binding']
+iff=e.data['functions']['logical equivalence']['native_binding']
 comparison+=f"""
 noncomputable def expected_local_equal {{T : Type}} (x y : T) : _root_.{condition_type} := x=y
 noncomputable def expected_local_equivalent (x y : _root_.{condition_type}) : _root_.{condition_type} := x ↔ y

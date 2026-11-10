@@ -30,7 +30,7 @@ mapping={'SubspaceOracle.LinearSpace':record,
  'SubspaceOracle.intersection':function('intersection of subspaces'),
  'SubspaceOracle.setOf':function('set of')}
 for oracle,name in [('equal','equal'),('member','set member'),('subset','set subset'),
-                    ('both','conjunction'),('equivalent','equivalence'),('implies','implication'),('negate','negation')]:
+                    ('both','conjunction'),('equivalent','logical equivalence'),('implies','implication'),('negate','negation')]:
     mapping['SubspaceOracle.'+oracle]=function(name)
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
