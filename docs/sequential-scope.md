@@ -74,3 +74,15 @@ uses an explicit scalar-zero wrapper because unresolved numerals still dispatch
 by built-in type spellings in main. This is an existing migration gap, not a newly
 introduced literal rule. All full module/numeral conformance requirements remain.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Current migration note: the study imports standard declared operators and declares
+its Scalar order explicitly. Canonical oracles now retain the native type and
+operator wrappers. Closed-carrier numeral interpretation is implemented; the
+historical built-in-dispatch remark above no longer describes the current compiler.
+The deliberately separate Scalar wrapper continues to use an explicit zero
+notation. General parameterized literals and native import isolation remain open.
+The renewed evidence is recorded in the study README; historical suite counts
+above describe their original revisions only.
+:::

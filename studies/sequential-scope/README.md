@@ -31,3 +31,25 @@ module still uses the existing flattened environment, and emitted Lean imports a
 collected at the top of one output file. Later native-instance effects remain an
 open conformance obligation; the fixture keeps native imports fixed.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Explicit operator migration
+
+The foundation now imports the explicit standard operator module. Its local
+`Scalar` remains a separate declared native type wrapper; the later operations
+module declares scalar order explicitly. Equality is the imported polymorphic
+condition. No compiler built-in or implicit operator environment was restored.
+
+The native oracle names each declared type/operator wrapper, including the
+carrier-of-types wrapper. It compares exact elaborated structures rather than
+unfolding all wrappers to make old expectations pass. Four canonical targets and
+two proofs pass after migration. The affected inference and scope tests also
+pass as a group (29 tests): their fixtures now import the operators they use,
+and the inferred natural literal expectation names its declared numeral
+constructor instead of expecting a bare Lean digit.
+
+This changes the fixture's explicit environment, not the sequential-scope rule.
+The earlier snapshot must still exclude later declarations and imports. The
+native-instance isolation limitation above remains open.
+:::

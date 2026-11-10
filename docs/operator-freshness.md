@@ -35,3 +35,13 @@ not a production acceptance result or a proof of overall speedup. The 45-second
 sample reached `restore active label`, as the earlier projection-only sample did;
 it does not demonstrate a broad active-label speedup.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The working-revision validation finished: all 18 topology verifiers passed, and
+the full regression ran 753 tests in 359.046 seconds with 33 failures and 42
+errors. The preceding revision had 750 tests, 33 failures and 46 errors. Three
+new freshness cases were added and the four existing freshness cases now run
+successfully with their explicit operator import. The suite as a whole still
+fails; these counts are not a full conformance claim.
+:::

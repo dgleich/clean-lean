@@ -18,7 +18,7 @@ DEFINITION='''Notation retain with law(n,f,h,z):
 class PartialCodomainInference(unittest.TestCase):
  def load(self,equation,definitions=DEFINITION,argument="function(x: Natural,h(x))",hypothesis=None):
   hypothesis=hypothesis or "for every(x: Natural,"+equation+")"
-  source=f'''Import "{ROOT/'library/logic/evidence.clean'}"
+  source=f'''Import "{ROOT/'library/logic/proof_equality.clean'}"
 Source local:
   Kind: other
   Label: local

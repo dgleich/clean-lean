@@ -22,18 +22,22 @@ generated=lean(results,e,[]);(HERE/'Generated.lean').write_text(generated)
 parsed=ast.parse((ROOT/'tools/check_basic_targets.py').read_text())
 comparison=next(ast.literal_eval(n.value) for n in parsed.body if isinstance(n,ast.Assign)
  and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))
-zero=e.data['functions']['scalar zero']['lean'].split()[0]
-wrapper=e.data['functions']['absolute value']['lean'].split()[0]
+zero=e.data['functions']['scalar zero']['native_binding']
+wrapper=e.data['functions']['absolute value']['native_binding']
+scalar=e.data['types']['Scalar']['native_binding']
+carrier=e.data['types']['Type']['native_binding']
+equality=e.data['functions']['equal']['native_binding']
+order=e.data['functions']['scalar at least']['native_binding']
 native='import Lean\n'+generated+comparison+f'''
-noncomputable def expected_absolute (x : Real) : Real := abs x
+noncomputable def expected_absolute (x : {scalar}) : {scalar} := abs x
 same_basic_target {wrapper} expected_absolute
-noncomputable def expected_zero : Real := 0
+noncomputable def expected_zero : {scalar} := (0 : Real)
 same_basic_target {zero} expected_zero
 
-def expected_arbitrary_equality : Prop := ∀ (T : Type) (x : T), x = x
+def expected_arbitrary_equality : Prop := ∀ (T : {carrier}) (x : T), @{equality} T x x
 same_basic_target CleanStatements.arbitrary_equality expected_arbitrary_equality
 
-def expected_absolute_nonnegative : Prop := ∀ (x : Real), {wrapper} x ≥ {zero}
+def expected_absolute_nonnegative : Prop := ∀ (x : {scalar}), {order} ({wrapper} x) {zero}
 same_basic_target CleanStatements.absolute_value_nonnegative expected_absolute_nonnegative
 
 theorem arbitrary_equality_checked : CleanStatements.arbitrary_equality := by

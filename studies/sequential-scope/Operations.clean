@@ -10,3 +10,9 @@ Notation scalar zero(): Scalar:
   Render latex: 0
 
 -- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Condition scalar at least(x,y):
+  Let x,y: Scalar
+  Infix: ≥
+  From Lean: x ≥ y
+  Render latex: {x}\ge {y}

@@ -1016,19 +1016,38 @@ Conclude: x = x</code></pre></section><section><h3>Schematic Lean binding</h3><p
 <p>A top-level result or Context retains its preceding Clean environment. A later import can supply vocabulary to a later theorem, but cannot repair an earlier unknown Clean name or source. An earlier <code>Let T: Type</code> still renders as a local Lean carrier after a later global <code>Type T()</code> declaration.</p>
 <p>The <a href="sequential-scope.md">scope contract</a> and <a href="../studies/sequential-scope/README.md">checked study</a> include four exact native targets and two proofs. Nested imports remain unsupported. This implements Clean visibility and rendering snapshots; emitted native imports are still collected at the beginning of the Lean file, so full native import isolation remains open.</p>
 </section>
-<section class="mapping" id="module-operators" data-status="proposed">
+<section class="mapping" id="module-operators" data-status="implemented">
 <h2>Module-declared operators</h2>
-<p>The <a href="../studies/carrier-fields/BoundOperators.md">composed prototype</a> also permits operator metadata on Condition. For example, <code>Condition implication(p: Proposition,q: Proposition)</code> with <code>Infix: →</code> and <code>Holds when: for every (h: (p), q)</code> has the schematic Lean body <code>fun p q =&gt; ∀ (_ : p), q</code>. A saved use retains this adapter even after another candidate is declared. Its callable proof view comes from the forall body, not the arrow glyph. Main Clean does not yet enable this metadata.</p>
-<p><strong>Proposed; isolated prototype only.</strong> Infix metadata associates an ordinary named notation with a binary symbol. Main Clean files do not accept this metadata yet.</p>
-<div class="pair"><section><h3>Proposed Clean</h3><pre><code>Notation scalar addition(x: Scalar,y: Scalar): Scalar:
-  Infix: +
-  Means: x+y
-  Render latex: {x}+{y}</code></pre></section><section><h3>Readable Lean equivalent</h3><pre><code>def scalar_addition (x y : Real) : Real := x+y
--- Clean x+y selects this wrapper when it is the unique match.
--- Exact generated names are checked in the prototype fixtures.</code></pre></section></div>
-<p>Parsing uses the existing operator tree; matching selects exactly one declared callable. Two matches are ambiguity, and an interrupted candidate cannot be discarded. There is no fallback to built-in binary meanings. The prototype rejects unresolved numerals. Its dependent-call matching checks matrix/vector dimensions and keeps nested elaboration failures distinct from candidate mismatches. Thirty-two exact native targets and three proofs pass in the isolated study, including proof-family application, partial inference, incorrect-evidence rejection, and ambiguity under candidate reordering. The refreshed patch preserves declaration-scoped matching and fresh-subtree reuse. Authored-body expansion stays opaque after its prefix/infix operator environment changes; this guard does not complete module isolation.</p>
-<p>The isolated <code>Prefix: -</code> and <code>Prefix: not</code> fields bind one explicit operand, with optional inferred parameters. For example, <code>scalar opposite(x: Scalar)</code> with <code>Means: -x</code> declares a wrapper equivalent to <code>def scalar_opposite (x : Real) := -x</code>; <code>-x</code> then selects that wrapper. Prefix and infix minus coexist. The source parser fixes grouping before overload selection, and comparison normalization uses the same declared prefix. The prefix fixture checks eleven exact targets and a double-opposite proof within the total above. Neither metadata field is enabled in main.</p>
-<p>Literal policy, declared precedence, module-owned scope, editor support and the full foundation migration remain unfinished. See <a href="module-operators.md">the draft contract</a> and <a href="../studies/module-operators/README.md">the isolated executable study</a>.</p>
+<p><strong>Implemented slice; full conformance remains open.</strong> Imported
+Notation and Condition declarations may associate named callables with existing
+infix and prefix spellings. Parsing fixes the operator tree before type-directed
+selection. Exactly one matching declaration is required; ambiguity and incomplete
+candidate analysis are not resolved by taking the first successful candidate.
+There is no implicit built-in mathematical operator fallback.</p>
+<div class="pair"><section><h3>Clean (Scalar is explicitly declared)</h3><pre><code>Condition scalar at least(x,y):
+  Let x,y: Scalar
+  Infix: ≥
+  From Lean: x ≥ y
+  Render latex: {x}\ge {y}</code></pre></section>
+<section><h3>Readable Lean equivalent</h3><pre><code>def scalarAtLeast (x y : Scalar) : Prop := x ≥ y
+-- Clean a ≥ b emits the selected wrapper application.
+-- Generated names and type wrappers remain explicit.</code></pre></section></div>
+<p>The <a href="../studies/sequential-scope/README.md">sequential-scope study</a>
+checks this scalar order and polymorphic equality through four exact native
+targets and two proofs. <code>Prefix: -</code> and <code>Prefix: not</code> likewise
+bind declared unary callables; prefix and infix minus coexist. The source grammar
+fixes precedence independently of overload selection.</p>
+<p>The explicit standard module authors implication with
+<code>Holds when: for every (h: (p),q)</code>. Its callable proof view follows that
+body, not the arrow glyph. Condition inference and comparison retain checked
+module identities within their specified binding boundaries. Closed-carrier
+numeral attachments and defaults are implemented separately; parameterized
+literal carriers and general native import/universe isolation remain open.</p>
+<p>See <a href="module-operators.md">the operator contract and historical design</a>,
+<a href="../studies/operator-integration/README.md">the integration study</a>, and
+<a href="operator-freshness.md">current traversal-local checking evidence</a>.
+The older <a href="../studies/module-operators/README.md">isolated study</a>
+records its own pinned baseline and must not be read as the current feature status.</p>
 </section></llm>
 
 <llm model="gpt-6" date="2026-11-10" role="assisted">

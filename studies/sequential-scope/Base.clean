@@ -1,9 +1,5 @@
 -- generated: gpt-6 2026-11-07 role=assisted; see PROVENANCE.md
-Import Lean Mathlib.Data.Real.Basic
-
-Type Type():
-  Means: Type
-  Render latex: \mathsf{{Type}}
+Import "../../library/operators.clean"
 
 Type Scalar():
   Means: Real

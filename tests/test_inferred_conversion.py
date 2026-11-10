@@ -7,7 +7,7 @@ from cleanlang.structures import declare
 ROOT=Path(__file__).resolve().parents[1]
 class InferredConversion(unittest.TestCase):
  def setUp(self):
-  self.e=Environment();load_module(ROOT/'library/types.clean',self.e);self.local={}
+  self.e=Environment();load_module(ROOT/'library/operators.clean',self.e);self.local={}
   notation('Define constant map(x):',['Let T: Type','Let x: T','Returns: Function(T,T)','Equals: function(y: T,x)'],self.e,authored=True)
   notation('Define apply endomap(f,x):',['Let T: Type','Let f: Function(T,T)','Let x: T','Returns: T','Equals: f(x)'],self.e,authored=True)
  def bind(self,n,t):
@@ -62,7 +62,9 @@ class InferredConversion(unittest.TestCase):
   self.assertEqual(self.normal('vector dimension(v)').lean,self.normal('m+1').lean)
  def test_inferred_natural_literal(self):
   notation('Define vector dimension(v):',['Let n: Natural','Let v: Vector(n,Real)','Returns: Natural','Equals: n'],self.e,authored=True)
-  self.bind('v','Vector(3,Real)');self.assertEqual(self.normal('vector dimension(v)').lean,'3')
+  self.bind('v','Vector(3,Real)')
+  constructor=self.e.data['types']['Natural']['numerals']['native_binding']
+  self.assertEqual(self.normal('vector dimension(v)').lean,f'(_root_.{constructor} (nat_lit 3))')
  def box(self):
   declare('Structure Box(T: Type):',['Let value: T','Constructor: box value'],self.e)
   notation('Define box(x):',['Let T: Type','Let x: T','Returns: Box(T)','Equals: box value(T,x)'],self.e,authored=True)
