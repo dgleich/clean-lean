@@ -85,3 +85,31 @@ preserves comparison-only emission and the stated native-adapter opacity; residu
 binders, lambda-authored locals and unrepresentable substitutions remain bounded.
 Dependent function types have their own [implemented initial contract](dependent-function-types.md).
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Current retained-index checks
+
+The twelve applied-index tests now distinguish the retained, declaration-bound
+ModuleCall tree from its printable source projection. Expected trees explicitly
+specify both branches, binder references, quantifier/lambda nesting, application
+arguments, selected callable identities and operator presentation. Re-parsing
+printed source reproduces the source tree; source text does not serialize the
+retained declaration identity.
+
+The numeral regression now checks a Real identity function applied to `1`.
+Inference determines the Real constructor before beta contraction. The resulting
+index retains that bound constructor, rather than reinterpreting a bare digit in
+a new expected type. Its stored syntax, resolved tree, comparison expression and
+Lean emission are checked. This is the existing numeral-inference behavior, not
+permission to coerce an unresolved numeric placeholder during contraction.
+
+`tools/check_applied_index_targets.py` independently specifies five canonical
+Lean targets: quantified and function-valued congruence proposition types, their
+proof terms, and the contracted numeral. A separate value lemma identifies the
+Real numeral with one. These checks supplement the pair-composition study.
+The full regression started before this test migration; its applied-index
+failures belong to the earlier test snapshot, and a passing focused rerun does
+not make that full run passing.
+:::

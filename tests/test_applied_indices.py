@@ -1,5 +1,5 @@
 # generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
-import unittest
+import json,unittest
 from pathlib import Path
 from cleanlang.core import Environment, Expr, Expressions, CleanError
 from cleanlang.modules import load_module, load_document
@@ -43,30 +43,46 @@ class AppliedIndices(unittest.TestCase):
     def test_bare_lambda_remains_rejected(self):
         with self.assertRaisesRegex(CleanError,'do not introduce binders'):
             index_value(self.expr('function(t: Real,t)'),self.e,self.local)
+    def assert_preserved_application(self,body,binder,operation,symbol):
+        value=self.expr('equality congruence(function(t: Real,'+body+'),a,b,hab)')
+        tree=json.loads(value.type.args[0].syntax)
+        # Independently specify both the retained identity-bearing tree and its
+        # source projection. Printed source cannot encode declaration identities.
+        def branch(offset,argument,bound):
+            t='clean_conversion_bound_'+str(offset)
+            u='clean_conversion_bound_'+str(offset+1)
+            operands=[['Local',t],['Local',u]]
+            inner=(['ModuleCall',operation,operands,
+                    self.e.data['functions'][operation]['lean'],['infix',symbol]]
+                   if bound else ['Operator',symbol,*operands])
+            return ['Apply',['Lambda',t,'Real',[binder,u,'Real',inner]],[['Local',argument]]]
+        expected=['ModuleCall','equal',[branch(0,'a',True),branch(2,'b',True)],
+                  self.e.data['functions']['equal']['lean'],['infix','=']]
+        self.assertEqual(tree,expected)
+        self.assertEqual(syntax.expression_tree(syntax.parse(syntax.condition_spelling(tree),'expression')),
+                         ['Operator','=',branch(0,'a',False),branch(2,'b',False)])
     def test_quantified_body_application_is_preserved(self):
-        value=self.expr('equality congruence(function(t: Real,for every (u: Real,t=u)),a,b,hab)')
-        import json
-        tree=json.loads(value.type.args[0].syntax)
-        self.assertEqual(tree[2][0],'Apply')
-        self.assertEqual(tree[2][1][0],'Lambda')
-        self.assertEqual(tree[2][1][3][0],'Forall')
-        self.assertEqual(syntax.expression_tree(syntax.parse(syntax.condition_spelling(tree),'expression')),tree)
+        self.assert_preserved_application('for every (u: Real,t=u)','Forall','equal','=')
     def test_nested_lambda_application_is_preserved(self):
-        value=self.expr('equality congruence(function(t: Real,function(u: Real,t+u)),a,b,hab)')
-        import json
-        tree=json.loads(value.type.args[0].syntax)
-        self.assertEqual(tree[2][0],'Apply')
-        self.assertEqual(tree[2][1][0],'Lambda')
-        self.assertEqual(tree[2][1][3][0],'Lambda')
-        self.assertEqual(syntax.expression_tree(syntax.parse(syntax.condition_spelling(tree),'expression')),tree)
+        self.assert_preserved_application('function(u: Real,t+u)','Lambda','real sum','+')
     def test_named_function_stays_opaque(self):
         proof=self.expr('equality congruence(f,a,b,hab)')
         self.assertEqual(proof.type,self.e.type('Evidence((f(a)=f(b)))',self.local))
-    def test_numeric_placeholder_not_coerced(self):
+    def test_beta_contraction_preserves_inferred_numeral_carrier(self):
         tree=['Apply',['Lambda','t','Real',['Local','t']],[['Decimal','1']]]
         expression=Expressions(self.e,self.local).elaborate(tree)
-        with self.assertRaisesRegex(CleanError,'unchanged determined type'):
-            index_value(expression,self.e,self.local)
+        value=index_value(expression,self.e,self.local)
+        spec=self.e.data['types']['Real'];attachment=spec['numerals']
+        identity=[spec['native_binding'],spec['native_declaration'],spec['native_template'],
+                  attachment['native_binding'],attachment['native_declaration'],attachment['payload']]
+        expected=['BoundNumeral','1','Real',identity,'inferred']
+        self.assertEqual(value.resolved,expected)
+        self.assertEqual(json.loads(value.syntax),expected)
+        target='(_root_.'+attachment['native_binding']+' (nat_lit 1))'
+        self.assertEqual(value.lean,target)
+        self.assertEqual(value.comparison,target)
+        self.assertEqual(Expressions(self.e,self.local).elaborate(value.resolved).type,
+                         self.e.type('Real'))
     def test_pair_composition_authored(self):
         for name in ['pair ambient equality','pair relative equality','identity pair inclusion','compose pair inclusions']:
             self.assertEqual(self.e.definitions[name]['implementation'],'equals')

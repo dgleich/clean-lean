@@ -864,6 +864,7 @@
       "comparison_rule": "Contract checked immediate binder-free lambda applications in indices, retaining the original call arguments; no implicit proof search",
       "checks": [
         "tests/test_applied_indices.py",
+        "tools/check_applied_index_targets.py",
         "studies/topology/verify_pair_composition.py"
       ],
       "pending": [
