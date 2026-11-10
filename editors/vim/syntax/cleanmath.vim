@@ -12,8 +12,8 @@ syntax match cleanMathDeclaration '\c^ *\%(Result\|Theorem\|Context\|Define\|Not
 syntax match cleanMathAssumption '\c^ *Assume \+[^:(),]\+:' contains=cleanMathKeyword,cleanMathDelimiter
 highlight default link cleanMathAssumption Identifier
 syntax match cleanMathTypedLet '\c^ *Let\>.*\%(:\|\<be\>\).*' contains=cleanMathKeyword,cleanMathDelimiter
-syntax match cleanMathMetadataKey '\c^ *\%(Literal\|Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:' contained
-syntax match cleanMathOpaque '\c^ *\%(Literal\|Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:.*$' contains=cleanMathMetadataKey
+syntax match cleanMathMetadataKey '\c^ *\%(Literal\|Classifies\|Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:' contained
+syntax match cleanMathOpaque '\c^ *\%(Literal\|Classifies\|Universe\|Constructor\|Assumption name\|Render\%( latex\)\?\|Describe\%( plural\)\?\|Attribution\|Kind\|Label\|Title\|Author\|Year\|Version\|Revision\|URL\|References\|source\|reference\|relationship\|scope\|changes\|note\)\s*:.*$' contains=cleanMathMetadataKey
 syntax match cleanMathLean '\c^ *\%(Numerals\|Means\|From Lean\)\s*:.*$'
 syntax match cleanMathDefaultKeyword '\c^ *Default \+numerals\>' contained
 syntax match cleanMathDefaultNumerals '\c^ *Default \+numerals *:.*$' contains=cleanMathDefaultKeyword,cleanMathDelimiter

@@ -1,0 +1,69 @@
+--- a/tests/test_dependent_calls.py
++++ b/tests/test_dependent_calls.py
+@@ -11,7 +11,7 @@
+     def setUp(self):
+         self.e = Environment()
+         load_module(ROOT/'library/topology/paths.clean', self.e)
+-        X = LocalType('X',(), 'X')
++        X = LocalType('X',(), 'X',0,self.e.data['types']['Type']['native_binding'])
+         self.local = {'X': Expr('X','X',Type('Type')),
+                       't': Expr('t','t',Type('Topology',(X,))),
+                       'u': Expr('u','u',Type('Topology',(X,))),
+@@ -47,7 +47,7 @@
+         self.assertEqual(self.expr('constant path(t,same point(x))').type,
+             self.e.type('Path(X,t,(same point(x)),(same point(x)))',self.local))
+     def test_naming_computed_index_is_supported(self):
+-        self.local['w']=Expr('w','w',LocalType('X',(), 'X'))
++        self.local['w']=Expr('w','w',LocalType('X',(), 'X',0,self.e.data['types']['Type']['native_binding']))
+         self.assertEqual(self.expr('constant path(t,w)').type,
+                          self.e.type('Path(X,t,w,w)',self.local))
+     def test_fresh_bound_endpoint_is_used(self):
+@@ -61,7 +61,7 @@
+         from cleanlang.dependent_functions import DependentFunctionType
+         self.assertIsInstance(self.expr('function(a: X, constant path(t,a))').type,DependentFunctionType)
+     def test_local_identity_not_just_printed_name(self):
+-        self.local['p'].type=Type('Path',(LocalType('X',(), 'X'),ValueIndex('t','different_t','t'),
++        self.local['p'].type=Type('Path',(LocalType('X',(), 'X',0,self.e.data['types']['Type']['native_binding']),ValueIndex('t','different_t','t'),
+                                        ValueIndex('x','x','x'),ValueIndex('y','y','y')))
+         with self.assertRaisesRegex(CleanError,'index mismatch'):
+             self.expr('reverse path(t,x,y,p)')
+@@ -100,7 +100,7 @@
+         self.local['v']=Expr('v','v',self.e.type('Vector(3,Real)',self.local))
+         self.assertEqual(self.expr('tag(v)').type,self.e.type('Tagged(3,v)',self.local))
+     def test_actual_local_index_does_not_capture_declared_name(self):
+-        self.local['a']=Expr('bound_a','a',LocalType('X',(), 'X'))
++        self.local['a']=Expr('bound_a','a',LocalType('X',(), 'X',0,self.e.data['types']['Type']['native_binding']))
+         result=self.expr('constant path(t,a)')
+         self.assertEqual(result.type.args[-1],ValueIndex('a','bound_a','a'))
+         self.assertIn('(bound_a)',result.lean)
+--- a/tests/test_structures.py
++++ b/tests/test_structures.py
+@@ -11,7 +11,7 @@
+ class Structures(unittest.TestCase):
+     def setUp(self):
+         self.e=Environment();load_module(ROOT/'library/topology/bundles.clean',self.e)
+-        self.local={'X':Expr('X','X',Type('Type')),'P':Expr('P','P',Type('BasedPath',(LocalType('X',(), 'X'),))),
++        self.local={'X':Expr('X','X',Type('Type')),'P':Expr('P','P',Type('BasedPath',(LocalType('X',(), 'X',0,self.e.data['types']['Type']['native_binding']),))),
+                     'I':Expr('I','I',Type('Endpoints')),'a':Expr('a','a',Type('Real')),
+                     'b':Expr('b','b',Type('Real'))}
+     def expr(self,s):return Expressions(self.e,self.local).parse(s)
+@@ -52,7 +52,7 @@
+         self.assertEqual(self.expr('based path(X,P.topology,P.start,P.finish,P.path)').type,self.local['P'].type)
+     def test_explicit_type_substitution(self):
+         self.local['Y']=Expr('Y','Y',Type('Type'))
+-        self.local['Q']=Expr('Q','Q',Type('BasedPath',(LocalType('Y',(), 'Y'),)))
++        self.local['Q']=Expr('Q','Q',Type('BasedPath',(LocalType('Y',(), 'Y',0,self.e.data['types']['Type']['native_binding']),)))
+         self.assertEqual(self.expr('reversed bundle(Y,Q)').type,self.local['Q'].type)
+         with self.assertRaises(CleanError):self.expr('reversed bundle(X,Q)')
+     def test_two_records_are_not_interchanged(self):
+--- a/studies/type-identity/Foundation.clean.proposed
++++ b/studies/type-identity/Foundation.clean.proposed
+@@ -2,6 +2,8 @@
+ Import Lean Mathlib.Data.Real.Basic
+ 
+ Type Type():
++  Universe: 1
++  Classifies: 0
+   Means: Type
+   Render latex: \mathsf{{Type}}
+   Describe: a type

@@ -1,0 +1,37 @@
+-- generated: gpt-6 2026-11-10 role=assisted; isolated carrier prototype
+Import "../../library/topology/spaces.clean"
+Source local:
+  Kind: other
+  Title: Closed-universe carrier acceptance
+  Label: Local
+
+Type LargeTypes():
+  Universe: 2
+  Classifies: 1
+  Means: Type 1
+  Render latex: \operatorname{{Types}}_1
+
+Define retain(x):
+  Let A: LargeTypes
+  Let x: A
+  Returns: A
+  Equals: x
+  Render latex: {x}
+
+Define retain twice(x):
+  Let A: LargeTypes
+  Let x: A
+  Returns: A
+  Equals: retain(retain(x))
+
+Condition equal large(x,y):
+  Let A: LargeTypes
+  Let x,y: A
+  From Lean: x = y
+
+Result retain topology object:
+  Attribution: local; identity; original
+  Let X: TopologicalSpace
+  Conclude: equal large(retain twice(X),X)
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

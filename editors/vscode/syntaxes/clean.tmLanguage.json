@@ -131,7 +131,7 @@
           }
         },
         {
-          "match": "^ *(?i:(Literal|Universe|Constructor|Assumption name|Render(?: latex)?|Describe(?: plural)?|Attribution|Kind|Label|Title|Author|Year|Version|Revision|URL|References|source|reference|relationship|scope|changes|note))\\s*(:)(.*)$",
+          "match": "^ *(?i:(Literal|Classifies|Universe|Constructor|Assumption name|Render(?: latex)?|Describe(?: plural)?|Attribution|Kind|Label|Title|Author|Year|Version|Revision|URL|References|source|reference|relationship|scope|changes|note))\\s*(:)(.*)$",
           "captures": {
             "1": {
               "name": "keyword.other.metadata.clean"

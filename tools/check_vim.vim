@@ -67,6 +67,8 @@ call assert_equal('cleanMathNumber', synIDattr(synID(28,10,1),'name'))
 call assert_equal('cleanMathMetadataKey', synIDattr(synID(29,3,1),'name'))
 call setline(30, '  Assume positive((0: Real))')
 call assert_notequal('cleanMathAssumption', synIDattr(synID(30,23,1),'name'))
+call setline(31, '  cLaSsIfIeS: 1')
+call assert_equal('cleanMathMetadataKey', synIDattr(synID(31,3,1),'name'))
 if len(v:errors)
  for error in v:errors | echom error | endfor
  cquit

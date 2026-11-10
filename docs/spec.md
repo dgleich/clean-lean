@@ -1404,3 +1404,16 @@ not become classifiers because of their name or universe. Three independent
 native declaration targets cover levels 0–2. Carrier binding, type-value
 elaboration, inference, storage and production integration remain pending.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The classifier study now prototypes generic implicit carrier arguments at closed
+higher universes. Local carriers retain level and classifier identity; matching
+requires the exact declared level, substitution checks it, and comparison keys
+preserve it. A checked topology specimen uses generic retain/equality operations
+and a Clean-authored composition, with five exact native targets and a reflexivity
+proof. A document-token omission for Classifies was discovered and repaired.
+Explicit carrier arguments, higher computed carriers, type values, dependent
+carrier fields/callables and storage migration remain incomplete; this is isolated
+validation, not production integration or full classifier conformance.
+:::

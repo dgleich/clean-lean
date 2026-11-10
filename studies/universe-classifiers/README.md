@@ -3,8 +3,8 @@
 # Proposal: explicit closed-universe carrier classifiers
 
 Status: isolated syntax and declaration-metadata prototype with checked native
-declaration targets and native feasibility examples. **Carrier-classifier elaboration is not implemented**, and this is not a
-Clean-to-Lean conformance claim. It is not part of the composed-language stack.
+declaration targets, implicit generic calls and native feasibility examples. **Generic implicit carrier arguments are now prototyped; the full classifier
+feature is not conforming or integrated.** It is not part of the composed-language stack.
 
 The concrete gap is equality of a universe-1 topology object. Clean's general
 carrier binder currently means Type 0, so a bundled space or homology theory
@@ -121,7 +121,8 @@ not a compilable complete module or a claim that its imports are available.
 
 ## Required implementation audit
 
-The current hardcoded carrier-kind checks affect at least:
+The complete migration must cover at least the following consumers (the new
+carrier patch addresses only part of this audit):
 
 | Consumer | Required change |
 |---|---|
@@ -134,7 +135,9 @@ The current hardcoded carrier-kind checks affect at least:
 | inferred_conversion.py / hygiene.py | Capture-avoiding carrier substitution with closed levels |
 | retained literal and codec prototypes | Checked annotations and LocalType payloads must preserve level and classifier identity |
 
-LocalType currently carries no level, and sort_level(LocalType) returns Type 0.
+Production LocalType carries no level, and sort_level(LocalType) returns Type 0.
+The carrier patch now retains a level and classifier identity, and uses them in
+local sort calculation, dependent type keys and checked substitution.
 Changing only the equality module or the type-value parser therefore cannot fix
 this gap. The codec's versioned record schema must change deliberately; old
 payloads must not silently default a higher carrier to level zero.
@@ -165,18 +168,77 @@ This query does not yet select candidates for unannotated type expressions.
 
 The extension adds negative and identity tests plus three independently written
 native declaration oracles at classified levels 0, 1 and 2. Exact comparisons check
-both elaborated declaration types and bodies. This does not validate generic
-carrier bindings, first-class type expressions, higher-universe inference,
-structures or stored local types. Those remain the next implementation boundary;
+both elaborated declaration types and bodies. The metadata extension alone does not validate generic carrier bindings. The
+subsequent carrier extension below addresses implicit calls; first-class type
+expressions, structures and stored local types remain pending. In both cases,
 the working compiler is unchanged. The expanded pinned reproduction passed
 76 selected tests in 29.745 seconds, strict parser generation/reproducibility,
 three exact declaration targets and the three native feasibility proofs.
 Full unittest discovery is running separately in the isolated metadata checkout;
 its result remains pending.
 
-Reproduce the syntax, declaration metadata and native checks:
+## Implicit carrier arguments and topology objects
+
+`carriers.patch` follows the syntax and metadata patches; `carrier-fixtures.patch`
+migrates the selected historical regression fixtures to explicit classifier metadata. It migrates the library's
+Type declaration to explicit Classifies: 0, recognizes local carrier variables
+through resolved metadata, and retains their closed level and native classifier
+identity. Their comparison keys include both fields. Substituting a carrier checks
+its required level; substituting a type-valued expression also checks classifier
+identity. Implicit generic calls match a checked operand's carrier at exactly the
+declared level, with no automatic lift. Native implicit binders use primitive
+Type k, and inferred native arguments are the checked carrier expressions.
+
+[CarrierExample.clean](CarrierExample.clean) is a compilable specimen **in this
+isolated patch stack**. It imports the real topology module, authors a generic
+`retain` operation directly in Clean for any Type-1 carrier, composes it in Clean as `retain twice`,
+and states that retaining a bundled topology object twice preserves that object.
+`equal large` is generic over carriers; it is not a special equality for TopCat.
+[CarrierTargets.lean](CarrierTargets.lean) checks five independent canonical
+native types/bodies and proves the resulting theorem by reflexivity. This is
+translator evidence for that path, not just a handwritten Lean feasibility test.
+
+A whole-document test exposed a gap in the earlier syntax-only prototype:
+Classifies had been added to FIELD but not FIELD_LINE. The carrier patch updates
+the document token and tests loading a complete classifier module. Strict parser
+regeneration remains required. Fifteen dedicated carrier tests pass, including repeated-argument agreement,
+classifier-preserving substitution and reifying higher local binders. Tests also
+cover exact-level rejection, alias
+resolution, ordinary bundles rejected as carrier binders, local higher-carrier
+arguments, level/identity-sensitive keys and substitution.
+
+Remaining boundaries include explicit generic carrier parameters, higher computed
+carriers, first-class type-value elaboration, classifier candidate ambiguity,
+carrier-valued dependent function binders, record fields/constructors and codec
+schema migration. Some legacy Type-name checks remain in those paths. The
+prototype explicitly rejects higher computed carriers and carrier-valued dependent
+function binders; passing this specimen does not make those paths supported.
+The first expanded run had four failures and 27 errors: manual LocalType fixtures
+lacked classifier identity, and the type-identity foundation omitted Classifies.
+The fixture patch supplies those fields without weakening assertions. All 72
+checks in the affected groups then passed in 14.740 seconds. The 92 generated
+corpus proof fixtures also compile with this stack. The fresh expanded reproduction then passed 217 selected tests in 66.927 seconds,
+strict parser/reproducibility checks and native checks. Three additional carrier
+checks were subsequently added; all 15 dedicated carrier tests passed in 0.292
+seconds. The fully Clean-authored retain specimen was independently regenerated
+and passed its five exact targets and proof. Unrestricted regression is running
+on the earlier specimen/test snapshot; its result remains pending.
+The full fixture audit also found manual LocalType values in test_linear_spaces
+and test_value_indices and standalone Type declarations in other historical
+studies. Their migration remains pending; selected-suite results must not be
+reported as complete regression coverage.
+No production compiler integration or full language conformance is claimed.
+
+Lexical Classifies highlighting is provided for VSCode/TextMate, Vim, Emacs and
+the browser tokenizer. Native TextMate and Vim checks and five browser checks
+pass. The Emacs test is authored but native execution remains unavailable because
+the local runtime fails its own startup check. The complete browser snapshot has
+not been regenerated. Highlighting does not enable the syntax in production.
+
+Reproduce the isolated stack and selected checks:
 
 ```sh
 LAKE=lake python3 studies/universe-classifiers/verify.py
+# Add --full for unrestricted unittest discovery after selected checks.
 ```
 :::

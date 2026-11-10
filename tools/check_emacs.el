@@ -86,6 +86,12 @@
     (should (eq (get-text-property (1- (point)) 'face) 'font-lock-constant-face))
     (search-forward "lItErAl")
     (should (eq (get-text-property (1- (point)) 'face) 'font-lock-keyword-face))))
+(ert-deftest clean-math-classifier-metadata ()
+  (with-temp-buffer
+    (insert "  cLaSsIfIeS: 1\n")
+    (clean-math-mode) (font-lock-ensure)
+    (goto-char (point-min)) (search-forward "cLaSsIfIeS")
+    (should (eq (get-text-property (1- (point)) 'face) 'font-lock-keyword-face))))
 (ert-run-tests-batch-and-exit)
 
 ;; generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

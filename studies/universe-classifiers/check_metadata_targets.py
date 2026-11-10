@@ -21,6 +21,6 @@ source+='\n'.join('same_basic_target '+env.data['types'][name]['native_binding']
 source+='\n-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md\n'
 path=Path(__file__).with_name('MetadataTargets.lean');path.write_text(source)
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Three exact classifier declaration targets passed; carrier elaboration remains pending.')
+print('Three exact classifier declaration targets passed; this check does not cover carrier elaboration.')
 
 # generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

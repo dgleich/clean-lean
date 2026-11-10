@@ -2848,7 +2848,7 @@
     {
       "id": "closed_universe_classifier_syntax",
       "status": "isolated-prototype",
-      "environment": "Pinned dde5d8e plus syntax and metadata patches; declaration validation implemented in isolation, carrier elaboration pending.",
+      "environment": "Pinned dde5d8e plus syntax, metadata and carrier patches; implicit higher-carrier calls prototyped, full feature pending.",
       "source": "type(TopologicalSpace : LargeTypes)",
       "expected_tree": [
         "ClassifiedTypeValue",
@@ -2860,10 +2860,12 @@
         "studies/universe-classifiers/test_syntax.py: independent explicit and nested trees, old tree preservation and malformed-form rejection",
         "studies/universe-classifiers/verify.py: strict generated parser, 45 tests and handwritten native feasibility with three proofs",
         "studies/universe-classifiers/test_metadata.py: twelve declaration, alias identity and rejection checks",
-        "studies/universe-classifiers/check_metadata_targets.py: three independent exact declaration types/bodies"
+        "studies/universe-classifiers/check_metadata_targets.py: three independent exact declaration types/bodies",
+        "studies/universe-classifiers/test_carriers.py: fifteen document, implicit inference, level/identity, substitution and rejection checks",
+        "studies/universe-classifiers/check_carrier_targets.py: five exact native targets and one topology-object identity proof"
       ],
       "pending": [
-        "Implement closed-level carrier binding and type-value elaboration; declaration metadata alone is insufficient",
+        "Complete explicit carrier arguments, first-class type expressions and classifier ambiguity selection",
         "Audit and update all local-type, substitution, inference, comparison, literal and storage consumers",
         "Independent canonical Clean-to-Lean targets and required negative semantic cases",
         "Editor/browser coverage and full regression"

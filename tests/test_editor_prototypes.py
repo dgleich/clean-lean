@@ -11,6 +11,10 @@ class EditorPrototypeDisplay(unittest.TestCase):
   rendered=review.highlight('  aSsUmE zero contents:')
   self.assertIn('<span class="keyword">aSsUmE</span>',rendered)
   self.assertIn('<span class="name">zero contents</span>',rendered)
+ def test_classifier_metadata(self):
+  rendered=review.highlight('  cLaSsIfIeS: 1')
+  self.assertIn('<span class="keyword">cLaSsIfIeS</span>',rendered)
+  self.assertIn('<span class="string"> 1</span>',rendered)
  def test_literal_metadata(self):
   rendered=review.highlight('  lItErAl: 0')
   self.assertIn('<span class="keyword">lItErAl</span>',rendered)
