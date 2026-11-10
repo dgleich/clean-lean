@@ -959,6 +959,7 @@
       "comparison_rule": "Typed Natural indices use checked comparison keys; declared left-to-right inference retains the last consistent representative",
       "checks": [
         "tests/test_dimension_indices.py",
+        "tools/check_completed_numeral_targets.py",
         "studies/dimensions/verify.py"
       ],
       "pending": [

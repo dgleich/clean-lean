@@ -103,3 +103,20 @@ topology verifiers. The first 11 passed, including the extreme-image study; the
 batch has not yet finished. No slow job was restarted or counted as passed because
 an observation interval expired.
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Completed topology batch
+
+All eighteen topology verifier processes exited successfully on the isolated
+prototype. All 37 checked-in Lean artifacts in the topology directory are unchanged
+relative to production after removing provenance-marker lines and outer whitespace.
+[The validation record](topology-validation.json) preserves each command, exit code,
+duration, normalized artifact hash and the prototype patch hash. The 92-proof corpus
+also passes with unchanged emitted output under the same comparison.
+
+These checks exercise the existing topology examples and their independent expected
+targets. They do not prove the outstanding interlevel, BigSteps or Mayer–Vietoris
+paper theorems. Both full regressions remain active, and the repair remains isolated.
+:::

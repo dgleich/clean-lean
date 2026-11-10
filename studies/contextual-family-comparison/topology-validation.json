@@ -1,0 +1,291 @@
+{
+  "status": "isolated prototype validation; not production integration",
+  "baseline": "47a7452043ae9fc506ece3fd6d0c8dbc49085189",
+  "patch_sha256": "d45b23f91045d186de043cffcc8249f3301df112dc4b7f2c27af693bbfb52496",
+  "topology_verifiers": [
+    {
+      "path": "studies/topology/verify.py",
+      "exit": 0,
+      "seconds": 8.327
+    },
+    {
+      "path": "studies/topology/verify_bundles.py",
+      "exit": 0,
+      "seconds": 6.122
+    },
+    {
+      "path": "studies/topology/verify_chain_squares.py",
+      "exit": 0,
+      "seconds": 8.789
+    },
+    {
+      "path": "studies/topology/verify_compact_image.py",
+      "exit": 0,
+      "seconds": 7.499
+    },
+    {
+      "path": "studies/topology/verify_evidence.py",
+      "exit": 0,
+      "seconds": 6.367
+    },
+    {
+      "path": "studies/topology/verify_extreme_images.py",
+      "exit": 0,
+      "seconds": 95.1
+    },
+    {
+      "path": "studies/topology/verify_homology.py",
+      "exit": 0,
+      "seconds": 9.628
+    },
+    {
+      "path": "studies/topology/verify_indices.py",
+      "exit": 0,
+      "seconds": 7.162
+    },
+    {
+      "path": "studies/topology/verify_interlevel.py",
+      "exit": 0,
+      "seconds": 9.176
+    },
+    {
+      "path": "studies/topology/verify_local_names.py",
+      "exit": 0,
+      "seconds": 21.117
+    },
+    {
+      "path": "studies/topology/verify_pair_composition.py",
+      "exit": 0,
+      "seconds": 8.725
+    },
+    {
+      "path": "studies/topology/verify_paths.py",
+      "exit": 0,
+      "seconds": 6.408
+    },
+    {
+      "path": "studies/topology/verify_relative.py",
+      "exit": 0,
+      "seconds": 15.472
+    },
+    {
+      "path": "studies/topology/verify_relative_maps.py",
+      "exit": 0,
+      "seconds": 18.635
+    },
+    {
+      "path": "studies/topology/verify_shifted_perturbations.py",
+      "exit": 0,
+      "seconds": 88.286
+    },
+    {
+      "path": "studies/topology/verify_spaces.py",
+      "exit": 0,
+      "seconds": 16.283
+    },
+    {
+      "path": "studies/topology/verify_subspaces.py",
+      "exit": 0,
+      "seconds": 6.986
+    },
+    {
+      "path": "studies/topology/verify_well_groups.py",
+      "exit": 0,
+      "seconds": 64.088
+    }
+  ],
+  "artifact_comparison": "Remove lines containing generated:, join with newlines, strip outer whitespace, append newline. Compare with production artifacts. SHA-256 below hashes normalized UTF-8 trial contents.",
+  "topology_artifacts": [
+    {
+      "path": "studies/topology/Bundles.lean",
+      "equal_without_provenance": true,
+      "sha256": "7468eefb6e86d261536fa51d50f3a14a4cf75aaf91f18e0a6d897e0bada03d01"
+    },
+    {
+      "path": "studies/topology/BundlesVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "16e200563f27d06f5faed30070a43d772b9f1c4140528c5da6006bc4e194889c"
+    },
+    {
+      "path": "studies/topology/ChainSquares.lean",
+      "equal_without_provenance": true,
+      "sha256": "4da91c2f7d96638ba574f1c4236444f01a4ab01af7d8c5939bc165c51bcca585"
+    },
+    {
+      "path": "studies/topology/ChainSquaresVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "394969a403746e35dd3e284ed13b45f9aeba69db379949d37596532b8a0d90b9"
+    },
+    {
+      "path": "studies/topology/CompactImage.lean",
+      "equal_without_provenance": true,
+      "sha256": "57e432a9f7f6e676a8d7ce9da0f5b0750d81b2b75d08de650b1df34650fcb660"
+    },
+    {
+      "path": "studies/topology/CompactImageVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "0d5b00e789dfb45f852eb0450a12bcb03a4141ea8149adac1b574bbb4baf3937"
+    },
+    {
+      "path": "studies/topology/Evidence.lean",
+      "equal_without_provenance": true,
+      "sha256": "7784d3b0077c834969f7167442d5c694515137ac39ae3638e9dc8729259f9765"
+    },
+    {
+      "path": "studies/topology/EvidenceVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "870658c14fd24df98d064714072a7d38f0b7940687d172996e32498fd1906c26"
+    },
+    {
+      "path": "studies/topology/ExtremeImages.lean",
+      "equal_without_provenance": true,
+      "sha256": "16aaa7e31928c4e17ed822afd7e555a72d91f1de4ae2354e8da6c89616011597"
+    },
+    {
+      "path": "studies/topology/ExtremeImagesVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "a35152aab6fb9174d41855a8079184d35a98ecd489165a274c1bd22d1b72ebfc"
+    },
+    {
+      "path": "studies/topology/Generated.lean",
+      "equal_without_provenance": true,
+      "sha256": "87c00e0c3588de771a3fb91f4270c115615e372960e54dc0874a9372ab48fe14"
+    },
+    {
+      "path": "studies/topology/Homology.lean",
+      "equal_without_provenance": true,
+      "sha256": "e63356d38fc937e5fef70fe054c239e474862a87ff5879276aba23c526cf7a5d"
+    },
+    {
+      "path": "studies/topology/HomologyVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "636824adc8cc582acb8d0866f9b9796893b50f46b938429907ead145ecbe76b7"
+    },
+    {
+      "path": "studies/topology/Interlevel.lean",
+      "equal_without_provenance": true,
+      "sha256": "0f964b312e0a02f543921f3b38066ce19021493eacd1429040d7e98b49cb950c"
+    },
+    {
+      "path": "studies/topology/InterlevelVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "7bce67f8d9843fb272d8cb90c70dfdd1d2e353de6b89bf290960ebea75d37b2a"
+    },
+    {
+      "path": "studies/topology/LocalNames.lean",
+      "equal_without_provenance": true,
+      "sha256": "2ec1376f83573a0de6f7eb412ad30720eef3bf8a5e089b1c134163a035746ced"
+    },
+    {
+      "path": "studies/topology/LocalNamesVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "0fc15f47583e626e3b058dd73d38f565a3b513c63fdfb0fef048f8c521ee528e"
+    },
+    {
+      "path": "studies/topology/PairComposition.lean",
+      "equal_without_provenance": true,
+      "sha256": "f34d945d90245e152e25cc5326bb359e943731128d7316e4256aee456307afce"
+    },
+    {
+      "path": "studies/topology/PairCompositionVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "6e67460476091091b0aed44fdcfe03edb5d48e4eaaaae804ce5e0b1e5deceb1c"
+    },
+    {
+      "path": "studies/topology/Paths.lean",
+      "equal_without_provenance": true,
+      "sha256": "54a79a8a0f66e769ce850fc6c46de3eedff0ccda1045f879e73d78cb76a6a27c"
+    },
+    {
+      "path": "studies/topology/PathsVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "eeac724d07ba05a02cad48f1516072d68feb40495a1f939343fba04ca5125966"
+    },
+    {
+      "path": "studies/topology/Relative.lean",
+      "equal_without_provenance": true,
+      "sha256": "b18aef2976e176a72b0d4f62c2115ff63e0ae0bdfa0f7385d7dedd2ec7e09d84"
+    },
+    {
+      "path": "studies/topology/RelativeMaps.lean",
+      "equal_without_provenance": true,
+      "sha256": "3c6c2f7bfd1e6bf0c5e8982b380b0d3481e885a815b6aaa807f5adf73b671dd8"
+    },
+    {
+      "path": "studies/topology/RelativeMapsVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "21c614fb07fd4cf97411d6bfc22ce3ef7ae871a8418a4a0e44405af28a0db287"
+    },
+    {
+      "path": "studies/topology/RelativeVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "19f85657333146437385432539c4ef89f795d376a627b9246cb09663fab3dc8b"
+    },
+    {
+      "path": "studies/topology/ShiftedPerturbations.lean",
+      "equal_without_provenance": true,
+      "sha256": "08462a8b83fdbec7af9ee075092f17745dfebd1e9f567a1a798537a393105784"
+    },
+    {
+      "path": "studies/topology/ShiftedPerturbationsVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "55ca604749bb56caf0d57d9cf61adf79b8320d5185340dab160d525bad7012f4"
+    },
+    {
+      "path": "studies/topology/Spaces.lean",
+      "equal_without_provenance": true,
+      "sha256": "b4c176c2ed0361cf2cdd2a57e23139bb51d97a3238a2f5df8ea7a477437b9f29"
+    },
+    {
+      "path": "studies/topology/SpacesVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "7b4fbcaa5825ecd745fa7cd8dd4d22e5b61e1af3db79d8cbb0ffacba5e01ea52"
+    },
+    {
+      "path": "studies/topology/Subspaces.lean",
+      "equal_without_provenance": true,
+      "sha256": "a61070a6683f27231b81016459e73310737c789c2511c423e788fd5960085af9"
+    },
+    {
+      "path": "studies/topology/SubspacesVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "09569ce9307fd3ce92d6d6a0d7aab4f22f20c170a9b53bce3dfc6d4023d74a35"
+    },
+    {
+      "path": "studies/topology/TwoImageCandidate.lean",
+      "equal_without_provenance": true,
+      "sha256": "d949b54e69146a14ba6deb9bd1af70fb89d903397e0a34f7c290bb455646b150"
+    },
+    {
+      "path": "studies/topology/ValueIndices.lean",
+      "equal_without_provenance": true,
+      "sha256": "4c31c0b98ff027bad72c4c5189628e858657d3c23ede72a0718451348e43075d"
+    },
+    {
+      "path": "studies/topology/ValueIndicesVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "b7c8c9b23a4416a39d8abdc80446200184ea5e127fd8fa59b70da648dfd048d4"
+    },
+    {
+      "path": "studies/topology/Verified.lean",
+      "equal_without_provenance": true,
+      "sha256": "efc757b6035ba0cca76229cdc9dc1fd05e794ff54f3cdf2434c90ef2aaadf645"
+    },
+    {
+      "path": "studies/topology/WellGroups.lean",
+      "equal_without_provenance": true,
+      "sha256": "25ac81f8e7e70ac3948b379b29741acf6a0c17691ca214809ee43cd65f0a472a"
+    },
+    {
+      "path": "studies/topology/WellGroupsVerified.lean",
+      "equal_without_provenance": true,
+      "sha256": "3211f5c60dc75eb395457958c312624e21c2c79016f39a4f3dd79c972325953f"
+    }
+  ],
+  "corpus": {
+    "proofs": 92,
+    "lean_exit": 0,
+    "unchanged_without_provenance": true
+  },
+  "full_regressions": "Both production and isolated-prototype full runs remain live; no terminal full-suite result."
+}

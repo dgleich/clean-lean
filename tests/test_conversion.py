@@ -50,9 +50,12 @@ class DefinitionConversion(unittest.TestCase):
         notation('Notation native endpoints(I: Endpoints): Endpoints:',
                  ['Means: I','Render latex: {I}'],self.e)
         self.assertIn('native_endpoints',self.norm('native endpoints(I)').lean)
-    def test_numeric_placeholder_stays_opaque(self):
+    def test_authored_zero_expands_to_its_determined_constructor(self):
         notation('Define zero real(): Real:',['Equals: 0'],self.e,authored=True)
-        self.assertIn('zero_real',self.norm('zero real()').lean)
+        self.assertIn('zero_real',self.expr('zero real()').lean)
+        numeral=self.e.data['types']['Real']['numerals']['native_binding']
+        self.assertEqual(self.norm('zero real()').lean,'(_root_.'+numeral+' (nat_lit 0))')
+        self.assertEqual(self.norm('zero real()').type,self.e.type('Real'))
     def test_unused_implicit_parameters_do_not_block(self):
         # K is inferred from field; it does not occur as an expression in the body.
         notation('Define retain complex(field,C):',['Let K: Type','Let field: FieldStructure(K)',

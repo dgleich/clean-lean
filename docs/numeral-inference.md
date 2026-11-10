@@ -149,3 +149,28 @@ and unresolved interaction checks. It also authors finite-vertex order using
 natural coordinate order. Neither change is integrated; source grammar and
 highlighting are unchanged.
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Renewed determined-numeral regression checks
+
+The closed-universe test still rejects a genuinely unresolved NUM argument at the
+call boundary. A separate parsed `equality reflexivity(0)` case now checks the
+selected Natural type argument and its exact evidence type after completion.
+Authored Real zero normalizes to its declared Real numeral constructor while its
+ordinary emitted call remains named. Dimension-alias fixtures now elaborate their
+literal instead of fabricating a typed Decimal node that bypasses numeral binding.
+
+Natural `1+1` is accepted as a dimension expression with both constructors retained;
+it is still not identified with literal `2` by Clean's bounded arithmetic comparison.
+Transpose tests check both reversed dimension types and ordered native numeral
+arguments, independently of incidental parentheses in a type's diagnostic spelling.
+
+Fifty tests across closed universes, definition conversion, dimension indices and
+explicit environments pass. `tools/check_completed_numeral_targets.py` independently
+checks the four native targets (Real zero, dimension sum, rectangular transpose and
+Natural reflexivity), plus a native dimension-value lemma. These changes update
+validation only. Parameterized vector/matrix zero and universe-polymorphic equality
+remain separate unresolved features.
+:::

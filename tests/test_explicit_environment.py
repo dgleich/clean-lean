@@ -70,7 +70,12 @@ class ExplicitEnvironmentTests(unittest.TestCase):
     def test_dimension_inference(self):
         env=Environment();load_module(ROOT/'library/linear_algebra.clean',env)
         expr=Expressions(env,{'A':Expr('A','A',env.type('Matrix(2,3,Complex)'))}).parse('transpose(A)')
-        self.assertEqual(str(expr.type),'Matrix(3,2,Complex)')
+        self.assertEqual(expr.type,env.type('Matrix(3,2,Complex)'))
+        key=env.data['functions']['transpose']['native_binding']
+        numeral=env.data['types']['Natural']['numerals']['native_binding']
+        two='(_root_.'+numeral+' (nat_lit 2))'
+        three='(_root_.'+numeral+' (nat_lit 3))'
+        self.assertEqual(expr.lean,'(@_root_.'+key+' ('+two+') ('+three+') (A))')
 
     def test_undeclared_type_parameter(self):
         with self.assertRaisesRegex(CleanError,'Unknown type'):

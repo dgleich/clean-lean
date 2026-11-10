@@ -70,6 +70,11 @@ class ClosedUniverses(unittest.TestCase):
     def test_unresolved_literal_is_not_a_type_argument(self):
         with self.assertRaisesRegex(CleanError,'unresolved type'):self.e.require_type_argument(NUM)
         with self.assertRaisesRegex(CleanError,'unresolved type'):
-            Expressions(self.e,self.local).parse('equality reflexivity(0)')
+            self.e.call('equality reflexivity',[Expr('0','0',NUM,tree=['Decimal','0'])],self.local)
+    def test_completed_literal_has_a_determined_type_argument(self):
+        proof=Expressions(self.e,self.local).parse('equality reflexivity(0)')
+        self.assertEqual(dict(proof.inferred_args),{'X':self.typ('Natural')})
+        self.assertEqual(proof.type,self.typ('Evidence(((0: Natural) = (0: Natural)))'))
+
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

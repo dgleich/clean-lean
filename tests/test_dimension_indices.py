@@ -40,14 +40,21 @@ class DimensionIndices(unittest.TestCase):
     def test_arithmetic_is_not_solved(self):
         self.assertNotEqual(self.typ('Vector((n+0),Real)'),self.typ('Vector(n,Real)'))
     def test_literal_alias(self):
-        self.local['three']=local_definition('three',Expr('3','3',NAT,tree=['Decimal','3']),self.e,self.local)
+        self.local['three']=local_definition('three',self.expr('3'),self.e,self.local)
         self.assertEqual(self.typ('Vector(three,Real)'),self.typ('Vector(3,Real)'))
     def test_negative_and_real_dimensions_reject(self):
         self.local['a']=Expr('a','a',self.typ('Real'))
         with self.assertRaises(CleanError):self.typ('Vector(a,Real)')
         for text in ['Vector(-1,Real)','Vector((-1),Real)','Vector((-n),Real)',
-                     'Vector((n + (-1)),Real)','Vector((1+1),Real)']:
+                     'Vector((n + (-1)),Real)']:
             with self.subTest(text=text),self.assertRaises(CleanError):self.typ(text)
+    def test_determined_literal_sum_is_a_dimension_without_arithmetic_solving(self):
+        dimension=self.typ('Vector((1+1),Real)').args[0]
+        add=self.e.data['functions']['natural sum']['native_binding']
+        numeral=self.e.data['types']['Natural']['numerals']['native_binding']
+        one='(_root_.'+numeral+' (nat_lit 1))'
+        self.assertEqual(dimension.lean,'(_root_.'+add+' ('+one+') ('+one+'))')
+        self.assertNotEqual(self.typ('Vector((1+1),Real)'),self.typ('Vector(2,Real)'))
     def test_bound_dimension_preserves_lean_identity(self):
         result=self.expr('for every (j: Natural, for every (v: Vector(j,Real), v = v))')
         vector=self.e.data['types']['Vector']['native_binding']

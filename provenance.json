@@ -6912,6 +6912,20 @@
         "# ",
         ""
       ]
+    },
+    "tools/check_completed_numeral_targets.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/contextual-family-comparison/topology-validation.json": {
+      "origin": "derived validation measurements and artifact hashes; assistant-authored explanatory metadata",
+      "mode": "sidecar"
     }
   }
 }
