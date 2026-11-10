@@ -17,6 +17,9 @@ mapping={}
 for oracle,name in [('constant','constant real map'),('add','add real maps'),('translate','translate real map'),
  ('shift','shifted perturbation'),('image','shifted pair image')]:
     mapping['ShiftOracle.'+oracle]=function(name)
+for oracle,name in [('equal','equal'),('difference','real difference'),('negative','real negative'),('atMost','real at most'),('atLeast','real at least')]:
+    mapping['ShiftOracle.'+oracle]=function(name)
+mapping['ShiftOracle.numeral']=env.data['types']['Real']['numerals']['native_binding']
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
 open Lean Elab Command
@@ -65,27 +68,38 @@ noncomputable def constant (X : SPACETYPE) (c : REALTYPE) : REALMAP_X :=
 noncomputable def add (X : SPACETYPE) (f g : REALMAP_X) : REALMAP_X :=
   letI : TopologicalSpace X.carrier := X.str
   f+g
+noncomputable def equal {T : Type} (x y : T) : CONDITIONTYPE := x=y
+noncomputable def difference (x y : REALTYPE) : REALTYPE := x-y
+noncomputable def negative (x : REALTYPE) : REALTYPE := -x
+noncomputable def atMost (x y : REALTYPE) : CONDITIONTYPE := x ≤ y
+noncomputable def atLeast (x y : REALTYPE) : CONDITIONTYPE := x ≥ y
+noncomputable def numeral (digits : Nat) : REALTYPE := (fun n : Nat => (n : Real)) digits
+local infix:50 " =ₛ " => equal
+local infixl:65 " -ₛ " => difference
+local prefix:75 "-ₛ" => negative
+local infix:50 " ≤ₛ " => atMost
+local infix:50 " ≥ₛ " => atLeast
 noncomputable def translate (X : SPACETYPE) (f : REALMAP_X) (t : REALTYPE) : REALMAP_X :=
   @add X f (@constant X t)
-noncomputable def shift (P : PROBLEM) (t : REALTYPE) : REALMAP_P := @translate P.space P.map (-t)
+noncomputable def shift (P : PROBLEM) (t : REALTYPE) : REALMAP_P := @translate P.space P.map (-ₛt)
 noncomputable def image {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (t : REALTYPE) (C : CERTIFIED K field H P r nesting)
-  (represents : C.data.map = @shift P t) : SUB_TARGET := @IMAGE K field H P r nesting C
+  (represents : C.data.map =ₛ @shift P t) : SUB_TARGET := @IMAGE K field H P r nesting C
 
 def valueStatement : Prop := ∀ (P : PROBLEM) (t : REALTYPE) (x : POINTTYPE P.space),
-  @VALUE P.space (@shift P t) x = @VALUE P.space P.map x - t
-def boundStatement : Prop := ∀ (P : PROBLEM) (t r : REALTYPE), -r ≤ t → t ≤ r → @BOUNDED P (@shift P t) r
-def pairStatement : Prop := ∀ (P : PROBLEM) (t : REALTYPE), @PERTURBED P (@shift P t) = @SHIFTED P t
+  @VALUE P.space (@shift P t) x =ₛ @VALUE P.space P.map x -ₛ t
+def boundStatement : Prop := ∀ (P : PROBLEM) (t r : REALTYPE), -ₛr ≤ₛ t → t ≤ₛ r → @BOUNDED P (@shift P t) r
+def pairStatement : Prop := ∀ (P : PROBLEM) (t : REALTYPE), @PERTURBED P (@shift P t) =ₛ @SHIFTED P t
 def certificatesStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (t r : REALTYPE),
-  P.interval.lower ≤ P.interval.upper → r ≥ 0 → -r ≤ t → t ≤ r → ∀ (nesting : NESTING),
-  ∃ C : CERTIFIED K field H P r nesting, C.data.map = @shift P t
+  P.interval.lower ≤ₛ P.interval.upper → r ≥ₛ numeral (nat_lit 0) → -ₛr ≤ₛ t → t ≤ₛ r → ∀ (nesting : NESTING),
+  ∃ C : CERTIFIED K field H P r nesting, C.data.map =ₛ @shift P t
 def independenceStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (t r : REALTYPE)
   (nesting : NESTING) (C D : CERTIFIED K field H P r nesting)
-  (first : C.data.map = @shift P t) (second : D.data.map = @shift P t),
-  @image K field H P r nesting t C first = @image K field H P r nesting t D second
+  (first : C.data.map =ₛ @shift P t) (second : D.data.map =ₛ @shift P t),
+  @image K field H P r nesting t C first =ₛ @image K field H P r nesting t D second
 def inclusionStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (t r : REALTYPE)
   (nesting : NESTING) (C : CERTIFIED K field H P r nesting)
-  (represents : C.data.map = @shift P t) (x : ELEMENTTYPE K field TARGET_MODULE),
+  (represents : C.data.map =ₛ @shift P t) (x : ELEMENTTYPE K field TARGET_MODULE),
   @BELONGS K field TARGET_MODULE x (@WELL K field H P r nesting) →
     @BELONGS K field TARGET_MODULE x (@image K field H P r nesting t C represents)
 end ShiftOracle
@@ -101,7 +115,7 @@ substitutions={'PROBLEM':env.structures['InterlevelProblem']['key'],'THEORY':env
 for placeholder,name in [('IMAGE','perturbation homology image'),('VALUE','real map value'),('BOUNDED','bounded perturbation'),
  ('PERTURBED','perturbed pair'),('SHIFTED','shifted pair'),('NESTED','nested pair'),('EXPANDED','expanded pair'),
  ('RELHOMOLOGY','relative homology'),('TARGET','perturbation target'),('WELL','relative well group'),('BELONGS','belongs to module subspace')]:substitutions[placeholder]=function(name)
-for placeholder,name in [('SPACETYPE','TopologicalSpace'),('REALTYPE','Real'),('FIELDTYPE','FieldStructure'),
+for placeholder,name in [('CONDITIONTYPE','Proposition'),('SPACETYPE','TopologicalSpace'),('REALTYPE','Real'),('FIELDTYPE','FieldStructure'),
  ('CARRIERTYPE','Type'),('POINTTYPE','Point'),('ELEMENTTYPE','ModuleElement'),
  ('REALMAPTYPE','ContinuousRealMap'),('SUBSPACETYPE','ModuleSubspace')]:
     substitutions[placeholder]='_root_.'+env.data['types'][name]['native_binding']
@@ -122,10 +136,13 @@ theorem shifted_perturbation_value : CleanStatements.shifted_perturbation_value 
   rfl
 theorem shifted_perturbation_bound : CleanStatements.shifted_perturbation_bound := by
   intro P t r lower upper x
+  change -r ≤ t at lower
+  change t ≤ r at upper
   change -r ≤ (P.map x + -t) - P.map x ∧ (P.map x + -t) - P.map x ≤ r
   constructor <;> linarith
 theorem shifted_perturbation_pair : CleanStatements.shifted_perturbation_pair := by
   intro P t
+  change PERTURBED P (SHIFT P t) = SHIFTED P t
   apply congrArg₂ (fun A B : Set P.space.carrier => @DATA.mk P.space A B)
   · apply Set.ext
     intro x
@@ -155,6 +172,7 @@ theorem well_group_lies_in_every_shifted_image : CleanStatements.well_group_lies
   exact (WellProofs.relative_well_group_membership K field H P r nesting x).mp member C
 end ShiftProofs
 '''
+proofs=proofs.replace('PERTURBED',function('perturbed pair')).replace('SHIFTED',function('shifted pair'))
 proofs=proofs.replace('DATA',env.structures['SpacePairData']['key']).replace('SHIFT',function('shifted perturbation'))
 path=here/'ShiftedPerturbationsVerified.lean'
 path.write_text(source+comparison+expected+'\n'.join(checks)+'\n'+supportproofs+proofs)

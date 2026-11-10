@@ -396,3 +396,20 @@ remain pending. Earlier verifiers have not all been rerun after this correction.
 The two-image equality remains explicitly unproved; successful certificate and
 membership proofs do not establish that paper theorem.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Shifted perturbations now passes seventeen canonical targets and six new proofs,
+plus twenty supporting proofs. Expected terms preserve the declared real
+difference, negation, order, equality and numeral adapters. Proof tactics expose
+wrapped order assumptions and pair equality explicitly; the canonical comparison
+remains structural. The one-page specimen compiled twice without box or unresolved
+reference warnings and was visually inspected.
+
+Cumulative migration is seventeen of eighteen verifiers: 455 summed per-verifier
+target checks and 85 proofs, excluding repeated supporting-proof runs from the
+proof total. Extreme images is the remaining pending verifier. This cumulative
+coverage is not an all-verifier rerun on the latest compiler. The two-image
+candidate remains unproved. The generated parser also matches the grammar under
+strict LALR and lexer checks; no grammar change was made in this checkpoint.
+:::

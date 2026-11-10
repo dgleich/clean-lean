@@ -194,3 +194,14 @@ new proofs pass, along with fifteen supporting proofs. The topology migration
 now covers sixteen of eighteen verifiers cumulatively. The fresh full regression
 is still pending; no full-suite pass is claimed.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Shifted perturbations adds seventeen canonical checks and six proofs, with twenty
+supporting proofs rechecked, bringing cumulative topology migration to seventeen
+of eighteen verifiers. Its statements retain declared scalar operations and the
+real numeral constructor. Extreme images and the full regression are pending.
+A separately diagnosed library conflict remains: the logical `equivalence`
+declaration collides with the existing type-equivalence constructor in
+`library/logic/equivalences.clean`; this needs an explicit naming correction.
+:::
