@@ -76,8 +76,8 @@ noncomputable def cleanDefine_conjunction_41680d3b84ab96b0cab9  (x : (_root_.cle
 noncomputable def cleanDefine_disjunction_2a3db8ccf67a84818535  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x ∨ y
 
-noncomputable def cleanDefine_implication_9c70b95b865a68fb6e58  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
-  x → y
+noncomputable def cleanDefine_implication_3b80760984def210df07  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (∀ (clean_bound_0 : (x)), y)
 
 noncomputable def cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x ↔ y
@@ -262,8 +262,8 @@ noncomputable def cleanDefine_image_2da051e82d83c8057192 {X : Type} {Y : Type} (
 noncomputable def cleanDefine_compose_maps_b7e7219a131a4bb5245c {X : Type} {Y : Type} {Z : Type} (g : (Y) → (Z)) (f : (X) → (Y)) : (X) → (Z) :=
   (fun (clean_bound_0 : X) => (g (f clean_bound_0)))
 
-noncomputable def cleanDefine_continuous_between_97c36c9607d00442c387 {X : Type} {Y : Type} (f : (X) → (Y)) (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (u : (_root_.cleanType_Topology_2eca621ea710e87cf174 (Y))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
-  (∀ (clean_bound_0 : (_root_.cleanType_Set_6e300741358eee425e81 (Y))), (_root_.cleanDefine_implication_9c70b95b865a68fb6e58 ((_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 (clean_bound_0) (u))) ((_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 ((_root_.cleanDefine_inverse_image_22bc73bac0cb61752f41 (f) (clean_bound_0))) (t)))))
+noncomputable def cleanDefine_continuous_between_8dd83630931b94d3a3c6 {X : Type} {Y : Type} (f : (X) → (Y)) (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (u : (_root_.cleanType_Topology_2eca621ea710e87cf174 (Y))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (∀ (clean_bound_0 : (_root_.cleanType_Set_6e300741358eee425e81 (Y))), (_root_.cleanDefine_implication_3b80760984def210df07 ((_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 (clean_bound_0) (u))) ((_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 ((_root_.cleanDefine_inverse_image_22bc73bac0cb61752f41 (f) (clean_bound_0))) (t)))))
 
 noncomputable def cleanDefine_selected_elements_405f5b391e3996990e41 {X : Type} (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))) (condition : (X) → ((_root_.cleanType_Proposition_ae4a13d2f060407bce35))) : (_root_.cleanType_Set_6e300741358eee425e81 (X)) :=
   (_root_.cleanNotation_set_of_2c71fd475f49a65bd03e ((fun (clean_bound_0 : X) => (_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (clean_bound_0) (S))) ((condition clean_bound_0))))))
@@ -319,9 +319,9 @@ def continuous_composition : Prop :=
   ∀ (v : (_root_.cleanType_Topology_2eca621ea710e87cf174 (Z))),
   ∀ (f : (X) → (Y)),
   ∀ (g : (Y) → (Z)),
-  ∀ («continuity_of_f_from_t_to_u» : (_root_.cleanDefine_continuous_between_97c36c9607d00442c387 (f) (t) (u))),
-  ∀ («continuity_of_g_from_u_to_v» : (_root_.cleanDefine_continuous_between_97c36c9607d00442c387 (g) (u) (v))),
-  (_root_.cleanDefine_continuous_between_97c36c9607d00442c387 ((_root_.cleanDefine_compose_maps_b7e7219a131a4bb5245c (g) (f))) (t) (v))
+  ∀ («continuity_of_f_from_t_to_u» : (_root_.cleanDefine_continuous_between_8dd83630931b94d3a3c6 (f) (t) (u))),
+  ∀ («continuity_of_g_from_u_to_v» : (_root_.cleanDefine_continuous_between_8dd83630931b94d3a3c6 (g) (u) (v))),
+  (_root_.cleanDefine_continuous_between_8dd83630931b94d3a3c6 ((_root_.cleanDefine_compose_maps_b7e7219a131a4bb5245c (g) (f))) (t) (v))
 
 /--
 source: topology
@@ -384,8 +384,8 @@ same_basic_target cleanDefine_image_2da051e82d83c8057192 expected_topology_bindi
 noncomputable def expected_topology_binding_9 {X Y Z : Type} (g : Y → Z) (f : X → Y) : X → Z := fun x : X => g (f x)
 same_basic_target cleanDefine_compose_maps_b7e7219a131a4bb5245c expected_topology_binding_9
 
-noncomputable def expected_topology_binding_10 {X Y : Type} (f : X → Y) (t : _root_.cleanType_Topology_2eca621ea710e87cf174 X) (u : _root_.cleanType_Topology_2eca621ea710e87cf174 Y) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := ∀ S : _root_.cleanType_Set_6e300741358eee425e81 Y, _root_.cleanDefine_implication_9c70b95b865a68fb6e58 (@_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 Y S u) (@_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 X (@_root_.cleanDefine_inverse_image_22bc73bac0cb61752f41 X Y f S) t)
-same_basic_target cleanDefine_continuous_between_97c36c9607d00442c387 expected_topology_binding_10
+noncomputable def expected_topology_binding_10 {X Y : Type} (f : X → Y) (t : _root_.cleanType_Topology_2eca621ea710e87cf174 X) (u : _root_.cleanType_Topology_2eca621ea710e87cf174 Y) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := ∀ S : _root_.cleanType_Set_6e300741358eee425e81 Y, _root_.cleanDefine_implication_3b80760984def210df07 (@_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 Y S u) (@_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 X (@_root_.cleanDefine_inverse_image_22bc73bac0cb61752f41 X Y f S) t)
+same_basic_target cleanDefine_continuous_between_8dd83630931b94d3a3c6 expected_topology_binding_10
 
 noncomputable def expected_topology_binding_11 {X : Type} (S : _root_.cleanType_Set_6e300741358eee425e81 X) (condition : X → _root_.cleanType_Proposition_ae4a13d2f060407bce35) : _root_.cleanType_Set_6e300741358eee425e81 X := @_root_.cleanNotation_set_of_2c71fd475f49a65bd03e X (fun x : X => _root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 (@_root_.cleanDefine_set_member_d7f862196f8cd9ab892e X x S) (condition x))
 same_basic_target cleanDefine_selected_elements_405f5b391e3996990e41 expected_topology_binding_11
@@ -399,7 +399,7 @@ same_basic_target CleanStatements.inverse_image_intersection expected_topology_b
 noncomputable def expected_topology_binding_14  : Prop := ∀ (X Y : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (f : X → Y) (S : _root_.cleanType_Set_6e300741358eee425e81 X) (y : Y), _root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb (@_root_.cleanDefine_set_member_d7f862196f8cd9ab892e Y y (@_root_.cleanDefine_image_2da051e82d83c8057192 X Y f S)) (∃ x : X, _root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 (@_root_.cleanDefine_set_member_d7f862196f8cd9ab892e X x S) (@_root_.cleanDefine_equal_59dc0f11ba9b345348cf Y (f x) y))
 same_basic_target CleanStatements.image_membership expected_topology_binding_14
 
-noncomputable def expected_topology_binding_15  : Prop := ∀ (X Y Z : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (t : _root_.cleanType_Topology_2eca621ea710e87cf174 X) (u : _root_.cleanType_Topology_2eca621ea710e87cf174 Y) (v : _root_.cleanType_Topology_2eca621ea710e87cf174 Z) (f : X → Y) (g : Y → Z) (_ : @_root_.cleanDefine_continuous_between_97c36c9607d00442c387 X Y f t u) (_ : @_root_.cleanDefine_continuous_between_97c36c9607d00442c387 Y Z g u v), @_root_.cleanDefine_continuous_between_97c36c9607d00442c387 X Z (@_root_.cleanDefine_compose_maps_b7e7219a131a4bb5245c X Y Z g f) t v
+noncomputable def expected_topology_binding_15  : Prop := ∀ (X Y Z : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (t : _root_.cleanType_Topology_2eca621ea710e87cf174 X) (u : _root_.cleanType_Topology_2eca621ea710e87cf174 Y) (v : _root_.cleanType_Topology_2eca621ea710e87cf174 Z) (f : X → Y) (g : Y → Z) (_ : @_root_.cleanDefine_continuous_between_8dd83630931b94d3a3c6 X Y f t u) (_ : @_root_.cleanDefine_continuous_between_8dd83630931b94d3a3c6 Y Z g u v), @_root_.cleanDefine_continuous_between_8dd83630931b94d3a3c6 X Z (@_root_.cleanDefine_compose_maps_b7e7219a131a4bb5245c X Y Z g f) t v
 same_basic_target CleanStatements.continuous_composition expected_topology_binding_15
 
 noncomputable def expected_topology_binding_16  : Prop := ∀ (I X : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (sets : I → _root_.cleanType_Set_6e300741358eee425e81 X) (x : X), _root_.cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb (@_root_.cleanDefine_set_member_d7f862196f8cd9ab892e X x (@_root_.cleanDefine_intersection_family_892b3d89c4dc28f0effe I X sets)) (∀ i : I, @_root_.cleanDefine_set_member_d7f862196f8cd9ab892e X x (sets i))
@@ -421,7 +421,7 @@ noncomputable def expected_topology_binding_21 (p q : _root_.cleanType_Propositi
 same_basic_target cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb expected_topology_binding_21
 
 noncomputable def expected_topology_binding_22 (p q : _root_.cleanType_Proposition_ae4a13d2f060407bce35) : _root_.cleanType_Proposition_ae4a13d2f060407bce35 := p → q
-same_basic_target cleanDefine_implication_9c70b95b865a68fb6e58 expected_topology_binding_22
+same_basic_target cleanDefine_implication_3b80760984def210df07 expected_topology_binding_22
 
 namespace TopologyFoundationProofs
 
@@ -434,7 +434,7 @@ theorem image_agrees {X Y : Type} (f : X → Y) (S : Set X) :
 
 theorem continuity_agrees {X Y : Type} (f : X → Y)
     (t : TopologicalSpace X) (u : TopologicalSpace Y) :
-    cleanDefine_continuous_between_97c36c9607d00442c387 f t u ↔ @Continuous X Y t u f := by
+    cleanDefine_continuous_between_8dd83630931b94d3a3c6 f t u ↔ @Continuous X Y t u f := by
   letI : TopologicalSpace X := t
   letI : TopologicalSpace Y := u
   change (∀ S : Set Y, IsOpen S → IsOpen (f ⁻¹' S)) ↔ Continuous f

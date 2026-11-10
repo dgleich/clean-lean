@@ -77,8 +77,8 @@ noncomputable def cleanDefine_conjunction_41680d3b84ab96b0cab9  (x : (_root_.cle
 noncomputable def cleanDefine_disjunction_2a3db8ccf67a84818535  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x ∨ y
 
-noncomputable def cleanDefine_implication_9c70b95b865a68fb6e58  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
-  x → y
+noncomputable def cleanDefine_implication_3b80760984def210df07  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (∀ (clean_bound_0 : (x)), y)
 
 noncomputable def cleanDefine_logical_equivalence_96508ad7b1ed7af02bcb  (x : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) (y : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x ↔ y
@@ -263,8 +263,8 @@ noncomputable def cleanDefine_image_2da051e82d83c8057192 {X : Type} {Y : Type} (
 noncomputable def cleanDefine_compose_maps_b7e7219a131a4bb5245c {X : Type} {Y : Type} {Z : Type} (g : (Y) → (Z)) (f : (X) → (Y)) : (X) → (Z) :=
   (fun (clean_bound_0 : X) => (g (f clean_bound_0)))
 
-noncomputable def cleanDefine_continuous_between_97c36c9607d00442c387 {X : Type} {Y : Type} (f : (X) → (Y)) (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (u : (_root_.cleanType_Topology_2eca621ea710e87cf174 (Y))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
-  (∀ (clean_bound_0 : (_root_.cleanType_Set_6e300741358eee425e81 (Y))), (_root_.cleanDefine_implication_9c70b95b865a68fb6e58 ((_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 (clean_bound_0) (u))) ((_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 ((_root_.cleanDefine_inverse_image_22bc73bac0cb61752f41 (f) (clean_bound_0))) (t)))))
+noncomputable def cleanDefine_continuous_between_8dd83630931b94d3a3c6 {X : Type} {Y : Type} (f : (X) → (Y)) (t : (_root_.cleanType_Topology_2eca621ea710e87cf174 (X))) (u : (_root_.cleanType_Topology_2eca621ea710e87cf174 (Y))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (∀ (clean_bound_0 : (_root_.cleanType_Set_6e300741358eee425e81 (Y))), (_root_.cleanDefine_implication_3b80760984def210df07 ((_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 (clean_bound_0) (u))) ((_root_.cleanDefine_open_in_2f000176928f8b3f5fc4 ((_root_.cleanDefine_inverse_image_22bc73bac0cb61752f41 (f) (clean_bound_0))) (t)))))
 
 noncomputable def cleanDefine_selected_elements_405f5b391e3996990e41 {X : Type} (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))) (condition : (X) → ((_root_.cleanType_Proposition_ae4a13d2f060407bce35))) : (_root_.cleanType_Set_6e300741358eee425e81 (X)) :=
   (_root_.cleanNotation_set_of_2c71fd475f49a65bd03e ((fun (clean_bound_0 : X) => (_root_.cleanDefine_conjunction_41680d3b84ab96b0cab9 ((_root_.cleanDefine_set_member_d7f862196f8cd9ab892e (clean_bound_0) (S))) ((condition clean_bound_0))))))
@@ -299,7 +299,7 @@ def continuous_image_of_a_compact_set : Prop :=
   ∀ (u : (_root_.cleanType_Topology_2eca621ea710e87cf174 (Y))),
   ∀ (f : (X) → (Y)),
   ∀ (S : (_root_.cleanType_Set_6e300741358eee425e81 (X))),
-  ∀ («continuity_of_f_from_t_to_u» : (_root_.cleanDefine_continuous_between_97c36c9607d00442c387 (f) (t) (u))),
+  ∀ («continuity_of_f_from_t_to_u» : (_root_.cleanDefine_continuous_between_8dd83630931b94d3a3c6 (f) (t) (u))),
   ∀ («compactness_of_S_in_t» : (_root_.cleanDefine_compact_in_301821979e6d65a95bf1 (S) (t))),
   (_root_.cleanDefine_compact_in_301821979e6d65a95bf1 ((_root_.cleanDefine_image_2da051e82d83c8057192 (f) (S))) (u))
 
@@ -328,7 +328,7 @@ noncomputable def expected_compact_adapter {X : Type} (S : _root_.cleanType_Set_
 same_basic_target cleanDefine_compact_in_301821979e6d65a95bf1 expected_compact_adapter
 noncomputable def expected_compact_statement : Prop :=
   ∀ (X Y : _root_.cleanType_Type_c1fed1af64ab6f12e0ed) (t : _root_.cleanType_Topology_2eca621ea710e87cf174 X) (u : _root_.cleanType_Topology_2eca621ea710e87cf174 Y) (f : X → Y) (S : _root_.cleanType_Set_6e300741358eee425e81 X),
-    @_root_.cleanDefine_continuous_between_97c36c9607d00442c387 X Y f t u → @_root_.cleanDefine_compact_in_301821979e6d65a95bf1 X S t →
+    @_root_.cleanDefine_continuous_between_8dd83630931b94d3a3c6 X Y f t u → @_root_.cleanDefine_compact_in_301821979e6d65a95bf1 X S t →
     @_root_.cleanDefine_compact_in_301821979e6d65a95bf1 Y (@_root_.cleanDefine_image_2da051e82d83c8057192 X Y f S) u
 same_basic_target CleanStatements.continuous_image_of_a_compact_set expected_compact_statement
 
