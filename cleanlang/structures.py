@@ -49,7 +49,7 @@ def projection_reduction(env, base, field, locals):
     definition=env.definitions.get(tree[1])
     if not definition or definition['implementation']!='equals':return None
     from .operator_bindings import scope_unchanged
-    if not scope_unchanged(env,definition) and not (tree[0]=='ModuleCall' and definition.get('bound_tree') is not None):return None
+    if not scope_unchanged(env,definition) and definition.get('bound_tree') is None:return None
     signature=env.data['functions'][tree[1]]['signature_tree']
     parameters=signature[2]
     if any(p[3]=='implicit' for p in parameters):return None

@@ -175,3 +175,22 @@ rejection. Fifty-five focused tests and the 92 corpus proofs pass. The fresh ful
 regression is still running; the earlier run of the initial inference revision
 was deliberately terminated after source changes and is not counted as passing.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The inferred-value full run finished with 693 tests, 44 failures and 70 errors.
+A subsequent [retained comparison correction](retained-comparison-scope.md)
+addresses newly exposed topology conversion inconsistencies. Sixty focused tests,
+relative maps' ten canonical targets and three proofs, five native inference
+targets and two proofs, and the 92 corpus proofs pass on the corrected compiler.
+A fresh full regression and the well-group verifier remain active; neither is
+counted as passing. Previous failed full runs remain evidence of unfinished work.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Well-group revalidation subsequently completed: 30 canonical targets and five
+new proofs pass, along with fifteen supporting proofs. The topology migration
+now covers sixteen of eighteen verifiers cumulatively. The fresh full regression
+is still pending; no full-suite pass is claimed.
+:::

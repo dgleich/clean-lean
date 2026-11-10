@@ -1020,3 +1020,15 @@ are unchanged; the acceptance catalog records the new semantic slice and its
 remaining conformance obligations. Explicit same-module and same-chain-complex
 operators now use this capability in the algebra modules.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+[Retained comparison after later operators](retained-comparison-scope.md) corrects
+three retained-body scope gates and aligns direct operator operands with named
+calls at the hidden-binder boundary. A checked retained body remains available
+after later operator declarations for named calls and eligible record projection;
+identity validation and existing shadowing/opacity rules still apply. A normalized
+operand containing a binder is not published as a new authored call argument.
+No grammar or native unfolding rule changes. Focused evidence and outstanding
+full validation are recorded in the report and acceptance catalog.
+:::

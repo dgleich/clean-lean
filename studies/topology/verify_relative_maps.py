@@ -15,6 +15,8 @@ mapping={}
 for oracle,name in [('projection','relative chain projection'),('commutes','pair chain commutes'),
  ('chainMap','relative chain map'),('homologyMap','relative homology map'),('image','relative homology image')]:
     mapping['RelativeMapOracle.'+oracle]=function(name)
+for oracle,name in [('equal','equal'),('equivalent','equivalence')]:
+    mapping['RelativeMapOracle.'+oracle]=function(name)
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
 open Lean Elab Command
@@ -58,14 +60,16 @@ elab "same_target " a:ident b:ident : command => do
 '''
 expected=r'''
 namespace RelativeMapOracle
+noncomputable def equal {T : Type} (x y : T) : CONDITIONTYPE := x=y
+noncomputable def equivalent (x y : CONDITIONTYPE) : CONDITIONTYPE := x ↔ y
 noncomputable def projection {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (X : SPACETYPE)
   (Q : PAIR X) : MAP((@SINGULAR K field H (@SUBSPACE X Q.ambient)),(@RELCHAINS K field H X Q)) :=
   @QUOTIENTPROJ K field (@SINGULAR K field H (@SUBSPACE X Q.relative))
     (@SINGULAR K field H (@SUBSPACE X Q.ambient)) (@PAIRMAP K field H X Q)
 noncomputable def commutes {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (X : SPACETYPE)
   (Q : INCLUSION X) : CONDITIONTYPE :=
-  @COMPOSE K field A B D (@AMBIENT K field H X Q) (@PAIRMAP K field H X Q.source) =
-    @COMPOSE K field A C D (@PAIRMAP K field H X Q.target) (@RELATIVE K field H X Q)
+  equal (@COMPOSE K field A B D (@AMBIENT K field H X Q) (@PAIRMAP K field H X Q.source))
+    (@COMPOSE K field A C D (@PAIRMAP K field H X Q.target) (@RELATIVE K field H X Q))
 noncomputable def chainMap {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (X : SPACETYPE)
   (Q : INCLUSION X) (h : @commutes K field H X Q) :
   MAP((@RELCHAINS K field H X Q.source),(@RELCHAINS K field H X Q.target)) :=
@@ -83,17 +87,17 @@ def commutationStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (
   (X : SPACETYPE) (Q : INCLUSION X), @commutes K field H X Q
 def quotientStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field)
   (X : SPACETYPE) (Q : INCLUSION X) (h : @commutes K field H X Q),
-  @COMPOSE K field B (@RELCHAINS K field H X Q.source) (@RELCHAINS K field H X Q.target)
-    (@chainMap K field H X Q h) (@projection K field H X Q.source) =
-  @COMPOSE K field B D (@RELCHAINS K field H X Q.target)
-    (@projection K field H X Q.target) (@AMBIENT K field H X Q)
+  equal (@COMPOSE K field B (@RELCHAINS K field H X Q.source) (@RELCHAINS K field H X Q.target)
+    (@chainMap K field H X Q h) (@projection K field H X Q.source))
+  (@COMPOSE K field B D (@RELCHAINS K field H X Q.target)
+    (@projection K field H X Q.target) (@AMBIENT K field H X Q))
 def imageStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field)
   (X : SPACETYPE) (Q : INCLUSION X) (h : @commutes K field H X Q)
   (x : ELEMENTTYPE K field MT),
   let f : MODULEMAPTYPE K field MS MT := @homologyMap K field H X Q h;
   let U : SUBSPACE_T := @image K field H X Q h;
-  @BELONGS K field MT x U ↔ @Exists (ELEMENTTYPE K field MS)
-    (fun y => @VALUE K field MS MT f y = x)
+  equivalent (@BELONGS K field MT x U) (@Exists (ELEMENTTYPE K field MS)
+    (fun y => equal (@VALUE K field MS MT f y) x))
 end RelativeMapOracle
 '''
 # Independent abbreviation expansion, never reading generated Lean bodies.
@@ -118,7 +122,7 @@ while 'MAP(' in expected:
     expected=expected[:start]+f'(CHAINMAPTYPE K field {a} {b})'+expected[i+1:]
 substitutions={'THEORY':env.structures['HomologyTheory']['key'],'PAIR':env.structures['TopologicalPair']['key'],
                'INCLUSION':env.structures['PairInclusion']['key']}
-for placeholder,name in [('SINGULAR','singular chains'),('SUBSPACE','subspace'),('RELCHAINS','relative chains'),
+for placeholder,name in [('EQUAL','equal'),('SINGULAR','singular chains'),('SUBSPACE','subspace'),('RELCHAINS','relative chains'),
  ('RELHOMOLOGY','relative homology'),('QUOTIENTPROJ','chain cokernel projection'),('PAIRMAP','pair chain inclusion'),
  ('COMPOSE','compose chain maps'),('AMBIENT','ambient chain map'),('RELATIVE','relative subset chain map'),
  ('QUOTIENTMAP','chain cokernel map'),('HOMOLOGYMAP','induced chain homology map'),('RANGE','module map range'),
@@ -138,7 +142,7 @@ namespace RelativeMapProofs
 theorem pair_chain_commutativity : CleanStatements.pair_chain_commutativity := by
   intro K field H X Q
   letI : Field K := field
-  simp only [COMMUTES, COMPOSE, PAIRMAP, INDUCED, AMBIENT, RELATIVE]
+  simp only [EQUAL, COMMUTES, COMPOSE, PAIRMAP, INDUCED, AMBIENT, RELATIVE]
   rw [← CategoryTheory.Functor.map_comp, ← CategoryTheory.Functor.map_comp]
   rfl
 theorem relative_quotient_maps_commute : CleanStatements.relative_quotient_maps_commute := by

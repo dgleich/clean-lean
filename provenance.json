@@ -6436,6 +6436,18 @@
         "# ",
         ""
       ]
+    },
+    "docs/retained-comparison-scope.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "tests/test_retained_conversion_scope.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

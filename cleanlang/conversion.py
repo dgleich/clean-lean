@@ -59,7 +59,7 @@ def _producer_field(expression,field,env,locals):
     definition=env.definitions.get(tree[1])
     if not definition or definition['implementation']!='equals':return None
     from .operator_bindings import scope_unchanged
-    if not scope_unchanged(env,definition) and not (tree[0]=='ModuleCall' and definition.get('bound_tree') is not None):return None
+    if not scope_unchanged(env,definition) and definition.get('bound_tree') is None:return None
     parameters=env.data['functions'][tree[1]]['signature_tree'][2]
     body=definition.get('bound_tree') or definition['tree']
     bindings=dict(zip((p[1] for p in parameters if p[3]=='explicit'),
@@ -96,10 +96,17 @@ def _normal_form(expression,environment,locals,*,fresh=False):
         return _normal_form(local.local_normal,env,locals) if local.local_expand and not shadowed_globals(env,locals) else local.local_normal
     if kind in ('NumeralAnnotation','BoundNumeral'):return elaborate(tree)
     if kind in ('Decimal','Lambda','Forall','Exists'):return expression
-    if kind=='Operator':return env.operator(tree[1],normal(tree[2]),normal(tree[3]),locals)
-    if kind=='Unary':
+    if kind in ('Operator','Unary'):
+        # Operators are declared calls too. Do not publish a hidden binder as
+        # an authored operand when normalizing a definition inside the call.
+        from .beta_indices import has_binder
+        def operand(tree):
+            actual=elaborate(tree)
+            value=_normal_form(actual,env,locals,fresh=True)
+            return actual if has_binder(value.tree) else value
+        if kind=='Operator':return env.operator(tree[1],operand(tree[2]),operand(tree[3]),locals)
         from .operator_bindings import apply_prefix
-        return apply_prefix(env,tree[1],normal(tree[2]),locals)
+        return apply_prefix(env,tree[1],operand(tree[2]),locals)
     if kind=='Apply':
         f=normal(tree[1]);args=[normal(a) for a in tree[2]]
         result=Expr('('+f.lean+' '+args[0].lean+')',expression.tex,expression.type,
@@ -157,7 +164,7 @@ def _normal_form(expression,environment,locals,*,fresh=False):
     definition=env.definitions.get(name)
     if definition and definition['implementation']=='equals':
         from .operator_bindings import scope_unchanged
-        if not scope_unchanged(env,definition) and not (kind=='ModuleCall' and definition.get('bound_tree') is not None):return checked
+        if not scope_unchanged(env,definition) and definition.get('bound_tree') is None:return checked
         parameters=env.data['functions'][name]['signature_tree'][2]
         implicit={p[1] for p in parameters if p[3]=='implicit'}
         body=definition.get('bound_tree') or definition['tree']

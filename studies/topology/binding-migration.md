@@ -359,3 +359,40 @@ All 92 curated corpus proofs pass. The complete current regression run is pendin
 its previous incomplete attempt was stopped after the implementation changed.
 Research theorem gaps and general universe-polymorphic equality remain open.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+Relative maps now passes ten canonical checks and three proofs on the working
+compiler, retaining declared equality/equivalence in its native expectations.
+The one-page PDF compiled twice without box or unresolved-reference warnings and
+was visually inspected. This brings cumulative migration coverage to fifteen of
+eighteen verifiers (408 summed per-verifier checks and 74 proofs, including
+repeated foundational checks). Earlier verifiers have not all been rerun after
+the latest compiler correction.
+
+Well-group loading exposed an inconsistency between named retained definitions,
+record projection and operator operand normalization. The
+[comparison correction](../../docs/retained-comparison-scope.md) passes 60 focused
+tests. Relative maps passes again after that correction; five independent
+inferred-value native targets and two proofs also pass, as do the 92 corpus
+proofs. Well-group revalidation is still running, with its oracle migration
+prepared but not counted as passing. Shifted perturbations and extreme images
+remain pending. No new claim about the paper theorems is made.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The well-group run above has now finished successfully: 30 canonical targets,
+five new proofs and fifteen supporting proofs pass. The independent expectations
+retain declared equality, subset, equivalence, real order and numeral adapters.
+The suffixed native oracle tokens are local test notation only. The generated
+one-page specimen compiled twice and was visually inspected; its long attribution
+has one underfull-box warning and no unresolved references.
+
+Cumulative migration coverage is now sixteen of eighteen verifiers, 438 summed
+per-verifier target checks and 79 proofs. Supporting proofs rerun by WellGroups
+are not added again to that proof total. Shifted perturbations and extreme images
+remain pending. Earlier verifiers have not all been rerun after this correction.
+The two-image equality remains explicitly unproved; successful certificate and
+membership proofs do not establish that paper theorem.
+:::

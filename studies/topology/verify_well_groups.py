@@ -19,6 +19,9 @@ for oracle,name in [('infimum','module subspace infimum'),('intersection','inter
  ('data','perturbation certificate'),('certified','certified perturbation'),('target','perturbation target'),
  ('inclusion','perturbation pair inclusion'),('image','perturbation homology image'),('well','relative well group')]:
     mapping['WellOracle.'+oracle]=function(name)
+for oracle,name in [('equal','equal'),('subset','set subset'),('equivalent','equivalence'),('atMost','real at most'),('atLeast','real at least')]:
+    mapping['WellOracle.'+oracle]=function(name)
+mapping['WellOracle.numeral']=env.data['types']['Real']['numerals']['native_binding']
 rename='\n'.join(f'  if n == `{a} then return `{b}' for a,b in mapping.items())
 comparison='''
 open Lean Elab Command
@@ -62,21 +65,32 @@ elab "same_target " a:ident b:ident : command => do
 '''
 expected=r'''
 namespace WellOracle
+noncomputable def equal {T : Type} (x y : T) : CONDITIONTYPE := x=y
+noncomputable def subset {T : Type} (A B : SETTYPE T) : CONDITIONTYPE := A ⊆ B
+noncomputable def equivalent (x y : CONDITIONTYPE) : CONDITIONTYPE := x ↔ y
+noncomputable def atMost (x y : REALTYPE) : CONDITIONTYPE := x ≤ y
+noncomputable def atLeast (x y : REALTYPE) : CONDITIONTYPE := x ≥ y
+noncomputable def numeral (digits : Nat) : REALTYPE := (fun n : Nat => (n : Real)) digits
+local infix:50 " =ᵥ " => equal
+local infix:50 " ⊆ᵥ " => subset
+local infix:20 " ↔ᵥ " => equivalent
+local infix:50 " ≤ᵥ " => atMost
+local infix:50 " ≥ᵥ " => atLeast
 noncomputable def infimum {K : Type} (field : FIELDTYPE K) (M : MODULE) (spaces : SETTYPE SUB_M) : SUB_M :=
   letI : Field K := field
   sInf spaces
 noncomputable def intersection {K I : Type} (field : FIELDTYPE K) (M : MODULE) (spaces : I → SUB_M) : SUB_M :=
-  @infimum K field M (@SETOF SUB_M (fun U => @Exists I (fun i => U=spaces i)))
+  @infimum K field M (@SETOF SUB_M (fun U => @Exists I (fun i => U=ᵥspaces i)))
 structure Data (P : PROBLEM) (r : REALTYPE) where
   map : REALMAP
   bounded : @BOUNDED P map r
   nesting : @NESTED P.space (@PERTURBED P map)
-  ambient : CANDIDATE_AMBIENT ⊆ EXPANDED_AMBIENT
-  relative : CANDIDATE_RELATIVE ⊆ EXPANDED_RELATIVE
+  ambient : CANDIDATE_AMBIENT ⊆ᵥ EXPANDED_AMBIENT
+  relative : CANDIDATE_RELATIVE ⊆ᵥ EXPANDED_RELATIVE
 noncomputable def data (P : PROBLEM) (r : REALTYPE) (map : REALMAP)
   (bounded : @BOUNDED P map r) (nesting : @NESTED P.space (@PERTURBED P map))
-  (ambient : CANDIDATE_AMBIENT ⊆ EXPANDED_AMBIENT)
-  (relative : CANDIDATE_RELATIVE ⊆ EXPANDED_RELATIVE) : Data P r :=
+  (ambient : CANDIDATE_AMBIENT ⊆ᵥ EXPANDED_AMBIENT)
+  (relative : CANDIDATE_RELATIVE ⊆ᵥ EXPANDED_RELATIVE) : Data P r :=
   @Data.mk P r map bounded nesting ambient relative
 noncomputable def target (P : PROBLEM) (r : REALTYPE) (nesting : NESTING) : PAIR P.space :=
   @CERTIFY P.space (@EXPANDED P r) nesting
@@ -100,18 +114,18 @@ noncomputable def well {K : Type} (field : FIELDTYPE K) (H : THEORY K field) (P 
 
 def intersectionStatement : Prop := ∀ (K I : CARRIERTYPE) (field : FIELDTYPE K) (M : MODULE) (spaces : I → SUB_M)
   (x : ELEMENTTYPE K field M),
-  @BELONGS K field M x (@intersection K I field M spaces) ↔ ∀ i : I, @BELONGS K field M x (spaces i)
+  @BELONGS K field M x (@intersection K I field M spaces) ↔ᵥ ∀ i : I, @BELONGS K field M x (spaces i)
 def coverageStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE),
-  P.interval.lower ≤ P.interval.upper → r ≥ 0 → ∀ (nesting : NESTING) (h : REALMAP),
-  @BOUNDED P h r → ∃ C : Certified K field H P r nesting, C.data.map=h
+  P.interval.lower ≤ᵥ P.interval.upper → r ≥ᵥ numeral (nat_lit 0) → ∀ (nesting : NESTING) (h : REALMAP),
+  @BOUNDED P h r → ∃ C : Certified K field H P r nesting, C.data.map=ᵥh
 def boundedStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (C : Certified K field H P r nesting), @BOUNDED P C.data.map r
 def independenceStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
-  (nesting : NESTING) (C D : Certified K field H P r nesting), C.data.map=D.data.map →
-  @image K field H P r nesting C = @image K field H P r nesting D
+  (nesting : NESTING) (C D : Certified K field H P r nesting), C.data.map=ᵥD.data.map →
+  @image K field H P r nesting C =ᵥ @image K field H P r nesting D
 def membershipStatement : Prop := ∀ (K : CARRIERTYPE) (field : FIELDTYPE K) (H : THEORY K field) (P : PROBLEM) (r : REALTYPE)
   (nesting : NESTING) (x : ELEMENTTYPE K field TARGET),
-  @BELONGS K field TARGET x (@well K field H P r nesting) ↔
+  @BELONGS K field TARGET x (@well K field H P r nesting) ↔ᵥ
     ∀ C : Certified K field H P r nesting, @BELONGS K field TARGET x (@image K field H P r nesting C)
 end WellOracle
 '''
@@ -134,7 +148,7 @@ for placeholder,name in [('SETOF','set of'),('BOUNDED','bounded perturbation'),(
  ('RELHOMOLOGY','relative homology'),('BELONGS','belongs to module subspace'),('PREIMAGE','inverse image'),
  ('UNDERLYING','underlying real map'),('CLOSED','closed interval'),('SELECTED','selected endpoints'),
  ('EXPANDINTERVAL','expanded interval'),('EXPANDENDPOINTS','expanded endpoints')]:substitutions[placeholder]=function(name)
-for placeholder,name in [('FIELDTYPE','FieldStructure'),('REALTYPE','Real'),('SETTYPE','Set'),
+for placeholder,name in [('CONDITIONTYPE','Proposition'),('FIELDTYPE','FieldStructure'),('REALTYPE','Real'),('SETTYPE','Set'),
  ('CARRIERTYPE','Type'),('ELEMENTTYPE','ModuleElement'),('SUBSPACETYPE','ModuleSubspace'),
  ('MODULETYPE','CoefficientModule'),('REALMAPTYPE','ContinuousRealMap'),('POINTTYPE','Point')]:
     substitutions[placeholder]='_root_.'+env.data['types'][name]['native_binding']

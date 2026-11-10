@@ -2287,6 +2287,38 @@
         "Full regression completion and fixes",
         "Native import/instance isolation and general universe-polymorphic signatures"
       ]
+    },
+    {
+      "id": "retained_comparison_after_later_operators",
+      "status": "partial",
+      "environment": "Explicit topology/basic imports and authored selected/included definitions, then a competing Real equality; docs/retained-comparison-scope.md.",
+      "source": "included(selected(),S)",
+      "expected_tree": [
+        "Call",
+        "included",
+        [
+          [
+            "Call",
+            "selected",
+            []
+          ],
+          [
+            "Local",
+            "S"
+          ]
+        ]
+      ],
+      "expected_lean": "Emits the declared included constant applied to the declared selected constant and S. Comparison agrees with selected() subset S while preserving the hidden-binder operand boundary. Eligible retained record projection selects the original constructor field.",
+      "checks": [
+        "tests/test_retained_conversion_scope.py (five cases, including target spelling and negatives)",
+        "studies/topology/verify_relative_maps.py (ten canonical targets and three proofs)",
+        "studies/topology/verify_well_groups.py (30 canonical targets, five new and fifteen supporting proofs)"
+      ],
+      "pending": [
+        "Current full regression result and fixes",
+        "Independent native checks of all comparison interactions",
+        "Complete native binding isolation and conformance"
+      ]
     }
   ]
 }
