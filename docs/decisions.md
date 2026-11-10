@@ -1163,3 +1163,14 @@ special-case type names. The joint constraint/default calculus for unannotated
 uses remains an acceptance blocker. This is not implemented or claimed fully
 specified; the current closed-carrier numeral rules are unchanged.
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The proposed [parameterized-literal result-pattern calculus](parameterized-literals.md#determined-carrier-pattern-calculus)
+now defines direct parameter recovery, first-occurrence representatives,
+telescope-order checking and deferred computed-index obligations. An isolated
+symbolic model passes twenty tests. This is design evidence only: production
+pattern construction, declaration checking, binding and joint inference remain
+unimplemented. No existing Clean syntax or literal interpretation changes.
+:::

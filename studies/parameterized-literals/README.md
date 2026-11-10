@@ -18,3 +18,26 @@ zero, default interaction, binding consumers and canonical target checks remain
 pending. Completing annotated zeros alone would not complete the required
 ordinary form `x != 0`.
 :::
+
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Determined-carrier pattern model
+
+`pattern_model.py` executes the proposed direct-recovery matching phases over a
+separate symbolic representation. Run:
+
+```sh
+python3 -m unittest discover -s studies/parameterized-literals -p test_pattern_model.py -v
+```
+
+Twenty tests pass. They cover vector and rectangular/square matrix shapes,
+identity-based naming, computed constraints deferred until recovery, invalid
+attachment parameters, ordered dependent typing and incomplete/error propagation.
+Callbacks stand for already checked type comparison, expression evaluation and
+parameter typing; the tests do not establish those callbacks for real Clean.
+
+This is design evidence for one component. It does not parse `Literal`, generate
+Lean, infer unannotated zeros, apply defaults, or check the native wrapper. The
+compiler imports none of this code. The full extension remains unimplemented.
+:::

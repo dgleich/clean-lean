@@ -73,10 +73,86 @@ although its ordinary named constructor may still be usable with explicit argume
 Transparent Clean aliases use their existing declaration-bound expansion; arbitrary
 Lean definitional equality does not make two nominal Clean carriers interchangeable.
 
-This rule needs a formal pattern grammar and an eligibility checker. Dependent
-function results, carrier projections and arbitrary universe-polymorphic outputs
-remain outside this proposed first implementation; they are not silently inferred.
-The general literal-family design must not claim those cases are complete.
+The result-pattern calculus below specifies direct recovery for determined
+carriers. Its conversion from checked Clean types and its production eligibility
+checker remain unimplemented. Dependent function results, carrier projections and
+arbitrary universe-polymorphic outputs remain outside this proposed first
+implementation; they are not silently inferred. The general literal-family
+design must not claim those cases are complete.
+
+### Determined-carrier pattern calculus
+
+The pattern language is an internal semantic representation, not new authored
+syntax. All names below are declaration or local binding identities, never display
+names. Normalize permitted transparent aliases using the existing bound type
+expansion before constructing a pattern. Preserve nominal carrier identities.
+
+```text
+pattern ::= Constructor(identity, pattern*)
+          | Parameter(formal_identity)
+          | Fixed(checked_closed_term)
+          | Check(bound_expression_identity, formal_identity*)
+```
+
+`Constructor` represents a declared carrier application with its ordered slots;
+its identity determines each slot's sort. A `Parameter` occupies one complete
+slot. `Fixed` contains no declaration formal. `Check` represents an index
+expression whose formal dependencies are explicit; evaluating it substitutes
+already recovered actuals into its bound expression. It is never an inverse
+operation. This first calculus requires a Constructor at the result root. A bare
+formal result type, function result type or projected result carrier needs an
+additional specified rule and is not accepted by this calculus.
+
+The checked declaration supplies a distinct-identity parameter telescope
+`p₁:T₁, …, pₖ:Tₖ`, with each type depending only on earlier formals. Every formal
+must occur as a Parameter somewhere in the result; occurrences solely inside
+Check do not count. Every Parameter and Check dependency must refer to that
+telescope. No undeclared formal, missing direct occurrence or duplicate formal
+identity is eligible. Structural slot validation and telescope well-formedness
+are declaration-checking prerequisites, not tasks delegated to a literal use.
+
+Matching takes a fully determined caller carrier—no inference metavariables—and
+has the following fixed phases:
+
+1. Traverse corresponding Constructor nodes depth-first, left-to-right. Different
+   identities or arities refute the match. At the first direct occurrence of each
+   formal, record the actual slot term, including its caller binding identity.
+   Later occurrences add equality obligations; they do not replace that first
+   representative. Fixed adds an equality obligation. Check saves a deferred
+   obligation without evaluating or recovering anything.
+2. In declaration telescope order, check each recovered term against its formal
+   type after capture-free substitution of the earlier recovered terms. All
+   parameters must be checked, including parameters absent from a native body.
+3. Discharge the repeated and fixed equations with the existing specified
+   type/index comparison, in traversal order. Evaluate each deferred Check by
+   substituting its ordered dependencies, then compare its determined result
+   with the corresponding actual slot. Check obligations are discharged in
+   traversal order after the other equations.
+4. On success return the recovered terms in declaration telescope order, not
+   result traversal order. These are the arguments of the literal constructor's
+   fully explicit native call. The first occurrence rule fixes the representative
+   even when two actual spellings compare equal.
+
+A disproved equation or ill-typed recovered argument refutes that candidate.
+An incomplete comparison, unsupported conversion or exhausted computation remains
+incomplete analysis; it cannot refute a competing constructor. Invalid environment
+errors propagate. This deterministic order also fixes which diagnostic is reported
+first; it gives no interpretation priority to declarations.
+
+For example, a pattern with slots `Check(successor,n), Parameter(n)` can recover n
+from its second slot before checking the first. The single-slot pattern
+`Check(successor,n)` is ineligible: it cannot recover n by arithmetic inversion.
+A matrix pattern with two `Parameter(n)` slots checks squareness without guessing
+an alternative dimension. Formal n and caller n are different identities, so
+matching retains the caller's term rather than capturing it.
+
+An [executable design model](../studies/parameterized-literals/pattern_model.py)
+implements these phases over a deliberately separate symbolic representation.
+Its twenty tests cover positive, negative, dependent-telescope and incomplete
+cases. It is not a production eligibility checker, a Clean AST adapter, a proof
+of the comparison oracle, or canonical Lean-target evidence. Joint inference
+below still needs a separate calculus; this matcher only consumes determined
+carriers and must not be used to discard unresolved families.
 
 ## Explicit annotations and a constructive Lean target
 
