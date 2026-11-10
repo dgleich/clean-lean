@@ -1,0 +1,35 @@
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+-- Independently authored target shapes. Uppercase tokens name explicit declarations.
+namespace GenericOracle
+noncomputable def value {A : Type} (S : SET A) (x : EL A S) : A := x.val
+noncomputable def member {A : Type} (S : SET A) (x : EL A S) : MEM (VALUE S x) S := x.property
+noncomputable def element {A : Type} (S : SET A) (x : A) (h : MEM x S) : EL A S := Subtype.mk x h
+noncomputable def supportConstructor {A : Type} {S T : SET A} {U : SET (EL A S)}
+ (survives : ∀ x : EL A T, MEM (VALUE T x) S)
+ (active : ∀ x : EL A T, MEM (ELEMENT S (VALUE T x) (survives x)) U)
+ (original : ∀ y : EL (EL A S) U, MEM (VALUE S (VALUE U y)) T) : SUPPORT A S T U :=
+ ⟨survives,active,original⟩
+noncomputable def genericForward (A : TYPE) (S T : SET A) (U : SET (EL A S))
+ (support : SUPPORT A S T U) (x : EL A T) : EL (EL A S) U :=
+ ELEMENT U (ELEMENT S (VALUE T x) (support.survives x)) (support.active x)
+noncomputable def genericBackward (A : TYPE) (S T : SET A) (U : SET (EL A S))
+ (support : SUPPORT A S T U) (y : EL (EL A S) U) : EL A T :=
+ ELEMENT T (VALUE S (VALUE U y)) (support.original y)
+noncomputable def genericEquivalence (A : TYPE) (S T : SET A) (U : SET (EL A S))
+ (support : SUPPORT A S T U)
+ (left : ∀ x : EL A T, EQ (GBACKWARD A S T U support (GFORWARD A S T U support x)) x)
+ (right : ∀ y : EL (EL A S) U, EQ (GFORWARD A S T U support (GBACKWARD A S T U support y)) y) :
+ EQUIVALENCE (EL A T) (EL (EL A S) U) :=
+ EQUIV (EL A T) (EL (EL A S) U)
+   (fun x => GFORWARD A S T U support x) (fun y => GBACKWARD A S T U support y) left right
+
+def leftStatement : Prop := ∀ (A : TYPE) (S T : SET A) (U : SET (EL A S))
+ (support : SUPPORT A S T U) (x : EL A T), EQ (GBACKWARD A S T U support (GFORWARD A S T U support x)) x
+def rightStatement : Prop := ∀ (A : TYPE) (S T : SET A) (U : SET (EL A S))
+ (support : SUPPORT A S T U) (y : EL (EL A S) U), EQ (GFORWARD A S T U support (GBACKWARD A S T U support y)) y
+def existsStatement : Prop := ∀ (A : TYPE) (S T : SET A) (U : SET (EL A S))
+ (support : SUPPORT A S T U), ∃ e : EQUIVALENCE (EL A T) (EL (EL A S) U),
+ ∀ x : EL A T, EQ (VALUE S (VALUE U (EVAL e x))) (VALUE T x)
+end GenericOracle
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -135,3 +135,10 @@ must not reapply its patch to the integrated compiler. Run the working tests and
 `tools/check_pruned_numeral_targets.py` directly for current evidence. The added
 five tests are production acceptance checks, not part of that historical patch.
 :::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+The current integrated revision now passes all 18 topology verifiers in addition
+to its focused and 92-proof corpus checks. Full regression and the specialized
+active-label translation remain running; neither is counted as passed.
+:::

@@ -28,8 +28,9 @@ equivalence given the explicit support record. Run
 three Lean proofs pass. The constructor oracle checks implicit parameter metadata
 as well as the dependent field types. Five Python checks cover carriers, wrong-set
 evidence, direction, field layout and authored bodies. The one-page `Generic.pdf`
-was compiled twice and inspected. Expected native expressions are shared literal
-oracles in `verify.py`; they are not derived from generated targets.
+was compiled twice and inspected. Expected generic native expressions are independently authored in
+[GenericOracle.lean.in](GenericOracle.lean.in); they are not derived from generated
+targets. The interval driver retains a separate pending oracle.
 
 ## Checked arithmetic construction
 
@@ -92,4 +93,30 @@ exact Clean target comparisons and proofs of both generated statements. Its
 assembly uses separately checked vanishing and edge-compatibility results. The
 pyramid theorem and the full canonical check of this module's specialized maps
 remain unfinished.
+:::
+
+:::llm gpt-6 2026-11-10 role=assisted
+
+## Current generic verification
+
+The generic driver has been migrated to the explicit native wrapper model.
+It substitutes only declaration identifiers into independently authored expected
+expressions. The oracle retains the declared set, element, equivalence, membership,
+equality and carrier-of-types wrappers, and distinguishes implicit native carrier
+parameters from authored explicit carrier parameters. Constructor parameter
+metadata is still compared structurally; the check was not weakened to
+normalization or definitional equality.
+
+The old driver failed on root-qualified identifier lookup and on expected raw Lean
+types/relations. The migrated driver now passes all ten canonical comparisons and
+three round-trip/equivalence proofs and five related Python tests directly on
+the current compiler. The regenerated
+one-page Generic PDF builds in two passes and has been inspected. No Clean
+mathematical definition or theorem assumption was changed for this migration.
+
+The current full regression and interval-specific translation are separate live
+jobs. Their outcomes are pending; historical references above to earlier running
+jobs are not evidence about these new runs. The current interval source still
+must produce its complete Generated.lean artifact before its specialized canonical
+expectations and arithmetic proofs can be migrated and checked.
 :::

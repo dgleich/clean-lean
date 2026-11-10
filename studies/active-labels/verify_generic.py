@@ -6,25 +6,15 @@ sys.path.insert(0,str(ROOT))
 from cleanlang.core import Environment,lean,latex
 from cleanlang.modules import load_document
 e=Environment();rs=load_document(HERE/'Generic.clean',e)
-f=lambda n:e.data['functions'][n]['lean'].split()[0]
+f=lambda n:e.data['functions'][n]['native_binding']
 s=lean(rs,e,['Lean']);(HERE/'GenericGenerated.lean').write_text(s);(HERE/'Generic.tex').write_text(latex(rs,e))
 keys={k:f(v) for k,v in [('VALUE','element value'),('MEMBER','element membership'),('ELEMENT','element from membership'),('GFORWARD','restrict element'),('GBACKWARD','restore element'),('GEQUIV','subtype restriction equivalence'),('EQUIV','equivalence'),('EVAL','equivalence forward')]}
 keys['SUPPORT']=e.structures['SubtypeRestrictionSupport']['key']
-# These literal oracles are independently authored, shared with the interval check.
-module=ast.parse((HERE/'verify.py').read_text())
-expected=next(ast.literal_eval(n.value) for n in module.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='expected' for t in n.targets))
-primitive=expected[expected.index('noncomputable def value'):expected.index('noncomputable def old')]
-generic=expected[expected.index('noncomputable def supportConstructor'):expected.index('noncomputable def forward')]
-expected='\nnamespace GenericOracle\n'+primitive+generic+r'''
-def leftStatement : Prop := ∀ (A : Type) (S T : Set A) (U : Set {i : A // i ∈ S})
- (support : SUPPORT A S T U) (x : {i : A // i ∈ T}), GBACKWARD A S T U support (GFORWARD A S T U support x) = x
-def rightStatement : Prop := ∀ (A : Type) (S T : Set A) (U : Set {i : A // i ∈ S})
- (support : SUPPORT A S T U) (y : {j : {i : A // i ∈ S} // j ∈ U}), GFORWARD A S T U support (GBACKWARD A S T U support y) = y
-def existsStatement : Prop := ∀ (A : Type) (S T : Set A) (U : Set {i : A // i ∈ S})
- (support : SUPPORT A S T U), ∃ e : {i : A // i ∈ T} ≃ {j : {i : A // i ∈ S} // j ∈ U},
- ∀ x : {i : A // i ∈ T}, VALUE S (VALUE U (EVAL e x)) = VALUE T x
-end GenericOracle
-'''
+# Target shapes are authored independently; no generated term is used as an oracle.
+keys.update({k:e.data['types'][v]['native_binding'] for k,v in
+             [('TYPE','Type'),('SET','Set'),('EL','Element'),('EQUIVALENCE','Equivalence')]})
+keys.update(MEM=f('set member'),EQ=f('equal'))
+expected=(HERE/'GenericOracle.lean.in').read_text()
 comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_basic_targets.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))
 pairs=[(f(n),v) for n,v in [('element value','value'),('element membership','member'),('element from membership','element'),('restrict element','genericForward'),('restore element','genericBackward'),('subtype restriction equivalence','genericEquivalence')]]
 pairs += [('CleanStatements.'+n,v) for n,v in [('restore_a_restricted_element','leftStatement'),('restrict_a_restored_element','rightStatement'),('supported_sets_correspond','existsStatement')]]
