@@ -1049,6 +1049,18 @@ same_basic_target actualInstantiatedVectorLiteral expectedInstantiatedVectorLite
 theorem meaningInstantiatedVectorLiteral (n : cleanType_Natural_469c53b6dafb7a218246) : actualInstantiatedVectorLiteral n = expectedInstantiatedVectorLiteral n := by rfl
 
 
+def actualRecoveredBinderCarrier : Type := (clean_pi_bound_8 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (clean_pi_bound_8) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))))
+def expectedRecoveredBinderCarrier : Type := (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 k cleanType_Complex_2d7f06a08f8ab1e3f46d
+same_basic_target actualRecoveredBinderCarrier expectedRecoveredBinderCarrier
+theorem meaningRecoveredBinderCarrier : actualRecoveredBinderCarrier = expectedRecoveredBinderCarrier := by rfl
+
+
+def actualRecoveredBinderIndex : Type := (clean_pi_bound_8 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Matrix_4518cbfc13ff70fc0769 (clean_pi_bound_8) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))))
+def expectedRecoveredBinderIndex : Type := (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Matrix_4518cbfc13ff70fc0769 k (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)) cleanType_Complex_2d7f06a08f8ab1e3f46d
+same_basic_target actualRecoveredBinderIndex expectedRecoveredBinderIndex
+theorem meaningRecoveredBinderIndex : actualRecoveredBinderIndex = expectedRecoveredBinderIndex := by rfl
+
+
 def actualQuantifiedZero (n : cleanType_Natural_469c53b6dafb7a218246) : Prop := (∀ (clean_bound_0 : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (n) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))), (_root_.cleanDefine_unequal_37c577a540f8692ae5c3 (clean_bound_0) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n)))))
 def expectedQuantifiedZero (n : cleanType_Natural_469c53b6dafb7a218246) : Prop :=
   ∀ z : cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d, @cleanDefine_unequal_37c577a540f8692ae5c3 (cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) z (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)

@@ -1645,5 +1645,16 @@ the original declaration and its arguments. See the
 <a href="../studies/parameterized-literals/README.md#literal-payloads-containing-bound-indices">mapping and limits</a>.
 Joint and production integration remain pending.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="outer-binder-constraints">
+<h2>Outer parameter constraints under binders (experimental model)</h2>
+<p>Comparing <code>Function(k: Natural,Vector(k,T))</code> with
+<code>Function(j: Natural,Vector(j,Complex))</code> can recover the outer T as
+Complex. In expanded Lean form the constraint is between
+<code>(k : Nat) → Fin k → T</code> and <code>(j : Nat) → Fin j → Complex</code>.
+The caller must explicitly identify which outer parameters are unknown. A solution
+cannot capture the inner k, and reconstruction rechecks the resulting type. See the
+<a href="../studies/parameterized-literals/README.md#outer-parameter-constraints-under-dependent-binders">model mapping and limits</a>.
+The Clean row builder and production inference do not use this bridge yet.</p>
+</section></llm>
 </body>
 </html>

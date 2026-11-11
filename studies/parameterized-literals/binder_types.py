@@ -12,7 +12,7 @@ class CheckedBinderTypes:
     """One fixed explicit environment and caller scope, with retained atom evidence."""
     def __init__(self,env,scope,*,limit=4096):
         if type(limit) is not int or limit<1:raise ValueError('Positive binder type traversal limit required')
-        self.env=env;self.scope=dict(scope);self.limit=limit;self.atoms={};self.names={};self.templates={}
+        self.env=env;self.scope=dict(scope);self.limit=limit;self.atoms={};self.names={};self.templates={};self.formals={}
         for name,spec in env.data['types'].items():
             key=spec.get('native_binding') or env.structures.get(name,{}).get('key')
             if key is None:continue
@@ -23,9 +23,17 @@ class CheckedBinderTypes:
         self.visits+=1
         if self.visits>self.limit:raise Incomplete('Checked binder type traversal limit exceeded')
 
-    def encode(self,typ):
-        self.visits=0
+    def encode(self,typ,formals=None):
+        self.visits=0;self.formals=dict(formals or {})
         try:
+            for name,variable in self.formals.items():
+                if not isinstance(variable,Variable) or name not in self.scope:
+                    raise Incomplete('Formal constraint requires a declared caller local and variable')
+                classifier=self.env.classifier_info(self.scope[name].type)
+                if classifier is not None and classifier[1]!=0:
+                    raise Incomplete('Higher formal classifier remains unsupported')
+                expected='type' if classifier is not None else 'index'
+                if variable.sort!=expected:raise Incomplete('Formal constraint has the wrong sort')
             self.env.require_type_argument(typ,0)
             result=self._encode(typ,self.scope,{},())
             well_scoped(result,limit=self.limit)
@@ -34,6 +42,8 @@ class CheckedBinderTypes:
 
     def _encode(self,typ,scope,locals,path):
         self.tick();builder=Builder(self.env,scope,self.limit,binder_ids=locals)
+        if isinstance(typ,(LocalType,ValueIndex)) and typ.name in self.formals and typ.name not in locals:
+            return self.formals[typ.name]
         if isinstance(typ,DependentFunctionType):
             self.env.require_type_argument(typ,0)
             domain=self._encode(typ.domain,scope,locals,path+(0,))
@@ -48,7 +58,10 @@ class CheckedBinderTypes:
             name=tree[1] if tree[0]=='Local' else None
             if name in locals:return Reference(locals[name],'index')
             checked=reify(typ,self.env,scope)
-            if builder.dependencies(checked,normalize=False):
+            from cleanlang.annotations import references
+            formal_references=references(checked,scope)|references(checked.type,scope)
+            for _,inferred in checked.inferred_args:formal_references.update(references(inferred,scope))
+            if builder.dependencies(checked,normalize=False) or formal_references.intersection(self.formals):
                 return self._encode_expression(checked,scope,locals,path)
             atom=Atom(repr(('retained index',typ.comparison_key(),dumps(index_tree(typ)))),'index')
             self.atoms.setdefault(atom,typ)
@@ -149,6 +162,7 @@ class CheckedBinderTypes:
             actual=Expressions(self.env,self.scope).elaborate(argument.tree)
             if actual.type!=domain:raise NoSolution('Dependent function argument has the wrong domain')
             value=index_value(actual,self.env,self.scope,_fresh=True)
+            self.formals={}
             encoded=self._encode(value,self.scope,{},('argument',))
             return self.decode(instantiate(term,encoded,limit=self.limit))
         except (CleanError,RecursionError) as error:raise Incomplete('Typed binder instantiation unavailable: '+str(error)) from error

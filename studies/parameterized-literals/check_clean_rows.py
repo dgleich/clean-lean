@@ -600,6 +600,22 @@ noncomputable def expected{name} {parameters} : Type := {expected}
 same_basic_target actual{name} expected{name}
 theorem meaning{name} {parameters} : actual{name}{' n' if parameters else ''} = expected{name}{' n' if parameters else ''} := by rfl
 """)
+from constraint_model import Variable,unify,resolve
+formal_scope={**scope,'T':Expr('T','T',env.type('Type'),tree=['Local','T'])}
+for name,left_source,right_source,formals,expected in [
+ ('RecoveredBinderCarrier','Function(k: Natural,Vector(k,T))','Function(j: Natural,Vector(j,Complex))',{'T':Variable('outer T','type')},f"(k : {t('Natural')}) → {t('Vector')} k {t('Complex')}"),
+ ('RecoveredBinderIndex','Function(k: Natural,Matrix(k,n,Complex))','Function(j: Natural,Matrix(j,1,Complex))',{'n':Variable('outer n','index')},f"(k : {t('Natural')}) → {t('Matrix')} k ({one}) {t('Complex')}")]:
+ codec=CheckedBinderTypes(env,formal_scope)
+ left=codec.encode(env.type(left_source,formal_scope),formals)
+ right=codec.encode(env.type(right_source,formal_scope))
+ bindings=unify([(left,right)])
+ actual=codec.decode(resolve(left,bindings))
+ checks.append(f"""
+def actual{name} : Type := {env.render_type(actual,'lean',formal_scope)}
+def expected{name} : Type := {expected}
+same_basic_target actual{name} expected{name}
+theorem meaning{name} : actual{name} = expected{name} := by rfl
+""")
 source='for every (z: Vector(n,Complex), z != 0)'
 value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
 checks.append(f"""
@@ -647,6 +663,6 @@ theorem meaningScopedCarrier : actualScopedCarrier := by
 """)
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Eighty-eight experimental targets and eighty-eight meaning proofs passed; production joint inference remains unimplemented.')
+print('Ninety experimental targets and ninety meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

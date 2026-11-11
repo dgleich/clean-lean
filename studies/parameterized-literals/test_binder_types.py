@@ -171,3 +171,50 @@ class CheckedBinderTypeBridge(unittest.TestCase):
   codec=self.codec();term=codec.encode(self.literal_index())
   self.env.data['functions']['complex vector zero']['literal']['digits']='1'
   with self.assertRaises(Incomplete):codec.decode(term)
+
+ def type_parameter(self):
+  self.scope['T']=Expr('T','T',self.env.type('Type'),tree=['Local','T'])
+  return Variable('outer T','type')
+ def test_solve_outer_type_parameter_under_dependent_binder(self):
+  from constraint_model import unify,resolve
+  variable=self.type_parameter();codec=self.codec()
+  left=codec.encode(self.env.type('Function(k: Natural,Vector(k,T))',self.scope),{'T':variable})
+  right=codec.encode(self.env.type('Function(j: Natural,Vector(j,Complex))',self.scope))
+  bindings=unify([(left,right)])
+  self.assertEqual(codec.decode(bindings[variable]),self.env.type('Complex'))
+  self.assertEqual(codec.decode(resolve(left,bindings)),codec.decode(right))
+ def test_solve_outer_index_parameter_under_dependent_binder(self):
+  from constraint_model import unify,resolve
+  codec=self.codec();variable=Variable('outer n','index')
+  left=codec.encode(self.env.type('Function(k: Natural,Matrix(k,n,Complex))',self.scope),{'n':variable})
+  right=codec.encode(self.env.type('Function(j: Natural,Matrix(j,3,Complex))',self.scope))
+  bindings=unify([(left,right)])
+  self.assertEqual(codec.decode(resolve(left,bindings)),codec.decode(right))
+ def test_outer_parameter_cannot_capture_bound_index(self):
+  from constraint_model import unify
+  codec=self.codec();variable=Variable('outer n','index')
+  left=codec.encode(self.env.type('Function(k: Natural,Matrix(k,n,Complex))',self.scope),{'n':variable})
+  right=codec.encode(self.env.type('Function(k: Natural,Matrix(k,k,Complex))',self.scope))
+  with self.assertRaises(NoSolution):unify([(left,right)])
+ def test_formal_parameter_sort_and_scope_are_checked(self):
+  codec=self.codec();typ=self.env.type('Vector(n,Complex)',self.scope)
+  for mapping in [{'n':Variable('n','type')},{'missing':Variable('n','index')}]:
+   with self.subTest(mapping=mapping),self.assertRaises(Incomplete):codec.encode(typ,mapping)
+
+ def test_computed_formal_is_exposed_without_inverse_inference(self):
+  from constraint_model import unify,variables,resolve
+  codec=self.codec();variable=Variable('outer n','index')
+  typ=self.env.type('Function(k: Natural,Matrix(k,(n+1),Complex))',self.scope)
+  left=codec.encode(typ,{'n':variable})
+  right=codec.encode(self.env.type('Function(k: Natural,Matrix(k,(3+1),Complex))',self.scope))
+  self.assertIn(variable,variables(left))
+  with self.assertRaises(Incomplete):unify([(left,right)])
+  # Once another constraint fixes n, reconstruction checks the selected operation.
+  three=codec.encode(self.env.type('Vector(3,Complex)',self.scope)).arguments[0]
+  self.assertEqual(codec.decode(resolve(left,{variable:three})),codec.decode(right))
+
+ def test_formal_hidden_in_fixed_operand_type_is_not_frozen(self):
+  notation('Notation count vector(x):',['Let n: Natural','Let x: Vector(n,Complex)','Returns: Natural','Means: 0','Render latex: count({x})'],self.env)
+  self.scope['x']=Expr('x','x',self.env.type('Vector(n,Complex)',self.scope),tree=['Local','x'])
+  typ=self.env.type('Vector((count vector(x)),Complex)',self.scope)
+  with self.assertRaises(Incomplete):self.codec().encode(typ,{'n':Variable('n','index')})

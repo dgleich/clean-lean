@@ -4043,6 +4043,22 @@
         "Embedded lambda inference",
         "Joint and production integration"
       ]
+    },
+    {
+      "id": "experimental_outer_binder_parameter_constraints",
+      "status": "experimental-slice",
+      "source": "Function(k: Natural,Vector(k,T)) = Function(j: Natural,Vector(j,Complex)) with T explicitly unknown",
+      "checks": [
+        "studies/parameterized-literals/test_binder_types.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Sort and scope explicit outer formal variables; expose computed dependencies; reconstruct resolved solutions; two independent native targets",
+      "pending": [
+        "Contextual metavariables",
+        "Checked conversion of unequal retained expressions",
+        "Embedded lambda inference",
+        "Clean row builder and production integration"
+      ]
     }
   ]
 }

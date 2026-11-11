@@ -2100,3 +2100,51 @@ Validation: 352 experimental Python tests, 88 exact native-target comparisons an
 88 supporting proofs pass. Full production validation remains a separate pending
 check; these results do not establish production joint-inference conformance.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Outer parameter constraints under dependent binders
+
+The checked type bridge accepts an explicit per-encoding map from caller local
+names to symbolic variables. Each name must exist in the fixed caller scope; a
+closed Type-0 classifier parameter requires a type variable, and other parameters
+require index variables. Higher classifier parameters are incomplete. This map
+is supplied by the caller, never inferred from an identifier's spelling.
+
+Direct LocalType and ValueIndex references to mapped outer parameters become the
+corresponding variables. Fresh inner binder names avoid caller locals, so the
+usual abstraction rule closes only actual inner references. Computed expressions
+are traversed when they reference either an opened binder or a mapped formal;
+including dependencies in result types and inferred arguments. A fixed operand
+whose type depends on an unknown formal currently reports incomplete; it must not
+be frozen as an independent atom. Otherwise an opaque index atom could accidentally
+hide an unsolved formal. The
+mapping is reset on each encode call, and typed application clears it before
+encoding the concrete argument.
+
+For example, equating `Function(k: Natural,Vector(k,T))` with
+`Function(j: Natural,Vector(j,Complex))` recovers T=Complex. Equating
+`Function(k: Natural,Matrix(k,n,Complex))` with
+`Function(j: Natural,Matrix(j,3,Complex))` recovers n=3. The bridge's structural
+output feeds the existing symbolic unifier; resolving its assignments and decoding
+the result rechecks carrier telescopes and retained expression evidence.
+
+An outer n cannot be solved by the inner k: the resulting dangling bound reference
+is rejected by scope checking. Computed n+1 exposes n but does not permit inverse
+inference. If another constraint supplies n, reconstruction checks the substituted
+expression. This is not a contextual metavariable implementation: unknowns allowed
+to depend on a binder still need explicit substitutions and scope-aware solving.
+Unsolved terms remain incomplete at reconstruction. Symbolic assignments alone do
+not certify type correctness; successful checked reconstruction is required.
+
+Two independent native targets cover recovered outer carrier and index parameters.
+Python checks include scope escape, wrong formal sorts, missing caller locals and
+computed-formal preservation. This connects the binder bridge to the standalone
+constraint model. The Clean row builder still uses its existing rigid/forward
+representation, and production integration and embedded lambda inference remain
+pending; this does not claim either is complete.
+
+Validation: all 358 experimental Python tests pass, with 90 exact native-target
+comparisons and 90 supporting proofs. The two new native checks reconstruct solved
+dependent types; they do not validate production candidate enumeration.
+:::

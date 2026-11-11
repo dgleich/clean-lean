@@ -2209,3 +2209,18 @@ compares inferred arguments and the result carrier. See the
 This changes neither the source grammar nor production literal selection. It does
 not license injective decomposition of literal expressions during unification.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental outer parameters under binders
+
+The checked type bridge can replace explicitly mapped caller parameters with
+sorted symbolic variables before binder abstraction. It traverses computed formal
+references rather than hiding them in opaque atoms. Solving structural binder
+constraints can recover outer type/index parameters; checked reconstruction must
+validate the result. Scope escape is rejected and computed operations are not
+assumed injective. See the
+[construction and boundaries](../studies/parameterized-literals/README.md#outer-parameter-constraints-under-dependent-binders).
+This connects the representation to the standalone model, not the production or
+Clean-row inference path. Contextual metavariables remain unimplemented.
+:::
