@@ -1609,9 +1609,21 @@ constraint. These operations are not yet wired into Clean translation. See the
 <code>(k : Nat) → Fin k → Complex</code>. Exact native checks retain the declared
 Natural, Vector, and Complex wrappers around this shape. Nested dependent types
 and caller dimensions also round-trip. Typed instantiation checks the argument's
-domain first. Computed bound indices such as k+1 still require structural expression
-lowering. This bridge is not yet the joint-inference or production path. See the
+domain first. The <a href="#computed-bound-index-bridge">computed-index extension
+below</a> adds structural expression lowering for cases such as k+1. This bridge
+is not yet the joint-inference or production path. See the
 <a href="../studies/parameterized-literals/README.md#checked-binder-type-bridge">mapping and validation boundary</a>.</p>
+</section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="computed-bound-index-bridge">
+<h2>Computed bound indices (experimental bridge)</h2>
+<p><code>Function(k: Natural,Vector((k+1),Complex))</code> can now round-trip
+through the symbolic binder representation. Its expanded Lean shape is
+<code>(k : Nat) → Fin (k+1) → Complex</code>; exact targets retain the selected
+addition, numeral, and type wrappers. Calls, applications, and record projections
+retain their operands and inferred arguments. Equality of their results does not
+justify solving their operands by injectivity. See the
+<a href="../studies/parameterized-literals/README.md#retained-computed-expressions-under-type-binders">representation and reconstruction contract</a>.
+This bridge remains separate from joint and production inference.</p>
 </section></llm>
 </body>
 </html>

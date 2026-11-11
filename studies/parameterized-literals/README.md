@@ -1970,3 +1970,58 @@ Computed bound expressions, contextual metavariables, higher-universe binders,
 embedded lambda inference, and integration with joint/production inference remain
 pending. The six native checks validate this bridge only, not those missing paths.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Retained computed expressions under type binders
+
+The checked binder-type bridge now supports computed indices containing selected
+module calls/operators, ordinary applications, and record projections. For example,
+`Function(k: Natural,Vector((k+1),Complex))` retains the declared addition and
+numeral wrappers while exposing k as a structural bound reference. Nested
+`j+k`, a bound callback `f(k)`, and a bound record projection `p.size` also work.
+
+A checked expression is closed over its selected module bindings first. The codec
+captures a template containing its constructor, selected target and presentation,
+operand count, and ordered inferred-argument names. Operand expressions, inferred
+argument types/indices, and result type become explicit children of an
+`IndexExpression` node. Its identity contains no substituted bound-local spelling.
+Direct local references and recursive computed operands pass through the existing
+binder abstraction rule. Closed operands keep their retained source evidence.
+The template is private checked evidence in the codec's fixed environment.
+
+Reconstruction restores operand source trees from checked representatives, invokes
+the captured call/application/projection, and checks its result type and every
+inferred argument against the reconstructed expected metadata. Changed selected
+operations, absent templates, wrong operand counts, or changed inferred/result
+types are incomplete. It does not trust an old expression payload. Authored calls
+whose mathematical value ignores an argument still retain that argument in their
+native target rather than being normalized away for emission.
+
+The symbolic model traverses IndexExpression children during abstraction,
+instantiation, substitution, occurs checks, and scope checks. It does **not**
+decompose unequal expression nodes as injective constructors during unification.
+Their comparison requires checked conversion and is incomplete at the standalone
+model boundary. In particular, equality of `ignore(n)` and `ignore(m)` cannot
+recover n=m. Exact equal representations may agree, and a whole expression can
+be assigned to a metavariable subject to the usual scope constraints. This
+separates retained syntax from arithmetic or function-injectivity reasoning.
+
+Seven new independent native targets cover bound addition, nested addition,
+callback application, projection, inferred type arguments, an ignored authored
+argument, and typed instantiation of a computed index. Existing targets remain
+regressions. Python cases additionally check alpha stability, operation changes,
+and deliberately altered inferred/result metadata.
+
+Computed indices already reject source binders in the production compiler. The
+codec additionally reports incomplete for bound type-value annotations and bound
+literal payloads it cannot yet expose structurally. Contextual metavariables,
+embedded lambda inference, higher-universe binders, and joint/production integration
+remain pending. This is still a separate representation bridge, not a new global
+inference policy or a complete definitional-equality procedure.
+
+Validation: 346 experimental Python tests pass, together with 84 independent
+native target comparisons and 84 supporting proofs. These include the seven new
+computed-index cases above. Production full discovery and active-label regeneration
+were confirmed running on 2026-11-11; neither is counted as a completed check.
+:::

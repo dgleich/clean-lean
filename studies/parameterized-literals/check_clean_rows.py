@@ -547,6 +547,35 @@ def expectedInstantiatedBinderType (n : {t('Natural')}) : Type := {t('Vector')} 
 same_basic_target actualInstantiatedBinderType expectedInstantiatedBinderType
 theorem meaningInstantiatedBinderType (n : {t('Natural')}) : actualInstantiatedBinderType n = expectedInstantiatedBinderType n := by rfl
 """)
+declare('Structure SizedPayload():',['Let size: Natural','Constructor: sized payload'],env)
+record=env.structures['SizedPayload']['key']
+notation('Notation binder count(item):',['Let T: Type','Let item: T','Returns: Natural','Means: 0','Render latex: count({item})'],env)
+notation('Define binder ignore(k: Natural): Natural:', ['Equals: (0:Natural)','Render latex: ignore({k})'],env,authored=True)
+for i,(source,expected) in enumerate([
+ ('Function(k: Natural,Vector((k+1),Complex))',f"(k : {t('Natural')}) → {t('Vector')} ({f('natural sum')} k ({one})) {t('Complex')}"),
+ ('Function(j: Natural,Function(k: Natural,Vector((j+k),Complex)))',f"(j k : {t('Natural')}) → {t('Vector')} ({f('natural sum')} j k) {t('Complex')}"),
+ ('Function(f: Function(Natural,Natural),Function(k: Natural,Vector((f(k)),Complex)))',f"(f : {t('Natural')} → {t('Natural')}) → (k : {t('Natural')}) → {t('Vector')} (f k) {t('Complex')}"),
+ ('Function(p: SizedPayload,Vector((p.size),Complex))',f"(p : {record}) → {t('Vector')} (@{record}.size p) {t('Complex')}"),
+ ('Function(k: Natural,Matrix(k,(binder count(k)),Complex))',f"(k : {t('Natural')}) → {t('Matrix')} k (@{f('binder count')} {t('Natural')} k) {t('Complex')}"),
+ ('Function(k: Natural,Matrix(k,(binder ignore(k)),Complex))',f"(k : {t('Natural')}) → {t('Matrix')} k (@{f('binder ignore')} k) {t('Complex')}")]):
+ codec=CheckedBinderTypes(env,scope)
+ typ=env.type(source,scope)
+ reconstructed=codec.decode(codec.encode(typ))
+ checks.append(f"""
+def actualComputedBinderType{i} : Type := {env.render_type(reconstructed,'lean',scope)}
+def expectedComputedBinderType{i} : Type := {expected}
+same_basic_target actualComputedBinderType{i} expectedComputedBinderType{i}
+theorem meaningComputedBinderType{i} : actualComputedBinderType{i} = expectedComputedBinderType{i} := by rfl
+""")
+codec=CheckedBinderTypes(env,scope)
+encoded=codec.encode(env.type('Function(k: Natural,Vector((k+1),Complex))',scope))
+result=codec.apply(encoded,scope['n'])
+checks.append(f"""
+def actualComputedInstantiation (n : {t('Natural')}) : Type := {env.render_type(result,'lean',scope)}
+def expectedComputedInstantiation (n : {t('Natural')}) : Type := {t('Vector')} ({f('natural sum')} n ({one})) {t('Complex')}
+same_basic_target actualComputedInstantiation expectedComputedInstantiation
+theorem meaningComputedInstantiation (n : {t('Natural')}) : actualComputedInstantiation n = expectedComputedInstantiation n := by rfl
+""")
 source='for every (z: Vector(n,Complex), z != 0)'
 value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
 checks.append(f"""
@@ -594,6 +623,6 @@ theorem meaningScopedCarrier : actualScopedCarrier := by
 """)
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Seventy-seven experimental targets and seventy-seven meaning proofs passed; production joint inference remains unimplemented.')
+print('Eighty-four experimental targets and eighty-four meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

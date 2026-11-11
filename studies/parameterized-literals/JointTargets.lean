@@ -437,6 +437,18 @@ noncomputable def cleanNotation_make_constant_eee795dd230fe60a3bb7  («T» : Typ
 noncomputable def cleanNotation_nested_maps_57725d573f51ccece624  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (clean_pi_bound_6 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((clean_pi_bound_7 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (clean_pi_bound_6) (clean_pi_bound_7))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))))) :=
   fun _ _ _ => (0 : Complex)
 
+structure cleanStructure_SizedPayload_00fcc8a636b5a36a7062  : Type where
+  «size» : (_root_.cleanType_Natural_469c53b6dafb7a218246)
+
+noncomputable def cleanConstructor_sized_payload_c64580182934098ef13b («size» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : _root_.cleanStructure_SizedPayload_00fcc8a636b5a36a7062 :=
+  @_root_.cleanStructure_SizedPayload_00fcc8a636b5a36a7062.mk «size»
+
+noncomputable def cleanNotation_binder_count_b24ccec6a3272bfdad35 {«T» : Type} («item» : «T») : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  0
+
+noncomputable def cleanDefine_binder_ignore_5a1355d131d97817361d  («k» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0))
+
 noncomputable def cleanNotation_opaque_count_4efa8df9a3534f27979e {«T» : Type} («item» : «T») : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
   0
 
@@ -963,6 +975,48 @@ def actualInstantiatedBinderType (n : cleanType_Natural_469c53b6dafb7a218246) : 
 def expectedInstantiatedBinderType (n : cleanType_Natural_469c53b6dafb7a218246) : Type := cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d
 same_basic_target actualInstantiatedBinderType expectedInstantiatedBinderType
 theorem meaningInstantiatedBinderType (n : cleanType_Natural_469c53b6dafb7a218246) : actualInstantiatedBinderType n = expectedInstantiatedBinderType n := by rfl
+
+
+def actualComputedBinderType0 : Type := (clean_pi_bound_8 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (clean_pi_bound_8) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))))
+def expectedComputedBinderType0 : Type := (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 k (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d
+same_basic_target actualComputedBinderType0 expectedComputedBinderType0
+theorem meaningComputedBinderType0 : actualComputedBinderType0 = expectedComputedBinderType0 := by rfl
+
+
+def actualComputedBinderType1 : Type := (clean_pi_bound_8 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((clean_pi_bound_9 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (clean_pi_bound_8) (clean_pi_bound_9))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))))
+def expectedComputedBinderType1 : Type := (j k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 j k) cleanType_Complex_2d7f06a08f8ab1e3f46d
+same_basic_target actualComputedBinderType1 expectedComputedBinderType1
+theorem meaningComputedBinderType1 : actualComputedBinderType1 = expectedComputedBinderType1 := by rfl
+
+
+def actualComputedBinderType2 : Type := (clean_pi_bound_8 : ((_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Natural_469c53b6dafb7a218246))) → ((clean_pi_bound_9 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((clean_pi_bound_8 clean_pi_bound_9)) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))))
+def expectedComputedBinderType2 : Type := (f : cleanType_Natural_469c53b6dafb7a218246 → cleanType_Natural_469c53b6dafb7a218246) → (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 (f k) cleanType_Complex_2d7f06a08f8ab1e3f46d
+same_basic_target actualComputedBinderType2 expectedComputedBinderType2
+theorem meaningComputedBinderType2 : actualComputedBinderType2 = expectedComputedBinderType2 := by rfl
+
+
+def actualComputedBinderType3 : Type := (clean_pi_bound_8 : _root_.cleanStructure_SizedPayload_00fcc8a636b5a36a7062) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanStructure_SizedPayload_00fcc8a636b5a36a7062.«size» (clean_pi_bound_8))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))))
+def expectedComputedBinderType3 : Type := (p : cleanStructure_SizedPayload_00fcc8a636b5a36a7062) → cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanStructure_SizedPayload_00fcc8a636b5a36a7062.size p) cleanType_Complex_2d7f06a08f8ab1e3f46d
+same_basic_target actualComputedBinderType3 expectedComputedBinderType3
+theorem meaningComputedBinderType3 : actualComputedBinderType3 = expectedComputedBinderType3 := by rfl
+
+
+def actualComputedBinderType4 : Type := (clean_pi_bound_8 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Matrix_4518cbfc13ff70fc0769 (clean_pi_bound_8) ((_root_.cleanNotation_binder_count_b24ccec6a3272bfdad35 (clean_pi_bound_8))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))))
+def expectedComputedBinderType4 : Type := (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Matrix_4518cbfc13ff70fc0769 k (@cleanNotation_binder_count_b24ccec6a3272bfdad35 cleanType_Natural_469c53b6dafb7a218246 k) cleanType_Complex_2d7f06a08f8ab1e3f46d
+same_basic_target actualComputedBinderType4 expectedComputedBinderType4
+theorem meaningComputedBinderType4 : actualComputedBinderType4 = expectedComputedBinderType4 := by rfl
+
+
+def actualComputedBinderType5 : Type := (clean_pi_bound_8 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Matrix_4518cbfc13ff70fc0769 (clean_pi_bound_8) ((_root_.cleanDefine_binder_ignore_5a1355d131d97817361d (clean_pi_bound_8))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))))
+def expectedComputedBinderType5 : Type := (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Matrix_4518cbfc13ff70fc0769 k (@cleanDefine_binder_ignore_5a1355d131d97817361d k) cleanType_Complex_2d7f06a08f8ab1e3f46d
+same_basic_target actualComputedBinderType5 expectedComputedBinderType5
+theorem meaningComputedBinderType5 : actualComputedBinderType5 = expectedComputedBinderType5 := by rfl
+
+
+def actualComputedInstantiation (n : cleanType_Natural_469c53b6dafb7a218246) : Type := (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (n) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))
+def expectedComputedInstantiation (n : cleanType_Natural_469c53b6dafb7a218246) : Type := cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d
+same_basic_target actualComputedInstantiation expectedComputedInstantiation
+theorem meaningComputedInstantiation (n : cleanType_Natural_469c53b6dafb7a218246) : actualComputedInstantiation n = expectedComputedInstantiation n := by rfl
 
 
 def actualQuantifiedZero (n : cleanType_Natural_469c53b6dafb7a218246) : Prop := (∀ (clean_bound_0 : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (n) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))), (_root_.cleanDefine_unequal_37c577a540f8692ae5c3 (clean_bound_0) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n)))))

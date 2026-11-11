@@ -37,6 +37,16 @@ class Carrier:
     sort: str='type'
 
 @dataclass(frozen=True)
+class IndexExpression:
+    """Retained checked syntax; its operation is not assumed injective."""
+    identity: str
+    arguments: tuple=()
+    sort: str='index'
+
+    def __post_init__(self):
+        if self.sort!='index':raise ValueError('Index-expression sort must be index')
+
+@dataclass(frozen=True)
 class Reference:
     """A lexical local reference, distinct from an opaque checked atom."""
     binder: object
@@ -68,7 +78,7 @@ def well_scoped(term,*,limit=4096):
         node,depth=pending.pop()
         if isinstance(node,Bound):
             if node.level>=depth:raise Incomplete('Malformed input contains a dangling bound reference')
-        elif isinstance(node,Carrier):pending.extend((a,depth) for a in node.arguments)
+        elif isinstance(node,(Carrier,IndexExpression)):pending.extend((a,depth) for a in node.arguments)
         elif isinstance(node,Binder):pending.extend(((node.domain,depth),(node.body,depth+1)))
         elif not isinstance(node,(Variable,Atom,Reference)):raise Incomplete('Unknown scoped term')
 
@@ -94,7 +104,7 @@ def abstract(binder,domain,body,*,identity='Pi',sort='type',limit=4096):
         if isinstance(term,Atom):
             if binder in term.free_binders:raise Incomplete('Opaque binder dependency cannot be abstracted structurally')
             return term
-        if isinstance(term,Carrier):return Carrier(term.identity,tuple(close(a,depth) for a in term.arguments),term.sort)
+        if isinstance(term,(Carrier,IndexExpression)):return type(term)(term.identity,tuple(close(a,depth) for a in term.arguments),term.sort)
         if isinstance(term,Binder):return Binder(term.identity,close(term.domain,depth),close(term.body,depth+1),term.sort)
         raise Incomplete('Unknown binder abstraction term')
     try:
@@ -123,7 +133,7 @@ def instantiate(binder,argument,*,limit=4096):
             # A well-scoped root Binder has no references outside itself.
             if term.level>depth:raise Incomplete('Instantiation found an external bound reference')
             return term
-        if isinstance(term,Carrier):return Carrier(term.identity,tuple(replace(a,depth) for a in term.arguments),term.sort)
+        if isinstance(term,(Carrier,IndexExpression)):return type(term)(term.identity,tuple(replace(a,depth) for a in term.arguments),term.sort)
         if isinstance(term,Binder):return Binder(term.identity,replace(term.domain,depth),replace(term.body,depth+1),term.sort)
         if isinstance(term,(Variable,Atom,Reference)):return term
         raise Incomplete('Unknown binder instantiation term')
@@ -148,7 +158,7 @@ def open_binder(binder,local,sort,*,limit=4096):
         elif isinstance(term,Variable):occupied=local in term.allowed_binders
         else:occupied=False
         if occupied:raise Incomplete('Opening local is not fresh in the binder scope')
-        if isinstance(term,Carrier):pending.extend(term.arguments)
+        if isinstance(term,(Carrier,IndexExpression)):pending.extend(term.arguments)
         elif isinstance(term,Binder):pending.extend((term.domain,term.body))
     return instantiate(binder,Reference(local,sort),limit=limit)
 
@@ -172,14 +182,14 @@ class Row:
 
 def resolve(term,bindings):
     if isinstance(term,Variable) and term in bindings:return resolve(bindings[term],bindings)
-    if isinstance(term,Carrier):return Carrier(term.identity,tuple(resolve(a,bindings) for a in term.arguments),term.sort)
+    if isinstance(term,(Carrier,IndexExpression)):return type(term)(term.identity,tuple(resolve(a,bindings) for a in term.arguments),term.sort)
     if isinstance(term,Binder):return Binder(term.identity,resolve(term.domain,bindings),resolve(term.body,bindings),term.sort)
     return term
 
 
 def variables(term):
     if isinstance(term,Variable):return {term}
-    if isinstance(term,Carrier):return set().union(*(variables(a) for a in term.arguments))
+    if isinstance(term,(Carrier,IndexExpression)):return set().union(*(variables(a) for a in term.arguments))
     if isinstance(term,Binder):return variables(term.domain)|variables(term.body)
     return set()
 
@@ -201,7 +211,7 @@ def check_scopes(bindings,*,limit=4096):
                 if (term,depth) in seen:continue
                 seen.add((term,depth))
                 if term in bindings:pending.append((bindings[term],depth))
-            elif isinstance(term,Carrier):pending.extend((a,depth) for a in term.arguments)
+            elif isinstance(term,(Carrier,IndexExpression)):pending.extend((a,depth) for a in term.arguments)
             elif isinstance(term,Binder):pending.extend(((term.domain,depth),(term.body,depth+1)))
             elif isinstance(term,Bound):
                 if term.level>=depth:raise NoSolution('Metavariable solution contains a dangling bound reference')
@@ -234,6 +244,8 @@ def unify(equations,bindings=None,*,limit=4096):
         if isinstance(left,Binder) and isinstance(right,Binder):
             if left.identity!=right.identity:raise NoSolution('Different binder constructors')
             pending[0:0]=[(left.domain,right.domain),(left.body,right.body)];continue
+        if isinstance(left,IndexExpression) or isinstance(right,IndexExpression):
+            raise Incomplete('Retained index expressions require checked conversion, not injective decomposition')
         raise NoSolution('Unequal rigid terms')
     check_scopes(bindings,limit=limit)
     return bindings
@@ -262,7 +274,7 @@ def saturate(row,*,limit=4096):
         for obligation,inputs in ready:
             try:
                 value=obligation.evaluate(inputs)
-                if not isinstance(value,(Atom,Carrier,Binder,Reference)) or variables(value):
+                if not isinstance(value,(Atom,Carrier,Binder,Reference,IndexExpression)) or variables(value):
                     raise Incomplete('Deferred check did not return a checked ground value')
                 equations.append((obligation.output,value))
             except Incomplete:incomplete=True

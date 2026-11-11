@@ -6,13 +6,13 @@ from cleanlang.inferred_conversion import reify
 from cleanlang.indices import index_value
 from cleanlang.retained_codec import dumps
 from clean_rows import Builder
-from constraint_model import Atom,Carrier,Reference,Binder,Variable,Incomplete,NoSolution,abstract,open_binder,well_scoped,instantiate
+from constraint_model import Atom,Carrier,IndexExpression,Reference,Binder,Variable,Incomplete,NoSolution,abstract,open_binder,well_scoped,instantiate
 
 class CheckedBinderTypes:
     """One fixed explicit environment and caller scope, with retained atom evidence."""
     def __init__(self,env,scope,*,limit=4096):
         if type(limit) is not int or limit<1:raise ValueError('Positive binder type traversal limit required')
-        self.env=env;self.scope=dict(scope);self.limit=limit;self.atoms={};self.names={}
+        self.env=env;self.scope=dict(scope);self.limit=limit;self.atoms={};self.names={};self.templates={}
         for name,spec in env.data['types'].items():
             key=spec.get('native_binding') or env.structures.get(name,{}).get('key')
             if key is None:continue
@@ -49,7 +49,7 @@ class CheckedBinderTypes:
             if name in locals:return Reference(locals[name],'index')
             checked=reify(typ,self.env,scope)
             if builder.dependencies(checked,normalize=False):
-                raise Incomplete('Opaque bound-index dependency needs structural expression lowering')
+                return self._encode_expression(checked,scope,locals,path)
             atom=Atom(repr(('retained index',typ.comparison_key(),dumps(index_tree(typ)))),'index')
             self.atoms.setdefault(atom,typ)
             return atom
@@ -60,6 +60,51 @@ class CheckedBinderTypes:
             return atom
         if type(typ) is not Type:raise Incomplete('Unsupported checked type constructor')
         return Carrier(builder.carrier_identity(typ.name),tuple(self._encode(a,scope,locals,path+(i,)) for i,a in enumerate(typ.args)))
+
+    def _encode_expression(self,value,scope,locals,path):
+        self.tick()
+        from cleanlang.bound_calls import _bind_checked
+        tree=_bind_checked(value,self.env,scope,binders=True)
+        checked=Expressions(self.env,scope).elaborate(tree)
+        kind=tree[0]
+        if kind=='ModuleCall':
+            operands=checked.checked_args
+            if operands is None:raise Incomplete('Computed call lacks checked operands')
+            skeleton=[kind,tree[1],None,*tree[3:]]
+        elif kind=='Projection':
+            operands=(Expressions(self.env,scope).elaborate(tree[1]),)
+            skeleton=[kind,None,tree[2]]
+        elif kind=='Apply':
+            operands=(Expressions(self.env,scope).elaborate(tree[1]),)+tuple(Expressions(self.env,scope).elaborate(a) for a in tree[2])
+            skeleton=[kind,None,None]
+        else:raise Incomplete('Bound index expression constructor remains unsupported: '+kind)
+        inferred=tuple(sorted(checked.inferred_args))
+        names=tuple(n for n,_ in inferred)
+        key=dumps((skeleton,len(operands),names))
+        self.templates.setdefault(key,(skeleton,len(operands),names))
+        children=tuple(self._encode(index_value(a,self.env,scope,_fresh=True),scope,locals,path+('operand',i)) for i,a in enumerate(operands))
+        implicit=tuple(self._encode(t,scope,locals,path+('implicit',i)) for i,(_,t) in enumerate(inferred))
+        result=self._encode(checked.type,scope,locals,path+('result',))
+        return IndexExpression(key,children+implicit+(result,))
+
+    def _decode_expression(self,term,scope,locals,path):
+        if term.identity not in self.templates:raise Incomplete('Missing checked index-expression template')
+        skeleton,count,names=self.templates[term.identity]
+        if len(term.arguments)!=count+len(names)+1:raise Incomplete('Malformed index-expression operand count')
+        values=tuple(self._decode(t,scope,locals,path+(i,)) for i,t in enumerate(term.arguments))
+        operands=[reify(v,self.env,scope).tree for v in values[:count]]
+        tree=list(skeleton)
+        if tree[0]=='ModuleCall':tree[2]=operands
+        elif tree[0]=='Projection':tree[1]=operands[0]
+        elif tree[0]=='Apply':tree[1]=operands[0];tree[2]=operands[1:]
+        else:raise Incomplete('Unknown checked index-expression template')
+        checked=Expressions(self.env,scope).elaborate(tree)
+        if checked.type!=values[-1]:raise Incomplete('Computed index result type changed')
+        inferred=dict(checked.inferred_args)
+        if set(inferred)!=set(names):raise Incomplete('Computed index implicit arguments changed')
+        for name,expected in zip(names,values[count:-1]):
+            if inferred[name]!=expected:raise Incomplete('Computed index implicit argument differs')
+        return index_value(checked,self.env,scope,_fresh=True)
 
     def decode(self,term):
         self.visits=0
@@ -106,6 +151,7 @@ class CheckedBinderTypes:
 
     def _decode(self,term,scope,locals,path):
         self.tick()
+        if isinstance(term,IndexExpression):return self._decode_expression(term,scope,locals,path)
         if isinstance(term,Reference):
             if term.binder not in locals or term.sort!='index':raise Incomplete('Unavailable lexical binder reference')
             return index_value(locals[term.binder],self.env,scope,_fresh=True)

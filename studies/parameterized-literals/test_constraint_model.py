@@ -373,3 +373,22 @@ class BinderRoundTripLaws(unittest.TestCase):
         binder=abstract('n',NAT,C('Pair',(Reference('n','index'),t)))
         bindings=unify([(t,REAL)])
         self.assertEqual(instantiate(resolve(binder,bindings),N),resolve(instantiate(binder,N),bindings))
+
+
+class RetainedIndexExpressions(unittest.TestCase):
+    def test_expression_arguments_are_not_inferred_by_injectivity(self):
+        from constraint_model import IndexExpression
+        for right in [IndexExpression('ignore',(M,)),N]:
+            with self.subTest(right=right),self.assertRaises(Incomplete):unify([(IndexExpression('ignore',(N,)),right)])
+    def test_abstraction_and_instantiation_visit_expression_children(self):
+        from constraint_model import IndexExpression,Reference,abstract,instantiate,Bound
+        expr=IndexExpression('add',(Reference('n','index'),N))
+        binder=abstract('n',NAT,vector(expr))
+        self.assertEqual(binder.body,vector(IndexExpression('add',(Bound(0,'index'),N))))
+        self.assertEqual(instantiate(binder,M),vector(IndexExpression('add',(M,N))))
+    def test_expression_scope_dependencies_cannot_escape(self):
+        from constraint_model import IndexExpression,Reference
+        with self.assertRaises(NoSolution):unify([(V('n','index'),IndexExpression('f',(Reference('inner','index'),)))])
+    def test_expression_sort_is_fixed(self):
+        from constraint_model import IndexExpression
+        with self.assertRaises(ValueError):IndexExpression('f',(),sort='type')

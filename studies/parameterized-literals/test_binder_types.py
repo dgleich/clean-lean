@@ -4,7 +4,7 @@ import unittest
 from cleanlang.core import Environment,Expr
 from cleanlang.modules import load_module,notation
 from binder_types import CheckedBinderTypes
-from constraint_model import Binder,Carrier,Bound,Variable,Incomplete,NoSolution,instantiate
+from constraint_model import Binder,Carrier,Bound,Variable,IndexExpression,Incomplete,NoSolution,instantiate
 ROOT=Path(__file__).resolve().parents[2]
 
 class CheckedBinderTypeBridge(unittest.TestCase):
@@ -34,13 +34,16 @@ class CheckedBinderTypeBridge(unittest.TestCase):
   codec=self.codec();result=codec.decode(codec.encode(typ))
   self.assertEqual(result,typ)
   self.assertEqual(self.env.render_type(result,'lean',self.scope),self.env.render_type(typ,'lean',self.scope))
- def test_computed_bound_index_is_explicitly_incomplete(self):
+ def test_computed_bound_index_preserves_selected_operation(self):
   typ=self.env.type('Function(k: Natural,Vector((k+1),Complex))',self.scope)
-  with self.assertRaisesRegex(Incomplete,'Opaque bound-index'):self.codec().encode(typ)
+  codec=self.codec();result=codec.decode(codec.encode(typ))
+  self.assertEqual(result,typ)
+  self.assertEqual(self.env.render_type(result,'lean',self.scope),self.env.render_type(typ,'lean',self.scope))
  def test_ignored_bound_source_is_not_silently_normalized_away(self):
   notation('Define ignore(k: Natural): Natural:', ['Equals: (0:Natural)','Render latex: ignore({k})'],self.env,authored=True)
   typ=self.env.type('Function(k: Natural,Matrix(k,(ignore(k)),Complex))',self.scope)
-  with self.assertRaises(Incomplete):self.codec().encode(typ)
+  codec=self.codec();result=codec.decode(codec.encode(typ))
+  self.assertEqual(self.env.render_type(result,'lean',self.scope),self.env.render_type(typ,'lean',self.scope))
  def test_free_type_parameter_survives_reconstruction(self):
   self.scope['T']=Expr('T','T',self.env.type('Type'),tree=['Local','T'])
   typ=self.env.type('Function(k: Natural,Vector(k,T))',self.scope)
@@ -81,3 +84,52 @@ class CheckedBinderTypeBridge(unittest.TestCase):
  def test_retained_atom_evidence_is_not_guessed_in_another_codec(self):
   term=self.codec().encode(self.env.type('Vector(n,Complex)',self.scope))
   with self.assertRaisesRegex(Incomplete,'Missing retained'):self.codec().decode(term)
+
+ def test_computed_index_refers_to_both_nested_binders(self):
+  typ=self.env.type('Function(j: Natural,Function(k: Natural,Vector((j+k),Complex)))',self.scope)
+  codec=self.codec();self.assertEqual(codec.decode(codec.encode(typ)),typ)
+ def test_bound_callback_application_in_index(self):
+  typ=self.env.type('Function(f: Function(Natural,Natural),Function(k: Natural,Vector((f(k)),Complex)))',self.scope)
+  codec=self.codec();self.assertEqual(codec.decode(codec.encode(typ)),typ)
+ def test_bound_record_projection_in_index(self):
+  from cleanlang.structures import declare
+  declare('Structure SizedPayload():',['Let size: Natural','Constructor: sized payload'],self.env)
+  typ=self.env.type('Function(p: SizedPayload,Vector((p.size),Complex))',self.scope)
+  codec=self.codec();self.assertEqual(codec.decode(codec.encode(typ)),typ)
+ def test_computed_call_preserves_inferred_type_argument(self):
+  notation('Notation count(item):',['Let T: Type','Let item: T','Returns: Natural','Means: 0','Render latex: count({item})'],self.env)
+  typ=self.env.type('Function(k: Natural,Matrix(k,(count(k)),Complex))',self.scope)
+  codec=self.codec();result=codec.decode(codec.encode(typ))
+  self.assertEqual(self.env.render_type(result,'lean',self.scope),self.env.render_type(typ,'lean',self.scope))
+ def test_computed_index_typed_instantiation(self):
+  typ=self.env.type('Function(k: Natural,Vector((k+1),Complex))',self.scope)
+  codec=self.codec();result=codec.apply(codec.encode(typ),self.scope['n'])
+  self.assertEqual(result,self.env.type('Vector((n+1),Complex)',self.scope))
+ def test_bound_type_value_in_index_still_incomplete(self):
+  notation('Notation count carrier(T: Type): Natural:', ['Means: 0','Render latex: count({T})'],self.env)
+  typ=self.env.type('Function(k: Natural,Vector((count carrier(type(Vector(k,Complex):Type))),Complex))',self.scope)
+  with self.assertRaisesRegex(Incomplete,'constructor remains unsupported'):self.codec().encode(typ)
+
+ def test_computed_bound_expression_is_alpha_stable(self):
+  codec=self.codec()
+  left=codec.encode(self.env.type('Function(k: Natural,Vector((k+1),Complex))',self.scope))
+  right=codec.encode(self.env.type('Function(j: Natural,Vector((j+1),Complex))',self.scope))
+  self.assertEqual(left,right)
+ def test_changed_bound_operation_is_incomplete(self):
+  codec=self.codec();term=codec.encode(self.env.type('Function(k: Natural,Vector((k+1),Complex))',self.scope))
+  self.env.data['functions']['natural sum']['lean']='changed target'
+  with self.assertRaises(Incomplete):codec.decode(term)
+ def test_computed_index_result_type_is_rechecked(self):
+  codec=self.codec();term=codec.encode(self.env.type('Function(k: Natural,Vector((k+1),Complex))',self.scope))
+  expression=term.body.arguments[0]
+  wrong=IndexExpression(expression.identity,expression.arguments[:-1]+(codec.encode(self.env.type('Complex')),))
+  body=Carrier(term.body.identity,(wrong,term.body.arguments[1]))
+  with self.assertRaisesRegex(Incomplete,'result type changed'):codec.decode(Binder(term.identity,term.domain,body))
+ def test_computed_index_implicit_type_is_rechecked(self):
+  notation('Notation count(item):',['Let T: Type','Let item: T','Returns: Natural','Means: 0','Render latex: count({item})'],self.env)
+  codec=self.codec();term=codec.encode(self.env.type('Function(k: Natural,Matrix(k,(count(k)),Complex))',self.scope))
+  expression=term.body.arguments[1]
+  self.assertEqual(len(expression.arguments),3)
+  wrong=IndexExpression(expression.identity,(expression.arguments[0],codec.encode(self.env.type('Real')),expression.arguments[2]))
+  body=Carrier(term.body.identity,(term.body.arguments[0],wrong,term.body.arguments[2]))
+  with self.assertRaisesRegex(Incomplete,'implicit argument differs'):codec.decode(Binder(term.identity,term.domain,body))

@@ -2174,6 +2174,21 @@ constructor telescopes during reconstruction. Typed instantiation checks the
 argument domain before substitution. See the
 [construction and explicit limits](../studies/parameterized-literals/README.md#checked-binder-type-bridge).
 This bridge has independent native targets but is not used by production or joint
-inference. Computed bound indices, contextual metavariables, and embedded lambda
-inference remain pending. No new source syntax is accepted.
+inference. The subsequent computed-index bridge below extends this initial slice.
+Contextual metavariables and embedded lambda inference remain pending. No new
+source syntax is accepted.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental computed bound-index representation
+
+The checked type bridge now represents selected calls, applications, and projections
+under binders as retained IndexExpression nodes. Reconstruction checks the selected
+operation, operands, result type, and inferred arguments. These nodes are not
+assumed injective by structural unification; unequal representations require checked
+conversion and remain incomplete in the standalone model. See the
+[constructive rules, native targets, and remaining limits](../studies/parameterized-literals/README.md#retained-computed-expressions-under-type-binders).
+No production or grammar change is claimed. Embedded lambda inference and broader
+bound annotation/literal lowering remain pending.
 :::

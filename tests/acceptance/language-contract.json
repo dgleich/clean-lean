@@ -3993,6 +3993,24 @@
         "Embedded lambda inference",
         "Joint and production integration"
       ]
+    },
+    {
+      "id": "experimental_computed_bound_index_bridge",
+      "status": "experimental-slice",
+      "source": "Function(k: Natural,Vector((k+1),Complex)); nested calls and projections",
+      "checks": [
+        "studies/parameterized-literals/test_binder_types.py",
+        "studies/parameterized-literals/test_constraint_model.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Retain checked operations, operands, inferred arguments and result types; abstract explicit dependencies; never infer operands by presumed injectivity; seven independent native targets",
+      "pending": [
+        "Bound type-value and literal payloads",
+        "Checked conversion of unequal IndexExpression nodes",
+        "Contextual metavariables",
+        "Embedded lambda inference",
+        "Joint and production integration"
+      ]
     }
   ]
 }
