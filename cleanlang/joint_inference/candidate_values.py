@@ -127,6 +127,11 @@ class CandidateValues:
         except (CleanError,RecursionError) as error:
             raise Incomplete('Candidate value checking unavailable: '+str(error)) from error
 
+    def representative(self,term,bindings):
+        """Recover checked row-local evidence without selecting or defaulting."""
+        representatives,_,_=self._context(bindings)
+        return representatives.get(term)
+
     def index_expression(self,plan,bindings,defaulted=()):
         from cleanlang.inferred_conversion import reify
         try:

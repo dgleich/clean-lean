@@ -40,13 +40,15 @@ def prepare_lambda_head(builder,tree,expected_result=None):
             validate=lambda term,value:body.typ(value,{})==term,
             assemble=assemble,limit=builder.limit,
             available=body.witness_available,allowed_binders=frozenset(body.binder_ids.values()))
-        codomain=representatives.get(result)
-        if ('binder',tuple(builder.row_namespace)) in body.dependencies(codomain,normalize=False):
-            raise Incomplete('Direct lambda codomain depends on its bound argument')
+        codomain=(body.row_values[row.choices].representative(result,bindings)
+                  if not contains_scoped_holes(tree[3]) else representatives.get(result))
         if types and codomain!=types[0]:raise Incomplete('Direct lambda alternatives need joint codomain recovery')
         types.append(codomain);viable.append(row)
     if not viable:raise NoSolution('Direct lambda has no viable body')
-    return tuple(viable),child.retain,builder.env.function_type(domain,types[0])
+    from cleanlang.dependent_functions import inferred_type
+    name=tree[1]
+    head_type=inferred_type(name,body.scope[name].lean,domain,types[0],builder.env,builder.scope)
+    return tuple(viable),child.retain,head_type
 
 
 def prepare_typed_call(builder,tree,expected=None):

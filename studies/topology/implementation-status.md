@@ -194,3 +194,15 @@ and matching unchanged source samples in both workers. The report is retained in
 `topology_fingerprinted_modules_and_sequences`. This check translates statements;
 it does not rerun their proofs or establish canonical-target equality.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Joint preparation now preserves a directly applied lambda's determined dependent
+codomain, including computed indices such as `Vector((k+1),Complex)`. Checked
+actual arguments substitute into the family; unresolved literal-bearing actuals
+remain incomplete. This is an inference improvement for existing dependent-call
+syntax, with two additional independent Lean targets and zero-vector proofs in
+the scoped-call driver. It adds no topology theorem or implicit mathematical
+binding. Production routing and general contextual recovery remain open.
+:::

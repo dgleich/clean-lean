@@ -305,6 +305,12 @@ noncomputable def cleanNotation_accept_f31b97787ce83dcca886  («p» : (_root_.cl
 noncomputable def cleanNotation_factory_a1e7ede9587e65e27fbb  («f» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) : ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) → ((_root_.cleanType_Real_107b6641a486642ad8e1)) :=
   fun _ => f 0
 
+noncomputable def cleanNotation_indexed_zero_direct_d2e6510a446e29d693ce  («k» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («z» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («k») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  fun _ => 0
+
+noncomputable def cleanNotation_indexed_zero_shifted_46c90fc94b6934555992  («k» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («z» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («k») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  fun _ => 0
+
 
 open scoped Matrix
 
@@ -462,5 +468,17 @@ noncomputable def actualExpectedComplex (n : cleanType_Natural_469c53b6dafb7a218
 noncomputable def expectedExpectedComplex (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Complex_2d7f06a08f8ab1e3f46d := (fun (x : cleanType_Natural_469c53b6dafb7a218246) => cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
 same_basic_target actualExpectedComplex expectedExpectedComplex
 theorem expectedMeaningComplex (n : cleanType_Natural_469c53b6dafb7a218246) : actualExpectedComplex n = cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0) := by rfl
+
+
+noncomputable def actualDependentDirect (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (n) cleanType_Complex_2d7f06a08f8ab1e3f46d := ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_indexed_zero_direct_d2e6510a446e29d693ce (clean_bound_0) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))) n)
+noncomputable def expectedDependentDirect (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (n) cleanType_Complex_2d7f06a08f8ab1e3f46d := (fun (k : cleanType_Natural_469c53b6dafb7a218246) => cleanNotation_indexed_zero_direct_d2e6510a446e29d693ce k (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) n
+same_basic_target actualDependentDirect expectedDependentDirect
+theorem dependentMeaningDirect (n : cleanType_Natural_469c53b6dafb7a218246) : actualDependentDirect n = (fun _ => 0) := by rfl
+
+
+noncomputable def actualDependentShifted (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_indexed_zero_shifted_46c90fc94b6934555992 (clean_bound_0) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))) n)
+noncomputable def expectedDependentShifted (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := (fun (k : cleanType_Natural_469c53b6dafb7a218246) => cleanNotation_indexed_zero_shifted_46c90fc94b6934555992 k (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) n
+same_basic_target actualDependentShifted expectedDependentShifted
+theorem dependentMeaningShifted (n : cleanType_Natural_469c53b6dafb7a218246) : actualDependentShifted n = (fun _ => 0) := by rfl
 
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -133,6 +133,36 @@ class JointCompletion(unittest.TestCase):
   value=complete(expression_tree(parse('(function(x: Natural,keep vector(n,v,0)))(2)','expression')),self.env,self.scope,typ,use_default=False)
   self.assertEqual(value.type,typ)
 
+
+ def test_direct_dependent_lambda_uses_checked_argument(self):
+  notation('Notation indexed zero(k: Natural,z: Real): Vector(k,Complex):', ['Means: fun _ => 0','Render latex: z({k},{z})'],self.env)
+  tree=expression_tree(parse('(function(k: Natural,indexed zero(k,0)))(n)','expression'))
+  with patch('cleanlang.joint_inference.clean_rows.Builder.solve_with_trace',side_effect=AssertionError('inner selection')):
+   value=complete(tree,self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.env.type('Vector(n,Complex)',self.scope))
+  self.assertEqual(value.tree[1][0],'Lambda')
+  self.assertEqual(Expressions(self.env,self.scope).elaborate(value.tree).lean,value.lean)
+
+ def test_direct_dependent_lambda_preserves_computed_family(self):
+  notation('Notation shifted zero(k: Natural,z: Real): Vector((k+1),Complex):', ['Means: fun _ => 0','Render latex: z({k},{z})'],self.env)
+  values=[]
+  for name in ('k','j'):
+   source=f'(function({name}: Natural,shifted zero({name},0)))(n)'
+   values.append(complete(expression_tree(parse(source,'expression')),self.env,self.scope,use_default=False))
+  self.assertEqual(values[0].type,self.env.type('Vector((n+1),Complex)',self.scope))
+  self.assertEqual(values[0].type,values[1].type)
+  self.assertEqual(values[0].lean,values[1].lean)
+
+ def test_direct_dependent_lambda_unknown_argument_remains_incomplete(self):
+  notation('Notation indexed zero(k: Natural,z: Real): Vector(k,Complex):', ['Means: fun _ => 0','Render latex: z({k},{z})'],self.env)
+  with self.assertRaises(Incomplete):
+   complete(expression_tree(parse('(function(k: Natural,indexed zero(k,0)))(2)','expression')),self.env,self.scope,use_default=False)
+
+ def test_direct_dependent_lambda_checks_result_expectation(self):
+  notation('Notation indexed zero(k: Natural,z: Real): Vector(k,Complex):', ['Means: fun _ => 0','Render latex: z({k},{z})'],self.env)
+  tree=expression_tree(parse('(function(k: Natural,indexed zero(k,0)))(n)','expression'))
+  with self.assertRaises(NoSolution):complete(tree,self.env,self.scope,self.env.type('Real'),use_default=False)
+
 if __name__=='__main__':unittest.main()
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

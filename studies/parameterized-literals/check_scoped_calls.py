@@ -106,8 +106,22 @@ noncomputable def expectedExpected{label} (n : {t('Natural')}) : {result} := (fu
 same_basic_target actualExpected{label} expectedExpected{label}
 theorem expectedMeaning{label} (n : {t('Natural')}) : actualExpected{label} n = {zero} := by rfl
 """)
+for label,dimension,native_dimension in [
+ ('Direct','k','n'),
+ ('Shifted','(k+1)',f'{f("natural sum")} n ({one})')]:
+ name='indexed zero '+label.lower()
+ notation(f'Notation {name}(k: Natural,z: Real): Vector({dimension},Complex):',
+  ['Means: fun _ => 0','Render latex: zero({k},{z})'],env)
+ source=f'(function(k: Natural,{name}(k,0)))(n)'
+ value=complete(expression_tree(parse(source,'expression')),env,scope,use_default=False)
+ checks.append(f"""
+noncomputable def actualDependent{label} (n : {t('Natural')}) : {t('Vector')} ({native_dimension}) {t('Complex')} := {value.lean}
+noncomputable def expectedDependent{label} (n : {t('Natural')}) : {t('Vector')} ({native_dimension}) {t('Complex')} := (fun (k : {t('Natural')}) => {f(name)} k ({zr})) n
+same_basic_target actualDependent{label} expectedDependent{label}
+theorem dependentMeaning{label} (n : {t('Natural')}) : actualDependent{label} n = (fun _ => 0) := by rfl
+""")
 path=HERE/'ScopedCallTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Twenty automatic scoped-call targets and twenty interpretation proofs passed; implicit/contextually unresolved consumers and production integration remain pending.')
+print('Twenty-two automatic scoped-call targets and twenty-two interpretation proofs passed; implicit/contextually unresolved consumers and production integration remain pending.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

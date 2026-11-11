@@ -2528,3 +2528,30 @@ discovery and the enclosing result check. Operator-input ambiguity remains an er
 regardless of expected result. See the [rule and checks](../studies/parameterized-literals/README.md#expected-scalar-results-for-directly-applied-lambdas).
 No syntax or default-routing change.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Determined dependent codomains of direct lambda heads
+
+This extends the earlier binder-independent direct-lambda rule: it also accepts
+a common ground checked codomain that
+refers to its own binder. Construct its function type with the ordinary dependent
+function abstraction rule (`dependent_functions.inferred_type`), preserving the
+source binder identity and checked codomain. Do not replace that family by a
+constant type inferred from the application's expected result.
+
+For an ordinary body row, recover the codomain through that row's checked
+representatives and computed-index plans after saturation, without selection or
+defaulting. This supports both `Vector(k,Complex)` and `Vector((k+1),Complex)`.
+Nested scoped bodies retain their existing reconstruction boundary. All viable
+body rows must agree on the codomain; an unresolved or competing family remains
+incomplete. Retain every viable row for the enclosing solve and operator audit.
+
+Application substitutes an already checked hole-free actual argument into the
+family using the existing dependent-call rule. An argument with unresolved
+literal interpretations still reports incomplete analysis; this change does not
+infer a family from a sampled result or add contextual value recovery. Recheck
+the retained head type and final application type before emission. No syntax,
+parse-tree, implicit-coercion or production-routing changes are introduced.
+:::

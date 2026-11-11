@@ -4465,6 +4465,22 @@
         "Indexed/local/dependent contextual codomain inference",
         "Default production routing"
       ]
+    },
+    {
+      "id": "joint_direct_dependent_lambda_result",
+      "status": "explicit-api-not-default",
+      "environment": "Explicit Natural/Real/Complex/Vector bindings; indexed zero(k: Natural,z: Real) returns Vector(k,Complex), shifted zero returns Vector((k+1),Complex); checked local n: Natural.",
+      "source": "(function(k: Natural,indexed zero(k,0)))(n)",
+      "expected_lean": "Retained application (fun k => declaredIndexedZero k declaredRealZero) n; result is declared Vector n Complex. The shifted declaration has result Vector (declaredNaturalSum n declaredNaturalOne) Complex.",
+      "checks": [
+        "tests/test_joint_completion.py: dependent application, shifted family and alpha-renaming, mismatch and unresolved-argument rejection",
+        "studies/parameterized-literals/check_scoped_calls.py: two independently authored exact Lean targets and two zero-vector proofs"
+      ],
+      "pending": [
+        "Selected-value recovery for literal-bearing actual arguments",
+        "Competing/contextually unresolved codomain families",
+        "Default production routing and full conformance"
+      ]
     }
   ]
 }

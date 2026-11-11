@@ -1774,7 +1774,7 @@ disposable metadata cannot authorize reuse across calls. See the
 </section></llm>
 <llm model="gpt-6" date="2026-11-11" role="assisted"><section id="direct-lambda-heads">
 <h2>Direct lambda application in joint inference</h2>
-<p><code>(function(x: Natural,x+1))(2)</code> now jointly resolves the body and argument. The output retains the Lean lambda application rather than replacing it with its computed value. All viable body rows must first establish the same ground, binder-independent codomain without defaults or selection. General dependent or unresolved codomains remain incomplete. See the <a href="../studies/parameterized-literals/README.md#direct-lambda-application-with-a-common-determined-codomain">rule, exhaustive scalar comparison and native target</a>.</p>
+<p><code>(function(x: Natural,x+1))(2)</code> now jointly resolves the body and argument. The output retains the Lean lambda application rather than replacing it with its computed value. All viable body rows must first establish the same ground, binder-independent codomain without defaults or selection. The later dependent-codomain rule below extends this to checked binder-dependent families; unresolved or competing families remain incomplete. See the <a href="../studies/parameterized-literals/README.md#direct-lambda-application-with-a-common-determined-codomain">rule, exhaustive scalar comparison and native target</a>.</p>
 </section></llm>
 <llm model="gpt-6" date="2026-11-11" role="assisted"><section id="joint-translator-errors">
 <h2>Joint inference at the translator boundary</h2>
@@ -1783,6 +1783,11 @@ disposable metadata cannot authorize reuse across calls. See the
 <llm model="gpt-6" date="2026-11-11" role="assisted"><section id="expected-direct-lambda-results">
 <h2>Expected results of direct lambda applications</h2>
 <p>Checking <code>(function(x: Natural,0))(2)</code> against Real supplies the body with the Real expectation while retaining one joint solve. An explicit consumer parameter can supply the same context. An indexed result such as <code>Vector(n,Complex)</code> does not justify guessing a constant codomain family; independent codomain discovery or further contextual recovery is required. See the <a href="../studies/parameterized-literals/README.md#expected-scalar-results-for-directly-applied-lambdas">specified rule and exact native targets</a>. Default translation is unchanged.</p>
+</section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="direct-dependent-lambda-results">
+<h2>Determined dependent lambda results</h2>
+<p>With an explicit <code>indexed zero(k: Natural,z: Real): Vector(k,Complex)</code> declaration, <code>(function(k: Natural,indexed zero(k,0)))(n)</code> has result <code>Vector(n,Complex)</code>. Its schematic Lean form is <code>(fun k =&gt; indexedZero k realZero) n</code>. The declared function and literal bindings supply the actual generated names.</p>
+<p>Each viable body row must establish the same checked codomain, using its own computed-index evidence. The ordinary dependent-function abstraction preserves the family; checked substitution supplies the application result. A shifted family <code>Vector((k+1),Complex)</code> works as well. Unresolved actual values and competing families remain incomplete. No child is selected or defaulted independently, and production routing is unchanged. See the <a href="../studies/parameterized-literals/README.md#direct-lambda-applications-with-dependent-results">examples and independent targets</a>.</p>
 </section></llm>
 </body>
 </html>

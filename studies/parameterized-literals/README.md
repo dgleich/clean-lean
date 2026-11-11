@@ -3215,3 +3215,44 @@ source samples: 92 result statements generate identical text. This fresh run doe
 not use `--verify-corpus`; the earlier 92 proof checks remain separately recorded.
 The new `corpus_fingerprinted` report must not be read as rerunning those proofs.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Direct lambda applications with dependent results
+
+Given an explicit declaration `indexed zero(k: Natural,z: Real)` returning
+`Vector(k,Complex)`, the joint API now accepts:
+
+```clean
+(function(k: Natural,indexed zero(k,0)))(n)
+```
+
+The body determines the family before application. Its zero is Real from the
+module signature; the result is `Vector(n,Complex)`. A declaration returning
+`Vector((k+1),Complex)` similarly yields `Vector((n+1),Complex)`. The generated
+Lean retains `(fun k => indexedZero k realZero) n`; it does not beta-reduce the
+source application or guess a constant result type.
+
+Common-codomain discovery uses each ordinary body's own computed-index evidence.
+The existing dependent-function abstraction and checked-argument substitution
+provide the unique type. All alternatives still join the enclosing solve without
+child selection or defaults. Distinct or unresolved families remain incomplete.
+In particular, replacing the actual `n` with an unresolved `2` remains incomplete:
+recovering a selected value for subsequent dependent substitution is separate work.
+
+Four API regressions cover direct and computed families, alpha-renaming, expected
+result mismatch, and the unresolved-argument boundary. Two independent native
+lambda-application targets and two zero-vector proofs extend the scoped driver.
+No grammar or production-default change is made.
+:::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Validation of the dependent-codomain change: 462 solver tests, 34 joint API/adapter/
+compatibility-checker tests, and the 115-case runtime migration suite pass. The
+scoped native driver passes 22 independent canonical targets and 22 interpretation
+proofs. HTML IDs/local paths and provenance checks pass. These bounded checks do
+not establish general contextual inference or completion of the topology papers.
+:::
