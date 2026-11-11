@@ -520,6 +520,33 @@ noncomputable def expectedMixedDependentChain (callback : {function_lean}) : {re
 same_basic_target actualMixedDependentChain expectedMixedDependentChain
 theorem meaningMixedDependentChain (callback : {function_lean}) : actualMixedDependentChain callback = {expected} := by rfl
 """)
+from binder_types import CheckedBinderTypes
+for i,(source,binders,expected) in enumerate([
+ ('Function(k: Natural,Vector(k,Complex))','',f"(k : {t('Natural')}) → {t('Vector')} k {t('Complex')}"),
+ ('Function(j: Natural,Function(k: Natural,Matrix(j,k,Complex)))','',f"(j k : {t('Natural')}) → {t('Matrix')} j k {t('Complex')}"),
+ ('Function(k: Natural,Function(Vector(k,Complex),Real))','',f"(k : {t('Natural')}) → ({t('Vector')} k {t('Complex')}) → {t('Real')}"),
+ ('Function(k: Natural,Matrix(k,n,Complex))',f"(n : {t('Natural')})",f"(k : {t('Natural')}) → {t('Matrix')} k n {t('Complex')}"),
+ ('Function(k: Natural,Matrix(k,(n+1),Complex))',f"(n : {t('Natural')})",f"(k : {t('Natural')}) → {t('Matrix')} k ({f('natural sum')} n ({one})) {t('Complex')}")]):
+ codec=CheckedBinderTypes(env,scope)
+ original=env.type(source,scope)
+ reconstructed=codec.decode(codec.encode(original))
+ actual=env.render_type(reconstructed,'lean',scope)
+ args=' n' if binders else ''
+ checks.append(f"""
+def actualBinderType{i} {binders} : Type := {actual}
+def expectedBinderType{i} {binders} : Type := {expected}
+same_basic_target actualBinderType{i} expectedBinderType{i}
+theorem meaningBinderType{i} {binders} : actualBinderType{i}{args} = expectedBinderType{i}{args} := by rfl
+""")
+codec=CheckedBinderTypes(env,scope)
+encoded=codec.encode(env.type('Function(k: Natural,Vector(k,Complex))',scope))
+result=codec.apply(encoded,scope['n'])
+checks.append(f"""
+def actualInstantiatedBinderType (n : {t('Natural')}) : Type := {env.render_type(result,'lean',scope)}
+def expectedInstantiatedBinderType (n : {t('Natural')}) : Type := {t('Vector')} n {t('Complex')}
+same_basic_target actualInstantiatedBinderType expectedInstantiatedBinderType
+theorem meaningInstantiatedBinderType (n : {t('Natural')}) : actualInstantiatedBinderType n = expectedInstantiatedBinderType n := by rfl
+""")
 source='for every (z: Vector(n,Complex), z != 0)'
 value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
 checks.append(f"""
@@ -567,6 +594,6 @@ theorem meaningScopedCarrier : actualScopedCarrier := by
 """)
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Seventy-one experimental joint-row targets and seventy-one meaning proofs passed; production joint inference remains unimplemented.')
+print('Seventy-seven experimental targets and seventy-seven meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

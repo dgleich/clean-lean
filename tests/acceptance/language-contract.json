@@ -3976,6 +3976,23 @@
         "Independent native targets for binder nodes",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_checked_binder_type_bridge",
+      "status": "experimental-slice",
+      "source": "Checked dependent function types with direct bound indices",
+      "checks": [
+        "studies/parameterized-literals/test_binder_types.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Declared constructor identities, direct-reference abstraction, retained outer indices, fresh opening, telescope validation, typed instantiation, six independent exact Lean targets",
+      "pending": [
+        "Computed bound expression lowering",
+        "Contextual metavariable substitution",
+        "Higher-universe binders",
+        "Embedded lambda inference",
+        "Joint and production integration"
+      ]
     }
   ]
 }

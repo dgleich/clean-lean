@@ -2154,3 +2154,17 @@ a separate obligation. See the
 No Clean lowering or new source syntax is claimed; contextual metavariables and
 embedded lambda inference remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental checked binder-type bridge
+
+A separate codec now maps checked Type-0 dependent types with direct bound indices
+to symbolic binders and back. It preserves retained caller-index syntax and checks
+constructor telescopes during reconstruction. Typed instantiation checks the
+argument domain before substitution. See the
+[construction and explicit limits](../studies/parameterized-literals/README.md#checked-binder-type-bridge).
+This bridge has independent native targets but is not used by production or joint
+inference. Computed bound indices, contextual metavariables, and embedded lambda
+inference remain pending. No new source syntax is accepted.
+:::

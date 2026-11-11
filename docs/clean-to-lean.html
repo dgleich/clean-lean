@@ -1602,5 +1602,16 @@ reabstracting it recovers the same structure. Domain typing remains a separate
 constraint. These operations are not yet wired into Clean translation. See the
 <a href="../studies/parameterized-literals/README.md#opening-and-instantiating-symbolic-binders">structural rules and tests</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="checked-binder-type-bridge">
+<h2>Checked binder types and the symbolic model (experimental)</h2>
+<p>A separate bridge encodes and reconstructs
+<code>Function(k: Natural,Vector(k,Complex))</code>, with the expanded Lean type
+<code>(k : Nat) → Fin k → Complex</code>. Exact native checks retain the declared
+Natural, Vector, and Complex wrappers around this shape. Nested dependent types
+and caller dimensions also round-trip. Typed instantiation checks the argument's
+domain first. Computed bound indices such as k+1 still require structural expression
+lowering. This bridge is not yet the joint-inference or production path. See the
+<a href="../studies/parameterized-literals/README.md#checked-binder-type-bridge">mapping and validation boundary</a>.</p>
+</section></llm>
 </body>
 </html>

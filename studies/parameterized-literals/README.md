@@ -1910,3 +1910,63 @@ The new operations are not yet used by the Clean adapter. Contextual metavariabl
 checked lowering, and embedded lambda inference remain the next integration work;
 no additional source programs are claimed supported by these model operations.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Checked binder-type bridge
+
+[binder_types.py](binder_types.py) connects the symbolic Binder representation to
+checked Type-0 Clean types in a fixed explicit environment and caller scope. It is
+a separate experiment: the joint row builder and production compiler do not call
+it. This is a representation bridge, not a complete conversion or inference
+procedure.
+
+Encoding preserves declared native constructor identities. A checked dependent
+function is opened with a fresh source local using the compiler's checked
+substitution operation. Direct bound index references become lexical Reference
+nodes, then structural abstraction closes them into de Bruijn references. Nested
+ordinary function layers remain declared Carrier nodes, including domains that
+refer to outer binders. Free caller type parameters retain their classifier and
+native identity.
+
+Other indices are retained atoms whose identity includes both checked comparison
+information and serialized source syntax. This avoids choosing a different source
+representative merely because two expressions normalize to the same index. Their
+source dependencies must exclude every local opened by the codec. A computed
+index such as k+1 under the k binder is incomplete, as is a source expression
+mentioning k even if normalization would erase it. Closed computations involving
+caller locals, such as n+1 under a separate k binder, are retained and supported.
+Thus equality of encoded terms is not a complete test of definitional equality.
+
+Reconstruction resolves constructors through their explicit native identities,
+opens binders with fresh lexical references, and rebuilds checked type objects.
+It checks constructor arity, captured parameter classifiers, and value-index types
+against the declared telescope. Retained indices are reified in the destination
+scope. Bound references are never reconstructed by text replacement. The compiler's
+existing rendering rule emits arrows for ordinary Function types and dependent
+arrows for dependent function types; nonfunction constructors keep their wrappers.
+
+The `apply` operation additionally rechecks an argument's source expression,
+compares its type with the reconstructed domain, instantiates the symbolic body,
+and reconstructs the resulting type. A certified domain mismatch rejects; missing
+source/evidence, unsolved variables, malformed representations, unsupported types,
+or exhausted traversal budgets are incomplete.
+
+The native driver independently spells six expected targets: a direct dependent
+vector family, nested matrix dimensions, an ordinary function with dependent
+domain, a free caller dimension, a retained caller computation, and typed
+instantiation. Its initial ordinary-function oracle incorrectly retained a
+Function wrapper; the corrected oracle follows the established arrow-rendering
+rule rather than weakening the canonical comparator. Python checks cover these
+boundaries, freshness collisions, outer type parameters, stale argument source,
+wrong domains and malformed index types.
+
+Validation: all 332 experimental Python tests pass. The native driver passes
+77 exact target comparisons and 77 supporting proofs: six new bridge checks
+and 71 existing adapter checks. Provenance and reference-HTML checks pass. Full
+production discovery and active-label regeneration remain live and pending.
+
+Computed bound expressions, contextual metavariables, higher-universe binders,
+embedded lambda inference, and integration with joint/production inference remain
+pending. The six native checks validate this bridge only, not those missing paths.
+:::
