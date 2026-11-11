@@ -72,6 +72,11 @@ def _normal_form(expression,environment,locals,*,fresh=False):
     env=environment
     elaborate=lambda tree:Expressions(env,locals).elaborate(tree)
     def normal(tree):return _normal_form(elaborate(tree),env,locals,fresh=True)
+    def unchanged(a,b):
+        return (a.tree==b.tree and a.lean==b.lean and a.tex==b.tex and
+                a.precedence==b.precedence and a.type==b.type and
+                env.render_type(a.type,'lean',locals)==env.render_type(b.type,'lean',locals) and
+                a.inferred_args==b.inferred_args)
     tree=expression.tree
     if not tree:return expression
     kind=tree[0]
@@ -94,6 +99,17 @@ def _normal_form(expression,environment,locals,*,fresh=False):
         for actual in typed:
             value=_normal_form(actual,env,locals,fresh=True)
             args.append(actual if has_binder(value.tree) else value)
+        if (fresh and expression.checked_args is not None and
+            expression.operator_binding is not None and
+            len(args)==len(expression.checked_args) and
+            all(unchanged(a,b) for a,b in zip(args,expression.checked_args))):
+            from .bound_calls import identity
+            from .core import CleanError
+            name,target,_=expression.operator_binding
+            if target!=identity(env,name):raise CleanError('Changed comparison operator')
+            # Selection was checked in this synchronous traversal under fixed
+            # declarations. No changed operand or public stored cache is reused.
+            return expression
         if kind=='Operator':return env.operator(tree[1],args[0],args[1],locals)
         from .operator_bindings import apply_prefix
         return apply_prefix(env,tree[1],args[0],locals)
@@ -134,11 +150,6 @@ def _normal_form(expression,environment,locals,*,fresh=False):
         head=normal(['Local',name])
         return Expr('('+head.lean+' '+args[0].lean+')',expression.tex,expression.type,
                     tree=['Apply',head.tree,[a.tree for a in args]])
-    def unchanged(a,b):
-        return (a.tree==b.tree and a.lean==b.lean and a.tex==b.tex and
-                a.precedence==b.precedence and a.type==b.type and
-                env.render_type(a.type,'lean',locals)==env.render_type(b.type,'lean',locals) and
-                a.inferred_args==b.inferred_args)
     reuse=(fresh and expression.checked_args is not None and
            len(args)==len(expression.checked_args) and
            all(unchanged(a,b) for a,b in zip(args,expression.checked_args)))

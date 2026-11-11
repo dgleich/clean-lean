@@ -3336,6 +3336,46 @@
         "Full production discovery",
         "Complete active-label native verification"
       ]
+    },
+    {
+      "id": "fresh_operator_comparison_reuse",
+      "status": "implemented-optimization",
+      "environment": "Explicit operator modules, fixed synchronous traversal; public entry points re-elaborate source",
+      "source": "x + y; -x (separate existing expressions)",
+      "expected_tree": [
+        [
+          "Operator",
+          "+",
+          [
+            "Local",
+            "x"
+          ],
+          [
+            "Local",
+            "y"
+          ]
+        ],
+        [
+          "Unary",
+          "-",
+          [
+            "Local",
+            "x"
+          ]
+        ]
+      ],
+      "expected_lean": "Unchanged uniquely selected explicit operator wrappers and checked implicit arguments; no return-type disambiguation",
+      "checks": [
+        "tests/test_stable_arguments.py",
+        "tests/test_contextual_key_contract.py",
+        "tests/test_contextual_family_comparison.py",
+        "tools/check_dimension_prefix_targets.py"
+      ],
+      "obligation": "docs/comparison-reuse.md#reusing-a-freshly-checked-operator",
+      "pending": [
+        "Full production discovery",
+        "Native integration for this change"
+      ]
     }
   ]
 }

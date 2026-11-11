@@ -140,3 +140,45 @@ change, and then confirmed absent. `/tmp/clean-snapshot-stop-retired.json` recor
 the commands and checkouts. Their incomplete results are preserved, not counted
 as passes or treated as failures caused by an observation timeout.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Reusing a freshly checked operator
+
+Comparison normalization extends the existing named-call freshness rule to infix
+and prefix operators. Freshness is an internal witness from elaboration in the
+same synchronous traversal under fixed declarations and scope; it is never inferred
+from a stored `checked_args` field at a public entry point.
+
+Normalize every operand first, retaining the previous rule against publishing
+hidden binders as authored arguments. Reuse the checked operator expression only
+if it has a selected binding and checked operands, its arity is unchanged, and each
+normalized operand agrees in tree, Lean text, LaTeX text, precedence, type, rendered
+Lean type and inferred arguments. The selected declaration identity must still
+match; otherwise fail. If any operand changes, run ordinary operator selection.
+This applies to both prefix and infix presentation, with no token-specific math.
+
+Under the fixed traversal environment, unchanged checked inputs give the same
+candidate set, uniquely selected declaration, implicit arguments and output as
+reselection. Returning the original checked expression therefore preserves its
+comparison and canonical emitted term. The rule is not a cross-call cache and does
+not allow an expected return type to resolve ambiguous input signatures. Public
+comparison re-elaborates the source, detecting newly added overloads, changed
+bindings, mutated operands and changed locals. Optional comparison memo rules are
+unchanged.
+
+Regressions check absence of redundant selection, reselection after an authored
+operand expands, rejection of changed selected bindings, public prefix/infix
+ambiguity, ignored stale operand caches and equal fresh/rechecked encoded index
+payloads. The focused comparison suite passes 92 tests. The fixed snapshot also passes
+strict parser checks, 550 integration Python tests, 120 experimental inference
+tests, and 24 experimental native targets with 24 supporting proofs. Full discovery,
+active-label verification and remaining native integration checks for this step
+remain pending. No whole-topology speedup is claimed.
+
+Older full-discovery and active-label processes were verified live and explicitly
+retired as superseded by this comparison change, not treated as passed or as
+observation timeouts. Replacement checks use the immutable snapshot
+`/tmp/clean-fresh-operator-validation-svfvi51g`. The bounded 20-second diagnostic
+also ended before the module finished; it is profiling evidence only.
+:::

@@ -1835,3 +1835,15 @@ identities are traversal bookkeeping only, never semantic cache keys. Grammar,
 scope and constructive Lean mapping remain unchanged. See the
 [union-preservation argument and validation limits](comparison-token-cache.md).
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Fresh operator comparison reuse
+
+A freshly checked prefix or infix expression may be reused within its synchronous
+comparison traversal when all normalized operands remain unchanged and the selected
+binding identity still matches. Changed operands trigger ordinary selection;
+public comparisons re-elaborate source and cannot trust stored operand caches.
+There is no grammar or target-rule change. The constructive preservation argument
+and validation boundaries are in the [comparison contract](comparison-reuse.md#reusing-a-freshly-checked-operator).
+:::

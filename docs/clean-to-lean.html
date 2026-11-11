@@ -1347,5 +1347,13 @@ sets reuse the lexical token union. Later scans reread mutable contents. This
 changes neither a Clean parse nor its Lean target; see the
 <a href="comparison-token-cache.md">preservation argument and diagnostics</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="fresh-operator-comparison">
+<h2>Fresh operator comparison reuse</h2>
+<p>A freshly checked <code>x + y</code> or <code>-x</code> keeps its selected
+binding when comparison normalization leaves every checked operand unchanged.
+Changed operands are selected again; public comparisons recheck source and new
+overloads. Parsing and Lean targets are unchanged. See the
+<a href="comparison-reuse.md#reusing-a-freshly-checked-operator">freshness and preservation contract</a>.</p>
+</section></llm>
 </body>
 </html>

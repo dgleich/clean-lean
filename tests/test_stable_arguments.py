@@ -80,11 +80,48 @@ class StableArguments(unittest.TestCase):
   self.scope['x']=replace(self.scope['x'],local_normal=self.expr('retain(y)'),local_expand=False)
   self.assertEqual(index_comparison(value,self.env,self.scope),index_comparison(self.expr('retain(retain(y))'),self.env,self.scope))
 
+class FreshOperatorReuse(StableArguments):
+ def test_unchanged_fresh_operator_does_not_reselect(self):
+  from cleanlang.conversion import _normal_form
+  for source in ('x+x','-x'):
+   value=self.expr(source)
+   with patch('cleanlang.operator_bindings.select',side_effect=AssertionError('redundant selection')):
+    normalized=_normal_form(value,self.env,self.scope,fresh=True)
+   self.assertIs(normalized,value)
+ def test_changed_operand_reselects(self):
+  from cleanlang.conversion import _normal_form
+  from cleanlang.operator_bindings import select
+  value=self.expr('x+alias(x)')
+  with patch('cleanlang.operator_bindings.select',wraps=select) as selection:
+   normalized=_normal_form(value,self.env,self.scope,fresh=True)
+  self.assertGreater(selection.call_count,0)
+  self.assertEqual(normalized.lean,self.expr('x+retain(x)').lean)
+ def test_fresh_operator_rejects_changed_binding(self):
+  from cleanlang.conversion import _normal_form
+  for source in ('x+x','-x'):
+   value=self.expr(source);name=value.operator_binding[0]
+   previous=self.env.data['functions'][name]['lean']
+   self.env.data['functions'][name]['lean']='changed'
+   try:
+    with self.assertRaisesRegex(CleanError,'Changed comparison operator'):
+     _normal_form(value,self.env,self.scope,fresh=True)
+   finally:self.env.data['functions'][name]['lean']=previous
+ def test_public_prefix_comparison_rechecks_new_overload(self):
+  value=self.expr('-x')
+  notation('Notation other negation(x: Real): Real:',
+           ['Means: -x','Prefix: -','Render latex: -{x}'],self.env)
+  with self.assertRaises(CleanError):index_comparison(value,self.env,self.scope)
+ def test_public_operator_ignores_stored_operand_cache(self):
+  value=self.expr('x+x');value.checked_args=(self.expr('alias(x)'),)*2
+  self.scope['x']=Expr('second','x',self.env.type('Real'),tree=['Local','x'])
+  self.assertEqual(index_comparison(value,self.env,self.scope),
+                   index_comparison(self.expr('x+x'),self.env,self.scope))
+
 class FreshIndexArguments(StableArguments):
  def test_fresh_and_rechecked_indices_have_identical_payloads(self):
   from cleanlang.indices import index_value
   from cleanlang.retained_codec import dumps
-  for source in ('x','retain(alias(x))','x+x'):
+  for source in ('x','retain(alias(x))','x+x','-x'):
    value=self.expr(source)
    self.assertEqual(dumps(index_value(value,self.env,self.scope,_fresh=True)),
                     dumps(index_value(value,self.env,self.scope)))

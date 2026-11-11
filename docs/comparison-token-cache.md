@@ -57,8 +57,8 @@ were running, so this is evidence of reduced scanning, not a controlled speedup.
 ## Shared-container scan (2026-11-11)
 
 The generated parser passes strict grammar/lexer checks and the integration
-Python suite passes 535 tests; the remaining native integration checks are still
-running. The focused suite passes 77 tests, and the experimental joint-inference suite
+Python suite passes 535 tests. The native integration checks and the 92-proof
+corpus recheck subsequently completed with no failures. The focused suite passes 77 tests, and the experimental joint-inference suite
 passes 120 tests. Its native verifier passes 24 exact targets and 24 meaning
 proofs against this scanner. Full discovery remains pending; these checks do not
 establish full topology validation or production joint inference.
