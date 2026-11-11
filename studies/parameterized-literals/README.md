@@ -1135,3 +1135,50 @@ There is no grammar or production compiler change. Classifier-dependent computed
 indices, computed exact-literal result patterns, general binder/evidence checking,
 exhaustive dependent candidate validity and production integration remain open.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Computed result types of exact literals
+
+The experimental literal adapter now converts a declaration's result type with
+the same forward index plans as dependent callable signatures. For example:
+
+```clean
+Notation shifted(m: Natural): Matrix(m,(m+1),Complex):
+  Means: fun _ _ => (0 : Complex)
+  Literal: 7
+  Render latex: 7
+```
+
+This deliberately artificial literal tests declaration-driven interpretation:
+under expected type `Matrix(n,(n+1),Complex)`, `7` selects the declared wrapper
+at `n`, schematically Lean `shifted n`. No mathematical meaning is attached to
+the digit by the adapter. The direct first dimension recovers `m`; the second
+is a checked forward substitution, not an equation solved backwards.
+
+For every literal candidate, convert the captured result template recursively:
+nominal carrier constructors and direct formals retain their ordinary constraints;
+computed indices introduce IndexPlans with stable source-path identities. Keep
+those plans in the fragment. A literal value plan requires both its parameters
+and its full result carrier to be ground. Enclosing dependent calls inherit that
+readiness requirement, so they cannot reconstruct a literal before its computed
+result indices have been checked. Candidate reconstruction and selected emission
+use the identical path-based result conversion and the solved representatives.
+Retained BoundLiteral emission continues to validate the declared application.
+
+A carrier-shape contradiction can now reject an unrelated computed-result literal
+without evaluating its index: a matrix literal does not compete with a vector
+literal. An unresolved computed-result candidate with no such contradiction still
+blocks selection/defaulting as incomplete. Conflicting checked dimensions reject
+the candidate; two valid declarations remain ambiguous. The change refines the
+older unconditional rejection at result-template conversion, without introducing
+arithmetic inversion, body unfolding, or first-success selection.
+
+The regression suite covers direct recovery, conflicting dimensions, missing
+parameters, duplicate interpretations, retained codec replay, unrelated carrier
+rejection, and use inside a dependent call whose value becomes a record dimension.
+The independent native targets cover the direct literal and that nested call.
+Validation: all 183 experimental tests, 45 exact native targets and 45 supporting
+proofs pass. Provenance checks pass. Production inference, classifier-dependent computed indices and exhaustive
+dependent candidate validity remain unfinished. No parsing rule changes.
+:::

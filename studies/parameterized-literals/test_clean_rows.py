@@ -628,10 +628,46 @@ class CleanRows(unittest.TestCase):
   self.assertTrue(found)
   self.assertEqual(set(found),{'defaulted'})
 
- def test_computed_formal_competitor_is_not_dropped(self):
+ def shifted_literal(self):
+  notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
+   ['Means: fun _ _ => (0 : Complex)','Literal: 7','Render latex: 7'],self.e)
+ def test_computed_literal_result_recovers_direct_parameter(self):
+  self.shifted_literal()
+  expected=self.e.type('Matrix(n,(n+1),Complex)',self.scope)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('7','expression')),expected,use_default=False)
+  self.assertEqual(value.type,expected)
+  self.assertEqual(value.tree[3],'shifted')
+ def test_computed_literal_result_retained_codec(self):
+  from cleanlang.core import Expressions
+  from cleanlang.retained_codec import dumps,loads
+  self.shifted_literal()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('7','expression')),self.e.type('Matrix(n,(n+1),Complex)',self.scope),use_default=False)
+  self.assertEqual(Expressions(self.e,self.scope).elaborate(loads(dumps(value.tree))).lean,value.lean)
+ def test_computed_literal_result_duplicate_remains_ambiguous(self):
+  self.shifted_literal()
+  notation('Notation alternate shifted(m: Natural): Matrix(m,(m+1),Complex):',
+   ['Means: fun _ _ => (0 : Complex)','Literal: 7','Render latex: 7'],self.e)
+  with self.assertRaises(Ambiguous):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('7','expression')),self.e.type('Matrix(n,(n+1),Complex)',self.scope),use_default=False)
+ def test_computed_literal_result_inside_dependent_call(self):
+  self.record();self.shifted_literal()
+  notation('Define shifted size(n: Natural,x: Matrix(n,(n+1),Complex)): Natural:',
+   ['Equals: n','Render latex: size({x})'],self.e,authored=True)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(shifted size(n,7),0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('VectorCell(n)',self.scope))
+ def test_computed_literal_result_rejects_conflicting_dimension(self):
+  self.shifted_literal()
+  with self.assertRaises(NoSolution):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('7','expression')),self.e.type('Matrix(n,n,Complex)',self.scope),use_default=False)
+ def test_computed_literal_result_without_parameter_is_incomplete(self):
+  self.shifted_literal()
+  with self.assertRaises(Incomplete):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('7','expression')))
+ def test_computed_formal_unrelated_competitor_is_checked_by_shape(self):
   notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
    ['Means: fun _ _ => (0 : Complex)','Literal: 0','Render latex: 0'],self.e)
-  with self.assertRaises(Incomplete):self.solve('x != 0')
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('x != 0','expression')))
+  self.assertEqual(value.tree[3][3],'complex vector zero')
  def test_expected_result_does_not_resolve_operator_input_tie(self):
   notation('Notation alternative(x: Real,y: Real): Complex:',
    ['Means: 0','Infix: +','Render latex: {x}+{y}'],self.e)

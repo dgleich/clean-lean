@@ -3554,6 +3554,28 @@
         "General dependent candidate validity",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_computed_literal_result",
+      "status": "experimental-slice",
+      "environment": "Explicit linear algebra modules and shifted(m: Natural) exact literal 7 with Matrix(m,m+1,Complex) result",
+      "source": "7",
+      "expected_type": "Matrix(n,(n+1),Complex)",
+      "expected_tree": [
+        "Decimal",
+        "7"
+      ],
+      "expected_lean": "shifted n, using the exact declared native wrapper identity",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Recover direct parameters, forward-check computed result indices, wait for the complete result carrier before value reconstruction; reject definite shape conflicts but preserve unresolved competitors",
+      "pending": [
+        "Classifier-dependent computed indices",
+        "General dependent candidate validity",
+        "Production integration"
+      ]
     }
   ]
 }

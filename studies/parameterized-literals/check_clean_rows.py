@@ -299,8 +299,26 @@ noncomputable def expectedOpaqueParameter : {result} :=
 same_basic_target actualOpaqueParameter expectedOpaqueParameter
 theorem meaningOpaqueParameter : actualOpaqueParameter = (fun _ => (0 : Complex)) := by rfl
 """)
+notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
+ ['Means: fun _ _ => (0 : Complex)','Literal: 7','Render latex: 7'],env)
+notation('Define shifted size(n: Natural,x: Matrix(n,(n+1),Complex)): Natural:',
+ ['Equals: n','Render latex: size({x})'],env,authored=True)
+shifted_type=env.type('Matrix(n,(n+1),Complex)',scope)
+for i,(source,expected_type,result,expected,meaning) in enumerate([
+ ('7',shifted_type,f"{t('Matrix')} n ({f('natural sum')} n ({one})) {t('Complex')}",
+  f"@{f('shifted')} n",'(fun _ _ => (0 : Complex))'),
+ ('vector cell(shifted size(n,7),0)',None,f"{cell} n",
+  f"@{f('vector cell')} (@{f('shifted size')} n (@{f('shifted')} n)) (@{f('complex vector zero')} n)",None)]):
+ value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),expected_type,use_default=False)
+ checks.append(f"""
+noncomputable def actualComputedLiteral{i} (n : {t('Natural')}) : {result} := {value.lean}
+noncomputable def expectedComputedLiteral{i} (n : {t('Natural')}) : {result} := {expected}
+same_basic_target actualComputedLiteral{i} expectedComputedLiteral{i}
+theorem meaningComputedLiteral{i} (n : {t('Natural')}) :
+  {'actualComputedLiteral'+str(i)+' n = '+meaning if meaning else '(actualComputedLiteral'+str(i)+' n).entry = (fun _ => (0 : Complex))'} := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Forty-three experimental joint-row targets and forty-three meaning proofs passed; production joint inference remains unimplemented.')
+print('Forty-five experimental joint-row targets and forty-five meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

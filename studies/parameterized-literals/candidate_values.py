@@ -124,7 +124,7 @@ class CandidateValues:
                 name=self.functions[self.choices['literal',where]];spec=env.data['functions'][name]
                 formal,_=b.telescope(spec,where)
                 recovered={n:representatives.get(t) for n,t in formal.items()}
-                target=representatives.get(b.typ(spec['literal']['result'],formal))
+                target=representatives.get(b.dependent_type(spec['literal']['result'],formal,{},where+('literal result',))[0])
                 args=[[p.name,p.visibility,bind(reify(recovered[p.name],env,scope,classifier=p.typ).tree,env,scope,binders=True)]
                       for p in b.signature(spec).parameters]
                 return ['BoundLiteral',digits(node[1]),node[1],name,snapshot(name,env),args,

@@ -1922,3 +1922,17 @@ its producer is opaque; unknown field values may not. See the
 This changes the experimental adapter only. Classifier-dependent indices and
 production inference remain pending; no grammar change is introduced.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental exact literals with computed result indices
+
+Literal result templates now use forward checked index substitution. Literal
+value readiness includes the full result carrier as well as its parameters;
+candidate reconstruction and retained emission use the same path-based template
+conversion. Carrier contradictions can reject unrelated candidates, but unresolved
+computed indices cannot be discarded or solved by defaults. See the
+[constructive rule and examples](../studies/parameterized-literals/README.md#computed-result-types-of-exact-literals).
+This is experimental; production inference and general candidate validity remain
+open. There is no grammar change or implicit mathematical operator behavior.
+:::

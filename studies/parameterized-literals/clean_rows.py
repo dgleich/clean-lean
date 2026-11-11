@@ -264,11 +264,11 @@ class Builder:
                 if (spec['native_binding'],spec['lean'],self.env.notation_definitions.get(key))!=(key,template,declaration):
                     raise Incomplete('Changed literal declaration')
                 variables,_=self.telescope(spec,path)
-                carrier=self.typ(attachment['result'],variables)
+                carrier,deferred,witnesses=self.dependent_type(attachment['result'],variables,{},path+('literal result',))
                 output=Variable(repr((path,key,'value')),'index')
                 found.append(Fragment(carrier,output,
                     (('literal',path,key),),(carrier,),tuple(variables.values()),
-                    plans=(ValuePlan(output,path,tuple(variables.values())),)))
+                    deferred=deferred,witnesses=witnesses,plans=(ValuePlan(output,path,tuple(variables.values())+(carrier,)),)))
             if len(found)>self.limit:raise Incomplete('Literal declaration row limit exceeded')
             return found
         if kind in ('Operator','Unary'):
@@ -479,7 +479,7 @@ class Builder:
                 name=functions[selected_literals['literal',path]];spec=self.env.data['functions'][name]
                 formal,_=self.telescope(spec,path)
                 recovered={n:actual(value) for n,value in formal.items()}
-                target=actual(self.typ(spec['literal']['result'],formal))
+                target=actual(self.dependent_type(spec['literal']['result'],formal,{},path+('literal result',))[0])
                 args=[[p.name,p.visibility,bind(reify(recovered[p.name],self.env,self.scope,
                                      classifier=p.typ).tree,self.env,self.scope,binders=True)]
                       for p in self.signature(spec).parameters]

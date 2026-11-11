@@ -1422,5 +1422,15 @@ revealing unknown field values. See the
 <a href="../studies/parameterized-literals/README.md#computed-indices-from-reconstructed-arguments">precise rules, independent native oracles and remaining limits</a>.
 This is experimental, not production inference.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="computed-literal-result">
+<h2>Experimental literal result computations</h2>
+<p>A declared literal with result <code>Matrix(m,(m+1),Complex)</code> can recover
+<code>m</code> from a direct dimension and check the second dimension by substitution.
+With expected type <code>Matrix(n,(n+1),Complex)</code>, the specimen translates
+schematically to <code>shifted n</code>. Literal reconstruction waits for the full
+result carrier. Unresolved competitors block defaults. See the
+<a href="../studies/parameterized-literals/README.md#computed-result-types-of-exact-literals">precise construction and native oracles</a>.
+This is an experimental adapter extension, not production inference.</p>
+</section></llm>
 </body>
 </html>

@@ -371,6 +371,12 @@ noncomputable def cleanConstructor_dependent_payload_8c5da5dfcfa516434dad («n»
 noncomputable def cleanNotation_make_padded_cell_e9e33cd97cb0772b14f0  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («data» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : _root_.cleanStructure_PaddedCell_160f6a93d8c1ee02afcf («n») :=
   cleanConstructor_padded_cell_5ccc731b1064afbc4e96 n data
 
+noncomputable def cleanNotation_shifted_66a78a420aa379038b52  («m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  fun _ _ => (0 : Complex)
+
+noncomputable def cleanDefine_shifted_size_93b37437cf14da76d128  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («x» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  «n»
+
 
 open scoped Matrix
 
@@ -699,5 +705,19 @@ noncomputable def expectedOpaqueParameter : cleanType_Vector_cce915f2d60cfd4f85a
   @cleanStructure_PaddedCell_160f6a93d8c1ee02afcf.data (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (@cleanNotation_make_padded_cell_e9e33cd97cb0772b14f0 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))))
 same_basic_target actualOpaqueParameter expectedOpaqueParameter
 theorem meaningOpaqueParameter : actualOpaqueParameter = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualComputedLiteral0 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Matrix_4518cbfc13ff70fc0769 n (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@_root_.cleanNotation_shifted_66a78a420aa379038b52 (n))
+noncomputable def expectedComputedLiteral0 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Matrix_4518cbfc13ff70fc0769 n (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := @cleanNotation_shifted_66a78a420aa379038b52 n
+same_basic_target actualComputedLiteral0 expectedComputedLiteral0
+theorem meaningComputedLiteral0 (n : cleanType_Natural_469c53b6dafb7a218246) :
+  actualComputedLiteral0 n = (fun _ _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualComputedLiteral1 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanStructure_VectorCell_ea235d5395205122748e n := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((@_root_.cleanDefine_shifted_size_93b37437cf14da76d128 (n) ((@_root_.cleanNotation_shifted_66a78a420aa379038b52 (n))))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n))))
+noncomputable def expectedComputedLiteral1 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanStructure_VectorCell_ea235d5395205122748e n := @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (@cleanDefine_shifted_size_93b37437cf14da76d128 n (@cleanNotation_shifted_66a78a420aa379038b52 n)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)
+same_basic_target actualComputedLiteral1 expectedComputedLiteral1
+theorem meaningComputedLiteral1 (n : cleanType_Natural_469c53b6dafb7a218246) :
+  (actualComputedLiteral1 n).entry = (fun _ => (0 : Complex)) := by rfl
 
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md
