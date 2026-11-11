@@ -9,7 +9,7 @@ ROOT=Path(__file__).resolve().parents[1]
 class TypeIdentity(unittest.TestCase):
     def setUp(self):
         self.env = Environment()
-        load_module(ROOT / 'studies/type-identity/Foundation.clean.proposed', self.env)
+        load_module(ROOT / 'tests/fixtures/type_identity.clean', self.env)
         self.locals = {
             'Real': Expr('Real', 'Real', Type('Type'), tree=['Local', 'Real'])
         }

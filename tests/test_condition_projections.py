@@ -14,6 +14,10 @@ Source test:
   Kind: other
   Label: Test
   Title: Projection naming
+Condition same problem(P: InterlevelProblem,Q: InterlevelProblem):
+  Infix: =
+  From Lean: P = Q
+  Render latex: {{P}}={{Q}}
 Result example:
   Attribution: test; labels; original
   Let P,Q: InterlevelProblem

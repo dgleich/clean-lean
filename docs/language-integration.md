@@ -119,3 +119,21 @@ explicit classifier metadata, including aliases and renamed classifiers. See
 example, native oracles and pending broad validation. This supersedes the earlier
 closed-parameter gap, not the general universe-polymorphism or native freshness gaps.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+[Broader supplementary validation](broad-validation-2026-11-11.md) has exposed
+compatibility fixture failures and an unresolved vector-zero inference failure in
+the original similarity/BibTeX examples. Selected passing checks do not establish
+full regression. Three fixture modules now pass 25 checks after migration; the
+original specimens remain unchanged and failing. Complete discovery remains pending.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The supplementary run completed 1,054 tests with 17 failures and 19 errors.
+Six fixture failures are repaired and separately rechecked; 30 basic Clean/BibTeX
+failures remain in that snapshot. A native check additionally found unescaped Lean
+keywords in accepted result titles. Both genuine language defects are recorded in
+the broader validation report; neither is covered by the earlier selected passes.
+:::

@@ -1,6 +1,6 @@
 # generated: gpt-6 2026-11-06 role=assisted; see PROVENANCE.md
 from pathlib import Path
-import unittest
+import json,unittest
 from cleanlang.core import Environment,Expr,Expressions,CleanError,NAT
 from cleanlang.modules import load_module,notation,type_declaration
 from cleanlang.conversion import local_definition
@@ -17,7 +17,7 @@ class DimensionIndices(unittest.TestCase):
         d=self.typ('Vector(m,Real)').args[0]
         self.assertIsInstance(d,DimensionIndex)
         self.assertEqual((d.name,d.lean,d.tex,d.comparison_key()),('m','m','m','n'))
-        self.assertEqual(d.syntax,'["Local","m"]')
+        self.assertEqual(json.loads(d.syntax),{'format':'clean-bound-tree','version':4,'value':['Local','m']})
     def test_alias_equality_and_hash(self):
         a,b=self.typ('Vector(n,Real)'),self.typ('Vector(m,Real)')
         self.assertEqual(a,b);self.assertEqual(hash(a),hash(b))
