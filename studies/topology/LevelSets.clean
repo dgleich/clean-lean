@@ -1,0 +1,50 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "../../library/topology/level_sets.clean"
+Source levels:
+  Kind: other
+  Label: Level-set specialization
+  Title: Degenerate intervals with no selected endpoints
+
+Text:
+  These are set identities for the level-set specialization of interlevel data.
+  They do not establish the well-group formula or identify relative homology
+  with ordinary homology.
+
+Result level pair has fiber:
+  Attribution: levels; degenerate closed interval; original
+  Let X: TopologicalSpace
+  Let f,g: ContinuousRealMap(X)
+  Let a: Real
+  Conclude: perturbed pair(level problem(X,f,a),g).ambient = level fiber(X,g,a)
+
+Result expanded level pair has band:
+  Attribution: levels; expanded degenerate interval; original
+  Let X: TopologicalSpace
+  Let f: ContinuousRealMap(X)
+  Let a,r: Real
+  Conclude: expanded pair(level problem(X,f,a),r).ambient = level band(X,f,a,r)
+
+Result expanded level pair has no relative points:
+  Attribution: levels; no selected endpoints; original
+  Let X: TopologicalSpace
+  Let f: ContinuousRealMap(X)
+  Let a,r: Real
+  Let x: Point(X)
+  Conclude: not(x ∈ expanded pair(level problem(X,f,a),r).relative)
+
+Result shifted level pair has shifted fiber:
+  Attribution: levels; shifted degenerate interval; original
+  Let X: TopologicalSpace
+  Let f: ContinuousRealMap(X)
+  Let a,t: Real
+  Conclude: shifted pair(level problem(X,f,a),t).ambient = level fiber(X,f,a+t)
+
+Result level perturbation pair has no relative points:
+  Attribution: levels; no selected endpoints; original
+  Let X: TopologicalSpace
+  Let f,g: ContinuousRealMap(X)
+  Let a: Real
+  Let x: Point(X)
+  Conclude: not(x ∈ perturbed pair(level problem(X,f,a),g).relative)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

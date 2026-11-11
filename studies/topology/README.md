@@ -20,6 +20,7 @@ individual milestones.
 | [comparison.md](comparison.md) | GitHub-readable theorem comparisons; historical proposed interfaces |
 | [comparison.html](comparison.html) | Same comparison with side-by-side panels |
 | [requirements.md](requirements.md) | Current decisions, precise next-slice design, blockers and proof obligations |
+| [LevelSets.clean](LevelSets.clean) | Level-set specialization: fibers, bands and empty relative subsets; [mapping and proof scope](level-sets.md) |
 | [Common.clean](Common.clean) | Explicit topology import and source declarations |
 | [Foundations.clean](Foundations.clean) | Four implemented foundation statements |
 | [basic.clean](../../library/topology/basic.clean) | Clean-authored images, preimages, continuity, selection and family intersection |

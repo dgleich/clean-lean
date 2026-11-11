@@ -1,0 +1,28 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "interlevel.clean"
+
+Define level problem(X,f,a):
+  Let X: TopologicalSpace
+  Let f: ContinuousRealMap(X)
+  Let a: Real
+  Returns: InterlevelProblem
+  Equals: interlevel problem(X,f,endpoints(a,a),no endpoints())
+  Render latex: P({f},{a})
+
+Define level fiber(X,f,a):
+  Let X: TopologicalSpace
+  Let f: ContinuousRealMap(X)
+  Let a: Real
+  Returns: Set(Point(X))
+  Equals: set of(function(x: Point(X),real map value(X,f,x) = a))
+  Render latex: {f}^{{-1}}({a})
+
+Define level band(X,f,a,r):
+  Let X: TopologicalSpace
+  Let f: ContinuousRealMap(X)
+  Let a,r: Real
+  Returns: Set(Point(X))
+  Equals: set of(function(x: Point(X),a-r ≤ real map value(X,f,x) and real map value(X,f,x) ≤ a+r))
+  Render latex: {f}^{{-1}}([{a}-{r},{a}+{r}])
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

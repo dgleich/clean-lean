@@ -395,3 +395,18 @@ statement uses `OpenCover(X)` and explicit coefficients. Its geometric sequence
 and excision/identification proofs remain missing; supplying its inputs does not
 establish exactness or any paper theorem. This adds no language syntax.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Level-set specialization
+
+The [level-set module and study](level-sets.md) now specialize interlevel data to
+endpoints a,a with no selected endpoints. Clean definitions supply the level
+problem, fiber and expanded band. Five supporting identities identify the ambient
+fibers for arbitrary perturbing maps, expanded bands, shifted fibers and empty
+relative subsets. No additional language syntax is required. Ordinary/relative
+homology identification and the two-extreme-perturbation theorem remain separate
+mathematical obligations; the strict-endpoint interlevel candidate cannot be
+instantiated at a=a.
+:::

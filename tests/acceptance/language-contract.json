@@ -4613,6 +4613,21 @@
       "pending": [
         "Full current-revision regression and active-label regeneration"
       ]
+    },
+    {
+      "id": "level_set_specialization_module",
+      "status": "checked-mathematical-module-no-new-syntax",
+      "source": "library/topology/level_sets.clean; studies/topology/LevelSets.clean",
+      "environment": "Explicit interlevel, set, real-map and operator imports with their declared Lean bindings.",
+      "expected_lean": "Interlevel constructor at endpoints(a,a) with no endpoints; explicit set-builder fiber and band; reduced preimage fields in the five result targets.",
+      "checks": [
+        "studies/topology/verify_level_sets.py: three independent definition targets, five independent statement targets, five set-identity proofs"
+      ],
+      "pending": [
+        "Natural identification of empty-relative-pair homology with ordinary homology",
+        "Perturbation-class and closed-cover/excision audit",
+        "Paper Theorem 3 well-group equality"
+      ]
     }
   ]
 }

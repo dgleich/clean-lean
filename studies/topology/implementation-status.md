@@ -318,3 +318,18 @@ the exact boundary: selected-value-dependent results and lambdas built against
 proof expectations remain separate gaps. The full active-label snapshot is still
 running; geometric basis-extension and Mayer–Vietoris obligations are unchanged.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Level-set specialization
+
+The [level-set module and study](level-sets.md) now specialize interlevel data to
+endpoints a,a with no selected endpoints. Clean definitions supply the level
+problem, fiber and expanded band. Five supporting identities identify the ambient
+fibers for arbitrary perturbing maps, expanded bands, shifted fibers and empty
+relative subsets. No additional language syntax is required. Ordinary/relative
+homology identification and the two-extreme-perturbation theorem remain separate
+mathematical obligations; the strict-endpoint interlevel candidate cannot be
+instantiated at a=a.
+:::
