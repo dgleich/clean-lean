@@ -3165,3 +3165,53 @@ Reference HTML IDs/local links and provenance checks pass. The full topology swe
 remains live on its final input and is not yet a completed compatibility result.
 
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Completed topology sweep and comparison input checks
+
+The earlier full sweep has now completed: all 23 topology result documents,
+containing 100 results, generated identical Lean under legacy and joint routing.
+`Common.clean` was the only non-comparison because the former loader required
+results. The complete historical observations are retained in
+[compatibility.json](compatibility.json), including that error. The run spanned
+changes from `0bd7da8` through `b388ec9`; it is accumulated diagnostic evidence,
+not a single-revision acceptance gate.
+
+`tools/check_joint_compatibility.py` now recognizes declaration-only modules and
+emits their definitions. It still rejects malformed result documents. Workers
+fingerprint compiler Python, this driver, repository `library`/`corpus`/`studies`
+Clean sources and the direct input before and after translation. A changed sample,
+different worker snapshots, or missing fingerprints cannot count as agreement.
+These hashes exclude external import closures and dependency trees and cannot
+detect a transient edit restored between samples; they are not filesystem isolation.
+
+Six harness tests cover nonempty module emission, malformed-document rejection,
+mutation invalidation, different worker inputs despite matching output, missing
+historical fingerprints, and edits to an external direct input. These tests check
+the quality of the report, not mathematical correctness. The default translator
+continues to use legacy inference, and unresolved contextual/dependent inference
+boundaries remain open.
+:::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+A fresh comparison with source fingerprints passes for `Common.clean`,
+`ExactSequences.clean`, `HomologySequence.clean` and `MayerVietorisMaps.clean`:
+one declaration-only module and eleven results, with identical generated text
+and matching unchanged source samples in both workers. The report is retained in
+`studies/parameterized-literals/compatibility.json` under
+`topology_fingerprinted_modules_and_sequences`. This check translates statements;
+it does not rerun their proofs or establish canonical-target equality.
+:::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The four corpus documents also pass the updated comparison with matching unchanged
+source samples: 92 result statements generate identical text. This fresh run does
+not use `--verify-corpus`; the earlier 92 proof checks remain separately recorded.
+The new `corpus_fingerprinted` report must not be read as rerunning those proofs.
+:::

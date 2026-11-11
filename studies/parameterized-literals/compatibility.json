@@ -5,7 +5,7 @@
     "date": "2026-11-11",
     "role": "assisted"
   },
-  "note": "Compatibility evidence for the committed pruning implementation; times are observations, not performance guarantees.",
+  "note": "Accumulated compatibility observations at multiple implementation stages; each stage has its own scope. Text equality is not canonical-target or proof evidence.",
   "corpus_before_pruning": {
     "_provenance": {
       "origin": "llm",
@@ -330,6 +330,720 @@
           "lean_sha256": "94cadbf493afd8aaba0bc688aab00df9638d8bed394e2f24381de680e85429f1",
           "hole_calls": 3,
           "elapsed_seconds": 1.872
+        },
+        "comparison": "same-generated-text"
+      }
+    ]
+  },
+  "topology_historical_full_sweep": {
+    "_provenance": {
+      "origin": "llm",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "role": "assisted"
+    },
+    "scope": "Isolated document translation; generated text hashes are diagnostics, not canonical Lean or proof validation.",
+    "default_changed": false,
+    "files": [
+      {
+        "path": "studies/topology/Bundles.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 10,
+          "lean_sha256": "577f853f04228eca31d2c1993dc6d21ec813c43928305e0e7b9dd2dc92e9c70c",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.333
+        },
+        "joint": {
+          "status": "translated",
+          "results": 10,
+          "lean_sha256": "577f853f04228eca31d2c1993dc6d21ec813c43928305e0e7b9dd2dc92e9c70c",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.325
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/ChainSquares.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 2,
+          "lean_sha256": "cf4c144667cca799ded73fae2c8853c2636a24ab3b29fd089345fd09b19f9757",
+          "hole_calls": 0,
+          "elapsed_seconds": 1.095
+        },
+        "joint": {
+          "status": "translated",
+          "results": 2,
+          "lean_sha256": "cf4c144667cca799ded73fae2c8853c2636a24ab3b29fd089345fd09b19f9757",
+          "hole_calls": 0,
+          "elapsed_seconds": 1.056
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/Common.clean",
+        "legacy": {
+          "status": "error",
+          "error_type": "CleanError",
+          "message": "No results found",
+          "last_tree": null,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.224
+        },
+        "joint": {
+          "status": "error",
+          "error_type": "CleanError",
+          "message": "No results found",
+          "last_tree": null,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.216
+        },
+        "comparison": "baseline-unavailable"
+      },
+      {
+        "path": "studies/topology/CompactImage.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 1,
+          "lean_sha256": "fcfc08edbc1f1f0f096488755936f7e29ca94b5c190dae40df8dd487ed8d2055",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.244
+        },
+        "joint": {
+          "status": "translated",
+          "results": 1,
+          "lean_sha256": "fcfc08edbc1f1f0f096488755936f7e29ca94b5c190dae40df8dd487ed8d2055",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.247
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/Evidence.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 4,
+          "lean_sha256": "7df0032a32c8e998c83e2ca4aea7e4f6b41928b1730ca8d50cd79ab209074cdb",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.552
+        },
+        "joint": {
+          "status": "translated",
+          "results": 4,
+          "lean_sha256": "7df0032a32c8e998c83e2ca4aea7e4f6b41928b1730ca8d50cd79ab209074cdb",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.553
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/ExactSequences.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "85aae67f535748cbf6e1e1721add1484de26928aa1297a90ef743a0f6ed82cc1",
+          "hole_calls": 4,
+          "elapsed_seconds": 0.627
+        },
+        "joint": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "85aae67f535748cbf6e1e1721add1484de26928aa1297a90ef743a0f6ed82cc1",
+          "hole_calls": 4,
+          "elapsed_seconds": 1.716
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/ExtremeImages.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 4,
+          "lean_sha256": "f1faedc21234d80a854f9c6bf7a4dcf66791d57de5e71c93f9d75f19ee9eb9fd",
+          "hole_calls": 1,
+          "elapsed_seconds": 123.045
+        },
+        "joint": {
+          "status": "translated",
+          "results": 4,
+          "lean_sha256": "f1faedc21234d80a854f9c6bf7a4dcf66791d57de5e71c93f9d75f19ee9eb9fd",
+          "hole_calls": 1,
+          "elapsed_seconds": 127.615
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/Foundations.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 4,
+          "lean_sha256": "86bb4fd3bf0e8bcc273b77d74b676219da85a1ca44fe557c04b53a6d29e0b486",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.296
+        },
+        "joint": {
+          "status": "translated",
+          "results": 4,
+          "lean_sha256": "86bb4fd3bf0e8bcc273b77d74b676219da85a1ca44fe557c04b53a6d29e0b486",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.256
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/Homology.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "c4821ad2e938fdfaa0fc1d7a3851fe4a79033d6175a9a46e73d5b6096f252dae",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.519
+        },
+        "joint": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "c4821ad2e938fdfaa0fc1d7a3851fe4a79033d6175a9a46e73d5b6096f252dae",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.503
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/HomologySequence.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "361042f1f0f5e4d9c4ff53db67a453cc596c8df05ef1aaa11b98c484f4abd533",
+          "hole_calls": 11,
+          "elapsed_seconds": 0.75
+        },
+        "joint": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "361042f1f0f5e4d9c4ff53db67a453cc596c8df05ef1aaa11b98c484f4abd533",
+          "hole_calls": 11,
+          "elapsed_seconds": 3.353
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/Interlevel.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 12,
+          "lean_sha256": "bf8c6964e359e509d5673cad533e72055a77d03c9156a8284d66024c1d2b1eb7",
+          "hole_calls": 6,
+          "elapsed_seconds": 0.799
+        },
+        "joint": {
+          "status": "translated",
+          "results": 12,
+          "lean_sha256": "bf8c6964e359e509d5673cad533e72055a77d03c9156a8284d66024c1d2b1eb7",
+          "hole_calls": 6,
+          "elapsed_seconds": 0.878
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/LocalNames.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 2,
+          "lean_sha256": "dc8272eb095231d40ab02f0d716fb502f53eef73963e366bc8a39d0da8cf0615",
+          "hole_calls": 0,
+          "elapsed_seconds": 12.013
+        },
+        "joint": {
+          "status": "translated",
+          "results": 2,
+          "lean_sha256": "dc8272eb095231d40ab02f0d716fb502f53eef73963e366bc8a39d0da8cf0615",
+          "hole_calls": 0,
+          "elapsed_seconds": 15.907
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/MayerVietorisMaps.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 1,
+          "lean_sha256": "94cadbf493afd8aaba0bc688aab00df9638d8bed394e2f24381de680e85429f1",
+          "hole_calls": 3,
+          "elapsed_seconds": 1.47
+        },
+        "joint": {
+          "status": "translated",
+          "results": 1,
+          "lean_sha256": "94cadbf493afd8aaba0bc688aab00df9638d8bed394e2f24381de680e85429f1",
+          "hole_calls": 3,
+          "elapsed_seconds": 1.912
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/ModuleProducts.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 3,
+          "lean_sha256": "6bb3448abd4fcb26eb675bf3a0d7a5781587d00feb8de805729f54fb6a43af73",
+          "hole_calls": 3,
+          "elapsed_seconds": 0.714
+        },
+        "joint": {
+          "status": "translated",
+          "results": 3,
+          "lean_sha256": "6bb3448abd4fcb26eb675bf3a0d7a5781587d00feb8de805729f54fb6a43af73",
+          "hole_calls": 3,
+          "elapsed_seconds": 1.782
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/PairComposition.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 6,
+          "lean_sha256": "1e255aaaf83cdc3a2e44071d1a612f43e1db298a7639e04fd59b80966304e237",
+          "hole_calls": 0,
+          "elapsed_seconds": 1.411
+        },
+        "joint": {
+          "status": "translated",
+          "results": 6,
+          "lean_sha256": "1e255aaaf83cdc3a2e44071d1a612f43e1db298a7639e04fd59b80966304e237",
+          "hole_calls": 0,
+          "elapsed_seconds": 1.494
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/Paths.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 4,
+          "lean_sha256": "441c34bed43d4fef874ccc7ade10dcab2b761d01a89df30f9166d4a43354d81b",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.28
+        },
+        "joint": {
+          "status": "translated",
+          "results": 4,
+          "lean_sha256": "441c34bed43d4fef874ccc7ade10dcab2b761d01a89df30f9166d4a43354d81b",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.334
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/Relative.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 4,
+          "lean_sha256": "e6e776cac0a82903431c56517be9b46d8f8f352df1da83060f3944884b52dada",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.794
+        },
+        "joint": {
+          "status": "translated",
+          "results": 4,
+          "lean_sha256": "e6e776cac0a82903431c56517be9b46d8f8f352df1da83060f3944884b52dada",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.8
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/RelativeMaps.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 3,
+          "lean_sha256": "2cc0efd5a615b28e14312449bf3dca92493bb57cca98f0761617956b16873cc8",
+          "hole_calls": 0,
+          "elapsed_seconds": 11.561
+        },
+        "joint": {
+          "status": "translated",
+          "results": 3,
+          "lean_sha256": "2cc0efd5a615b28e14312449bf3dca92493bb57cca98f0761617956b16873cc8",
+          "hole_calls": 0,
+          "elapsed_seconds": 11.665
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/ShiftedPerturbations.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 6,
+          "lean_sha256": "e3604b8661cd3ce450ad9c372310c5c0aa8acebd2ee854937e5088b46dd28719",
+          "hole_calls": 1,
+          "elapsed_seconds": 187.125
+        },
+        "joint": {
+          "status": "translated",
+          "results": 6,
+          "lean_sha256": "e3604b8661cd3ce450ad9c372310c5c0aa8acebd2ee854937e5088b46dd28719",
+          "hole_calls": 1,
+          "elapsed_seconds": 191.403
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/Spaces.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "f716fddaa59487b60b2172a1fe3561499e0ef36c417f2569b52ae02805ed622a",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.335
+        },
+        "joint": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "f716fddaa59487b60b2172a1fe3561499e0ef36c417f2569b52ae02805ed622a",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.295
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/Subspaces.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 4,
+          "lean_sha256": "f07eaafd38bc788ed5bd08beec15cc3f6143dfbbd08e7fe32add44fdaae7a106",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.328
+        },
+        "joint": {
+          "status": "translated",
+          "results": 4,
+          "lean_sha256": "f07eaafd38bc788ed5bd08beec15cc3f6143dfbbd08e7fe32add44fdaae7a106",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.37
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/TwoImageCandidate.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 1,
+          "lean_sha256": "af203fdcb3d8a20233753df8f2873f782e1ccd6daec1385499da6843d58b2fd4",
+          "hole_calls": 1,
+          "elapsed_seconds": 134.479
+        },
+        "joint": {
+          "status": "translated",
+          "results": 1,
+          "lean_sha256": "af203fdcb3d8a20233753df8f2873f782e1ccd6daec1385499da6843d58b2fd4",
+          "hole_calls": 1,
+          "elapsed_seconds": 125.43
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/ValueIndices.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 4,
+          "lean_sha256": "b51919aeedc1fb690b9d8513208a7e6bbe6769502e7e6c5beb3104296ad26d95",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.245
+        },
+        "joint": {
+          "status": "translated",
+          "results": 4,
+          "lean_sha256": "b51919aeedc1fb690b9d8513208a7e6bbe6769502e7e6c5beb3104296ad26d95",
+          "hole_calls": 0,
+          "elapsed_seconds": 0.277
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/WellGroups.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "acd7e05e72bb90561020a2129f1a20067dbc359414ee3e212973bcef388a7cdd",
+          "hole_calls": 1,
+          "elapsed_seconds": 128.548
+        },
+        "joint": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "acd7e05e72bb90561020a2129f1a20067dbc359414ee3e212973bcef388a7cdd",
+          "hole_calls": 1,
+          "elapsed_seconds": 120.76
+        },
+        "comparison": "same-generated-text"
+      }
+    ],
+    "revision_scope": "Historical sweep launched at 0bd7da8 and completed while later changes through b388ec9 landed. Workers ran at different times; source fingerprints were not recorded. Not a single-revision conformance gate.",
+    "summary": "23 theorem documents, 100 results, identical generated text. Common.clean was not supported by the old document-only loader; its no-results error is retained below."
+  },
+  "topology_fingerprinted_modules_and_sequences": {
+    "_provenance": {
+      "origin": "llm",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "role": "assisted"
+    },
+    "scope": "Isolated document/module translation; generated text hashes are diagnostics, not canonical Lean or proof validation.",
+    "snapshot_scope": "Before/after fingerprints of cleanlang Python, this driver, repository library/corpus/studies Clean files and direct input. External import closures, dependencies and transient edits restored between samples are not covered.",
+    "default_changed": false,
+    "files": [
+      {
+        "path": "studies/topology/Common.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 0,
+          "lean_sha256": "863a08a997f9fbd28130eafb8251dc014a941ed99172a9b47c0e6b334899e4fb",
+          "input_kind": "module",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.32
+        },
+        "joint": {
+          "status": "translated",
+          "results": 0,
+          "lean_sha256": "863a08a997f9fbd28130eafb8251dc014a941ed99172a9b47c0e6b334899e4fb",
+          "input_kind": "module",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.312
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/ExactSequences.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "85aae67f535748cbf6e1e1721add1484de26928aa1297a90ef743a0f6ed82cc1",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 4,
+          "elapsed_seconds": 0.885
+        },
+        "joint": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "85aae67f535748cbf6e1e1721add1484de26928aa1297a90ef743a0f6ed82cc1",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 4,
+          "elapsed_seconds": 1.686
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/HomologySequence.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "361042f1f0f5e4d9c4ff53db67a453cc596c8df05ef1aaa11b98c484f4abd533",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 11,
+          "elapsed_seconds": 0.993
+        },
+        "joint": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "361042f1f0f5e4d9c4ff53db67a453cc596c8df05ef1aaa11b98c484f4abd533",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 11,
+          "elapsed_seconds": 3.463
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/MayerVietorisMaps.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 1,
+          "lean_sha256": "94cadbf493afd8aaba0bc688aab00df9638d8bed394e2f24381de680e85429f1",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 3,
+          "elapsed_seconds": 1.161
+        },
+        "joint": {
+          "status": "translated",
+          "results": 1,
+          "lean_sha256": "94cadbf493afd8aaba0bc688aab00df9638d8bed394e2f24381de680e85429f1",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 3,
+          "elapsed_seconds": 1.606
+        },
+        "comparison": "same-generated-text"
+      }
+    ]
+  },
+  "corpus_fingerprinted": {
+    "_provenance": {
+      "origin": "llm",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "role": "assisted"
+    },
+    "scope": "Isolated document/module translation; generated text hashes are diagnostics, not canonical Lean or proof validation.",
+    "snapshot_scope": "Before/after fingerprints of cleanlang Python, this driver, repository library/corpus/studies Clean files and direct input. External import closures, dependencies and transient edits restored between samples are not covered.",
+    "default_changed": false,
+    "files": [
+      {
+        "path": "corpus/algorithms.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "8043f9740de75f8842ac3a98f136ab08b5e4ea5221f8cff0e6f07cc3da563985",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 3,
+          "elapsed_seconds": 0.426
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "8043f9740de75f8842ac3a98f136ab08b5e4ea5221f8cff0e6f07cc3da563985",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 3,
+          "elapsed_seconds": 0.688
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "corpus/analysis.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "65e4af3f25d1850b43925d455d3b371f868ca9f3a2b53739df7df3d5d8b45fae",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 15,
+          "elapsed_seconds": 0.447
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "65e4af3f25d1850b43925d455d3b371f868ca9f3a2b53739df7df3d5d8b45fae",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 15,
+          "elapsed_seconds": 0.746
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "corpus/graph_theory.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "814f67cb776506949afb58851362bc0213400078f41ae24f50af1ebdc518b4e1",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.415
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "814f67cb776506949afb58851362bc0213400078f41ae24f50af1ebdc518b4e1",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.479
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "corpus/linear_algebra.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "d2b5de98a5b660d5be01518ec5218d09ad7b59d5a9ea17075f80b0ec795329fb",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 1,
+          "elapsed_seconds": 0.537
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "d2b5de98a5b660d5be01518ec5218d09ad7b59d5a9ea17075f80b0ec795329fb",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "5ae416706617db27b81a3f773836ef40804c61483f19af8e7b3149946c858040",
+            "clean_sources_sha256": "5fd2edb81137b2429e6b83713a4e9510c250f4c5f20a71d96d38417a28fe6d8e"
+          },
+          "inputs_stable": true,
+          "hole_calls": 1,
+          "elapsed_seconds": 0.641
         },
         "comparison": "same-generated-text"
       }

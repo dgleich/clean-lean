@@ -4392,7 +4392,8 @@
       "expected_lean": "Declared real sine/cosine, natural powers and real sum/equality; child contradictions are removed without defaults or parent result-based overload selection.",
       "checks": [
         "tests/test_joint_completion.py: no-default trigonometric regression",
-        "tools/check_joint_compatibility.py: isolated corpus and topology comparison; optional 92 corpus proofs",
+        "tools/check_joint_compatibility.py: isolated corpus, topology and declaration-module comparison with source fingerprints; optional 92 corpus proofs",
+        "tests/test_joint_compatibility.py: reject changed or missing input snapshots and preserve invalid-document errors",
         "studies/parameterized-literals: solver ambiguity/incomplete regression suite"
       ],
       "pending": [

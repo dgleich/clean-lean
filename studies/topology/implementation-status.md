@@ -158,6 +158,39 @@ The [inference study](../parameterized-literals/README.md) records native oracle
 corpus comparison, runtime migration checks and remaining contextual/dependent
 inference boundaries. In particular, a scalar result expectation may constrain a
 directly applied lambda, but an indexed application result must not be used to
-invent a constant codomain family. The all-topology comparison is still running;
-its partial observations are not a completed compatibility gate.
+invent a constant codomain family. The completed all-topology comparison is recorded below; it does not establish
+canonical-target conformance or justify changing production inference routing.
+:::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Completed topology text comparison
+
+The historical full sweep completed with identical generated Lean for all 23
+result documents (100 results). The old document-only loader could not compare
+`Common.clean`, which contains declarations and no results. Its error is preserved
+in [the evidence record](../parameterized-literals/compatibility.json).
+
+This sweep ran while revisions from `0bd7da8` through `b388ec9` landed. It has no
+source fingerprints and is not evidence for a single immutable compiler revision.
+The checker now handles declaration-only modules explicitly, without treating an
+invalid result document as a module. Before/after source fingerprints detect
+observed changes during a worker and disagreement between the two workers' inputs.
+The snapshots cover compiler Python, the driver, repository Clean sources and the
+direct input; they do not capture arbitrary external imports or dependency trees,
+nor detect an edit restored between samples. Generated text equality remains
+separate from the 42 canonical targets and 14 native proofs recorded above.
+:::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+A fresh comparison with source fingerprints passes for `Common.clean`,
+`ExactSequences.clean`, `HomologySequence.clean` and `MayerVietorisMaps.clean`:
+one declaration-only module and eleven results, with identical generated text
+and matching unchanged source samples in both workers. The report is retained in
+`studies/parameterized-literals/compatibility.json` under
+`topology_fingerprinted_modules_and_sequences`. This check translates statements;
+it does not rerun their proofs or establish canonical-target equality.
 :::

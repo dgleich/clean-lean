@@ -8872,6 +8872,14 @@
         "# ",
         ""
       ]
+    },
+    "tests/test_joint_compatibility.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }
