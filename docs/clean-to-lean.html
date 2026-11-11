@@ -1297,5 +1297,14 @@ functions or use defaults to guess applicability. This is not yet connected to
 Clean call reconstruction and has no new Lean mapping. See the
 <a href="../studies/parameterized-literals/README.md#forward-deferred-constraint-model">model contract and integration obligations</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="deferred-clean-calls">
+<h2>Experimental deferred Clean calls</h2>
+<p><code>vector cell(successor(2),0)</code> now checks the nested call after its
+Natural argument is fixed. Its zero-vector wrapper receives the same checked
+successor application, including the declared numeral wrapper. Module identities,
+implicit arguments and default origins are retained. This remains a supported
+experimental fragment, not general production inference. See the
+<a href="../studies/parameterized-literals/README.md#deferred-calls-in-the-clean-adapter">constructive mapping and remaining obligations</a>.</p>
+</section></llm>
 </body>
 </html>

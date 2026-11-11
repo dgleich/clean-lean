@@ -3234,7 +3234,7 @@
         "studies/parameterized-literals/check_clean_rows.py",
         "studies/parameterized-literals/test_constraint_model.py"
       ],
-      "native_oracles": "Fourteen independent exact targets and fourteen meaning proofs in studies/parameterized-literals/JointTargets.lean",
+      "native_oracles": "Seventeen independent exact targets and seventeen meaning proofs in studies/parameterized-literals/JointTargets.lean",
       "negative_cases": [
         "Duplicate zero constructors",
         "Unresolved families are not discarded",
@@ -3250,7 +3250,7 @@
         "Full production regression",
         "General dependent-default interactions",
         "General dependent telescope constraints and checked candidate applicability",
-        "Checked deferred call reconstruction in the Clean adapter"
+        "Deferred reconstruction for parameterized literal arguments, projections and general dependent calls"
       ],
       "retention_checks": [
         "Simultaneous defaulted position trace",

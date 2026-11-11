@@ -1759,3 +1759,16 @@ function rules. The [scheduler contract](../studies/parameterized-literals/READM
 specifies batching, incomplete-result precedence and budget boundaries. This is
 not yet connected to the Clean adapter and introduces no language syntax.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental deferred call reconstruction
+
+The study adapter now creates forward checks for calls whose chosen children have
+concrete retained trees. Checks use fixed module identities, validate explicit
+values and inferred arguments, and propagate checked result indices. Candidate
+checks do not register caller representatives; selected witnesses are rechecked
+with correct default-origin metadata. The [construction and limitations](../studies/parameterized-literals/README.md#deferred-calls-in-the-clean-adapter)
+define this supported fragment. General candidate validity and production
+integration are still pending; no new parse rule is introduced.
+:::

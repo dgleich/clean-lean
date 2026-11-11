@@ -491,3 +491,75 @@ Those native checks still exercise the adapter without deferred obligations;
 they are not evidence for the future Clean-call reconstruction. Production code
 is unchanged and full discovery remains outstanding.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Deferred calls in the Clean adapter
+
+The adapter now emits forward obligations for a declared call when every chosen
+child has a concrete retained syntax tree. Known caller subtrees and selected
+scalar-numeral candidates supply such trees. A nested call combines those trees
+using an explicit ModuleCall identity, retaining operator presentation where
+applicable. A local with the same name cannot redirect the call.
+
+An obligation waits for its explicit value terms and implicit parameter terms to
+be ground. It rechecks the concrete module call through the existing elaborator,
+compares checked explicit values and inferred implicit arguments with the solved
+terms, and returns the checked result's index-comparison key. Unsupported checking
+is incomplete; it is not silently treated as a mismatching candidate. A conclusively
+different checked argument is a mismatch. Child obligations precede parent
+obligations through these input dependencies, without relying on enumeration order.
+
+For example, these now work without numeral defaults:
+
+```clean
+vector cell(successor(2),0)
+vector cell(successor(successor(2)),0)
+vector cell(n+1,0)
+```
+
+Their zero-vector argument receives respectively the checked successor call,
+nested successor call, or declared natural-addition call. None requires inverting
+those functions. Independent native oracles retain the declared numeral and
+callable wrappers, not merely a definitionally equal Lean arithmetic expression.
+
+Each row carries its own reconstruction witnesses; evaluating candidates does
+not insert representatives into the caller pool. After selection, scalar-hole
+representatives are recorded in source order, then computed-call representatives
+in child-before-parent order. Existing equivalent caller/expected-type
+representatives retain priority. A witness is rechecked before retention and its
+index must agree with the solved output. The witness stores the correspondence
+between its concrete numeral positions and original hole positions, so retained
+copies preserve simultaneous-default origin markers. The final expression is
+still rechecked and its callable choices compared with the selected row.
+
+The operator applicability audit also saturates deferred obligations without
+parent result constraints. Expected results must still not select between two
+operators with the same valid input signature.
+
+Remaining boundary: exact parameterized literals do not yet supply concrete child
+trees until their arguments are reconstructed. Calls consuming such literals
+therefore may still have unresolved value variables, and not every dependent
+candidate has an applicability obligation. Computed formal indices, general
+binders/evidence, hole-bearing projections/applications and production integration
+remain open. A test preserves unresolved inference for
+`vector cell(length of vector(0),0)` rather than guessing the inner dimension.
+
+A separate probe exposed an existing production restriction: a Natural dimension
+formed with unary negation is rejected even if a module supplies a Natural-valued
+prefix interpretation. This experiment does not repair that restriction or claim
+all declared operator/index combinations are accepted.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Deferred-adapter validation: 106 experimental tests pass; seventeen independent
+native target comparisons and seventeen supporting proofs pass
+(`/tmp/clean-deferred-calls-final-native.log`). New native cases include
+successor(2), nested successor calls and n+1 as dimensions. Python checks cover
+module binding under local shadowing, conflicting expected indices, codec replay,
+and preservation of a defaulted numeral when count(0) is copied into a dependent
+zero-vector index. The production compiler is unchanged in this step. Existing
+full discovery/active-label processes were confirmed live, not restarted or
+counted as successes.
+:::

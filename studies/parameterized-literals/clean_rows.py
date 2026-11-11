@@ -12,7 +12,7 @@ from cleanlang.callable_signatures import require
 from cleanlang.numeral_inference import holes,default_carrier
 from cleanlang.numerals import digits,identity
 from cleanlang.operator_bindings import token
-from constraint_model import Variable,Atom,Carrier,Row,Incomplete,Ambiguous,NoSolution,select_with_trace,unify,resolve,variables
+from constraint_model import Variable,Atom,Carrier,Row,Deferred,saturate,Incomplete,Ambiguous,NoSolution,select_with_trace,unify,resolve,variables
 
 @dataclass(frozen=True)
 class Fragment:
@@ -22,6 +22,10 @@ class Fragment:
     carriers: tuple=()
     arguments: tuple=()
     equations: tuple=()
+    deferred: tuple=()
+    witnesses: tuple=()
+    syntax: object=None
+    origins: tuple=()
 
 class Builder:
     def __init__(self,env,scope,limit=4096):
@@ -81,11 +85,31 @@ class Builder:
             if p.visibility=='implicit':implicit.append(variables[p.name])
         return variables,tuple(implicit)
 
+    def call_witness(self,name,key,node,origins):
+        def checked(defaulted=()):
+            spec=self.env.data['functions'][name]
+            self.signature(spec)
+            if spec['native_binding']!=key:raise Incomplete('Changed deferred callable')
+            syntax=node
+            def replace_at(tree,path,origin):
+                result=list(tree)
+                if not path:
+                    if tree[0]!='BoundNumeral':raise Incomplete('Missing deferred numeral origin')
+                    result[4]=origin
+                else:result[path[0]]=replace_at(tree[path[0]],path[1:],origin)
+                return result
+            for local_path,source_path in origins:
+                syntax=replace_at(syntax,local_path,'defaulted' if source_path in defaulted else 'inferred')
+            try:return Expressions(self.env,self.scope).elaborate(syntax)
+            except CleanError as error:
+                raise Incomplete('Deferred call requires unavailable checking: '+str(error)) from error
+        return checked
+
     def fragments(self,tree,path=()):
         if not holes(tree):
             if path not in self.known or path not in self.known_values:
                 raise Incomplete('Known argument lacks checked index evidence')
-            return [Fragment(self.typ(self.known[path].type),self.known_values[path])]
+            return [Fragment(self.typ(self.known[path].type),self.known_values[path],syntax=self.known[path].tree)]
         kind=tree[0]
         if kind=='Decimal':
             text=digits(tree[1]);found=[]
@@ -95,7 +119,8 @@ class Builder:
                 value=Expressions(self.env,self.scope).elaborate(node)
                 carrier=self.typ(value.type)
                 found.append(Fragment(carrier,self.index(value)[0],
-                    (('numeral',path,spec['numerals']['native_binding']),),(carrier,)))
+                    (('numeral',path,spec['numerals']['native_binding']),),(carrier,),
+                    syntax=node,origins=(((),path),)))
             for name,spec in sorted(self.env.data['functions'].items()):
                 attachment=spec.get('literal')
                 if attachment is None or attachment['digits']!=text:continue
@@ -133,10 +158,36 @@ class Builder:
                 equations=tuple(eq for a in actuals for eq in a.equations)
                 equations+=tuple(zip(parameters,(a.typ for a in actuals)))
                 equations+=tuple((variables[n],a.value) for n,a in zip(explicit,actuals))
-                rows.append(Fragment(result,Variable(repr((path,spec['native_binding'],'value')),'index'),
+                output=Variable(repr((path,spec['native_binding'],'value')),'index')
+                deferred=tuple(d for a in actuals for d in a.deferred)
+                witnesses=tuple(w for a in actuals for w in a.witnesses)
+                syntax=None;origins=()
+                if all(a.syntax is not None for a in actuals):
+                    syntax=['ModuleCall',name,[a.syntax for a in actuals],spec['lean']]
+                    if kind in ('Operator','Unary'):syntax.append([fixity,token(tree[1],fixity)])
+                    origins=tuple(((2,i)+local,source) for i,a in enumerate(actuals) for local,source in a.origins)
+                    witness=self.call_witness(name,spec['native_binding'],syntax,origins)
+                    implicit_names=tuple(p.name for p in signature.parameters if p.visibility=='implicit')
+                    def evaluate(inputs,witness=witness,implicit_names=implicit_names):
+                        try:
+                            value=witness()
+                            if value.checked_args is None:raise Incomplete('Missing deferred checked arguments')
+                            for actual,expected in zip(value.checked_args,inputs):
+                                if self.index(actual)[0]!=expected:raise NoSolution('Deferred argument value mismatch')
+                            inferred=dict(value.inferred_args)
+                            for name,expected in zip(implicit_names,inputs[len(value.checked_args):]):
+                                if name not in inferred:raise Incomplete('Missing deferred implicit argument')
+                                if self.typ(inferred[name],{})!=expected:raise NoSolution('Deferred implicit argument mismatch')
+                            return self.index(value)[0]
+                        except CleanError as error:
+                            raise Incomplete('Deferred checked index is unsupported: '+str(error)) from error
+                    deferred+=(Deferred(output,tuple(a.value for a in actuals)+implicit,evaluate),)
+                    witnesses+=((output,witness),)
+                rows.append(Fragment(result,output,
                     tuple(c for a in actuals for c in a.choices)+(('call',path,spec['native_binding']),),
                     tuple(t for a in actuals for t in a.carriers),
-                    tuple(t for a in actuals for t in a.arguments)+implicit,equations))
+                    tuple(t for a in actuals for t in a.arguments)+implicit,equations,
+                    deferred,witnesses,syntax,origins))
         return rows
 
     def rows(self,tree,expected=None):
@@ -158,9 +209,11 @@ class Builder:
                 for i in range(2,len(node)):prepare(node[i],path+(i,))
         prepare(tree,())
         if expected is not None:self.typ(expected)
+        fragments=self.fragments(tree)
+        self.row_witnesses={f.choices:f.witnesses for f in fragments}
         return [Row(f.choices,f.carriers,f.carriers+f.arguments+(f.typ,),
-                    f.equations+(((f.typ,self.typ(expected)),) if expected is not None else ()))
-                for f in self.fragments(tree)]
+                    f.equations+(((f.typ,self.typ(expected)),) if expected is not None else ()),f.deferred)
+                for f in fragments]
 
     def solve_with_trace(self,tree,expected=None,*,use_default=True):
         name=default_carrier(self.env) if use_default else None
@@ -187,7 +240,7 @@ class Builder:
                 for f in self.fragments(node,path):
                     if any(literals.get((k,p))!=key for k,p,key in f.choices if k in ('literal','numeral')):continue
                     constraints=f.equations+tuple((t,fixed[p]) for t,p in zip(f.carriers,local_paths))
-                    try:bindings=unify(constraints,limit=self.limit)
+                    try:bindings=saturate(Row((),(),(),constraints,f.deferred),limit=self.limit)
                     except NoSolution:continue
                     if any(variables(resolve(t,bindings)) for t in f.arguments):
                         raise Incomplete('Operator input applicability remains unresolved')
@@ -210,7 +263,8 @@ class Builder:
         positions=holes(tree)
         defaulted={positions[i][0] for i in selected.defaulted_positions}
         row=next(row for row in self.rows(tree,expected) if row.choices==choices)
-        bindings=unify(row.equations+tuple(zip(row.arguments,actual_arguments)),limit=self.limit)
+        bindings=saturate(Row(row.choices,row.carriers,row.arguments,
+            row.equations+tuple(zip(row.arguments,actual_arguments)),row.deferred),limit=self.limit)
         from cleanlang.annotations import Annotation,references
         from cleanlang.bound_calls import bind
         from cleanlang.inferred_conversion import reify
@@ -226,6 +280,10 @@ class Builder:
             origin='defaulted' if path in defaulted else 'inferred'
             value=Expressions(self.env,self.scope).elaborate(
                 ['BoundNumeral',decimal,name,identity(name,self.env),origin])
+            self.known_index(value)
+        for output,witness in self.row_witnesses[choices]:
+            value=witness(defaulted)
+            if self.index(value)[0]!=resolve(output,bindings):raise Incomplete('Deferred result changed during retention')
             self.known_index(value)
         types={self.carrier_identity(n):n for n,s in self.env.data['types'].items()
                if 'native_binding' in s or n in self.env.structures}

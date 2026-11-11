@@ -418,4 +418,28 @@ same_basic_target actualComputedDimension2 expectedComputedDimension2
 theorem meaningComputedDimension2 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) :
   (actualComputedDimension2 n D).entry = (fun _ => (0 : Complex)) := by rfl
 
+
+noncomputable def actualDeferredDimension0 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) : cleanStructure_VectorCell_ea235d5395205122748e (cleanNotation_successor_04500991a57d12c49471 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((_root_.cleanNotation_successor_04500991a57d12c49471 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNotation_successor_04500991a57d12c49471 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))))))
+noncomputable def expectedDeferredDimension0 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) : cleanStructure_VectorCell_ea235d5395205122748e (cleanNotation_successor_04500991a57d12c49471 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) :=
+  @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (cleanNotation_successor_04500991a57d12c49471 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNotation_successor_04500991a57d12c49471 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))
+same_basic_target actualDeferredDimension0 expectedDeferredDimension0
+theorem meaningDeferredDimension0 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) :
+  (actualDeferredDimension0 n D).entry = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualDeferredDimension1 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) : cleanStructure_VectorCell_ea235d5395205122748e (cleanNotation_successor_04500991a57d12c49471 (cleanNotation_successor_04500991a57d12c49471 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))) := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((_root_.cleanNotation_successor_04500991a57d12c49471 ((_root_.cleanNotation_successor_04500991a57d12c49471 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNotation_successor_04500991a57d12c49471 ((_root_.cleanNotation_successor_04500991a57d12c49471 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))))))))
+noncomputable def expectedDeferredDimension1 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) : cleanStructure_VectorCell_ea235d5395205122748e (cleanNotation_successor_04500991a57d12c49471 (cleanNotation_successor_04500991a57d12c49471 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))) :=
+  @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (cleanNotation_successor_04500991a57d12c49471 (cleanNotation_successor_04500991a57d12c49471 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNotation_successor_04500991a57d12c49471 (cleanNotation_successor_04500991a57d12c49471 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))))
+same_basic_target actualDeferredDimension1 expectedDeferredDimension1
+theorem meaningDeferredDimension1 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) :
+  (actualDeferredDimension1 n D).entry = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualDeferredDimension2 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) : cleanStructure_VectorCell_ea235d5395205122748e (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (n) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (n) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))))
+noncomputable def expectedDeferredDimension2 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) : cleanStructure_VectorCell_ea235d5395205122748e (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) :=
+  @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))
+same_basic_target actualDeferredDimension2 expectedDeferredDimension2
+theorem meaningDeferredDimension2 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) :
+  (actualDeferredDimension2 n D).entry = (fun _ => (0 : Complex)) := by rfl
+
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

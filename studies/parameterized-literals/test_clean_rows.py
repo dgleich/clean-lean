@@ -126,15 +126,69 @@ class CleanRows(unittest.TestCase):
   with self.assertRaises(NoSolution):
    Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(successor(n),0)','expression')),
     self.e.type('VectorCell((successor(m)))',self.scope))
- def test_computed_dimension_with_unresolved_literal_is_still_unresolved(self):
+ def test_deferred_call_dimension_is_checked_without_default(self):
   self.record();self.successor()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(successor(2),0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('VectorCell((successor((2:Natural))))',self.scope))
+  self.assertEqual(value.tree[2][1][5][0][2][0],'ModuleCall')
+ def test_deferred_chain_keeps_nested_calls(self):
+  self.record();self.successor()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(successor(successor(2)),0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('VectorCell((successor(successor((2:Natural)))))',self.scope))
+ def test_deferred_operator_result_supplies_dimension(self):
+  self.record()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(n+1,0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('VectorCell((n+(1:Natural)))',self.scope))
+ def test_deferred_conflicting_result_is_not_ignored(self):
+  self.record();self.successor()
+  with self.assertRaises(NoSolution):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(successor(2),0)','expression')),
+    self.e.type('VectorCell((successor((3:Natural))))',self.scope))
+ def test_deferred_call_with_parameterized_literal_stays_unresolved(self):
+  self.record()
+  notation('Notation length of vector(x):',
+   ['Let n: Natural','Let x: Vector(n,Complex)','Returns: Natural','Means: n','Render latex: len({x})'],self.e)
   with self.assertRaises(Underdetermined):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(length of vector(0),0)','expression')),use_default=False)
+ def test_deferred_known_binding_change_is_incomplete(self):
+  self.record();self.successor()
+  self.e.data['functions']['successor']['lean']='changed'
+  with self.assertRaises(Incomplete):
    Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(successor(2),0)','expression')))
+ def test_deferred_default_origin_is_retained(self):
+  notation('Notation same(x):',['Let T: Type','Let x: T','Returns: T','Means: x','Render latex: {x}'],self.e)
+  value=Builder(self.e,{}).materialize(expression_tree(parse('same(0)','expression')))
+  self.assertEqual(value.tree[2][0][4],'defaulted')
+ def test_default_origin_survives_copy_into_dependent_index(self):
+  self.record()
+  notation('Notation count(x):',['Let T: Type','Let x: T','Returns: Natural','Means: 0','Render latex: count({x})'],self.e)
+  value=Builder(self.e,{}).materialize(expression_tree(parse('vector cell(count(0),0)','expression')))
+  source_numeral=value.tree[2][0][2][0]
+  index_call=value.tree[2][1][5][0][2]
+  self.assertEqual(source_numeral[4],'defaulted')
+  self.assertEqual(index_call[0],'ModuleCall')
+  self.assertEqual(index_call[2][0][4],'defaulted')
+ def test_deferred_dimension_codec_preserves_call(self):
+  from cleanlang.core import Expressions
+  from cleanlang.retained_codec import dumps,loads
+  self.record();self.successor()
+  value=Builder(self.e,{}).materialize(expression_tree(parse('vector cell(successor(2),0)','expression')))
+  replay=Expressions(self.e,{}).elaborate(loads(dumps(value.tree)))
+  self.assertEqual(value.lean,replay.lean)
  def test_computed_dimension_declaration_order_is_irrelevant(self):
   self.record();self.successor();tree=expression_tree(parse('vector cell(successor(n),0)','expression'))
   first=Builder(self.e,self.scope).materialize(tree)
   self.e.data['functions']=dict(reversed(list(self.e.data['functions'].items())))
   self.assertEqual(first.lean,Builder(self.e,self.scope).materialize(tree).lean)
+ def test_deferred_operator_uses_module_binding_despite_local_shadow(self):
+  self.record()
+  notation('Notation plus(x: Natural,y: Natural): Natural:',
+   ['Means: Nat.add x y','Infix: +','Render latex: {x}+{y}'],self.e)
+  self.e.operator_overloads['+']=['plus']
+  self.scope['plus']=Expr('f','f',self.e.type('Function(Natural,Function(Natural,Natural))'),tree=['Local','plus'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(2+2,0)','expression')))
+  self.assertIn(self.e.data['functions']['plus']['native_binding'],value.lean)
+  self.assertNotIn('(f)',value.lean)
  def solve(self,source,**kw):
   return Builder(self.e,self.scope).solve(expression_tree(parse(source,'expression')),**kw)
  def literal(self,result):return [key for kind,_,key in result[0] if kind=='literal']

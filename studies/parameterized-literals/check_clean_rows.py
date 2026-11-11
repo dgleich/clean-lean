@@ -105,8 +105,22 @@ same_basic_target actualComputedDimension{i} expectedComputedDimension{i}
 theorem meaningComputedDimension{i} {computed_binders} :
   (actualComputedDimension{i} n D).entry = (fun _ => (0 : Complex)) := by rfl
 """)
+none=f"{nn} (nat_lit 1)"
+for i,(source,index) in enumerate([
+ ('vector cell(successor(2),0)',f"{f('successor')} ({ntwo})"),
+ ('vector cell(successor(successor(2)),0)',f"{f('successor')} ({f('successor')} ({ntwo}))"),
+ ('vector cell(n+1,0)',f"{f('natural sum')} n ({none})")]):
+ value=Builder(env,computed_scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ checks.append(f"""
+noncomputable def actualDeferredDimension{i} {computed_binders} : {cell} ({index}) := {value.lean}
+noncomputable def expectedDeferredDimension{i} {computed_binders} : {cell} ({index}) :=
+  @{f('vector cell')} ({index}) (@{f('complex vector zero')} ({index}))
+same_basic_target actualDeferredDimension{i} expectedDeferredDimension{i}
+theorem meaningDeferredDimension{i} {computed_binders} :
+  (actualDeferredDimension{i} n D).entry = (fun _ => (0 : Complex)) := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Fourteen experimental joint-row targets and fourteen meaning proofs passed; production joint inference remains unimplemented.')
+print('Seventeen experimental joint-row targets and seventeen meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md
