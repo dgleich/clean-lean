@@ -1048,5 +1048,48 @@
         "comparison": "same-generated-text"
       }
     ]
+  },
+  "open_cover_module": {
+    "_provenance": {
+      "origin": "llm",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "role": "assisted"
+    },
+    "scope": "Isolated document/module translation; generated text hashes are diagnostics, not canonical Lean or proof validation.",
+    "snapshot_scope": "Before/after fingerprints of cleanlang Python, this driver, repository library/corpus/studies Clean files and direct input. External import closures, dependencies and transient edits restored between samples are not covered.",
+    "default_changed": false,
+    "files": [
+      {
+        "path": "studies/topology/OpenCovers.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 3,
+          "lean_sha256": "94c5c1587cd1cc717cf806032006f309360c1d24fc00a161aa561c0f879d1a21",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "95c6a9aedb7a87d8e3af035ffa5098d903f8745e7b7e48874679473b92d7a1b0",
+            "clean_sources_sha256": "22c016569ee19081c7db29ed43e5fc79d4e1efb2701293823c4f831609d06642"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.595
+        },
+        "joint": {
+          "status": "translated",
+          "results": 3,
+          "lean_sha256": "94c5c1587cd1cc717cf806032006f309360c1d24fc00a161aa561c0f879d1a21",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "95c6a9aedb7a87d8e3af035ffa5098d903f8745e7b7e48874679473b92d7a1b0",
+            "clean_sources_sha256": "22c016569ee19081c7db29ed43e5fc79d4e1efb2701293823c4f831609d06642"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.676
+        },
+        "comparison": "same-generated-text"
+      }
+    ]
   }
 }

@@ -1,0 +1,27 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "../../library/topology/open_covers.clean"
+Source covers:
+  Kind: other
+  Label: Open cover foundations
+  Title: Mathlib topology and certified open subsets
+
+Result open subset is open:
+  Attribution: covers; openness certificate; original
+  Let X: TopologicalSpace
+  Let U: OpenSubset(X)
+  Conclude: open in(U.carrier,space topology(X))
+
+Result overlap has intersection carrier:
+  Attribution: covers; open overlap definition; original
+  Let X: TopologicalSpace
+  Let U,V: OpenSubset(X)
+  Conclude: open overlap(X,U,V).carrier = U.carrier ∩ V.carrier
+
+Result cover contains every point:
+  Attribution: covers; coverage certificate; original
+  Let X: TopologicalSpace
+  Let C: OpenCover(X)
+  Let x: Point(X)
+  Conclude: x ∈ C.left.carrier or x ∈ C.right.carrier
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

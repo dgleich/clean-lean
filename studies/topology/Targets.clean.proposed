@@ -2,6 +2,8 @@
 -- Pending mathematical interfaces; NOT an accepted Clean module.
 -- See requirements.md for each blocker.
 Import "Common.clean"
+Import "../../library/topology/open_covers.clean"
+Import "../../library/algebra/exact_sequences.clean"
 
 Result increasing death critical set:
   Attribution: bigsteps; Theorem 9; adapted
@@ -61,11 +63,14 @@ Result interlevel well group:
 
 Result Mayer Vietoris:
   Attribution: hatcher; section 2.2; specialized
-  Let F: Field
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let coefficients: CoefficientModule(K,field)
   Let X: TopologicalSpace
-  Let U,V: OpenSubset(X)
-  Assume cover: union(U,V) = whole space(X)
+  Let C: OpenCover(X)
+  -- The open cover and terminal exactness condition exist. The geometric
+  -- sequence construction below remains unavailable, so this is still proposed.
   Conclude:
-    exact(mayer vietoris sequence(F,X,U,V))
+    exact sequence ending in zero(field,mayer vietoris sequence(field,coefficients,X,C))
 
 -- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

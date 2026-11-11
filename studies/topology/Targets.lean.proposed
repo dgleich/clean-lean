@@ -40,11 +40,12 @@ def interlevelWellGroupFormula
       shiftedPairImage F p f a b E r r ⊓
       shiftedPairImage F p f a b E r (-r)
 
+-- Schematic names: CleanOpenCover abbreviates the generated OpenCover record.
+-- Its subsets, openness and covering certificates are implemented in
+-- library/topology/open_covers.clean. The geometric sequence is still missing.
 def mayerVietorisStatement
-    (F : Type u) [Field F]
-    (X : Type v) [TopologicalSpace X]
-    (U V : TopologicalSpace.Opens X) : Prop :=
-  (U : Set X) ∪ (V : Set X) = Set.univ →
-    ExactSequence (mayerVietorisSequence F X U V)
+    (K : Type) [Field K] (coefficients : ModuleCat K)
+    (X : TopCat) (C : CleanOpenCover X) : Prop :=
+  exactSequenceEndingInZero (mayerVietorisSequence coefficients X C)
 
 -- generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md

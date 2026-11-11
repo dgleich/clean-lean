@@ -1789,5 +1789,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p>With an explicit <code>indexed zero(k: Natural,z: Real): Vector(k,Complex)</code> declaration, <code>(function(k: Natural,indexed zero(k,0)))(n)</code> has result <code>Vector(n,Complex)</code>. Its schematic Lean form is <code>(fun k =&gt; indexedZero k realZero) n</code>. The declared function and literal bindings supply the actual generated names.</p>
 <p>Each viable body row must establish the same checked codomain, using its own computed-index evidence. The ordinary dependent-function abstraction preserves the family; checked substitution supplies the application result. A shifted family <code>Vector((k+1),Complex)</code> works as well. Unresolved actual values and competing families remain incomplete. No child is selected or defaulted independently, and production routing is unchanged. See the <a href="../studies/parameterized-literals/README.md#direct-lambda-applications-with-dependent-results">examples and independent targets</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="open-cover-records">
+<h2>Open subsets and cover evidence</h2>
+<p>The explicit <code>topology/open_covers.clean</code> module defines <code>OpenSubset(X)</code> as a record with a set carrier and an <code>IsOpen</code> certificate for the topology of <code>X</code>. <code>OpenCover(X)</code> contains two such records and evidence that every point belongs to at least one. Its schematic Lean field type is <code>∀ x, x ∈ left.carrier ∨ x ∈ right.carrier</code>.</p>
+<p><code>open overlap(X,U,V)</code> is a Clean-authored constructor application. The proof field uses an explicit adapter for <code>IsOpen.inter</code>. These are ordinary record, condition, projection and evidence forms; no syntax or implicit instance rule is added. See the <a href="../studies/topology/open-covers.md">study and native target checks</a>. The geometric Mayer–Vietoris sequence remains unimplemented.</p>
+</section></llm>
 </body>
 </html>

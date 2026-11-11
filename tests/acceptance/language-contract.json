@@ -4481,6 +4481,21 @@
         "Competing/contextually unresolved codomain families",
         "Default production routing and full conformance"
       ]
+    },
+    {
+      "id": "topology_certified_open_covers",
+      "status": "implemented-native-checked",
+      "environment": "Explicit spaces, logic evidence and open_covers modules; pinned Mathlib TopCat and IsOpen.inter.",
+      "source": "Let X: TopologicalSpace; Let C: OpenCover(X); Let x: Point(X); Conclude: x ∈ C.left.carrier or x ∈ C.right.carrier",
+      "expected_lean": "Quantification over the declared TopCat wrapper and generated OpenCover record, with declared disjunction/membership over its left and right carrier projections. Covering evidence is a field, not an assumed conclusion of a separate topology theorem.",
+      "checks": [
+        "studies/topology/verify_open_covers.py: eight independent canonical targets and four proofs",
+        "studies/topology/OpenCovers.clean: openness, intersection-carrier and cover-membership statements"
+      ],
+      "pending": [
+        "Geometric Mayer–Vietoris sequence construction, excision and homology identification",
+        "No general canonical equivalence with Mathlib Opens is asserted"
+      ]
     }
   ]
 }

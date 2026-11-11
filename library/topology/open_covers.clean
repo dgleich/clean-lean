@@ -1,0 +1,42 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "spaces.clean"
+Import "../logic/evidence.clean"
+
+/-- An open subset of a fixed topological space, with its certificate. -/
+Structure OpenSubset(X: TopologicalSpace):
+  Let carrier: Set(Point(X))
+  Let openness: Evidence((open in(carrier,space topology(X))))
+  Constructor: open subset
+  Describe: an open subset of ${X}$
+  Describe plural: open subsets of ${X}$
+
+Condition covers space(X,U,V):
+  Let X: TopologicalSpace
+  Let U,V: OpenSubset(X)
+  Holds when:
+    for every (x: Point(X), x ∈ U.carrier or x ∈ V.carrier)
+  Assumption name: coverage by {U} and {V}
+  Render: {U} and {V} cover {X}
+
+/-- An ordered pair of open subsets whose union contains every point. -/
+Structure OpenCover(X: TopologicalSpace):
+  Let left,right: OpenSubset(X)
+  Let covering: Evidence((covers space(X,left,right)))
+  Constructor: open cover
+  Describe: a cover of ${X}$ by two open subsets
+
+Notation intersection openness(X,U,V):
+  Let X: TopologicalSpace
+  Let U,V: OpenSubset(X)
+  Returns: Evidence((open in((U.carrier ∩ V.carrier),space topology(X))))
+  Means: @IsOpen.inter X.carrier X.str U.carrier V.carrier U.openness V.openness
+  Render latex: \operatorname{{openIntersection}}({U},{V})
+
+Define open overlap(X,U,V):
+  Let X: TopologicalSpace
+  Let U,V: OpenSubset(X)
+  Returns: OpenSubset(X)
+  Equals: open subset(X,U.carrier ∩ V.carrier,intersection openness(X,U,V))
+  Render latex: {U} \cap {V}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

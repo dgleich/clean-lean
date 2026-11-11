@@ -206,3 +206,17 @@ syntax, with two additional independent Lean targets and zero-vector proofs in
 the scoped-call driver. It adds no topology theorem or implicit mathematical
 binding. Production routing and general contextual recovery remain open.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Concrete open-cover inputs
+
+[Open subsets and certified covers](open-covers.md) now provide Clean records for
+subsets with openness evidence and ordered binary covers with explicit coverage
+evidence. Coverage and intersection construction are authored in Clean; the only
+new native adapter imports Mathlib's `IsOpen.inter`. The proposed Mayer–Vietoris
+statement uses `OpenCover(X)` and explicit coefficients. Its geometric sequence
+and excision/identification proofs remain missing; supplying its inputs does not
+establish exactness or any paper theorem. This adds no language syntax.
+:::
