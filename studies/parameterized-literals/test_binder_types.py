@@ -151,3 +151,23 @@ class CheckedBinderTypeBridge(unittest.TestCase):
   term=codec.encode(self.env.type('Function(k: Natural,Vector((count carrier(type(Vector(k,Complex):Type))),Complex))',self.scope))
   self.env.data['types']['Type']['native_declaration']='changed classifier declaration'
   with self.assertRaises(Incomplete):codec.decode(term)
+
+ def literal_index(self,k='k'):
+  if 'count vector' not in self.env.data['functions']:
+   notation('Notation count vector(x):',['Let n: Natural','Let x: Vector(n,Complex)','Returns: Natural','Means: 0','Render latex: count({x})'],self.env)
+  return self.env.type(f'Function({k}: Natural,Vector((count vector((0:Vector({k},Complex)))),Complex))',self.scope)
+ def test_bound_literal_round_trip_preserves_target(self):
+  typ=self.literal_index();codec=self.codec();result=codec.decode(codec.encode(typ))
+  self.assertEqual(self.env.render_type(result,'lean',self.scope),self.env.render_type(typ,'lean',self.scope))
+ def test_bound_literal_alpha_stability(self):
+  codec=self.codec();self.assertEqual(codec.encode(self.literal_index('k')),codec.encode(self.literal_index('j')))
+ def test_bound_literal_typed_instantiation(self):
+  codec=self.codec();term=codec.encode(self.literal_index())
+  result=codec.apply(term,self.scope['n'])
+  expected=self.env.type('Vector((count vector((0:Vector(n,Complex)))),Complex)',self.scope)
+  self.assertEqual(self.env.render_type(result,'lean',self.scope),self.env.render_type(expected,'lean',self.scope))
+
+ def test_bound_literal_changed_declaration_is_incomplete(self):
+  codec=self.codec();term=codec.encode(self.literal_index())
+  self.env.data['functions']['complex vector zero']['literal']['digits']='1'
+  with self.assertRaises(Incomplete):codec.decode(term)

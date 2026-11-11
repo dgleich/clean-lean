@@ -2063,3 +2063,40 @@ Validation: 348 experimental Python tests, 86 exact native-target comparisons an
 and its typed instantiation. Full production discovery and active-label regeneration
 remain separate pending checks.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Literal payloads containing bound indices
+
+The experimental checked-type bridge now traverses retained parameterized literals,
+including `(0: Vector(k,Complex))` used as an operand inside a computed index under
+`Function(k: Natural,...)`. The selected literal is preserved, rather than rerunning
+literal selection or converting its retained source to an ordinary call.
+
+For a checked BoundLiteral, the template keeps canonical and authored digits, the
+selected declaration name and snapshot, parameter names and visibility in telescope
+order, and presentation. Parameter source trees and the carrier annotation are
+removed from that template. Each parameter expression becomes a structural child;
+ordered recovered implicit arguments and the checked result type follow. These
+children use the existing binder abstraction, instantiation and scope rules.
+
+Reconstruction decodes every parameter, rebuilds the saved telescope with those
+source trees, and creates a carrier Annotation from the decoded result type and its
+free references. Existing literal replay then verifies the declaration snapshot,
+digits, telescope, recovered implicit arguments, and result carrier. The bridge
+also compares the result type and inferred arguments with its retained children.
+Thus a changed literal declaration cannot silently select a new interpretation.
+The representation remains non-injective: equality of literal results does not
+justify recovering their parameter arguments.
+
+Independent Lean targets cover a vector-zero operand inside a dependent index and
+its instantiation at a caller's dimension. Python checks additionally exercise
+alpha renaming and changed-declaration rejection. This extends the preceding
+annotation slice. Contextual metavariables, conversion of unequal retained terms,
+embedded lambda inference, higher-universe binders and joint/production integration
+remain pending. This is representation support, not a new literal inference policy.
+
+Validation: 352 experimental Python tests, 88 exact native-target comparisons and
+88 supporting proofs pass. Full production validation remains a separate pending
+check; these results do not establish production joint-inference conformance.
+:::

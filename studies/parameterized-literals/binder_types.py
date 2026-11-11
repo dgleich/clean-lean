@@ -74,7 +74,10 @@ class CheckedBinderTypes:
             self.templates.setdefault(key,(skeleton,1,()))
             return IndexExpression(key,(self._encode(carrier,scope,locals,path+('carrier',)),
                                         self._encode(checked.type,scope,locals,path+('result',))))
-        if kind=='ModuleCall':
+        if kind=='BoundLiteral':
+            operands=tuple(Expressions(self.env,scope).elaborate(t) for _,_,t in tree[5])
+            skeleton=[*tree[:5],[[n,v,None] for n,v,_ in tree[5]],None,tree[7]]
+        elif kind=='ModuleCall':
             operands=checked.checked_args
             if operands is None:raise Incomplete('Computed call lacks checked operands')
             skeleton=[kind,tree[1],None,*tree[3:]]
@@ -107,6 +110,11 @@ class CheckedBinderTypes:
             operands=[]
         else:operands=[reify(v,self.env,scope).tree for v in values[:count]]
         if tree[0]=='BoundTypeValue':pass
+        elif tree[0]=='BoundLiteral':
+            from cleanlang.annotations import Annotation,references
+            tree[5]=[[n,v,t] for (n,v,_),t in zip(tree[5],operands)]
+            carrier=values[-1]
+            tree[6]=Annotation(str(carrier),carrier,references(carrier,scope))
         elif tree[0]=='ModuleCall':tree[2]=operands
         elif tree[0]=='Projection':tree[1]=operands[0]
         elif tree[0]=='Apply':tree[1]=operands[0];tree[2]=operands[1:]

@@ -4027,6 +4027,22 @@
         "Embedded lambda inference",
         "Joint and production integration"
       ]
+    },
+    {
+      "id": "experimental_bound_literal_payload_bridge",
+      "status": "experimental-slice",
+      "source": "Function(k: Natural,Vector((count vector((0:Vector(k,Complex)))),Complex))",
+      "checks": [
+        "studies/parameterized-literals/test_binder_types.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Expose literal parameters and carrier structurally; preserve and recheck literal snapshot, telescope, digits and presentation; two independent native targets",
+      "pending": [
+        "Contextual metavariables",
+        "Checked conversion of unequal retained expressions",
+        "Embedded lambda inference",
+        "Joint and production integration"
+      ]
     }
   ]
 }

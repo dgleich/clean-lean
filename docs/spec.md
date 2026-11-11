@@ -2196,3 +2196,16 @@ snapshot and carrier universe. See the
 The existing source grammar is unchanged. This extends the experimental computed
 index representation; it does not integrate joint inference into production.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental bound literal payloads
+
+The checked binder-type bridge exposes retained literal arguments and carrier types
+structurally. It preserves the selected declaration snapshot, digits, telescope
+visibility and presentation. Reconstruction invokes checked literal replay and
+compares inferred arguments and the result carrier. See the
+[construction and remaining limits](../studies/parameterized-literals/README.md#literal-payloads-containing-bound-indices).
+This changes neither the source grammar nor production literal selection. It does
+not license injective decomposition of literal expressions during unification.
+:::

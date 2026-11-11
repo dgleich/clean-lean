@@ -1635,5 +1635,15 @@ classifier and universe. See the
 <a href="../studies/parameterized-literals/README.md#type-values-containing-bound-indices">mapping and remaining limits</a>.
 This is not yet the production joint-inference path.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="bound-literal-payloads">
+<h2>Literal operands under binders (experimental bridge)</h2>
+<p>A computed index may contain <code>(0: Vector(k,Complex))</code>. The bridge
+retains the selected vector-zero declaration and traverses its dimension argument.
+The expanded Lean operand is <code>(fun _ : Fin k => (0 : Complex))</code>;
+exact targets retain the declared zero wrapper applied to k. Reconstruction checks
+the original declaration and its arguments. See the
+<a href="../studies/parameterized-literals/README.md#literal-payloads-containing-bound-indices">mapping and limits</a>.
+Joint and production integration remain pending.</p>
+</section></llm>
 </body>
 </html>
