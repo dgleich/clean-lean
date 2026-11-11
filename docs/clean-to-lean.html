@@ -1834,5 +1834,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p><code>zero chain quotient(field,C,D)</code> uses the declared cokernel of the declared zero map. Clean definitions construct its projection and both induced homology directions. The reduction map explicitly imports Mathlib's <code>cokernelZeroIsoTarget.hom</code>. Local object names in the four inverse-law statements remain Lean lets.</p>
 <p>The <a href="../studies/topology/zero-chain-quotients.md">study</a> checks sixteen canonical targets and proves nine inverse, naturality and cokernel-agreement laws. The quotient map is Clean-authored as reduction, then the given chain map, then projection; its homology map uses the existing functor adapter. No new syntax is required. The empty-relative-subset chain identification and its compatible equality transport remain open.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="empty-singular-chains">
+<h2>Empty spaces and zero singular chains</h2>
+<p><code>empty space(X)</code> maps to <code>IsEmpty X.carrier</code>; <code>zero chain complex(field,C)</code> maps to the categorical <code>IsZero C</code> with the explicit field instance. <code>empty relative part(X,Q)</code> is Clean-authored using the relative subspace.</p>
+<p>The <a href="../studies/topology/empty-chains.md">study</a> checks five exact targets and proves that an empty space has zero singular chains and an empty relative part has zero chain inclusion. These use the existing singular-chain functor and actual pair inclusion. Cokernel equality transport and the full ordinary/relative homology identification remain separate steps.</p>
+</section></llm>
 </body>
 </html>

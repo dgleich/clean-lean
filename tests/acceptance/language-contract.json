@@ -4642,6 +4642,20 @@
         "Compatible equality transport and ordinary-homology identification",
         "Level well-group theorem"
       ]
+    },
+    {
+      "id": "empty_singular_chains",
+      "status": "checked-mathematical-module-no-new-syntax",
+      "source": "library/topology/empty_chains.clean; studies/topology/EmptyChains.clean",
+      "expected_lean": "IsEmpty of the declared space carrier; IsZero of the declared module chain complex; the actual pair chain inclusion equals the declared zero map.",
+      "checks": [
+        "studies/topology/verify_empty_chains.py: three condition and two statement targets; two Clean-result proofs and a generic empty-chain lemma"
+      ],
+      "pending": [
+        "Compatible cokernel equality transport",
+        "Level-set empty-part certificates and ordinary-homology identification",
+        "Well-group formula and closed-cover/excision audit"
+      ]
     }
   ]
 }

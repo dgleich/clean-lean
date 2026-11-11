@@ -1,0 +1,22 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "relative_homology.clean"
+
+Condition empty space(X):
+  Let X: TopologicalSpace
+  From Lean: IsEmpty X.carrier
+  Render: {X} is empty
+
+Condition zero chain complex(field,C):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C: ModuleChainComplex(K,field)
+  From Lean: (letI : Field K := field; CategoryTheory.Limits.IsZero C)
+  Render: {C} is a zero chain complex
+
+Condition empty relative part(X,Q):
+  Let X: TopologicalSpace
+  Let Q: TopologicalPair(X)
+  Holds when: empty space(subspace(X,Q.relative))
+  Render: {Q} has empty relative part
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

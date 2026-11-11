@@ -1,0 +1,27 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "../../library/topology/empty_chains.clean"
+Source empty_chains:
+  Kind: other
+  Label: Empty-space singular chains
+  Title: Mathlib singular-chain comparison with alternating constant complexes
+
+Result empty space has zero singular chains:
+  Attribution: empty_chains; singularChainComplexFunctorIsoOfTotallyDisconnectedSpace; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Assume empty space(X)
+  Conclude: zero chain complex(field,singular chains(field,H,X))
+
+Result empty relative part has zero chain inclusion:
+  Attribution: empty_chains; maps from a zero object; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: TopologicalPair(X)
+  Assume empty relative part(X,Q)
+  Conclude: pair chain inclusion(field,H,X,Q) = zero chain map(field,singular chains(field,H,subspace(X,Q.relative)),singular chains(field,H,subspace(X,Q.ambient)))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

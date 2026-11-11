@@ -361,3 +361,17 @@ map for a supplied commuting square. No new native adapter or syntax is added.
 The actual empty-subspace chain identification and compatible equality transport
 remain necessary before applying these results to the level well group.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Empty relative subsets give zero chain inclusions
+
+The [empty-chain study](empty-chains.md) now proves that the actual singular chains
+of an empty space form a zero object and that the actual relative chain inclusion
+is zero for a pair with empty relative part. Five canonical targets, two Clean-result
+proofs and a generic supporting lemma check this concrete construction. The two
+foundational conditions import IsEmpty and IsZero explicitly; the relative condition
+uses an authored Clean definition. Cokernel transport along the inclusion equality,
+its compatibility and the ordinary-homology identification remain open.
+:::

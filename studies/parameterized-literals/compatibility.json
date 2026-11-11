@@ -2227,5 +2227,101 @@
       "log": "/tmp/clean-zero-quotient-naturality.log"
     },
     "scope": "Four inverse laws, four naturality laws and one agreement with cokernel.map. The empty-subspace identification and compatible equality transport remain pending."
+  },
+  "empty_singular_chains": {
+    "comparison": {
+      "_provenance": {
+        "origin": "llm",
+        "model": "gpt-6",
+        "date": "2026-11-11",
+        "role": "assisted"
+      },
+      "scope": "Isolated document/module translation; generated text hashes are diagnostics, not canonical Lean or proof validation.",
+      "snapshot_scope": "Before/after fingerprints of cleanlang Python, this driver, repository library/corpus/studies Clean files and direct input. External import closures, dependencies and transient edits restored between samples are not covered.",
+      "default_changed": false,
+      "files": [
+        {
+          "path": "library/topology/empty_chains.clean",
+          "legacy": {
+            "status": "translated",
+            "results": 0,
+            "lean_sha256": "f540f803594d21ed2637fd4e25a47ee1de3185ab8204384eb7730fe113a02367",
+            "input_kind": "module",
+            "snapshot": {
+              "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+              "clean_sources_sha256": "36edc822ad520085356fad50861b576257367b180a2efdf7ed1cff47afd72cd2"
+            },
+            "inputs_stable": true,
+            "hole_calls": 0,
+            "elapsed_seconds": 1.153
+          },
+          "joint": {
+            "status": "translated",
+            "results": 0,
+            "lean_sha256": "f540f803594d21ed2637fd4e25a47ee1de3185ab8204384eb7730fe113a02367",
+            "input_kind": "module",
+            "snapshot": {
+              "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+              "clean_sources_sha256": "36edc822ad520085356fad50861b576257367b180a2efdf7ed1cff47afd72cd2"
+            },
+            "inputs_stable": true,
+            "hole_calls": 0,
+            "elapsed_seconds": 1.229
+          },
+          "comparison": "same-generated-text"
+        },
+        {
+          "path": "studies/topology/EmptyChains.clean",
+          "legacy": {
+            "status": "translated",
+            "results": 2,
+            "lean_sha256": "673cfb4ed35ddb9e6164fb52410ee264e5f7dd90fa40106b2e779a46af62534f",
+            "input_kind": "document",
+            "snapshot": {
+              "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+              "clean_sources_sha256": "36edc822ad520085356fad50861b576257367b180a2efdf7ed1cff47afd72cd2"
+            },
+            "inputs_stable": true,
+            "hole_calls": 0,
+            "elapsed_seconds": 1.12
+          },
+          "joint": {
+            "status": "translated",
+            "results": 2,
+            "lean_sha256": "673cfb4ed35ddb9e6164fb52410ee264e5f7dd90fa40106b2e779a46af62534f",
+            "input_kind": "document",
+            "snapshot": {
+              "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+              "clean_sources_sha256": "36edc822ad520085356fad50861b576257367b180a2efdf7ed1cff47afd72cd2"
+            },
+            "inputs_stable": true,
+            "hole_calls": 0,
+            "elapsed_seconds": 0.856
+          },
+          "comparison": "same-generated-text"
+        }
+      ],
+      "corpus_proofs": {
+        "status": "proved",
+        "results": 92,
+        "lean_sha256": "8ff4e4b4826de95e63ac97a37b8d58dcb088316a66e57cd634986057ddc07413",
+        "input_kind": "corpus-proofs",
+        "snapshot": {
+          "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+          "clean_sources_sha256": "36edc822ad520085356fad50861b576257367b180a2efdf7ed1cff47afd72cd2"
+        },
+        "inputs_stable": true,
+        "hole_calls": 19,
+        "elapsed_seconds": 19.348
+      }
+    },
+    "native": {
+      "status": "passed",
+      "canonical_targets": 5,
+      "clean_result_proofs": 2,
+      "supporting_lemmas": 1,
+      "log": "/tmp/clean-empty-chains-native.log"
+    },
+    "scope": "Actual singular-chain zero object and empty-relative inclusion equality; compatible cokernel transport and ordinary-homology identification remain pending."
   }
 }
