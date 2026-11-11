@@ -1571,5 +1571,16 @@ including its inverse-law proofs; it does not replace that wrapper by
 <code>Equiv.trans</code>. Three exact target comparisons and three proofs check
 composition, identity, and reversal on the working compiler.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="chained-callable-signatures">
+<h2>Chained dependent calls (experimental)</h2>
+<p>Given a callback with type
+<code>Function(j: Natural,Function(v: Vector(j,Complex),Function(k: Natural,Vector((j+k),Complex))))</code>,
+<code>f(2)(0)(3)</code> uses j=2 to constrain the middle zero to a complex vector,
+then k=3 to determine the result dimension. The expanded Lean form is
+<code>f (2 : Nat) (fun _ =&gt; (0 : Complex)) (3 : Nat)</code>;
+the exact target retains declared numeral and vector-literal wrappers. Ordinary
+function layers preserve dependencies needed by later dependent layers. See the
+<a href="../studies/parameterized-literals/README.md#chained-callable-signatures">scope and propagation rule</a>.</p>
+</section></llm>
 </body>
 </html>

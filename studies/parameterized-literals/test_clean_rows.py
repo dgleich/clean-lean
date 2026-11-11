@@ -964,6 +964,45 @@ class CleanRows(unittest.TestCase):
   self.scope['f']=Expr('f','f',typ,tree=['Local','f'])
   with self.assertRaises(Incomplete):
    Builder(self.e,self.scope).materialize(expression_tree(parse('hidden offset(f,0)','expression')),use_default=False)
+ def nested_map_producer(self):
+  notation('Notation nested maps(x: Real): Function(n: Natural,Function(k: Natural,Vector((n+k),Complex))):',
+   ['Means: fun _ _ _ => (0 : Complex)','Render latex: nested({x})'],self.e)
+ def test_chained_dependent_head_preserves_first_argument(self):
+  self.nested_map_producer()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('nested maps(0)(2)(3)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+(3:Natural)),Complex)',self.scope))
+ def test_chained_dependent_local_preserves_first_argument(self):
+  typ=self.e.type('Function(j: Natural,Function(k: Natural,Vector((j+k),Complex)))',self.scope)
+  self.scope['f']=Expr('f','f',typ,tree=['Local','f'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('f(2)(3)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+(3:Natural)),Complex)',self.scope))
+ def test_chained_dependent_head_preserves_computed_first_argument(self):
+  self.nested_map_producer()
+  notation('Define count real(x: Real): Natural:', ['Equals: (2:Natural)','Render latex: count({x})'],self.e,authored=True)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('nested maps(0)(count real(0))(3)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+(3:Natural)),Complex)',self.scope))
+ def test_chained_dependent_head_keeps_outer_free_dimension(self):
+  self.nested_map_producer()
+  builder=Builder(self.e,self.scope,binder_ids={'n':('binder',())})
+  value=builder.materialize(expression_tree(parse('nested maps(0)(n)(3)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector((n+(3:Natural)),Complex)',self.scope))
+  self.assertEqual(builder.dependencies(value.type),frozenset({('binder',())}))
+ def test_chained_dependent_head_rejects_wrong_second_argument(self):
+  self.nested_map_producer()
+  with self.assertRaises(NoSolution):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('nested maps(0)(2)(r)','expression')),use_default=False)
+ def test_chained_dependent_head_retains_codec(self):
+  from cleanlang.retained_codec import dumps,loads
+  from cleanlang.core import Expressions
+  self.nested_map_producer()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('nested maps(0)(2)(3)','expression')),use_default=False)
+  self.assertEqual(Expressions(self.e,self.scope).elaborate(loads(dumps(value.tree))).lean,value.lean)
+ def test_chained_dependent_domain_constrains_vector_literal(self):
+  typ=self.e.type('Function(j: Natural,Function(v: Vector(j,Complex),Function(k: Natural,Vector((j+k),Complex))))',self.scope)
+  self.scope['f']=Expr('f','f',typ,tree=['Local','f'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('f(2)(0)(3)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+(3:Natural)),Complex)',self.scope))
+  self.assertEqual(value.tree[1][2][0][3],'complex vector zero')
  def map_producer(self):
   notation('Notation make map(n: Natural,x: Real): Function(Vector(n,Complex),Real):',
    ['Means: fun _ => x','Render latex: map({n},{x})'],self.e)

@@ -1769,3 +1769,46 @@ No grammar or production behavior changes. Embedded lambda constraints, general
 inverse dependent-type inference, universal symbolic-family validity, and production
 integration remain pending. Paper proofs are separate obligations.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Chained callable signatures
+
+The experimental adapter now carries callable metadata from an application result
+into the next application, for both ordinary and dependent function layers.
+Metadata consists of the checked template, its formal substitutions, concrete
+argument evidence where available, and the converted result carrier. It is local
+to the candidate row and must agree with that row's carrier. No selected source
+expression is replaced by an independently chosen representative.
+
+For a declared `nested maps(x: Real)` returning
+`Function(n: Natural,Function(k: Natural,Vector((n+k),Complex)))`, the expression
+`nested maps(0)(2)(3)` retains the three successive applications and has vector
+dimension 2+3. A local callback of the corresponding type supports `f(2)(3)`.
+More importantly, a family with type
+`Function(j: Natural,Function(v: Vector(j,Complex),Function(k: Natural,Vector((j+k),Complex))))`
+supports `f(2)(0)(3)`: the middle layer is ordinary in v, yet its domain depends on
+j and its result contains another dependent layer. The zero there is constrained
+to the declared complex-vector literal of dimension two.
+
+At each Apply node, domain conversion uses the accumulated formal map. A dependent
+layer additionally binds its own argument before converting the codomain; an
+ordinary layer preserves the map without inventing a binder. The codomain's
+callable template and converted carrier become the next row-local descriptor.
+All constraints and value/type plans from earlier applications remain in the row.
+Checked local application uses the same propagation rule. Source parsing remains
+the existing left-associated postfix application grammar; inference never chooses
+a different grouping. Retained reconstruction rechecks every application.
+
+Validation: 279 experimental Python tests pass, along with 71 independently
+expected Lean targets and 71 supporting proofs. Production full discovery remains
+live. The active-label regeneration terminated with status 143 without new
+artifacts and is being rerun; neither run is counted as passing.
+
+The tests cover module producers, local callbacks, computed first arguments,
+outer-scope dimensions, wrong second arguments, retained serialization, and a
+mixed ordinary/dependent chain. Independent native targets spell each application
+and every selected numeral/vector wrapper explicitly. This is not embedded lambda
+inference, higher-universe generalization, or inverse inference of hidden type
+parameters. Those limits and production integration remain pending.
+:::

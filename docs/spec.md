@@ -2113,3 +2113,15 @@ from incomplete checking and restore the enclosing trial on every exit. See the
 No inverse inference from an opaque type key, embedded lambda support, or
 production integration is claimed. Existing grammar is unchanged.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental chained callable signatures
+
+Application results now retain checked callable descriptors through both ordinary
+and dependent function layers. Subsequent domain and codomain conversion use the
+accumulated formal map; only a dependent layer adds a binding for its argument.
+Source grouping remains the existing left-associated postfix grammar. See the
+[constructive chain rule and examples](../studies/parameterized-literals/README.md#chained-callable-signatures).
+No production or grammar change is claimed; embedded lambda inference remains open.
+:::

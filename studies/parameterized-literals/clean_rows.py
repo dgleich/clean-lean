@@ -15,7 +15,7 @@ from cleanlang.operator_bindings import token
 from constraint_model import Variable,Atom,Carrier,Row,Deferred,saturate,Incomplete,Ambiguous,NoSolution,select_with_trace,unify,resolve,variables
 
 @dataclass(frozen=True)
-class DependentHead:
+class CallableHead:
     template: object
     formals: tuple
     evidence: tuple
@@ -36,7 +36,7 @@ class Fragment:
     fields: tuple=()
     parameters: tuple=()
     plans: tuple=()
-    dependent_function: object=None
+    callable_signature: object=None
 
 class Builder:
     def __init__(self,env,scope,limit=4096,*,binder_ids=None,binder_path=()):
@@ -303,7 +303,7 @@ class Builder:
                 base.arguments,base.equations,deferred,witnesses,syntax,origins,
                 selected_field.fields if selected_field is not None else (),
                 selected_field.parameters if selected_field is not None else (),plans,
-                self.dependent_head(field_type,formals,evidence,typ)))
+                self.callable_head(field_type,formals,evidence,typ)))
         return results
 
     def local_call_fragments(self,tree,path):
@@ -330,13 +330,13 @@ class Builder:
                 argument.choices+(choice,),argument.carriers,
                 argument.arguments,argument.equations+((argument.typ,domain_term),),
                 argument.deferred+deferred,argument.witnesses+witnesses,
-                plans=argument.plans+(ValuePlan(output,path,requirements,result),)))
+                plans=argument.plans+(ValuePlan(output,path,requirements,result),),
+                callable_signature=self.callable_head(codomain,formals,evidence,result)))
         return results
 
-    def dependent_head(self,typ,formals,evidence,carrier):
-        from cleanlang.dependent_functions import DependentFunctionType
-        if isinstance(typ,DependentFunctionType):
-            return DependentHead(typ,tuple(formals.items()),tuple(evidence.items()),carrier)
+    def callable_head(self,typ,formals,evidence,carrier):
+        if self.env.is_function_type(typ):
+            return CallableHead(typ,tuple(formals.items()),tuple(evidence.items()),carrier)
         return None
 
     def application_fragments(self,tree,path):
@@ -350,18 +350,22 @@ class Builder:
         functions={self.carrier_identity(n) for n in self.env.data['types'] if self.env.is_function_type(Type(n))}
         results=[]
         for head,argument in product(heads,arguments):
-            deferred=();witnesses=()
-            if head.dependent_function is not None:
-                descriptor=head.dependent_function;function=descriptor.template
-                if descriptor.carrier!=head.typ:raise Incomplete('Dependent head metadata disagrees with carrier')
+            deferred=();witnesses=();next_function=None
+            if head.callable_signature is not None:
+                descriptor=head.callable_signature;function=descriptor.template
+                if descriptor.carrier!=head.typ:raise Incomplete('Callable head metadata disagrees with carrier')
+                from cleanlang.dependent_functions import DependentFunctionType
                 formals=dict(descriptor.formals);evidence=dict(descriptor.evidence)
-                domain,domain_deferred,domain_witnesses=self.dependent_type(function.domain,formals,evidence,path+('application domain',))
-                formals[function.binder]=argument.value
-                evidence.pop(function.binder,None)
-                if argument.syntax is not None:
-                    evidence[function.binder]=self.call_witness(None,None,argument.syntax,argument.origins)
-                result,deferred,witnesses=self.dependent_type(function.codomain,formals,evidence,path+('application result',))
+                domain_type,codomain=function.args
+                domain,domain_deferred,domain_witnesses=self.dependent_type(domain_type,formals,evidence,path+('application domain',))
+                if isinstance(function,DependentFunctionType):
+                    formals[function.binder]=argument.value
+                    evidence.pop(function.binder,None)
+                    if argument.syntax is not None:
+                        evidence[function.binder]=self.call_witness(None,None,argument.syntax,argument.origins)
+                result,deferred,witnesses=self.dependent_type(codomain,formals,evidence,path+('application result',))
                 deferred=domain_deferred+deferred;witnesses=domain_witnesses+witnesses
+                next_function=self.callable_head(codomain,formals,evidence,result)
             else:
                 if not isinstance(head.typ,Carrier):raise Incomplete('Application head type unresolved')
                 if head.typ.identity not in functions or len(head.typ.arguments)!=2:continue
@@ -373,7 +377,7 @@ class Builder:
                 head.choices+argument.choices+(('application',path,'inferred'),),head.carriers+argument.carriers,
                 head.arguments+argument.arguments,head.equations+argument.equations+((argument.typ,domain),),
                 head.deferred+argument.deferred+deferred,head.witnesses+argument.witnesses+witnesses,
-                plans=plans+(ValuePlan(output,path,requirements,result),)))
+                plans=plans+(ValuePlan(output,path,requirements,result),),callable_signature=next_function))
         return results
 
     def known_fragment(self,value,atom=None,*,optional=False):
@@ -516,7 +520,7 @@ class Builder:
                     tuple(t for a in actuals for t in a.carriers),
                     tuple(t for a in actuals for t in a.arguments)+implicit,equations,
                     deferred,witnesses,syntax,origins,fields,record_arguments,plans,
-                    self.dependent_head(signature.result,variables,evidence,result)))
+                    self.callable_head(signature.result,variables,evidence,result)))
         return rows
 
     def rows(self,tree,expected=None):

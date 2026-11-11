@@ -3926,6 +3926,23 @@
         "Basis extension and pyramid theorem",
         "Full current compiler regression"
       ]
+    },
+    {
+      "id": "experimental_chained_callable_signatures",
+      "status": "experimental-slice",
+      "source": "nested maps(0)(2)(3); f(2)(0)(3)",
+      "expected_outcome": "Earlier argument values constrain later callable domains and codomains through ordinary and dependent function layers",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Preserve left-associated parse, row-local callable metadata, scope dependencies, retained applications, and independent native targets",
+      "pending": [
+        "Embedded lambda inference",
+        "Higher-universe generalization",
+        "Inverse dependent-type inference",
+        "Production integration"
+      ]
     }
   ]
 }

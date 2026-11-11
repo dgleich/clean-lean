@@ -118,3 +118,23 @@ Its conversion module SHA-256 is
 Both are pending. The older fresh-operator snapshot jobs remain live baseline
 checks and do not validate this projection change.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Active-label regeneration termination and retry
+
+The projection-snapshot active-label session 83679 returned exit status 143.
+Its Python process 229974 was confirmed defunct; the log was empty and its
+Generated/Verified artifacts still had their pre-run timestamps. This is a
+terminated, incomplete validation, not a successful check. The cause of the
+termination was not established. Full Python discovery session 84890 was still
+live when checked.
+
+A new invocation uses the same immutable snapshot and conversion hash. A detached
+wrapper records its start and child return code in
+`/tmp/clean-projection-active-retry.json`, with output in
+`/tmp/clean-projection-active-retry.log`. Initial wrapper PID: 233718. The retry
+was started only after terminal status was confirmed; it is pending, not passing.
+The signature-chain changes in the experimental study do not change this
+production compiler snapshot.
+:::

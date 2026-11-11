@@ -486,6 +486,40 @@ noncomputable def expectedParameterizedCarrier (r : {t('Real')}) : {result_lean}
 same_basic_target actualParameterizedCarrier expectedParameterizedCarrier
 theorem meaningParameterizedCarrier (r : {t('Real')}) : actualParameterizedCarrier r = (fun _ => r) := by rfl
 """)
+notation('Notation nested maps(x: Real): Function(n: Natural,Function(k: Natural,Vector((n+k),Complex))):',
+ ['Means: fun _ _ _ => (0 : Complex)','Render latex: nested({x})'],env)
+value=Builder(env,scope).materialize(expression_tree(parse('nested maps(0)(2)(3)','expression')),use_default=False)
+three=f"{nn} (nat_lit 3)"
+result_lean=f"{t('Vector')} ({f('natural sum')} ({ntwo}) ({three})) {t('Complex')}"
+expected=f"((@{f('nested maps')} ({nr} (nat_lit 0))) ({ntwo})) ({three})"
+checks.append(f"""
+noncomputable def actualDependentChain : {result_lean} := {value.lean}
+noncomputable def expectedDependentChain : {result_lean} := {expected}
+same_basic_target actualDependentChain expectedDependentChain
+theorem meaningDependentChain : actualDependentChain = (fun _ => (0 : Complex)) := by rfl
+""")
+local_scope=dict(scope)
+local_scope['callback']=Expr('callback','f',env.type('Function(j: Natural,Function(k: Natural,Vector((j+k),Complex)))',scope),tree=['Local','callback'])
+value=Builder(env,local_scope).materialize(expression_tree(parse('callback(2)(3)','expression')),use_default=False)
+function_lean=f"(j k : {t('Natural')}) → {t('Vector')} ({f('natural sum')} j k) {t('Complex')}"
+expected=f"callback ({ntwo}) ({three})"
+checks.append(f"""
+noncomputable def actualLocalDependentChain (callback : {function_lean}) : {result_lean} := {value.lean}
+noncomputable def expectedLocalDependentChain (callback : {function_lean}) : {result_lean} := {expected}
+same_basic_target actualLocalDependentChain expectedLocalDependentChain
+theorem meaningLocalDependentChain (callback : {function_lean}) : actualLocalDependentChain callback = {expected} := by rfl
+""")
+local_scope=dict(scope)
+local_scope['callback']=Expr('callback','f',env.type('Function(j: Natural,Function(v: Vector(j,Complex),Function(k: Natural,Vector((j+k),Complex))))',scope),tree=['Local','callback'])
+value=Builder(env,local_scope).materialize(expression_tree(parse('callback(2)(0)(3)','expression')),use_default=False)
+function_lean=f"(j : {t('Natural')}) → {t('Vector')} j {t('Complex')} → (k : {t('Natural')}) → {t('Vector')} ({f('natural sum')} j k) {t('Complex')}"
+expected=f"callback ({ntwo}) (@{f('complex vector zero')} ({ntwo})) ({three})"
+checks.append(f"""
+noncomputable def actualMixedDependentChain (callback : {function_lean}) : {result_lean} := {value.lean}
+noncomputable def expectedMixedDependentChain (callback : {function_lean}) : {result_lean} := {expected}
+same_basic_target actualMixedDependentChain expectedMixedDependentChain
+theorem meaningMixedDependentChain (callback : {function_lean}) : actualMixedDependentChain callback = {expected} := by rfl
+""")
 source='for every (z: Vector(n,Complex), z != 0)'
 value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
 checks.append(f"""
@@ -533,6 +567,6 @@ theorem meaningScopedCarrier : actualScopedCarrier := by
 """)
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Sixty-eight experimental joint-row targets and sixty-eight meaning proofs passed; production joint inference remains unimplemented.')
+print('Seventy-one experimental joint-row targets and seventy-one meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md
