@@ -1,0 +1,11 @@
+--- a/tests/test_type_expressions.py
++++ b/tests/test_type_expressions.py
+@@ -82,7 +82,7 @@
+    self.expr('retain(type(Real))')
+  def test_explicit_foundation_required(self):
+   del self.e.data['types']['Type']
+-  with self.assertRaisesRegex(CleanError,'foundational Type binding'):
++  with self.assertRaisesRegex(CleanError,'No declared classifier'):
+    self.expr('type(Real)')
+  def test_continuation_and_encoded_collision(self):
+   results=self.load_statement('  Assume reflexive(\n    type(Real),x)')

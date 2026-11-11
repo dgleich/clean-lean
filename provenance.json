@@ -7756,6 +7756,90 @@
         "-- ",
         ""
       ]
+    },
+    "studies/universe-classifiers/type-values.patch": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "manifest"
+    },
+    "studies/universe-classifiers/type-value-fixtures.patch": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "manifest"
+    },
+    "studies/universe-classifiers/test_classified_values.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/check_value_targets.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/TypeValueExample.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/TypeValueTargets.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/TypeValueExample.tex": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/TypeValueSpecimen.tex": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/TypeValueSpecimen.pdf": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "manifest"
+    },
+    "studies/universe-classifiers/type-values.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "markdown"
     }
   }
 }

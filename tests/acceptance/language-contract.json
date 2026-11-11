@@ -2528,7 +2528,7 @@
         "tests/test_contextual_key_contract.py: six stale-metadata, identity, shell and pool-restoration checks",
         "tests/test_quantified_beta.py: choice-backed quantified comparisons",
         "tools/check_contextual_family_targets.py: three exact targets and two proofs",
-        "studies/choice/verify.py: seven exact targets and three proofs"
+        "studies/choice/verify.py: ten exact targets and three proofs"
       ],
       "pending": [
         "Full integration regression",
@@ -2848,14 +2848,14 @@
     {
       "id": "closed_universe_classifier_syntax",
       "status": "isolated-prototype",
-      "environment": "Pinned dde5d8e plus syntax, metadata and carrier patches; implicit higher-carrier calls prototyped, full feature pending.",
+      "environment": "Pinned classifier stack including type-values.patch; explicit/unannotated values and retained identity implemented in isolation.",
       "source": "type(TopologicalSpace : LargeTypes)",
       "expected_tree": [
         "ClassifiedTypeValue",
         "TopologicalSpace",
         "LargeTypes"
       ],
-      "expected_lean": "PROPOSED: native TopologicalSpace carrier term checked against the explicitly selected Classifies:1 classifier. No translation implementation or canonical target comparison exists yet.",
+      "expected_lean": "TypeValueTargets.lean checks a declaration returning the LargeTypes native wrapper with body the declared TopologicalSpace native carrier, without coercion or universe lift.",
       "checks": [
         "studies/universe-classifiers/test_syntax.py: independent explicit and nested trees, old tree preservation and malformed-form rejection",
         "studies/universe-classifiers/verify.py: strict generated parser, reproducibility, selected regressions and handwritten native feasibility with three proofs",
@@ -2864,13 +2864,14 @@
         "studies/universe-classifiers/test_carriers.py: fifteen document, implicit inference, level/identity, substitution and rejection checks",
         "studies/universe-classifiers/check_carrier_targets.py: five exact native targets and one topology-object identity proof",
         "studies/universe-classifiers/carrier-fixtures.patch: thirteen fixtures migrated without weakening assertions; extra 29 regression checks pass",
-        "studies/operator-integration/verify_foundations.py, verify_saved.py, verify_dispatch.py: 67 exact native targets and ten proofs on the migrated classifier stack"
+        "studies/operator-integration/verify_foundations.py, verify_saved.py, verify_dispatch.py: 67 exact native targets and ten proofs on the migrated classifier stack",
+        "studies/universe-classifiers/check_value_targets.py: independent type-value tree, ten exact targets and three proofs",
+        "studies/universe-classifiers/test_classified_values.py: 26 selection, scope, result-index, retention, substitution, naming, rendering and rejection cases"
       ],
       "pending": [
-        "Complete first-class type expressions and classifier ambiguity selection",
-        "Audit and update all local-type, substitution, inference, comparison, literal and storage consumers",
-        "Independent canonical Clean-to-Lean targets and required negative semantic cases",
-        "Editor/browser coverage and full regression"
+        "Versioned codec/schema migration and payload-only replay",
+        "Higher projected carriers and carrier-valued records/dependent callables",
+        "Broader native-environment freshness contracts, full regression and production integration"
       ]
     },
     {
@@ -2902,10 +2903,9 @@
       "checks": [
         "studies/universe-classifiers/check_carrier_targets.py: independent conclusion tree, five canonical native targets and a kernel-checked identity proof",
         "studies/universe-classifiers/test_carriers.py: exact-level rejection, ordinary-bundle rejection, aliases, repeated-argument agreement and substitution identity",
-        "studies/universe-classifiers/verify.py: 260 selected tests plus explicit-carrier, native foundation, saved-expression and dispatch checks"
+        "studies/universe-classifiers/verify.py: 281 selected tests plus explicit-carrier, native foundation, saved-expression and dispatch checks"
       ],
       "pending": [
-        "Higher first-class type-value elaboration and inferred higher-carrier reification",
         "Carrier-valued dependent fields/callables, classifier ambiguity selection and storage schema migration",
         "Full regression on the latest fixture snapshot and production integration"
       ]
@@ -2950,9 +2950,30 @@
         "explicit-oracles.patch: two dispatch declaration expectations migrated to primitive Type domains"
       ],
       "pending": [
-        "Higher first-class type values and inferred higher-type reification",
         "Carrier-valued dependent fields/callables and storage migration",
         "Full regression and production integration"
+      ]
+    },
+    {
+      "id": "retained_classifier_identity",
+      "status": "isolated-prototype",
+      "environment": "Closed classifier stack with in-memory checked annotations; plain JSON replay is deliberately rejected.",
+      "source": "Bind type(TopologicalSpace) with one visible level-1 classifier; add a second classifier; replay the bound value.",
+      "expected_tree": [
+        "BoundTypeValue",
+        "checked TopologicalSpace annotation",
+        "checked selected-classifier annotation",
+        "native declaration snapshot",
+        "implicit"
+      ],
+      "expected_lean": "Replay preserves the original TopologicalSpace carrier term and selected classifier type. Fresh unannotated syntax now reports semantic ambiguity; changed selected classifier metadata/declaration rejects replay.",
+      "checks": [
+        "test_classified_values.py: selection independent of order/expected type, alias deduplication, retained replay after competing import, changed snapshot rejection and lost-annotation JSON rejection",
+        "check_value_targets.py: reification of a formal inferred carrier with two visible classifiers, and an authored carrier-returning definition"
+      ],
+      "pending": [
+        "Payload-only replay with the versioned codec and higher LocalType schema",
+        "Full mathematical adapter-environment freshness and production integration"
       ]
     }
   ]

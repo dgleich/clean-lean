@@ -1,0 +1,58 @@
+-- generated: gpt-6 2026-11-11 role=assisted; isolated first-class carrier prototype
+Import "../../library/topology/spaces.clean"
+Source local:
+  Kind: other
+  Label: Local
+  Title: First-class topology carriers
+
+Type LargeTypes():
+  Universe: 2
+  Classifies: 1
+  Means: Type 1
+  Render latex: \operatorname{{Types}}_1
+
+-- Two visible classifiers deliberately make unannotated Type-1 values ambiguous.
+Type AlternativeTypes():
+  Universe: 2
+  Classifies: 1
+  Means: Type 1
+  Render latex: \operatorname{{AlternativeTypes}}_1
+
+Define topology carrier():
+  Returns: LargeTypes
+  Equals: type(TopologicalSpace : LargeTypes)
+
+Define retain in(A,x):
+  Let A: LargeTypes
+  Let x: A
+  Returns: A
+  Equals: x
+
+Define retain inferred(x):
+  Let A: LargeTypes
+  Let x: A
+  Returns: A
+  Equals: retain in(A,x)
+
+Condition equal large(x,y):
+  Let A: LargeTypes
+  Let x,y: A
+  From Lean: x = y
+  Render latex: {x}={y}
+
+Result explicit topology carrier:
+  Attribution: local; identity; original
+  Let X: TopologicalSpace
+  Conclude: equal large(retain in(type(TopologicalSpace : LargeTypes),X),X)
+
+Result inferred topology carrier:
+  Attribution: local; identity; original
+  Let X: TopologicalSpace
+  Conclude: equal large(retain inferred(X),X)
+
+Result named topology carrier:
+  Attribution: local; identity; original
+  Let X: TopologicalSpace
+  Conclude: equal large(retain in(topology carrier(),X),X)
+
+-- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

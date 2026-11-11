@@ -1,0 +1,358 @@
+--- a/cleanlang/type_values.py
++++ b/cleanlang/type_values.py
+@@ -1,5 +1,5 @@
+-"""Explicit Type 0 values and structural source substitution."""
+-from .core import Expr,Type,Expressions
++"""Closed-universe carrier values and structural source substitution."""
++from .core import Expr,Type,Expressions,CleanError
+ 
+ def substitute(tree,bindings,environment,locals):
+     from .hygiene import substitute as hygienic
+@@ -15,3 +15,78 @@
+     return hygienic(tree,actuals,environment,locals,types)
+ 
+ # generated: gpt-6 2026-11-07 role=assisted; LLM-authored portions; see PROVENANCE.md
++
++
++KINDS=('TypeValue','ClassifiedTypeValue','BoundTypeValue')
++
++
++def spelling(tree):
++    if tree[0]=='TypeValue':return 'type('+str(tree[1])+')'
++    explicit=tree[0]=='ClassifiedTypeValue' or tree[4]=='explicit'
++    return 'type('+str(tree[1])+(' : '+str(tree[2]) if explicit else '')+')'
++
++
++def classifier_snapshot(classifier,env):
++    """Closed classifier contract, including its selected native declaration."""
++    info=env.classifier_info(classifier)
++    if info is None:raise CleanError('Type value requires a declared carrier classifier')
++    spec=env.data['types'][classifier.name]
++    from .modules import classifier_level
++    level=classifier_level({'classifies':str(info[1]),'universe':str(spec.get('universe')),
++        'means':spec.get('lean','')},spec.get('parameter_names',[]))
++    if spec.get('args')!=[] or 'numerals' in spec:
++        raise CleanError('Invalid closed carrier classifier')
++    env.render_type(classifier,'lean')
++    return (info[0],level,spec['universe'],spec['lean'],spec['native_declaration'])
++
++
++def select_classifier(value,env):
++    level=env.sort_level(value)-1
++    if level<0:raise CleanError('Proof types cannot be first-class carrier values')
++    candidates={}
++    for name,spec in env.data['types'].items():
++        if spec.get('args')!=[]:continue
++        classifier=env.type(name,phrases=False)
++        info=env.classifier_info(classifier)
++        if info is None or info[1]!=level:continue
++        snapshot=classifier_snapshot(classifier,env)
++        previous=candidates.get(snapshot[0])
++        if previous is not None and previous!=classifier:
++            raise CleanError('Inconsistent aliases for one classifier identity')
++        candidates[snapshot[0]]=classifier
++    if not candidates:raise CleanError('No declared classifier for carrier level '+str(level))
++    if len(candidates)!=1:raise CleanError('Ambiguous carrier classifier; use type(T : C)')
++    return next(iter(candidates.values()))
++
++
++def elaborate(tree,env,locals):
++    from .annotations import Annotation,checked,references
++    kind=tree[0]
++    if kind=='BoundTypeValue':
++        if len(tree)!=5 or not all(isinstance(x,Annotation) for x in tree[1:3]) or tree[4] not in ('implicit','explicit'):
++            raise CleanError('Retained type value requires checked annotations and presentation')
++        value=env.type(tree[1],locals,phrases=False)
++        classifier=env.type(tree[2],locals,phrases=False)
++        snapshot=classifier_snapshot(classifier,env)
++        if tree[3]!=snapshot:raise CleanError('Changed retained carrier classifier')
++        carrier_annotation,classifier_annotation=tree[1:3]
++        presentation=tree[4]
++    else:
++        value=env.type(tree[1],locals,phrases=False)
++        classifier=(select_classifier(value,env) if kind=='TypeValue'
++                    else env.type(tree[2],locals,phrases=False))
++        snapshot=classifier_snapshot(classifier,env)
++        carrier_annotation=(checked(tree[1],env,locals) if isinstance(tree[1],Annotation)
++                            else Annotation(str(value),value,references(value,locals)))
++        classifier_annotation=checked(str(classifier),env,{})
++        presentation='implicit' if kind=='TypeValue' else 'explicit'
++    if not references(value,locals).issubset(carrier_annotation.names):
++        raise CleanError('Untracked carrier references in retained annotation')
++    missing=carrier_annotation.names.difference(locals)
++    if missing:raise CleanError('Unbound carrier references: '+', '.join(sorted(missing)))
++    if classifier_annotation.names:raise CleanError('Retained classifier annotation must be closed')
++    env.require_type_argument(value,snapshot[1])
++    retained=['BoundTypeValue',carrier_annotation,classifier_annotation,snapshot,presentation]
++    tex=env.render_type(value,'latex',locals)
++    if presentation=='explicit':tex=r'\left('+tex+r' : '+env.render_type(classifier,'latex')+r'\right)'
++    return Expr(env.render_type(value,'lean',locals),tex,classifier,tree=retained)
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -414,21 +414,30 @@
+                 raise SignatureMismatch('Inconsistent dependent argument: '+n,mismatch_owner)
+             if n not in substitutions or (implicit.get(n)==NAT or self.classifier_info(implicit.get(n)) is not None):substitutions[n]=value
+ 
++        def replacement_bindings(scope):
++            from .inferred_conversion import reify
++            values=dict(substitutions)
++            for n,value in substitutions.items():
++                classifier=implicit.get(n)
++                if isinstance(value,Type) and self.classifier_info(classifier) is not None:
++                    values[n]=reify(value,self,locals,classifier=classifier)
++            return {**values,**actuals,**scope}
++
+         def index(n,scope):
+             from .indices import index_value, substitute_index
+             if n in scope:return index_value(scope[n],self,locals)
+             if n in actuals:return index_value(actuals[n],self,locals)
+-            return substitute_index(ValueIndex(n,'',''),{**substitutions,**actuals,**scope},self,locals)
++            return substitute_index(ValueIndex(n,'',''),replacement_bindings(scope),self,locals)
+ 
+         def replace(t,scope=None):
+             scope={} if scope is None else scope
+             from .indices import ComputedIndex, DimensionIndex, substitute_index
+             from .dependent_functions import DependentFunctionType,substitute
+-            if isinstance(t,DependentFunctionType):return substitute(t,{**substitutions,**actuals,**scope},self,locals)
++            if isinstance(t,DependentFunctionType):return substitute(t,replacement_bindings(scope),self,locals)
+             if isinstance(t,ProofType):return ProofType(replace(t.args[0],scope))
+             if isinstance(t,DimensionIndex) and t.name in substitutions:return substitutions[t.name]
+             if isinstance(t,ComputedIndex):
+-                return substitute_index(t,{**substitutions,**actuals,**scope},self,locals)
++                return substitute_index(t,replacement_bindings(scope),self,locals)
+             if isinstance(t,ValueIndex):return index(t.name,scope)
+             if isinstance(t,LocalType):return substitutions.get(t.name,t)
+             if isinstance(t,Type):
+@@ -558,13 +567,9 @@
+     def _elaborate(self,tree):
+         from .annotations import Annotation
+         kind=tree[0]
+-        if kind=='TypeValue':
+-            sort=self.reg.data['types'].get('Type',{})
+-            if sort.get('args')!=[] or sort.get('lean','').strip()!='Type' or sort.get('universe')!=1:
+-                raise CleanError('Type expressions require the foundational Type binding to Lean Type')
+-            value=self.reg.type(tree[1],self.env,phrases=False)
+-            self.reg.require_type_argument(value)
+-            return Expr(self.reg.render_type(value,'lean',self.env),self.reg.render_type(value,'latex',self.env),Type('Type'),tree=['TypeValue',tree[1] if isinstance(tree[1],Annotation) else str(value)])
++        if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
++            from .type_values import elaborate
++            return elaborate(tree,self.reg,self.env)
+         if kind in ('NumeralAnnotation','BoundNumeral'):
+             from .numerals import elaborate
+             return elaborate(tree,self.reg,self.env)
+@@ -754,7 +759,7 @@
+                 if payload[0] in ('Local','Call') and (payload[1] in reg.data['types'] or payload[1] in reg.data['aliases']):
+                     raise CleanError('Cannot use let x = Type; use let x: Type or let x be Type')
+                 value=Expressions(reg,env).elaborate(payload)
+-                if value.type==Type('Type'):raise CleanError('Type-valued local definitions are not implemented; use a top-level Type declaration')
++                if reg.classifier_info(value.type) is not None:raise CleanError('Type-valued local definitions are not implemented; use a top-level Type declaration')
+                 if value.type==NUM:raise CleanError('Local definition requires a resolved numeral interpretation')
+                 if value.type==PROP:raise CleanError('Local condition abbreviations are not implemented; use a top-level Condition declaration')
+                 from .conversion import local_definition
+--- a/cleanlang/syntax.py
++++ b/cleanlang/syntax.py
+@@ -69,7 +69,9 @@
+         from .bound_calls import source_operator
+         return source_operator(tree,expression_spelling)
+     if kind in ('Local','Decimal'):return tree[1]
+-    if kind=='TypeValue':return 'type('+tree[1]+')'
++    if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
++        from .type_values import spelling
++        return spelling(tree)
+     if kind in ('Call','ModuleCall'):return tree[1]+'('+','.join(map(expression_spelling,tree[2]))+')'
+     if kind=='Projection':
+         base=expression_spelling(tree[1])
+@@ -265,7 +267,9 @@
+         from .bound_calls import source_operator
+         return source_operator(tree,condition_spelling)
+     if kind in ('Local','Decimal'):return tree[1]
+-    if kind=='TypeValue':return 'type('+tree[1]+')'
++    if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
++        from .type_values import spelling
++        return spelling(tree)
+     if kind in ('Call','ModuleCall'):return tree[1]+'('+','.join(map(condition_spelling,tree[2]))+')'
+     if kind=='Projection':
+         base=condition_spelling(tree[1])
+--- a/cleanlang/conditions.py
++++ b/cleanlang/conditions.py
+@@ -16,7 +16,9 @@
+         from .bound_calls import source_operator
+         return source_operator(tree,source_expression)
+     if kind=='Local': return tree[1]
+-    if kind=='TypeValue': return 'type('+tree[1]+')'
++    if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
++        from .type_values import spelling
++        return spelling(tree)
+     if kind=='Decimal': return tree[1].lstrip('0') or '0'
+     if kind in ('Call','ModuleCall'): return tree[1]+'('+', '.join(map(source_expression,tree[2]))+')'
+     if kind=='Projection': return source_expression(tree[1])+'.'+tree[2]
+--- a/cleanlang/bound_calls.py
++++ b/cleanlang/bound_calls.py
+@@ -42,9 +42,9 @@
+         domain=annotation.typ
+         value=Expr(tree[1],texid(tree[1]),domain,tree=['Local',tree[1]])
+         return [kind,tree[1],annotation,bind(tree[3],env,{**locals,tree[1]:value},binders=True)]
+-    if kind=='TypeValue':
+-        from .annotations import checked
+-        return [kind,checked(tree[1],env,locals)]
++    if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
++        from .type_values import elaborate
++        return elaborate(tree,env,locals).tree
+     if kind=='Decimal':raise UnclosedBinding('Numeral binding requires a checked interpretation')
+     if kind=='Local':return tree
+     # Do not claim binding closure for source strings containing type expressions.
+--- a/cleanlang/dependent_functions.py
++++ b/cleanlang/dependent_functions.py
+@@ -19,7 +19,7 @@
+     if kind=='NumeralAnnotation':
+         from .numerals import type_source
+         return set(re.findall(ID,type_source(tree[2])))
+-    if kind=='TypeValue':
++    if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
+         from .annotations import Annotation
+         return set(tree[1].names) if isinstance(tree[1],Annotation) else set(re.findall(ID,tree[1]))
+     if kind=='ModuleCall':return set().union(*(tree_names(a) for a in tree[2]))
+--- a/cleanlang/carrier_types.py
++++ b/cleanlang/carrier_types.py
+@@ -7,7 +7,7 @@
+     if info is None:raise CleanError('Carrier expression must have a declared classifier type')
+     from .conversion import comparison_normal_form
+     normal=comparison_normal_form(expression,env,locals)
+-    if normal.tree[0]=='TypeValue':return env.type(normal.tree[1],locals,phrases=False)
++    if normal.tree[0] in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):return env.type(normal.tree[1],locals,phrases=False)
+     if normal.tree[0]=='Local':return LocalType(normal.tree[1],(),normal.lean,info[1],info[0])
+     if info[1]!=0:raise CleanError('Higher-universe computed carriers are not implemented')
+     from .indices import index_value
+--- a/cleanlang/beta_indices.py
++++ b/cleanlang/beta_indices.py
+@@ -4,7 +4,7 @@
+ 
+ 
+ def has_binder(tree):
+-    if isinstance(tree,list) and tree and tree[0]=='TypeValue':
++    if isinstance(tree,list) and tree and tree[0] in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
+         from .syntax import parse,type_tree
+         def inside(node):
+             if not isinstance(node,list):return False
+@@ -27,7 +27,7 @@
+                 not has_binder(function[3]) and not has_binder(args[0])):
+                 name=function[1];actual=args[0]
+                 def substitute(body):
+-                    if body[0]=='TypeValue':
++                    if body[0] in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
+                         from .type_values import substitute as replace_type
+                         return replace_type(body,{name:Expressions(environment,locals).elaborate(actual)},environment,locals)
+                     if body[0]=='Local':return actual if body[1]==name else body
+--- a/cleanlang/numeral_inference.py
++++ b/cleanlang/numeral_inference.py
+@@ -18,7 +18,7 @@
+     def visit(node,path):
+         kind=node[0]
+         if kind=='Decimal':digits(node[1]);found.append((path,node[1]));return
+-        if kind in ('Local','TypeValue','NumeralAnnotation','BoundNumeral'):return
++        if kind in ('Local','TypeValue','ClassifiedTypeValue','BoundTypeValue','NumeralAnnotation','BoundNumeral'):return
+         if kind in ('Call','ModuleCall'):
+             for i,arg in enumerate(node[2]):visit(arg,path+(2,i))
+         elif kind=='Apply':
+--- a/cleanlang/inferred_conversion.py
++++ b/cleanlang/inferred_conversion.py
+@@ -2,12 +2,14 @@
+ from .core import Type,LocalType,Expr,NAT,Expressions
+ from .hygiene import UnrepresentableSubstitution
+ 
+-def reify(value,environment,locals):
++def reify(value,environment,locals,*,classifier=None):
+     if isinstance(value,Type):
+-        if isinstance(value,LocalType) and value.name in locals and environment.classifier_info(locals[value.name].type)==(value.classifier,value.universe) and locals[value.name].lean==value.lean:
++        if isinstance(value,LocalType) and value.name in locals and environment.classifier_info(locals[value.name].type)==(value.classifier,value.universe) and locals[value.name].lean==value.lean and (classifier is None or locals[value.name].type==classifier):
+             return Expressions(environment,locals).elaborate(['Local',value.name])
+         from .annotations import Annotation,references
+-        tree=['TypeValue',Annotation(str(value),value,references(value,locals))]
++        from .type_values import select_classifier
++        classifier=select_classifier(value,environment) if classifier is None else classifier
++        tree=['ClassifiedTypeValue',Annotation(str(value),value,references(value,locals)),str(classifier)]
+         return Expressions(environment,locals).elaborate(tree)
+     from .core import ValueIndex
+     from .dependent_functions import index_tree
+@@ -43,7 +45,7 @@
+         import re
+         from .core import ID
+         return set(re.findall(ID,type_source(tree[2])))
+-    if kind=='TypeValue':return type_values(type_tree(parse(tree[1],'type_ref')))
++    if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):return type_values(type_tree(parse(tree[1],'type_ref')))
+     if kind=='ModuleCall':return set().union(*(value_names(a) for a in tree[2]))
+     if kind=='Call':return {tree[1]}|set().union(*(value_names(a) for a in tree[2]))
+     if kind=='Projection':return value_names(tree[1])
+--- a/cleanlang/hygiene.py
++++ b/cleanlang/hygiene.py
+@@ -101,6 +101,8 @@
+             return bind(node,environment,locals)
+         if kind=='NumeralAnnotation':raise UnrepresentableSubstitution('Bind numeral annotations before substitution')
+         if kind=='TypeValue':return ['TypeValue',annotation(node[1],mapping,callheads)]
++        if kind=='ClassifiedTypeValue':return [kind,annotation(node[1],mapping,callheads),annotation(node[2],mapping,callheads)]
++        if kind=='BoundTypeValue':return [kind,annotation(node[1],mapping,callheads),node[2],node[3],node[4]]
+         if kind=='ModuleCall':return [kind,node[1],[expr(a,mapping,callheads) for a in node[2]],*node[3:]]
+         if kind=='Call':
+             args=[expr(a,mapping,callheads) for a in node[2]]
+--- a/cleanlang/indices.py
++++ b/cleanlang/indices.py
+@@ -52,7 +52,7 @@
+             return reify(value,env,locals).tree
+         return expression_tree(parse(str(value),'expression'))
+     def replace(node):
+-        if node[0]=='TypeValue':
++        if node[0] in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
+             from .type_values import substitute
+             return substitute(node,bindings,env,locals)
+         if node[0]=='Local' and node[1] in bindings:return reference(bindings[node[1]])
+--- a/cleanlang/structures.py
++++ b/cleanlang/structures.py
+@@ -62,7 +62,7 @@
+     if has_binder(body):return None
+     bindings=dict(zip((p[1] for p in parameters),tree[2]))
+     def replace(node):
+-        if node[0]=='TypeValue':
++        if node[0] in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
+             from .type_values import substitute
+             return substitute(node,{n:Expressions(env,locals).elaborate(t) for n,t in bindings.items()},env,locals)
+         if node[0]=='Local':return bindings.get(node[1],node)
+--- a/cleanlang/annotations.py
++++ b/cleanlang/annotations.py
+@@ -28,7 +28,7 @@
+             from .core import ID
+             import re
+             return set(re.findall(ID,type_source(tree[2]))).intersection(locals)
+-        if kind=='TypeValue':
++        if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
+             if isinstance(tree[1],Annotation):return set(tree[1].names)
+             from .core import ID
+             import re
+--- a/cleanlang/conversion.py
++++ b/cleanlang/conversion.py
+@@ -57,7 +57,7 @@
+             actual=inferred[n]
+             if isinstance(actual,Type):
+                 types[n]=actual
+-                if n in values:bindings[n]=reify(actual,env,locals)
++                if n in values:bindings[n]=reify(actual,env,locals,classifier=env.type(p[2],phrases=False))
+             else:bindings[n]=reify(actual,env,locals)
+         expanded=substitute(body,bindings,env,locals,types)
+     except UnrepresentableSubstitution:return None
+@@ -79,7 +79,7 @@
+         local=locals.get(tree[1])
+         if local is None or local.local_normal is None:return expression
+         return _normal_form(local.local_normal,env,locals) if local.local_expand and not shadowed_globals(env,locals) else local.local_normal
+-    if kind in ('NumeralAnnotation','BoundNumeral'):return elaborate(tree)
++    if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue','NumeralAnnotation','BoundNumeral'):return elaborate(tree)
+     if kind in ('Decimal','Lambda','Forall','Exists'):return expression
+     if kind in ('Operator','Unary'):
+         # Operators are declared calls too. Do not publish a hidden binder as
+@@ -170,7 +170,7 @@
+                     actual=inferred[n]
+                     if isinstance(actual,Type):
+                         type_bindings[n]=actual
+-                        if n in values:bindings[n]=reify(actual,env,locals)
++                        if n in values:bindings[n]=reify(actual,env,locals,classifier=env.type(p[2],phrases=False))
+                     else:bindings[n]=reify(actual,env,locals)
+                 expanded_tree=substitute(body,bindings,env,locals,type_bindings)
+             except UnrepresentableSubstitution:return checked

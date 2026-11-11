@@ -3,10 +3,10 @@
 # Proposal: explicit closed-universe carrier classifiers
 
 Status: isolated syntax and declaration-metadata prototype with checked native
-declaration targets, implicit generic calls and native feasibility examples. **Generic implicit and explicit carrier arguments are now prototyped; the full classifier
+declaration targets, generic calls, first-class type values and native feasibility examples. **Generic implicit/explicit carrier arguments and first-class values are prototyped; the full classifier
 feature is not conforming or integrated.** It is not part of the composed-language stack.
 
-The concrete gap is equality of a universe-1 topology object. Clean's general
+The original concrete gap was equality of a universe-1 topology object. Clean's general
 carrier binder currently means Type 0, so a bundled space or homology theory
 cannot instantiate it. Adding a special equality for each record would conceal
 the missing generic capability. Conversely, treating every Universe: 1 object as
@@ -314,6 +314,16 @@ pending. Their absence can still block conversion of an authored body that uses
 an inferred carrier in an explicit value position. Record/type-constructor
 parameter handling and the storage schema need their own full audit. This is
 still an isolated prototype, not production conformance.
+
+## Current first-class value boundary
+
+The later [first-class value implementation](type-values.md) implements explicit
+and uniquely selected unannotated carrier expressions, retained classifier identity
+and inferred-carrier reification. Earlier “pending” descriptions above record the
+preceding prototype stages. Review [TypeValueExample.clean](TypeValueExample.clean),
+its exact native targets and the rendered PDF for the current checked example.
+Storage/schema migration, higher carrier fields/callables, full regression and
+production integration remain pending.
 
 Reproduce the isolated stack and selected checks:
 

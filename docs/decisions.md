@@ -1439,3 +1439,31 @@ domain of old explicit Type parameters; two independent dispatch oracles are
 migrated accordingly. First-class higher type expressions, inferred higher-type
 reification, dependent carrier fields/callables and storage remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The classifier study now elaborates type(T : C) and type(T) in isolation. Explicit
+selection requires a closed declared classifier at T's exact level; unannotated
+selection enumerates and alias-deduplicates all visible classifiers at that level,
+requiring exactly one without expected-type or order-based selection. BoundTypeValue
+retains checked carrier/classifier annotations, a classifier declaration snapshot,
+and presentation. Replay validates that identity without reselection; substitution
+changes only the carrier annotation. Reification of an inferred carrier uses its
+formal declared classifier. Explicit LaTeX retains the classifier annotation.
+See studies/universe-classifiers/type-values.md for the constructive mapping,
+consumer audit and native oracles. Plain JSON replay without checked annotations
+rejects; codec migration, higher carrier fields/callables and integration remain
+pending. These language checks do not prove missing paper theorems.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Classifier prototype refinement: dependent-call substitution reifies inferred
+carrier arguments with their formal declared classifier before substituting into
+value indices, computed indices and dependent callable types. Explicit actuals
+and inner scope bindings override inferred bindings; direct carrier positions
+retain Type substitution. Visible competing classifiers do not change this rule.
+Retained carrier annotations must account for all free references, and those
+references must remain in scope; the retained classifier annotation is closed.
+These checks are implemented in the isolated type-values patch, not production.
+:::
