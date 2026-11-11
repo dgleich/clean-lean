@@ -1,7 +1,7 @@
 # generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
 """Checked ground representatives, separate from declaration-choice inference."""
 from dataclasses import dataclass
-from constraint_model import Variable,Carrier,Incomplete,NoSolution,resolve,variables
+from .constraint_model import Variable,Carrier,Incomplete,NoSolution,resolve,variables
 
 @dataclass(frozen=True)
 class Seed:

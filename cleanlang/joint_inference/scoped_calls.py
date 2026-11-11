@@ -7,10 +7,10 @@ be determined by checked hole-free arguments; general contextual discovery is pe
 from itertools import product
 from cleanlang.dependent_functions import occurs,substitute,DependentFunctionType
 from cleanlang.numeral_inference import holes,default_carrier
-from constraint_model import Row,Selection,Incomplete,NoSolution
-from contextual_constraints import Candidate,select_contextual
-from scoped_bodies import ScopedBody
-from clean_rows import Builder
+from .constraint_model import Row,Selection,Incomplete,NoSolution
+from .contextual_constraints import Candidate,select_contextual
+from .scoped_bodies import ScopedBody
+from .clean_rows import Builder
 
 
 def prepare_typed_call(builder,tree,expected=None):

@@ -227,7 +227,7 @@ solver. Reusing its current pruning rule unchanged would be unjustified.
 
 ### Executable joint-constraint experiment
 
-The [symbolic constraint model](../studies/parameterized-literals/constraint_model.py)
+The [symbolic constraint model](../cleanlang/joint_inference/constraint_model.py)
 now exercises one proposed selection policy. It consumes a finite, exhaustive list
 of declaration-choice rows. It is not connected to Clean parsing or elaboration,
 and does not yet specify how dependent Clean signatures generate those rows.

@@ -6,9 +6,9 @@ from unittest.mock import patch
 from cleanlang.core import Environment,Expr,Expressions
 from cleanlang.modules import load_module,notation
 from cleanlang.retained_codec import dumps,loads
-from constraint_model import Row,Selection,select_with_trace,Incomplete,NoSolution,Ambiguous
-from clean_rows import Builder
-from scoped_bodies import ScopedBody
+from cleanlang.joint_inference.constraint_model import Row,Selection,select_with_trace,Incomplete,NoSolution,Ambiguous
+from cleanlang.joint_inference.clean_rows import Builder
+from cleanlang.joint_inference.scoped_bodies import ScopedBody
 ROOT=Path(__file__).resolve().parents[2]
 
 class ScopedBodies(unittest.TestCase):

@@ -1,8 +1,8 @@
 # generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
 """Demanded candidate values reconstructed before literal defaults or selection."""
 from dataclasses import dataclass
-from constraint_model import Variable,Carrier,Deferred,resolve,variables,unify,Incomplete,NoSolution
-from witness_model import Resolver,Seed,Plan
+from .constraint_model import Variable,Carrier,Deferred,resolve,variables,unify,Incomplete,NoSolution
+from .witness_model import Resolver,Seed,Plan
 from cleanlang.core import Type,Expressions,CleanError
 from cleanlang.numeral_inference import holes
 

@@ -6893,16 +6893,6 @@
         ""
       ]
     },
-    "studies/parameterized-literals/constraint_model.py": {
-      "origin": "llm-assisted",
-      "model": "gpt-6",
-      "date": "2026-11-10",
-      "mode": "comment",
-      "comment": [
-        "# ",
-        ""
-      ]
-    },
     "studies/parameterized-literals/test_constraint_model.py": {
       "origin": "llm-assisted",
       "model": "gpt-6",
@@ -8405,16 +8395,6 @@
       "date": "2026-11-11",
       "mode": "markdown"
     },
-    "studies/parameterized-literals/clean_rows.py": {
-      "origin": "llm-assisted",
-      "model": "gpt-6",
-      "date": "2026-11-11",
-      "mode": "comment",
-      "comment": [
-        "# ",
-        ""
-      ]
-    },
     "studies/parameterized-literals/test_clean_rows.py": {
       "origin": "llm-assisted",
       "model": "gpt-6",
@@ -8477,23 +8457,7 @@
         ""
       ]
     },
-    "studies/parameterized-literals/witness_model.py": {
-      "origin": "llm-assisted",
-      "mode": "comment",
-      "comment": [
-        "# ",
-        ""
-      ]
-    },
     "studies/parameterized-literals/test_witness_model.py": {
-      "origin": "llm-assisted",
-      "mode": "comment",
-      "comment": [
-        "# ",
-        ""
-      ]
-    },
-    "studies/parameterized-literals/candidate_values.py": {
       "origin": "llm-assisted",
       "mode": "comment",
       "comment": [
@@ -8558,16 +8522,6 @@
       "date": "2026-11-11"
     },
     "studies/basis-reindexing/verify_composition.py": {
-      "origin": "llm-assisted",
-      "mode": "comment",
-      "comment": [
-        "# ",
-        ""
-      ],
-      "model": "gpt-6",
-      "date": "2026-11-11"
-    },
-    "studies/parameterized-literals/binder_types.py": {
       "origin": "llm-assisted",
       "mode": "comment",
       "comment": [
@@ -8665,27 +8619,7 @@
       "model": "gpt-6",
       "date": "2026-11-11"
     },
-    "studies/parameterized-literals/contextual_terms.py": {
-      "origin": "llm-assisted",
-      "mode": "comment",
-      "comment": [
-        "# ",
-        ""
-      ],
-      "model": "gpt-6",
-      "date": "2026-11-11"
-    },
     "studies/parameterized-literals/test_contextual_terms.py": {
-      "origin": "llm-assisted",
-      "mode": "comment",
-      "comment": [
-        "# ",
-        ""
-      ],
-      "model": "gpt-6",
-      "date": "2026-11-11"
-    },
-    "studies/parameterized-literals/contextual_constraints.py": {
       "origin": "llm-assisted",
       "mode": "comment",
       "comment": [
@@ -8725,16 +8659,6 @@
       "model": "gpt-6",
       "date": "2026-11-11"
     },
-    "studies/parameterized-literals/scoped_bodies.py": {
-      "origin": "llm-assisted",
-      "mode": "comment",
-      "comment": [
-        "# ",
-        ""
-      ],
-      "model": "gpt-6",
-      "date": "2026-11-11"
-    },
     "studies/parameterized-literals/test_scoped_bodies.py": {
       "origin": "llm-assisted",
       "mode": "comment",
@@ -8760,16 +8684,6 @@
       "mode": "comment",
       "comment": [
         "-- ",
-        ""
-      ],
-      "model": "gpt-6",
-      "date": "2026-11-11"
-    },
-    "studies/parameterized-literals/scoped_calls.py": {
-      "origin": "llm-assisted",
-      "mode": "comment",
-      "comment": [
-        "# ",
         ""
       ],
       "model": "gpt-6",
@@ -8804,6 +8718,108 @@
       ],
       "model": "gpt-6",
       "date": "2026-11-11"
+    },
+    "cleanlang/joint_inference/constraint_model.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-10",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "cleanlang/joint_inference/contextual_terms.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "cleanlang/joint_inference/contextual_constraints.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "cleanlang/joint_inference/witness_model.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "cleanlang/joint_inference/binder_types.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "cleanlang/joint_inference/candidate_values.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "cleanlang/joint_inference/clean_rows.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "cleanlang/joint_inference/scoped_bodies.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "cleanlang/joint_inference/scoped_calls.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "cleanlang/joint_inference/__init__.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_joint_completion.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

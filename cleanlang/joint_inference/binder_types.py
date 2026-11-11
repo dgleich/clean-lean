@@ -5,8 +5,8 @@ from cleanlang.dependent_functions import DependentFunctionType,fresh_source,fre
 from cleanlang.inferred_conversion import reify
 from cleanlang.indices import index_value
 from cleanlang.retained_codec import dumps
-from clean_rows import Builder
-from constraint_model import Atom,Carrier,IndexExpression,Reference,Binder,Variable,Incomplete,NoSolution,abstract,open_binder,well_scoped,instantiate
+from .clean_rows import Builder
+from .constraint_model import Atom,Carrier,IndexExpression,Reference,Binder,Variable,Incomplete,NoSolution,abstract,open_binder,well_scoped,instantiate
 
 class CheckedBinderTypes:
     """One fixed explicit environment and caller scope, with retained atom evidence."""

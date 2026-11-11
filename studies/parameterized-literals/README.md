@@ -71,7 +71,7 @@ inference feature. See the [detailed policy](../../docs/parameterized-literals.m
 
 ## Rows from actual Clean declarations
 
-[clean_rows.py](clean_rows.py) bridges parsed expressions and actual imported
+[clean_rows.py](../../cleanlang/joint_inference/clean_rows.py) bridges parsed expressions and actual imported
 Clean signatures into the joint constraint model. This closes the earlier gap
 where tests supplied all symbolic equations by hand. It does not change the
 production parser, numeral completion or operator selector.
@@ -1915,7 +1915,7 @@ no additional source programs are claimed supported by these model operations.
 
 ## Checked binder-type bridge
 
-[binder_types.py](binder_types.py) connects the symbolic Binder representation to
+[binder_types.py](../../cleanlang/joint_inference/binder_types.py) connects the symbolic Binder representation to
 checked Type-0 Clean types in a fixed explicit environment and caller scope. It is
 a separate experiment: the joint row builder and production compiler do not call
 it. This is a representation bridge, not a complete conversion or inference
@@ -2865,5 +2865,51 @@ independent scoped Lean targets and seventeen interpretation proofs pass. Proven
 HTML IDs/local links and whitespace checks pass. The production full-discovery and
 active-label snapshot processes are still confirmed live; their completion remains
 pending and is not inferred from these experimental checks.
+
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Installable joint completion API
+
+The maintained implementation now lives in `cleanlang/joint_inference/`; this
+study retains its experiments, tests and native target drivers. There is one
+implementation, with package-relative internal imports. Historical development
+notes above retain their experimental status; moving code does not discharge
+inference or conformance gaps.
+
+```python
+from cleanlang.joint_inference import complete, Incomplete
+value = complete(parsed_tree, environment, locals, expected_type,
+                 limit=4096, use_default=True)
+```
+
+`complete` accepts an already parsed expression tree and a fixed explicit environment
+and local scope. It returns the checked retained `Expr`. `Incomplete`, `NoSolution`,
+`Ambiguous` and `Underdetermined` are exported analysis outcomes; underlying binding
+or source errors remain compiler errors. Invalid resource limits are rejected.
+The caller's scope dictionary is copied. This API neither parses source nor
+changes `Expressions.elaborate` or the ordinary numeral completion entry point.
+An incomplete joint solve is propagated, never retried under the old inference
+policy. The ordinary no-hole elaborator remains the checker for retained candidates.
+
+The package includes all nine implementation modules and its API in built wheels.
+Tests and native drivers import the package directly, with no study-path loader or
+second implementation. The scoped driver now exercises `complete` for all seventeen
+canonical targets and interpretation proofs. Production default routing remains
+pending compatibility and full inference coverage; no fallback based on which
+solver succeeds is an acceptable integration policy.
+
+Validation: 462 solver tests, four dedicated API tests and seventeen native scoped
+comparisons/proofs pass after relocation. A wheel built with `uv build --wheel`
+was installed to a fresh temporary target; from `/tmp`, with only that target on
+`PYTHONPATH`, both a dimensioned vector zero and a recursive local application
+passed. Explicit library source files were supplied by absolute path; this check
+does not claim that the standard library itself is bundled in the wheel.
+After relocation, the existing 97-target/97-proof suite, four contextual-type
+targets/proofs and three scoped-adapter targets/proofs also pass: 121 canonical
+Lean comparisons and 121 supporting proofs across the four native drivers.
+Provenance and reference HTML IDs/local links pass. The old production validation
+snapshot processes remain confirmed live; their results are still pending.
 
 :::

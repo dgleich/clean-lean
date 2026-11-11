@@ -1760,5 +1760,9 @@ disposable metadata cannot authorize reuse across calls. See the
 <h2>Function-producing heads (experimental)</h2>
 <p><code>h(function (a: Real,0))(0)</code> now selects the lambda body and final argument together when the checked type of <code>h</code> determines the intermediate function type. Its Lean interpretation is the curried application <code>h (fun a =&gt; realZero) complexZero</code> for the documented fixture. A module factory works the same way. This extends the earlier hole-free-head boundary; types depending on unresolved actual arguments remain incomplete. See the <a href="../studies/parameterized-literals/README.md#joint-preparation-of-function-producing-heads-experimental">rule and independent targets</a>. Production inference is unchanged.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="packaged-joint-api">
+<h2>Packaged joint completion API</h2>
+<p><code>cleanlang.joint_inference.complete(tree, env, locals, expected)</code> explicitly invokes the joint solver and returns a checked retained expression. The implementation is now installed with Clean; seventeen scoped native target checks call this API. This does not yet switch the ordinary translator to joint inference. Incomplete analysis propagates without a legacy fallback. See the <a href="../studies/parameterized-literals/README.md#installable-joint-completion-api">contract, wheel check and remaining boundary</a>.</p>
+</section></llm>
 </body>
 </html>

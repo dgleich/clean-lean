@@ -5,8 +5,8 @@ This is an experimental boundary for recursively prepared scoped bodies.
 """
 from cleanlang.core import Expr,Expressions,texid
 from cleanlang.dependent_functions import fresh_bound,DependentFunctionType,substitute
-from constraint_model import Incomplete,NoSolution
-from clean_rows import Builder
+from .constraint_model import Incomplete,NoSolution
+from .clean_rows import Builder
 
 class ScopedBody:
     def __init__(self,env,scope,tree,expected=None,*,path,limit=4096,binder_ids=None):
@@ -35,7 +35,7 @@ class ScopedBody:
 
     def rows(self):
         """Expose checked body alternatives without defaulting or selecting."""
-        from scoped_calls import prepare_expression
+        from .scoped_calls import prepare_expression
         self.prepared=prepare_expression(self.builder,self.tree[3],self.body_expected)
         return self.prepared[0]
 

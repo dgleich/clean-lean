@@ -5,7 +5,7 @@ An occurrence supplies distinct explicit locals for an ordered formal telescope.
 The solution is an explicit abstracted closure, never a renamed opaque atom.
 """
 from dataclasses import dataclass
-from constraint_model import (Atom, Carrier, IndexExpression, Reference, Bound,
+from .constraint_model import (Atom, Carrier, IndexExpression, Reference, Bound,
     Binder, Variable, abstract, instantiate, well_scoped, variables, unify,
     Incomplete, NoSolution)
 

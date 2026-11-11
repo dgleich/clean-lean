@@ -7,7 +7,7 @@ sys.path[:0]=[str(ROOT),str(HERE)]
 from cleanlang.core import Environment,Expr,lean
 from cleanlang.modules import load_module
 from cleanlang.syntax import parse,expression_tree
-from clean_rows import Builder
+from cleanlang.joint_inference.clean_rows import Builder
 
 env=Environment();load_module(ROOT/'library/linear_algebra.clean',env)
 scope={n:Expr(n,n,env.type('Natural'),tree=['Local',n]) for n in ('m','n')}
@@ -520,7 +520,7 @@ noncomputable def expectedMixedDependentChain (callback : {function_lean}) : {re
 same_basic_target actualMixedDependentChain expectedMixedDependentChain
 theorem meaningMixedDependentChain (callback : {function_lean}) : actualMixedDependentChain callback = {expected} := by rfl
 """)
-from binder_types import CheckedBinderTypes
+from cleanlang.joint_inference.binder_types import CheckedBinderTypes
 for i,(source,binders,expected) in enumerate([
  ('Function(k: Natural,Vector(k,Complex))','',f"(k : {t('Natural')}) → {t('Vector')} k {t('Complex')}"),
  ('Function(j: Natural,Function(k: Natural,Matrix(j,k,Complex)))','',f"(j k : {t('Natural')}) → {t('Matrix')} j k {t('Complex')}"),
@@ -600,7 +600,7 @@ noncomputable def expected{name} {parameters} : Type := {expected}
 same_basic_target actual{name} expected{name}
 theorem meaning{name} {parameters} : actual{name}{' n' if parameters else ''} = expected{name}{' n' if parameters else ''} := by rfl
 """)
-from constraint_model import Variable,unify,resolve
+from cleanlang.joint_inference.constraint_model import Variable,unify,resolve
 formal_scope={**scope,'T':Expr('T','T',env.type('Type'),tree=['Local','T'])}
 for name,left_source,right_source,formals,expected in [
  ('RecoveredBinderCarrier','Function(k: Natural,Vector(k,T))','Function(j: Natural,Vector(j,Complex))',{'T':Variable('outer T','type')},f"(k : {t('Natural')}) → {t('Vector')} k {t('Complex')}"),

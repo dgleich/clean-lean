@@ -6,8 +6,8 @@ from cleanlang.core import Environment,Expr,Expressions
 from cleanlang.modules import load_module,notation
 from cleanlang.syntax import parse,expression_tree
 from cleanlang.retained_codec import dumps,loads
-from clean_rows import Builder
-from constraint_model import NoSolution,Incomplete,Ambiguous
+from cleanlang.joint_inference.clean_rows import Builder
+from cleanlang.joint_inference.constraint_model import NoSolution,Incomplete,Ambiguous
 ROOT=Path(__file__).resolve().parents[2]
 
 class ScopedCalls(unittest.TestCase):

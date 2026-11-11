@@ -6,10 +6,10 @@ HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
 sys.path[:0]=[str(ROOT),str(HERE)]
 from cleanlang.core import Environment,Expr,lean
 from cleanlang.modules import load_module
-from binder_types import CheckedBinderTypes
-from constraint_model import Binder,Reference,Variable,Row,open_binder
-from contextual_terms import Parameter,Actual,callable_type
-from contextual_constraints import Family,Occurrence,Candidate,select_contextual
+from cleanlang.joint_inference.binder_types import CheckedBinderTypes
+from cleanlang.joint_inference.constraint_model import Binder,Reference,Variable,Row,open_binder
+from cleanlang.joint_inference.contextual_terms import Parameter,Actual,callable_type
+from cleanlang.joint_inference.contextual_constraints import Family,Occurrence,Candidate,select_contextual
 
 env=Environment();load_module(ROOT/'library/linear_algebra.clean',env)
 scope={'n':Expr('n','n',env.type('Natural'),tree=['Local','n'])}

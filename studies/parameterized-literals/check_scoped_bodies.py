@@ -12,10 +12,10 @@ sys.path[:0]=[str(ROOT),str(HERE)]
 from cleanlang.core import Environment,Expressions,lean
 from cleanlang.modules import load_module,notation
 from cleanlang.syntax import parse,expression_tree
-from clean_rows import Builder
-from scoped_bodies import ScopedBody
-from contextual_constraints import Candidate,select_contextual
-from constraint_model import Row,Selection
+from cleanlang.joint_inference.clean_rows import Builder
+from cleanlang.joint_inference.scoped_bodies import ScopedBody
+from cleanlang.joint_inference.contextual_constraints import Candidate,select_contextual
+from cleanlang.joint_inference.constraint_model import Row,Selection
 
 env=Environment();load_module(ROOT/'library/linear_algebra.clean',env)
 t=lambda name:env.data['types'][name]['native_binding']

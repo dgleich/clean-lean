@@ -13,6 +13,6 @@ parser = ["lark==1.3.1", "interegular==0.3.3"]
 bibtex = ["pybtex==0.26.1"]
 
 [tool.setuptools]
-packages = ["cleanlang"]
+packages = ["cleanlang", "cleanlang.joint_inference"]
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -1,7 +1,7 @@
 # generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
 import unittest
-from contextual_terms import Parameter,Actual,Solution,solve_pattern,apply_solution,callable_type
-from constraint_model import (Atom,Carrier,IndexExpression,Reference,Bound,Binder,
+from cleanlang.joint_inference.contextual_terms import Parameter,Actual,Solution,solve_pattern,apply_solution,callable_type
+from cleanlang.joint_inference.constraint_model import (Atom,Carrier,IndexExpression,Reference,Bound,Binder,
                               Variable,Incomplete,NoSolution)
 N=Carrier('Natural');C=Carrier('Complex')
 V=lambda n:Carrier('Vector',(n,C))

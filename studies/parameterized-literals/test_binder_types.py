@@ -3,8 +3,8 @@ from pathlib import Path
 import unittest
 from cleanlang.core import Environment,Expr
 from cleanlang.modules import load_module,notation
-from binder_types import CheckedBinderTypes
-from constraint_model import Binder,Carrier,Bound,Variable,IndexExpression,Incomplete,NoSolution,instantiate
+from cleanlang.joint_inference.binder_types import CheckedBinderTypes
+from cleanlang.joint_inference.constraint_model import Binder,Carrier,Bound,Variable,IndexExpression,Incomplete,NoSolution,instantiate
 ROOT=Path(__file__).resolve().parents[2]
 
 class CheckedBinderTypeBridge(unittest.TestCase):
@@ -176,7 +176,7 @@ class CheckedBinderTypeBridge(unittest.TestCase):
   self.scope['T']=Expr('T','T',self.env.type('Type'),tree=['Local','T'])
   return Variable('outer T','type')
  def test_solve_outer_type_parameter_under_dependent_binder(self):
-  from constraint_model import unify,resolve
+  from cleanlang.joint_inference.constraint_model import unify,resolve
   variable=self.type_parameter();codec=self.codec()
   left=codec.encode(self.env.type('Function(k: Natural,Vector(k,T))',self.scope),{'T':variable})
   right=codec.encode(self.env.type('Function(j: Natural,Vector(j,Complex))',self.scope))
@@ -184,14 +184,14 @@ class CheckedBinderTypeBridge(unittest.TestCase):
   self.assertEqual(codec.decode(bindings[variable]),self.env.type('Complex'))
   self.assertEqual(codec.decode(resolve(left,bindings)),codec.decode(right))
  def test_solve_outer_index_parameter_under_dependent_binder(self):
-  from constraint_model import unify,resolve
+  from cleanlang.joint_inference.constraint_model import unify,resolve
   codec=self.codec();variable=Variable('outer n','index')
   left=codec.encode(self.env.type('Function(k: Natural,Matrix(k,n,Complex))',self.scope),{'n':variable})
   right=codec.encode(self.env.type('Function(j: Natural,Matrix(j,3,Complex))',self.scope))
   bindings=unify([(left,right)])
   self.assertEqual(codec.decode(resolve(left,bindings)),codec.decode(right))
  def test_outer_parameter_cannot_capture_bound_index(self):
-  from constraint_model import unify
+  from cleanlang.joint_inference.constraint_model import unify
   codec=self.codec();variable=Variable('outer n','index')
   left=codec.encode(self.env.type('Function(k: Natural,Matrix(k,n,Complex))',self.scope),{'n':variable})
   right=codec.encode(self.env.type('Function(k: Natural,Matrix(k,k,Complex))',self.scope))
@@ -202,7 +202,7 @@ class CheckedBinderTypeBridge(unittest.TestCase):
    with self.subTest(mapping=mapping),self.assertRaises(Incomplete):codec.encode(typ,mapping)
 
  def test_computed_formal_is_exposed_without_inverse_inference(self):
-  from constraint_model import unify,variables,resolve
+  from cleanlang.joint_inference.constraint_model import unify,variables,resolve
   codec=self.codec();variable=Variable('outer n','index')
   typ=self.env.type('Function(k: Natural,Matrix(k,(n+1),Complex))',self.scope)
   left=codec.encode(typ,{'n':variable})

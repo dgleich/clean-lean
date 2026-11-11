@@ -6,8 +6,8 @@ or declaration search occur here. Ground occurrences determine contextual closur
 known closures constrain all remaining occurrences by checked application.
 """
 from dataclasses import dataclass
-from constraint_model import variables,resolve,unify,well_scoped,Incomplete,NoSolution
-from contextual_terms import Parameter,Actual,solve_pattern,apply_solution
+from .constraint_model import variables,resolve,unify,well_scoped,Incomplete,NoSolution
+from .contextual_terms import Parameter,Actual,solve_pattern,apply_solution
 
 @dataclass(frozen=True)
 class Family:
@@ -136,7 +136,7 @@ def select_contextual(candidates,*,default=None,enumeration_complete=True,limit=
     The fully checked bindings are retained as equations in an ordinary Row.
     Contextual outputs/domains are already ground and cannot be changed by defaults.
     """
-    from constraint_model import Row,Selection,select_with_trace
+    from .constraint_model import Row,Selection,select_with_trace
     if not enumeration_complete:raise Incomplete('Contextual candidate enumeration unfinished')
     candidates=tuple(candidates)
     if len(candidates)>limit:raise Incomplete('Contextual candidate row limit exceeded')

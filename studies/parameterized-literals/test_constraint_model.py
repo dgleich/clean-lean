@@ -1,8 +1,8 @@
 # generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
 """Independent symbolic row oracles; not production Clean acceptance tests."""
 import unittest
-from constraint_model import Variable as V,Atom as A,Carrier as C,Row,select,select_with_trace,unify,Deferred,saturate
-from constraint_model import NoSolution,Underdetermined,Ambiguous,Incomplete
+from cleanlang.joint_inference.constraint_model import Variable as V,Atom as A,Carrier as C,Row,select,select_with_trace,unify,Deferred,saturate
+from cleanlang.joint_inference.constraint_model import NoSolution,Underdetermined,Ambiguous,Incomplete
 NAT=C('Nat');REAL=C('Real');COMPLEX=C('Complex')
 N=A('caller/n','index');M=A('caller/m','index')
 def vector(n):return C('Vector',(n,COMPLEX))
@@ -178,7 +178,7 @@ class ScopedConstraints(unittest.TestCase):
     def test_closed_solution_satisfies_intersecting_alias_scopes(self):
         left=V('left','index',frozenset({'left'}));right=V('right','index',frozenset({'right'}))
         bindings=unify([(left,right),(right,N)])
-        from constraint_model import resolve
+        from cleanlang.joint_inference.constraint_model import resolve
         self.assertEqual(resolve(left,bindings),N)
 
     def test_forward_check_cannot_introduce_escaping_binder(self):
@@ -187,7 +187,7 @@ class ScopedConstraints(unittest.TestCase):
         with self.assertRaises(NoSolution):saturate(row)
 
     def test_scope_dependency_resource_exhaustion_is_incomplete(self):
-        from constraint_model import check_scopes
+        from cleanlang.joint_inference.constraint_model import check_scopes
         x=V('x','type')
         with self.assertRaises(Incomplete):check_scopes({x:C('Pair',(REAL,REAL))},limit=1)
 
@@ -199,90 +199,90 @@ class ScopedConstraints(unittest.TestCase):
 
 class BinderAbstraction(unittest.TestCase):
     def test_bound_names_have_one_structural_representation(self):
-        from constraint_model import Reference,Bound,Binder,abstract
+        from cleanlang.joint_inference.constraint_model import Reference,Bound,Binder,abstract
         expected=Binder('Pi',NAT,vector(Bound(0,'index')))
         self.assertEqual(abstract('n',NAT,vector(Reference('n','index'))),expected)
         self.assertEqual(abstract('m',NAT,vector(Reference('m','index'))),expected)
     def test_outer_reference_is_not_discharged(self):
-        from constraint_model import Reference,Bound,Binder,abstract
+        from cleanlang.joint_inference.constraint_model import Reference,Bound,Binder,abstract
         body=C('Pair',(Reference('n','index'),Reference('outer','index')))
         self.assertEqual(abstract('n',NAT,body),Binder('Pi',NAT,C('Pair',(Bound(0,'index'),Reference('outer','index')))))
     def test_nested_reference_depth_and_domain_scope(self):
-        from constraint_model import Reference,Bound,Binder,abstract
+        from cleanlang.joint_inference.constraint_model import Reference,Bound,Binder,abstract
         inner=abstract('j',vector(Reference('n','index')),C('Pair',(Reference('n','index'),Reference('j','index'))))
         expected=Binder('Pi',NAT,Binder('Pi',vector(Bound(0,'index')),C('Pair',(Bound(1,'index'),Bound(0,'index')))))
         self.assertEqual(abstract('n',NAT,inner),expected)
     def test_unused_binder_preserves_free_atom(self):
-        from constraint_model import abstract,Binder
+        from cleanlang.joint_inference.constraint_model import abstract,Binder
         self.assertEqual(abstract('n',NAT,vector(N)),Binder('Pi',NAT,vector(N)))
     def test_opaque_dependency_is_not_guessed_from_atom_text(self):
-        from constraint_model import abstract
+        from cleanlang.joint_inference.constraint_model import abstract
         with self.assertRaises(Incomplete):abstract('n',NAT,vector(A('n + 1','index',frozenset({'n'}))))
     def test_contextual_metavariable_needs_explicit_future_representation(self):
-        from constraint_model import abstract
+        from cleanlang.joint_inference.constraint_model import abstract
         with self.assertRaises(Incomplete):abstract('n',NAT,V('T','type',frozenset({'n'})))
     def test_scope_independent_metavariable_unifies_under_binder(self):
-        from constraint_model import abstract,resolve
+        from cleanlang.joint_inference.constraint_model import abstract,resolve
         t=V('T','type')
         bindings=unify([(abstract('n',NAT,t),abstract('m',NAT,REAL))])
         self.assertEqual(resolve(t,bindings),REAL)
     def test_local_reference_cannot_solve_outer_metavariable(self):
-        from constraint_model import abstract,Reference
+        from cleanlang.joint_inference.constraint_model import abstract,Reference
         x=V('x','index')
         with self.assertRaises(NoSolution):unify([(abstract('n',NAT,vector(x)),abstract('m',NAT,vector(Reference('m','index'))))])
     def test_free_reference_permissions_remain_checked(self):
-        from constraint_model import abstract,Reference
+        from cleanlang.joint_inference.constraint_model import abstract,Reference
         closed=V('T','type');inner=V('U','type',frozenset({'outer'}))
         typ=abstract('n',NAT,vector(Reference('outer','index')))
         with self.assertRaises(NoSolution):unify([(closed,typ)])
         self.assertEqual(unify([(inner,typ)])[inner],typ)
     def test_occurs_check_visits_binder_domain_and_body(self):
-        from constraint_model import Binder
+        from cleanlang.joint_inference.constraint_model import Binder
         t=V('T','type')
         for rhs in [Binder('Pi',t,REAL),Binder('Pi',NAT,t)]:
             with self.subTest(rhs=rhs),self.assertRaises(NoSolution):unify([(t,rhs)])
     def test_different_binder_constructor_rejects(self):
-        from constraint_model import Binder
+        from cleanlang.joint_inference.constraint_model import Binder
         with self.assertRaises(NoSolution):unify([(Binder('Pi',NAT,REAL),Binder('Lambda',NAT,REAL))])
     def test_dangling_bound_input_is_incomplete_even_without_variables(self):
-        from constraint_model import Bound,Binder
+        from cleanlang.joint_inference.constraint_model import Bound,Binder
         for term in [Bound(0,'index'),Binder('Pi',NAT,Bound(1,'index'))]:
             with self.subTest(term=term),self.assertRaises(Incomplete):unify([(term,term)])
     def test_forward_check_can_return_closed_binder(self):
-        from constraint_model import abstract,Reference
+        from cleanlang.joint_inference.constraint_model import abstract,Reference
         t=V('T','type');typ=abstract('n',NAT,vector(Reference('n','index')))
         self.assertEqual(select([Row(('pi',),(),(t,),(),(Deferred(t,(),lambda _:typ),))]),(('pi',),(typ,)))
     def test_sort_preserved_when_resolving_structural_term(self):
-        from constraint_model import resolve,abstract
+        from cleanlang.joint_inference.constraint_model import resolve,abstract
         t=V('t','index');app=C('f',(t,),sort='index')
         self.assertEqual(resolve(app,{t:N}),C('f',(N,),sort='index'))
         self.assertEqual(abstract('unused',NAT,app).body.sort,'index')
     def test_abstraction_resource_limit_is_incomplete(self):
-        from constraint_model import abstract,Reference
+        from cleanlang.joint_inference.constraint_model import abstract,Reference
         with self.assertRaises(Incomplete):abstract('n',NAT,vector(Reference('n','index')),limit=1)
     def test_bound_level_requires_nonnegative_integer(self):
-        from constraint_model import Bound
+        from cleanlang.joint_inference.constraint_model import Bound
         for level in [-1,True,1.0]:
             with self.subTest(level=level),self.assertRaises(ValueError):Bound(level,'index')
 
 
 class BinderScopeRegressions(unittest.TestCase):
     def test_outer_alias_cannot_hide_later_bound_escape(self):
-        from constraint_model import abstract,Reference
+        from cleanlang.joint_inference.constraint_model import abstract,Reference
         x,y=V('x','index'),V('y','index')
         bindings=unify([(x,y)])
         with self.assertRaises(NoSolution):
             unify([(abstract('n',NAT,vector(y)),abstract('m',NAT,vector(Reference('m','index'))))],bindings)
     def test_nested_bound_positions_are_not_interchangeable(self):
-        from constraint_model import Binder,Bound
+        from cleanlang.joint_inference.constraint_model import Binder,Bound
         outer=Binder('Pi',NAT,Binder('Pi',NAT,vector(Bound(1,'index'))))
         inner=Binder('Pi',NAT,Binder('Pi',NAT,vector(Bound(0,'index'))))
         with self.assertRaises(NoSolution):unify([(outer,inner)])
     def test_unknown_body_constructor_is_incomplete(self):
-        from constraint_model import abstract
+        from cleanlang.joint_inference.constraint_model import abstract
         with self.assertRaises(Incomplete):abstract('n',NAT,object())
     def test_binder_scope_check_keeps_domain_dependencies(self):
-        from constraint_model import abstract,Reference
+        from cleanlang.joint_inference.constraint_model import abstract,Reference
         t=V('T','type')
         typ=abstract('n',vector(Reference('outer','index')),REAL)
         with self.assertRaises(NoSolution):unify([(t,typ)])
@@ -290,72 +290,72 @@ class BinderScopeRegressions(unittest.TestCase):
 
 class BinderInstantiation(unittest.TestCase):
     def test_abstract_then_substitute_direct_dimension(self):
-        from constraint_model import abstract,instantiate,Reference
+        from cleanlang.joint_inference.constraint_model import abstract,instantiate,Reference
         typ=abstract('n',NAT,vector(Reference('n','index')))
         self.assertEqual(instantiate(typ,N),vector(N))
     def test_substitute_through_nested_domain_and_body(self):
-        from constraint_model import abstract,instantiate,Reference,Bound,Binder
+        from cleanlang.joint_inference.constraint_model import abstract,instantiate,Reference,Bound,Binder
         inner=abstract('j',vector(Reference('n','index')),C('Pair',(Reference('n','index'),Reference('j','index'))))
         typ=abstract('n',NAT,inner)
         self.assertEqual(instantiate(typ,M),Binder('Pi',vector(M),C('Pair',(M,Bound(0,'index')))))
     def test_inserting_binder_does_not_capture_its_internal_reference(self):
-        from constraint_model import abstract,instantiate,Reference,Bound,Binder
+        from cleanlang.joint_inference.constraint_model import abstract,instantiate,Reference,Bound,Binder
         argument=abstract('a',NAT,vector(Reference('a','index')))
         outer=abstract('T',C('Type'),abstract('n',NAT,C('Pair',(Reference('T','type'),Reference('n','index')))))
         self.assertEqual(instantiate(outer,argument),Binder('Pi',NAT,C('Pair',(argument,Bound(0,'index')))))
     def test_free_argument_reference_remains_free_under_binder(self):
-        from constraint_model import abstract,instantiate,Reference,Bound,Binder
+        from cleanlang.joint_inference.constraint_model import abstract,instantiate,Reference,Bound,Binder
         outer=abstract('n',NAT,abstract('j',NAT,C('Pair',(Reference('n','index'),Reference('j','index')))))
         free=Reference('caller/j','index')
         self.assertEqual(instantiate(outer,free),Binder('Pi',NAT,C('Pair',(free,Bound(0,'index')))))
     def test_open_and_close_recovers_alpha_canonical_binder(self):
-        from constraint_model import abstract,open_binder,Reference
+        from cleanlang.joint_inference.constraint_model import abstract,open_binder,Reference
         original=abstract('n',NAT,abstract('j',NAT,C('Pair',(Reference('n','index'),Reference('j','index')))))
         body=open_binder(original,'fresh','index')
         self.assertEqual(abstract('fresh',original.domain,body),original)
     def test_opening_rejects_collision_in_domain(self):
-        from constraint_model import abstract,open_binder,Reference
+        from cleanlang.joint_inference.constraint_model import abstract,open_binder,Reference
         typ=abstract('n',vector(Reference('outer','index')),REAL)
         with self.assertRaises(Incomplete):open_binder(typ,'outer','index')
     def test_opening_checks_opaque_and_metavariable_dependencies(self):
-        from constraint_model import Binder,open_binder
+        from cleanlang.joint_inference.constraint_model import Binder,open_binder
         for body in [A('opaque','type',frozenset({'outer'})),V('T','type',frozenset({'outer'}))]:
             with self.subTest(body=body),self.assertRaises(Incomplete):open_binder(Binder('Pi',NAT,body),'outer','index')
     def test_argument_with_dangling_bound_reference_is_incomplete(self):
-        from constraint_model import Binder,Bound,instantiate
+        from cleanlang.joint_inference.constraint_model import Binder,Bound,instantiate
         with self.assertRaises(Incomplete):instantiate(Binder('Pi',NAT,REAL),Bound(0,'index'))
     def test_argument_sort_mismatch_rejects(self):
-        from constraint_model import abstract,instantiate,Reference
+        from cleanlang.joint_inference.constraint_model import abstract,instantiate,Reference
         typ=abstract('n',NAT,vector(Reference('n','index')))
         with self.assertRaises(NoSolution):instantiate(typ,REAL)
     def test_unused_argument_preserves_body(self):
-        from constraint_model import Binder,instantiate
+        from cleanlang.joint_inference.constraint_model import Binder,instantiate
         self.assertEqual(instantiate(Binder('Pi',NAT,REAL),N),REAL)
     def test_instantiation_leaves_scope_independent_variable_unresolved(self):
-        from constraint_model import abstract,instantiate,Reference,resolve
+        from cleanlang.joint_inference.constraint_model import abstract,instantiate,Reference,resolve
         t=V('T','type');typ=abstract('n',NAT,C('Pair',(Reference('n','index'),t)))
         result=instantiate(typ,N)
         self.assertEqual(result,C('Pair',(N,t)))
         self.assertEqual(resolve(result,unify([(t,REAL)])),C('Pair',(N,REAL)))
     def test_instantiated_free_dependency_still_obeys_solution_scope(self):
-        from constraint_model import abstract,instantiate,Reference
+        from cleanlang.joint_inference.constraint_model import abstract,instantiate,Reference
         typ=abstract('n',NAT,vector(Reference('n','index')))
         result=instantiate(typ,Reference('outer','index'))
         with self.assertRaises(NoSolution):unify([(V('T','type'),result)])
     def test_instantiation_and_opening_limits_are_incomplete(self):
-        from constraint_model import Binder,Bound,instantiate,open_binder
+        from cleanlang.joint_inference.constraint_model import Binder,Bound,instantiate,open_binder
         typ=Binder('Pi',NAT,vector(Bound(0,'index')))
         for op in [lambda:instantiate(typ,N,limit=1),lambda:open_binder(typ,'fresh','index',limit=1)]:
             with self.assertRaises(Incomplete):op()
     def test_nonbinder_and_unknown_argument_are_incomplete(self):
-        from constraint_model import Binder,instantiate,open_binder
+        from cleanlang.joint_inference.constraint_model import Binder,instantiate,open_binder
         for op in [lambda:instantiate(REAL,N),lambda:open_binder(REAL,'fresh','index'),lambda:instantiate(Binder('Pi',NAT,REAL),object())]:
             with self.assertRaises(Incomplete):op()
 
 
 class BinderRoundTripLaws(unittest.TestCase):
     def test_open_close_round_trip_over_bounded_term_family(self):
-        from constraint_model import Reference,Bound,Binder,abstract,instantiate,open_binder
+        from cleanlang.joint_inference.constraint_model import Reference,Bound,Binder,abstract,instantiate,open_binder
         leaves=[Reference('a','index'),Reference('outer','index'),N,REAL,V('T','type')]
         cases=list(leaves)
         cases += [C('Pair',(x,y)) for x in leaves for y in leaves]
@@ -368,7 +368,7 @@ class BinderRoundTripLaws(unittest.TestCase):
                 opened=open_binder(closed,'fresh','index')
                 self.assertEqual(abstract('fresh',NAT,opened),closed)
     def test_scope_independent_substitution_commutes_with_instantiation(self):
-        from constraint_model import abstract,instantiate,Reference,resolve
+        from cleanlang.joint_inference.constraint_model import abstract,instantiate,Reference,resolve
         t=V('T','type')
         binder=abstract('n',NAT,C('Pair',(Reference('n','index'),t)))
         bindings=unify([(t,REAL)])
@@ -377,18 +377,18 @@ class BinderRoundTripLaws(unittest.TestCase):
 
 class RetainedIndexExpressions(unittest.TestCase):
     def test_expression_arguments_are_not_inferred_by_injectivity(self):
-        from constraint_model import IndexExpression
+        from cleanlang.joint_inference.constraint_model import IndexExpression
         for right in [IndexExpression('ignore',(M,)),N]:
             with self.subTest(right=right),self.assertRaises(Incomplete):unify([(IndexExpression('ignore',(N,)),right)])
     def test_abstraction_and_instantiation_visit_expression_children(self):
-        from constraint_model import IndexExpression,Reference,abstract,instantiate,Bound
+        from cleanlang.joint_inference.constraint_model import IndexExpression,Reference,abstract,instantiate,Bound
         expr=IndexExpression('add',(Reference('n','index'),N))
         binder=abstract('n',NAT,vector(expr))
         self.assertEqual(binder.body,vector(IndexExpression('add',(Bound(0,'index'),N))))
         self.assertEqual(instantiate(binder,M),vector(IndexExpression('add',(M,N))))
     def test_expression_scope_dependencies_cannot_escape(self):
-        from constraint_model import IndexExpression,Reference
+        from cleanlang.joint_inference.constraint_model import IndexExpression,Reference
         with self.assertRaises(NoSolution):unify([(V('n','index'),IndexExpression('f',(Reference('inner','index'),)))])
     def test_expression_sort_is_fixed(self):
-        from constraint_model import IndexExpression
+        from cleanlang.joint_inference.constraint_model import IndexExpression
         with self.assertRaises(ValueError):IndexExpression('f',(),sort='type')

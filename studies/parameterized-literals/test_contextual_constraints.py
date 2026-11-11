@@ -1,9 +1,9 @@
 # generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
 import unittest
 from itertools import permutations
-from contextual_constraints import Family,Occurrence,solve,saturate_contextual
-from contextual_terms import Parameter,Actual,apply_solution
-from constraint_model import Atom,Carrier,IndexExpression,Reference,Variable,Deferred,Row,resolve,Incomplete,NoSolution
+from cleanlang.joint_inference.contextual_constraints import Family,Occurrence,solve,saturate_contextual
+from cleanlang.joint_inference.contextual_terms import Parameter,Actual,apply_solution
+from cleanlang.joint_inference.constraint_model import Atom,Carrier,IndexExpression,Reference,Variable,Deferred,Row,resolve,Incomplete,NoSolution
 N=Carrier('Natural');C=Carrier('Complex');R=Carrier('Real')
 V=lambda n:Carrier('Vector',(n,C))
 A=lambda n:Actual(Reference(n,'index'),N)
@@ -105,47 +105,47 @@ if __name__=='__main__':unittest.main()
 
 class ContextualSelection(unittest.TestCase):
  def candidate(self,name,carrier,output=None):
-  from contextual_constraints import Candidate
+  from cleanlang.joint_inference.contextual_constraints import Candidate
   return Candidate(Row((name,),(carrier,),(carrier,)),(F,),
    (Occurrence('a','family',(A('k'),),carrier if output is None else output),))
  def test_default_selects_only_after_contextual_checks(self):
-  from contextual_constraints import select_contextual
+  from cleanlang.joint_inference.contextual_constraints import select_contextual
   result=select_contextual((self.candidate('real',R),self.candidate('complex',C)),default=R)
   self.assertEqual(result.selection.choices,('real',))
   self.assertEqual(result.selection.defaulted_positions,(0,))
   self.assertEqual(apply_solution(result.solutions['family'],(A('j'),)),R)
  def test_unresolved_contextual_competitor_blocks_default(self):
-  from contextual_constraints import select_contextual
+  from cleanlang.joint_inference.contextual_constraints import select_contextual
   unknown=Variable('unknown','type')
   for candidates in permutations((self.candidate('real',R),self.candidate('pending',C,unknown))):
    with self.assertRaises(Incomplete):select_contextual(candidates,default=R)
  def test_same_carrier_distinct_declarations_stay_ambiguous(self):
-  from contextual_constraints import select_contextual
-  from constraint_model import Ambiguous
+  from cleanlang.joint_inference.contextual_constraints import select_contextual
+  from cleanlang.joint_inference.constraint_model import Ambiguous
   with self.assertRaises(Ambiguous):select_contextual((self.candidate('one',R),self.candidate('two',R)),default=R)
  def test_invalid_contextual_candidate_is_rejected(self):
-  from contextual_constraints import select_contextual
+  from cleanlang.joint_inference.contextual_constraints import select_contextual
   result=select_contextual((self.candidate('bad',R,V(Reference('foreign','index'))),self.candidate('good',C)),default=R)
   self.assertEqual(result.selection.choices,('good',))
   self.assertEqual(result.selection.defaulted_positions,())
  def test_unresolved_emitted_argument_blocks_selection(self):
-  from contextual_constraints import Candidate,select_contextual
-  from constraint_model import Underdetermined
+  from cleanlang.joint_inference.contextual_constraints import Candidate,select_contextual
+  from cleanlang.joint_inference.constraint_model import Underdetermined
   unknown=Variable('argument','index')
   bad=Candidate(Row(('bad',),(R,),(unknown,)),(F,),(Occurrence('a','family',(A('k'),),R),))
   with self.assertRaises(Underdetermined):select_contextual((bad,),default=R)
  def test_same_choices_after_defaults_keep_correct_closure(self):
-  from contextual_constraints import select_contextual
+  from cleanlang.joint_inference.contextual_constraints import select_contextual
   result=select_contextual((self.candidate('same',R),self.candidate('same',C)),default=C)
   self.assertEqual(apply_solution(result.solutions['family'],(A('j'),)),C)
  def test_default_rejected_row_is_not_rechecked_against_selected_arguments(self):
-  from contextual_constraints import Candidate,select_contextual
+  from cleanlang.joint_inference.contextual_constraints import Candidate,select_contextual
   left=Candidate(Row(('same',),(R,),(IndexExpression('left',()),)))
   right=Candidate(Row(('same',),(C,),(IndexExpression('right',()),)))
   for order in permutations((left,right)):
    result=select_contextual(order,default=R)
    self.assertEqual(result.selection.arguments,(IndexExpression('left',()),))
  def test_enumeration_and_resource_limits_are_incomplete(self):
-  from contextual_constraints import select_contextual
+  from cleanlang.joint_inference.contextual_constraints import select_contextual
   with self.assertRaises(Incomplete):select_contextual((self.candidate('real',R),),enumeration_complete=False)
   with self.assertRaises(Incomplete):select_contextual((self.candidate('real',R),self.candidate('complex',C)),limit=1)

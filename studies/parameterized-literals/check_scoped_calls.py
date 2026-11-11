@@ -7,7 +7,7 @@ sys.path[:0]=[str(ROOT),str(HERE)]
 from cleanlang.core import Environment,Expr,lean
 from cleanlang.modules import load_module,notation
 from cleanlang.syntax import parse,expression_tree
-from clean_rows import Builder
+from cleanlang.joint_inference import complete
 
 env=Environment();load_module(ROOT/'library/linear_algebra.clean',env)
 scope={n:Expr(n,n,env.type('Natural'),tree=['Local',n]) for n in ('n','m')}
@@ -47,7 +47,7 @@ comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_
 checks=[]
 for i,(name,parameters,result,meaning,source,expected) in enumerate(cases):
  notation(f'Notation {name}({parameters}): {result}:',['Means: '+meaning,'Render latex: consumer'],env)
- value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ value=complete(expression_tree(parse(source,'expression')),env,scope,use_default=False)
  result='Real' if result=='T' else result
  checks.append(f'''
 noncomputable def actualScopedCall{i} (n m : {t('Natural')}) : {t(result)} := {value.lean}
@@ -73,7 +73,7 @@ local_cases=[
 ]
 for i,(typ,native,source,expected) in enumerate(local_cases):
  local_scope={**scope,'h':Expr('h','h',env.type(typ,scope),tree=['Local','h'])}
- value=Builder(env,local_scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ value=complete(expression_tree(parse(source,'expression')),env,local_scope,use_default=False)
  checks.append(f"""
 noncomputable def actualLocalScoped{i} (n : {t('Natural')}) (h : {native}) : {t('Real')} := {value.lean}
 noncomputable def expectedLocalScoped{i} (n : {t('Natural')}) (h : {native}) : {t('Real')} := {expected}
@@ -82,7 +82,7 @@ theorem localScopedMeaning{i} (n : {t('Natural')}) (h : {native}) : actualLocalS
 """)
 notation('Notation factory(f: Function(Real,Real)): Function(Complex,Real):',
  ['Means: fun _ => f 0','Render latex: factory({f})'],env)
-factory=Builder(env,scope).materialize(expression_tree(parse('factory(function (a: Real,0))(0)','expression')),use_default=False)
+factory=complete(expression_tree(parse('factory(function (a: Real,0))(0)','expression')),env,scope,use_default=False)
 checks.append(f"""
 noncomputable def actualFactory : {t('Real')} := {factory.lean}
 noncomputable def expectedFactory : {t('Real')} := {f('factory')} (fun (a : {t('Real')}) => {zr}) ({zc})

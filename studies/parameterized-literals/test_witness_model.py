@@ -2,8 +2,8 @@
 """Independent graph/ordering checks; not a substitute for Lean target validation."""
 from dataclasses import dataclass
 import unittest
-from constraint_model import Atom,Carrier,Variable,Incomplete,NoSolution
-from witness_model import Resolver,Seed,Plan
+from cleanlang.joint_inference.constraint_model import Atom,Carrier,Variable,Incomplete,NoSolution
+from cleanlang.joint_inference.witness_model import Resolver,Seed,Plan
 
 @dataclass(frozen=True)
 class Value:

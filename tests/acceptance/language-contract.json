@@ -4366,6 +4366,23 @@
         "General implicit and contextual inference",
         "Production integration"
       ]
+    },
+    {
+      "id": "packaged_joint_completion_api",
+      "status": "explicit-api-not-default",
+      "environment": "Installable cleanlang.joint_inference package; explicitly loaded Clean modules and caller scope.",
+      "source": "h(function (a: Real,0))(0)",
+      "expected_lean": "Same canonical target as the scoped-head oracle, reached through the public complete API.",
+      "checks": [
+        "tests/test_joint_completion.py: carrier recovery, scoped application, scope copying and no fallback",
+        "studies/parameterized-literals/check_scoped_calls.py: seventeen public-API canonical targets and proofs",
+        "Installed wheel smoke check outside repository with explicit library paths"
+      ],
+      "pending": [
+        "Default production routing and compatibility validation",
+        "General contextual and value-dependent inference coverage",
+        "Bundled standard-library distribution"
+      ]
     }
   ]
 }

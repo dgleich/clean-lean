@@ -2441,3 +2441,19 @@ supersedes the prior blanket hole-free-head restriction. Value-dependent unresol
 results, implicit signature recovery and production integration remain pending.
 No grammar change.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Packaged joint completion boundary
+
+The joint solver now has an installable, explicit API:
+`cleanlang.joint_inference.complete(tree, env, locals, expected=None, limit=4096,
+use_default=True)` (the last two arguments are keyword-only). It returns a checked
+retained expression or propagates its precise analysis failure; incomplete analysis
+never triggers a legacy-solver fallback. Source parsing and default production
+elaboration are unchanged. This relocates the maintained solver from the study to
+the package, with one implementation and native drivers using the public API.
+See the [API contract and validation](../studies/parameterized-literals/README.md#installable-joint-completion-api).
+Default routing still requires compatibility validation and outstanding inference
+coverage; packaging alone is not conformance evidence.
+:::

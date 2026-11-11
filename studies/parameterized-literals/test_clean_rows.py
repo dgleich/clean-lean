@@ -4,8 +4,8 @@ import unittest
 from cleanlang.core import Environment,Expr
 from cleanlang.modules import load_module,notation,type_declaration
 from cleanlang.syntax import expression_tree,parse
-from clean_rows import Builder
-from constraint_model import Variable,Atom,Carrier,Ambiguous,Underdetermined,Incomplete,NoSolution
+from cleanlang.joint_inference.clean_rows import Builder
+from cleanlang.joint_inference.constraint_model import Variable,Atom,Carrier,Ambiguous,Underdetermined,Incomplete,NoSolution
 
 ROOT=Path(__file__).resolve().parents[2]
 class CleanRows(unittest.TestCase):
@@ -317,7 +317,7 @@ class CleanRows(unittest.TestCase):
     self.solve('0',expected=self.scope['x'].type,use_default=False)
  def test_ground_literal_batch_incomplete_precedes_mismatch(self):
   from types import SimpleNamespace
-  from candidate_values import CandidateValues,ValuePlan
+  from cleanlang.joint_inference.candidate_values import CandidateValues,ValuePlan
   def check(path,bindings):
    if path==(0,):raise NoSolution('Definite rejected application')
    raise Incomplete('Unavailable application')
@@ -329,7 +329,7 @@ class CleanRows(unittest.TestCase):
     with self.assertRaises(Incomplete):CandidateValues.validate_ground_applications(candidate,{})
  def test_undemanded_call_checked_before_selection(self):
   from unittest.mock import patch
-  from candidate_values import CandidateValues
+  from cleanlang.joint_inference.candidate_values import CandidateValues
   self.vector_count();seen=[];original=CandidateValues.expression
   def checked(candidate,path,bindings,defaulted=()):
    seen.append(path);return original(candidate,path,bindings,defaulted)
@@ -338,7 +338,7 @@ class CleanRows(unittest.TestCase):
   self.assertIn((),seen)
  def test_unavailable_undemanded_call_blocks_selection(self):
   from unittest.mock import patch
-  from candidate_values import CandidateValues
+  from cleanlang.joint_inference.candidate_values import CandidateValues
   self.vector_count();original=CandidateValues.expression
   def checked(candidate,path,bindings,defaulted=()):
    if path==():raise Incomplete('Unavailable root application')
@@ -347,7 +347,7 @@ class CleanRows(unittest.TestCase):
    with self.assertRaises(Incomplete):self.solve('vector count(n,0)',use_default=False)
  def test_determined_application_type_mismatch_rejects_row(self):
   from types import SimpleNamespace
-  from candidate_values import CandidateValues,ValuePlan
+  from cleanlang.joint_inference.candidate_values import CandidateValues,ValuePlan
   expected=Carrier('expected');actual=Carrier('actual')
   plan=ValuePlan(Atom('output','index'),(),(),expected)
   candidate=SimpleNamespace(fragment=SimpleNamespace(plans=(plan,)),
@@ -1068,7 +1068,7 @@ class CleanRows(unittest.TestCase):
   with self.assertRaises(NoSolution):
    Builder(self.e,self.scope).materialize(['Forall','z','Real',['Operator','=', ['Local','z'],['Decimal','0']]],self.e.type('Real'))
  def test_checked_dimension_records_lexical_binder_dependency(self):
-  from constraint_model import unify
+  from cleanlang.joint_inference.constraint_model import unify
   builder=Builder(self.e,self.scope,binder_ids={'n':('binder',(3,))})
   dimension=builder.typ(self.e.type('Vector(n,Complex)',self.scope)).arguments[0]
   self.assertEqual(dimension.free_binders,frozenset({('binder',(3,))}))
@@ -1108,7 +1108,7 @@ class CleanRows(unittest.TestCase):
   with self.assertRaises(Incomplete):builder.dependencies(self.e.type('Vector(n,Complex)',self.scope))
  def test_source_witness_can_depend_on_erased_binder(self):
   from cleanlang.core import Expressions
-  from witness_model import Resolver,Seed
+  from cleanlang.joint_inference.witness_model import Resolver,Seed
   notation('Define ignore(n: Natural): Natural:',
    ['Equals: (0:Natural)','Render latex: ignore({n})'],self.e,authored=True)
   builder=Builder(self.e,self.scope,binder_ids={'n':('binder',())})

@@ -12,7 +12,7 @@ from cleanlang.callable_signatures import require
 from cleanlang.numeral_inference import holes,default_carrier
 from cleanlang.numerals import digits,identity
 from cleanlang.operator_bindings import token
-from constraint_model import Variable,Atom,Carrier,Row,Deferred,saturate,Incomplete,Ambiguous,NoSolution,select_with_trace,unify,resolve,variables
+from .constraint_model import Variable,Atom,Carrier,Row,Deferred,saturate,Incomplete,Ambiguous,NoSolution,select_with_trace,unify,resolve,variables
 
 @dataclass(frozen=True)
 class CallableHead:
@@ -202,7 +202,7 @@ class Builder:
         if isinstance(typ,DependentFunctionType):
             names=tuple(n for n in formals if occurs(typ,n))
             if names:
-                from candidate_values import TypePlan
+                from .candidate_values import TypePlan
                 output=self.variable(repr((path,'computed dependent type')),'type')
                 return output,(TypePlan(output,typ,tuple((n,formals[n]) for n in names)),),()
         if isinstance(typ,ValueIndex) and typ.name not in formals:
@@ -210,7 +210,7 @@ class Builder:
             if names:
                 output=self.variable(repr((path,'computed formal index')),'index')
                 if any(n not in evidence for n in names):
-                    from candidate_values import IndexPlan
+                    from .candidate_values import IndexPlan
                     return output,(IndexPlan(output,typ,tuple((n,formals[n]) for n in names)),),()
                 def witness(defaulted=()):
                     from cleanlang.indices import substitute_index
@@ -241,7 +241,7 @@ class Builder:
         return self.typ(typ,formals),(),()
 
     def dependent_template(self,template,formals,signature):
-        from binder_types import CheckedBinderTypes
+        from .binder_types import CheckedBinderTypes
         from cleanlang.core import Expr,texid
         from cleanlang.lean_identifiers import quoted
         declared={p.name:Expr(quoted(p.name),texid(p.name),p.typ,tree=['Local',p.name])
@@ -250,7 +250,7 @@ class Builder:
         return codec,codec.encode(template,formals)
 
     def recoverable_parameters(self,template,formals,signature):
-        from constraint_model import Binder
+        from .constraint_model import Binder
         _,term=self.dependent_template(template,formals,signature)
         pending=[term];found=set();visits=0
         while pending:
@@ -263,8 +263,8 @@ class Builder:
 
     def dependent_argument_constraints(self,template,actual,formals,signature,*,with_evidence=False):
         """Structural constraints from a checked caller argument, with no new witnesses."""
-        from binder_types import CheckedBinderTypes
-        from constraint_model import Binder,IndexExpression
+        from .binder_types import CheckedBinderTypes
+        from .constraint_model import Binder,IndexExpression
         formal_codec,left=self.dependent_template(template,formals,signature)
         actual_codec=CheckedBinderTypes(self.env,self.scope,limit=self.limit)
         right=actual_codec.encode(actual)
@@ -277,7 +277,7 @@ class Builder:
             return term
         # These are additional inference equations, not a replacement for the
         # forward TypePlan that checks the complete instantiated signature.
-        from constraint_model import Bound,variables as unknowns
+        from .constraint_model import Bound,variables as unknowns
         def closes_at_root(term):
             todo=[(term,0)];visits=0
             while todo:
@@ -357,7 +357,7 @@ class Builder:
         return checked
 
     def projection_fragments(self,tree,path):
-        from candidate_values import ValuePlan
+        from .candidate_values import ValuePlan
         from cleanlang.dependent_functions import occurs
         results=[]
         for base in self.fragments(tree[1],path+(1,)):
@@ -411,7 +411,7 @@ class Builder:
         return self.checked_application_fragments(self.scope[tree[1]],tree,path,('local call',path,tree[1]))
 
     def checked_application_fragments(self,function,tree,path,choice):
-        from candidate_values import ValuePlan
+        from .candidate_values import ValuePlan
         from cleanlang.dependent_functions import DependentFunctionType
         if not self.env.is_function_type(function.type) or len(function.type.args)!=2 or len(tree[2])!=1:
             raise Incomplete('Application requires a checked unary function')
@@ -441,7 +441,7 @@ class Builder:
         return None
 
     def application_fragments(self,tree,path):
-        from candidate_values import ValuePlan
+        from .candidate_values import ValuePlan
         if len(tree[2])!=1:raise Incomplete('Application requires one argument')
         if not holes(tree[1]):
             return self.checked_application_fragments(self.known[path+(1,)],tree,path,('application',path,'checked'))
@@ -515,7 +515,7 @@ class Builder:
             parameters=tuple((n,arguments[n]) for n in record['parameters'] if n in arguments))
 
     def fragments(self,tree,path=()):
-        from candidate_values import ValuePlan
+        from .candidate_values import ValuePlan
         if not holes(tree):
             if path not in self.known or path not in self.known_values:
                 raise Incomplete('Known argument lacks checked index evidence')
@@ -588,7 +588,7 @@ class Builder:
                             raise Incomplete('Dependent argument candidate checking unavailable: '+str(error)) from error
                         equations+=self.dependent_argument_constraints(p.typ,actual.type,variables,signature)
                     elif isinstance(p.typ,DependentFunctionType) and a.callable_signature is not None and any(occurs(p.typ,n) for n in variables):
-                        from candidate_values import ParameterPlan
+                        from .candidate_values import ParameterPlan
                         descriptor=a.callable_signature
                         if descriptor.carrier!=a.typ:raise Incomplete('Producer callable metadata disagrees with carrier')
                         dependencies=tuple((n,t) for n,t in descriptor.formals if occurs(descriptor.template,n))
@@ -672,7 +672,7 @@ class Builder:
         prepare(tree,())
         if expected is not None:self.typ(expected)
         fragments=self.fragments(tree)
-        from candidate_values import CandidateValues
+        from .candidate_values import CandidateValues
         self.row_witnesses={f.choices:f.witnesses for f in fragments}
         self.row_values={};rows=[]
         for f in fragments:
@@ -713,7 +713,7 @@ class Builder:
                     if any(literals.get((k,p))!=key for k,p,key in f.choices if k in ('literal','numeral')):continue
                     constraints=f.equations+tuple((t,fixed[p]) for t,p in zip(f.carriers,local_paths))
                     try:
-                        from candidate_values import CandidateValues
+                        from .candidate_values import CandidateValues
                         values=CandidateValues(self,tree,f,constraints,f.carriers+f.arguments)
                         bindings=saturate(Row((),(),(),constraints,values.checks()),limit=self.limit)
                         values.validate_ground_applications(bindings)
@@ -769,9 +769,9 @@ class Builder:
         if tree[0] in ('Forall','Exists','Lambda'):
             try:return self.materialize_binder(tree,expected,use_default)
             except RecursionError as error:raise Incomplete('Binder traversal recursion limit exceeded') from error
-        from scoped_calls import contains_scoped_holes
+        from .scoped_calls import contains_scoped_holes
         if tree[0] in ('Call','Apply') and contains_scoped_holes(tree):
-            from scoped_calls import materialize_call
+            from .scoped_calls import materialize_call
             return materialize_call(self,tree,expected,use_default=use_default)
         selected=self.solve_with_trace(tree,expected,use_default=use_default)
         return self.retain_selected(tree,selected,expected)
@@ -830,7 +830,7 @@ class Builder:
         values=self.row_values[choices]
         for plan in values.index_plans:
             value=values.index_expression(plan,bindings,defaulted)
-            from candidate_values import TypePlan
+            from .candidate_values import TypePlan
             if isinstance(plan,TypePlan):
                 term=self.typ(value,{})
                 if term!=resolve(plan.output,bindings):raise Incomplete('Formal type changed during retention')
@@ -850,7 +850,7 @@ class Builder:
         types={self.carrier_identity(n):n for n,s in self.env.data['types'].items()
                if 'native_binding' in s or n in self.env.structures}
         functions={s['native_binding']:n for n,s in self.env.data['functions'].items()}
-        from witness_model import Resolver,Seed
+        from .witness_model import Resolver,Seed
         representatives=Resolver(bindings,
             tuple(Seed(term,value,(i,)) for i,(term,value) in enumerate(self.rigid.items())),
             validate=lambda term,value:self.typ(value,{})==term,
