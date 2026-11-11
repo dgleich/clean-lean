@@ -13,7 +13,8 @@ The source PDF is not redistributed here.
 
 ## Read this first
 
-Start with [the paper-shaped Clean draft](Paper.clean.proposed), then follow its
+Start with [the executable literate entry point](Paper.clean), then read
+[the unimplemented paper theorem targets](Paper.clean.proposed) and follow their
 imports into [Models.clean](Models.clean), [Bounds.clean](Bounds.clean) and
 [CSR.clean](CSR.clean). Those three modules translate today. The draft deliberately
 uses a `.proposed` extension: its IEEE754 import does not exist yet. No dummy
@@ -169,7 +170,7 @@ python3 studies/laproof/verify.py
 ```
 
 Use the repository's pinned Lean/Mathlib environment; set `LAKE` if necessary.
-The driver regenerates [Generated.lean](Generated.lean) and
+The driver loads the literate `Paper.clean` entry point and regenerates [Generated.lean](Generated.lean) and
 [Verified.lean](Verified.lean), checks both, and proves two supporting zero cases
 plus five agreement lemmas (dot, sum, row-major MM, fused dot and floating
 equivalence). These seven checks do not prove the paper's four theorems. They are

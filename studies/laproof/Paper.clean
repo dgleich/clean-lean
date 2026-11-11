@@ -1,0 +1,50 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Text:
+  LAProof in Clean: an executable companion in progress.
+  Source: Kellison, Appel, Tekriwal and Bindel, LAProof (2023).
+  This document is an original adaptation. See README.md for source locations,
+  interpretation decisions, and a section-by-section completion checklist.
+
+Text:
+  Arithmetic models.
+  The imported definitions make traversal order and empty accumulators explicit.
+  Arithmetic callbacks describe algorithms; they do not establish IEEE behavior.
+Import "Models.clean"
+
+Text:
+  Numerical accuracy.
+  Named conditions describe perturbations, residuals, and entry bounds.
+  Defining a conclusion does not prove that floating arithmetic satisfies it.
+Import "Bounds.clean"
+
+Text:
+  Sparse storage and computation.
+  The CSR model separates storage validity from the pure row computation.
+  A C correctness proof additionally requires a memory and execution model.
+Import "CSR.clean"
+
+Text:
+  Checked supporting results.
+  We restate the two zero-case statements in Foundations.clean. Verified.lean proves them
+  and five agreement lemmas. These are not the four numbered paper theorems.
+Result no accumulated rounding at zero:
+  Attribution: laproof; equation 4; adapted
+  Let u: Real
+  Conclude: accumulated rounding(u,0) = 0
+
+Result no accumulated underflow at zero:
+  Attribution: laproof; equation 5; adapted
+  Let u,eta: Real
+  Let m: Natural
+  Conclude: accumulated underflow(u,eta,0,m) = 0
+
+
+
+Text:
+  Remaining paper results.
+  Paper.clean.proposed records the numbered theorem targets and the FMA target.
+  Its missing IEEE754 dependency is intentional and is not imported here.
+  IEEE semantics, numerical proofs, dense/sparse equivalence, and C correctness
+  remain completion obligations. This entry point checks only the implemented slice.
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

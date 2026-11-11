@@ -8152,6 +8152,15 @@
         "# ",
         ""
       ]
+    },
+    "studies/laproof/Paper.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6"
     }
   }
 }

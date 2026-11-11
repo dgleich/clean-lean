@@ -519,6 +519,37 @@ set_option linter.unusedVariables false
 
 namespace CleanStatements
 
+/-!
+LAProof in Clean: an executable companion in progress.
+Source: Kellison, Appel, Tekriwal and Bindel, LAProof (2023).
+This document is an original adaptation. See README.md for source locations,
+interpretation decisions, and a section-by-section completion checklist.
+-/
+
+/-!
+Arithmetic models.
+The imported definitions make traversal order and empty accumulators explicit.
+Arithmetic callbacks describe algorithms; they do not establish IEEE behavior.
+-/
+
+/-!
+Numerical accuracy.
+Named conditions describe perturbations, residuals, and entry bounds.
+Defining a conclusion does not prove that floating arithmetic satisfies it.
+-/
+
+/-!
+Sparse storage and computation.
+The CSR model separates storage validity from the pure row computation.
+A C correctness proof additionally requires a memory and execution model.
+-/
+
+/-!
+Checked supporting results.
+We restate the two zero-case statements in Foundations.clean. Verified.lean proves them
+and five agreement lemmas. These are not the four numbered paper theorems.
+-/
+
 /--
 source: laproof
 reference: equation 4
@@ -537,6 +568,14 @@ def no_accumulated_underflow_at_zero : Prop :=
   ∀ (u eta : (_root_.cleanType_Real_107b6641a486642ad8e1)),
   ∀ (m : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
   (_root_.cleanDefine_equal_59dc0f11ba9b345348cf ((_root_.cleanDefine_accumulated_underflow_121eb07b6035c21247fe (u) (eta) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0))) (m))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+
+/-!
+Remaining paper results.
+Paper.clean.proposed records the numbered theorem targets and the FMA target.
+Its missing IEEE754 dependency is intentional and is not imported here.
+IEEE semantics, numerical proofs, dense/sparse equivalence, and C correctness
+remain completion obligations. This entry point checks only the implemented slice.
+-/
 
 end CleanStatements
 

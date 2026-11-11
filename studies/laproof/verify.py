@@ -7,7 +7,7 @@ sys.path.insert(0,str(ROOT))
 from cleanlang.core import Environment,lean
 from cleanlang.modules import load_document
 HERE=Path(__file__).resolve().parent
-e=Environment();rs=load_document(HERE/'Foundations.clean',e)
+e=Environment();rs=load_document(HERE/'Paper.clean',e)
 source=lean(rs,e,['Lean'])
 (HERE/'Generated.lean').write_text(source)
 f=lambda n:e.data['functions'][n]['lean'].split()[0]
