@@ -442,4 +442,22 @@ same_basic_target actualDeferredDimension2 expectedDeferredDimension2
 theorem meaningDeferredDimension2 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) :
   (actualDeferredDimension2 n D).entry = (fun _ => (0 : Complex)) := by rfl
 
+
+noncomputable def actualProjection0 : cleanType_Natural_469c53b6dafb7a218246 := (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
+noncomputable def expectedProjection0 : cleanType_Natural_469c53b6dafb7a218246 := cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)
+same_basic_target actualProjection0 expectedProjection0
+theorem meaningProjection0 : actualProjection0 = (2 : Nat) := by rfl
+
+
+noncomputable def actualProjection1 : cleanStructure_VectorCell_ea235d5395205122748e (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))))
+noncomputable def expectedProjection1 : cleanStructure_VectorCell_ea235d5395205122748e (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) := @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+same_basic_target actualProjection1 expectedProjection1
+theorem meaningProjection1 : actualProjection1.entry = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualProjection2 : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))
+noncomputable def expectedProjection2 : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) cleanType_Complex_2d7f06a08f8ab1e3f46d := @cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
+same_basic_target actualProjection2 expectedProjection2
+theorem meaningProjection2 : actualProjection2 = (fun _ => (0 : Complex)) := by rfl
+
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

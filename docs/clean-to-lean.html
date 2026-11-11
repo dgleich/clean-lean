@@ -1315,5 +1315,14 @@ For a declared truncated opposite, the abbreviated Lean carrier is
 meanings and non-Natural results are rejected. Standard imports provide no Natural
 prefix-minus meaning. See the <a href="dimension-indices.md#module-declared-prefix-values-in-dimensions">checking and retention rule</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="literal-bearing-projections">
+<h2>Experimental literal-bearing projections</h2>
+<p><code>dimension(2).size</code> reduces to its checked numeral;
+<code>vector cell(2,0).entry</code> reduces to the checked vector-zero wrapper.
+The adapter uses nominal field declarations and preserves the operator ambiguity
+audit inside the base. Field types depending on other field values remain
+unsupported in this experiment. See the
+<a href="../studies/parameterized-literals/README.md#projections-from-literal-bearing-records">construction and native expectations</a>.</p>
+</section></llm>
 </body>
 </html>

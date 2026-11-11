@@ -1776,3 +1776,17 @@ checked index without extra token-based mathematics. The [dimension contract](di
 specifies the unchanged parse and constructive native mapping. The standard
 module still has no Natural prefix-minus declaration.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental projections with literal holes
+
+The joint-literal adapter resolves field declarations through a known nominal
+structure and substitutes its symbolic parameters into the checked field type.
+Concrete projection witnesses are checked forward; operator ambiguity is audited
+inside the base even when projection reduction removes it from the resulting term.
+The [construction and boundaries](../studies/parameterized-literals/README.md#projections-from-literal-bearing-records)
+cover source traversal and native reduction. Field-value-dependent result types
+and unresolved carriers remain incomplete. Parsing and production elaboration
+are unchanged.
+:::

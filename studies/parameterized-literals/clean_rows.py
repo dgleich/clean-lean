@@ -87,9 +87,10 @@ class Builder:
 
     def call_witness(self,name,key,node,origins):
         def checked(defaulted=()):
-            spec=self.env.data['functions'][name]
-            self.signature(spec)
-            if spec['native_binding']!=key:raise Incomplete('Changed deferred callable')
+            if name is not None:
+                spec=self.env.data['functions'][name]
+                self.signature(spec)
+                if spec['native_binding']!=key:raise Incomplete('Changed deferred callable')
             syntax=node
             def replace_at(tree,path,origin):
                 result=list(tree)
@@ -105,12 +106,46 @@ class Builder:
                 raise Incomplete('Deferred call requires unavailable checking: '+str(error)) from error
         return checked
 
+    def projection_fragments(self,tree,path):
+        from cleanlang.dependent_functions import occurs
+        results=[]
+        for base in self.fragments(tree[1],path+(1,)):
+            if not isinstance(base.typ,Carrier):raise Incomplete('Projection carrier remains unresolved')
+            spec=next((s for s in self.env.structures.values() if s['key']==base.typ.identity),None)
+            if spec is None or tree[2] not in dict(spec['fields']):continue
+            field_type=dict(spec['fields'])[tree[2]]
+            if any(occurs(field_type,n) for n,_ in spec['fields']):
+                raise Incomplete('Projection type depends on record field values')
+            if len(spec['parameters'])!=len(base.typ.arguments):raise Incomplete('Projection parameter arity mismatch')
+            formals=dict(zip(spec['parameters'],base.typ.arguments))
+            typ=self.typ(field_type,formals)
+            output=Variable(repr((path,spec['key'],tree[2])),'index')
+            syntax=None;origins=();deferred=base.deferred;witnesses=base.witnesses
+            if base.syntax is not None:
+                syntax=['Projection',base.syntax,tree[2]]
+                origins=tuple(((1,)+local,source) for local,source in base.origins)
+                witness=self.call_witness(None,None,syntax,origins)
+                def evaluate(inputs,witness=witness,field_type=field_type,names=tuple(spec['parameters'])):
+                    try:
+                        value=witness()
+                        expected=self.typ(field_type,dict(zip(names,inputs[1:])))
+                        if self.typ(value.type,{})!=expected:raise NoSolution('Deferred projection type mismatch')
+                        return self.index(value)[0]
+                    except CleanError as error:raise Incomplete('Deferred projection checking is unavailable: '+str(error)) from error
+                deferred+=(Deferred(output,(base.value,)+base.typ.arguments,evaluate),)
+                witnesses+=((output,witness),)
+            results.append(Fragment(typ,output,
+                base.choices+(('projection',path,(spec['key'],tree[2])),),base.carriers,
+                base.arguments,base.equations,deferred,witnesses,syntax,origins))
+        return results
+
     def fragments(self,tree,path=()):
         if not holes(tree):
             if path not in self.known or path not in self.known_values:
                 raise Incomplete('Known argument lacks checked index evidence')
             return [Fragment(self.typ(self.known[path].type),self.known_values[path],syntax=self.known[path].tree)]
         kind=tree[0]
+        if kind=='Projection':return self.projection_fragments(tree,path)
         if kind=='Decimal':
             text=digits(tree[1]);found=[]
             for name,spec in sorted(self.env.data['types'].items()):
@@ -203,7 +238,8 @@ class Builder:
                 except CleanError as error:
                     raise Incomplete('Known argument index is unsupported: '+str(error)) from error
                 return
-            if node[0]=='Call':
+            if node[0]=='Projection':prepare(node[1],path+(1,))
+            elif node[0]=='Call':
                 for i,arg in enumerate(node[2]):prepare(arg,path+(2,i))
             elif node[0] in ('Operator','Unary'):
                 for i in range(2,len(node)):prepare(node[i],path+(i,))
@@ -247,6 +283,7 @@ class Builder:
                     viable.add(f.choices[-1][2])
                 if len(viable)>1:raise Ambiguous('Operator input signatures are ambiguous independently of the expected result')
                 for i in range(2,len(node)):walk(node[i],path+(i,))
+            elif kind=='Projection':walk(node[1],path+(1,))
             elif kind=='Call':
                 for i,arg in enumerate(node[2]):walk(arg,path+(2,i))
         walk(tree,())
@@ -311,6 +348,7 @@ class Builder:
                           Annotation(str(target),target,references(target,self.scope)),origin]
                 literal(retained,self.env,self.scope)
                 return retained
+            if node[0]=='Projection':return [node[0],replace(node[1],path+(1,)),node[2]]
             if node[0]=='Call':return [node[0],node[1],[replace(a,path+(2,i)) for i,a in enumerate(node[2])]]
             if node[0] in ('Operator','Unary'):return [*node[:2],*[replace(node[i],path+(i,)) for i in range(2,len(node))]]
             return node
@@ -318,6 +356,11 @@ class Builder:
         result=Expressions(self.env,self.scope).elaborate(rebuilt,expected)
         expected_calls={path:key for kind,path,key in choices if kind=='call'}
         def check(value,path):
+            source=rebuilt
+            for i in path:source=source[i]
+            if source[0]=='Projection':
+                check(Expressions(self.env,self.scope).elaborate(source[1]),path+(1,))
+                return
             if path not in expected_calls:return
             if value.tree[0] in ('Operator','Unary'):
                 name=value.operator_binding[0];paths=[path+(i,) for i in range(2,len(value.tree))]

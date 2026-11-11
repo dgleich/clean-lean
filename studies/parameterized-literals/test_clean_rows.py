@@ -196,6 +196,52 @@ class CleanRows(unittest.TestCase):
   value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(-2,0)','expression')),use_default=False)
   self.assertEqual(value.type,self.e.type('VectorCell((-(2:Natural)))',self.scope))
   self.assertIn(self.e.data['functions']['truncated opposite']['native_binding'],value.lean)
+ def dimension(self):
+  from cleanlang.structures import declare
+  declare('Structure Dimension():',['Let size: Natural','Constructor: dimension'],self.e)
+ def test_projection_from_literal_constructor(self):
+  self.dimension()
+  value=Builder(self.e,{}).materialize(expression_tree(parse('dimension(2).size','expression')),use_default=False)
+  self.assertEqual(value.tree[:3],['BoundNumeral','2','Natural'])
+ def test_hole_bearing_projection_supplies_dimension(self):
+  self.record();self.dimension()
+  value=Builder(self.e,{}).materialize(expression_tree(parse('vector cell(dimension(2).size,0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('VectorCell(2)'))
+ def test_projection_substitutes_structure_parameter(self):
+  self.record()
+  value=Builder(self.e,{}).materialize(expression_tree(parse('vector cell(2,0).entry','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(2,Complex)'))
+  self.assertEqual(value.tree[0],'BoundLiteral')
+ def test_unknown_field_and_nonrecord_projection_are_mismatches(self):
+  self.dimension()
+  for source in ['dimension(2).missing','2.size']:
+   with self.subTest(source=source),self.assertRaises(NoSolution):
+    Builder(self.e,{}).materialize(expression_tree(parse(source,'expression')))
+ def test_projected_field_type_is_not_chosen_by_expected_type(self):
+  from cleanlang.structures import declare
+  declare('Structure ScalarCell():',['Let entry: Real','Constructor: scalar cell'],self.e)
+  with self.assertRaises(NoSolution):
+   Builder(self.e,{}).materialize(expression_tree(parse('scalar cell(0).entry','expression')),self.e.type('Natural'))
+ def test_projection_field_dependencies_are_explicitly_incomplete(self):
+  from cleanlang.structures import declare
+  declare('Structure Payload():',['Let size: Natural','Let data: Vector(size,Complex)','Constructor: payload'],self.e)
+  with self.assertRaisesRegex(Incomplete,'depends on record field'):
+   Builder(self.e,{}).materialize(expression_tree(parse('payload(2,0).data','expression')))
+ def test_projection_keeps_operator_ambiguity_audit(self):
+  self.dimension()
+  notation('Notation alternative(x: Natural,y: Natural): Natural:',
+   ['Means: x+y','Infix: +','Render latex: {x}+{y}'],self.e)
+  with self.assertRaises(Ambiguous):
+   Builder(self.e,{}).materialize(expression_tree(parse('dimension(1+1).size','expression')))
+ def test_projection_cannot_resolve_operator_input_signature_tie(self):
+  from cleanlang.structures import declare
+  self.dimension();declare('Structure Other():',['Let other: Natural','Constructor: other'],self.e)
+  for name,typ,constructor in [('sized','Dimension','dimension'),('unsized','Other','other')]:
+   key=self.e.data['functions'][constructor]['native_binding']
+   notation('Notation '+name+'(x: Natural): '+typ+':',
+    ['Means: _root_.'+key+' x','Prefix: -','Render latex: -{x}'],self.e)
+  with self.assertRaisesRegex(Ambiguous,'independently of the expected result'):
+   Builder(self.e,{}).materialize(expression_tree(parse('(-2).size','expression')))
  def solve(self,source,**kw):
   return Builder(self.e,self.scope).solve(expression_tree(parse(source,'expression')),**kw)
  def literal(self,result):return [key for kind,_,key in result[0] if kind=='literal']

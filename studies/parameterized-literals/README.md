@@ -573,3 +573,56 @@ prefix declaration is present. This does not add such a declaration to standard
 imports or change the other deferred-inference limitations. The experimental
 suite now has 107 passing tests.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Projections from literal-bearing records
+
+The experimental adapter now traverses Projection nodes containing literal holes.
+For each base candidate with a known nominal structure identity, it looks up the
+field in that structure's checked declaration and substitutes the structure's
+symbolic parameters into the checked field type. It does not infer a structural
+record type from a field name. A concrete non-record carrier or missing field is
+a mismatch; an unresolved carrier remains incomplete.
+
+These examples now materialize without defaults:
+
+```clean
+dimension(2).size
+vector cell(dimension(2).size,0)
+vector cell(2,0).entry
+```
+
+Here Dimension has a Natural field named size; VectorCell(n) has an entry field
+of type Vector(n,Complex). The existing production projection reducer turns the
+first expression into the declared Natural numeral and the last into the declared
+complex-vector zero application. The independent native expectations therefore
+contain those reduced terms, not a projection artificially preserved in Lean.
+
+If the chosen base has concrete retained syntax, a forward obligation rechecks
+the projection and compares its checked result type with the substituted field
+type before exposing its checked value index. Literal-origin paths are shifted
+through the projection node and selected witnesses follow the same retention
+rules as call witnesses. A base that still lacks concrete syntax remains subject
+to the earlier selected-expression recheck and general candidate-validity gap.
+
+The source traversal, operator applicability audit, literal reconstruction and
+final callable verification all traverse projection bases. Since checking a
+projection may reduce away its base, callable verification explicitly rechecks
+the original reconstructed base and verifies its choices. Field selection cannot
+disambiguate operators with the same valid input signature: a regression constructs
+two such operators returning different nominal records and confirms rejection
+even when only one record has the requested field.
+
+This slice requires representable nominal carriers/parameters and field types
+that depend only on structure parameters. Types depending on preceding field
+values remain explicitly incomplete, as does an unresolved nominal carrier.
+For example `payload(2,0).data` for a record whose data type is indexed by its
+size field is not claimed supported. General dependent projection constraints,
+applications, binder/evidence handling and production integration remain open.
+
+Validation: 115 experimental tests pass, with twenty independent exact native
+targets and twenty supporting proofs (`/tmp/clean-projection-rows-native.log`).
+The latest Python run additionally includes the field-selection/operator-tie
+regression. Production sources are unchanged by this step.
+:::
