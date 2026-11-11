@@ -1310,3 +1310,52 @@ Validation: 195 experimental tests, 49 exact native targets and 49 supporting
 proofs pass. Provenance checks pass. Full production discovery and active-label
 verification remain pending in their existing fixed-snapshot jobs.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Explicit carrier operands in dependent inference
+
+The experimental adapter accepts checked Type-0 carrier values as operands, both
+explicit type expressions and local carrier variables. For example:
+
+```clean
+Define explicit vector(T: Type,x: T,y: Vector((carrier extent(T)),Complex)): Vector((carrier extent(T)),Complex):
+  Equals: y
+  Render latex: vector({T},{x},{y})
+```
+
+`explicit vector(type(Real),1,0)` has schematic Lean target
+`@explicitVector Real (realNumeral 1)
+  (complexVectorZero (@carrierExtent Real))`.
+The explicit carrier constrains the scalar literal to Real without defaulting.
+If more than one classifier is available, write `type(Real:Type)` or the intended
+alternate classifier explicitly. Passing the wrong classifier is a mismatch even
+when both classifiers have Lean body `Type`.
+
+The symbolic converter accepts a closed module-declared classifier for Type-0
+carriers as an operand type. It still rejects higher classifier levels. For a
+checked carrier-valued expression, recover the carrier through the existing
+checked carrier conversion; store that carrier's symbolic type term as the operand
+value rather than treating it as a value index. Caller representative collection
+retains the checked carrier in source order. Ordinary classifier identities remain
+part of operand type equations, so this does not equate different classifiers.
+
+Static computed-index witnesses now accept those checked carrier expressions.
+They compare the recovered carrier term with the symbolic formal before the same
+checked substitution. Dynamic inferred-type substitution still uses the captured
+classifier rule from the preceding entry. Direct checked constructors may retain
+Type-0 carrier arguments alongside value arguments; projections can therefore
+check field types depending on the carrier parameter. No arbitrary producer body
+is unfolded and unknown field values remain unavailable.
+
+The regressions cover explicit Real, an alternate classifier, wrong-classifier
+rejection, a caller-local carrier T, and a constructor projection with a field of
+type `Vector((carrier extent(T)),Complex)`. Native expectations independently spell
+both explicit call variants and the projected vector wrapper. General higher
+universes, computed carrier types outside the supported nominal/local fragment,
+symbolic-family validity and production integration remain open. No syntax change.
+
+Validation: all 200 experimental tests, 52 exact native targets and 52 supporting
+proofs pass. Provenance checks pass. The full production and active-label
+fixed-snapshot jobs remain pending.
+:::

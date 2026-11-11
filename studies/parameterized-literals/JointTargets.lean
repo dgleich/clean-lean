@@ -392,6 +392,18 @@ noncomputable def cleanNotation_small_extent_52e2b4bc6b506a129e4b  («T» : Type
 noncomputable def cleanDefine_small_vector_f55f5d4e09f3cb5ba45e {«T» : Type} («x» : «T») («y» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanNotation_small_extent_52e2b4bc6b506a129e4b («T»))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanNotation_small_extent_52e2b4bc6b506a129e4b («T»))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
   «y»
 
+noncomputable def cleanDefine_explicit_vector_a514ab06aae994dfb20b  («T» : Type) («x» : «T») («y» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanNotation_carrier_extent_3bb270212568b13b01b0 («T»))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanNotation_carrier_extent_3bb270212568b13b01b0 («T»))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  «y»
+
+noncomputable def cleanDefine_explicit_small_vector_fd18ce9a3d4df15e275c  («T» : Type) («x» : «T») («y» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanNotation_small_extent_52e2b4bc6b506a129e4b («T»))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanNotation_small_extent_52e2b4bc6b506a129e4b («T»))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  «y»
+
+structure cleanStructure_TypedPayload_8ff15373d5869669aa91 («T» : Type) : Type where
+  «data» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanNotation_carrier_extent_3bb270212568b13b01b0 («T»))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))
+
+noncomputable def cleanConstructor_typed_payload_861622886b290b49caa6 («T» : Type) («data» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanNotation_carrier_extent_3bb270212568b13b01b0 («T»))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : _root_.cleanStructure_TypedPayload_8ff15373d5869669aa91 («T») :=
+  @_root_.cleanStructure_TypedPayload_8ff15373d5869669aa91.mk «T» «data»
+
 
 open scoped Matrix
 
@@ -765,5 +777,26 @@ noncomputable def expectedClassifierIndex1_0 (n : cleanType_Natural_469c53b6dafb
 same_basic_target actualClassifierIndex1_0 expectedClassifierIndex1_0
 theorem meaningClassifierIndex1_0 (n : cleanType_Natural_469c53b6dafb7a218246) :
   actualClassifierIndex1_0 n = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualExplicitCarrier0 : cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanNotation_carrier_extent_3bb270212568b13b01b0 cleanType_Real_107b6641a486642ad8e1) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@_root_.cleanDefine_explicit_vector_a514ab06aae994dfb20b ((_root_.cleanType_Real_107b6641a486642ad8e1)) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 1))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((@_root_.cleanNotation_carrier_extent_3bb270212568b13b01b0 ((_root_.cleanType_Real_107b6641a486642ad8e1)))))))
+noncomputable def expectedExplicitCarrier0 : cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanNotation_carrier_extent_3bb270212568b13b01b0 cleanType_Real_107b6641a486642ad8e1) cleanType_Complex_2d7f06a08f8ab1e3f46d :=
+  @cleanDefine_explicit_vector_a514ab06aae994dfb20b cleanType_Real_107b6641a486642ad8e1 (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 1)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (@cleanNotation_carrier_extent_3bb270212568b13b01b0 cleanType_Real_107b6641a486642ad8e1))
+same_basic_target actualExplicitCarrier0 expectedExplicitCarrier0
+theorem meaningExplicitCarrier0 : actualExplicitCarrier0 = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualExplicitCarrier1 : cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanNotation_small_extent_52e2b4bc6b506a129e4b cleanType_Real_107b6641a486642ad8e1) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@_root_.cleanDefine_explicit_small_vector_fd18ce9a3d4df15e275c ((_root_.cleanType_Real_107b6641a486642ad8e1)) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 1))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((@_root_.cleanNotation_small_extent_52e2b4bc6b506a129e4b ((_root_.cleanType_Real_107b6641a486642ad8e1)))))))
+noncomputable def expectedExplicitCarrier1 : cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanNotation_small_extent_52e2b4bc6b506a129e4b cleanType_Real_107b6641a486642ad8e1) cleanType_Complex_2d7f06a08f8ab1e3f46d :=
+  @cleanDefine_explicit_small_vector_fd18ce9a3d4df15e275c cleanType_Real_107b6641a486642ad8e1 (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 1)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (@cleanNotation_small_extent_52e2b4bc6b506a129e4b cleanType_Real_107b6641a486642ad8e1))
+same_basic_target actualExplicitCarrier1 expectedExplicitCarrier1
+theorem meaningExplicitCarrier1 : actualExplicitCarrier1 = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualCarrierProjection : cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanNotation_carrier_extent_3bb270212568b13b01b0 cleanType_Real_107b6641a486642ad8e1) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((@_root_.cleanNotation_carrier_extent_3bb270212568b13b01b0 ((_root_.cleanType_Real_107b6641a486642ad8e1)))))
+noncomputable def expectedCarrierProjection : cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanNotation_carrier_extent_3bb270212568b13b01b0 cleanType_Real_107b6641a486642ad8e1) cleanType_Complex_2d7f06a08f8ab1e3f46d :=
+  @cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (@cleanNotation_carrier_extent_3bb270212568b13b01b0 cleanType_Real_107b6641a486642ad8e1)
+same_basic_target actualCarrierProjection expectedCarrierProjection
+theorem meaningCarrierProjection : actualCarrierProjection = (fun _ => (0 : Complex)) := by rfl
 
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

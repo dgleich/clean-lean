@@ -1459,5 +1459,15 @@ including when another classifier describes the same Lean universe. Explicit
 source type values use <code>type(Natural)</code>. See the
 <a href="../studies/parameterized-literals/README.md#computed-indices-depending-on-inferred-types">constructive mapping and restricted implementation scope</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="explicit-carrier-inference">
+<h2>Experimental explicit carrier operands</h2>
+<p><code>explicit vector(type(Real),1,0)</code> translates schematically to
+<code>@explicitVector Real (realNumeral 1) (complexVectorZero (@carrierExtent Real))</code>.
+The explicit carrier constrains the scalar literal. With multiple classifiers,
+<code>type(Real:Type)</code> selects one explicitly; a wrong classifier remains a
+mismatch. Local carrier operands and dependent constructor projections are covered
+by the <a href="../studies/parameterized-literals/README.md#explicit-carrier-operands-in-dependent-inference">same checked conversion rule</a>.
+Higher-universe and production integration limits remain.</p>
+</section></llm>
 </body>
 </html>

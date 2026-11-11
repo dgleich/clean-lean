@@ -1973,3 +1973,16 @@ incomplete. See the [rule, readable specimen and remaining boundaries](../studie
 Higher universes, explicit classifier operands and general symbolic validity
 remain open. No parsing or production inference rule changes.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental explicit carrier operands
+
+Checked Type-0 carrier expressions now supply symbolic type terms to dependent
+call constraints. Their declared classifier remains part of the operand type;
+wrong classifiers are rejected. Static index substitution and direct-constructor
+parameter evidence preserve checked carrier expressions. See the
+[constructive rules and specimens](../studies/parameterized-literals/README.md#explicit-carrier-operands-in-dependent-inference).
+Higher classifiers and general symbolic validity remain open. The parser and
+production inference are unchanged.
+:::

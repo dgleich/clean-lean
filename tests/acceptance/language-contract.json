@@ -3662,6 +3662,23 @@
         "Universal symbolic-family validity",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_explicit_carrier_operand",
+      "status": "experimental-slice",
+      "environment": "Explicit linear algebra modules, carrier extent and explicit vector; optional distinct Small classifier",
+      "source": "explicit vector(type(Real),1,0)",
+      "expected_lean": "@explicitVector Real (realNumeral 1) (complexVectorZero (@carrierExtent Real)), using exact wrapper identities",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Convert checked Type-0 carrier operands to symbolic type terms while retaining classifier identity; preserve static substitution and constructor evidence; reject wrong classifier",
+      "pending": [
+        "Higher universes and general computed carriers",
+        "Universal symbolic-family validity",
+        "Production integration"
+      ]
     }
   ]
 }

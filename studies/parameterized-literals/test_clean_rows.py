@@ -727,6 +727,38 @@ class CleanRows(unittest.TestCase):
   self.typed_extent()
   value=Builder(self.e,self.scope).materialize(expression_tree(parse('typed vector(n,0)','expression')),use_default=False)
   self.assertEqual(Expressions(self.e,self.scope).elaborate(loads(dumps(value.tree))).lean,value.lean)
+ def explicit_typed_vector(self,classifier='Type'):
+  notation(f'Notation carrier extent(T: {classifier}): Natural:',
+   ['Means: 2','Render latex: extent({T})'],self.e)
+  notation(f'Define explicit vector(T: {classifier},x: T,y: Vector((carrier extent(T)),Complex)): Vector((carrier extent(T)),Complex):',
+   ['Equals: y','Render latex: vector({T},{x},{y})'],self.e,authored=True)
+ def test_explicit_carrier_operand_in_dependent_call(self):
+  self.explicit_typed_vector()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('explicit vector(type(Real),1,0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector((carrier extent(type(Real))),Complex)',self.scope))
+ def test_explicit_carrier_preserves_alternate_classifier(self):
+  type_declaration('Type Small():',['Universe: 1','Classifies: 0','Means: Type','Render latex: S'],self.e)
+  self.explicit_typed_vector('Small')
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('explicit vector(type(Real:Small),1,0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector((carrier extent(type(Real:Small))),Complex)',self.scope))
+ def test_explicit_carrier_wrong_classifier_rejected(self):
+  type_declaration('Type Small():',['Universe: 1','Classifies: 0','Means: Type','Render latex: S'],self.e)
+  self.explicit_typed_vector('Small')
+  with self.assertRaises(NoSolution):
+   self.solve('explicit vector(type(Real:Type),1,0)',use_default=False)
+ def test_explicit_local_carrier_operand(self):
+  self.explicit_typed_vector()
+  self.scope['T']=Expr('T','T',self.e.type('Type'),tree=['Local','T'])
+  self.scope['z']=Expr('z','z',self.e.type('T',self.scope),tree=['Local','z'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('explicit vector(T,z,0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector((carrier extent(T)),Complex)',self.scope))
+ def test_explicit_carrier_constructor_projection(self):
+  from cleanlang.structures import declare
+  self.explicit_typed_vector()
+  declare('Structure TypedPayload(T: Type):',
+   ['Let data: Vector((carrier extent(T)),Complex)','Constructor: typed payload'],self.e)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('typed payload(type(Real),0).data','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector((carrier extent(type(Real))),Complex)',self.scope))
  def shifted_literal(self):
   notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
    ['Means: fun _ _ => (0 : Complex)','Literal: 7','Render latex: 7'],self.e)

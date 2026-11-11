@@ -43,6 +43,12 @@ class Builder:
         return key
 
     def index(self,value):
+        classifier=self.env.classifier_info(value.type)
+        if classifier is not None:
+            if classifier[1]!=0:raise Incomplete('Higher classifier operand')
+            from cleanlang.carrier_types import carrier
+            checked=carrier(value,self.env,self.scope)
+            return self.typ(checked,{}),checked
         from cleanlang.indices import index_value
         index=index_value(value,self.env,self.scope,_fresh=True)
         atom=Atom(repr(index.comparison_key()),'index')
@@ -72,7 +78,9 @@ class Builder:
             return atom
         if type(typ) is not Type:raise Incomplete('Unsupported carrier constructor: '+type(typ).__name__)
         key=self.carrier_identity(typ.name)
-        if self.env.sort_level(typ)!=1:raise Incomplete('Only Type-0 carriers in this adapter')
+        classifier=self.env.classifier_info(typ)
+        if self.env.sort_level(typ)!=1 and (classifier is None or classifier[1]!=0):
+            raise Incomplete('Only Type-0 carriers and their closed classifiers in this adapter')
         return Carrier(key,tuple(self.typ(a,None if capture else formals) for a in typ.args))
 
     def dependent_type(self,typ,formals,evidence,path):
@@ -92,8 +100,6 @@ class Builder:
                 def witness(defaulted=()):
                     from cleanlang.indices import substitute_index
                     from cleanlang.inferred_conversion import reify
-                    if any(getattr(formals[n],'sort',None)!='index' for n in names):
-                        raise Incomplete('Computed formal classifier arguments remain unsupported')
                     if any(n not in evidence for n in names):
                         raise Incomplete('Computed formal index lacks concrete argument evidence')
                     try:
@@ -102,8 +108,6 @@ class Builder:
                     except CleanError as error:
                         raise Incomplete('Computed formal index checking unavailable: '+str(error)) from error
                 def evaluate(inputs):
-                    if any(getattr(formals[n],'sort',None)!='index' for n in names):
-                        raise Incomplete('Computed formal classifier arguments remain unsupported')
                     if any(n not in evidence for n in names):
                         raise Incomplete('Computed formal index lacks concrete argument evidence')
                     for n,expected in zip(names,inputs):
@@ -210,7 +214,7 @@ class Builder:
         """Expose direct, checked constructor evidence without claiming new holes.
 
         Child checks do not register representatives: caller priority was already
-        established by the prepass. Classifier parameter witnesses stay unsupported.
+        established by the prepass. Type-0 classifier values retain their checked carrier evidence.
         """
         try:
             typ=self.typ(value.type,{})
@@ -231,7 +235,6 @@ class Builder:
         if len(tree[2])!=len(parameters):raise Incomplete('Known constructor arity mismatch')
         arguments={}
         for p,node in zip(parameters,tree[2]):
-            if p.classifier is not None:continue
             try:checked=Expressions(self.env,self.scope).elaborate(node)
             except CleanError as error:raise Incomplete('Known constructor argument check unavailable: '+str(error)) from error
             child=self.known_fragment(checked,optional=True)

@@ -349,8 +349,33 @@ same_basic_target actualClassifierIndex{j}_{k} expectedClassifierIndex{j}_{k}
 theorem meaningClassifierIndex{j}_{k} (n : {t('Natural')}) :
   actualClassifierIndex{j}_{k} n = (fun _ => (0 : Complex)) := by rfl
 """)
+for j,classifier in enumerate(['Type','Small']):
+ extent='carrier extent' if j==0 else 'small extent'
+ copier='explicit vector' if j==0 else 'explicit small vector'
+ notation(f'Define {copier}(T: {classifier},x: T,y: Vector(({extent}(T)),Complex)): Vector(({extent}(T)),Complex):',
+  ['Equals: y','Render latex: vector({T},{x},{y})'],env,authored=True)
+ value=Builder(env,scope).materialize(expression_tree(parse(f'{copier}(type(Real:{classifier}),1,0)','expression')),use_default=False)
+ index=f"@{f(extent)} {t('Real')}";zero=f"@{f('complex vector zero')} ({index})"
+ checks.append(f"""
+noncomputable def actualExplicitCarrier{j} : {t('Vector')} ({index}) {t('Complex')} := {value.lean}
+noncomputable def expectedExplicitCarrier{j} : {t('Vector')} ({index}) {t('Complex')} :=
+  @{f(copier)} {t('Real')} ({nr} (nat_lit 1)) ({zero})
+same_basic_target actualExplicitCarrier{j} expectedExplicitCarrier{j}
+theorem meaningExplicitCarrier{j} : actualExplicitCarrier{j} = (fun _ => (0 : Complex)) := by rfl
+""")
+declare('Structure TypedPayload(T: Type):',
+ ['Let data: Vector((carrier extent(T)),Complex)','Constructor: typed payload'],env)
+value=Builder(env,scope).materialize(expression_tree(parse('typed payload(type(Real:Type),0).data','expression')),use_default=False)
+index=f"@{f('carrier extent')} {t('Real')}"
+checks.append(f"""
+noncomputable def actualCarrierProjection : {t('Vector')} ({index}) {t('Complex')} := {value.lean}
+noncomputable def expectedCarrierProjection : {t('Vector')} ({index}) {t('Complex')} :=
+  @{f('complex vector zero')} ({index})
+same_basic_target actualCarrierProjection expectedCarrierProjection
+theorem meaningCarrierProjection : actualCarrierProjection = (fun _ => (0 : Complex)) := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Forty-nine experimental joint-row targets and forty-nine meaning proofs passed; production joint inference remains unimplemented.')
+print('Fifty-two experimental joint-row targets and fifty-two meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md
