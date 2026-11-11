@@ -32,8 +32,9 @@ class Evidence(unittest.TestCase):
     def test_assumption_passes_explicit_proof(self):
         e,r=self.load();s=lean(r,e,[])
         subset=e.data['functions']['set subset']['native_binding']
-        self.assertIn(f'∀ («inclusion» : (_root_.{subset} (S) (T))),',s)
-        self.assertIn('(S) (T) («inclusion»)',s)
+        self.assertIn(f'∀ («inclusion» : (_root_.{subset} («S») («T»))),',s)
+        constructor=e.data['functions']['certified inclusion']['native_binding']
+        self.assertIn(f':= (@_root_.{constructor} («X») («S») («T») («inclusion»));',s)
     def test_direct_type_equals_alias(self):
         e=Environment();load_module(ROOT/'library/topology/pairs.clean',e)
         local={}

@@ -61,8 +61,9 @@ Result local names:
             e=Environment();rs=load_document(p,e)
         target=lean(rs,e,[])
         key=e.data['types']['ChainMap']['native_binding']
-        self.assertIn('let R :',target)
-        self.assertIn(f'∀ (f : (_root_.{key} (K) (field) (R) (R))),',target)
+        self.assertIn('let «R» :',target)
+        self.assertIn(f'∀ («f» : (_root_.{key} («K») («field») («R») («R»))),',target)
+        self.assertLess(target.index('let «R» :'),target.index('∀ («f» :'))
     def test_function_alias_call_head_converts(self):
         self.locals['g']=Expr('g','g',self.typ('Function(Real,Real)'))
         self.bind('f','g')

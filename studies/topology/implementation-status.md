@@ -6,6 +6,68 @@ This is an audit checkpoint, not a completion claim. The maintained specificatio
 and executable fixtures are authoritative; historical milestone paragraphs and
 catalog entries must not be read as a current all-green report.
 
+## Current checkpoint: 2026-11-11
+
+Compiler changes through `f84aa3b` have the following newer evidence. The older
+milestone counts below describe their own snapshots and are not cumulative
+current-revision validation.
+
+| Area | Current evidence | Still open |
+|---|---|---|
+| Relative and ordinary homology | [Clean-authored comparison maps](relative-ordinary-comparison.md), with six canonical targets and four inverse/naturality proofs; canonical pair-inclusion maps are used | Level-specific perturbation diagrams and image transport |
+| Level-set application | [Three assembled comparisons](level-homology-comparison.md), with four exact targets and three application proofs plus four generic helpers; nesting and zero inclusion are proved, not assumed | Identifying separately named fiber/band spaces, well-group equality and cover/excision |
+| Explicit joint API | Scoped proof-producing lambdas and implicit carrier/dimension recovery from their annotated domains; eleven native targets/proofs in the [evidence driver](../../tools/check_joint_proof_targets.py), 63 API/adapter checks, 462 solver tests and 115 runtime tests | Production routing, selected-value-dependent scoped results and general contextual signature recovery |
+| Corpus compatibility | All four documents produce identical legacy/joint text with stable fingerprints; all 92 corpus proofs pass after the latest change | This does not establish general target uniqueness or full regression |
+| Full Python discovery | Immutable full jobs are running. The alphabetically first class loads active labels in `setUpClass`, before unittest prints a test name | No full discovery pass at the current revision |
+| Complementary Python discovery | A separate immutable `f84aa3b` run contains the other 1,234 tests and logs class setup; it excludes exactly the four `test_active_labels` cases | The run has recorded failures and is still running; it cannot substitute for the preserved full jobs |
+
+The complementary run has exposed two distinct failure classes. The similarity
+and BibTeX specimens still use unannotated vector zero, which production numeral
+completion cannot infer. This is the previously documented integration gap in
+[the literal study](../parameterized-literals/README.md), not a passing example.
+Several tests also retain obsolete expectations for pre-module Lean operators,
+unquoted source locals, or old LaTeX grouping. The evidence/local-shadowing and
+basic precedence assertions have been migrated to explicit native wrapper calls
+and quoted locals. Their assertions still check the actual statement body;
+finding an imported function declaration alone does not establish call resolution.
+The original examples remain unchanged and still fail under production routing.
+Updating stale oracles does not fix or waive the missing inference support.
+
+Focused validation after these oracle repairs: 42 tests pass across
+`test_callable_evidence`, `test_evidence`, and the three core precedence/grouping
+tests. This is Python translation evidence, not a new kernel proof or a full-suite
+pass. No parser, elaborator, example, or production-routing change is part of this
+repair. The full immutable runs retain their original test versions and results.
+
+The isolated joint-runtime driver now also runs all 42 core theorem tests,
+including the unchanged similarity source. Its expanded 157-test run passes.
+The core cases check named matrix application and scalar multiplication wrappers,
+dependent dimension rejection, local-definition order, metadata and rendering.
+The driver retains its two documented positive replacements for legacy inference
+limitations; it does not patch production routing outside its own process.
+Run `python3 tools/check_joint_runtime.py` to reproduce this scoped result.
+This improves migration evidence but does not establish full integration or
+discharge the remaining dependent-signature analysis boundaries.
+
+The same regression run exposed an obsolete local-name expectation in
+`test_local_conversion`. Its repaired oracle checks that `R` remains a named
+local chain complex in both indices of `ChainMap`, and that its `let` precedes
+the map binder. All ten local-conversion tests pass after that repair.
+
+Comparison optimizations preserve the public source recheck and exact target
+rules. Controlled fixtures reduce repeated work, but bounded active-label
+observations still end without completing the selected declaration. There is no
+current end-to-end performance or full active-label validation claim.
+
+The latest corpus/diagnostic records are in
+[the scoped compatibility report](../parameterized-literals/compatibility.json).
+The new complementary run's authoritative process metadata is
+`/tmp/clean-complementary-current.json`, with its log at
+`/tmp/clean-complementary-current.log`. These paths identify this session's run,
+not portable proof artifacts or a permanent pass result. Empty full-suite logs
+alone do not prove import failure, deadlock or termination: class setup can be
+running before the first test report.
+
 ## Implemented language and module interfaces
 
 | Requirement | Concrete implementation and acceptance evidence | Remaining boundary |
@@ -80,9 +142,9 @@ is still in progress; the older counts below retain their historical scope.
 |---|---|---|
 | Big Steps, Theorem 9 | Indexed records and ordinary set/function definitions can express its inputs and support predicates | Filtered complex, lazy reduction, the actual algorithm run and its invariants; the two sides must be computed independently |
 | Interlevel, Theorem 1 | Explicit diagrams, interval bases, subpath restrictions, endpoint clipping, surviving-label support and restricted label records, and a checked generic basis-reindexing wrapper | Full generated-target comparison for the native-checked surviving active-label equivalence; basis reindexing and compatibility, pyramid construction, exact-diamond basis flips and extension proof |
-| Interlevel, Theorem 3 | Actual singular-homology, submodule, perturbation and shifted-image foundations | Assemble the level-set specialization and prove the two-extreme-perturbation formula with justified cover hypotheses |
+| Interlevel, Theorem 3 | Actual singular-homology, perturbation and shifted-image foundations; level fibers/bands, explicit emptiness certificates, and assembled relative-to-ordinary comparisons | Named fiber/band identifications, a level-specific naturality/image diagram, and the two-extreme-perturbation formula with justified cover hypotheses |
 | Interlevel, Theorem 4 | A translated two-image candidate over actual relative objects; checked supporting inclusion maps | Reverse inclusion and the cover/excision audit; no proof is claimed by translating the candidate |
-| Mayer–Vietoris | Graded objects/maps, ordinary/relative chains, [actual inclusion-induced maps with zero composite](mayer-vietoris-maps.md), [binary module sums](module-products.md), and the [checked exact-pair/interior/terminal interface](exact-sequences.md) | Connecting maps, degree shifts, actual homology endpoint/augmentation data, excision and the actual long-exact-sequence construction/proof |
+| Mayer–Vietoris | Graded objects/maps, ordinary/relative chains, [actual inclusion-induced maps with zero composite](mayer-vietoris-maps.md), [binary module sums](module-products.md), and the [checked exact-pair/interior/terminal interface](exact-sequences.md) | The actual cover-based chain sequence and its connecting map, endpoint/augmentation data, excision and the Mayer–Vietoris long-exact-sequence proof; generic chain connecting maps alone do not establish these |
 
 These missing mathematical objects are not supplied by opaque names or assumptions
 of the desired conclusion. Conversely, a missing paper proof does not establish a

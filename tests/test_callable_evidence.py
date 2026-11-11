@@ -45,11 +45,14 @@ class CallableEvidence(unittest.TestCase):
  def test_implication(self):self.load('', '  Let n: Natural\n  Assume h: n = 0 → n = n\n  Assume p: n = 0\n  Let q = h(p)\n  Conclude: q = q\n')
  def test_callable_local_precedes_module(self):
   source=self.load('Notation evidence(n: Natural): Natural:\n  Means: n+1\n  Render latex: e({n})\n','  Let n: Natural\n  Assume evidence: for every (x: Natural,x = x)\n  Let p = evidence(n)\n  Conclude: p = p\n')
-  self.assertIn('(«evidence» n)',source)
+  statement=source.split('namespace CleanStatements',1)[1]
+  self.assertIn(':= («evidence» «n»);',statement)
+  self.assertNotIn('cleanNotation_evidence_',statement)
  def test_noncallable_local_preserves_module_resolution(self):
   source=self.load('Notation evidence(n: Natural): Natural:\n  Means: n+1\n  Render latex: e({n})\n','  Let n: Natural\n  Assume evidence: n = n\n  Let p = evidence(n)\n  Conclude: p = p\n')
-  self.assertIn('cleanNotation_evidence_',source)
-  self.assertNotIn('(«evidence» n)',source)
+  statement=source.split('namespace CleanStatements',1)[1]
+  self.assertRegex(statement,r':= \(_root_\.cleanNotation_evidence_[a-f0-9]+ \(«n»\)\);')
+  self.assertNotIn('(«evidence» «n»)',statement)
  def test_inferred_carrier_condition(self):self.load('Condition pointwise equal(f,g):\n  Let T: Type\n  Let f,g: Function(T,T)\n  Holds when: for every (x: T,f(x) = g(x))\n','  Let T: Type\n  Let f,g: Function(T,T)\n  Let x: T\n  Assume h: pointwise equal(f,g)\n  Let p = h(x)\n  Conclude: p = p\n')
  def test_existential_result(self):self.load('', '  Assume h: for every (x: Natural,there exists (y: Natural,x = y))\n  Let n: Natural\n  Let p = h(n)\n  Conclude: p = p\n')
  def test_existential_evidence_not_callable(self):

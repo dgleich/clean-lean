@@ -9,7 +9,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'tests')]
 from cleanlang import numeral_inference
 
-MODULES=['test_numeral_pruning','test_declared_standard_operators',
+MODULES=['test_clean','test_numeral_pruning','test_declared_standard_operators',
          'test_literal_retention','test_dependent_functions','test_structures']
 
 

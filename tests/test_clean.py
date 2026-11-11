@@ -20,10 +20,13 @@ class CleanTests(unittest.TestCase):
         self.assertEqual(base,lean(parse(SOURCE.replace('A, S be complex n×n matrices','A, S: Matrix(n,n,Complex)'),self.reg),self.reg,[]))
     def test_multiplication_and_local_definition(self):
         s=lean(parse(SOURCE,self.reg),self.reg,[])
-        self.assertIn('A *ᵥ x',s); self.assertIn('μ • x',s)
+        application=self.reg.data['functions']['complex matrix application']['native_binding']
+        scaling=self.reg.data['functions']['complex scale vector']['native_binding']
+        self.assertIn(f'(@_root_.{application} («n») («n») («A») («x»))',s)
+        self.assertIn(f'(@_root_.{scaling} («n») («μ») («x»))',s)
         vector=self.reg.data['types']['Vector']['native_binding']
         complex=self.reg.data['types']['Complex']['native_binding']
-        self.assertIn(f'let y : (_root_.{vector} (n) ((_root_.{complex}))) :=',s)
+        self.assertIn(f'let «y» : (_root_.{vector} («n») ((_root_.{complex}))) :=',s)
         self.assertNotIn('sorry',s); self.assertNotIn('axiom',s)
     def reject(self,s,part):
         with self.assertRaisesRegex(CleanError,part): parse(s,self.reg)
@@ -35,7 +38,7 @@ class CleanTests(unittest.TestCase):
     def test_bad_indentation(self): self.reject(SOURCE.replace('    Let n','  Let n'),'dedent')
     def test_duplicate_names(self): self.reject(SOURCE.replace('Let y = inverse(S)*x','Let x = inverse(S)*x'),'Duplicate name')
     def test_dimensions_checked(self):
-        self.reject(SOURCE.replace('complex n-vector','complex 2-vector'),'dimension')
+        self.reject(SOURCE.replace('complex n-vector','complex 2-vector'),r'No declared meaning for operator \*')
     def test_conclusion_must_be_proposition(self): self.reject(SOURCE[:SOURCE.index('    Conclude:')]+'    Conclude: x\n','proposition')
     def test_assumption_must_be_proposition(self): self.reject(SOURCE.replace('Assume nonzero: x ≠ 0','Assume nonzero: x'),'condition')
     def test_define_alias(self):
@@ -71,23 +74,31 @@ class CleanTests(unittest.TestCase):
     def test_conclude_is_last(self): self.reject(SOURCE+'    Let z: Real\n','Unexpected nesting or syntax')
     def test_logical_precedence(self):
         env={x:Expr(x,x,PROP) for x in ['p','q','r']}
-        self.assertEqual(Expressions(self.reg,env).parse('p and q or r').lean,'((p ∧ q) ∨ r)')
+        value=Expressions(self.reg,env).parse('p and q or r')
+        conjunction=self.reg.data['functions']['conjunction']['native_binding']
+        disjunction=self.reg.data['functions']['disjunction']['native_binding']
+        self.assertEqual(value.tree,['Operator','∨',['Operator','∧',['Local','p'],['Local','q']],['Local','r']])
+        self.assertEqual(value.lean,f'(_root_.{disjunction} ((_root_.{conjunction} (p) (q))) (r))')
     def test_unary_minus_and_power(self):
         env={'x':Expr('x','x',Type('Real'))}
         parser=Expressions(self.reg,env)
-        self.assertEqual(parser.parse('-x^2').lean,'(-(x ^ 2))')
-        self.assertEqual(parser.parse('(-x)^2').lean,'((-x) ^ 2)')
-        self.assertIn('(-x)',parser.parse('(-x)^2').tex)
+        negative=self.reg.data['functions']['real negative']['native_binding']
+        power=self.reg.data['functions']['real power']['native_binding']
+        numeral=self.reg.data['types']['Natural']['numerals']['native_binding']
+        two=f'(_root_.{numeral} (nat_lit 2))'
+        self.assertEqual(parser.parse('-x^2').lean,f'(_root_.{negative} ((_root_.{power} (x) ({two}))))')
+        self.assertEqual(parser.parse('(-x)^2').lean,f'(_root_.{power} ((_root_.{negative} (x))) ({two}))')
+        self.assertEqual(parser.parse('(-x)^2').tex,r'\left(-x\right)^{2}')
     def test_negation_preserves_grouping(self):
         env={x:Expr(x,x,PROP) for x in ['p','q']}
         tx=Expressions(self.reg,env).parse('not (p and q)').tex
-        self.assertEqual(tx,r'\text{not }(p \text{ and } q)')
+        self.assertEqual(tx,r'\text{not }\left(p\text{ and }q\right)')
     def test_forward_reference_rejected(self):
         self.reject(SOURCE.replace('Let y = inverse(S)*x','Let y = z'),'Unknown name: z')
     def test_assumption_order_after_definition(self):
         source=SOURCE.replace('    Conclude:','    Assume hy: y ≠ 0\n    Conclude:')
         code=lean(parse(source,self.reg),self.reg,[])
-        self.assertLess(code.index('let y :'),code.index('∀ («hy» :'))
+        self.assertLess(code.index('let «y» :'),code.index('∀ («hy» :'))
     def test_english_logic_in_latex_keeps_lean_semantics(self):
         env={x:Expr(x,x,PROP) for x in ['p','q']}
         for op,word in [('and','and'),('or','or'),('↔','if and only if'),('→','implies')]:
@@ -96,7 +107,8 @@ class CleanTests(unittest.TestCase):
         s=latex(parse(SOURCE,self.reg),self.reg)
         self.assertIn(r'\text{ and }',s)
         self.assertNotIn(r'\land',s)
-        self.assertIn('μ • x',lean(parse(SOURCE,self.reg),self.reg,[]))
+        scaling=self.reg.data['functions']['complex scale vector']['native_binding']
+        self.assertIn(f'(@_root_.{scaling} («n») («μ») («x»))',lean(parse(SOURCE,self.reg),self.reg,[]))
     def test_typed_objects_render_as_english(self):
         s=latex(parse(SOURCE,self.reg),self.reg)
         self.assertIn('Let $n$ be a natural number.',s)

@@ -26,6 +26,25 @@ relative functor laws, connecting maps, exactness/excision and the five research
 theorem proofs. These mathematical
 obligations must not be conflated with merely parsing their proposed signatures.
 
+## Latest acceptance checkpoint
+
+The [current audit](implementation-status.md#current-checkpoint-2026-11-11)
+separates production language/module support from the explicit experimental joint
+API and from unproved mathematics. The level specialization now has assembled
+ordinary-homology comparisons with constructed certificates. The paper's
+well-group formula is still open. Generic connecting maps and exactness tools do
+not yet supply the actual cover/excision construction for Mayer–Vietoris.
+
+Full validation is unresolved. Its first active-label class performs expensive
+module loading in class setup, before unittest reports individual tests. A
+complementary 1,234-test run at `f84aa3b` excludes only those four tests while the
+full runs remain live. Neither a running job nor a successful partial suite may
+be called a full regression pass.
+The complementary run has already recorded failures: production vector-zero
+inference is missing, and some assertion strings predate module-backed operators
+and quoted locals. The audit records these separately; obsolete oracle repairs
+must not hide the production integration gap.
+
 ## Working foundation
 
 `library/topology/basic.clean` defines inverse image, image, selection,
