@@ -2426,3 +2426,65 @@ and surrounding-call constraints together, and recheck the complete selected
 Clean expression against independently authored native targets. That work and
 production integration remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Shared contextual constraints and forward checks
+
+`contextual_constraints.py` adds a fixed point over ordinary equations, typed
+contextual occurrences and existing `Deferred` checks. Its `saturate_contextual`
+adapter consumes an ordinary model `Row`'s equations and deferred obligations.
+It does not yet participate in the source Builder or candidate selection/defaults.
+
+Each family has a unique string identity, fixed ordered formal telescope, output
+sort and allowed-free scope. References denote lexical binding identities, not
+merely printed source names. Each occurrence has a unique string identity, refers
+to that family, supplies typed explicit local arguments, and has an ordinary
+symbolic output. One ground occurrence can determine the family closure; another
+use under a different local name then constrains its output through checked
+application. All uses must agree. This permits a first family to constrain an
+ordinary type variable that unlocks a second family or a forward obligation.
+
+The constructive rule is:
+
+1. Unify the ordinary equations with the existing scope-checked unifier.
+2. Resolve each occurrence's domain types, actual types and output. An occurrence
+   is ready when its domain/actual types are ground and either its output is ground
+   or its family already has a solution. Forward checks are ready when all inputs
+   are ground. No ready work with pending dependencies means incomplete.
+3. For an unsolved family, invert each ready ground occurrence using the contextual
+   pattern operation. Compare all proposed closed solutions; never select the
+   first occurrence without checking the others. For a solved family, recheck its
+   dependent telescope and instantiate at each ready occurrence's actual locals.
+4. Evaluate ready forward checks under the same bindings. As with ordinary Row
+   checks, callbacks must be deterministic and pure under the fixed environment.
+   Their results must be
+   ground, structurally supported and well-scoped. Compare each result against its
+   output, and collect its equation together with the contextual output equations.
+   Unavailable ready checks dominate mismatches in the batch. If checks succeed,
+   jointly unify the collected equations, retain the agreed closures, and repeat.
+5. Return the ordinary bindings and contextual closures only when all occurrences
+   and forward checks have finished. Row argument determination and exhaustive
+   candidate selection remain the caller's obligations, as for ordinary saturation.
+
+The occurrence IDs provide a fixed diagnostic traversal; they do not choose a
+permitted interpretation. There is no arithmetic inversion, opaque-atom renaming,
+independent lambda-body solve, or default application. Unsupported patterns,
+conversion, unresolved cycles and resource exhaustion remain incomplete. A foreign
+local cannot escape into an output variable with a smaller permitted scope.
+
+Seventeen new tests cover alpha-renamed sharing, conflicting uses and input-order
+permutations, ordinary-to-contextual and contextual-to-ordinary propagation,
+multiple-family chains, dependent actual types, unresolved cycles, scope rejection,
+sort and identity validation, unavailable-check precedence, computed-expression
+boundaries, shared forward-check saturation and resource limits. These are model
+checks. Builder integration, contextual occurrence encoding under source binders,
+whole-expression native oracles and production joint lambda inference remain
+pending; no source syntax or emitted Lean target changes here.
+
+Validation: all 408 experimental tests pass, including the seventeen new cases.
+Reference HTML IDs/local links and provenance checks pass. No production compiler
+files changed, and no new canonical Lean-target validation is claimed for this
+model-only addition. Existing full discovery and active-label snapshot jobs remain
+live and pending separately.
+:::

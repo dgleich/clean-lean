@@ -1728,5 +1728,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <h2>Contextual pattern experiment: no new Lean translation yet</h2>
 <p>The experimental model can recover a structural family depending on an explicit local and reapply it under a different local name, preserving dependent domains and avoiding capture. These model closures are not emitted Lean terms. Embedded lambda inference still requires joint constraint integration and independent whole-expression Lean targets; see the <a href="../studies/parameterized-literals/README.md#contextual-pattern-inversion-groundwork">contract and limitations</a>.</p>
 </section></llm>
+
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="contextual-constraint-model">
+<h2>Shared contextual constraints: experimental model</h2>
+<p>The contextual model now shares a fixed point with ordinary equations and forward checks. All uses of an inferred family must agree, including uses under different local names. This does not add a Clean-to-Lean rule: source lambda integration, complete-expression target oracles and production support remain pending. See the <a href="../studies/parameterized-literals/README.md#shared-contextual-constraints-and-forward-checks">model contract</a>.</p>
+</section></llm>
 </body>
 </html>

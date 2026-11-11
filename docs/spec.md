@@ -2335,3 +2335,18 @@ rule. See the [constructive contract and tests](../studies/parameterized-literal
 Joint-row integration, complete-expression Lean targets and production integration
 are required before claiming embedded lambda support. No grammar change.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental contextual constraint fixed point
+
+The model now saturates ordinary Row equations and Deferred checks together with
+typed contextual family occurrences. Ground occurrences determine agreed closures;
+checked applications constrain other outputs, possibly unlocking further families
+or forward checks. Every ready check is evaluated, unavailable checking dominates
+batch mismatches, and no defaults or candidate selection occur. See the
+[constructive rule](../studies/parameterized-literals/README.md#shared-contextual-constraints-and-forward-checks).
+This remains experimental model infrastructure. Source binder/Builder integration,
+whole-expression Lean oracles and production inference are pending. No grammar or
+emission change is accepted by this entry.
+:::
