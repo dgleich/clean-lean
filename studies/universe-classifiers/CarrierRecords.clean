@@ -1,0 +1,25 @@
+-- generated: gpt-6 2026-11-11 role=assisted; isolated computed-carrier prototype
+Import "TypeValueCommon.clean"
+
+Structure SpacePackage():
+  Universe: 2
+  Let carrier: LargeTypes
+  Let point: carrier
+  Constructor: pack space
+
+Define package space(X):
+  Let X: TopologicalSpace
+  Returns: SpacePackage
+  Equals: pack space(type(TopologicalSpace : LargeTypes),X)
+
+Result packaged space entry:
+  Attribution: local; carrier package projection; original
+  Let X: TopologicalSpace
+  Conclude: equal large(package space(X).point,X)
+
+Result stored entry reflexivity:
+  Attribution: local; reflexivity; original
+  Let P: SpacePackage
+  Conclude: equal large(P.point,P.point)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -347,3 +347,11 @@ classifier domains, including authored families such as the identity on every
 Type-1 carrier. See [the binding specification](carrier-binders.md) and
 [the Clean example](CarrierFunctions.clean). It includes version-2 storage.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The optional `--computed-carriers` composition handles higher projected carriers
+and dependent record fields, with explicit level/identity metadata and version-3
+storage. See [the contract](computed-carriers.md) and
+[the authored record example](CarrierRecords.clean).
+:::

@@ -7908,6 +7908,50 @@
         "-- ",
         ""
       ]
+    },
+    "studies/universe-classifiers/computed-carriers.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/universe-classifiers/computed-carrier-fixtures.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/universe-classifiers/computed-carriers.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/universe-classifiers/CarrierRecords.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/test_computed_carriers.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/check_carrier_record_targets.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/CarrierRecordTargets.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

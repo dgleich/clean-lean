@@ -72,12 +72,16 @@ The two earlier rejection fixtures are deliberately migrated: Type-0 and higher
 classifier binders now have positive acceptance cases. Other freshness and scope
 rejections remain. The expanded dependent-function/structure/conversion/storage run passed 158 tests
 in 53.969 seconds before the final independent source-tree case was added; the
-final focused ten-case run passed separately. Fresh pinned reproduction is running. Reproduce the complete stack
+final focused ten-case run passed separately. The fresh pinned reproduction
+completed successfully: 287 selected tests (115.826 seconds), ten binder tests
+(3.292 seconds), 29 storage/index tests (23.938 seconds), strict parser checks
+and all native suites. Full regression remains pending. Reproduce the complete stack
 with `python3 studies/universe-classifiers/verify.py --carrier-binders`; that flag
 also enables version-2 storage. Production remains unchanged.
 
-Higher computed/projected carriers and general higher carrier-valued record fields
-remain separate work. This family example does not prove any homology, well-group
+The optional [computed-carrier composition](computed-carriers.md) now adds higher
+computed/projected carriers and dependent record fields. General higher
+record-parameter and type-constructor handling remain separate work. This family example does not prove any homology, well-group
 or numerical-analysis theorem. Full regression and production integration remain
 unfinished.
 :::

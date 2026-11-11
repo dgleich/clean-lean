@@ -1,0 +1,217 @@
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -112,6 +112,12 @@
+ class LocalType(Type):
+     """A local carrier reference, distinct from a module constructor."""
+     lean: str = ''
++    universe: int = 0
++    classifier: str = ''
++
++@dataclass(frozen=True)
++class ComputedCarrier(Type):
++    """Carrier expression with retained closed level and classifier identity."""
+     universe: int = 0
+     classifier: str = ''
+ 
+@@ -309,7 +315,9 @@
+         from .dependent_functions import DependentFunctionType
+         bindings=bindings or {}
+         if isinstance(t,LocalType):return t.lean if target=='lean' else texid(t.name)
+-        if t.name=='$carrier':return '('+t.args[0].lean+')' if target=='lean' else t.args[0].tex
++        if t.name=='$carrier':
++            if not isinstance(t,ComputedCarrier):raise CleanError('Carrier type lacks retained classifier metadata')
++            return '('+t.args[0].lean+')' if target=='lean' else t.args[0].tex
+         if isinstance(t,DependentFunctionType):
+             domain=self.render_type(t.domain,target,bindings);codomain=self.render_type(t.codomain,target,bindings)
+             if target=='lean':return '('+t.bound+' : '+domain+') → ('+codomain+')'
+@@ -355,7 +363,8 @@
+         """Closed Lean Sort level; local carrier variables retain their closed level."""
+         if not isinstance(t,Type) or t==NUM:
+             raise CleanError('Cannot determine a closed universe for an unresolved type')
+-        if isinstance(t,LocalType):return t.universe+1
++        if isinstance(t,(LocalType,ComputedCarrier)):return t.universe+1
++        if t.name=='$carrier':raise CleanError('Carrier type lacks retained classifier metadata')
+         if isinstance(t,ProofType):return 0
+         if self.is_function_type(t) and len(t.args)==2:
+             codomain=self.sort_level(t.args[1])
+@@ -442,6 +451,9 @@
+                 return substitute_index(t,replacement_bindings(scope),self,locals)
+             if isinstance(t,ValueIndex):return index(t.name,scope)
+             if isinstance(t,LocalType):return substitutions.get(t.name,t)
++            if isinstance(t,ComputedCarrier):
++                from .carrier_types import substitute_carrier
++                return substitute_carrier(t,replacement_bindings(scope),self,locals)
+             if isinstance(t,Type):
+                 return Type(t.name,tuple(replace(a,scope) for a in t.args))
+             return substitutions.get(t,t)
+@@ -490,6 +502,9 @@
+             elif isinstance(pattern,ValueIndex):
+                 if replace(pattern,scope)!=actual:
+                     raise SignatureMismatch('Dependent index mismatch: '+pattern.name,mismatch_owner)
++            elif isinstance(pattern,ComputedCarrier):
++                if replace(pattern,scope)!=actual:
++                    raise SignatureMismatch('Computed carrier mismatch',mismatch_owner)
+             elif isinstance(pattern,Type):
+                 if isinstance(pattern,LocalType) and pattern.name in implicit:
+                     info=self.classifier_info(implicit[pattern.name])
+--- a/cleanlang/carrier_types.py
++++ b/cleanlang/carrier_types.py
+@@ -1,6 +1,6 @@
+ # generated: gpt-6 2026-11-07 role=assisted; isolated prototype
+-"""Type-0 carriers obtained from checked type-valued expressions."""
+-from .core import Type,LocalType,CleanError
++"""Closed-universe carriers obtained from checked classified expressions."""
++from .core import Type,LocalType,ComputedCarrier,Expressions,CleanError
+ 
+ def carrier(expression,env,locals):
+     info=env.classifier_info(expression.type)
+@@ -9,8 +9,16 @@
+     normal=comparison_normal_form(expression,env,locals)
+     if normal.tree[0] in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):return env.type(normal.tree[1],locals,phrases=False)
+     if normal.tree[0]=='Local':return LocalType(normal.tree[1],(),normal.lean,info[1],info[0])
+-    if info[1]!=0:raise CleanError('Higher-universe computed carriers are not implemented')
+     from .indices import index_value
+-    return Type('$carrier',(index_value(expression,env,locals),))
++    return ComputedCarrier('$carrier',(index_value(expression,env,locals),),info[1],info[0])
+ 
+ # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
++
++def substitute_carrier(typ,bindings,env,locals):
++    from .indices import substitute_index
++    from .dependent_functions import index_tree
++    index=substitute_index(typ.args[0],bindings,env,locals)
++    value=Expressions(env,locals).elaborate(index_tree(index))
++    if env.classifier_info(value.type)!=(typ.classifier,typ.universe):
++        raise CleanError('Computed carrier changed classifier or universe')
++    return carrier(value,env,locals)
+--- a/cleanlang/dependent_functions.py
++++ b/cleanlang/dependent_functions.py
+@@ -2,7 +2,7 @@
+ """Explicit dependent arrows: scoped identities, alpha keys and substitution."""
+ from dataclasses import dataclass
+ import json,re
+-from .core import Type,LocalType,ProofType,ValueIndex,Expr,CleanError,ID,NUM,texid
++from .core import Type,LocalType,ComputedCarrier,ProofType,ValueIndex,Expr,CleanError,ID,NUM,texid
+ 
+ 
+ def index_tree(index):
+@@ -128,6 +128,7 @@
+         if not contains_free(codomain,typ.bound):
+             return ('type',typ.constructor,(type_key(typ.domain,bound),codomain))
+         return ('Pi',typ.constructor,type_key(typ.domain,bound),type_key(typ.codomain,bound+(typ.bound,)))
++    if isinstance(typ,ComputedCarrier):return ('computed-carrier',typ.universe,typ.classifier,type_key(typ.args[0],bound))
+     if isinstance(typ,ValueIndex):return ('index',abstract_template(typ.comparison_key(),bound))
+     if isinstance(typ,LocalType):return ('local-type',typ.universe,typ.classifier,abstract_template(typ.lean,bound))
+     if isinstance(typ,Type):return ('type',typ.name,tuple(type_key(a,bound) for a in typ.args))
+@@ -186,6 +187,9 @@
+         replacement={**bindings,typ.binder:scope[binder]}
+         codomain=substitute(typ.codomain,replacement,env,scope)
+         return make(typ.constructor,binder,bound,domain,codomain)
++    if isinstance(typ,ComputedCarrier):
++        from .carrier_types import substitute_carrier
++        return substitute_carrier(typ,bindings,env,locals)
+     if isinstance(typ,ProofType):return ProofType(substitute_index(typ.args[0],bindings,env,locals))
+     if isinstance(typ,ValueIndex):
+         if not tree_names(index_tree(typ)).intersection(bindings):return typ
+--- a/cleanlang/structures.py
++++ b/cleanlang/structures.py
+@@ -2,7 +2,7 @@
+ """Finite authored records and explicit field references; no structural subtyping."""
+ import hashlib
+ import re
+-from .core import CleanError, Type, LocalType, ProofType, ValueIndex, Expr, NAT, ID, texid, textext
++from .core import CleanError, Type, LocalType, ComputedCarrier, ProofType, ValueIndex, Expr, NAT, ID, texid, textext
+ 
+ 
+ def reference_name(tree):
+@@ -18,6 +18,9 @@
+     from .indices import ComputedIndex, substitute_index
+     from .dependent_functions import DependentFunctionType,substitute
+     if isinstance(t,DependentFunctionType):return substitute(t,bindings,env,locals)
++    if isinstance(t,ComputedCarrier):
++        from .carrier_types import substitute_carrier
++        return substitute_carrier(t,bindings,env,locals)
+     if isinstance(t,ProofType):return ProofType(substitute_index(t.args[0],bindings,env,locals))
+     if isinstance(t,ComputedIndex):return substitute_index(t,bindings,env,locals)
+     if isinstance(t,ValueIndex):
+@@ -112,7 +115,7 @@
+         value=Expr(target,tex,result_type,tree=['Projection',base.tree,name])
+         if name==field:return value
+         from .indices import index_value
+-        if result_type==Type('Type'):
++        if env.classifier_info(result_type) is not None:
+             from .carrier_types import carrier
+             bindings[name]=carrier(value,env,locals)
+         else:bindings[name]=index_value(value,env,locals)
+--- a/cleanlang/annotations.py
++++ b/cleanlang/annotations.py
+@@ -81,10 +81,16 @@
+ 
+ 
+ def validate(typ,env,locals):
+-    from .core import Type,ValueIndex
++    from .core import Type,ComputedCarrier,ValueIndex,CleanError
+     from .dependent_functions import index_tree
+     from .bound_calls import bind
++    if isinstance(typ,ComputedCarrier):
++        from .carrier_types import substitute_carrier
++        fresh=substitute_carrier(typ,{},env,locals)
++        if env.render_type(typ,'lean',locals)!=env.render_type(fresh,'lean',locals):
++            raise CleanError('Stale computed carrier native target')
+     if isinstance(typ,Type):
++        if typ.name=='$carrier' and not isinstance(typ,ComputedCarrier):raise CleanError('Carrier type lacks retained classifier metadata')
+         for arg in typ.args:validate(arg,env,locals)
+     elif isinstance(typ,ValueIndex):bind(index_tree(typ),env,locals,binders=True)
+ 
+--- a/cleanlang/retained_codec.py
++++ b/cleanlang/retained_codec.py
+@@ -2,15 +2,16 @@
+ """Versioned data encoding, not an elaboration or an environment loader."""
+ import json
+ from cleanlang.annotations import Annotation
+-from cleanlang.core import Type,LocalType,ValueIndex,ProofType,Expr,CleanError
++from cleanlang.core import Type,LocalType,ComputedCarrier,ValueIndex,ProofType,Expr,CleanError
+ from cleanlang.indices import ComputedIndex,DimensionIndex
+ from cleanlang.proof_types import ProofIndex
+ from cleanlang.dependent_functions import DependentFunctionType
+ from cleanlang.binder_keys import ScopedKey
+ 
+-# The schema is explicit: dataclass changes do not silently change version 2.
++# The schema is explicit: dataclass changes do not silently change version 3.
+ SCHEMA={
+  'Type':(Type,('name','args')),
++ 'ComputedCarrier':(ComputedCarrier,('name','args','universe','classifier')),
+  'LocalType':(LocalType,('name','args','lean','universe','classifier')),
+  'ValueIndex':(ValueIndex,('name','lean','tex','comparison')),
+  'ComputedIndex':(ComputedIndex,('name','lean','tex','comparison','syntax','resolved')),
+@@ -41,7 +42,7 @@
+      return {'tag':tag,'fields':{name:encode(getattr(item,name)) for name in names}}
+    raise CleanError('Unsupported bound-tree value: '+type(item).__name__)
+   finally:active.remove(identity)
+- return json.dumps({'format':'clean-bound-tree','version':2,'value':encode(value)},ensure_ascii=False,sort_keys=True,separators=(',',':'))
++ return json.dumps({'format':'clean-bound-tree','version':3,'value':encode(value)},ensure_ascii=False,sort_keys=True,separators=(',',':'))
+ 
+ def loads(source):
+  def pairs(entries):
+@@ -54,7 +55,7 @@
+  try:document=json.loads(source,object_pairs_hook=pairs,parse_constant=constant)
+  except (ValueError,TypeError) as error:raise CleanError('Invalid bound-tree JSON') from error
+  if (type(document) is not dict or set(document)!={'format','version','value'} or
+-     document['format']!='clean-bound-tree' or type(document['version']) is not int or document['version']!=2):
++     document['format']!='clean-bound-tree' or type(document['version']) is not int or document['version']!=3):
+   raise CleanError('Unsupported bound-tree envelope or version')
+  def decode(item):
+   if type(item) in (str,int,bool) or item is None:return item
+@@ -79,6 +80,12 @@
+   values={name:decode(item['fields'][name]) for name in names}
+   if tag in ('Type','LocalType','ProofType','DependentFunctionType'):
+    if type(values['name']) is not str or type(values['args']) is not tuple:raise CleanError('Malformed type fields')
++  if tag=='ComputedCarrier':
++   if (values['name']!='$carrier' or type(values['args']) is not tuple or
++       len(values['args'])!=1 or not isinstance(values['args'][0],ValueIndex) or
++       type(values['universe']) is not int or values['universe']<0 or
++       type(values['classifier']) is not str or not values['classifier']):
++    raise CleanError('Malformed computed carrier metadata')
+   if tag=='LocalType':
+    if (type(values['lean']) is not str or type(values['classifier']) is not str or
+        type(values['universe']) is not int or values['universe']<0):

@@ -3042,6 +3042,29 @@
         "Higher computed/projected carriers and higher carrier record fields",
         "Production integration and broader native environment freshness"
       ]
+    },
+    {
+      "id": "closed_computed_carrier",
+      "status": "isolated-prototype",
+      "environment": "Classifier stack with carrier binders, computed-carriers.patch and version-3 storage.",
+      "source": "Structure SpacePackage(): Universe: 2; Let carrier: LargeTypes; Let point: carrier; Constructor: pack space. Then P.point.",
+      "expected_tree": [
+        "Projection",
+        [
+          "Local",
+          "P"
+        ],
+        "point"
+      ],
+      "expected_lean": "The record point projection has the record carrier projection as its type, at retained Type 1. Constructor projection may reduce to the supplied topology space.",
+      "checks": [
+        "test_computed_carriers.py: metadata, substitution, classifier level, storage and rejection tests",
+        "check_carrier_record_targets.py: four independent exact native targets and two proofs"
+      ],
+      "pending": [
+        "Fresh composition, full regression and production integration",
+        "General higher record/type-constructor parameters and full native dependency freshness"
+      ]
     }
   ]
 }

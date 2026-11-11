@@ -135,8 +135,10 @@ schema; complete regression and production integration remain pending. The `.res
 index path is covered; it is not evidence for persisted round trips.
 
 The optional [carrier-binder composition](carrier-binders.md) now supports
-carrier-valued dependent function binders. Higher computed/projected carriers,
-full higher-carrier record/type-constructor handling, and type-valued local
+carrier-valued dependent function binders. The optional
+[computed-carrier composition](computed-carriers.md) also handles higher projected
+carriers and dependent record fields. General higher record/type-constructor
+parameters and type-valued local
 Let definitions remain unsupported or incomplete. The local-definition rejection
 now recognizes all declared classifiers, rather than only the name Type.
 General universe polymorphism, full regression and production integration remain

@@ -1482,3 +1482,17 @@ dispatch, even without value indices. No grammar or token change is introduced.
 See studies/universe-classifiers/carrier-binders.md for the constructive rule,
 independent syntax/native evidence and remaining limits. Production is unchanged.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The optional computed-carrier composition extends existing carrier-expression
+semantics to every declared closed classifier level. ComputedCarrier explicitly
+stores its checked index, level and classifier identity. Substitution elaborates
+the substituted index and checks that identity before extracting the carrier;
+annotation validation also rejects a stale stored native target. Record projection
+detects preceding carrier fields by classifier metadata, not the name Type.
+Version-3 payloads encode this record explicitly; older versions reject. See
+studies/universe-classifiers/computed-carriers.md for the exact constructive rule,
+schema and independent native checks. Production and general record-parameter
+inference remain outside this isolated extension.
+:::
