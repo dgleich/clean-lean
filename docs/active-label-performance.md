@@ -72,3 +72,27 @@ reported 143; the composed-language and classifier-syntax driver sessions report
 baseline runs were kept. This supersedes earlier descriptions of the eight runs
 as live; their logs and checkouts remain available.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The integrated parser reproduction and 445 selected Python tests pass after the
+reuse change (51.643 seconds for the selected suite). A second 30-second profile
+still ended before the active-label equivalence finished. Its 58,133,435 sampled
+calls cannot be compared as a speed ratio with the first profile: competing CPU
+load changed when obsolete runs were terminated, and neither observation covered
+a completed declaration. The new focused regression proves removal of duplicate
+root elaboration, not a whole-module speedup.
+
+Full discovery now runs against immutable commit be1579c in a separate checkout.
+Native target checks remain in progress; no full conformance claim is made.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The native integration run completed successfully: 32 exact target comparisons,
+12 supporting proofs, and all 92 corpus proof fixtures passed under the pinned
+Lean/Mathlib environment. This includes the actual Mayer–Vietoris inclusion maps
+and their zero-composite proof, not the full long exact sequence. The runner ended
+with `Failures: []`. Full discovery and completed active-label translation remain
+pending. No whole-module performance improvement is claimed.
+:::
