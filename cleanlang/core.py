@@ -171,6 +171,7 @@ class Expr:
     inferred_args: tuple = field(default=(),compare=False,repr=False)
     # Typed children are reusable only with a traversal-local freshness witness.
     # Apply stores its checked head first, followed by its argument children.
+    # A non-reduced Projection stores its single checked base.
     checked_args: object = field(default=None,compare=False,repr=False)
     operator_binding: object = field(default=None,compare=False,repr=False)
 @dataclass

@@ -161,3 +161,48 @@ class ApplicationChildrenReuse(unittest.TestCase):
         old=self.application()
         with patch.object(Expressions,'elaborate',side_effect=TimeoutError('Unavailable application')):
             with self.assertRaises(TimeoutError):comparison_normal_form(old,self.env,self.local)
+
+
+# generated: gpt-6 2026-11-11 role=assisted
+class NestedProjectionReuse(unittest.TestCase):
+    def setUp(self):
+        from cleanlang.structures import declare
+        self.env=Environment();load_module(ROOT/'library/operators.clean',self.env)
+        declare('Structure Cell(A: Type):',['Let value: A','Constructor: cell'],self.env)
+        self.local={}
+
+    def projection(self,depth=12,carrier='Real',target='first'):
+        typ=carrier
+        for _ in range(depth):typ='Cell('+typ+')'
+        self.local['b']=Expr(target,'b',self.env.type(typ),tree=['Local','b'])
+        tree=['Local','b']
+        for _ in range(depth):tree=['Projection',tree,'value']
+        return Expressions(self.env,self.local).elaborate(tree)
+
+    def test_nested_projection_checks_base_once(self):
+        old=self.projection();original=Expressions._elaborate;leaves=[]
+        def counted(worker,tree):
+            if tree==['Local','b']:leaves.append(tree)
+            return original(worker,tree)
+        with patch.object(Expressions,'_elaborate',counted):
+            actual=comparison_normal_form(old,self.env,self.local)
+        self.assertEqual(len(leaves),1)
+        self.assertEqual((actual.lean,actual.type,actual.tree),(old.lean,old.type,old.tree))
+
+    def test_public_projection_ignores_saved_base_and_rechecks_type(self):
+        old=self.projection(3)
+        old.checked_args=(Expr('bogus','bogus',self.env.type('Real')),)
+        expected=self.projection(3,'Complex','second')
+        actual=comparison_normal_form(old,self.env,self.local)
+        self.assertEqual((actual.lean,actual.type,actual.tree),(expected.lean,expected.type,expected.tree))
+        self.assertNotIn('bogus',actual.lean)
+
+    def test_public_projection_rejects_missing_field(self):
+        old=self.projection(3)
+        self.local['b']=Expr('other','other',self.env.type('Real'),tree=['Local','b'])
+        with self.assertRaises(CleanError):comparison_normal_form(old,self.env,self.local)
+
+    def test_projection_recheck_failure_propagates(self):
+        old=self.projection(3)
+        with patch.object(Expressions,'elaborate',side_effect=TimeoutError('Unavailable projection')):
+            with self.assertRaises(TimeoutError):comparison_normal_form(old,self.env,self.local)

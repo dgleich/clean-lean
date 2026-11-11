@@ -4189,6 +4189,33 @@
         "Geometric short exact sequence, excision, identification with Mayer–Vietoris maps, exactness and degree-zero endpoint",
         "General language conformance and production joint inference remain separate obligations"
       ]
+    },
+    {
+      "id": "nested_fresh_projection_comparison",
+      "status": "implemented-slice",
+      "environment": "Explicit structure Cell(A: Type), field value:A, constructor cell; local b with nested Cell layers.",
+      "source": "b.value.value",
+      "expected_tree": [
+        "Projection",
+        [
+          "Projection",
+          [
+            "Local",
+            "b"
+          ],
+          "value"
+        ],
+        "value"
+      ],
+      "expected_lean": "The same declared field projections and arguments as before; reuse within fresh comparison does not change emission. Public comparison never trusts saved children.",
+      "checks": [
+        "tests/test_bound_comparison_reuse.py: NestedProjectionReuse checks one base elaboration, rebinding with corrupt metadata, invalid fields and unavailable checking",
+        "Existing structure, retained-codec and contextual comparison tests"
+      ],
+      "pending": [
+        "Full discovery and active-label regeneration remain separately running",
+        "General native-adapter and joint-inference conformance remain open"
+      ]
     }
   ]
 }

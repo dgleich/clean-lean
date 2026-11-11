@@ -1718,5 +1718,10 @@ same traversal. Public comparison still rechecks saved source in the current sco
 disposable metadata cannot authorize reuse across calls. See the
 <a href="comparison-token-cache.md#fresh-application-child-reuse">implementation and validation limits</a>.</p>
 </section></llm>
+
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="nested-fresh-projection-bases">
+<h2>Nested projection comparison</h2>
+<p>A freshly checked field projection retains its base only for reuse within the same synchronous comparison. Nested projections avoid repeated base checking. Public comparison rechecks the stored tree in the current scope and ignores saved child metadata. Lean targets and syntax are unchanged; see the <a href="comparison-token-cache.md#nested-fresh-projection-bases">validation boundary</a>.</p>
+</section></llm>
 </body>
 </html>

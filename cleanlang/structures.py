@@ -112,7 +112,7 @@ def project(env, base, field, locals):
         result_type=substitute_type(typ,bindings,env,locals)
         target='(@_root_.'+spec['key']+'.«'+name+'»'+''.join(' ('+v+')' for v in targets)+' ('+base.lean+'))'
         tex=base.tex+r'.\mathrm{'+textext(name)+'}'
-        value=Expr(target,tex,result_type,tree=['Projection',base.tree,name])
+        value=Expr(target,tex,result_type,tree=['Projection',base.tree,name],checked_args=(base,))
         if name==field:return value
         from .indices import index_value
         if env.classifier_info(result_type) is not None:

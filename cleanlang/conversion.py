@@ -131,7 +131,8 @@ def _normal_form(expression,environment,locals,*,fresh=False):
         from .beta_indices import has_binder
         # One synchronous check supplies both producer inspection and base
         # normalization. Public entry still rechecks the stored source tree.
-        checked_base=elaborate(tree[1])
+        checked_base=(expression.checked_args[0] if fresh and expression.checked_args is not None
+                      else elaborate(tree[1]))
         selected=_producer_field(checked_base,tree[2],env,locals)
         if selected is not None and selected.type==expression.type:
             return _normal_form(selected,env,locals)

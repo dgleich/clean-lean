@@ -191,3 +191,46 @@ Detached wrappers record live child PIDs and eventual exit codes in
 are new validation runs for changed compiler code; older live snapshots remain
 untouched. None is counted as a completed validation from its running status.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Nested fresh projection bases
+
+`structures.project` records `(base,)` in disposable checked-child metadata only
+for a non-reduced projection. A fresh comparison uses this checked base rather
+than elaborating its tree again. Public comparison still rechecks that tree;
+saved metadata cannot certify freshness. Producer-field selection and normalized
+projection reconstruction are unchanged. Reduced constructors do not acquire a
+misleading projection child tuple.
+
+Consumer audit: retained binding and contextual emission use checked metadata as
+call arguments only for Call/ModuleCall/Operator/Unary. The experimental binder
+codec and selected-tree checker explicitly handle Projection bases. Its generic
+dependency walker can visit the additional base. Metadata remains excluded from
+serialization and semantic snapshots; there is no long-lived freshness cache.
+
+Four regressions cover nested checking, corrupted saved children with changed
+caller/type, invalid fields after rebinding, and unavailable checking. A controlled
+12-level projection comparison with the previous Git normalizer checks the base
+12 times before and once after, with identical Lean, TeX, type and source tree.
+One 100-traversal diagnostic measured 0.30756 seconds before and 0.09592 after.
+This is not a whole-topology speed claim: a 20-second loading observation still
+stopped within `restricted active labels`.
+
+Focused validation passes 91 tests; integration Python checks pass 578 tests.
+The experimental suite passes 374 tests and 97 exact native targets with 97
+supporting proofs. Reference HTML IDs/local links, provenance and frozen compiler
+hashes pass their checks. The complete integration driver also passed strict
+parser regeneration, all native integration targets and proofs, and the regenerated
+92-proof corpus (`Failures: []`). Full discovery and active-label regeneration
+remain pending; the focused/native results do not replace them.
+New full discovery and active-label runs use immutable snapshot
+`/tmp/clean-nested-projection-validation-hrnvtp2p`, based on `89280fa` plus the
+production patch. Its conversion SHA-256 is
+`a1fe222ecfc6341cecac145a2f9b539cdafd137d520dafc6ba0e7f6f4a3f87d1`.
+Metadata is in `/tmp/clean-nested-projection-validation.json`; the corresponding
+`/tmp/clean-nested-projection-full.json` and `-active.json` record PIDs and exits.
+Earlier live runs are not restarted or counted as passes. Older operator
+active-label process 225099 was observed defunct with no completion log; it is
+incomplete evidence, not a successful validation.
+:::

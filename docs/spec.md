@@ -2306,3 +2306,17 @@ is neither serialized nor used as a semantic snapshot field. Source grammar and
 Lean targets are unchanged. See the
 [implementation boundary and validation](comparison-token-cache.md#fresh-application-child-reuse).
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Nested fresh projection bases
+
+A non-reduced projection retains its checked base as a one-element transient
+child tuple. Within the same synchronous comparison traversal, a fresh projection
+may reuse that base for producer inspection and recursive normalization. Public
+entry must elaborate the stored base tree in the current scope, ignoring saved
+children; missing fields and unavailable checks propagate. Constructor reductions
+retain their existing behavior. No parsing, target selection, emitted expression,
+serialization or semantic snapshot rule changes. See the
+[boundary and validation](comparison-token-cache.md#nested-fresh-projection-bases).
+:::
