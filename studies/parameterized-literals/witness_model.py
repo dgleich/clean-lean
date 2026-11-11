@@ -1,7 +1,7 @@
 # generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
 """Checked ground representatives, separate from declaration-choice inference."""
 from dataclasses import dataclass
-from constraint_model import Carrier,Incomplete,NoSolution,resolve,variables
+from constraint_model import Variable,Carrier,Incomplete,NoSolution,resolve,variables
 
 @dataclass(frozen=True)
 class Seed:
@@ -22,10 +22,13 @@ class Resolver:
     validate(term,value) must check semantic agreement. assemble reconstructs a
     nominal carrier from checked argument representatives. Neither callback may
     mutate this snapshot. A failed preferred plan never falls through to another.
+    Optional available(value,allowed_binders) checks the actual representative in
+    each requested scope, including memo hits; semantic equality is insufficient.
     """
-    def __init__(self,bindings,seeds=(),plans=(),*,validate,assemble,limit=4096):
+    def __init__(self,bindings,seeds=(),plans=(),*,validate,assemble,limit=4096,available=None,allowed_binders=frozenset()):
         if type(limit) is not int or limit<1:raise ValueError('Positive witness limit required')
         self.bindings=dict(bindings);self.validate=validate;self.assemble=assemble
+        self.available=available;self.allowed_binders=frozenset(allowed_binders)
         self.limit=limit;self.visits=0;self.memo={};self.active=set();self.options={}
         for entry in (*seeds,*plans):
             if not isinstance(entry,(Seed,Plan)):raise ValueError('Unknown witness entry')
@@ -43,7 +46,13 @@ class Resolver:
         return term
 
     def get(self,term):
-        try:return self._get(term)
+        try:
+            allowed=term.allowed_binders if isinstance(term,Variable) else self.allowed_binders
+            value=self._get(term)
+            if self.available is not None and self.available(value,allowed) is not True:
+                raise Incomplete('Preferred witness is unavailable in the requested binder scope')
+            return value
+        except NoSolution as error:raise Incomplete('Witness scope checking rejected a solved representative') from error
         except RecursionError as error:raise Incomplete('Witness reconstruction exhausted recursion') from error
 
     def _get(self,term):

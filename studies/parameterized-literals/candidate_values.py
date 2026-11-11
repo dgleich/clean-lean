@@ -198,7 +198,8 @@ class CandidateValues:
             plans.append(Plan(output,plan.requirements,build,(4,i)))
         representatives=Resolver(bindings,seeds,plans,
             validate=lambda term,value:b.typ(value,{})==term,
-            assemble=lambda term,args:Type(self.types[term.identity],args),limit=b.limit)
+            assemble=lambda term,args:Type(self.types[term.identity],args),limit=b.limit,
+            available=b.witness_available,allowed_binders=frozenset(b.binder_ids.values()))
         return representatives,reconstruct,source
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

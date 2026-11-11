@@ -3845,6 +3845,23 @@
         "Universal symbolic-family validity",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_scoped_witness_availability",
+      "status": "experimental-slice",
+      "environment": "Checked authored ignore(n): Natural returning zero; inner n binder and outer metavariable",
+      "source": "Retained ignore(n) requested as a representative of zero outside n scope",
+      "expected_outcome": "Incomplete, even after an inner-scope memo hit or with a lower-priority closed representative available",
+      "checks": [
+        "studies/parameterized-literals/test_witness_model.py",
+        "studies/parameterized-literals/test_clean_rows.py"
+      ],
+      "obligation": "Check actual source dependencies and destination-scope reification separately from normalized semantic dependencies; no memo bypass or fallback/candidate pruning",
+      "pending": [
+        "Embedded binder constraints and dependent abstraction",
+        "Universal symbolic-family validity",
+        "Production integration"
+      ]
     }
   ]
 }

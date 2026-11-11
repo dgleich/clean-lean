@@ -1521,5 +1521,13 @@ Lexical binder identities constrain generated metavariables; final binder checki
 still rebinds source annotations. See the
 <a href="../studies/parameterized-literals/README.md#checked-binder-dependencies-in-outer-inference-scopes">dependency construction and remaining embedded-region work</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="scoped-witness-availability">
+<h2>Retained expressions and destination scopes</h2>
+<p>An authored <code>ignore(n)</code> can compare equal to zero while its retained
+source still refers to n. The experimental resolver checks that source in the
+requested scope, including after memoization. It cannot emit the same expression
+outside n's binder merely because the comparison value is closed. See the
+<a href="../studies/parameterized-literals/README.md#availability-of-retained-representatives-across-scopes">availability rule and remaining integration work</a>.</p>
+</section></llm>
 </body>
 </html>

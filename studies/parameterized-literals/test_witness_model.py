@@ -88,3 +88,38 @@ class WitnessModel(unittest.TestCase):
 if __name__=='__main__':unittest.main()
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+# generated: gpt-6 2026-11-11 role=assisted
+class ScopedWitnesses(unittest.TestCase):
+    def test_closed_meaning_does_not_make_source_available(self):
+        outer=Variable('outer','index')
+        r=resolver([seed(0,'ignore(k)')],bindings={outer:index(0)},
+                   available=lambda value,allowed:'k' in allowed,allowed_binders=frozenset({'k'}))
+        with self.assertRaises(Incomplete):r.get(outer)
+
+    def test_memo_does_not_bypass_narrower_scope(self):
+        inner=Variable('inner','index',frozenset({'k'}));outer=Variable('outer','index')
+        r=resolver([seed(0,'ignore(k)')],bindings={inner:index(0),outer:index(0)},
+                   available=lambda value,allowed:'k' in allowed,allowed_binders=frozenset({'k'}))
+        self.assertEqual(r.get(inner).spelling,'ignore(k)')
+        with self.assertRaises(Incomplete):r.get(outer)
+
+    def test_unavailable_preferred_source_does_not_fall_back(self):
+        outer=Variable('outer','index')
+        r=resolver([seed(0,'ignore(k)',(0,)),seed(0,'0',(1,))],bindings={outer:index(0)},
+                   available=lambda value,allowed:value.spelling=='0')
+        with self.assertRaises(Incomplete):r.get(outer)
+
+    def test_closed_source_can_be_shared_between_scopes(self):
+        outer=Variable('outer','index');inner=Variable('inner','index',frozenset({'k'}))
+        r=resolver([seed(0)],bindings={outer:index(0),inner:index(0)},available=lambda value,allowed:True)
+        self.assertIs(r.get(outer),r.get(inner))
+
+    def test_failed_scope_check_is_not_candidate_pruning(self):
+        def reject(*_):raise NoSolution('Unavailable representation')
+        with self.assertRaises(Incomplete):resolver([seed(0)],available=reject).get(index(0))
+
+    def test_scope_check_requires_positive_boolean_evidence(self):
+        for answer in (None,False,'unknown',1):
+            with self.subTest(answer=answer),self.assertRaises(Incomplete):
+                resolver([seed(0)],available=lambda *_:answer).get(index(0))

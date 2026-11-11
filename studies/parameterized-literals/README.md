@@ -1597,3 +1597,48 @@ Validation: all 241 experimental tests, 62 exact native targets and 62 supportin
 proofs pass. Provenance checks pass. Full production and active-label validation
 remain pending in the projection-reuse snapshot.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Availability of retained representatives across scopes
+
+The ground witness resolver now separates semantic agreement from availability
+of the actual retained expression in a requested binder scope. A request through
+a metavariable uses that variable's allowed binder set; a ground-term request uses
+the resolver's fixed active set. After obtaining the preferred representative,
+including a memo hit, require positive Boolean evidence from the availability
+checker. False, unavailable/unknown results and failed checking are incomplete
+analysis, not a reason to discard a candidate. The established representative
+priority still applies: an unavailable preferred source does not fall through to
+a different spelling.
+
+The Clean adapter supplies this checker in both pre-selection reconstruction and
+selected emission. Collect the retained source's dependencies without comparison
+normalization, including checked types and implicit arguments, and require them
+to fit the requested binder set. For a value index, also reify the retained source
+under the destination locals after removing unavailable binder names. This keeps
+source-expression checking distinct from the normalized dependency analysis used
+for semantic constraint terms. Scopes with no tracked binders require no extra
+scope transition check.
+
+For example, an authored `ignore(n)` may have the same closed comparison value as
+Natural zero. Its retained source still mentions n. The checked representative can
+be used inside n's scope, but a request from an outer metavariable fails as
+incomplete, even after an inner request populated the memo. The resolver does not
+silently replace it by a lower-priority numeral-zero representative. An actually
+closed source can be shared across the two scopes.
+
+Six independent resolver tests cover closed meaning versus source availability,
+memo narrowing, no fallback, closed-source sharing, failure classification and
+positive Boolean evidence. A Clean-backed regression constructs the authored
+ignore function and checks the same inner/outer requests using real retained
+indices. Existing binder examples still pass whole-binder annotation rebinding.
+This establishes representative availability checking, not general embedded
+binder constraints or dependent-function abstraction. Production joint inference
+and universal symbolic-family validity remain open.
+
+Validation: all 248 experimental tests pass; the existing 62 exact native targets
+and 62 supporting proofs pass with scope-aware availability checks. Provenance
+checks pass. Full production and active-label runs remain pending in the
+projection-reuse snapshot.
+:::

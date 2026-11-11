@@ -921,6 +921,21 @@ class CleanRows(unittest.TestCase):
  def test_checked_binder_dependency_budget_is_incomplete(self):
   builder=Builder(self.e,self.scope,limit=1,binder_ids={'n':('binder',())})
   with self.assertRaises(Incomplete):builder.dependencies(self.e.type('Vector(n,Complex)',self.scope))
+ def test_source_witness_can_depend_on_erased_binder(self):
+  from cleanlang.core import Expressions
+  from witness_model import Resolver,Seed
+  notation('Define ignore(n: Natural): Natural:',
+   ['Equals: (0:Natural)','Render latex: ignore({n})'],self.e,authored=True)
+  builder=Builder(self.e,self.scope,binder_ids={'n':('binder',())})
+  term,value=builder.index(Expressions(self.e,self.scope).parse('ignore(n)'))
+  self.assertFalse(term.free_binders)
+  self.assertEqual(builder.dependencies(value,normalize=False),frozenset({('binder',())}))
+  inner=builder.variable('inner','index');outer=Variable('outer','index')
+  representatives=Resolver({inner:term,outer:term},[Seed(term,value,(0,))],
+   validate=lambda t,v:builder.typ(v,{})==t,assemble=lambda *_:None,
+   available=builder.witness_available,allowed_binders=frozenset(builder.binder_ids.values()))
+  self.assertEqual(representatives.get(inner),value)
+  with self.assertRaises(Incomplete):representatives.get(outer)
  def shifted_literal(self):
   notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
    ['Means: fun _ _ => (0 : Complex)','Literal: 7','Render latex: 7'],self.e)

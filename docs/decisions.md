@@ -2069,3 +2069,16 @@ remove unused dependencies. See the
 Embedded binder abstraction and production integration remain open. No grammar
 change is introduced.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental scope availability of retained witnesses
+
+Witness resolution now checks retained-expression availability for every requested
+scope, including memo hits. Semantic equality alone does not justify moving a
+source expression outside a binder. Missing availability is incomplete; preferred
+representation failure does not select another spelling. See the
+[resolver contract and Clean-backed example](../studies/parameterized-literals/README.md#availability-of-retained-representatives-across-scopes).
+The adapter checks both source dependencies and destination-scope reification for
+value indices. Embedded binder constraints and production integration remain open.
+:::

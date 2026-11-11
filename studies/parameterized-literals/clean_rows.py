@@ -40,7 +40,7 @@ class Builder:
     def variable(self,identity,sort):
         return Variable(identity,sort,frozenset(self.binder_ids.values()))
 
-    def dependencies(self,value):
+    def dependencies(self,value,*,normalize=True):
         if not self.binder_ids:return frozenset()
         from cleanlang.annotations import references
         from cleanlang.core import Expr
@@ -60,13 +60,23 @@ class Builder:
             elif isinstance(current,Type):
                 raise Incomplete('Binder dependencies of this type constructor remain unsupported')
             elif isinstance(current,Expr):
-                checked=comparison_normal_form(current,self.env,self.scope)
+                checked=comparison_normal_form(current,self.env,self.scope) if normalize else current
                 names.update(references(checked,self.scope))
                 pending.append(checked.type)
                 pending.extend(v for _,v in checked.inferred_args)
                 if checked.checked_args is not None:pending.extend(checked.checked_args)
             else:raise Incomplete('Checked binder dependency representation unsupported')
         return frozenset(self.binder_ids[n] for n in names if n in self.binder_ids)
+
+    def witness_available(self,value,allowed):
+        if not self.binder_ids:return True
+        if not self.dependencies(value,normalize=False).issubset(allowed):return False
+        if isinstance(value,ValueIndex):
+            from cleanlang.inferred_conversion import reify
+            scope={n:v for n,v in self.scope.items() if n not in self.binder_ids or self.binder_ids[n] in allowed}
+            try:reify(value,self.env,scope)
+            except CleanError as error:raise Incomplete('Witness destination-scope checking unavailable: '+str(error)) from error
+        return True
 
     def carrier_identity(self,name):
         spec=self.env.data['types'].get(name,{})
@@ -605,7 +615,8 @@ class Builder:
         representatives=Resolver(bindings,
             tuple(Seed(term,value,(i,)) for i,(term,value) in enumerate(self.rigid.items())),
             validate=lambda term,value:self.typ(value,{})==term,
-            assemble=lambda term,args:Type(types[term.identity],args),limit=self.limit)
+            assemble=lambda term,args:Type(types[term.identity],args),limit=self.limit,
+            available=self.witness_available,allowed_binders=frozenset(self.binder_ids.values()))
         actual=representatives.get
         def replace(node,path):
             if node[0]=='Decimal':
