@@ -2099,3 +2099,17 @@ a different target. See the
 Producer-dependent symbolic signatures and embedded lambda inference remain open.
 No grammar or production change is claimed.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental dependent signature substitution
+
+Dependent function templates with producer formals now use forward TypePlans:
+checked representative substitution yields a rigid alpha-canonical type key.
+Inferred applications retain template and formal evidence in their own candidate
+row. Assigned candidate checks distinguish owned compiler signature mismatches
+from incomplete checking and restore the enclosing trial on every exit. See the
+[construction, examples, and unresolved cases](../studies/parameterized-literals/README.md#forward-substitution-into-dependent-function-signatures).
+No inverse inference from an opaque type key, embedded lambda support, or
+production integration is claimed. Existing grammar is unchanged.
+:::

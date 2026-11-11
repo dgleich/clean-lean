@@ -443,9 +443,9 @@ class CleanRows(unittest.TestCase):
   replay=Expressions(self.e,{}).elaborate(loads(dumps(value.tree)))
   self.assertEqual(value.lean,replay.lean)
   self.assertEqual(value.type,replay.type)
- def test_computed_formal_argument_check_failure_remains_incomplete(self):
+ def test_computed_formal_argument_known_mismatch_rejects(self):
   self.padded()
-  with self.assertRaises(Incomplete):
+  with self.assertRaises(NoSolution):
    Builder(self.e,self.scope).materialize(expression_tree(parse('padded(2,x)','expression')),use_default=False)
 
  def test_computed_formal_index_does_not_default_unknown_competitor(self):
@@ -901,6 +901,69 @@ class CleanRows(unittest.TestCase):
   self.dependent_map_producer()
   with self.assertRaises(NoSolution):
    Builder(self.e,self.scope).materialize(expression_tree(parse('make dependent(0)(2)','expression')),self.e.type('Real'),use_default=False)
+ def offset_map_producer(self):
+  notation('Notation make offset(n: Natural,x: Real): Function(k: Natural,Vector((k+n),Complex)):',
+   ['Means: fun _ _ => (0 : Complex)','Render latex: map({n},{x})'],self.e)
+ def test_dependent_signature_substitutes_producer_parameter(self):
+  self.offset_map_producer()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('make offset(n,0)(2)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+n),Complex)',self.scope))
+ def test_dependent_signature_substitutes_literal_parameter(self):
+  self.offset_map_producer()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('make offset(3,0)(2)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+(3:Natural)),Complex)',self.scope))
+ def test_dependent_signature_substitutes_reconstructed_parameter(self):
+  self.offset_map_producer()
+  notation('Define count real(x: Real): Natural:', ['Equals: (3:Natural)','Render latex: count({x})'],self.e,authored=True)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('make offset(count real(0),0)(2)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+(3:Natural)),Complex)',self.scope))
+ def test_dependent_signature_parameter_type_checks_argument(self):
+  notation('Notation consume offset(n: Natural,f: Function(k: Natural,Vector((k+n),Complex)),x: Real): Real:',
+   ['Means: x','Render latex: consume({n},{f},{x})'],self.e)
+  typ=self.e.type('Function(j: Natural,Vector((j+n),Complex))',self.scope)
+  self.scope['f']=Expr('f','f',typ,tree=['Local','f'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('consume offset(n,f,0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Real'))
+  with self.assertRaises(NoSolution):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('consume offset(m,f,0)','expression')),use_default=False)
+ def test_dependent_signature_substitutes_type_parameter(self):
+  notation('Notation make constant(T: Type,item: T,x: Real): Function(k: Natural,Vector(k,T)):',
+   ['Means: fun _ _ => item','Render latex: constant({item})'],self.e)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('make constant(type(Real:Type),r,0)(2)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(2,Real)',self.scope))
+ def test_dependent_signature_substitution_preserves_outer_scope(self):
+  self.offset_map_producer()
+  builder=Builder(self.e,self.scope,binder_ids={'n':('binder',())})
+  value=builder.materialize(expression_tree(parse('make offset(n,0)(2)','expression')),use_default=False)
+  self.assertEqual(builder.dependencies(value.type),frozenset({('binder',())}))
+ def test_candidate_mismatch_trial_restores_owner(self):
+  from cleanlang.core import SignatureMismatch
+  from unittest.mock import patch
+  owner=object();self.e._numeral_trial_owner=owner
+  def mismatch(*args,**kwargs):raise SignatureMismatch('wrong domain',self.e._numeral_trial_owner)
+  with patch('cleanlang.core.Expressions.elaborate',side_effect=mismatch):
+   with self.assertRaises(NoSolution):Builder(self.e,self.scope).check_candidate(['Local','r'])
+  self.assertIs(self.e._numeral_trial_owner,owner)
+ def test_candidate_foreign_mismatch_and_unknown_error_stay_incomplete(self):
+  from cleanlang.core import SignatureMismatch,CleanError
+  from unittest.mock import patch
+  builder=Builder(self.e,self.scope)
+  with patch('cleanlang.core.Expressions.elaborate',side_effect=SignatureMismatch('foreign',object())):
+   with self.assertRaises(Incomplete):builder.check_candidate(['Local','r'])
+  self.assertFalse(hasattr(self.e,'_numeral_trial_owner'))
+  with patch('cleanlang.core.Expressions.elaborate',side_effect=CleanError('unavailable')):
+   with self.assertRaises(Incomplete):builder.call_witness(None,None,['Local','r'],())()
+  self.assertFalse(hasattr(self.e,'_numeral_trial_owner'))
+ def test_candidate_trial_rejects_unassigned_literals(self):
+  with self.assertRaises(Incomplete):Builder(self.e,self.scope).check_candidate(['Decimal','0'])
+ def test_dependent_signature_unresolved_parameter_stays_incomplete(self):
+  notation('Notation hidden offset(f,x):',
+   ['Let n: Natural','Let f: Function(k: Natural,Vector((k+n),Complex))','Let x: Real','Returns: Real',
+    'Means: x','Render latex: offset({f},{x})'],self.e)
+  typ=self.e.type('Function(j: Natural,Vector((j+n),Complex))',self.scope)
+  self.scope['f']=Expr('f','f',typ,tree=['Local','f'])
+  with self.assertRaises(Incomplete):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('hidden offset(f,0)','expression')),use_default=False)
  def map_producer(self):
   notation('Notation make map(n: Natural,x: Real): Function(Vector(n,Complex),Real):',
    ['Means: fun _ => x','Render latex: map({n},{x})'],self.e)

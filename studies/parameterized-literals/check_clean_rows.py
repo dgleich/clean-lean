@@ -464,6 +464,28 @@ noncomputable def expectedDependentProjectionHead (callback : {function_lean}) :
 same_basic_target actualDependentProjectionHead expectedDependentProjectionHead
 theorem meaningDependentProjectionHead (callback : {function_lean}) : actualDependentProjectionHead callback = callback ({ntwo}) := by rfl
 """)
+notation('Notation make offset(n: Natural,x: Real): Function(k: Natural,Vector((k+n),Complex)):',
+ ['Means: fun _ _ => (0 : Complex)','Render latex: map({n},{x})'],env)
+value=Builder(env,scope).materialize(expression_tree(parse('make offset(n,0)(2)','expression')),use_default=False)
+result_lean=f"{t('Vector')} ({f('natural sum')} ({ntwo}) n) {t('Complex')}"
+expected=f"(@{f('make offset')} n ({nr} (nat_lit 0))) ({ntwo})"
+checks.append(f"""
+noncomputable def actualParameterizedHead (n : {t('Natural')}) : {result_lean} := {value.lean}
+noncomputable def expectedParameterizedHead (n : {t('Natural')}) : {result_lean} := {expected}
+same_basic_target actualParameterizedHead expectedParameterizedHead
+theorem meaningParameterizedHead (n : {t('Natural')}) : actualParameterizedHead n = (fun _ => (0 : Complex)) := by rfl
+""")
+notation('Notation make constant(T: Type,item: T,x: Real): Function(k: Natural,Vector(k,T)):',
+ ['Means: fun _ _ => item','Render latex: constant({item})'],env)
+value=Builder(env,scope).materialize(expression_tree(parse('make constant(type(Real:Type),r,0)(2)','expression')),use_default=False)
+result_lean=f"{t('Vector')} ({ntwo}) {t('Real')}"
+expected=f"(@{f('make constant')} {t('Real')} r ({nr} (nat_lit 0))) ({ntwo})"
+checks.append(f"""
+noncomputable def actualParameterizedCarrier (r : {t('Real')}) : {result_lean} := {value.lean}
+noncomputable def expectedParameterizedCarrier (r : {t('Real')}) : {result_lean} := {expected}
+same_basic_target actualParameterizedCarrier expectedParameterizedCarrier
+theorem meaningParameterizedCarrier (r : {t('Real')}) : actualParameterizedCarrier r = (fun _ => r) := by rfl
+""")
 source='for every (z: Vector(n,Complex), z != 0)'
 value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
 checks.append(f"""
@@ -511,6 +533,6 @@ theorem meaningScopedCarrier : actualScopedCarrier := by
 """)
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Sixty-six experimental joint-row targets and sixty-six meaning proofs passed; production joint inference remains unimplemented.')
+print('Sixty-eight experimental joint-row targets and sixty-eight meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

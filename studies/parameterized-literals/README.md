@@ -1717,3 +1717,55 @@ templates or embedded lambda bodies. It adds no grammar rule and does not change
 production elaboration. Those broader binder constraints, universal symbolic-family
 validity, and production integration remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Forward substitution into dependent function signatures
+
+The experimental adapter now represents a dependent function type containing free
+producer formals by a TypePlan. Its output is a type variable; its inputs are the
+referenced formal variables in declaration order. When inputs are determined,
+the resolver supplies their checked representatives using the existing priority
+and scope rules. Classifier parameters use their captured classifier. Checked
+capture-avoiding type substitution rebuilds the signature, and its alpha-canonical
+rigid key constrains the output. TypePlan outputs are rechecked during retention;
+candidate templates do not install global caller representatives.
+
+For example, declare `make offset(n: Natural,x: Real)` returning
+`Function(k: Natural,Vector((k+n),Complex))`. Then `make offset(n,0)(2)` has result
+`Vector(2+n,Complex)` and retains the producer call followed by application.
+The producer parameter can also be a reconstructed expression such as
+`count real(0)`. A type parameter works through an explicit classifier expression:
+`make constant(type(Real:Type),r,0)(2)` returns a real vector when the declared
+producer returns `Function(k: Natural,Vector(k,T))`.
+
+An inferred dependent head retains the checked template, formal terms, concrete
+argument evidence where available, and its converted carrier as row-local
+metadata. Domain conversion uses producer formals; codomain conversion additionally
+binds the function's own argument, shadowing only that binder. The head's metadata
+must agree with its converted carrier. Both head and argument constraints remain
+in the row; computed indices use forward substitution. The same TypePlan rule
+checks dependent function parameter types against supplied function arguments.
+There is no inverse inference of a producer parameter from an opaque function-type
+key. Undetermined inputs remain incomplete.
+
+Candidate checking now uses a fresh compiler mismatch owner after all literal
+interpretations have been assigned. Only a SignatureMismatch bearing that owner
+rejects the row. A foreign mismatch, unresolved literals, or unavailable checking
+remains incomplete. The previous owner is restored on every exit. This prevents a
+known type mismatch from being misclassified as unavailable checking when a type
+plan and a call check become ready together; it does not turn arbitrary compiler
+errors into candidate rejection. The older `padded(2,x)` test now expects a
+rejection: its fixed caller dimension is incompatible with the required dimension,
+and the compiler certifies that signature mismatch. The earlier incomplete
+expectation recorded a missing diagnostic distinction, not an accepted program.
+
+Validation: 272 experimental Python tests pass, including unresolved formal inputs
+and trial-owner restoration. The native driver passes 68 independently expected
+Lean targets and 68 supporting proofs. Provenance checks pass. Production full
+discovery and active-label verification remain live, not passing results.
+
+No grammar or production behavior changes. Embedded lambda constraints, general
+inverse dependent-type inference, universal symbolic-family validity, and production
+integration remain pending. Paper proofs are separate obligations.
+:::

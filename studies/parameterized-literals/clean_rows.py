@@ -15,6 +15,13 @@ from cleanlang.operator_bindings import token
 from constraint_model import Variable,Atom,Carrier,Row,Deferred,saturate,Incomplete,Ambiguous,NoSolution,select_with_trace,unify,resolve,variables
 
 @dataclass(frozen=True)
+class DependentHead:
+    template: object
+    formals: tuple
+    evidence: tuple
+    carrier: object
+
+@dataclass(frozen=True)
 class Fragment:
     typ: object
     value: object
@@ -156,7 +163,13 @@ class Builder:
         No inverse arithmetic and no candidate-provided caller representatives.
         Evidence is row-local and rechecked, including before retained emission.
         """
-        from cleanlang.dependent_functions import occurs
+        from cleanlang.dependent_functions import occurs,DependentFunctionType
+        if isinstance(typ,DependentFunctionType):
+            names=tuple(n for n in formals if occurs(typ,n))
+            if names:
+                from candidate_values import TypePlan
+                output=self.variable(repr((path,'computed dependent type')),'type')
+                return output,(TypePlan(output,typ,tuple((n,formals[n]) for n in names)),),()
         if isinstance(typ,ValueIndex) and typ.name not in formals:
             names=tuple(n for n in formals if occurs(typ,n))
             if names:
@@ -206,6 +219,21 @@ class Builder:
             if p.visibility=='implicit':implicit.append(variables[p.name])
         return variables,tuple(implicit)
 
+    def check_candidate(self,tree):
+        """Only compiler-certified mismatches owned by this trial reject a row."""
+        from cleanlang.core import SignatureMismatch
+        if holes(tree):raise Incomplete('Candidate checking requires assigned literal interpretations')
+        owner=object();missing=object();previous=getattr(self.env,'_numeral_trial_owner',missing)
+        try:
+            self.env._numeral_trial_owner=owner
+            return Expressions(self.env,self.scope).elaborate(tree)
+        except SignatureMismatch as error:
+            if error.owner is owner:raise NoSolution(str(error)) from error
+            raise Incomplete('Mismatch belongs to a different checking trial') from error
+        finally:
+            if previous is missing:del self.env._numeral_trial_owner
+            else:self.env._numeral_trial_owner=previous
+
     def call_witness(self,name,key,node,origins):
         def checked(defaulted=()):
             if name is not None:
@@ -222,7 +250,7 @@ class Builder:
                 return result
             for local_path,source_path in origins:
                 syntax=replace_at(syntax,local_path,'defaulted' if source_path in defaulted else 'inferred')
-            try:return Expressions(self.env,self.scope).elaborate(syntax)
+            try:return self.check_candidate(syntax)
             except CleanError as error:
                 raise Incomplete('Deferred call requires unavailable checking: '+str(error)) from error
         return checked
@@ -275,7 +303,7 @@ class Builder:
                 base.arguments,base.equations,deferred,witnesses,syntax,origins,
                 selected_field.fields if selected_field is not None else (),
                 selected_field.parameters if selected_field is not None else (),plans,
-                self.fixed_dependent_function(field_type,formals)))
+                self.dependent_head(field_type,formals,evidence,typ)))
         return results
 
     def local_call_fragments(self,tree,path):
@@ -305,10 +333,10 @@ class Builder:
                 plans=argument.plans+(ValuePlan(output,path,requirements,result),)))
         return results
 
-    def fixed_dependent_function(self,typ,formals):
-        from cleanlang.dependent_functions import DependentFunctionType,occurs
-        if isinstance(typ,DependentFunctionType) and not any(occurs(typ,n) for n in formals):
-            return typ
+    def dependent_head(self,typ,formals,evidence,carrier):
+        from cleanlang.dependent_functions import DependentFunctionType
+        if isinstance(typ,DependentFunctionType):
+            return DependentHead(typ,tuple(formals.items()),tuple(evidence.items()),carrier)
         return None
 
     def application_fragments(self,tree,path):
@@ -324,13 +352,16 @@ class Builder:
         for head,argument in product(heads,arguments):
             deferred=();witnesses=()
             if head.dependent_function is not None:
-                function=head.dependent_function
-                if self.typ(function,{})!=head.typ:raise Incomplete('Dependent head metadata disagrees with carrier')
-                domain=self.typ(function.domain,{})
-                formals={function.binder:argument.value};evidence={}
+                descriptor=head.dependent_function;function=descriptor.template
+                if descriptor.carrier!=head.typ:raise Incomplete('Dependent head metadata disagrees with carrier')
+                formals=dict(descriptor.formals);evidence=dict(descriptor.evidence)
+                domain,domain_deferred,domain_witnesses=self.dependent_type(function.domain,formals,evidence,path+('application domain',))
+                formals[function.binder]=argument.value
+                evidence.pop(function.binder,None)
                 if argument.syntax is not None:
                     evidence[function.binder]=self.call_witness(None,None,argument.syntax,argument.origins)
                 result,deferred,witnesses=self.dependent_type(function.codomain,formals,evidence,path+('application result',))
+                deferred=domain_deferred+deferred;witnesses=domain_witnesses+witnesses
             else:
                 if not isinstance(head.typ,Carrier):raise Incomplete('Application head type unresolved')
                 if head.typ.identity not in functions or len(head.typ.arguments)!=2:continue
@@ -485,7 +516,7 @@ class Builder:
                     tuple(t for a in actuals for t in a.carriers),
                     tuple(t for a in actuals for t in a.arguments)+implicit,equations,
                     deferred,witnesses,syntax,origins,fields,record_arguments,plans,
-                    self.fixed_dependent_function(signature.result,variables)))
+                    self.dependent_head(signature.result,variables,evidence,result)))
         return rows
 
     def rows(self,tree,expected=None):
@@ -644,8 +675,14 @@ class Builder:
         values=self.row_values[choices]
         for plan in values.index_plans:
             value=values.index_expression(plan,bindings,defaulted)
-            if self.index(value)[0]!=resolve(plan.output,bindings):raise Incomplete('Formal index changed during retention')
-            self.known_index(value)
+            from candidate_values import TypePlan
+            if isinstance(plan,TypePlan):
+                term=self.typ(value,{})
+                if term!=resolve(plan.output,bindings):raise Incomplete('Formal type changed during retention')
+                self.rigid.setdefault(term,value)
+            else:
+                if self.index(value)[0]!=resolve(plan.output,bindings):raise Incomplete('Formal index changed during retention')
+                self.known_index(value)
         for plan in values.active:
             value=values.expression(plan.path,bindings,defaulted)
             if self.index(value)[0]!=resolve(plan.output,bindings):raise Incomplete('Candidate value changed during retention')

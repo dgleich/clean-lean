@@ -1549,5 +1549,16 @@ explicit module wrappers. Computed dimensions are checked forward. See the
 <a href="../studies/parameterized-literals/README.md#applying-inferred-expressions-with-fixed-dependent-signatures">row-local signature rule</a>.
 Signatures depending on unresolved producer parameters remain incomplete.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="dependent-signature-substitution">
+<h2>Producer parameters in dependent signatures (experimental)</h2>
+<p>A producer returning <code>Function(k: Natural,Vector((k+n),Complex))</code>
+can use its determined parameter n during inference. The call
+<code>make offset(n,0)(2)</code> translates schematically to
+<code>(makeOffset n (0 : Real)) (2 : Nat)</code>, with result dimension 2+n.
+The actual target retains module wrappers. Explicit type parameters use forms
+such as <code>type(Real:Type)</code>. See the
+<a href="../studies/parameterized-literals/README.md#forward-substitution-into-dependent-function-signatures">forward substitution and trial ownership rules</a>.
+Unresolved inputs are incomplete; this is not inverse inference from function types.</p>
+</section></llm>
 </body>
 </html>

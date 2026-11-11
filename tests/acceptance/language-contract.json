@@ -3895,6 +3895,23 @@
         "Universal symbolic-family validity",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_dependent_signature_substitution",
+      "status": "experimental-slice",
+      "source": "make offset(n,0)(2); make constant(type(Real:Type),r,0)(2)",
+      "expected_outcome": "Checked producer values and classifier values substitute into dependent signatures; mismatching function argument rejects",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Forward TypePlans, capture-avoiding checked substitution, row-local head metadata, owned mismatch rejection, independent native targets",
+      "pending": [
+        "Inverse dependent-type inference",
+        "Embedded lambda constraints",
+        "Universal symbolic-family validity",
+        "Production integration"
+      ]
     }
   ]
 }

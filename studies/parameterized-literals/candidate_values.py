@@ -25,6 +25,10 @@ class IndexPlan:
     @property
     def requirements(self):return self.inputs
 
+@dataclass(frozen=True)
+class TypePlan(IndexPlan):
+    """Forward substitution into a checked type, without inverse type inference."""
+
 class CandidateValues:
     def __init__(self,builder,tree,fragment,equations,arguments):
         self.builder=builder;self.tree=tree;self.fragment=fragment
@@ -83,7 +87,7 @@ class CandidateValues:
                 bindings=unify(tuple(zip(plan.requirements,inputs)),self.bindings,limit=self.builder.limit)
                 value=(self.index_expression(plan,bindings) if isinstance(plan,IndexPlan)
                        else self.expression(plan.path,bindings))
-                try:return self.builder.index(value)[0]
+                try:return self.builder.typ(value,{}) if isinstance(plan,TypePlan) else self.builder.index(value)[0]
                 except CleanError as error:
                     raise Incomplete('Candidate index checking unavailable: '+str(error)) from error
             checks.append(Deferred(plan.output,plan.requirements,evaluate))
@@ -92,7 +96,7 @@ class CandidateValues:
     def expression(self,path,bindings,defaulted=()):
         try:
             _,reconstruct,source=self._context(bindings,defaulted)
-            return Expressions(self.builder.env,self.builder.scope).elaborate(reconstruct(source(path),path))
+            return self.builder.check_candidate(reconstruct(source(path),path))
         except (CleanError,RecursionError) as error:
             raise Incomplete('Candidate value checking unavailable: '+str(error)) from error
 
@@ -100,7 +104,8 @@ class CandidateValues:
         from cleanlang.inferred_conversion import reify
         try:
             representatives,_,_=self._context(bindings,defaulted)
-            return reify(self._index_value(plan,representatives),self.builder.env,self.builder.scope)
+            value=self._index_value(plan,representatives)
+            return value if isinstance(plan,TypePlan) else reify(value,self.builder.env,self.builder.scope)
         except (CleanError,RecursionError) as error:
             raise Incomplete('Candidate formal-index checking unavailable: '+str(error)) from error
 
@@ -115,6 +120,9 @@ class CandidateValues:
                 if classifier is None:raise Incomplete('Computed formal lacks captured classifier')
             elif term.sort!='index':raise Incomplete('Unsupported computed formal sort')
             actuals[name]=reify(representatives.get(term),b.env,b.scope,classifier=classifier)
+        if isinstance(plan,TypePlan):
+            from cleanlang.dependent_functions import substitute
+            return substitute(plan.template,actuals,b.env,b.scope)
         return substitute_index(plan.template,actuals,b.env,b.scope)
 
     def _context(self,bindings,defaulted=()):
@@ -171,7 +179,7 @@ class CandidateValues:
                     from cleanlang.operator_bindings import token
                     fixity='infix' if kind=='Operator' else 'prefix'
                     result.append([fixity,token(node[1],fixity)])
-                checked=Expressions(env,scope).elaborate(result)
+                checked=b.check_candidate(result)
                 formal,_=b.telescope(spec,where)
                 inferred=dict(checked.inferred_args)
                 for p in b.signature(spec).parameters:
@@ -193,7 +201,7 @@ class CandidateValues:
             output=resolve(plan.output,bindings)
             if variables(output):continue
             def build(_,plan=plan):
-                value=Expressions(env,scope).elaborate(reconstruct(source(plan.path),plan.path))
+                value=b.check_candidate(reconstruct(source(plan.path),plan.path))
                 return b.index(value)[1]
             plans.append(Plan(output,plan.requirements,build,(4,i)))
         representatives=Resolver(bindings,seeds,plans,

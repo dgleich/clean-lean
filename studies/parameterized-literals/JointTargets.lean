@@ -428,6 +428,12 @@ noncomputable def cleanNotation_make_dependent_0ab289a5e21e8e8743c5  («x» : (_
 noncomputable def cleanNotation_make_shifted_dependent_c7457e9ae9dbd5c757a0  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (clean_pi_bound_3 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (clean_pi_bound_3) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) :=
   fun _ _ => (0 : Complex)
 
+noncomputable def cleanNotation_make_offset_e3af094f7c9fa8dfb12a  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (clean_pi_bound_4 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (clean_pi_bound_4) («n»))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) :=
+  fun _ _ => (0 : Complex)
+
+noncomputable def cleanNotation_make_constant_eee795dd230fe60a3bb7  («T» : Type) («item» : «T») («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (clean_pi_bound_5 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (clean_pi_bound_5) («T»))) :=
+  fun _ _ => item
+
 noncomputable def cleanNotation_opaque_count_4efa8df9a3534f27979e {«T» : Type} («item» : «T») : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
   0
 
@@ -888,6 +894,18 @@ noncomputable def actualDependentProjectionHead (callback : (j : cleanType_Natur
 noncomputable def expectedDependentProjectionHead (callback : (j : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 j (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := callback (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
 same_basic_target actualDependentProjectionHead expectedDependentProjectionHead
 theorem meaningDependentProjectionHead (callback : (j : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 j (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d) : actualDependentProjectionHead callback = callback (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) := by rfl
+
+
+noncomputable def actualParameterizedHead (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) n) cleanType_Complex_2d7f06a08f8ab1e3f46d := ((@_root_.cleanNotation_make_offset_e3af094f7c9fa8dfb12a (n) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+noncomputable def expectedParameterizedHead (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) n) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@cleanNotation_make_offset_e3af094f7c9fa8dfb12a n (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
+same_basic_target actualParameterizedHead expectedParameterizedHead
+theorem meaningParameterizedHead (n : cleanType_Natural_469c53b6dafb7a218246) : actualParameterizedHead n = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualParameterizedCarrier (r : cleanType_Real_107b6641a486642ad8e1) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) cleanType_Real_107b6641a486642ad8e1 := ((@_root_.cleanNotation_make_constant_eee795dd230fe60a3bb7 ((_root_.cleanType_Real_107b6641a486642ad8e1)) (r) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+noncomputable def expectedParameterizedCarrier (r : cleanType_Real_107b6641a486642ad8e1) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) cleanType_Real_107b6641a486642ad8e1 := (@cleanNotation_make_constant_eee795dd230fe60a3bb7 cleanType_Real_107b6641a486642ad8e1 r (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
+same_basic_target actualParameterizedCarrier expectedParameterizedCarrier
+theorem meaningParameterizedCarrier (r : cleanType_Real_107b6641a486642ad8e1) : actualParameterizedCarrier r = (fun _ => r) := by rfl
 
 
 def actualQuantifiedZero (n : cleanType_Natural_469c53b6dafb7a218246) : Prop := (∀ (clean_bound_0 : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (n) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))), (_root_.cleanDefine_unequal_37c577a540f8692ae5c3 (clean_bound_0) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n)))))
