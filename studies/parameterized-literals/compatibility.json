@@ -4098,5 +4098,151 @@
         ]
       ]
     }
+  },
+  "direct_lambda_codomain_alternatives_corpus": {
+    "_provenance": {
+      "origin": "llm",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "role": "assisted"
+    },
+    "scope": "Isolated document/module translation; generated text hashes are diagnostics, not canonical Lean or proof validation.",
+    "snapshot_scope": "Before/after fingerprints of cleanlang Python, this driver, repository library/corpus/studies Clean files and direct input. External import closures, dependencies and transient edits restored between samples are not covered.",
+    "default_changed": false,
+    "files": [
+      {
+        "path": "corpus/algorithms.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "8043f9740de75f8842ac3a98f136ab08b5e4ea5221f8cff0e6f07cc3da563985",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "8431a466aad889bb8464a06cffde8c5e92f8c1021fb68820976dfddf8e06ebfc",
+            "clean_sources_sha256": "64567c2c5e9053864d8257df30c974b8ef77dbcdbadd30b1463c08599e124d1d"
+          },
+          "inputs_stable": true,
+          "hole_calls": 3,
+          "elapsed_seconds": 0.656
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "8043f9740de75f8842ac3a98f136ab08b5e4ea5221f8cff0e6f07cc3da563985",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "8431a466aad889bb8464a06cffde8c5e92f8c1021fb68820976dfddf8e06ebfc",
+            "clean_sources_sha256": "64567c2c5e9053864d8257df30c974b8ef77dbcdbadd30b1463c08599e124d1d"
+          },
+          "inputs_stable": true,
+          "hole_calls": 3,
+          "elapsed_seconds": 1.51
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "corpus/analysis.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "65e4af3f25d1850b43925d455d3b371f868ca9f3a2b53739df7df3d5d8b45fae",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "8431a466aad889bb8464a06cffde8c5e92f8c1021fb68820976dfddf8e06ebfc",
+            "clean_sources_sha256": "64567c2c5e9053864d8257df30c974b8ef77dbcdbadd30b1463c08599e124d1d"
+          },
+          "inputs_stable": true,
+          "hole_calls": 15,
+          "elapsed_seconds": 1.241
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "65e4af3f25d1850b43925d455d3b371f868ca9f3a2b53739df7df3d5d8b45fae",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "8431a466aad889bb8464a06cffde8c5e92f8c1021fb68820976dfddf8e06ebfc",
+            "clean_sources_sha256": "64567c2c5e9053864d8257df30c974b8ef77dbcdbadd30b1463c08599e124d1d"
+          },
+          "inputs_stable": true,
+          "hole_calls": 15,
+          "elapsed_seconds": 1.426
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "corpus/graph_theory.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "814f67cb776506949afb58851362bc0213400078f41ae24f50af1ebdc518b4e1",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "8431a466aad889bb8464a06cffde8c5e92f8c1021fb68820976dfddf8e06ebfc",
+            "clean_sources_sha256": "64567c2c5e9053864d8257df30c974b8ef77dbcdbadd30b1463c08599e124d1d"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.752
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "814f67cb776506949afb58851362bc0213400078f41ae24f50af1ebdc518b4e1",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "8431a466aad889bb8464a06cffde8c5e92f8c1021fb68820976dfddf8e06ebfc",
+            "clean_sources_sha256": "64567c2c5e9053864d8257df30c974b8ef77dbcdbadd30b1463c08599e124d1d"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.704
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "corpus/linear_algebra.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "d2b5de98a5b660d5be01518ec5218d09ad7b59d5a9ea17075f80b0ec795329fb",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "8431a466aad889bb8464a06cffde8c5e92f8c1021fb68820976dfddf8e06ebfc",
+            "clean_sources_sha256": "64567c2c5e9053864d8257df30c974b8ef77dbcdbadd30b1463c08599e124d1d"
+          },
+          "inputs_stable": true,
+          "hole_calls": 1,
+          "elapsed_seconds": 0.853
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "d2b5de98a5b660d5be01518ec5218d09ad7b59d5a9ea17075f80b0ec795329fb",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "8431a466aad889bb8464a06cffde8c5e92f8c1021fb68820976dfddf8e06ebfc",
+            "clean_sources_sha256": "64567c2c5e9053864d8257df30c974b8ef77dbcdbadd30b1463c08599e124d1d"
+          },
+          "inputs_stable": true,
+          "hole_calls": 1,
+          "elapsed_seconds": 0.822
+        },
+        "comparison": "same-generated-text"
+      }
+    ],
+    "corpus_proofs": {
+      "status": "proved",
+      "results": 92,
+      "lean_sha256": "d6317b82ef9742eb6bbce40f4005ac07f44f5135d3c3bb2518a21cb6be2f300c",
+      "input_kind": "corpus-proofs",
+      "snapshot": {
+        "implementation_sha256": "8431a466aad889bb8464a06cffde8c5e92f8c1021fb68820976dfddf8e06ebfc",
+        "clean_sources_sha256": "64567c2c5e9053864d8257df30c974b8ef77dbcdbadd30b1463c08599e124d1d"
+      },
+      "inputs_stable": true,
+      "hole_calls": 19,
+      "elapsed_seconds": 39.723
+    }
   }
 }

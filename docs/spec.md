@@ -2490,6 +2490,8 @@ This removes the nominal Type-0 restriction, with no syntax or default-routing c
 
 ## Direct lambda heads with determined codomains
 
+The later [distinct-codomain rule](#direct-lambda-alternatives-with-distinct-determined-codomains) supersedes the common-codomain restriction below.
+
 Joint preparation may discover a common ordinary function type for a directly
 applied lambda only when every viable body row has the same ground checked
 codomain, with no retained reference to that lambda's own bound local. Saturation
@@ -2519,6 +2521,8 @@ Default routing remains unchanged. No grammar or Lean-emission rule changes.
 
 ## Expected nullary nominal results of direct lambdas
 
+The later [distinct-codomain rule](#direct-lambda-alternatives-with-distinct-determined-codomains) supersedes the common-codomain restriction below.
+
 When a direct lambda application is checked against a closed nullary nominal
 carrier C, prepare its body under C and its function under the explicit domain
 arrow to C. All body and argument alternatives still enter one enclosing solve.
@@ -2533,6 +2537,8 @@ No syntax or default-routing change.
 :::llm gpt-6 2026-11-11 role=assisted
 
 ## Determined dependent codomains of direct lambda heads
+
+The later [distinct-codomain rule](#direct-lambda-alternatives-with-distinct-determined-codomains) supersedes the common-codomain restriction below.
 
 This extends the earlier binder-independent direct-lambda rule: it also accepts
 a common ground checked codomain that
@@ -2819,7 +2825,7 @@ Constructive rule:
 
 1. Recover implicit parameters by the existing checked-domain/sibling rule. Start
    with every available application-head alternative, retaining its own callable
-   type. Direct lambda head discovery retains its existing common-codomain rule.
+   type. Direct lambda head discovery follows the later distinct-determined-codomain rule.
 2. Traverse explicit arguments in source order. For each live prefix, substitute
    its checked values into the next parameter type; enumerate all child rows under
    that expectation. Preserve declaration identities, equations, deferred checks,
@@ -2955,4 +2961,50 @@ For `pick(n,x,y)` with both vector arguments and the result indexed by `n+1`,
 three substitutions become one. Independent expected source trees and native
 wrapper applications cover this case and replacement of inferred `n` by `m`.
 Full regression and whole-study performance remain separate obligations.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Direct lambda alternatives with distinct determined codomains
+
+The explicit joint API no longer requires every viable body of a directly applied
+lambda to have the same codomain. This supersedes the common-codomain restriction
+in the earlier direct-lambda sections. It does not change production routing.
+
+1. Parse the source once using the existing Lambda and Apply constructors. Prepare
+   body rows under the explicit binder domain. Only a closed nullary nominal
+   application expectation may be propagated into the body as before; an indexed
+   expectation does not invent a constant or dependent family.
+2. Saturate each body row without selecting or defaulting it. Discard inconsistent
+   rows. Recover that row's ground checked codomain from its checked representative
+   and retained index plans. An unresolved or unavailable viable representative
+   still yields incomplete analysis, not a discarded competitor.
+3. Abstract the binder in each recovered codomain with `inferred_type`. Keep the
+   triple (body row, body reconstruction, inferred head type) for every viable row.
+   Distinct codomains are distinct alternatives; never take the first as common.
+4. Continue each head through the ordinary checked argument-prefix rule. Substitute
+   its checked argument into its own dependent codomain, then add the enclosing
+   expected-result constraint to the resulting row. Retain all alternatives for
+   one enclosing contextual selection and simultaneous default policy.
+5. Reconstruct the selected body from its original row choices and projected trace.
+   Check its operator-input ambiguity, head type and final application type using
+   the existing retained-target audits. The expected result cannot resolve two
+   operator declarations with identical checked input signatures.
+
+For example, declare `+` on (Natural, Real) with result `Vector(k,Complex)` and on
+(Natural, Complex) with result `Vector((k+1),Complex)`, where k is the first operand.
+In `(function(k: Natural,k+0))(n)`, an expected `Vector(n,Complex)` selects the first
+family and its Real numeral interpretation; `Vector((n+1),Complex)` selects the
+second and its Complex numeral. Without an expectation and with defaults disabled,
+these alternatives remain ambiguous. Reversing declaration order cannot choose a
+meaning. An incompatible `Vector((n+2),Complex)` expectation is inconsistent.
+
+Uniqueness is supplied by the existing exhaustive contextual selection and target
+audits, not by codomain discovery. Each row has its own deterministic abstraction
+and source-ordered representative; no cross-row codomain is synthesized. Resource
+limits and unresolved competitors retain the incomplete outcome. This adds no
+grammar, conversion, coercion, universe or default rule. Completely unresolved
+lambda bodies, general backward family inference and production integration remain
+open. Independent source-tree, rejection, order-invariance and native-target tests
+cover the implemented slice; they do not establish general conformance.
 :::

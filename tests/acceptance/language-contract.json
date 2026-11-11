@@ -4990,6 +4990,46 @@
       "pending": [
         "Full regression and whole-study throughput"
       ]
+    },
+    {
+      "id": "direct_lambda_distinct_determined_codomains",
+      "status": "implemented-experimental-api",
+      "environment": "Explicit linear algebra imports; distinct + input signatures Natural/Real -> Vector(k,Complex), Natural/Complex -> Vector(k+1,Complex); local n: Natural; defaults disabled.",
+      "source": "(function(k: Natural,k+0))(n)",
+      "expected_tree": [
+        "Apply",
+        [
+          "Lambda",
+          "k",
+          "Natural",
+          [
+            "Operator",
+            "+",
+            [
+              "Local",
+              "k"
+            ],
+            [
+              "Decimal",
+              "0"
+            ]
+          ]
+        ],
+        [
+          [
+            "Local",
+            "n"
+          ]
+        ]
+      ],
+      "expected_lean": "Expected Vector(n,Complex): retained lambda applied to n, with declared indexed-sum and Real numeral 0. Expected Vector(n+1,Complex): successor-indexed-sum with Complex numeral 0. Preserve the chosen family and wrapper application.",
+      "checks": [
+        "Six API cases: no-context ambiguity, indexed expectation, reversed declarations, mismatching expected type, identical operator input ambiguity, enclosing module context",
+        "Two independent canonical targets and agreement proofs in check_joint_proof_targets.py"
+      ],
+      "pending": [
+        "Full regression, production routing and general backward contextual family recovery"
+      ]
     }
   ]
 }

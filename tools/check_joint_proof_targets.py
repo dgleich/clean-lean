@@ -147,8 +147,25 @@ noncomputable def expected{suffix} (n : {t('Natural')}) (h : {local_lean}) : {re
 same_basic_target actual{suffix} expected{suffix}
 theorem meaning{suffix} (n : {t('Natural')}) (h : {local_lean}) : actual{suffix} n h = expected{suffix} n h := by rfl
 ''')
+# Distinct input carriers give distinct viable lambda codomain families. The
+# enclosing indexed expectation selects only after application substitutes n.
+for name,index,carrier in [('indexed sum','k','Real'),('successor indexed sum','(k+1)','Complex')]:
+ notation(f'Notation {name}(k: Natural,z: {carrier}): Vector({index},Complex):',
+          ['Means: fun _ => 0','Infix: +','Render latex: {k}+{z}'],env)
+for suffix,index,dimension,name,carrier in [
+ ('Fiber','n','n','indexed sum','Real'),
+ ('Successor','(n+1)',shift,'successor indexed sum','Complex'),
+]:
+ expected=env.type(f'Vector({index},Complex)',scope)
+ value=complete(expression_tree(parse('(function(k: Natural,k+0))(n)','expression')),env,scope,expected,use_default=False)
+ checks.append(f'''
+noncomputable def actualLambda{suffix} (n : {t('Natural')}) : {env.render_type(value.type,'lean',scope)} := {value.lean}
+noncomputable def expectedLambda{suffix} (n : {t('Natural')}) : {t('Vector')} ({dimension}) {t('Complex')} := (fun (k : {t('Natural')}) => {f(name)} k ({num(carrier)} (nat_lit 0))) n
+same_basic_target actualLambda{suffix} expectedLambda{suffix}
+theorem meaningLambda{suffix} (n : {t('Natural')}) : actualLambda{suffix} n = expectedLambda{suffix} n := by rfl
+''')
 path=ROOT/'studies/parameterized-literals/ProofTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Nineteen exact evidence/prefix/resolution targets and nineteen interpretation proofs passed; general contextual recovery and production integration remain pending.')
+print(f'{len(checks)} exact evidence/prefix/resolution/lambda targets and interpretation proofs passed; general contextual recovery and production integration remain pending.')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -14,7 +14,7 @@ from .clean_rows import Builder
 
 
 def prepare_lambda_head(builder,tree,expected_result=None):
-    """Discover a common checked codomain without selecting body alternatives."""
+    """Keep each checked codomain paired with its unselected body alternative."""
     from cleanlang.core import Type
     from .witness_model import Resolver,Seed
     domain=builder.env.type(tree[2],builder.scope,phrases=False)
@@ -24,7 +24,7 @@ def prepare_lambda_head(builder,tree,expected_result=None):
               if type(expected_result) is Type and not expected_result.args else None)
     child=ScopedBody(builder.env,builder.scope,tree,expected,path=builder.row_namespace,
                      limit=builder.limit,binder_ids=builder.binder_ids)
-    rows=child.rows();types=[];viable=[];body=child.builder
+    rows=child.rows();heads=[];body=child.builder
     names={body.carrier_identity(n):n for n,spec in builder.env.data['types'].items()
            if 'native_binding' in spec or n in builder.env.structures}
     def assemble(term,args):
@@ -42,13 +42,12 @@ def prepare_lambda_head(builder,tree,expected_result=None):
             available=body.witness_available,allowed_binders=frozenset(body.binder_ids.values()))
         codomain=(body.row_values[row.choices].representative(result,bindings)
                   if not contains_scoped_holes(tree[3]) else representatives.get(result))
-        if types and codomain!=types[0]:raise Incomplete('Direct lambda alternatives need joint codomain recovery')
-        types.append(codomain);viable.append(row)
-    if not viable:raise NoSolution('Direct lambda has no viable body')
-    from cleanlang.dependent_functions import inferred_type
-    name=tree[1]
-    head_type=inferred_type(name,body.scope[name].lean,domain,types[0],builder.env,builder.scope)
-    return tuple(viable),child.retain,head_type
+        from cleanlang.dependent_functions import inferred_type
+        name=tree[1]
+        head_type=inferred_type(name,body.scope[name].lean,domain,codomain,builder.env,builder.scope)
+        heads.append((row,child.retain,head_type))
+    if not heads:raise NoSolution('Direct lambda has no viable body')
+    return heads
 
 
 def recover_scoped_implicits(builder,spec,signature,sources):
@@ -138,8 +137,7 @@ def prepare_call_alternatives(builder,tree,expected=None):
             child=Builder(env,scope,builder.limit-1,binder_ids=builder.binder_ids,
                           binder_path=builder.binder_path,row_namespace=builder.row_namespace+(1,))
             if head_tree[0]=='Lambda':
-                rows,retain,typ=prepare_lambda_head(child,head_tree,expected)
-                heads=[(row,retain,typ) for row in rows]
+                heads=prepare_lambda_head(child,head_tree,expected)
             elif head_tree[0] in ('Call','Apply'):
                 heads=prepare_call_alternatives(child,head_tree)
             else:raise Incomplete('Scoped application head needs contextual type recovery')

@@ -91,6 +91,55 @@ class JointCompletion(unittest.TestCase):
   with self.assertRaises(Incomplete):
    complete(expression_tree(parse('(function(x: Natural,0))(2)','expression')),self.env,self.scope)
 
+ def indexed_lambda_overloads(self,reverse=False):
+  declarations=[('indexed sum','k','Real'),('successor indexed sum','(k+1)','Complex')]
+  if reverse:declarations.reverse()
+  for name,index,carrier in declarations:
+   notation(f'Notation {name}(k: Natural,z: {carrier}): Vector({index},Complex):',
+            ['Means: fun _ => 0','Infix: +','Render latex: {k}+{z}'],self.env)
+ def test_direct_lambda_distinct_codomains_remain_ambiguous(self):
+  self.indexed_lambda_overloads()
+  with self.assertRaises(Ambiguous):
+   complete(expression_tree(parse('(function(k: Natural,k+0))(n)','expression')),
+            self.env,self.scope,use_default=False)
+ def test_indexed_expectation_selects_lambda_codomain_after_application(self):
+  self.indexed_lambda_overloads()
+  tree=expression_tree(parse('(function(k: Natural,k+0))(n)','expression'))
+  self.assertEqual(tree,['Apply',['Lambda','k','Natural',['Operator','+',['Local','k'],['Decimal','0']]],[['Local','n']]])
+  expected=self.env.type('Vector(n,Complex)',self.scope)
+  with patch('cleanlang.joint_inference.clean_rows.Builder.solve_with_trace',side_effect=AssertionError('inner selection')):
+   value=complete(tree,self.env,self.scope,expected,use_default=False)
+  self.assertEqual(value.type,expected)
+  self.assertIn(self.env.data['functions']['indexed sum']['native_binding'],value.lean)
+  self.assertNotIn(self.env.data['functions']['successor indexed sum']['native_binding'],value.lean)
+ def test_indexed_lambda_alternatives_do_not_depend_on_declaration_order(self):
+  source='(function(k: Natural,k+0))(n)'
+  self.indexed_lambda_overloads()
+  first=complete(expression_tree(parse(source,'expression')),self.env,self.scope,self.env.type('Vector((n+1),Complex)',self.scope),use_default=False)
+  self.setUp();self.indexed_lambda_overloads(reverse=True)
+  second=complete(expression_tree(parse(source,'expression')),self.env,self.scope,self.env.type('Vector((n+1),Complex)',self.scope),use_default=False)
+  self.assertEqual((first.tree,first.lean,first.type),(second.tree,second.lean,second.type))
+ def test_indexed_lambda_alternatives_reject_unmatched_result(self):
+  self.indexed_lambda_overloads()
+  with self.assertRaises(NoSolution):
+   complete(expression_tree(parse('(function(k: Natural,k+0))(n)','expression')),self.env,self.scope,self.env.type('Vector((n+2),Complex)',self.scope),use_default=False)
+
+ def test_lambda_codomain_selection_does_not_hide_operator_input_ambiguity(self):
+  self.indexed_lambda_overloads()
+  notation('Notation conflicting indexed sum(k: Natural,z: Real): Vector((k+2),Complex):',
+           ['Means: fun _ => 0','Infix: +','Render latex: {k}+{z}'],self.env)
+  with self.assertRaises(Ambiguous):
+   complete(expression_tree(parse('(function(k: Natural,k+0))(n)','expression')),
+            self.env,self.scope,self.env.type('Vector(n,Complex)',self.scope),use_default=False)
+ def test_module_context_selects_direct_lambda_family(self):
+  self.indexed_lambda_overloads()
+  notation('Notation consume indexed(n: Natural,v: Vector(n,Complex)): Real:',
+           ['Means: 0','Render latex: c({n},{v})'],self.env)
+  value=complete(expression_tree(parse('consume indexed(n,(function(k: Natural,k+0))(n))','expression')),
+                 self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.env.type('Real'))
+  self.assertIn(self.env.data['functions']['indexed sum']['native_binding'],value.lean)
+
  def test_scalar_fragment_matches_independent_flat_exhaustive_oracle(self):
   from test_numeral_pruning import exhaustive
   from cleanlang.numeral_inference import holes

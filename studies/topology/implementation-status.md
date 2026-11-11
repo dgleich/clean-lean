@@ -17,7 +17,7 @@ current-revision validation.
 |---|---|---|
 | Relative and ordinary homology | [Clean-authored comparison maps](relative-ordinary-comparison.md), with six canonical targets and four inverse/naturality proofs; canonical pair-inclusion maps are used | Level-specific perturbation diagrams and image transport |
 | Level-set application | [Three assembled comparisons](level-homology-comparison.md), with four exact targets and three application proofs plus four generic helpers; nesting and zero inclusion are proved, not assumed | Identifying separately named fiber/band spaces, well-group equality and cover/excision |
-| Explicit joint API | Scoped proof lambdas, implicit domain recovery and value-dependent argument prefixes; nineteen native targets/proofs in the [evidence driver](../../tools/check_joint_proof_targets.py), 79 API/adapter/checker tests, 462 solver tests and 157 runtime tests | Production routing, general backward contextual recovery and direct-lambda alternative codomain discovery |
+| Explicit joint API | Scoped proof lambdas, implicit domain recovery and value-dependent argument prefixes; nineteen native targets/proofs in the [evidence driver](../../tools/check_joint_proof_targets.py), 79 API/adapter/checker tests, 462 solver tests and 157 runtime tests | Production routing, general backward contextual recovery and unresolved lambda codomain discovery |
 | Corpus compatibility | All four documents produce identical legacy/joint text with stable fingerprints; all 92 corpus proofs pass after the latest change | This does not establish general target uniqueness or full regression |
 | Full Python discovery | Immutable full jobs are running. The alphabetically first class loads active labels in `setUpClass`, before unittest prints a test name | No full discovery pass at the current revision |
 | Complementary Python discovery | A separate immutable `f84aa3b` run contains the other 1,234 tests and logs class setup; it excludes exactly the four `test_active_labels` cases | The run has recorded failures and is still running; it cannot substitute for the preserved full jobs |
@@ -560,4 +560,20 @@ Sixty focused tests and fourteen canonical native targets plus five supporting
 proofs pass. These are implementation checks, not new topology proofs or evidence
 of complete active-label throughput. Full regression remains pending. The exact
 rule is in [the specification](../../docs/spec.md#computed-index-reuse-within-a-dependent-call).
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Directly applied lambdas now retain separately determined codomain alternatives
+through the enclosing joint solve. An expected vector dimension can distinguish
+families after substituting the checked actual argument. Same-input operator
+ambiguity is still rejected; indexed expectations do not invent a family.
+The explicit API passes 85 API/adapter/checker cases and 21 independent native
+target/proof pairs, including two new lambda-family targets. Production routing,
+unresolved codomains, backward contextual recovery and full regression remain
+open. See the [constructive rule](../../docs/spec.md#direct-lambda-alternatives-with-distinct-determined-codomains).
+
+The preceding computed-index reuse revision also finished its 157 runtime and
+462 solver tests successfully. Those counts describe that revision, not a full
+regression result for the lambda change. The immutable full jobs remain live.
 :::

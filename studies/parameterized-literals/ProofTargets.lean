@@ -304,6 +304,12 @@ noncomputable def cleanNotation_carry_e8246d605d3ac3daee58  («p» : (_root_.cle
 noncomputable def cleanNotation_h_b005fbc73804229a6902  («g» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
   g 0
 
+noncomputable def cleanNotation_indexed_sum_77b40037e6a35fdf8471  («k» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («z» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («k») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  fun _ => 0
+
+noncomputable def cleanNotation_successor_indexed_sum_ea121968f637dfea625c  («k» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («z» : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («k») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  fun _ => 0
+
 
 open scoped Matrix
 
@@ -444,5 +450,17 @@ noncomputable def actualCallableShadow (n : cleanType_Natural_469c53b6dafb7a2182
 noncomputable def expectedCallableShadow (n : cleanType_Natural_469c53b6dafb7a218246) (h : ∀ (g : cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1), cleanDefine_equal_5fac732a65dd209a83f4 n n) : cleanDefine_equal_5fac732a65dd209a83f4 n n := h (fun (x : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
 same_basic_target actualCallableShadow expectedCallableShadow
 theorem meaningCallableShadow (n : cleanType_Natural_469c53b6dafb7a218246) (h : ∀ (g : cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1), cleanDefine_equal_5fac732a65dd209a83f4 n n) : actualCallableShadow n h = expectedCallableShadow n h := by rfl
+
+
+noncomputable def actualLambdaFiber (n : cleanType_Natural_469c53b6dafb7a218246) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (n) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) := ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_indexed_sum_77b40037e6a35fdf8471 (clean_bound_0) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))) n)
+noncomputable def expectedLambdaFiber (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (n) cleanType_Complex_2d7f06a08f8ab1e3f46d := (fun (k : cleanType_Natural_469c53b6dafb7a218246) => cleanNotation_indexed_sum_77b40037e6a35fdf8471 k (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) n
+same_basic_target actualLambdaFiber expectedLambdaFiber
+theorem meaningLambdaFiber (n : cleanType_Natural_469c53b6dafb7a218246) : actualLambdaFiber n = expectedLambdaFiber n := by rfl
+
+
+noncomputable def actualLambdaSuccessor (n : cleanType_Natural_469c53b6dafb7a218246) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (n) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) := ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_successor_indexed_sum_ea121968f637dfea625c (clean_bound_0) ((_root_.cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0))))) n)
+noncomputable def expectedLambdaSuccessor (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := (fun (k : cleanType_Natural_469c53b6dafb7a218246) => cleanNotation_successor_indexed_sum_ea121968f637dfea625c k (cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0))) n
+same_basic_target actualLambdaSuccessor expectedLambdaSuccessor
+theorem meaningLambdaSuccessor (n : cleanType_Natural_469c53b6dafb7a218246) : actualLambdaSuccessor n = expectedLambdaSuccessor n := by rfl
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
