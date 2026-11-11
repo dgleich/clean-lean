@@ -2514,3 +2514,17 @@ mismatch ownership. Assigned expressions retain normal checking behavior. See th
 [error mapping and migration checks](../studies/parameterized-literals/README.md#translator-facing-joint-error-boundary).
 Default routing remains unchanged. No grammar or Lean-emission rule changes.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Expected nullary nominal results of direct lambdas
+
+When a direct lambda application is checked against a closed nullary nominal
+carrier C, prepare its body under C and its function under the explicit domain
+arrow to C. All body and argument alternatives still enter one enclosing solve.
+Do not infer a constant indexed codomain from an application expectation: indexed,
+local and dependent expectations continue through independent common-codomain
+discovery and the enclosing result check. Operator-input ambiguity remains an error
+regardless of expected result. See the [rule and checks](../studies/parameterized-literals/README.md#expected-scalar-results-for-directly-applied-lambdas).
+No syntax or default-routing change.
+:::

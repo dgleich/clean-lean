@@ -142,3 +142,22 @@ to the geometric construction and its identification/exactness, not the absence
 of a generic algebraic connecting map. These checks add no new syntax and do not
 resolve the broader inference or full-regeneration validation obligations.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Joint inference integration evidence
+
+The solver is now installable through an explicit API and has a translator-facing
+error adapter. Default production routing remains unchanged. Closed nominal
+higher-universe carriers are supported in the joint path; the exact-sequence,
+homology-sequence and Mayer–Vietoris-map drivers passed under isolated joint routing
+with 42 canonical targets and 14 proofs. Those are the same algebraic/wrapper claims
+as before, not additional geometric paper theorems.
+
+The [inference study](../parameterized-literals/README.md) records native oracles,
+corpus comparison, runtime migration checks and remaining contextual/dependent
+inference boundaries. In particular, a scalar result expectation may constrain a
+directly applied lambda, but an indexed application result must not be used to
+invent a constant codomain family. The all-topology comparison is still running;
+its partial observations are not a completed compatibility gate.
+:::

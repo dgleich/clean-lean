@@ -4449,6 +4449,21 @@
         "Default routing",
         "Remaining contextual inference boundaries"
       ]
+    },
+    {
+      "id": "joint_expected_direct_lambda_result",
+      "status": "explicit-api-not-default",
+      "environment": "Expected Real or Complex result supplied explicitly or by a module consumer; explicit Natural lambda domain.",
+      "source": "(function(x: Natural,0))(2)",
+      "expected_lean": "A retained Natural-domain lambda returning the expected scalar zero, applied to declared natural two, selected jointly.",
+      "checks": [
+        "tests/test_joint_completion.py: five expected-result and dependent-boundary cases",
+        "studies/parameterized-literals/check_scoped_calls.py: two additional exact targets and interpretation proofs"
+      ],
+      "pending": [
+        "Indexed/local/dependent contextual codomain inference",
+        "Default production routing"
+      ]
     }
   ]
 }

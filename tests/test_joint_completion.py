@@ -107,6 +107,32 @@ class JointCompletion(unittest.TestCase):
     else:
      with self.assertRaises(Ambiguous if expected else NoSolution if holes(tree) else CleanError):complete(tree,env,scope,use_default=False)
 
+ def test_expected_result_constrains_direct_lambda_body(self):
+  tree=expression_tree(parse('(function(x: Natural,0))(2)','expression'))
+  with patch('cleanlang.joint_inference.clean_rows.Builder.solve_with_trace',side_effect=AssertionError('inner selection')):
+   value=complete(tree,self.env,self.scope,self.env.type('Real'),use_default=False)
+  self.assertEqual(value.tree[1][3][2],'Real')
+  self.assertEqual(value.tree[2][0][2],'Natural')
+ def test_indexed_result_does_not_force_a_constant_lambda_codomain(self):
+  expected=self.env.type('Vector(n,Complex)',self.scope)
+  with self.assertRaises(Incomplete):
+   complete(expression_tree(parse('(function(x: Natural,0))(2)','expression')),self.env,self.scope,expected,use_default=False)
+ def test_module_argument_supplies_direct_lambda_result(self):
+  notation('Notation real consumer(x: Real): Real:', ['Means: x','Render latex: c({x})'],self.env)
+  value=complete(expression_tree(parse('real consumer((function(x: Natural,0))(2))','expression')),self.env,self.scope,use_default=False)
+  self.assertEqual(value.tree[2][0][1][3][2],'Real')
+ def test_expected_result_does_not_resolve_operator_input_ambiguity(self):
+  notation('Notation other sum(x: Natural,y: Natural): Real:', ['Means: 0','Infix: +','Render latex: {x}+{y}'],self.env)
+  with self.assertRaises(Ambiguous):
+   complete(expression_tree(parse('(function(x: Natural,x+1))(2)','expression')),self.env,self.scope,self.env.type('Natural'))
+
+ def test_indexed_expectation_still_allows_independently_determined_codomain(self):
+  typ=self.env.type('Vector(n,Complex)',self.scope)
+  self.scope['v']=Expr('v','v',typ,tree=['Local','v'])
+  notation('Notation keep vector(n: Natural,v: Vector(n,Complex),z: Real): Vector(n,Complex):', ['Means: v','Render latex: k({n},{v},{z})'],self.env)
+  value=complete(expression_tree(parse('(function(x: Natural,keep vector(n,v,0)))(2)','expression')),self.env,self.scope,typ,use_default=False)
+  self.assertEqual(value.type,typ)
+
 if __name__=='__main__':unittest.main()
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -13,12 +13,16 @@ from .scoped_bodies import ScopedBody
 from .clean_rows import Builder
 
 
-def prepare_lambda_head(builder,tree):
+def prepare_lambda_head(builder,tree,expected_result=None):
     """Discover a common checked codomain without selecting body alternatives."""
     from cleanlang.core import Type
     from .witness_model import Resolver,Seed
     domain=builder.env.type(tree[2],builder.scope,phrases=False)
-    child=ScopedBody(builder.env,builder.scope,tree,path=builder.row_namespace,
+    # Only a closed nullary nominal expectation can be propagated here without
+    # inventing an indexed/dependent codomain family from one application.
+    expected=(builder.env.function_type(domain,expected_result)
+              if type(expected_result) is Type and not expected_result.args else None)
+    child=ScopedBody(builder.env,builder.scope,tree,expected,path=builder.row_namespace,
                      limit=builder.limit,binder_ids=builder.binder_ids)
     rows=child.rows();types=[];viable=[];body=child.builder
     names={body.carrier_identity(n):n for n,spec in builder.env.data['types'].items()
@@ -56,7 +60,7 @@ def prepare_typed_call(builder,tree,expected=None):
             child=Builder(env,scope,builder.limit-1,binder_ids=builder.binder_ids,
                           binder_path=builder.binder_path,row_namespace=builder.row_namespace+(1,))
             if head_tree[0]=='Lambda':
-                head_rows,head_retain,head_type=prepare_lambda_head(child,head_tree)
+                head_rows,head_retain,head_type=prepare_lambda_head(child,head_tree,expected)
             elif head_tree[0] in ('Call','Apply'):
                 head_rows,head_retain,head_type=prepare_typed_call(child,head_tree)
             else:raise Incomplete('Scoped application head needs contextual type recovery')

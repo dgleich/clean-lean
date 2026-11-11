@@ -3127,3 +3127,41 @@ full topology sweep is separate and remains incomplete; default-routing completi
 is not inferred from this bounded regression slice.
 
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Expected scalar results for directly applied lambdas
+
+A direct lambda application may use a checked closed nullary nominal expected
+result type to constrain its body before the enclosing joint solve. For example,
+checking `(function(x: Natural,0))(2)` against `Real` checks the lambda against
+`Function(Natural,Real)`. The body's zero is inferred as Real and its argument as
+Natural; neither is independently selected or defaulted. The same rule applies
+when an explicit module parameter supplies that result expectation.
+
+The propagation rule is deliberately limited to `Type` carriers with no arguments.
+It does not infer a codomain family from one application result. In particular,
+an expected `Vector(n,Complex)` must not force an otherwise unresolved lambda to
+return a constant dimension n: a dependent codomain would need contextual recovery.
+For indexed/local/dependent expectations, preparation uses the existing independent
+common-codomain discovery, then checks the enclosing result. Thus a lambda body
+whose module signature already determines `Vector(n,Complex)` still works, while
+a bare-zero body with that indexed expectation remains incomplete.
+
+The expected type only contributes constraints. The existing body operator audit
+still rejects two overloads accepting the same inputs, even if their result types
+differ and only one matches the expectation. Captured source references and the
+common-codomain check remain unchanged. There is no grammar change and the default
+translator is not switched.
+
+Five API cases cover Real context without inner selection, a module-provided
+context, rejection of constant-codomain guessing, independently determined indexed
+results, and preservation of operator-input ambiguity. Two additional independent
+Lean targets check the Real and Complex lambda applications, with interpretation
+proofs. The scoped native driver now has twenty target/proof pairs.
+Validation: all 462 solver tests and 24 API/adapter tests pass on the final guarded
+rule. Twenty scoped canonical targets and twenty interpretation proofs pass.
+Reference HTML IDs/local links and provenance checks pass. The full topology sweep
+remains live on its final input and is not yet a completed compatibility result.
+
+:::

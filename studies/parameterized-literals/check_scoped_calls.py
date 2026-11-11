@@ -96,8 +96,18 @@ noncomputable def expectedDirectLambda : {t('Natural')} := (fun (x : {t('Natural
 same_basic_target actualDirectLambda expectedDirectLambda
 theorem directLambdaMeaning : actualDirectLambda = 3 := by rfl
 """)
+for label,typ,result,zero in [
+ ('Real',env.type('Real'),t('Real'),zr),
+ ('Complex',env.type('Complex'),t('Complex'),zc)]:
+ contextual=complete(expression_tree(parse('(function(x: Natural,0))(2)','expression')),env,scope,typ,use_default=False)
+ checks.append(f"""
+noncomputable def actualExpected{label} (n : {t('Natural')}) : {result} := {contextual.lean}
+noncomputable def expectedExpected{label} (n : {t('Natural')}) : {result} := (fun (x : {t('Natural')}) => {zero}) ({num('Natural')} (nat_lit 2))
+same_basic_target actualExpected{label} expectedExpected{label}
+theorem expectedMeaning{label} (n : {t('Natural')}) : actualExpected{label} n = {zero} := by rfl
+""")
 path=HERE/'ScopedCallTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Eighteen automatic scoped-call targets and eighteen interpretation proofs passed; implicit/contextually unresolved consumers and production integration remain pending.')
+print('Twenty automatic scoped-call targets and twenty interpretation proofs passed; implicit/contextually unresolved consumers and production integration remain pending.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

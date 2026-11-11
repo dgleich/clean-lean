@@ -451,4 +451,16 @@ noncomputable def expectedDirectLambda : cleanType_Natural_469c53b6dafb7a218246 
 same_basic_target actualDirectLambda expectedDirectLambda
 theorem directLambdaMeaning : actualDirectLambda = 3 := by rfl
 
+
+noncomputable def actualExpectedReal (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+noncomputable def expectedExpectedReal (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (fun (x : cleanType_Natural_469c53b6dafb7a218246) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
+same_basic_target actualExpectedReal expectedExpectedReal
+theorem expectedMeaningReal (n : cleanType_Natural_469c53b6dafb7a218246) : actualExpectedReal n = cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0) := by rfl
+
+
+noncomputable def actualExpectedComplex (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Complex_2d7f06a08f8ab1e3f46d := ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (_root_.cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0))) (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+noncomputable def expectedExpectedComplex (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Complex_2d7f06a08f8ab1e3f46d := (fun (x : cleanType_Natural_469c53b6dafb7a218246) => cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
+same_basic_target actualExpectedComplex expectedExpectedComplex
+theorem expectedMeaningComplex (n : cleanType_Natural_469c53b6dafb7a218246) : actualExpectedComplex n = cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0) := by rfl
+
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md
