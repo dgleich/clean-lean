@@ -1187,5 +1187,12 @@ still require rechecking; retained callable identities and dimension checks rema
 mandatory. This changes internal work, not the Clean syntax or intended Lean term.
 See <a href="active-label-performance.md">the diagnostic and validation record</a>.</p>
 </llm>
+<llm model="gpt-6" date="2026-11-11">
+<p id="stable-native-operators">Contextual comparison emits already-normalized
+native operator children without normalizing them a second time. The rule requires
+fresh checked children and matching declaration identities; public comparison still
+rechecks the source. It leaves the emitted Lean target unchanged. See
+<a href="active-label-performance.md">validation and remaining limits</a>.</p>
+</llm>
 </body>
 </html>

@@ -18,10 +18,15 @@ def comparison_key(expression,env,locals,*,fresh=False):
         if tree[0]=='Local':
             local=locals.get(tree[1])
             return local is not None and local.local_normal is None
-        if tree[0]=='Decimal':return True
-        if tree[0] not in ('Call','ModuleCall'):return False
-        name=tree[1]
-        if tree[0]=='Call' and name in locals:return False
+        if tree[0] in ('Decimal','BoundNumeral'):return True
+        if tree[0] in ('Operator','Unary'):
+            if value.operator_binding is None:return False
+            name,target,_=value.operator_binding
+            if target!=identity(env,name):raise CleanError('Changed comparison operator')
+        elif tree[0] in ('Call','ModuleCall'):
+            name=tree[1]
+            if tree[0]=='Call' and name in locals:return False
+        else:return False
         definition=env.definitions.get(name)
         if definition and definition['implementation']=='equals':return False
         if value.checked_args is None:return False

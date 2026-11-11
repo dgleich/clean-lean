@@ -3,7 +3,7 @@
 from pathlib import Path
 import unittest
 from cleanlang.core import Environment,Expressions,Expr,Type,CleanError
-from cleanlang.modules import load_module
+from cleanlang.modules import load_module,type_declaration,condition_declaration
 from cleanlang.bound_calls import bind,UnclosedBinding
 from cleanlang.numeral_inference import declare_default
 from cleanlang.syntax import parse,expression_tree
@@ -32,9 +32,16 @@ class DeclaredStandardOperators(unittest.TestCase):
             expr('v*A')
 
     def test_closed_operator_keeps_numeral_constructor(self):
-        common=ROOT/'studies/module-numerals/Common.clean.proposed'
-        a=Environment();load_module(common,a);declare_default('Counting',a)
-        b=Environment();load_module(common,b);declare_default('Real',b)
+        def environment(default):
+            env=Environment();load_module(ROOT/'library/types.clean',env)
+            condition_declaration('Condition equal(x,y):',
+                ['Let T: Type','Let x,y: T','Infix: =','From Lean: x=y',
+                 'Render latex: {x}={y}'],env)
+            type_declaration('Type Counting():',
+                ['Means: Nat','Numerals: fun n : Nat => n','Render latex: C'],env)
+            declare_default(default,env)
+            return env
+        a=environment('Counting');b=environment('Real')
         tree=bind(expression_tree(parse('1=1','expression')),a,{})
         self.assertTrue(all(x[0]=='BoundNumeral' and x[2]=='Counting' for x in tree[2]))
         actual=Expressions(b,{}).elaborate(tree).lean

@@ -96,3 +96,44 @@ and their zero-composite proof, not the full long exact sequence. The runner end
 with `Failures: []`. Full discovery and completed active-label translation remain
 pending. No whole-module performance improvement is claimed.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Already-normalized native operator children
+
+Within one contextual-comparison traversal, a freshly normalized native operator
+or prefix application is stable when its retained binding identity still matches,
+its declaration is not Clean-authored with `Equals`, and every checked child is
+stable. Freshly checked numeral leaves are stable too. Such a subtree goes directly
+to comparison emission without another normalization traversal. Emission still
+checks the binding and exact native call template. Local definitions, authored
+calls, unchecked expressions, and restored caches do not establish stability.
+Public comparison re-elaborates its source under the current explicit environment.
+This is a work-reuse rule, not a grammar, inference, or Lean-target change.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The pre-fix independent traversal-count tests failed: seven nested additions
+normalized 28 operator nodes; six nested negations normalized 21. The implementation
+now normalizes seven and six respectively, retaining exactly the original native
+comparison key in these fixtures. Interaction checks cover authored aliases under
+operators and newly competing overloads. This establishes removal of repeated
+subtree work, not completion or a speed ratio for the active-label study.
+
+The first focused command named a nonexistent `test_operator_bindings` module and
+failed to import it. The corrected command uses `test_declared_standard_operators`;
+its result and the broader native check are recorded below when complete.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The corrected focused run found an obsolete fixture import: the production
+operator test loaded a historical `.proposed` module without classifier metadata.
+The test now uses current explicit type/equality declarations and an independently
+declared Counting numeral type. Its first migration attempt imported a module
+with a conflicting default; the final fixture deliberately imports only types
+and declares equality before selecting its default. Historical study sources are
+unchanged. All 44 focused checks now pass, including retained numeral-constructor
+replay under a different default. Broader integration remains pending.
+:::

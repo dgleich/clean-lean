@@ -1548,3 +1548,18 @@ stored metadata and disposable caches never provide this witness. No parse,
 inference rule, persisted schema, or intended Lean target changes. See
 [active-label-performance.md](active-label-performance.md) for validation status.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Already-normalized native operator children
+
+Within one contextual-comparison traversal, a freshly normalized native operator
+or prefix application is stable when its retained binding identity still matches,
+its declaration is not Clean-authored with `Equals`, and every checked child is
+stable. Freshly checked numeral leaves are stable too. Such a subtree goes directly
+to comparison emission without another normalization traversal. Emission still
+checks the binding and exact native call template. Local definitions, authored
+calls, unchecked expressions, and restored caches do not establish stability.
+Public comparison re-elaborates its source under the current explicit environment.
+This is a work-reuse rule, not a grammar, inference, or Lean-target change.
+:::

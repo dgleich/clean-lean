@@ -26,6 +26,36 @@ class StableArguments(unittest.TestCase):
   with patch('cleanlang.conversion._normal_form',side_effect=counted):key=index_comparison(value,self.env,self.scope)
   self.assertEqual(len(calls),depth)
   self.assertEqual(key,value.lean)
+ def test_nested_native_operators_normalized_once(self):
+  import cleanlang.conversion as conversion
+  depth=7;value=self.expr('x'+'+1'*depth)
+  original=conversion._normal_form;calls=[]
+  def counted(value,*args,**kwargs):
+   if value.tree[0]=='Operator':calls.append(value.tree)
+   return original(value,*args,**kwargs)
+  with patch('cleanlang.conversion._normal_form',side_effect=counted):
+   result=index_comparison(value,self.env,self.scope)
+  self.assertEqual(len(calls),depth)
+  self.assertEqual(result,value.lean)
+ def test_prefix_operator_chain_normalized_once(self):
+  import cleanlang.conversion as conversion
+  depth=6;value=self.expr('-('*depth+'x'+')'*depth)
+  original=conversion._normal_form;calls=[]
+  def counted(value,*args,**kwargs):
+   if value.tree[0]=='Unary':calls.append(value.tree)
+   return original(value,*args,**kwargs)
+  with patch('cleanlang.conversion._normal_form',side_effect=counted):
+   result=index_comparison(value,self.env,self.scope)
+  self.assertEqual(len(calls),depth)
+  self.assertEqual(result,value.lean)
+ def test_operator_children_still_expand_authored_aliases(self):
+  self.assertEqual(index_comparison(self.expr('x+alias(x)'),self.env,self.scope),
+                   index_comparison(self.expr('x+retain(x)'),self.env,self.scope))
+ def test_public_operator_comparison_rechecks_new_overload(self):
+  value=self.expr('x+x')
+  notation('Notation other sum(x: Real,y: Real): Real:',
+           ['Means: x+y','Infix: +','Render latex: {x}+{y}'],self.env)
+  with self.assertRaises(CleanError):index_comparison(value,self.env,self.scope)
  def test_authored_alias_still_expands(self):
   self.assertEqual(index_comparison(self.expr('retain(alias(x))'),self.env,self.scope),
    index_comparison(self.expr('retain(retain(x))'),self.env,self.scope))
