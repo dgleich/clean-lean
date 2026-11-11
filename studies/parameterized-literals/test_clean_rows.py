@@ -326,7 +326,34 @@ class CleanRows(unittest.TestCase):
    with self.subTest(order=ordered):
     candidate=SimpleNamespace(fragment=SimpleNamespace(
      choices=(('literal',(0,),'a'),('literal',(1,),'b')),plans=ordered),expression=check)
-    with self.assertRaises(Incomplete):CandidateValues.validate_ground_literals(candidate,{})
+    with self.assertRaises(Incomplete):CandidateValues.validate_ground_applications(candidate,{})
+ def test_undemanded_call_checked_before_selection(self):
+  from unittest.mock import patch
+  from candidate_values import CandidateValues
+  self.vector_count();seen=[];original=CandidateValues.expression
+  def checked(candidate,path,bindings,defaulted=()):
+   seen.append(path);return original(candidate,path,bindings,defaulted)
+  with patch.object(CandidateValues,'expression',checked):
+   self.solve('vector count(n,0)',use_default=False)
+  self.assertIn((),seen)
+ def test_unavailable_undemanded_call_blocks_selection(self):
+  from unittest.mock import patch
+  from candidate_values import CandidateValues
+  self.vector_count();original=CandidateValues.expression
+  def checked(candidate,path,bindings,defaulted=()):
+   if path==():raise Incomplete('Unavailable root application')
+   return original(candidate,path,bindings,defaulted)
+  with patch.object(CandidateValues,'expression',checked):
+   with self.assertRaises(Incomplete):self.solve('vector count(n,0)',use_default=False)
+ def test_determined_application_type_mismatch_rejects_row(self):
+  from types import SimpleNamespace
+  from candidate_values import CandidateValues,ValuePlan
+  expected=Carrier('expected');actual=Carrier('actual')
+  plan=ValuePlan(Atom('output','index'),(),(),expected)
+  candidate=SimpleNamespace(fragment=SimpleNamespace(plans=(plan,)),
+   expression=lambda *_:SimpleNamespace(type=actual),
+   builder=SimpleNamespace(typ=lambda t,_:t,index=lambda _: (Atom('output','index'),None)))
+  with self.assertRaises(NoSolution):CandidateValues.validate_ground_applications(candidate,{})
  def test_unresolved_family_is_not_discarded(self):
   with self.assertRaises(Underdetermined):self.solve('0',use_default=False)
  def test_default_restricts_all_zeros_simultaneously(self):

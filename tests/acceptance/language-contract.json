@@ -3598,6 +3598,38 @@
         "General dependent candidate validity",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_ground_application_validity",
+      "status": "experimental-slice",
+      "environment": "Explicit linear algebra modules and Clean-authored vector count",
+      "source": "vector count(n,0)",
+      "expected_type": "Natural",
+      "expected_tree": [
+        "Call",
+        "vector count",
+        [
+          [
+            "Local",
+            "n"
+          ],
+          [
+            "Decimal",
+            "0"
+          ]
+        ]
+      ],
+      "expected_lean": "vectorCount n (complexVectorZero n), using exact declared wrapper identities",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Check determined calls and projections before selection, including actual versus symbolic result type and solved value index; unavailable checking blocks selection",
+      "pending": [
+        "Universal validity of unresolved symbolic families",
+        "General binder/evidence coverage",
+        "Production integration"
+      ]
     }
   ]
 }

@@ -1441,5 +1441,14 @@ An unavailable competing application blocks selection. Unresolved symbolic
 families remain a separate validity gap. See the
 <a href="../studies/parameterized-literals/README.md#checking-determined-literal-applications-before-selection">phase rule and production boundary</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="ground-application-validity">
+<h2>Checking determined calls and projections</h2>
+<p><code>vector count(n,0)</code> translates schematically to
+<code>vectorCount n (complexVectorZero n)</code>. Even when its value is unused by
+other type indices, the experimental adapter checks the application and compares
+its result type with the solved candidate type before selection. The rule also
+covers determined projection plans. See the
+<a href="../studies/parameterized-literals/README.md#checking-determined-calls-and-projections-before-selection">validation phase and unresolved-family boundary</a>.</p>
+</section></llm>
 </body>
 </html>

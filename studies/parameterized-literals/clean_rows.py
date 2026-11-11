@@ -197,7 +197,7 @@ class Builder:
             plans=base.plans
             if syntax is None:
                 requirements=tuple(dict.fromkeys(tuple(t for p in plans for t in p.requirements)+base.arguments))
-                plans+=(ValuePlan(output,path,requirements),)
+                plans+=(ValuePlan(output,path,requirements,typ),)
             results.append(Fragment(typ,output,
                 base.choices+(('projection',path,(spec['key'],tree[2])),),base.carriers,
                 base.arguments,base.equations,deferred,witnesses,syntax,origins,
@@ -268,7 +268,7 @@ class Builder:
                 output=Variable(repr((path,key,'value')),'index')
                 found.append(Fragment(carrier,output,
                     (('literal',path,key),),(carrier,),tuple(variables.values()),
-                    deferred=deferred,witnesses=witnesses,plans=(ValuePlan(output,path,tuple(variables.values())+(carrier,)),)))
+                    deferred=deferred,witnesses=witnesses,plans=(ValuePlan(output,path,tuple(variables.values())+(carrier,),carrier),)))
             if len(found)>self.limit:raise Incomplete('Literal declaration row limit exceeded')
             return found
         if kind in ('Operator','Unary'):
@@ -328,7 +328,7 @@ class Builder:
                 plans=tuple(p for a in actuals for p in a.plans)
                 if syntax is None:
                     requirements=tuple(dict.fromkeys(tuple(t for p in plans for t in p.requirements)+tuple(t for a in actuals for t in a.arguments)+implicit))
-                    plans+=(ValuePlan(output,path,requirements),)
+                    plans+=(ValuePlan(output,path,requirements,result),)
                 fields=();record_arguments=()
                 if isinstance(result,Carrier):
                     record=next((s for s in self.env.structures.values() if s['key']==result.identity),None)
@@ -375,7 +375,7 @@ class Builder:
             except NoSolution:continue
             self.row_values[f.choices]=values
             row=Row(f.choices,f.carriers,arguments,equations,values.checks())
-            try:values.validate_ground_literals(saturate(row,limit=self.limit))
+            try:values.validate_ground_applications(saturate(row,limit=self.limit))
             except NoSolution:continue
             rows.append(row)
         return rows
@@ -409,7 +409,7 @@ class Builder:
                         from candidate_values import CandidateValues
                         values=CandidateValues(self,tree,f,constraints,f.carriers+f.arguments)
                         bindings=saturate(Row((),(),(),constraints,values.checks()),limit=self.limit)
-                        values.validate_ground_literals(bindings)
+                        values.validate_ground_applications(bindings)
                     except NoSolution:continue
                     if any(variables(resolve(t,bindings)) for t in f.arguments):
                         raise Incomplete('Operator input applicability remains unresolved')

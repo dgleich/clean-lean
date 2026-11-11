@@ -1958,3 +1958,15 @@ Unresolved symbolic families retain the existing policy and are not claimed
 universally valid. See the [phase rule and integration gap](../studies/parameterized-literals/README.md#checking-determined-literal-applications-before-selection).
 No grammar or production compiler change is made.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental determined-application validity
+
+The post-saturation validity phase now covers calls and projections as well as
+literals. Reconstruction plans retain their symbolic result type; determined
+applications must elaborate to that type and agree with any solved value index.
+Missing checking blocks selection. See the [constructive extension and tests](../studies/parameterized-literals/README.md#checking-determined-calls-and-projections-before-selection).
+Unresolved symbolic families and production integration remain open. No syntax
+or parsing rule changes.
+:::

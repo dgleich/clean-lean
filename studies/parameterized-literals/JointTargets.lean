@@ -720,4 +720,11 @@ same_basic_target actualComputedLiteral1 expectedComputedLiteral1
 theorem meaningComputedLiteral1 (n : cleanType_Natural_469c53b6dafb7a218246) :
   (actualComputedLiteral1 n).entry = (fun _ => (0 : Complex)) := by rfl
 
+
+noncomputable def actualUndemandedCall (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Natural_469c53b6dafb7a218246 := (@_root_.cleanDefine_vector_count_00ecd8c9844201a439bd (n) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n))))
+noncomputable def expectedUndemandedCall (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Natural_469c53b6dafb7a218246 :=
+  @cleanDefine_vector_count_00ecd8c9844201a439bd n (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)
+same_basic_target actualUndemandedCall expectedUndemandedCall
+theorem meaningUndemandedCall (n : cleanType_Natural_469c53b6dafb7a218246) : actualUndemandedCall n = n := by rfl
+
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

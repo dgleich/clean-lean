@@ -317,8 +317,16 @@ same_basic_target actualComputedLiteral{i} expectedComputedLiteral{i}
 theorem meaningComputedLiteral{i} (n : {t('Natural')}) :
   {'actualComputedLiteral'+str(i)+' n = '+meaning if meaning else '(actualComputedLiteral'+str(i)+' n).entry = (fun _ => (0 : Complex))'} := by rfl
 """)
+value=Builder(env,scope).materialize(expression_tree(parse('vector count(n,0)','expression')),use_default=False)
+checks.append(f"""
+noncomputable def actualUndemandedCall (n : {t('Natural')}) : {t('Natural')} := {value.lean}
+noncomputable def expectedUndemandedCall (n : {t('Natural')}) : {t('Natural')} :=
+  @{f('vector count')} n (@{f('complex vector zero')} n)
+same_basic_target actualUndemandedCall expectedUndemandedCall
+theorem meaningUndemandedCall (n : {t('Natural')}) : actualUndemandedCall n = n := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Forty-five experimental joint-row targets and forty-five meaning proofs passed; production joint inference remains unimplemented.')
+print('Forty-six experimental joint-row targets and forty-six meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

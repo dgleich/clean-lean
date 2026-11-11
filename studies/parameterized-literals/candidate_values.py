@@ -11,6 +11,7 @@ class ValuePlan:
     output: object
     path: tuple
     requirements: tuple
+    result_type: object=None
 
 @dataclass(frozen=True)
 class IndexPlan:
@@ -53,26 +54,27 @@ class CandidateValues:
         # of the demand fixed point's visitation order.
         self.active=tuple(p for p in fragment.plans if p in active)
 
-    def validate_ground_literals(self,bindings):
-        """Check determined literal applications after forward constraints settle.
+    def validate_ground_applications(self,bindings):
+        """Check determined candidate applications after forward constraints settle.
 
         Symbolic families remain subject to the existing selection/default rules;
         this does not claim their universal telescope validity.
         """
-        literal_paths={path for kind,path,_ in self.fragment.choices if kind=='literal'}
         incomplete=False;mismatch=False
         for plan in self.fragment.plans:
-            if plan.path not in literal_paths:continue
-            if any(variables(resolve(t,bindings)) for t in plan.requirements):continue
+            needed=plan.requirements+(() if plan.result_type is None else (plan.result_type,))
+            if any(variables(resolve(t,bindings)) for t in needed):continue
             try:
                 value=self.expression(plan.path,bindings)
+                if plan.result_type is not None and self.builder.typ(value.type,{})!=resolve(plan.result_type,bindings):
+                    mismatch=True
                 expected=resolve(plan.output,bindings)
                 if not variables(expected) and self.builder.index(value)[0]!=expected:
                     mismatch=True
             except Incomplete:incomplete=True
             except NoSolution:mismatch=True
-        if incomplete:raise Incomplete('A determined literal application check is incomplete')
-        if mismatch:raise NoSolution('Checked literal value differs from candidate index')
+        if incomplete:raise Incomplete('A determined candidate application check is incomplete')
+        if mismatch:raise NoSolution('Checked application differs from candidate type or index')
 
     def checks(self):
         checks=[p for p in self.fragment.deferred if not isinstance(p,IndexPlan)]

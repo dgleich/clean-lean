@@ -1226,3 +1226,32 @@ batch regression checks that unavailable checking takes precedence over mismatch
 All 187 experimental tests, 45 exact native targets and 45 supporting proofs pass.
 The existing full production and active-label jobs remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Checking determined calls and projections before selection
+
+The post-saturation validity phase now covers every reconstruction plan, including
+ordinary calls and projections, rather than exact literals alone. Each plan stores
+its symbolic result type. When its reconstruction requirements and result type are
+ground, elaborate the expression in the fixed scope and compare the checked result
+type with that solved type. If its value already has a solved index, compare that
+index as well. Call reconstruction still verifies inferred implicit arguments.
+Unresolved plans retain the explicitly incomplete universal-validity coverage of
+the preceding entry; this is not a claim about every symbolic candidate.
+
+For example, `vector count(n,0)` returns a Natural and need not supply a dimension
+to another expression. It now checks the application before selection, with
+schematic Lean target `vectorCount n (complexVectorZero n)`. The same mechanism
+covers dynamic projections and constructors; static concrete calls already have
+forward checking obligations. Expected-result constraints remain excluded from
+operator input auditing. No parser or production inference behavior changes.
+
+The negative tests inject unavailable checking of an otherwise undemanded root
+call and a checked result type unequal to the symbolic candidate type. A positive
+observation checks that root application elaboration occurs before selection.
+The native oracle independently spells the standalone vector-count application.
+Validation: all 190 experimental tests, 46 exact native targets and 46 supporting
+proofs pass. Provenance checks pass. Production full discovery and active-label
+verification remain live and pending in their fixed-snapshot jobs.
+:::
