@@ -1402,3 +1402,45 @@ proofs pass. Nested local calls and nonfunction locals with no module callable
 also have regressions. Provenance checks pass. Production full discovery and
 active-label verification remain pending in the projection-reuse snapshot.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Function-valued expressions and application
+
+The experimental adapter now handles the existing Apply syntax, including
+`q.map(0)` for a function-valued field and `make map(n,0)(0)` for a function
+returned by a call. The callee expression is retained; it is not converted to a
+new module name. For a checked field `Function(Vector(n,Complex),Real)`, the
+schematic Lean term is `(MapHolder.map n q) (complexVectorZero n)`.
+A checked dependent field `Function(k: Natural,Vector((k+1),Complex))` uses the
+same forward substitution as a local dependent callback.
+
+If the callee contains no literal holes, elaborate it in the fixed caller scope
+and use its checked domain/codomain with the shared unary application rule.
+Otherwise enumerate callee and argument fragments jointly. A determined nominal
+function carrier supplies its two symbolic type arguments as domain/codomain;
+equate the argument type with the domain, retain both fragments' constraints and
+witnesses, and add an application value plan. A definite nonfunction carrier
+rejects that combination; an unresolved head type is incomplete. The existing row
+limit applies to the Cartesian product. Inferred dependent-function heads remain
+outside this nominal-carrier rule rather than being treated as nondependent.
+
+Application plans require callee/argument recovery parameters and their types.
+Reconstruction preserves Apply with reconstructed head and argument. The
+post-saturation checker validates determined applications' types and solved values.
+The operator-input audit and selected native-choice validation now traverse both
+callee and argument. Thus an expected result cannot hide an operator-input tie
+inside `make map(n,r+0)(0)`. Caller representatives are collected in source order,
+with a known callee checked before its argument.
+
+Tests cover ordinary and dependent function fields, inferred returned functions,
+conflicting expected results, retained codec replay and operator ambiguity inside
+the callee. Three independent native oracles spell the field projection and
+application wrappers. Lambda/quantifier regions, inferred dependent-function
+heads, general callable proof views, universal symbolic-family validity and
+production joint inference remain open. No grammar change is introduced.
+
+Validation: all 215 experimental tests, 58 exact native targets and 58 supporting
+proofs pass. Provenance checks pass. The projection-reuse full discovery and
+active-label validation jobs remain pending.
+:::

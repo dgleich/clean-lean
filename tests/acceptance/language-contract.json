@@ -3737,6 +3737,41 @@
         "Universal symbolic-family validity",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_function_expression_inference",
+      "status": "experimental-slice",
+      "environment": "Explicit linear algebra modules and MapHolder with a Vector(n,Complex) to Real field",
+      "source": "q.map(0)",
+      "expected_tree": [
+        "Apply",
+        [
+          "Projection",
+          [
+            "Local",
+            "q"
+          ],
+          "map"
+        ],
+        [
+          [
+            "Decimal",
+            "0"
+          ]
+        ]
+      ],
+      "expected_lean": "(MapHolder.map n q) (complexVectorZero n), with exact declared wrapper identities",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Check known callee types or combine nominal function-head and argument fragments; preserve Apply and audit nested operators/native choices; no expected-result tie breaking",
+      "pending": [
+        "Inferred dependent-function heads",
+        "Binder regions and callable proof views",
+        "Universal symbolic-family validity",
+        "Production integration"
+      ]
     }
   ]
 }

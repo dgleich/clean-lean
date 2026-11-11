@@ -211,11 +211,13 @@ class Builder:
         return results
 
     def local_call_fragments(self,tree,path):
+        return self.checked_application_fragments(self.scope[tree[1]],tree,path,('local call',path,tree[1]))
+
+    def checked_application_fragments(self,function,tree,path,choice):
         from candidate_values import ValuePlan
         from cleanlang.dependent_functions import DependentFunctionType
-        function=self.scope[tree[1]]
-        if not self.env.is_function_type(function.type) or len(tree[2])!=1:
-            raise Incomplete('Local application requires a checked unary function')
+        if not self.env.is_function_type(function.type) or len(function.type.args)!=2 or len(tree[2])!=1:
+            raise Incomplete('Application requires a checked unary function')
         domain,codomain=function.type.args
         domain_term=self.typ(domain)
         results=[]
@@ -229,10 +231,34 @@ class Builder:
             output=Variable(repr((path,'local application value')),'index')
             requirements=tuple(dict.fromkeys(tuple(t for p in argument.plans for t in p.requirements)+argument.arguments+(argument.typ,result)))
             results.append(Fragment(result,output,
-                argument.choices+(('local call',path,tree[1]),),argument.carriers,
+                argument.choices+(choice,),argument.carriers,
                 argument.arguments,argument.equations+((argument.typ,domain_term),),
                 argument.deferred+deferred,argument.witnesses+witnesses,
                 plans=argument.plans+(ValuePlan(output,path,requirements,result),)))
+        return results
+
+    def application_fragments(self,tree,path):
+        from candidate_values import ValuePlan
+        if len(tree[2])!=1:raise Incomplete('Application requires one argument')
+        if not holes(tree[1]):
+            return self.checked_application_fragments(self.known[path+(1,)],tree,path,('application',path,'checked'))
+        heads=self.fragments(tree[1],path+(1,))
+        arguments=self.fragments(tree[2][0],path+(2,0))
+        if len(heads)*len(arguments)>self.limit:raise Incomplete('Application row limit exceeded')
+        functions={self.carrier_identity(n) for n in self.env.data['types'] if self.env.is_function_type(Type(n))}
+        results=[]
+        for head,argument in product(heads,arguments):
+            if not isinstance(head.typ,Carrier):raise Incomplete('Application head type unresolved')
+            if head.typ.identity not in functions or len(head.typ.arguments)!=2:continue
+            domain,result=head.typ.arguments
+            output=Variable(repr((path,'application value')),'index')
+            plans=head.plans+argument.plans
+            requirements=tuple(dict.fromkeys(tuple(t for p in plans for t in p.requirements)+head.arguments+argument.arguments+(head.typ,argument.typ,result)))
+            results.append(Fragment(result,output,
+                head.choices+argument.choices+(('application',path,'inferred'),),head.carriers+argument.carriers,
+                head.arguments+argument.arguments,head.equations+argument.equations+((argument.typ,domain),),
+                head.deferred+argument.deferred,head.witnesses+argument.witnesses,
+                plans=plans+(ValuePlan(output,path,requirements,result),)))
         return results
 
     def known_fragment(self,value,atom=None,*,optional=False):
@@ -276,6 +302,7 @@ class Builder:
             return [self.known_fragment(self.known[path],self.known_values[path])]
         kind=tree[0]
         if kind=='Projection':return self.projection_fragments(tree,path)
+        if kind=='Apply':return self.application_fragments(tree,path)
         if kind=='Call' and tree[1] in self.scope and self.env.is_function_type(self.scope[tree[1]].type):
             return self.local_call_fragments(tree,path)
         if kind=='Decimal':
@@ -389,7 +416,15 @@ class Builder:
                 except CleanError as error:
                     raise Incomplete('Known argument index is unsupported: '+str(error)) from error
                 return
-            if node[0]=='Projection':prepare(node[1],path+(1,))
+            if node[0]=='Apply':
+                if not holes(node[1]):
+                    from cleanlang.dependent_functions import DependentFunctionType
+                    head=Expressions(self.env,self.scope).elaborate(node[1])
+                    self.known[path+(1,)]=head
+                    if not isinstance(head.type,DependentFunctionType):self.typ(head.type)
+                else:prepare(node[1],path+(1,))
+                for i,arg in enumerate(node[2]):prepare(arg,path+(2,i))
+            elif node[0]=='Projection':prepare(node[1],path+(1,))
             elif node[0]=='Call':
                 for i,arg in enumerate(node[2]):prepare(arg,path+(2,i))
             elif node[0] in ('Operator','Unary'):
@@ -448,6 +483,9 @@ class Builder:
                     viable.add(f.choices[-1][2])
                 if len(viable)>1:raise Ambiguous('Operator input signatures are ambiguous independently of the expected result')
                 for i in range(2,len(node)):walk(node[i],path+(i,))
+            elif kind=='Apply':
+                walk(node[1],path+(1,))
+                for i,arg in enumerate(node[2]):walk(arg,path+(2,i))
             elif kind=='Projection':walk(node[1],path+(1,))
             elif kind=='Call':
                 for i,arg in enumerate(node[2]):walk(arg,path+(2,i))
@@ -523,6 +561,7 @@ class Builder:
                           Annotation(str(target),target,references(target,self.scope)),origin]
                 literal(retained,self.env,self.scope)
                 return retained
+            if node[0]=='Apply':return ['Apply',replace(node[1],path+(1,)),[replace(a,path+(2,i)) for i,a in enumerate(node[2])]]
             if node[0]=='Projection':return [node[0],replace(node[1],path+(1,)),node[2]]
             if node[0]=='Call':return [node[0],node[1],[replace(a,path+(2,i)) for i,a in enumerate(node[2])]]
             if node[0] in ('Operator','Unary'):return [*node[:2],*[replace(node[i],path+(i,)) for i in range(2,len(node))]]
@@ -533,6 +572,10 @@ class Builder:
         def check(value,path):
             source=rebuilt
             for i in path:source=source[i]
+            if source[0]=='Apply':
+                check(Expressions(self.env,self.scope).elaborate(source[1]),path+(1,))
+                for i,arg in enumerate(source[2]):check(Expressions(self.env,self.scope).elaborate(arg),path+(2,i))
+                return
             if source[0]=='Projection':
                 check(Expressions(self.env,self.scope).elaborate(source[1]),path+(1,))
                 return

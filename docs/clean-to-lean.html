@@ -1485,5 +1485,14 @@ use checked substitution, and a callback's value may supply another dimension.
 A local function shadows a same-named module callable; a nonfunction local does
 not. See the <a href="../studies/parameterized-literals/README.md#local-function-calls-in-joint-inference">construction and remaining higher-order limits</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="application-literal-inference">
+<h2>Experimental inference through function expressions</h2>
+<p><code>q.map(0)</code> maps schematically to
+<code>(MapHolder.map n q) (complexVectorZero n)</code>. For
+<code>make map(n,0)(0)</code>, the returned Function carrier constrains the outer
+literal. Checked dependent field types use forward substitution. Operator auditing
+also traverses the callee expression. See the
+<a href="../studies/parameterized-literals/README.md#function-valued-expressions-and-application">precise construction and remaining binder/dependent-head limits</a>.</p>
+</section></llm>
 </body>
 </html>

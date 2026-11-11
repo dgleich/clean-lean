@@ -156,6 +156,7 @@ class CandidateValues:
                       for p in b.signature(spec).parameters]
                 return ['BoundLiteral',digits(node[1]),node[1],name,snapshot(name,env),args,
                         Annotation(str(target),target,references(target,scope)),origin]
+            if kind=='Apply':return ['Apply',reconstruct(node[1],where+(1,)),[reconstruct(a,where+(2,i)) for i,a in enumerate(node[2])]]
             if kind=='Projection':return ['Projection',reconstruct(node[1],where+(1,)),node[2]]
             if kind=='Call' and ('local call',where) in self.choices:
                 if self.choices['local call',where]!=node[1]:raise Incomplete('Changed local callable')

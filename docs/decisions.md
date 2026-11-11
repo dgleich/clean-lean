@@ -2019,3 +2019,16 @@ the local call and validates nested selected module calls. See the
 General Apply/binder regions and production integration remain open; no syntax
 change is introduced.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental inference through application expressions
+
+Apply expressions now combine checked callee domains or inferred nominal Function
+carriers with argument constraints. Reconstruction retains the callee expression;
+operator auditing and native-choice checks traverse both sides. Checked dependent
+callee types use forward substitution. See the
+[constructive rule and limitations](../studies/parameterized-literals/README.md#function-valued-expressions-and-application).
+Inferred dependent heads, binder regions and production integration remain open.
+The existing grammar and parse are unchanged.
+:::

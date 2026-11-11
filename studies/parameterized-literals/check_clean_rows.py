@@ -395,8 +395,34 @@ same_basic_target actualLocalCall{i} expectedLocalCall{i}
 theorem meaningLocalCall{i} {binders} :
   {'(actualLocalCall'+str(i)+' n local_f).entry = (fun _ => (0 : Complex))' if meaning else 'actualLocalCall'+str(i)+' n local_f = '+expected} := by rfl
 """)
+for i,dependent in enumerate([False,True]):
+ name='DependentMapHolder' if dependent else 'MapHolder'
+ function='Function(k: Natural,Vector((k+1),Complex))' if dependent else 'Function(Vector(n,Complex),Real)'
+ declare(f'Structure {name}(n: Natural):',[f'Let map: {function}','Constructor: dependent holder' if dependent else 'Constructor: ordinary holder'],env)
+ local_scope=dict(scope);local_scope['q']=Expr('q','q',env.type(f'{name}(n)',scope),tree=['Local','q'])
+ source='q.map(2)' if dependent else 'q.map(0)'
+ value=Builder(env,local_scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ record=env.structures[name]['key'];arg=ntwo if dependent else f"@{f('complex vector zero')} n"
+ result=f"{t('Vector')} ({f('natural sum')} ({ntwo}) ({one})) {t('Complex')}" if dependent else t('Real')
+ expected=f"(@{record}.map n q) ({arg})"
+ checks.append(f"""
+noncomputable def actualFieldApply{i} (n : {t('Natural')}) (q : {record} n) : {result} := {value.lean}
+noncomputable def expectedFieldApply{i} (n : {t('Natural')}) (q : {record} n) : {result} := {expected}
+same_basic_target actualFieldApply{i} expectedFieldApply{i}
+theorem meaningFieldApply{i} (n : {t('Natural')}) (q : {record} n) : actualFieldApply{i} n q = {expected} := by rfl
+""")
+notation('Notation make map(n: Natural,x: Real): Function(Vector(n,Complex),Real):',
+ ['Means: fun _ => x','Render latex: map({n},{x})'],env)
+value=Builder(env,scope).materialize(expression_tree(parse('make map(n,0)(0)','expression')),use_default=False)
+expected=f"(@{f('make map')} n ({nr} (nat_lit 0))) (@{f('complex vector zero')} n)"
+checks.append(f"""
+noncomputable def actualInferredApply (n : {t('Natural')}) : {t('Real')} := {value.lean}
+noncomputable def expectedInferredApply (n : {t('Natural')}) : {t('Real')} := {expected}
+same_basic_target actualInferredApply expectedInferredApply
+theorem meaningInferredApply (n : {t('Natural')}) : actualInferredApply n = ({nr} (nat_lit 0)) := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Fifty-five experimental joint-row targets and fifty-five meaning proofs passed; production joint inference remains unimplemented.')
+print('Fifty-eight experimental joint-row targets and fifty-eight meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

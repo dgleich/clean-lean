@@ -803,6 +803,44 @@ class CleanRows(unittest.TestCase):
   value=Builder(self.e,self.scope).materialize(expression_tree(parse('f(g(0))','expression')),use_default=False)
   self.assertEqual(value.type,self.e.type('Natural'))
   self.assertEqual(value.tree[2][0][2][0][2],'Real')
+ def map_holder(self,dependent=False):
+  from cleanlang.structures import declare
+  function='Function(k: Natural,Vector((k+1),Complex))' if dependent else 'Function(Vector(n,Complex),Real)'
+  declare('Structure MapHolder(n: Natural):',[f'Let map: {function}','Constructor: map holder'],self.e)
+  self.scope['q']=Expr('q','q',self.e.type('MapHolder(n)',self.scope),tree=['Local','q'])
+ def test_function_field_application_constrains_literal(self):
+  self.map_holder()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('q.map(0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Real'))
+  self.assertEqual(value.tree[0],'Apply')
+  self.assertEqual(value.tree[2][0][3],'complex vector zero')
+ def test_dependent_function_field_application(self):
+  self.map_holder(True)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('q.map(2)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+1),Complex)',self.scope))
+ def map_producer(self):
+  notation('Notation make map(n: Natural,x: Real): Function(Vector(n,Complex),Real):',
+   ['Means: fun _ => x','Render latex: map({n},{x})'],self.e)
+ def test_inferred_function_expression_application(self):
+  self.map_producer()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('make map(n,0)(0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Real'))
+  self.assertEqual(value.tree[2][0][3],'complex vector zero')
+ def test_application_conflicting_expected_type_rejected(self):
+  self.map_producer()
+  with self.assertRaises(NoSolution):
+   self.solve('make map(n,0)(0)',expected=self.e.type('Complex'),use_default=False)
+ def test_application_retained_codec(self):
+  from cleanlang.core import Expressions
+  from cleanlang.retained_codec import dumps,loads
+  self.map_producer()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('make map(n,0)(0)','expression')),use_default=False)
+  self.assertEqual(Expressions(self.e,self.scope).elaborate(loads(dumps(value.tree))).lean,value.lean)
+ def test_application_audits_operator_inside_callee(self):
+  self.map_producer()
+  notation('Notation alternative(x: Real,y: Real): Complex:',
+   ['Means: 0','Infix: +','Render latex: {x}+{y}'],self.e)
+  with self.assertRaises(Ambiguous):self.solve('make map(n,r+0)(0)',use_default=False)
  def shifted_literal(self):
   notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
    ['Means: fun _ _ => (0 : Complex)','Literal: 7','Render latex: 7'],self.e)
