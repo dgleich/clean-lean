@@ -1339,5 +1339,13 @@ continues and that transient pool stops trying to cache further comparisons.
 Later public comparisons start fresh. No Clean syntax or Lean target rule changes.
 See the <a href="comparison-reuse.md#stop-repeated-unavailable-snapshot-attempts">reuse and validation contract</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="reserved-name-graph">
+<h2>Reserved-name graph traversal</h2>
+<p>Fresh binder allocation collects the union of identifier tokens from the
+explicit environment. Shared containers are visited once, and identical text
+sets reuse the lexical token union. Later scans reread mutable contents. This
+changes neither a Clean parse nor its Lean target; see the
+<a href="comparison-token-cache.md">preservation argument and diagnostics</a>.</p>
+</section></llm>
 </body>
 </html>

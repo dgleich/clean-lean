@@ -29,15 +29,20 @@ def key(term,owned):
 
 def environment_tokens(environment):
     """Cache only the pure token union of an identical immutable text snapshot."""
-    texts=[]
-    def collect(value):
-        if isinstance(value,str):texts.append(str(value))
-        elif isinstance(value,dict):
-            for k,v in value.items():collect(k);collect(v)
-        elif isinstance(value,(tuple,list)):
-            for v in value:collect(v)
-    collect(environment.data);collect(environment.notation_definitions)
-    snapshot=tuple(texts)
+    texts=set();pending=[environment.data,environment.notation_definitions];seen={}
+    while pending:
+        value=pending.pop()
+        if isinstance(value,str):
+            texts.add(str(value))
+        elif isinstance(value,(dict,tuple,list)):
+            identity=id(value)
+            if identity in seen:continue
+            # Keep references alive while scanning; IDs never enter the key.
+            seen[identity]=value
+            if isinstance(value,dict):
+                pending.extend(value.keys());pending.extend(value.values())
+            else:pending.extend(value)
+    snapshot=frozenset(texts)
     cached=getattr(environment,'_comparison_reserved_tokens',None)
     if cached is None or cached[0]!=snapshot:
         cached=(snapshot,frozenset(token for text in snapshot for token in re.findall(ID,text)))

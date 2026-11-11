@@ -34,6 +34,37 @@ class Reservation(unittest.TestCase):
   pool=Pool(env,{},['Local','x'])
   local={'y':Expr('clean_comparison_identity_0','y',Type('Real'))}
   self.assertEqual(pool.fresh(local),'clean_comparison_identity_1')
+ def test_shared_containers_are_scanned_once(self):
+  class Counted(list):
+   visits=0
+   def __iter__(self):self.visits+=1;return super().__iter__()
+  shared=Counted(['clean_comparison_identity_0'])
+  env=SimpleNamespace(data={'first':[shared]*100,'second':shared},notation_definitions={})
+  tokens=environment_tokens(env)
+  self.assertEqual(shared.visits,1)
+  self.assertEqual(tokens,frozenset(['first','second','clean_comparison_identity_0']))
+ def test_text_set_is_independent_of_order_and_sharing(self):
+  a=SimpleNamespace(data={'a':['x','y','x'],'b':['y']},notation_definitions={'body':'z'})
+  b=SimpleNamespace(data={'b':['y','x'],'a':['x','y']},notation_definitions={'body':'z'})
+  self.assertEqual(environment_tokens(a),environment_tokens(b))
+  self.assertEqual(a._comparison_reserved_tokens[0],b._comparison_reserved_tokens[0])
+ def test_shared_mutations_are_read_by_later_scan(self):
+  shared=['clean_comparison_identity_0']
+  env=SimpleNamespace(data=[shared,shared],notation_definitions={})
+  self.assertIn('clean_comparison_identity_0',environment_tokens(env))
+  shared[:]=['clean_comparison_identity_1']
+  current=environment_tokens(env)
+  self.assertNotIn('clean_comparison_identity_0',current)
+  self.assertIn('clean_comparison_identity_1',current)
+ def test_deep_shared_graph_reserves_every_collision_token(self):
+  graph=['clean_comparison_identity_0']
+  for _ in range(2000):graph=[graph,graph]
+  env=SimpleNamespace(data=graph,notation_definitions={'body':'clean_comparison_identity_1'})
+  self.assertEqual(Pool(env,{},['Local','x']).fresh({}),'clean_comparison_identity_2')
+ def test_dictionary_keys_and_native_bodies_are_scanned(self):
+  env=SimpleNamespace(data={('clean_comparison_identity_0','key'):['value']},
+   notation_definitions={'native':'def clean_comparison_identity_1 := value'})
+  self.assertEqual(Pool(env,{},['Local','x']).fresh({}),'clean_comparison_identity_2')
  def test_binder_free_comparison_does_not_scan_environment(self):
   env=Environment();load_module(ROOT/'library/operators.clean',env)
   local={'x':Expr('x','x',env.type('Real'),tree=['Local','x'])}

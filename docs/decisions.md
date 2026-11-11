@@ -1823,3 +1823,15 @@ pool. This changes optional optimization effort only. The unchanged target rule,
 mutation checks and profiling limits are documented in the
 [comparison contract](comparison-reuse.md#stop-repeated-unavailable-snapshot-attempts).
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Shared graph traversal for reserved names
+
+Fresh-name reservation scans each reachable environment container once and caches
+an immutable set of distinct text leaves. Multiplicity, order and sharing do not
+change the identifier-token union. Every later scan rereads mutable contents;
+identities are traversal bookkeeping only, never semantic cache keys. Grammar,
+scope and constructive Lean mapping remain unchanged. See the
+[union-preservation argument and validation limits](comparison-token-cache.md).
+:::

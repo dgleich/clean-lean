@@ -3316,6 +3316,26 @@
       "pending": [
         "Full production discovery"
       ]
+    },
+    {
+      "id": "reserved_name_shared_graph",
+      "status": "implemented-optimization",
+      "environment": "Fixed explicit environment, synchronous access; dictionary/list/tuple graph with shared subcontainers and mutable string leaves",
+      "source": "Existing Clean syntax; no new constructor",
+      "expected_tree": "Unchanged input tree",
+      "expected_lean": "Identical least-unused fresh-binder sequence and canonical Lean target regardless of graph sharing, traversal order or cache warmth",
+      "checks": [
+        "tests/test_lazy_reservation.py",
+        "tests/test_comparison_token_cache.py",
+        "tests/test_contextual_key_contract.py",
+        "tests/test_contextual_family_comparison.py",
+        "tests/test_stable_arguments.py"
+      ],
+      "obligation": "Union of identifier tokens over all reachable strings; fresh scan observes mutations; identities never enter semantic keys; see docs/comparison-token-cache.md",
+      "pending": [
+        "Full production discovery",
+        "Complete active-label native verification"
+      ]
     }
   ]
 }
