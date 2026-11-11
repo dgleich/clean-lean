@@ -1961,3 +1961,15 @@ Missing checking blocks selection. See the [constructive extension and tests](..
 Unresolved symbolic families and production integration remain open. No syntax
 or parsing rule changes.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental type-formal index substitution
+
+Computed index plans may now reconstruct inferred Type-0 carrier formals using
+the classifier captured in the checked callable signature. Symbolic formal identity
+selects that classifier; ambient classifier search does not. Missing evidence is
+incomplete. See the [rule, readable specimen and remaining boundaries](../studies/parameterized-literals/README.md#computed-indices-depending-on-inferred-types).
+Higher universes, explicit classifier operands and general symbolic validity
+remain open. No parsing or production inference rule changes.
+:::

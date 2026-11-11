@@ -325,8 +325,32 @@ noncomputable def expectedUndemandedCall (n : {t('Natural')}) : {t('Natural')} :
 same_basic_target actualUndemandedCall expectedUndemandedCall
 theorem meaningUndemandedCall (n : {t('Natural')}) : actualUndemandedCall n = n := by rfl
 """)
+from cleanlang.modules import type_declaration
+type_declaration('Type Small():',['Universe: 1','Classifies: 0','Means: Type','Render latex: S'],env)
+for j,classifier in enumerate(['Type','Small']):
+ extent='carrier extent' if j==0 else 'small extent'
+ copier='typed vector' if j==0 else 'small vector'
+ notation(f'Notation {extent}(T: {classifier}): Natural:',
+  ['Means: 2','Render latex: extent({T})'],env)
+ notation(f'Define {copier}(x,y):',
+  [f'Let T: {classifier}','Let x: T',f'Let y: Vector(({extent}(T)),Complex)',
+   f'Returns: Vector(({extent}(T)),Complex)','Equals: y','Render latex: vector({x},{y})'],env,authored=True)
+ for k,arg in enumerate(['n','1'] if j==0 else ['n']):
+  source=f'{copier}({arg},0)'
+  value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')))
+  index=f"@{f(extent)} {t('Natural')}"
+  zero=f"@{f('complex vector zero')} ({index})"
+  actual_arg='n' if arg=='n' else one
+  checks.append(f"""
+noncomputable def actualClassifierIndex{j}_{k} (n : {t('Natural')}) : {t('Vector')} ({index}) {t('Complex')} := {value.lean}
+noncomputable def expectedClassifierIndex{j}_{k} (n : {t('Natural')}) : {t('Vector')} ({index}) {t('Complex')} :=
+  @{f(copier)} {t('Natural')} ({actual_arg}) ({zero})
+same_basic_target actualClassifierIndex{j}_{k} expectedClassifierIndex{j}_{k}
+theorem meaningClassifierIndex{j}_{k} (n : {t('Natural')}) :
+  actualClassifierIndex{j}_{k} n = (fun _ => (0 : Complex)) := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Forty-six experimental joint-row targets and forty-six meaning proofs passed; production joint inference remains unimplemented.')
+print('Forty-nine experimental joint-row targets and forty-nine meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

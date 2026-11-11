@@ -694,6 +694,39 @@ class CleanRows(unittest.TestCase):
   self.assertTrue(found)
   self.assertEqual(set(found),{'defaulted'})
 
+ def typed_extent(self,classifier="Type"):
+  notation(f'Notation carrier extent(T: {classifier}): Natural:',
+   ['Means: 2','Render latex: extent({T})'],self.e)
+  notation('Define typed vector(x,y):',
+   [f'Let T: {classifier}','Let x: T','Let y: Vector((carrier extent(T)),Complex)',
+    'Returns: Vector((carrier extent(T)),Complex)','Equals: y','Render latex: vector({x},{y})'],self.e,authored=True)
+ def test_computed_index_uses_captured_implicit_classifier(self):
+  self.typed_extent()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('typed vector(n,0)','expression')),use_default=False)
+  expected=self.e.type('Vector((carrier extent(type(Natural))),Complex)',self.scope)
+  self.assertEqual(value.type,expected)
+ def test_computed_index_classifier_with_scalar_literal(self):
+  self.typed_extent()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('typed vector(1,0)','expression')))
+  self.assertEqual(value.type,self.e.type('Vector((carrier extent(type(Natural))),Complex)',self.scope))
+ def test_computed_index_uses_declared_alternate_classifier(self):
+  type_declaration('Type Small():',['Universe: 1','Classifies: 0','Means: Type','Render latex: S'],self.e)
+  self.typed_extent('Small')
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('typed vector(n,0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector((carrier extent(type(Natural:Small))),Complex)',self.scope))
+ def test_computed_index_missing_classifier_is_incomplete(self):
+  from unittest.mock import patch
+  self.typed_extent();original=Builder.telescope
+  def capture(builder,spec,path):
+   result=original(builder,spec,path);builder.formal_classifiers.clear();return result
+  with patch.object(Builder,'telescope',capture):
+   with self.assertRaises(Incomplete):self.solve('typed vector(n,0)',use_default=False)
+ def test_computed_index_classifier_retained_codec(self):
+  from cleanlang.core import Expressions
+  from cleanlang.retained_codec import dumps,loads
+  self.typed_extent()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('typed vector(n,0)','expression')),use_default=False)
+  self.assertEqual(Expressions(self.e,self.scope).elaborate(loads(dumps(value.tree))).lean,value.lean)
  def shifted_literal(self):
   notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
    ['Means: fun _ _ => (0 : Complex)','Literal: 7','Render latex: 7'],self.e)

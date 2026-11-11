@@ -1255,3 +1255,58 @@ Validation: all 190 experimental tests, 46 exact native targets and 46 supportin
 proofs pass. Provenance checks pass. Production full discovery and active-label
 verification remain live and pending in their fixed-snapshot jobs.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Computed indices depending on inferred types
+
+The experimental forward substitution rule now supports a computed index whose
+formal argument is an inferred Type-0 carrier. For example:
+
+```clean
+Notation carrier extent(T: Type): Natural:
+  Means: 2
+  Render latex: extent({T})
+
+Define typed vector(x,y):
+  Let T: Type
+  Let x: T
+  Let y: Vector((carrier extent(T)),Complex)
+  Returns: Vector((carrier extent(T)),Complex)
+  Equals: y
+  Render latex: vector({x},{y})
+```
+
+`typed vector(n,0)` with `n: Natural` has schematic Lean target
+`@typedVector Natural n (complexVectorZero (@carrierExtent Natural))`.
+The declared extent wrapper is retained instead of replaced by the numeral 2.
+The author writes `carrier extent(type(Natural))` when explicitly supplying a
+type value in a computed expression; a bare `Natural` there is not a local value.
+
+Telescope conversion records each classifier parameter's captured checked type,
+keyed by the symbolic formal variable (source path, native declaration identity,
+and parameter name). Forward index reconstruction resolves that variable to a
+checked carrier representative and reifies it using this exact classifier before
+substitution. It does not select a classifier by spelling or environment order.
+Missing classifier evidence is incomplete. Value-sorted formals retain the previous
+checked value reconstruction rule. The source template and unique forward output
+equation are unchanged.
+
+A second module-declared classifier `Small` can classify the same Lean universe.
+The regression requires a signature declared with `Small` to use that classifier
+even while the ordinary `Type` classifier is available. Other tests cover inferred
+Natural from a caller value, scalar-literal defaulting, retained codec replay and
+missing captured classifier evidence. Three independent native expectations spell
+the actual implicit carrier and extent wrappers for the ordinary, defaulted and
+alternate-classifier examples.
+
+This closes the inferred Type-0 formal case only. General higher universes,
+explicit classifier-valued operands in the experimental fragment builder,
+classifier-dependent static-evidence paths, and arbitrary dependent classifiers
+remain outside this slice. Unresolved symbolic-family validity and production
+integration also remain open; no new syntax or production behavior is claimed.
+
+Validation: 195 experimental tests, 49 exact native targets and 49 supporting
+proofs pass. Provenance checks pass. Full production discovery and active-label
+verification remain pending in their existing fixed-snapshot jobs.
+:::

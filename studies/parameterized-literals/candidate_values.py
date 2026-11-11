@@ -107,10 +107,14 @@ class CandidateValues:
     def _index_value(self,plan,representatives):
         from cleanlang.inferred_conversion import reify
         from cleanlang.indices import substitute_index
-        if any(term.sort!='index' for _,term in plan.formals):
-            raise Incomplete('Computed formal classifier arguments remain unsupported')
-        b=self.builder
-        actuals={name:reify(representatives.get(term),b.env,b.scope) for name,term in plan.formals}
+        b=self.builder;actuals={}
+        for name,term in plan.formals:
+            classifier=None
+            if term.sort=='type':
+                classifier=b.formal_classifiers.get(term)
+                if classifier is None:raise Incomplete('Computed formal lacks captured classifier')
+            elif term.sort!='index':raise Incomplete('Unsupported computed formal sort')
+            actuals[name]=reify(representatives.get(term),b.env,b.scope,classifier=classifier)
         return substitute_index(plan.template,actuals,b.env,b.scope)
 
     def _context(self,bindings,defaulted=()):

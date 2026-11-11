@@ -1450,5 +1450,14 @@ its result type with the solved candidate type before selection. The rule also
 covers determined projection plans. See the
 <a href="../studies/parameterized-literals/README.md#checking-determined-calls-and-projections-before-selection">validation phase and unresolved-family boundary</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="type-formal-index">
+<h2>Experimental computed indices with inferred types</h2>
+<p><code>typed vector(n,0)</code> can translate schematically to
+<code>@typedVector Natural n (complexVectorZero (@carrierExtent Natural))</code>.
+The type argument is reconstructed using the signature's captured classifier,
+including when another classifier describes the same Lean universe. Explicit
+source type values use <code>type(Natural)</code>. See the
+<a href="../studies/parameterized-literals/README.md#computed-indices-depending-on-inferred-types">constructive mapping and restricted implementation scope</a>.</p>
+</section></llm>
 </body>
 </html>

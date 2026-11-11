@@ -377,6 +377,21 @@ noncomputable def cleanNotation_shifted_66a78a420aa379038b52  («m» : (_root_.c
 noncomputable def cleanDefine_shifted_size_93b37437cf14da76d128  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («x» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
   «n»
 
+noncomputable abbrev cleanType_Small_1783dae1e02581b79538  : Type 1 :=
+  Type
+
+noncomputable def cleanNotation_carrier_extent_3bb270212568b13b01b0  («T» : Type) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  2
+
+noncomputable def cleanDefine_typed_vector_078c4e2172358acbbe77 {«T» : Type} («x» : «T») («y» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanNotation_carrier_extent_3bb270212568b13b01b0 («T»))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanNotation_carrier_extent_3bb270212568b13b01b0 («T»))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  «y»
+
+noncomputable def cleanNotation_small_extent_52e2b4bc6b506a129e4b  («T» : Type) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  2
+
+noncomputable def cleanDefine_small_vector_f55f5d4e09f3cb5ba45e {«T» : Type} («x» : «T») («y» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanNotation_small_extent_52e2b4bc6b506a129e4b («T»))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanNotation_small_extent_52e2b4bc6b506a129e4b («T»))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  «y»
+
 
 open scoped Matrix
 
@@ -726,5 +741,29 @@ noncomputable def expectedUndemandedCall (n : cleanType_Natural_469c53b6dafb7a21
   @cleanDefine_vector_count_00ecd8c9844201a439bd n (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)
 same_basic_target actualUndemandedCall expectedUndemandedCall
 theorem meaningUndemandedCall (n : cleanType_Natural_469c53b6dafb7a218246) : actualUndemandedCall n = n := by rfl
+
+
+noncomputable def actualClassifierIndex0_0 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanNotation_carrier_extent_3bb270212568b13b01b0 cleanType_Natural_469c53b6dafb7a218246) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@_root_.cleanDefine_typed_vector_078c4e2172358acbbe77 ((_root_.cleanType_Natural_469c53b6dafb7a218246)) (n) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((@_root_.cleanNotation_carrier_extent_3bb270212568b13b01b0 ((_root_.cleanType_Natural_469c53b6dafb7a218246)))))))
+noncomputable def expectedClassifierIndex0_0 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanNotation_carrier_extent_3bb270212568b13b01b0 cleanType_Natural_469c53b6dafb7a218246) cleanType_Complex_2d7f06a08f8ab1e3f46d :=
+  @cleanDefine_typed_vector_078c4e2172358acbbe77 cleanType_Natural_469c53b6dafb7a218246 (n) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (@cleanNotation_carrier_extent_3bb270212568b13b01b0 cleanType_Natural_469c53b6dafb7a218246))
+same_basic_target actualClassifierIndex0_0 expectedClassifierIndex0_0
+theorem meaningClassifierIndex0_0 (n : cleanType_Natural_469c53b6dafb7a218246) :
+  actualClassifierIndex0_0 n = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualClassifierIndex0_1 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanNotation_carrier_extent_3bb270212568b13b01b0 cleanType_Natural_469c53b6dafb7a218246) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@_root_.cleanDefine_typed_vector_078c4e2172358acbbe77 ((_root_.cleanType_Natural_469c53b6dafb7a218246)) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((@_root_.cleanNotation_carrier_extent_3bb270212568b13b01b0 ((_root_.cleanType_Natural_469c53b6dafb7a218246)))))))
+noncomputable def expectedClassifierIndex0_1 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanNotation_carrier_extent_3bb270212568b13b01b0 cleanType_Natural_469c53b6dafb7a218246) cleanType_Complex_2d7f06a08f8ab1e3f46d :=
+  @cleanDefine_typed_vector_078c4e2172358acbbe77 cleanType_Natural_469c53b6dafb7a218246 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (@cleanNotation_carrier_extent_3bb270212568b13b01b0 cleanType_Natural_469c53b6dafb7a218246))
+same_basic_target actualClassifierIndex0_1 expectedClassifierIndex0_1
+theorem meaningClassifierIndex0_1 (n : cleanType_Natural_469c53b6dafb7a218246) :
+  actualClassifierIndex0_1 n = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualClassifierIndex1_0 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanNotation_small_extent_52e2b4bc6b506a129e4b cleanType_Natural_469c53b6dafb7a218246) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@_root_.cleanDefine_small_vector_f55f5d4e09f3cb5ba45e ((_root_.cleanType_Natural_469c53b6dafb7a218246)) (n) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((@_root_.cleanNotation_small_extent_52e2b4bc6b506a129e4b ((_root_.cleanType_Natural_469c53b6dafb7a218246)))))))
+noncomputable def expectedClassifierIndex1_0 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanNotation_small_extent_52e2b4bc6b506a129e4b cleanType_Natural_469c53b6dafb7a218246) cleanType_Complex_2d7f06a08f8ab1e3f46d :=
+  @cleanDefine_small_vector_f55f5d4e09f3cb5ba45e cleanType_Natural_469c53b6dafb7a218246 (n) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (@cleanNotation_small_extent_52e2b4bc6b506a129e4b cleanType_Natural_469c53b6dafb7a218246))
+same_basic_target actualClassifierIndex1_0 expectedClassifierIndex1_0
+theorem meaningClassifierIndex1_0 (n : cleanType_Natural_469c53b6dafb7a218246) :
+  actualClassifierIndex1_0 n = (fun _ => (0 : Complex)) := by rfl
 
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -33,7 +33,7 @@ class Fragment:
 class Builder:
     def __init__(self,env,scope,limit=4096):
         if type(limit) is not int or limit<1:raise ValueError('Positive row limit required')
-        self.env=env;self.scope=scope;self.limit=limit;self.rigid={};self.known={};self.known_values={}
+        self.env=env;self.scope=scope;self.limit=limit;self.rigid={};self.known={};self.known_values={};self.formal_classifiers={}
 
     def carrier_identity(self,name):
         spec=self.env.data['types'].get(name,{})
@@ -131,6 +131,7 @@ class Builder:
             info=p.classifier
             if info is not None and info[1]!=0:raise Incomplete('Higher classifier parameter')
             variables[p.name]=Variable(repr((path,spec['native_binding'],p.name)), 'type' if info is not None else 'index')
+            if info is not None:self.formal_classifiers[variables[p.name]]=p.typ
             if p.visibility=='implicit':implicit.append(variables[p.name])
         return variables,tuple(implicit)
 
@@ -348,7 +349,7 @@ class Builder:
         # Caller representatives are collected in source order before any
         # declaration enumeration, so candidate order cannot choose an index's
         # emitted spelling. The explicit expected type is visited afterward.
-        self.rigid={};self.known={};self.known_values={}
+        self.rigid={};self.known={};self.known_values={};self.formal_classifiers={}
         def prepare(node,path):
             if not holes(node):
                 value=Expressions(self.env,self.scope).elaborate(node)

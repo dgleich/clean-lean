@@ -3630,6 +3630,38 @@
         "General binder/evidence coverage",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_type_formal_index",
+      "status": "experimental-slice",
+      "environment": "Explicit linear algebra modules, carrier extent and typed vector with an implicit Type-0 classifier parameter",
+      "source": "typed vector(n,0)",
+      "expected_tree": [
+        "Call",
+        "typed vector",
+        [
+          [
+            "Local",
+            "n"
+          ],
+          [
+            "Decimal",
+            "0"
+          ]
+        ]
+      ],
+      "expected_lean": "@typedVector Natural n (complexVectorZero (@carrierExtent Natural)), using exact declared wrapper identities",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Reify inferred carrier formals using captured classifier types before checked index substitution; missing evidence is incomplete and alternate classifiers cannot change selection",
+      "pending": [
+        "Higher universes and dependent classifiers",
+        "Explicit classifier operands in experimental fragments",
+        "Universal symbolic-family validity",
+        "Production integration"
+      ]
     }
   ]
 }
