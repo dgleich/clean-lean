@@ -411,6 +411,19 @@ noncomputable def expectedFieldApply{i} (n : {t('Natural')}) (q : {record} n) : 
 same_basic_target actualFieldApply{i} expectedFieldApply{i}
 theorem meaningFieldApply{i} (n : {t('Natural')}) (q : {record} n) : actualFieldApply{i} n q = {expected} := by rfl
 """)
+notation('Notation consume dependent(f: Function(j: Natural,Vector((j+1),Complex)),x: Real): Real:',
+ ['Means: x','Render latex: consume({f},{x})'],env)
+local_scope=dict(scope)
+record=env.structures['DependentMapHolder']['key']
+local_scope['q']=Expr('q','q',env.type('DependentMapHolder(n)',scope),tree=['Local','q'])
+value=Builder(env,local_scope).materialize(expression_tree(parse('consume dependent(q.map,0)','expression')),use_default=False)
+expected=f"@{f('consume dependent')} (@{record}.map n q) ({nr} (nat_lit 0))"
+checks.append(f"""
+noncomputable def actualDependentArgument (n : {t('Natural')}) (q : {record} n) : {t('Real')} := {value.lean}
+noncomputable def expectedDependentArgument (n : {t('Natural')}) (q : {record} n) : {t('Real')} := {expected}
+same_basic_target actualDependentArgument expectedDependentArgument
+theorem meaningDependentArgument (n : {t('Natural')}) (q : {record} n) : actualDependentArgument n q = ({nr} (nat_lit 0)) := by rfl
+""")
 notation('Notation make map(n: Natural,x: Real): Function(Vector(n,Complex),Real):',
  ['Means: fun _ => x','Render latex: map({n},{x})'],env)
 value=Builder(env,scope).materialize(expression_tree(parse('make map(n,0)(0)','expression')),use_default=False)
@@ -468,6 +481,6 @@ theorem meaningScopedCarrier : actualScopedCarrier := by
 """)
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Sixty-two experimental joint-row targets and sixty-two meaning proofs passed; production joint inference remains unimplemented.')
+print('Sixty-three experimental joint-row targets and sixty-three meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

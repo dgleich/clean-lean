@@ -3862,6 +3862,22 @@
         "Universal symbolic-family validity",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_checked_dependent_arguments",
+      "status": "experimental-slice",
+      "source": "consume dependent(q.map,0)",
+      "expected_outcome": "Alpha-equivalent checked dependent field accepted; wrong codomain rejected; free symbolic template incomplete",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Abstract bound identity, preserve outer dependencies, retain independent exact native target",
+      "pending": [
+        "Embedded binder constraints",
+        "Symbolic dependent templates",
+        "Production integration"
+      ]
     }
   ]
 }

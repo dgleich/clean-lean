@@ -814,6 +814,46 @@ class CleanRows(unittest.TestCase):
   self.assertEqual(value.type,self.e.type('Real'))
   self.assertEqual(value.tree[0],'Apply')
   self.assertEqual(value.tree[2][0][3],'complex vector zero')
+ def test_dependent_function_carrier_alpha_identity(self):
+  builder=Builder(self.e,self.scope)
+  left=self.e.type('Function(k: Natural,Vector((k+n),Complex))',self.scope)
+  right=self.e.type('Function(j: Natural,Vector((j+n),Complex))',self.scope)
+  different=self.e.type('Function(j: Natural,Vector((j+m),Complex))',self.scope)
+  self.assertEqual(builder.typ(left),builder.typ(right))
+  self.assertNotEqual(builder.typ(left),builder.typ(different))
+ def test_dependent_function_carrier_preserves_outer_dependency(self):
+  builder=Builder(self.e,self.scope,binder_ids={'n':('binder',())})
+  typ=self.e.type('Function(k: Natural,Vector((k+n),Complex))',self.scope)
+  for normalize in (True,False):
+   self.assertEqual(builder.dependencies(typ,normalize=normalize),frozenset({('binder',())}))
+  closed=self.e.type('Function(k: Natural,Vector(k,Complex))',self.scope)
+  self.assertEqual(builder.dependencies(closed),frozenset())
+ def test_dependent_function_inner_name_does_not_capture_outer_local(self):
+  builder=Builder(self.e,self.scope,binder_ids={'n':('binder',())})
+  typ=self.e.type('Function(n: Natural,Vector(n,Complex))',{})
+  self.assertEqual(builder.dependencies(typ),frozenset())
+  self.assertEqual(builder.dependencies(typ,normalize=False),frozenset())
+ def test_dependent_function_dependency_budget_is_incomplete(self):
+  typ=self.e.type('Function(k: Natural,Vector((k+n),Complex))',self.scope)
+  with self.assertRaises(Incomplete):
+   Builder(self.e,self.scope,limit=1,binder_ids={'n':('binder',())}).dependencies(typ)
+ def test_dependent_function_argument_wrong_codomain_rejects(self):
+  self.map_holder(True)
+  notation('Notation consume wrong(f: Function(j: Natural,Vector(j,Complex)),x: Real): Real:',
+   ['Means: x','Render latex: consume({f},{x})'],self.e)
+  with self.assertRaises(NoSolution):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('consume wrong(q.map,0)','expression')),use_default=False)
+ def test_dependent_function_symbolic_template_is_incomplete(self):
+  typ=self.e.type('Function(k: Natural,Vector((k+n),Complex))',self.scope)
+  with self.assertRaisesRegex(Incomplete,'Symbolic dependent'):
+   Builder(self.e,self.scope).typ(typ,{'n':Variable('n','index')})
+ def test_dependent_function_field_as_module_argument(self):
+  self.map_holder(True)
+  notation('Notation consume(f: Function(j: Natural,Vector((j+1),Complex)),x: Real): Real:',
+   ['Means: x','Render latex: consume({f},{x})'],self.e)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('consume(q.map,0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Real'))
+  self.assertEqual(value.tree[2][1][2],'Real')
  def test_dependent_function_field_application(self):
   self.map_holder(True)
   value=Builder(self.e,self.scope).materialize(expression_tree(parse('q.map(2)','expression')),use_default=False)

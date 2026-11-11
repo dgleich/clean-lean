@@ -1529,5 +1529,15 @@ requested scope, including after memoization. It cannot emit the same expression
 outside n's binder merely because the comparison value is closed. See the
 <a href="../studies/parameterized-literals/README.md#availability-of-retained-representatives-across-scopes">availability rule and remaining integration work</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="checked-dependent-arguments">
+<h2>Checked dependent function arguments (experimental)</h2>
+<p>A field <code>q.map: Function(k: Natural,Vector(k,Complex))</code> can match
+an argument declared with binder <code>j</code>. Both describe a Lean type
+<code>(k : Nat) → Fin k → Complex</code> (expanded equivalent). Bound names are
+abstracted; free dimensions are retained. Passing <code>consume(q.map,0)</code>
+retains the selected field and callable wrappers, with zero constrained by the
+other parameter. Unresolved dependent templates remain incomplete. See the
+<a href="../studies/parameterized-literals/README.md#checked-dependent-functions-as-rigid-carriers">precise experimental boundary</a>.</p>
+</section></llm>
 </body>
 </html>

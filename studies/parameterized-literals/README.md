@@ -1642,3 +1642,37 @@ and 62 supporting proofs pass with scope-aware availability checks. Provenance
 checks pass. Full production and active-label runs remain pending in the
 projection-reuse snapshot.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Checked dependent functions as rigid carriers
+
+The experimental adapter accepts a fully checked Type-0 dependent function type
+as a rigid type atom. Its identity is the checked `type_key`, which abstracts the
+bound Lean identity and retains free identities. Thus `Function(k: Natural,
+Vector(k,Complex))` and the version with binder `j` agree; different free dimensions
+remain distinct. A formal occurring free in the type is explicitly incomplete:
+this rule does not solve symbolic dependent function templates.
+
+For example, a structure field `q.map` of type `Function(k: Natural,
+Vector((k+1),Complex))` can be passed to `consume(f: Function(j: Natural,
+Vector((j+1),Complex)), x: Real)` in `consume(q.map,0)`. The argument constrains
+zero to Real. The native check independently spells the field projection, selected
+consume wrapper, and Real numeral wrapper; alpha-renaming chooses no new target.
+
+Dependency collection opens the codomain with a fresh checked local, recursively
+collects dependencies with the same outer binder identities, and includes the
+domain dependencies. The opened local is not an outer dependency. Source and
+normalized dependency modes remain separate. Freshness avoids source-name capture;
+checking failure or budget exhaustion is incomplete. Caller representatives are
+captured only during caller conversion, never installed from candidate templates.
+
+Validation: 255 experimental Python tests pass, and the native driver checks
+63 independently expected Lean targets with 63 supporting proofs. Production
+full discovery and active-label verification are still running; these focused
+results do not establish production conformance.
+
+This changes no grammar and remains experimental. Inferred dependent function
+heads, embedded lambda constraints, unresolved dependent templates, universal
+symbolic-family validity, and production integration remain pending.
+:::

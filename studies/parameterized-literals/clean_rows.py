@@ -46,7 +46,8 @@ class Builder:
         from cleanlang.core import Expr
         from cleanlang.inferred_conversion import reify
         from cleanlang.conversion import comparison_normal_form
-        pending=[value];seen={};names=set();visits=0
+        from cleanlang.dependent_functions import DependentFunctionType
+        pending=[value];seen={};names=set();bound_dependencies=set();visits=0
         while pending:
             visits+=1
             if visits>self.limit:raise Incomplete('Checked binder dependency limit exceeded')
@@ -56,6 +57,20 @@ class Builder:
             if isinstance(current,ValueIndex):
                 pending.append(reify(current,self.env,self.scope))
             elif isinstance(current,LocalType):names.update(references(current,self.scope))
+            elif isinstance(current,DependentFunctionType):
+                from cleanlang.dependent_functions import fresh_source,fresh_bound,substitute
+                from cleanlang.core import texid
+                if visits>=self.limit:raise Incomplete('Checked binder dependency limit exceeded')
+                name=fresh_source(current.binder,self.env,self.scope,{})
+                local=Expr(fresh_bound(self.env,self.scope),texid(name),current.domain,tree=['Local',name])
+                scope={**self.scope,name:local}
+                try:
+                    codomain=substitute(current.codomain,{current.binder:local},self.env,scope)
+                    child=Builder(self.env,scope,self.limit-visits,binder_ids=self.binder_ids)
+                    bound_dependencies.update(child.dependencies(codomain,normalize=normalize))
+                except (CleanError,RecursionError) as error:
+                    raise Incomplete('Dependent binder dependency checking unavailable: '+str(error)) from error
+                pending.append(current.domain)
             elif type(current) is Type:pending.extend(current.args)
             elif isinstance(current,Type):
                 raise Incomplete('Binder dependencies of this type constructor remain unsupported')
@@ -66,7 +81,7 @@ class Builder:
                 pending.extend(v for _,v in checked.inferred_args)
                 if checked.checked_args is not None:pending.extend(checked.checked_args)
             else:raise Incomplete('Checked binder dependency representation unsupported')
-        return frozenset(self.binder_ids[n] for n in names if n in self.binder_ids)
+        return frozenset(bound_dependencies)|frozenset(self.binder_ids[n] for n in names if n in self.binder_ids)
 
     def witness_available(self,value,allowed):
         if not self.binder_ids:return True
@@ -105,6 +120,14 @@ class Builder:
     def typ(self,typ,formals=None):
         capture=formals is None
         formals={} if formals is None else formals
+        from cleanlang.dependent_functions import DependentFunctionType,type_key,occurs
+        if isinstance(typ,DependentFunctionType):
+            if self.env.sort_level(typ)!=1:raise Incomplete('Higher dependent function carrier')
+            if any(occurs(typ,name) for name in formals):
+                raise Incomplete('Symbolic dependent function template requires binder constraints')
+            atom=Atom(repr(('dependent function',type_key(typ))),'type',self.dependencies(typ))
+            if capture:self.rigid.setdefault(atom,typ)
+            return atom
         if isinstance(typ,LocalType):
             if typ.name in formals:return formals[typ.name]
             if typ.universe!=0:raise Incomplete('Higher local carrier')

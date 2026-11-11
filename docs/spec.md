@@ -2073,3 +2073,15 @@ representation failure does not select another spelling. See the
 The adapter checks both source dependencies and destination-scope reification for
 value indices. Embedded binder constraints and production integration remain open.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental checked dependent function arguments
+
+Fixed checked Type-0 dependent function types now form alpha-canonical rigid atoms
+in the experimental inference adapter. Codomain dependency collection opens a
+fresh local and discharges only that local; outer dependencies remain. Free
+symbolic formals still require unsupported binder constraints. See the
+[constructive rule and example](../studies/parameterized-literals/README.md#checked-dependent-functions-as-rigid-carriers).
+No grammar or production behavior changes; embedded binder inference remains open.
+:::

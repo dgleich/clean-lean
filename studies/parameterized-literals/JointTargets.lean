@@ -416,6 +416,9 @@ structure cleanStructure_DependentMapHolder_7829492f0231f9bf0401 («n» : (_root
 noncomputable def cleanConstructor_dependent_holder_9b656f4e6dc113e795f5 («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («map» : (clean_pi_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (clean_pi_bound_0) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))))) : _root_.cleanStructure_DependentMapHolder_7829492f0231f9bf0401 («n») :=
   @_root_.cleanStructure_DependentMapHolder_7829492f0231f9bf0401.mk «n» «map»
 
+noncomputable def cleanNotation_consume_dependent_f49a44b2e2418da0be18  («f» : (clean_pi_bound_1 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (clean_pi_bound_1) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))))) («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  x
+
 noncomputable def cleanNotation_make_map_dabe59151c764f6fd203  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) → ((_root_.cleanType_Real_107b6641a486642ad8e1)) :=
   fun _ => x
 
@@ -849,6 +852,12 @@ noncomputable def actualFieldApply1 (n : cleanType_Natural_469c53b6dafb7a218246)
 noncomputable def expectedFieldApply1 (n : cleanType_Natural_469c53b6dafb7a218246) (q : cleanStructure_DependentMapHolder_7829492f0231f9bf0401 n) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@cleanStructure_DependentMapHolder_7829492f0231f9bf0401.map n q) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
 same_basic_target actualFieldApply1 expectedFieldApply1
 theorem meaningFieldApply1 (n : cleanType_Natural_469c53b6dafb7a218246) (q : cleanStructure_DependentMapHolder_7829492f0231f9bf0401 n) : actualFieldApply1 n q = (@cleanStructure_DependentMapHolder_7829492f0231f9bf0401.map n q) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) := by rfl
+
+
+noncomputable def actualDependentArgument (n : cleanType_Natural_469c53b6dafb7a218246) (q : cleanStructure_DependentMapHolder_7829492f0231f9bf0401 n) : cleanType_Real_107b6641a486642ad8e1 := (@_root_.cleanNotation_consume_dependent_f49a44b2e2418da0be18 ((@_root_.cleanStructure_DependentMapHolder_7829492f0231f9bf0401.«map» (n) (q))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedDependentArgument (n : cleanType_Natural_469c53b6dafb7a218246) (q : cleanStructure_DependentMapHolder_7829492f0231f9bf0401 n) : cleanType_Real_107b6641a486642ad8e1 := @cleanNotation_consume_dependent_f49a44b2e2418da0be18 (@cleanStructure_DependentMapHolder_7829492f0231f9bf0401.map n q) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualDependentArgument expectedDependentArgument
+theorem meaningDependentArgument (n : cleanType_Natural_469c53b6dafb7a218246) (q : cleanStructure_DependentMapHolder_7829492f0231f9bf0401 n) : actualDependentArgument n q = (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) := by rfl
 
 
 noncomputable def actualInferredApply (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := ((@_root_.cleanNotation_make_map_dabe59151c764f6fd203 (n) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n)))
