@@ -284,7 +284,7 @@ class Environment:
                     raise CleanError(f'Value index {a} requires {expected}, got {actual.type}')
                 from .indices import index_value
                 from .proof_types import index as condition_index
-                out.append(condition_index(actual,self,env or {},_fresh=True) if actual.type==PROP else index_value(actual,self,env or {}));continue
+                out.append(condition_index(actual,self,env or {},_fresh=True) if actual.type==PROP else index_value(actual,self,env or {},_fresh=True));continue
             if not (a.startswith('(') or re.fullmatch(r'\d+|'+ID+r'(?:\.'+ID+r')*',a)):
                 raise CleanError('Dimension must be a numeral, natural parameter, field or parenthesized computation')
             if re.fullmatch(ID,a) and (env is None or a not in env or env[a].type!=NAT):

@@ -1525,3 +1525,17 @@ remain; older versions and explicitly supplied removed fields reject. Encoding
 never traverses the omitted caches. See [payload-cache-policy.md](payload-cache-policy.md)
 for the deterministic representation rule, tests and remaining performance limits.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Fresh index construction
+
+Index construction may reuse operands immediately elaborated in the same explicit
+module environment and local scope. The internal freshness witness is passed only
+by substituted-index construction and the checked value-index type-argument path.
+Dimension validation, retained callable identities, and comparison normalization
+remain mandatory. Public index construction defaults to rechecking the source;
+stored metadata and disposable caches never provide this witness. No parse,
+inference rule, persisted schema, or intended Lean target changes. See
+[active-label-performance.md](active-label-performance.md) for validation status.
+:::

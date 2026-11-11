@@ -10,7 +10,8 @@ class ComputedIndex(ValueIndex):
     resolved: object = field(default=None,kw_only=True,compare=False,repr=False)
 
 
-def index_value(expression,environment=None,locals=None):
+def index_value(expression,environment=None,locals=None,*,_fresh=False):
+    """Retain an index; _fresh is internal, synchronous elaboration evidence only."""
     from .retained_codec import dumps
     from .structures import reference_name
     from .syntax import expression_spelling
@@ -25,12 +26,13 @@ def index_value(expression,environment=None,locals=None):
         for child in node:check(child)
     check(tree)
     if environment is not None:
-        from .bound_calls import bind
-        tree=bind(tree,environment,locals or {})
+        from .bound_calls import bind,_bind_checked
+        tree=(_bind_checked(expression,environment,locals or {}) if _fresh
+              else bind(tree,environment,locals or {}))
     comparison=None
     if environment is not None:
         from .conversion import index_comparison
-        comparison=index_comparison(expression,environment,locals or {})
+        comparison=index_comparison(expression,environment,locals or {},_fresh=_fresh)
     ref=reference_name(tree)
     if ref is not None:return ValueIndex(ref,expression.lean,expression.tex,comparison=comparison)
     return ComputedIndex('('+expression_spelling(tree)+')',expression.lean,expression.tex,
@@ -80,7 +82,7 @@ def substitute_index(index,bindings,env,locals):
         if node[0]=='Unary':return ['Unary',node[1],replace(node[2])]
         return node
     result=Expressions(env,locals).elaborate(replace(tree))
-    return dimension_index(result,env,locals) if isinstance(index,DimensionIndex) else index_value(result,env,locals)
+    return dimension_index(result,env,locals,_fresh=True) if isinstance(index,DimensionIndex) else index_value(result,env,locals,_fresh=True)
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
 
@@ -90,7 +92,7 @@ class DimensionIndex(ComputedIndex):
     """Natural-number slot, retaining its checked source expression."""
 
 
-def dimension_index(expression,environment,locals):
+def dimension_index(expression,environment,locals,*,_fresh=False):
     from .retained_codec import dumps
     from .core import NAT,NUM
     if expression.type==NUM and expression.tree[0]=='Decimal':
@@ -104,7 +106,7 @@ def dimension_index(expression,environment,locals):
         return False
     if negative(comparison_normal_form(expression,environment,locals).tree):
         raise CleanError('Natural dimensions do not support unary negation')
-    value=index_value(expression,environment,locals)
+    value=index_value(expression,environment,locals,_fresh=_fresh)
     syntax=value.syntax if isinstance(value,ComputedIndex) else dumps(expression.tree)
     name=expression.tree[1] if expression.tree[0]=='Decimal' else value.name
     return DimensionIndex(name,value.lean,value.tex,syntax,comparison=value.comparison,resolved=value.resolved if isinstance(value,ComputedIndex) else expression.tree)

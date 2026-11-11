@@ -50,6 +50,37 @@ class StableArguments(unittest.TestCase):
   self.scope['x']=replace(self.scope['x'],local_normal=self.expr('retain(y)'),local_expand=False)
   self.assertEqual(index_comparison(value,self.env,self.scope),index_comparison(self.expr('retain(retain(y))'),self.env,self.scope))
 
+class FreshIndexArguments(StableArguments):
+ def test_fresh_and_rechecked_indices_have_identical_payloads(self):
+  from cleanlang.indices import index_value
+  from cleanlang.retained_codec import dumps
+  for source in ('x','retain(alias(x))','x+x'):
+   value=self.expr(source)
+   self.assertEqual(dumps(index_value(value,self.env,self.scope,_fresh=True)),
+                    dumps(index_value(value,self.env,self.scope)))
+ def test_fresh_index_avoids_reelaborating_checked_root(self):
+  from cleanlang.indices import index_value
+  value=self.expr('retain(retain(x))');original=Expressions.elaborate;counts=[]
+  def counted(instance,tree):
+   if tree==value.tree:counts.append(tree)
+   return original(instance,tree)
+  with patch.object(Expressions,'elaborate',counted):
+   index_value(value,self.env,self.scope,_fresh=True)
+  self.assertEqual(counts,[])
+  with patch.object(Expressions,'elaborate',counted):
+   index_value(value,self.env,self.scope)
+  self.assertGreater(len(counts),0)
+ def test_public_index_rechecks_scope_despite_cached_operands(self):
+  from cleanlang.indices import index_value
+  value=self.expr('retain(x)')
+  self.scope['x']=Expr('second','x',self.env.type('Real'),tree=['Local','x'])
+  self.assertIn('second',str(index_value(value,self.env,self.scope).comparison))
+ def test_fresh_retained_index_still_rejects_changed_binding(self):
+  from cleanlang.indices import index_value
+  value=Expressions(self.env,self.scope).elaborate(bind(self.expr('retain(x)').tree,self.env,self.scope))
+  self.env.data['functions']['retain']['lean']='changed'
+  with self.assertRaises(CleanError):index_value(value,self.env,self.scope,_fresh=True)
+
 if __name__=='__main__':unittest.main()
 
 # generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
