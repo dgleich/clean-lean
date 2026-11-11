@@ -5,7 +5,7 @@ from cleanlang.core import Environment,Expr
 from cleanlang.modules import load_module,notation,type_declaration
 from cleanlang.syntax import expression_tree,parse
 from clean_rows import Builder
-from constraint_model import Atom,Carrier,Ambiguous,Underdetermined,Incomplete,NoSolution
+from constraint_model import Variable,Atom,Carrier,Ambiguous,Underdetermined,Incomplete,NoSolution
 
 ROOT=Path(__file__).resolve().parents[2]
 class CleanRows(unittest.TestCase):
@@ -882,6 +882,45 @@ class CleanRows(unittest.TestCase):
  def test_quantifier_wrong_expected_type_is_rejected(self):
   with self.assertRaises(NoSolution):
    Builder(self.e,self.scope).materialize(['Forall','z','Real',['Operator','=', ['Local','z'],['Decimal','0']]],self.e.type('Real'))
+ def test_checked_dimension_records_lexical_binder_dependency(self):
+  from constraint_model import unify
+  builder=Builder(self.e,self.scope,binder_ids={'n':('binder',(3,))})
+  dimension=builder.typ(self.e.type('Vector(n,Complex)',self.scope)).arguments[0]
+  self.assertEqual(dimension.free_binders,frozenset({('binder',(3,))}))
+  with self.assertRaises(NoSolution):unify([(builder.variable('inner','index'),dimension),(Variable('outer','index'),dimension)])
+ def test_candidate_variables_receive_active_binder_permissions(self):
+  builder=Builder(self.e,self.scope,binder_ids={'n':('binder',(3,))})
+  formal,_=builder.telescope(self.e.data['functions']['complex vector zero'],())
+  self.assertEqual(formal['n'].allowed_binders,frozenset({('binder',(3,))}))
+ def test_normalization_removes_unused_binder_dependency(self):
+  from cleanlang.core import Expressions
+  notation('Define ignore(n: Natural): Natural:',
+   ['Equals: (0:Natural)','Render latex: ignore({n})'],self.e,authored=True)
+  builder=Builder(self.e,self.scope,binder_ids={'n':('binder',())})
+  value=Expressions(self.e,self.scope).parse('ignore(n)')
+  zero=Expressions(self.e,self.scope).parse('(0:Natural)')
+  self.assertEqual(builder.index(value)[0],builder.index(zero)[0])
+  self.assertFalse(builder.index(value)[0].free_binders)
+ def test_same_printed_index_in_distinct_scopes_stays_distinct(self):
+  typ=self.e.type('Vector(n,Complex)',self.scope)
+  left=Builder(self.e,self.scope,binder_ids={'n':('binder',(1,))}).typ(typ).arguments[0]
+  right=Builder(self.e,self.scope,binder_ids={'n':('binder',(2,))}).typ(typ).arguments[0]
+  self.assertNotEqual(left,right)
+ def test_opaque_index_tracks_implicit_carrier_dependency(self):
+  from cleanlang.core import Expressions
+  notation('Notation opaque count(item):',
+   ['Let T: Type','Let item: T','Returns: Natural','Means: 0','Render latex: count({item})'],self.e)
+  self.scope['T']=Expr('T','T',self.e.type('Type'),tree=['Local','T'])
+  self.scope['item']=Expr('item','item',self.e.type('T',self.scope),tree=['Local','item'])
+  builder=Builder(self.e,self.scope,binder_ids={'T':('binder',()),'item':('binder',(3,))})
+  value=Expressions(self.e,self.scope).parse('opaque count(item)')
+  self.assertEqual(builder.index(value)[0].free_binders,frozenset({('binder',()),('binder',(3,))}))
+ def test_checked_binder_dependency_unknown_representation_is_incomplete(self):
+  builder=Builder(self.e,self.scope,binder_ids={'n':('binder',())})
+  with self.assertRaises(Incomplete):builder.dependencies(object())
+ def test_checked_binder_dependency_budget_is_incomplete(self):
+  builder=Builder(self.e,self.scope,limit=1,binder_ids={'n':('binder',())})
+  with self.assertRaises(Incomplete):builder.dependencies(self.e.type('Vector(n,Complex)',self.scope))
  def shifted_literal(self):
   notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
    ['Means: fun _ _ => (0 : Complex)','Literal: 7','Render latex: 7'],self.e)

@@ -419,6 +419,9 @@ noncomputable def cleanConstructor_dependent_holder_9b656f4e6dc113e795f5 («n» 
 noncomputable def cleanNotation_make_map_dabe59151c764f6fd203  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) → ((_root_.cleanType_Real_107b6641a486642ad8e1)) :=
   fun _ => x
 
+noncomputable def cleanNotation_opaque_count_4efa8df9a3534f27979e {«T» : Type} («item» : «T») : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  0
+
 
 open scoped Matrix
 
@@ -877,5 +880,14 @@ noncomputable def expectedDependentLambda : (k : cleanType_Natural_469c53b6dafb7
   fun k => @cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 k
 same_basic_target actualDependentLambda expectedDependentLambda
 theorem meaningDependentLambda (k : cleanType_Natural_469c53b6dafb7a218246) : actualDependentLambda k = (fun _ => (0 : Complex)) := by rfl
+
+
+def actualScopedCarrier : Prop := (∀ (clean_bound_0 : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)), (∀ (clean_bound_1 : clean_bound_0), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((_root_.cleanNotation_opaque_count_4efa8df9a3534f27979e (clean_bound_1))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0))))))
+def expectedScopedCarrier : Prop :=
+  ∀ T : cleanType_Type_c1fed1af64ab6f12e0ed, ∀ item : T, @cleanDefine_equal_5fac732a65dd209a83f4 cleanType_Natural_469c53b6dafb7a218246 (@cleanNotation_opaque_count_4efa8df9a3534f27979e T item) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0))
+same_basic_target actualScopedCarrier expectedScopedCarrier
+theorem meaningScopedCarrier : actualScopedCarrier := by
+  intro T item
+  rfl
 
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

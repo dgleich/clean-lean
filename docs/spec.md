@@ -2047,3 +2047,16 @@ resource exhaustion is incomplete. See the [constructive model rule and missing 
 The Clean adapter does not yet assign this metadata to embedded binder regions or
 abstract dependent function scopes. No syntax or production change is claimed.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental checked binder dependency metadata
+
+Outer binder bodies now attach lexical binder permissions to generated variables
+and checked comparison dependencies to rigid terms. Dependency collection includes
+implicit arguments and types, not just source spelling; authored normalization can
+remove unused dependencies. See the
+[construction and witness-rebinding boundary](../studies/parameterized-literals/README.md#checked-binder-dependencies-in-outer-inference-scopes).
+Embedded binder abstraction and production integration remain open. No grammar
+change is introduced.
+:::

@@ -1512,5 +1512,14 @@ explicit allowed/free binder sets at each unification boundary. This is supporti
 model infrastructure: embedded Clean binder lowering and Lean abstraction are
 still pending. See the <a href="../studies/parameterized-literals/README.md#scope-admissibility-in-the-symbolic-constraint-model">precise rule and evidence boundary</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="checked-binder-dependencies">
+<h2>Checked dependencies in outer binder inference</h2>
+<p>For <code>for every (T: Type, for every (item: T, opaque count(item) = 0))</code>,
+the inferred application retains the bound carrier argument, schematically
+<code>@opaqueCount T item</code>. Dependency analysis includes that implicit T.
+Lexical binder identities constrain generated metavariables; final binder checking
+still rebinds source annotations. See the
+<a href="../studies/parameterized-literals/README.md#checked-binder-dependencies-in-outer-inference-scopes">dependency construction and remaining embedded-region work</a>.</p>
+</section></llm>
 </body>
 </html>

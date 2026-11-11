@@ -453,8 +453,21 @@ noncomputable def expectedDependentLambda : (k : {t('Natural')}) → {t('Vector'
 same_basic_target actualDependentLambda expectedDependentLambda
 theorem meaningDependentLambda (k : {t('Natural')}) : actualDependentLambda k = (fun _ => (0 : Complex)) := by rfl
 """)
+notation('Notation opaque count(item):',
+ ['Let T: Type','Let item: T','Returns: Natural','Means: 0','Render latex: count({item})'],env)
+source='for every (T: Type, for every (item: T, opaque count(item) = 0))'
+value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+checks.append(f"""
+def actualScopedCarrier : Prop := {value.lean}
+def expectedScopedCarrier : Prop :=
+  ∀ T : {t('Type')}, ∀ item : T, @{f('equal')} {t('Natural')} (@{f('opaque count')} T item) ({nn} (nat_lit 0))
+same_basic_target actualScopedCarrier expectedScopedCarrier
+theorem meaningScopedCarrier : actualScopedCarrier := by
+  intro T item
+  rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Sixty-one experimental joint-row targets and sixty-one meaning proofs passed; production joint inference remains unimplemented.')
+print('Sixty-two experimental joint-row targets and sixty-two meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

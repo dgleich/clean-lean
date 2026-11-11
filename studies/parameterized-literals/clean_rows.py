@@ -31,9 +31,42 @@ class Fragment:
     plans: tuple=()
 
 class Builder:
-    def __init__(self,env,scope,limit=4096):
+    def __init__(self,env,scope,limit=4096,*,binder_ids=None,binder_path=()):
         if type(limit) is not int or limit<1:raise ValueError('Positive row limit required')
+        self.binder_ids=dict(binder_ids or {});self.binder_path=tuple(binder_path)
+        if not set(self.binder_ids).issubset(scope):raise ValueError('Binder identities require checked locals')
         self.env=env;self.scope=scope;self.limit=limit;self.rigid={};self.known={};self.known_values={};self.formal_classifiers={}
+
+    def variable(self,identity,sort):
+        return Variable(identity,sort,frozenset(self.binder_ids.values()))
+
+    def dependencies(self,value):
+        if not self.binder_ids:return frozenset()
+        from cleanlang.annotations import references
+        from cleanlang.core import Expr
+        from cleanlang.inferred_conversion import reify
+        from cleanlang.conversion import comparison_normal_form
+        pending=[value];seen={};names=set();visits=0
+        while pending:
+            visits+=1
+            if visits>self.limit:raise Incomplete('Checked binder dependency limit exceeded')
+            current=pending.pop()
+            if id(current) in seen:continue
+            seen[id(current)]=current
+            if isinstance(current,ValueIndex):
+                pending.append(reify(current,self.env,self.scope))
+            elif isinstance(current,LocalType):names.update(references(current,self.scope))
+            elif type(current) is Type:pending.extend(current.args)
+            elif isinstance(current,Type):
+                raise Incomplete('Binder dependencies of this type constructor remain unsupported')
+            elif isinstance(current,Expr):
+                checked=comparison_normal_form(current,self.env,self.scope)
+                names.update(references(checked,self.scope))
+                pending.append(checked.type)
+                pending.extend(v for _,v in checked.inferred_args)
+                if checked.checked_args is not None:pending.extend(checked.checked_args)
+            else:raise Incomplete('Checked binder dependency representation unsupported')
+        return frozenset(self.binder_ids[n] for n in names if n in self.binder_ids)
 
     def carrier_identity(self,name):
         spec=self.env.data['types'].get(name,{})
@@ -51,7 +84,7 @@ class Builder:
             return self.typ(checked,{}),checked
         from cleanlang.indices import index_value
         index=index_value(value,self.env,self.scope,_fresh=True)
-        atom=Atom(repr(index.comparison_key()),'index')
+        atom=Atom(repr(index.comparison_key()),'index',self.dependencies(index))
         return atom,index
 
     def known_index(self,value):
@@ -65,7 +98,7 @@ class Builder:
         if isinstance(typ,LocalType):
             if typ.name in formals:return formals[typ.name]
             if typ.universe!=0:raise Incomplete('Higher local carrier')
-            atom=Atom(typ.lean,'type')
+            atom=Atom(typ.lean,'type',self.dependencies(typ))
             if capture:self.rigid.setdefault(atom,typ)
             return atom
         if isinstance(typ,ValueIndex):
@@ -73,7 +106,7 @@ class Builder:
             from cleanlang.dependent_functions import occurs
             if any(occurs(typ,name) for name in formals):
                 raise Incomplete('Computed formal index requires deferred checking')
-            atom=Atom(repr(typ.comparison_key()),'index')
+            atom=Atom(repr(typ.comparison_key()),'index',self.dependencies(typ))
             if capture:self.rigid.setdefault(atom,typ)
             return atom
         if type(typ) is not Type:raise Incomplete('Unsupported carrier constructor: '+type(typ).__name__)
@@ -93,7 +126,7 @@ class Builder:
         if isinstance(typ,ValueIndex) and typ.name not in formals:
             names=tuple(n for n in formals if occurs(typ,n))
             if names:
-                output=Variable(repr((path,'computed formal index')),'index')
+                output=self.variable(repr((path,'computed formal index')),'index')
                 if any(n not in evidence for n in names):
                     from candidate_values import IndexPlan
                     return output,(IndexPlan(output,typ,tuple((n,formals[n]) for n in names)),),()
@@ -134,7 +167,7 @@ class Builder:
         for p in self.signature(spec).parameters:
             info=p.classifier
             if info is not None and info[1]!=0:raise Incomplete('Higher classifier parameter')
-            variables[p.name]=Variable(repr((path,spec['native_binding'],p.name)), 'type' if info is not None else 'index')
+            variables[p.name]=self.variable(repr((path,spec['native_binding'],p.name)), 'type' if info is not None else 'index')
             if info is not None:self.formal_classifiers[variables[p.name]]=p.typ
             if p.visibility=='implicit':implicit.append(variables[p.name])
         return variables,tuple(implicit)
@@ -185,7 +218,7 @@ class Builder:
             typ,type_deferred,type_witnesses=self.dependent_type(field_type,formals,evidence,path+('field type',))
             selected_field=fields.get(tree[2])
             output=(selected_field.value if selected_field is not None else
-                    Variable(repr((path,spec['key'],tree[2])),'index'))
+                    self.variable(repr((path,spec['key'],tree[2])),'index'))
             syntax=None;origins=();deferred=base.deferred+type_deferred;witnesses=base.witnesses+type_witnesses
             if base.syntax is not None:
                 syntax=['Projection',base.syntax,tree[2]]
@@ -228,7 +261,7 @@ class Builder:
                 if argument.syntax is not None:
                     evidence[name]=self.call_witness(None,None,argument.syntax,argument.origins)
             result,deferred,witnesses=self.dependent_type(codomain,formals,evidence,path+('local result',))
-            output=Variable(repr((path,'local application value')),'index')
+            output=self.variable(repr((path,'local application value')),'index')
             requirements=tuple(dict.fromkeys(tuple(t for p in argument.plans for t in p.requirements)+argument.arguments+(argument.typ,result)))
             results.append(Fragment(result,output,
                 argument.choices+(choice,),argument.carriers,
@@ -251,7 +284,7 @@ class Builder:
             if not isinstance(head.typ,Carrier):raise Incomplete('Application head type unresolved')
             if head.typ.identity not in functions or len(head.typ.arguments)!=2:continue
             domain,result=head.typ.arguments
-            output=Variable(repr((path,'application value')),'index')
+            output=self.variable(repr((path,'application value')),'index')
             plans=head.plans+argument.plans
             requirements=tuple(dict.fromkeys(tuple(t for p in plans for t in p.requirements)+head.arguments+argument.arguments+(head.typ,argument.typ,result)))
             results.append(Fragment(result,output,
@@ -323,7 +356,7 @@ class Builder:
                     raise Incomplete('Changed literal declaration')
                 variables,_=self.telescope(spec,path)
                 carrier,deferred,witnesses=self.dependent_type(attachment['result'],variables,{},path+('literal result',))
-                output=Variable(repr((path,key,'value')),'index')
+                output=self.variable(repr((path,key,'value')),'index')
                 found.append(Fragment(carrier,output,
                     (('literal',path,key),),(carrier,),tuple(variables.values()),
                     deferred=deferred,witnesses=witnesses,plans=(ValuePlan(output,path,tuple(variables.values())+(carrier,),carrier),)))
@@ -359,7 +392,7 @@ class Builder:
                 equations=tuple(eq for a in actuals for eq in a.equations)
                 equations+=tuple(zip(parameters,(a.typ for a in actuals)))
                 equations+=tuple((variables[p.name],a.value) for p,a in zip(explicit,actuals))
-                output=Variable(repr((path,spec['native_binding'],'value')),'index')
+                output=self.variable(repr((path,spec['native_binding'],'value')),'index')
                 deferred=tuple(d for a in actuals for d in a.deferred)+type_deferred
                 witnesses=tuple(w for a in actuals for w in a.witnesses)+type_witnesses
                 syntax=None;origins=()
@@ -513,7 +546,9 @@ class Builder:
             body_expected=(substitute(expected.codomain,{expected.binder:local},self.env,scope)
                            if isinstance(expected,DependentFunctionType) else expected.args[1])
         if self.limit<=1:raise Incomplete('Binder traversal resource limit exceeded')
-        body=Builder(self.env,scope,self.limit-1).materialize(body_tree,body_expected,use_default=use_default)
+        binder_ids={**self.binder_ids,name:('binder',self.binder_path)}
+        body=Builder(self.env,scope,self.limit-1,binder_ids=binder_ids,binder_path=self.binder_path+(3,)).materialize(
+            body_tree,body_expected,use_default=use_default)
         # Re-elaborate the whole binder: annotations rebind their captured source
         # references to the compiler's final binder, not the temporary check name.
         return Expressions(self.env,self.scope).elaborate([kind,name,domain_source,body.tree],expected)

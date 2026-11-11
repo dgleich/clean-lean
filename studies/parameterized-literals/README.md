@@ -1547,3 +1547,53 @@ and 61 supporting proofs pass with the scope checker; these do not establish
 embedded-binder lowering. Provenance checks pass. Full production and active-label
 validation remain pending in the projection-reuse snapshot.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Checked binder dependencies in outer inference scopes
+
+Outer binder materialization now passes an explicit source-name to semantic-binder
+identity map to its body builder. Identities use the binder's lexical AST path;
+a nested body extends that path by its body-child index. Every newly introduced
+constraint variable receives the active binder identities as its allowed set.
+The builder checks that mapped binder names are present in its checked scope.
+
+Rigid local carrier terms and checked value indices receive free-binder metadata.
+For a value index, reify and comparison-normalize the checked expression in the
+fixed scope, then collect retained source references. Also traverse its checked
+type, inferred implicit arguments and checked explicit arguments: source spelling
+alone would miss an implicit type parameter. Nominal type arguments are traversed
+structurally; local carrier references contribute their mapped binder identities.
+Unknown representations and unsupported type constructors remain incomplete;
+a visit budget bounds dependency analysis. No Lean string search identifies a
+binder dependency.
+
+The metadata describes the checked comparison value. An authored `ignore(n)` that
+normalizes to a closed Natural zero has the same empty dependency set as that zero.
+An opaque `opaque count(item)` retains its declared application: if item has a
+bound type T, both item and the inferred T are tracked. Distinct lexical binders
+remain distinct even if their source names and temporary Lean names coincide.
+
+These dependencies now reach the scope-admissibility check during outer binder
+body inference. A dimension extracted from `Vector(n,Complex)` can solve an inner
+metavariable that allows n, but cannot solve an outer one with an empty binder set.
+Existing final whole-binder elaboration still rebinds retained annotations and
+ensures temporary checking names do not escape.
+
+Comparison dependencies are not permission to move an arbitrary source witness
+into another scope. Reification must check that witness in the destination scope;
+embedded-region integration still needs explicit binder abstraction, dependency
+discharge and scoped representative reconstruction. The current outer-prefix
+implementation does not share body metavariables across binder boundaries or
+claim that general embedded lambda inference is complete.
+
+Regressions cover lexical dimension dependencies, active permissions, rejected
+outer capture, removed unused dependencies, same spelling in different scopes,
+implicit carrier dependencies, unsupported representations and resource limits.
+The added native oracle quantifies over a carrier T and an item of T, retaining
+T as an explicit implicit argument to the declared count wrapper.
+
+Validation: all 241 experimental tests, 62 exact native targets and 62 supporting
+proofs pass. Provenance checks pass. Full production and active-label validation
+remain pending in the projection-reuse snapshot.
+:::

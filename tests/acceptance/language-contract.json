@@ -3828,6 +3828,23 @@
         "Embedded binder region integration",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_checked_binder_dependencies",
+      "status": "experimental-slice",
+      "environment": "Explicit modules, outer binder scopes and declared opaque count",
+      "source": "for every (T: Type, for every (item: T, opaque count(item) = 0))",
+      "expected_lean": "∀ T : Type, ∀ item : T, equal (@opaqueCount T item) (naturalNumeral 0), with exact declared wrappers",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Assign lexical binder permissions and checked normalized dependencies, including implicit arguments; reject escaping solutions; recheck retained witnesses in their actual scope",
+      "pending": [
+        "Embedded binder abstraction and scoped representatives",
+        "Universal symbolic-family validity",
+        "Production integration"
+      ]
     }
   ]
 }
