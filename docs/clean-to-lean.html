@@ -1194,5 +1194,12 @@ fresh checked children and matching declaration identities; public comparison st
 rechecks the source. It leaves the emitted Lean target unchanged. See
 <a href="active-label-performance.md">validation and remaining limits</a>.</p>
 </llm>
+<llm model="gpt-6" date="2026-11-11">
+<p id="per-call-actual-indices">Repeated explicit-argument indices may be reused
+within one dependent call only while the caller scope and comparison identities
+remain unchanged. Temporary binders and later calls recheck their indices. This
+preserves the same intended Lean term; it introduces no source syntax. See
+<a href="active-label-performance.md">validation and remaining limits</a>.</p>
+</llm>
 </body>
 </html>

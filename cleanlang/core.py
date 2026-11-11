@@ -419,6 +419,11 @@ class Environment:
         parameters=signature['parameters']
         actuals=dict(zip((n for n,_ in parameters),args))
         substitutions={}
+        # Declaration data are fixed throughout this synchronous call. Retain
+        # the original objects so identity checks cannot suffer id reuse.
+        entry_locals=tuple(locals.items())
+        actual_indices={}
+
 
         def bind(n,value):
             if n in substitutions and substitutions[n]!=value:
@@ -437,7 +442,21 @@ class Environment:
         def index(n,scope):
             from .indices import index_value, substitute_index
             if n in scope:return index_value(scope[n],self,locals)
-            if n in actuals:return index_value(actuals[n],self,locals)
+            if n in actuals:
+                # Shared dependent binders are temporary scope extensions. Do
+                # not reuse a caller index inside one, or across pool allocations.
+                unchanged=(not scope and len(locals)==len(entry_locals) and
+                           all(locals.get(k) is v for k,v in entry_locals))
+                pool=getattr(self,'_comparison_pool',None)
+                epoch=(pool,frozenset(pool.owned)) if pool is not None else (None,())
+                previous=actual_indices.get(n)
+                if unchanged and previous is not None and previous[0]==epoch:
+                    return previous[1]
+                value=index_value(actuals[n],self,locals)
+                after=getattr(self,'_comparison_pool',None)
+                end=(after,frozenset(after.owned)) if after is not None else (None,())
+                if unchanged and epoch==end:actual_indices[n]=(epoch,value)
+                return value
             return substitute_index(ValueIndex(n,'',''),replacement_bindings(scope),self,locals)
 
         def replace(t,scope=None):

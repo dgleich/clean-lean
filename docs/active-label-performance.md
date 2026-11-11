@@ -156,3 +156,34 @@ This includes the Mayer–Vietoris maps and zero composite, not a full exact seq
 The separate active-label verifier and full discovery have not completed; this
 change is not evidence of a whole-module speedup or full language conformance.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Actual-index reuse within one dependent call
+
+A dependent call can retain a constructed explicit-argument index for later
+occurrences of the same formal parameter within that call. Reuse requires an
+empty shared-binder scope, exactly the entry local names and objects, and the same
+comparison pool with unchanged owned identities. The original objects are held
+strongly for the call's lifetime. Construction must also leave the pool unchanged
+before an entry is stored. Temporary binder scopes and pool allocations bypass
+reuse. Substitution-dependent and computed formal indices are not cached by this
+rule. Declaration data remain fixed during synchronous matching; the cache is
+local to that invocation and is discarded on return or error.
+
+The first occurrence still performs full public index construction. A subsequent
+call, even with identical source spelling, constructs its indices afresh. Nothing
+is persisted or inferred from stored caches. Grammar, ambiguity rejection and
+intended Lean targets are unchanged. See [active-label-performance.md](active-label-performance.md)
+for focused and native validation status.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The independent constant-path test recorded two constructions of the same endpoint
+before the repair and one afterward, while checking the resulting Path type.
+A second call with a changed local target produces a different indexed type, and
+an injected comparison-pool allocation prevents reuse. All 88 selected dependent,
+hygiene, scope and storage checks pass; the expanded dependent-call suite passes
+25 tests. Native integration and complete discovery remain pending.
+:::

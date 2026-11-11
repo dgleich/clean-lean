@@ -25,6 +25,42 @@ class DependentCalls(unittest.TestCase):
     def test_returns_substituted_endpoints(self):
         self.assertEqual(self.expr('reverse path(t,x,y,p)').type,
                          self.e.type('Path(X,t,y,x)',self.local))
+    def test_repeated_actual_index_is_constructed_once_per_call(self):
+        from unittest.mock import patch
+        import cleanlang.indices as indices
+        original=indices.index_value;visits=[]
+        def counted(value,*args,**kwargs):
+            if value.tree==['Local','x']:visits.append(value.lean)
+            return original(value,*args,**kwargs)
+        with patch('cleanlang.indices.index_value',side_effect=counted):
+            result=self.expr('constant path(t,x)')
+        self.assertEqual(visits,['x'])
+        self.assertEqual(result.type,self.e.type('Path(X,t,x,x)',self.local))
+    def test_actual_index_reuse_stops_when_comparison_pool_grows(self):
+        from unittest.mock import patch
+        import cleanlang.indices as indices
+        from cleanlang.binder_keys import Pool
+        original=indices.index_value;visits=[]
+        pool=Pool(self.e,self.local,['Local','x'])
+        self.e._comparison_pool=pool
+        def counted(value,*args,**kwargs):
+            if value.tree==['Local','x']:
+                visits.append(value.lean)
+                pool.fresh(self.local)
+            return original(value,*args,**kwargs)
+        try:
+            with patch('cleanlang.indices.index_value',side_effect=counted):
+                self.expr('constant path(t,x)')
+        finally:del self.e._comparison_pool
+        self.assertEqual(visits,['x','x'])
+
+    def test_actual_index_reuse_does_not_cross_call_scopes(self):
+        first=self.expr('constant path(t,x)')
+        self.local['x']=Expr('changed','x',self.local['x'].type,tree=['Local','x'])
+        second=self.expr('constant path(t,x)')
+        self.assertNotEqual(first.type,second.type)
+        self.assertEqual(second.type,self.e.type('Path(X,t,x,x)',self.local))
+
     def test_composition_uses_intermediate_index(self):
         self.assertEqual(self.expr('join paths(t,x,y,z,p,q)').type,
                          self.e.type('Path(X,t,x,z)',self.local))
