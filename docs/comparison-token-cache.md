@@ -325,3 +325,55 @@ comparison normalization remain substantial work. Updated full regression is
 pending. Earlier live validation jobs remain preserved and are not counted as
 passes. Reference HTML IDs/links and provenance checks pass.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Opaque projections in contextual comparison emission
+
+After normalizing a checked call, comparison-key emission may recognize a
+projection child as already stable only when it retains exactly one freshly
+checked base and that entire base satisfies the existing stable-opaque test.
+That test permits unresolved local values without local definitions, supported
+literal leaves and native declared calls/operators with recursively stable
+arguments. Authored definitions, local callable applications, hidden binders and
+unsupported expression forms remain outside this shortcut.
+
+The projection's field and dependent type were checked during the preceding
+normalization. The shortcut only avoids repeating that normalization during
+comparison-key emission. It does not alter the emitted accessor or select a
+new field. Public comparison still elaborates the full source tree in the
+current scope; stored projection/call payloads do not establish freshness.
+No cross-invocation cache, new conversion relation or grammar rule is introduced.
+
+For a projection over a stable opaque base there is no authored producer field
+or local definition left to expand. Applying the same normalizer again would
+retain the same accessor and type. Native parent templates are still checked
+against their fresh arguments. This establishes preservation of the comparison
+key under the fixed-declaration synchronous-traversal assumption.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Opaque-projection validation passes 70 focused comparison/projection tests,
+462 joint solver tests and 115 runtime tests. Eleven independently authored native
+targets and four agreement proofs pass. Both elaboration routes produce identical
+Lean text for all four corpus documents under matching stable fingerprints;
+all 92 corpus proofs pass. The report retains this evidence under
+`opaque_projection_comparison_corpus` and the controlled diagnostic under
+`opaque_projection_comparison_diagnostic` in
+[the compatibility report](../studies/parameterized-literals/compatibility.json).
+
+In the controlled fixture, eight enclosing native calls cause nine normalizations
+of the opaque projection on baseline `8b35696` and one after the change, with
+identical comparison keys. This does not measure full-study throughput. Full
+updated-revision regression and complete active-label validation remain pending;
+earlier live jobs are preserved. Reference HTML IDs/links and provenance pass.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The post-change active-label diagnostic reached the selected declaration but its
+20-second observation ended with exit 2 and translation incomplete. It supplies
+no full-study completion or speedup claim; the controlled work-count result above
+is the measured improvement.
+:::

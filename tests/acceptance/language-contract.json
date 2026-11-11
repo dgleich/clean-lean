@@ -4755,6 +4755,34 @@
         "Full updated-revision regression",
         "Complete active-label validation"
       ]
+    },
+    {
+      "id": "opaque_projection_comparison_emission",
+      "status": "implementation-optimization-full-validation-pending",
+      "source": "tests/test_bound_comparison_reuse.py: OpaqueProjectionComparison; tools/check_projection_dependency_targets.py",
+      "expected_tree": [
+        "Call",
+        "producer argument",
+        [
+          [
+            "Projection",
+            [
+              "Local",
+              "b"
+            ],
+            "value"
+          ]
+        ]
+      ],
+      "expected_lean": "The declared argument call applied to the declared value accessor; the comparison key retains the same accessor and field type. Authored producers still reduce through the existing normalization rules.",
+      "checks": [
+        "OpaqueProjectionComparison: single normalization, fresh scope/payload checks, retained declaration identity rejection and authored-producer reduction",
+        "check_projection_dependency_targets.py: eleven canonical targets and four agreement proofs"
+      ],
+      "pending": [
+        "Full updated-revision regression",
+        "Complete active-label validation"
+      ]
     }
   ]
 }

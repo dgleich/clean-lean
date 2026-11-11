@@ -36,6 +36,12 @@ def comparison_key(expression,env,locals,*,fresh=False):
             local=locals.get(tree[1])
             return local is not None and local.local_normal is None
         if tree[0] in ('Decimal','BoundNumeral'):return True
+        if tree[0]=='Projection':
+            # Normalization has already checked the selected field and its
+            # dependent type. It remains opaque only when its complete base
+            # is stable and opaque too; authored producers still normalize.
+            return (value.checked_args is not None and len(value.checked_args)==1
+                    and stable_opaque(value.checked_args[0]))
         if tree[0] in ('Operator','Unary'):
             if value.operator_binding is None:return False
             name,target,_=value.operator_binding

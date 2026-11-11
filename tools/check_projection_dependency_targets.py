@@ -5,7 +5,7 @@ ROOT=Path(__file__).resolve().parents[1];sys.path[:0]=[str(ROOT),str(ROOT/'tests
 from test_projection_dependencies import SOURCE
 from cleanlang.core import Environment,Expr,Expressions,lean
 from cleanlang.modules import load_module
-from cleanlang.conversion import comparison_normal_form
+from cleanlang.conversion import comparison_normal_form,index_comparison
 comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_basic_targets.py').read_text()).body
  if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))
 with tempfile.TemporaryDirectory() as d:
@@ -51,8 +51,15 @@ Define projection producer(n: Natural): ProducerBox:
             f'noncomputable def producerNormalExpected (n : {nat}) : {nat} := {arg} ({arg} n)',
             'same_basic_target producerNormal producerNormalExpected',
             f'theorem producerAgreement (n : {nat}) : producerSource n = producerNormal n := by rfl']
+ s['b']=Expr('b','b',e.type('ProducerBox'),tree=['Local','b'])
+ opaque=Expressions(e,s).parse('producer argument(producer argument(b.value))')
+ opaque_key=index_comparison(opaque,e,s)
+ checks += [f'noncomputable def opaqueProjectionKey (b : {box}) : {nat} := {opaque_key}',
+            f'noncomputable def opaqueProjectionExpected (b : {box}) : {nat} := {arg} ({arg} (@{box}.value b))',
+            'same_basic_target opaqueProjectionKey opaqueProjectionExpected',
+            f'theorem opaqueProjectionAgreement (b : {box}) : opaqueProjectionKey b = @{box}.value b := by rfl']
  native=Path(d)/'Checks.lean';native.write_text(lean([],e,['Lean'])+comparison+'\n'.join(checks)+'\n')
  subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(native)],cwd=ROOT,check=True)
-print('Ten canonical projection/producer targets and three agreement proofs passed.')
+print('Eleven canonical projection/producer/key targets and four agreement proofs passed.')
 
 # generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

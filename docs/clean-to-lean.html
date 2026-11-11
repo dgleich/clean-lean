@@ -1869,5 +1869,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p>After checking a projection's source, comparison normalization may reuse its producer's checked arguments within that synchronous traversal. Hygienic substitution and checking the selected field remain explicit. A freshly selected field need not repeat its check during normalization. Retained module identities are still checked; public invocations and direct helper calls without freshness recheck source arguments.</p>
 <p>This changes repeated work only. The source projection still emits its declared accessor, and independently specified canonical targets check the comparison result. There is no persistent cache, new syntax, inference rule or broader conversion equivalence. See the <a href="comparison-token-cache.md">comparison report</a> for the measured scope and outstanding full validation.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="opaque-projection-comparison">
+<h2>Opaque projections while emitting comparison keys</h2>
+<p>After normalization, a checked projection over a recursively stable opaque base need not be normalized again at every enclosing native call. Its field and dependent type have already been checked. Authored producers, local definitions, hidden binders and unsupported forms remain outside this shortcut. Public comparison still checks the complete current source.</p>
+<p>The accessor, source target and comparison key are unchanged. This is traversal-local work reuse, with no new syntax or conversion rule. Independent native targets and rebinding tests are described in the <a href="comparison-token-cache.md">comparison report</a>; full regression remains a separate obligation.</p>
+</section></llm>
 </body>
 </html>

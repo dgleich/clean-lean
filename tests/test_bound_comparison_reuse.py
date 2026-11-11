@@ -283,3 +283,52 @@ class FreshProducerArguments(unittest.TestCase):
         old=self.expression()
         with patch.object(self.env,'call',side_effect=TimeoutError('source unavailable')):
             with self.assertRaises(TimeoutError):comparison_normal_form(old,self.env,self.local)
+
+# generated: gpt-6 2026-11-11 role=assisted
+class OpaqueProjectionComparison(ProjectionBaseReuse):
+    def setUp(self):
+        super().setUp()
+        notation('Notation retain value(x: Real): Real:',
+                 ['Means: x','Render latex: R({x})'],self.env)
+
+    def nested(self,depth=8):
+        text='opaque box(x).value'
+        for _ in range(depth):text='retain value('+text+')'
+        return Expressions(self.env,self.local).parse(text)
+
+    def test_opaque_projection_normalized_once_in_comparison_key(self):
+        from cleanlang import conversion
+        value=self.nested();original=conversion._normal_form;projections=[]
+        def count(expression,*args,**kwargs):
+            if expression.tree[0]=='Projection':projections.append(expression.tree)
+            return original(expression,*args,**kwargs)
+        with patch.object(conversion,'_normal_form',side_effect=count):
+            key=conversion.index_comparison(value,self.env,self.local)
+        self.assertEqual(len(projections),1)
+        self.assertEqual(key,value.lean)
+
+    def test_comparison_key_rechecks_mutated_projection_payload(self):
+        from cleanlang.conversion import index_comparison
+        value=self.nested(1)
+        value.checked_args=(Expr('forged','forged',self.env.type('Real')),)
+        self.local['x']=Expr('second','x',self.env.type('Real'),tree=['Local','x'])
+        expected=self.nested(1)
+        self.assertEqual(index_comparison(value,self.env,self.local),expected.lean)
+
+    def test_changed_native_producer_identity_rejects(self):
+        from cleanlang.bound_calls import bind
+        from cleanlang.conversion import index_comparison
+        value=Expressions(self.env,self.local).elaborate(bind(self.nested(2).tree,self.env,self.local))
+        self.env.data['functions']['opaque box']['lean']+=' changed'
+        with self.assertRaisesRegex(CleanError,'Changed bound module callable'):
+            index_comparison(value,self.env,self.local)
+
+    def test_authored_producer_is_not_treated_as_opaque(self):
+        from cleanlang.conversion import index_comparison
+        from cleanlang.structures import declare
+        declare('Structure WithAction():',['Let value: Real','Let action: Function(Real,Real)','Constructor: with action'],self.env)
+        notation('Define action producer(x: Real): WithAction:',
+                 ['Equals: with action(x,function(y: Real,x))'],self.env,authored=True)
+        value=Expressions(self.env,self.local).parse('retain value(action producer(x).value)')
+        expected=Expressions(self.env,self.local).parse('retain value(x)')
+        self.assertEqual(index_comparison(value,self.env,self.local),expected.lean)

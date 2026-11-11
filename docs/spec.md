@@ -2691,3 +2691,29 @@ hidden-binder handling and dependent field-type checks are unchanged. No parser,
 conversion equivalence, inference policy or emitted target changes are introduced;
 no checked value is cached across public invocations. Failed checks propagate.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Opaque projections in contextual comparison emission
+
+After normalizing a checked call, comparison-key emission may recognize a
+projection child as already stable only when it retains exactly one freshly
+checked base and that entire base satisfies the existing stable-opaque test.
+That test permits unresolved local values without local definitions, supported
+literal leaves and native declared calls/operators with recursively stable
+arguments. Authored definitions, local callable applications, hidden binders and
+unsupported expression forms remain outside this shortcut.
+
+The projection's field and dependent type were checked during the preceding
+normalization. The shortcut only avoids repeating that normalization during
+comparison-key emission. It does not alter the emitted accessor or select a
+new field. Public comparison still elaborates the full source tree in the
+current scope; stored projection/call payloads do not establish freshness.
+No cross-invocation cache, new conversion relation or grammar rule is introduced.
+
+For a projection over a stable opaque base there is no authored producer field
+or local definition left to expand. Applying the same normalizer again would
+retain the same accessor and type. Native parent templates are still checked
+against their fresh arguments. This establishes preservation of the comparison
+key under the fixed-declaration synchronous-traversal assumption.
+:::
