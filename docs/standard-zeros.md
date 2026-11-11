@@ -34,7 +34,11 @@ interpretations, ambiguity and unsupported matrix one. The
 four constructor types/bodies and four theorem propositions, then proves the four
 interpretation statements. Its generated artifact is
 [StandardZeros.lean](../generated/StandardZeros.lean). All eight comparisons and
-four proofs pass under the pinned environment.
+four proofs pass under the pinned environment. The final integration run
+(`/tmp/clean-standard-zeros-integration.log`) also passes strict parser reproduction,
+501 Python tests, 65 exact native targets, 34 supporting proofs and all 92 corpus
+proofs, ending with `Failures: []`. Full discovery remains incomplete; these scoped
+results do not establish general inference or whole-language conformance.
 
 ## Remaining unannotated inference obligation
 
