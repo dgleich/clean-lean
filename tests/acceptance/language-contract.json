@@ -4152,6 +4152,43 @@
         "Full production discovery",
         "Current active-label regeneration"
       ]
+    },
+    {
+      "id": "chain_short_exact_connecting_map",
+      "status": "implemented-slice",
+      "environment": "Explicit library/algebra/homology_sequences.clean import; pinned Mathlib HomologySequence, Type-0 coefficient carrier, explicit field and short-exactness evidence.",
+      "source": "connecting homology map(field,S,h,n)",
+      "expected_tree": [
+        "Call",
+        "connecting homology map",
+        [
+          [
+            "Local",
+            "field"
+          ],
+          [
+            "Local",
+            "S"
+          ],
+          [
+            "Local",
+            "h"
+          ],
+          [
+            "Local",
+            "n"
+          ]
+        ]
+      ],
+      "expected_lean": "Declared wrapper with inferred K and explicit field,S,h,n. Native body installs field and calls CategoryTheory.ShortComplex.ShortExact.δ h (n+1) n rfl. Domain H(S.X₃,n+1), codomain H(S.X₁,n). No inference policy or new syntax is introduced.",
+      "checks": [
+        "studies/topology/verify_homology_sequence.py: thirteen independently authored canonical targets and two zero-composition proofs",
+        "tests/test_homology_sequence.py: independent call tree, degree shift/direction, wrong-sequence evidence rejection and authored composites"
+      ],
+      "pending": [
+        "Geometric short exact sequence, excision, identification with Mayer–Vietoris maps, exactness and degree-zero endpoint",
+        "General language conformance and production joint inference remain separate obligations"
+      ]
     }
   ]
 }

@@ -1,0 +1,102 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "chains.clean"
+Import "graded_maps.clean"
+Import "exact_sequences.clean"
+Import "../logic/evidence.clean"
+Import Lean Mathlib.Algebra.Homology.HomologySequence
+
+Type ChainShortSequence(K: Type,field: FieldStructure(K)):
+  Universe: 1
+  Means: (letI : Field K := field; CategoryTheory.ShortComplex (ChainComplex (ModuleCat.{0} K) ℕ))
+  Render latex: \operatorname{{ShortCh}}_{{{K}}}
+  Describe: a composable pair of chain maps with zero composite over ${K}$
+
+Notation sequence first chain(field,S):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Returns: ModuleChainComplex(K,field)
+  Means: (letI : Field K := field; S.X₁)
+  Render latex: C_{{first}}({S})
+
+Notation sequence middle chain(field,S):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Returns: ModuleChainComplex(K,field)
+  Means: (letI : Field K := field; S.X₂)
+  Render latex: C_{{middle}}({S})
+
+Notation sequence last chain(field,S):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Returns: ModuleChainComplex(K,field)
+  Means: (letI : Field K := field; S.X₃)
+  Render latex: C_{{last}}({S})
+
+Notation sequence first chain map(field,S):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Returns: ChainMap(K,field,(sequence first chain(field,S)),(sequence middle chain(field,S)))
+  Means: (letI : Field K := field; S.f)
+  Render latex: f({S})
+
+Notation sequence last chain map(field,S):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Returns: ChainMap(K,field,(sequence middle chain(field,S)),(sequence last chain(field,S)))
+  Means: (letI : Field K := field; S.g)
+  Render latex: g({S})
+
+Notation short chain sequence(field,A,B,C,f,g,h):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let A,B,C: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,A,B)
+  Let g: ChainMap(K,field,B,C)
+  Let h: Evidence((compose chain maps(field,A,B,C,g,f) = zero chain map(field,A,C)))
+  Returns: ChainShortSequence(K,field)
+  Means: (letI : Field K := field; CategoryTheory.ShortComplex.mk f g h)
+  Render latex: ({f},{g})
+
+Condition short exact chain sequence(field,S):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  From Lean: (letI : Field K := field; S.ShortExact)
+  Render latex: {S}\text{{ is short exact}}
+
+Notation connecting homology map(field,S,h,n):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Let h: Evidence((short exact chain sequence(field,S)))
+  Let n: Natural
+  Returns: ModuleMap(K,field,(chain homology(field,sequence last chain(field,S),n+1)),(chain homology(field,sequence first chain(field,S),n)))
+  Means: (letI : Field K := field; CategoryTheory.ShortComplex.ShortExact.δ h (n+1) n rfl)
+  Render latex: \delta_{{{n}+1}}({S})
+
+Define connecting then first(field,S,h,n):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Let h: Evidence((short exact chain sequence(field,S)))
+  Let n: Natural
+  Returns: ModuleMap(K,field,(chain homology(field,sequence last chain(field,S),n+1)),(chain homology(field,sequence middle chain(field,S),n)))
+  Equals: module composition(field,chain homology(field,sequence last chain(field,S),n+1),chain homology(field,sequence first chain(field,S),n),chain homology(field,sequence middle chain(field,S),n),connecting homology map(field,S,h,n),induced chain homology map(field,sequence first chain(field,S),sequence middle chain(field,S),sequence first chain map(field,S),n))
+  Render latex: \operatorname{{connecting then first}}({S},{n})
+
+Define last then connecting(field,S,h,n):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Let h: Evidence((short exact chain sequence(field,S)))
+  Let n: Natural
+  Returns: ModuleMap(K,field,(chain homology(field,sequence middle chain(field,S),n+1)),(chain homology(field,sequence first chain(field,S),n)))
+  Equals: module composition(field,chain homology(field,sequence middle chain(field,S),n+1),chain homology(field,sequence last chain(field,S),n+1),chain homology(field,sequence first chain(field,S),n),induced chain homology map(field,sequence middle chain(field,S),sequence last chain(field,S),sequence last chain map(field,S),n+1),connecting homology map(field,S,h,n))
+  Render latex: \operatorname{{last then connecting}}({S},{n})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

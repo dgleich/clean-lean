@@ -130,3 +130,14 @@ construction, filtered complexes and lazy-reduction invariants, well-group rever
 inclusions and cover/excision, and the Mayer–Vietoris connecting sequence. These
 are distinct from unfinished production joint inference and validation.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The [algebraic homology sequence study](homology-sequence.md) now exposes
+Mathlib's connecting map for a short exact chain sequence. Its two adjacent
+composites are authored in Clean, with thirteen canonical-target comparisons and
+two native proofs. The missing Mayer–Vietoris connecting sequence above refers
+to the geometric construction and its identification/exactness, not the absence
+of a generic algebraic connecting map. These checks add no new syntax and do not
+resolve the broader inference or full-regeneration validation obligations.
+:::

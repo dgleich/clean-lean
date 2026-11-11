@@ -1,0 +1,27 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "../../library/algebra/homology_sequences.clean"
+
+Source homology_sequence:
+  Kind: other
+  Title: Mathlib.Algebra.Homology.HomologySequence
+  Label: Mathlib homology sequence
+
+Result connecting then first vanishes:
+  Attribution: homology_sequence; CategoryTheory.ShortComplex.ShortExact.δ_comp; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Let n: Natural
+  Assume h: short exact chain sequence(field,S)
+  Conclude: connecting then first(field,S,h,n) = module zero map(field,chain homology(field,sequence last chain(field,S),n+1),chain homology(field,sequence middle chain(field,S),n))
+
+Result last then connecting vanishes:
+  Attribution: homology_sequence; CategoryTheory.ShortComplex.ShortExact.comp_δ; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Let n: Natural
+  Assume h: short exact chain sequence(field,S)
+  Conclude: last then connecting(field,S,h,n) = module zero map(field,chain homology(field,sequence middle chain(field,S),n+1),chain homology(field,sequence first chain(field,S),n))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
