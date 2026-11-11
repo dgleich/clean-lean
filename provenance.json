@@ -8136,6 +8136,22 @@
         "# ",
         ""
       ]
+    },
+    "tests/test_progressive_review.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/check_review_progressive.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

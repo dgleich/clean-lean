@@ -152,3 +152,29 @@ emacs --batch -Q -l tools/check_emacs.el
 PYTHONPATH=tests:. python3 -m unittest test_editor_prototypes -v
 ```
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Current review snapshot
+
+`python3 tools/build_review.py --progressive` publishes the complete source
+inventory before translating it, then atomically refreshes the offline HTML while
+attempting every translation. Pending files explicitly say “Translation pending”;
+the header reports the incomplete build and pending count. Reloading the page
+shows newer results and preserves browser-local notes. This option does not skip
+slow files or turn a translation into a proof claim. The ordinary build still
+publishes once after collection finishes.
+
+The current progressive snapshot contains 158 Clean files. Sixteen focused
+inventory/highlighting/escaping checks passed. Native Chromium checks passed for
+pending status, exact source text, navigation, search, notes across reload and
+mobile layout; the mobile screenshot was inspected. Reproduce those partial-build
+UI checks with `python3 tools/check_review_progressive.py`. Full translated-snapshot
+validation remains pending while the active-label module is being translated.
+The full-browser checker remains `tools/check_review.py` for the completed build.
+
+A fresh Emacs runtime attempt supplied the extracted portable dump and both local
+library paths, but startup still segfaulted before loading clean-math-mode. Native
+Emacs validation is therefore still pending; this is not a mode-test failure.
+No user editor settings or installed system packages were modified.
+:::

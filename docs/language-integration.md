@@ -95,3 +95,11 @@ gaps. Existing topology wrappers and proved supporting laws remain separate from
 the missing homology/excision/well-group research constructions; LAProof's IEEE
 and C verification obligations are also unchanged.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The review browser now has a progressive build mode and a current 158-file source
+snapshot. Pending translations are explicit; 16 focused tests and Chromium
+source/navigation/notes/mobile checks pass. The full translation build remains
+running, and native Emacs startup remains unavailable. See [editor validation](../editors/README.md).
+:::
