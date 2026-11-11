@@ -105,3 +105,22 @@ The independent canonical comparator is unchanged. The corrected metadata and
 parameter tests pass 21 cases, and 44 module/alias/universe compatibility tests
 pass. Final selected/native validation and full discovery remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Final selected validation passes 466 tests in 85.203 seconds, including all ten
+new parameter cases. Strict parser reproduction passed in the initial integration
+run. That run retains its two recorded failures; after the explicit fixture and
+oracle corrections, the selected suite and the ten-target carrier check were
+rerun successfully. Across the completed native checks, 36 exact targets and
+13 supporting proofs pass, along with all 92 corpus proof fixtures. This count
+includes the four new parameterized targets and projection proof. The original
+failed runner is not relabelled as a successful run.
+
+Generated TypeValueTargets changes are intentional: the Indexed classifier
+parameter now uses a primitive Type-1 binder and its generated identifiers change
+accordingly. Other regenerated artifacts are unchanged after provenance stamping.
+Full discovery uses immutable commit 403ef42 and remains pending. General native
+freshness, universe polymorphism, and missing topology paper constructions remain
+outside this completed local slice.
+:::
