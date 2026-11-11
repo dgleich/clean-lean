@@ -1,7 +1,7 @@
 # generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
 """Independent symbolic row oracles; not production Clean acceptance tests."""
 import unittest
-from constraint_model import Variable as V,Atom as A,Carrier as C,Row,select,unify
+from constraint_model import Variable as V,Atom as A,Carrier as C,Row,select,select_with_trace,unify
 from constraint_model import NoSolution,Underdetermined,Ambiguous,Incomplete
 NAT=C('Nat');REAL=C('Real');COMPLEX=C('Complex')
 N=A('caller/n','index');M=A('caller/m','index')
@@ -65,6 +65,19 @@ class JointLiteralConstraints(unittest.TestCase):
     def test_conflicting_constraints_reject(self):
         t=V('t','type')
         with self.assertRaises(NoSolution):select([Row(('a',),(t,),(),((t,NAT),(t,REAL)))])
+
+class DefaultTrace(unittest.TestCase):
+    def test_trace_records_simultaneous_positions(self):
+        rows=[Row(('nn',),(NAT,NAT),()),Row(('rr',),(REAL,REAL),())]
+        result=select_with_trace(rows,default=NAT)
+        self.assertEqual(result.defaulted_positions,(0,1))
+        self.assertEqual(result.default_carrier,NAT)
+        self.assertEqual(result.result,select(rows,default=NAT))
+        self.assertEqual(result,select_with_trace(rows[::-1],default=NAT))
+    def test_context_forced_position_has_no_default_trace(self):
+        result=select_with_trace([Row(('r',),(REAL,),())],default=NAT)
+        self.assertEqual(result.defaulted_positions,())
+        self.assertIsNone(result.default_carrier)
 
 if __name__=='__main__':unittest.main()
 

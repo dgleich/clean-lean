@@ -1654,3 +1654,16 @@ operator input-signature tie and gathers caller representatives before enumerati
 candidate declarations. Its [construction and remaining obligations](../studies/parameterized-literals/README.md#rows-from-actual-clean-declarations)
 are a proposed extension, not an accepted full language rule.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental default-origin trace
+
+Joint selection records the literal positions restricted by the simultaneous
+pre-default solution analysis. The experimental materializer preserves these
+positions as `defaulted` retained nodes and marks context-forced holes `inferred`.
+The native constructor is unchanged by this presentation metadata. The
+[trace contract](../studies/parameterized-literals/README.md#retaining-default-origins)
+and replay checks do not change production inference or resolve the remaining
+general dependent-constraint obligations.
+:::

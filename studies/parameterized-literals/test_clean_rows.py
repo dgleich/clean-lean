@@ -85,9 +85,54 @@ class CleanRows(unittest.TestCase):
   self.assertEqual(first.lean,second.lean)
   self.assertEqual(first.tree,second.tree)
  def test_materialization_does_not_hide_an_unresolved_default(self):
-  with self.assertRaises(Underdetermined):Builder(self.e,self.scope).materialize(expression_tree(parse('0','expression')))
+  with self.assertRaises(Underdetermined):Builder(self.e,self.scope).materialize(expression_tree(parse('0','expression')),use_default=False)
  def test_zero_times_vector_keeps_scalar_and_matrix_interpretations(self):
   with self.assertRaises(Ambiguous):self.solve('0*x = x')
+
+ def test_default_origin_is_retained_and_visible(self):
+  tree=expression_tree(parse('0','expression'))
+  builder=Builder(self.e,self.scope);trace=builder.solve_with_trace(tree)
+  self.assertEqual(trace.defaulted_positions,(0,))
+  value=builder.materialize(tree)
+  self.assertEqual(value.tree[4],'defaulted')
+  self.assertIn(r'\mathbb{N}',value.tex)
+ def test_simultaneous_defaults_are_both_retained(self):
+  tree=expression_tree(parse('0 = 0','expression'))
+  builder=Builder(self.e,self.scope);trace=builder.solve_with_trace(tree)
+  self.assertEqual(trace.defaulted_positions,(0,1))
+  value=builder.materialize(tree)
+  self.assertEqual([value.tree[i][4] for i in (2,3)],['defaulted','defaulted'])
+ def test_context_forced_numeral_is_not_marked_defaulted(self):
+  tree=expression_tree(parse('r+0','expression'))
+  builder=Builder(self.e,self.scope);trace=builder.solve_with_trace(tree)
+  self.assertEqual(trace.defaulted_positions,());self.assertIsNone(trace.default_carrier)
+  self.assertEqual(builder.materialize(tree).tree[3][4],'inferred')
+ def test_expected_carrier_precedes_any_default(self):
+  tree=expression_tree(parse('0','expression'));builder=Builder(self.e,self.scope)
+  expected=self.e.type('Real');trace=builder.solve_with_trace(tree,expected)
+  self.assertEqual(trace.defaulted_positions,())
+  value=builder.materialize(tree,expected)
+  self.assertEqual(value.type,expected);self.assertEqual(value.tree[4],'inferred')
+ def test_annotated_literal_is_not_a_default_position(self):
+  tree=expression_tree(parse('0 = (0: Natural)','expression'));builder=Builder(self.e,self.scope)
+  self.assertEqual(builder.solve_with_trace(tree).defaulted_positions,())
+  value=builder.materialize(tree)
+  self.assertEqual(value.tree[2][4],'inferred');self.assertEqual(len(value.tree[3]),4)
+ def test_default_does_not_prefer_numerals_over_exact_constructor(self):
+  notation('Notation another natural zero(): Natural:',
+   ['Means: 0','Literal: 0','Render latex: 0'],self.e)
+  with self.assertRaises(Ambiguous):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('0','expression')))
+ def test_retained_default_survives_new_default_and_codec(self):
+  from cleanlang.numerals import identity
+  from cleanlang.retained_codec import dumps,loads
+  from cleanlang.core import Expressions
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('0','expression')))
+  saved=dumps(value.tree)
+  self.e.numeral_default=('Real',tuple(identity('Real',self.e)))
+  replay=Expressions(self.e,self.scope).elaborate(loads(saved))
+  self.assertEqual(replay.lean,value.lean);self.assertEqual(replay.tex,value.tex)
+  self.assertEqual(replay.tree[4],'defaulted')
 
 if __name__=='__main__':unittest.main()
 

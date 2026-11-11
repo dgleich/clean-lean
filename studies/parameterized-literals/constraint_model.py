@@ -68,7 +68,18 @@ def unify(equations,bindings=None,*,limit=4096):
     return bindings
 
 
-def select(rows,*,default=None,enumeration_complete=True,limit=4096):
+@dataclass(frozen=True)
+class Selection:
+    choices: tuple
+    arguments: tuple
+    defaulted_positions: tuple
+    default_carrier: object=None
+
+    @property
+    def result(self):return self.choices,self.arguments
+
+
+def select_with_trace(rows,*,default=None,enumeration_complete=True,limit=4096):
     """Select only after all branches and simultaneous defaults are resolved.
 
     Each row's arguments include every emitted implicit/explicit parameter.
@@ -108,6 +119,13 @@ def select(rows,*,default=None,enumeration_complete=True,limit=4096):
             raise Underdetermined('A competing interpretation has unresolved parameters')
     if len(solutions)!=1:raise Ambiguous('Multiple declaration interpretations')
     row,bindings=solutions[0]
-    return row.choices,tuple(resolve(arg,bindings) for arg in row.arguments)
+    return Selection(row.choices,tuple(resolve(arg,bindings) for arg in row.arguments),
+                     tuple(restrictions),default if restrictions else None)
+
+
+def select(rows,*,default=None,enumeration_complete=True,limit=4096):
+    """Return choices and arguments from the same exhaustive traced selection."""
+    return select_with_trace(rows,default=default,
+        enumeration_complete=enumeration_complete,limit=limit).result
 
 # generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

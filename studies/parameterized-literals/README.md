@@ -112,7 +112,7 @@ mathematical meaning; declarations supply carrier and callable identities.
    inputs. Unresolved input applicability remains incomplete. This retains the
    production operator policy instead of adding return-type overload selection.
 
-The non-defaulted materializer recovers the selected row's bindings, builds
+The materializer recovers the selected row's bindings, builds
 retained BoundLiteral/BoundNumeral nodes with explicit declaration identities,
 ordered actuals and checked carrier annotations, then runs the existing elaborator.
 It checks that every emitted callable agrees with the selected row. Carrier/type
@@ -155,9 +155,8 @@ The following still block production integration:
 - Formal classifier resolution currently reads signature source in the fixed
   environment. Retained declaration-bound telescope metadata needs a complete
   audit before this can support all alias/shadowing cases.
-- The symbolic solver applies defaults, but the materializer deliberately refuses
-  assignments needing defaults. Defaulted versus inferred presentation and saved
-  provenance must be carried explicitly into retained nodes.
+- Default origins now survive materialization for the supported fragment, as
+  specified below. General dependent-default interactions remain unimplemented.
 - Known non-local values may supply types while their value equations remain
   deferred. Recovering a parameter without a checked representative is incomplete.
 - Checking one selected row through the old elaborator does not prove that every
@@ -169,4 +168,53 @@ The following still block production integration:
 
 The original similarity and BibTeX examples still fail production unannotated
 vector-zero inference. No source rewrite or switch to this adapter conceals that.
+:::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Retaining default origins
+
+`select_with_trace` now returns an immutable selection containing declaration
+choices, resolved arguments, the ordered default-restricted literal positions,
+and the default carrier when a restriction was used. The existing `select` API
+returns the choices/arguments view of that same computation. It does not run a
+second heuristic or infer origins after selection.
+
+Restrictions are still calculated simultaneously from the complete pre-default
+solution set. A uniquely determined carrier does not acquire a default marker
+merely because a default is visible. Conflicting restrictions, unresolved
+competitors and duplicate constructors retain their existing error behavior.
+No trace is returned until selection has succeeded uniquely.
+
+The adapter maps the recorded position ordinals to the original Decimal paths.
+Its materializer writes `defaulted` at exactly those retained numeral/literal
+nodes; other newly resolved holes are `inferred`. Explicitly annotated literals
+were never holes and retain their existing explicit form. The saved constructor
+identity and arguments determine the native term, while the origin determines
+whether the mathematical rendering displays the chosen carrier.
+
+Examples with the standard Natural default:
+
+| Source | Retained origin |
+|---|---|
+| `0` | defaulted Natural |
+| `0 = 0` | both positions defaulted Natural |
+| `r + 0`, r Real | inferred Real |
+| `0` with expected Real | inferred Real |
+| `0 = (0: Natural)` | inferred left operand; explicit right operand |
+| `x != 0`, x a complex vector | inferred vector zero |
+
+The experimental materializer accepts defaults by default. Passing
+`use_default=False` deliberately retains the previous unresolved-family check.
+A round-trip test changes the visible default to Real after saving a defaulted
+Natural numeral; replay preserves its Natural constructor, origin and rendering.
+A competing exact Natural-zero constructor is still ambiguous with the Natural
+Numerals constructor: a default supplies no constructor-priority rule.
+
+All 65 design/adapter tests pass. The native checker now compares seven exact
+targets and proves seven meaning statements, adding standalone Natural zero and
+its reflexive equality to the earlier five examples. This verifies the retained
+terms for these specimens, not production integration or the unresolved
+candidate-validity and dependent-constraint obligations listed above.
 :::

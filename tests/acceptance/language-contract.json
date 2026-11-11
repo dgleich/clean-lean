@@ -3224,14 +3224,17 @@
         "0 != x",
         "A = 0",
         "0 = A",
-        "r + 0"
+        "r + 0",
+        "0",
+        "0 = 0"
       ],
       "constructive_rule": "studies/parameterized-literals/README.md#rows-from-actual-clean-declarations",
       "tests": [
         "studies/parameterized-literals/test_clean_rows.py",
-        "studies/parameterized-literals/check_clean_rows.py"
+        "studies/parameterized-literals/check_clean_rows.py",
+        "studies/parameterized-literals/test_constraint_model.py"
       ],
-      "native_oracles": "Five independent exact targets and five meaning proofs in studies/parameterized-literals/JointTargets.lean",
+      "native_oracles": "Seven independent exact targets and seven meaning proofs in studies/parameterized-literals/JointTargets.lean",
       "negative_cases": [
         "Duplicate zero constructors",
         "Unresolved families are not discarded",
@@ -3243,10 +3246,17 @@
       "pending": [
         "Production integration",
         "Binder and general dependent constraints",
-        "Default provenance in retained targets",
         "Retained declaration telescope audit",
         "Every candidate validated before selection",
-        "Full production regression"
+        "Full production regression",
+        "General dependent-default interactions"
+      ],
+      "retention_checks": [
+        "Simultaneous defaulted position trace",
+        "Context-forced numerals remain inferred",
+        "Explicit annotations are not default holes",
+        "Codec replay preserves origin after default change",
+        "Same-carrier exact constructor and Numerals remain ambiguous"
       ]
     }
   ]

@@ -329,4 +329,18 @@ same_basic_target actualJoint4 expectedJoint4
 theorem meaningJoint4 (m n : cleanType_Natural_469c53b6dafb7a218246) (x : cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) (A : cleanType_Matrix_4518cbfc13ff70fc0769 m n cleanType_Real_107b6641a486642ad8e1) (r : cleanType_Real_107b6641a486642ad8e1) : actualJoint4 m n x A r = r := by
   simp [actualJoint4, cleanNotation_real_sum_713c2cdea73d301a76c4, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
 
+
+noncomputable def actualDefault0 : cleanType_Natural_469c53b6dafb7a218246 := (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0))
+noncomputable def expectedDefault0 : cleanType_Natural_469c53b6dafb7a218246 := cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0)
+same_basic_target actualDefault0 expectedDefault0
+
+
+noncomputable def actualDefault1 : cleanType_Proposition_ae4a13d2f060407bce35 := (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0))))
+noncomputable def expectedDefault1 : cleanType_Proposition_ae4a13d2f060407bce35 := @cleanDefine_equal_5fac732a65dd209a83f4 cleanType_Natural_469c53b6dafb7a218246 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0))
+same_basic_target actualDefault1 expectedDefault1
+
+theorem meaningDefault0 : actualDefault0 = (0 : Nat) := by rfl
+
+theorem meaningDefault1 : actualDefault1 := by rfl
+
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -42,8 +42,21 @@ same_basic_target actualJoint{i} expectedJoint{i}
   checks.append(f'''theorem meaningJoint{i} {binders} : actualJoint{i} m n x A r = r := by
   simp [actualJoint{i}, {f('real sum')}, {nr}]
 ''')
+nn=env.data['types']['Natural']['numerals']['native_binding']
+nzero=f"{nn} (nat_lit 0)"
+for i,(source,typ,expected) in enumerate([
+ ('0',t('Natural'),nzero),
+ ('0 = 0',t('Proposition'),f"@{f('equal')} {t('Natural')} ({nzero}) ({nzero})")]):
+ value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')))
+ checks.append(f'''
+noncomputable def actualDefault{i} : {typ} := {value.lean}
+noncomputable def expectedDefault{i} : {typ} := {expected}
+same_basic_target actualDefault{i} expectedDefault{i}
+''')
+checks.append('theorem meaningDefault0 : actualDefault0 = (0 : Nat) := by rfl\n')
+checks.append('theorem meaningDefault1 : actualDefault1 := by rfl\n')
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Five experimental joint-row targets and five meaning proofs passed; production joint inference remains unimplemented.')
+print('Seven experimental joint-row targets and seven meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

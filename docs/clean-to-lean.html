@@ -1244,8 +1244,9 @@ inference remains incomplete. See <a href="standard-zeros.md">targets and checks
 <h2>Experimental joint literal inference</h2>
 <p>The study adapter can select a retained vector-zero constructor for
 <code>x != 0</code> and <code>0 != x</code>, then check the resulting Lean calls.
-Five canonical targets pass. This is not production inference: dependent
-constraints, default provenance and full candidate validation remain open.
+Seven canonical targets pass. Defaulted positions now retain their origin and
+selected constructor across replay. This is not production inference: dependent
+constraints and full candidate validation remain open.
 See the <a href="../studies/parameterized-literals/README.md#rows-from-actual-clean-declarations">construction and boundaries</a>.</p>
 </section></llm>
 </body>

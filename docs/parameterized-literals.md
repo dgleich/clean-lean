@@ -457,3 +457,15 @@ default provenance, declaration-bound telescope auditing and exhaustive candidat
 validation remain required. The linked study specifies the construction order,
 unsupported boundaries and 56 passing design/adapter tests.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The experimental source-to-row adapter now also retains the simultaneous default
+restriction positions in an immutable selection trace. Materialization marks
+exactly those source holes `defaulted`, preserving constructor identity, rendering
+and codec replay across a later default change. Context-forced literals remain
+`inferred`; existing annotations stay explicit. The [study contract](../studies/parameterized-literals/README.md#retaining-default-origins)
+records 65 passing design/adapter tests and seven exact native targets with seven
+meaning proofs. Production inference, general dependent constraints and exhaustive
+candidate validation remain unchanged and incomplete.
+:::

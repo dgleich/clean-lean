@@ -12,7 +12,7 @@ from cleanlang.core import Type,LocalType,ValueIndex,Expr,Expressions,split
 from cleanlang.numeral_inference import holes,default_carrier
 from cleanlang.numerals import digits,identity
 from cleanlang.operator_bindings import token
-from constraint_model import Variable,Atom,Carrier,Row,Incomplete,Ambiguous,NoSolution,select,unify,resolve,variables
+from constraint_model import Variable,Atom,Carrier,Row,Incomplete,Ambiguous,NoSolution,select_with_trace,unify,resolve,variables
 
 @dataclass(frozen=True)
 class Fragment:
@@ -156,12 +156,15 @@ class Builder:
                     f.equations+(((f.typ,self.typ(expected)),) if expected is not None else ()))
                 for f in self.fragments(tree)]
 
-    def solve(self,tree,expected=None,*,use_default=True):
+    def solve_with_trace(self,tree,expected=None,*,use_default=True):
         name=default_carrier(self.env) if use_default else None
         default=self.typ(self.env.type(name)) if name is not None else None
-        selected=select(self.rows(tree,expected),default=default,limit=self.limit)
-        self.audit_operators(tree,selected)
+        selected=select_with_trace(self.rows(tree,expected),default=default,limit=self.limit)
+        self.audit_operators(tree,selected.result)
         return selected
+
+    def solve(self,tree,expected=None,*,use_default=True):
+        return self.solve_with_trace(tree,expected,use_default=use_default).result
 
     def audit_operators(self,tree,selected):
         # Return-type constraints must not break a tie between operators whose
@@ -190,14 +193,16 @@ class Builder:
         walk(tree,())
 
 
-    def materialize(self,tree,expected=None):
-        """Check one non-defaulted selected row with the existing elaborator.
+    def materialize(self,tree,expected=None,*,use_default=True):
+        """Recheck one selected row while retaining simultaneous default origins.
 
         This demonstrates retained targets; it does not discharge exhaustive
         validation of every partially solved dependent row for production use.
         """
-        selected=self.solve(tree,expected,use_default=False)
-        choices,actual_arguments=selected
+        selected=self.solve_with_trace(tree,expected,use_default=use_default)
+        choices,actual_arguments=selected.result
+        positions=holes(tree)
+        defaulted={positions[i][0] for i in selected.defaulted_positions}
         row=next(row for row in self.rows(tree,expected) if row.choices==choices)
         bindings=unify(row.equations+tuple(zip(row.arguments,actual_arguments)),limit=self.limit)
         from cleanlang.annotations import Annotation,references
@@ -214,10 +219,11 @@ class Builder:
             raise Incomplete('No checked representative for recovered parameter')
         def replace(node,path):
             if node[0]=='Decimal':
+                origin='defaulted' if path in defaulted else 'inferred'
                 if ('numeral',path) in selected_literals:
                     key=selected_literals['numeral',path]
                     name=next(n for n,s in self.env.data['types'].items() if s.get('numerals',{}).get('native_binding')==key)
-                    return ['BoundNumeral',node[1],name,identity(name,self.env),'inferred']
+                    return ['BoundNumeral',node[1],name,identity(name,self.env),origin]
                 name=functions[selected_literals['literal',path]];spec=self.env.data['functions'][name]
                 formal,_=self.telescope(spec,path)
                 recovered={n:actual(value) for n,value in formal.items()}
@@ -225,7 +231,7 @@ class Builder:
                 args=[[p[1],p[3],bind(reify_parameter(recovered[p[1]],p,self.env,self.scope).tree,
                                      self.env,self.scope,binders=True)] for p in spec['signature_tree'][2]]
                 retained=['BoundLiteral',digits(node[1]),node[1],name,snapshot(name,self.env),args,
-                          Annotation(str(target),target,references(target,self.scope)),'inferred']
+                          Annotation(str(target),target,references(target,self.scope)),origin]
                 literal(retained,self.env,self.scope)
                 return retained
             if node[0]=='Call':return [node[0],node[1],[replace(a,path+(2,i)) for i,a in enumerate(node[2])]]
