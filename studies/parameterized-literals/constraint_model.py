@@ -103,6 +103,56 @@ def abstract(binder,domain,body,*,identity='Pi',sort='type',limit=4096):
     except RecursionError as error:raise Incomplete('Binder abstraction recursion exhausted') from error
 
 
+def instantiate(binder,argument,*,limit=4096):
+    """Capture-free structural substitution; domain typing is a separate constraint.
+
+    The argument must have no dangling de Bruijn references at its own root.
+    Free lexical references are allowed and remain free under nested binders.
+    """
+    if not isinstance(binder,Binder):raise Incomplete('Instantiation requires a binder node')
+    well_scoped(binder,limit=limit);well_scoped(argument,limit=limit)
+    visits=0
+    def replace(term,depth):
+        nonlocal visits
+        visits+=1
+        if visits>limit:raise Incomplete('Binder instantiation limit exceeded')
+        if isinstance(term,Bound):
+            if term.level==depth:
+                if term.sort!=argument.sort:raise NoSolution('Bound argument sort mismatch')
+                return argument
+            # A well-scoped root Binder has no references outside itself.
+            if term.level>depth:raise Incomplete('Instantiation found an external bound reference')
+            return term
+        if isinstance(term,Carrier):return Carrier(term.identity,tuple(replace(a,depth) for a in term.arguments),term.sort)
+        if isinstance(term,Binder):return Binder(term.identity,replace(term.domain,depth),replace(term.body,depth+1),term.sort)
+        if isinstance(term,(Variable,Atom,Reference)):return term
+        raise Incomplete('Unknown binder instantiation term')
+    try:
+        result=replace(binder.body,0)
+        well_scoped(result,limit=limit)
+        return result
+    except RecursionError as error:raise Incomplete('Binder instantiation recursion exhausted') from error
+
+
+def open_binder(binder,local,sort,*,limit=4096):
+    """Expose a binder with a genuinely fresh explicit lexical reference."""
+    if not isinstance(binder,Binder):raise Incomplete('Opening requires a binder node')
+    well_scoped(binder,limit=limit)
+    pending=[binder];visits=0
+    while pending:
+        visits+=1
+        if visits>limit:raise Incomplete('Binder opening freshness limit exceeded')
+        term=pending.pop()
+        if isinstance(term,Reference):occupied=term.binder==local
+        elif isinstance(term,Atom):occupied=local in term.free_binders
+        elif isinstance(term,Variable):occupied=local in term.allowed_binders
+        else:occupied=False
+        if occupied:raise Incomplete('Opening local is not fresh in the binder scope')
+        if isinstance(term,Carrier):pending.extend(term.arguments)
+        elif isinstance(term,Binder):pending.extend((term.domain,term.body))
+    return instantiate(binder,Reference(local,sort),limit=limit)
+
+
 @dataclass(frozen=True)
 class Deferred:
     """Pure forward check: ground inputs -> checked ground value, no inversion."""

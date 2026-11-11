@@ -286,3 +286,90 @@ class BinderScopeRegressions(unittest.TestCase):
         t=V('T','type')
         typ=abstract('n',vector(Reference('outer','index')),REAL)
         with self.assertRaises(NoSolution):unify([(t,typ)])
+
+
+class BinderInstantiation(unittest.TestCase):
+    def test_abstract_then_substitute_direct_dimension(self):
+        from constraint_model import abstract,instantiate,Reference
+        typ=abstract('n',NAT,vector(Reference('n','index')))
+        self.assertEqual(instantiate(typ,N),vector(N))
+    def test_substitute_through_nested_domain_and_body(self):
+        from constraint_model import abstract,instantiate,Reference,Bound,Binder
+        inner=abstract('j',vector(Reference('n','index')),C('Pair',(Reference('n','index'),Reference('j','index'))))
+        typ=abstract('n',NAT,inner)
+        self.assertEqual(instantiate(typ,M),Binder('Pi',vector(M),C('Pair',(M,Bound(0,'index')))))
+    def test_inserting_binder_does_not_capture_its_internal_reference(self):
+        from constraint_model import abstract,instantiate,Reference,Bound,Binder
+        argument=abstract('a',NAT,vector(Reference('a','index')))
+        outer=abstract('T',C('Type'),abstract('n',NAT,C('Pair',(Reference('T','type'),Reference('n','index')))))
+        self.assertEqual(instantiate(outer,argument),Binder('Pi',NAT,C('Pair',(argument,Bound(0,'index')))))
+    def test_free_argument_reference_remains_free_under_binder(self):
+        from constraint_model import abstract,instantiate,Reference,Bound,Binder
+        outer=abstract('n',NAT,abstract('j',NAT,C('Pair',(Reference('n','index'),Reference('j','index')))))
+        free=Reference('caller/j','index')
+        self.assertEqual(instantiate(outer,free),Binder('Pi',NAT,C('Pair',(free,Bound(0,'index')))))
+    def test_open_and_close_recovers_alpha_canonical_binder(self):
+        from constraint_model import abstract,open_binder,Reference
+        original=abstract('n',NAT,abstract('j',NAT,C('Pair',(Reference('n','index'),Reference('j','index')))))
+        body=open_binder(original,'fresh','index')
+        self.assertEqual(abstract('fresh',original.domain,body),original)
+    def test_opening_rejects_collision_in_domain(self):
+        from constraint_model import abstract,open_binder,Reference
+        typ=abstract('n',vector(Reference('outer','index')),REAL)
+        with self.assertRaises(Incomplete):open_binder(typ,'outer','index')
+    def test_opening_checks_opaque_and_metavariable_dependencies(self):
+        from constraint_model import Binder,open_binder
+        for body in [A('opaque','type',frozenset({'outer'})),V('T','type',frozenset({'outer'}))]:
+            with self.subTest(body=body),self.assertRaises(Incomplete):open_binder(Binder('Pi',NAT,body),'outer','index')
+    def test_argument_with_dangling_bound_reference_is_incomplete(self):
+        from constraint_model import Binder,Bound,instantiate
+        with self.assertRaises(Incomplete):instantiate(Binder('Pi',NAT,REAL),Bound(0,'index'))
+    def test_argument_sort_mismatch_rejects(self):
+        from constraint_model import abstract,instantiate,Reference
+        typ=abstract('n',NAT,vector(Reference('n','index')))
+        with self.assertRaises(NoSolution):instantiate(typ,REAL)
+    def test_unused_argument_preserves_body(self):
+        from constraint_model import Binder,instantiate
+        self.assertEqual(instantiate(Binder('Pi',NAT,REAL),N),REAL)
+    def test_instantiation_leaves_scope_independent_variable_unresolved(self):
+        from constraint_model import abstract,instantiate,Reference,resolve
+        t=V('T','type');typ=abstract('n',NAT,C('Pair',(Reference('n','index'),t)))
+        result=instantiate(typ,N)
+        self.assertEqual(result,C('Pair',(N,t)))
+        self.assertEqual(resolve(result,unify([(t,REAL)])),C('Pair',(N,REAL)))
+    def test_instantiated_free_dependency_still_obeys_solution_scope(self):
+        from constraint_model import abstract,instantiate,Reference
+        typ=abstract('n',NAT,vector(Reference('n','index')))
+        result=instantiate(typ,Reference('outer','index'))
+        with self.assertRaises(NoSolution):unify([(V('T','type'),result)])
+    def test_instantiation_and_opening_limits_are_incomplete(self):
+        from constraint_model import Binder,Bound,instantiate,open_binder
+        typ=Binder('Pi',NAT,vector(Bound(0,'index')))
+        for op in [lambda:instantiate(typ,N,limit=1),lambda:open_binder(typ,'fresh','index',limit=1)]:
+            with self.assertRaises(Incomplete):op()
+    def test_nonbinder_and_unknown_argument_are_incomplete(self):
+        from constraint_model import Binder,instantiate,open_binder
+        for op in [lambda:instantiate(REAL,N),lambda:open_binder(REAL,'fresh','index'),lambda:instantiate(Binder('Pi',NAT,REAL),object())]:
+            with self.assertRaises(Incomplete):op()
+
+
+class BinderRoundTripLaws(unittest.TestCase):
+    def test_open_close_round_trip_over_bounded_term_family(self):
+        from constraint_model import Reference,Bound,Binder,abstract,instantiate,open_binder
+        leaves=[Reference('a','index'),Reference('outer','index'),N,REAL,V('T','type')]
+        cases=list(leaves)
+        cases += [C('Pair',(x,y)) for x in leaves for y in leaves]
+        cases += [Binder('Pi',x,C('Pair',(y,Bound(0,'index')))) for x in leaves for y in leaves]
+        cases += [Binder('Pi',NAT,Binder('Pi',x,C('Triple',(y,Bound(0,'index'),Bound(1,'index'))))) for x in leaves for y in leaves]
+        for term in cases:
+            with self.subTest(term=term):
+                closed=abstract('a',NAT,term)
+                self.assertEqual(instantiate(closed,Reference('a','index')),term)
+                opened=open_binder(closed,'fresh','index')
+                self.assertEqual(abstract('fresh',NAT,opened),closed)
+    def test_scope_independent_substitution_commutes_with_instantiation(self):
+        from constraint_model import abstract,instantiate,Reference,resolve
+        t=V('T','type')
+        binder=abstract('n',NAT,C('Pair',(Reference('n','index'),t)))
+        bindings=unify([(t,REAL)])
+        self.assertEqual(instantiate(resolve(binder,bindings),N),resolve(instantiate(binder,N),bindings))

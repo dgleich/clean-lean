@@ -3960,6 +3960,22 @@
         "Independent native targets for binder nodes",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_symbolic_binder_opening",
+      "status": "experimental-model-only",
+      "source": "instantiate and open_binder on explicit symbolic Binder nodes",
+      "checks": [
+        "studies/parameterized-literals/test_constraint_model.py"
+      ],
+      "obligation": "Capture-free structural substitution, root-well-scoped arguments, fresh lexical opening, domain/body depth distinction, explicit sort checks and round-trip properties",
+      "pending": [
+        "Domain typing through checked Clean lowering",
+        "Contextual metavariable substitution",
+        "Embedded lambda inference",
+        "Independent native targets for binder nodes",
+        "Production integration"
+      ]
     }
   ]
 }

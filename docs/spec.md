@@ -2140,3 +2140,17 @@ These nodes have no Clean lowering yet and accept no new source syntax. Contextu
 metavariables and embedded lambda inference remain open; native regression checks
 must not be described as conformance evidence for this representation.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental binder opening and instantiation
+
+The standalone model can instantiate a well-scoped binder with a root-well-scoped
+argument and open it using a fresh lexical identity. Nested binder domains and
+bodies have distinct depth rules; free argument references remain free. Freshness
+includes opaque dependencies and metavariable permission sets. Domain typing is
+a separate obligation. See the
+[constructive operations and validation boundary](../studies/parameterized-literals/README.md#opening-and-instantiating-symbolic-binders).
+No Clean lowering or new source syntax is claimed; contextual metavariables and
+embedded lambda inference remain pending.
+:::

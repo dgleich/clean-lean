@@ -1592,5 +1592,15 @@ This is a prerequisite model, not a new Clean-to-Lean translation rule. Checked
 Clean lowering, contextual metavariables, and embedded lambda inference are
 pending. See the <a href="../studies/parameterized-literals/README.md#explicit-symbolic-binder-abstraction">abstraction and unification contract</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="symbolic-binder-opening">
+<h2>Opening and substituting binder bodies (model only)</h2>
+<p>The constraint model can now replace a bound reference by an argument, including
+under nested binders. For example, substituting m into a body representing
+<code>(j : Vector n Complex) → Pair n j</code> changes n to m while keeping j
+bound. This is schematic symbolic notation. Opening uses a fresh lexical identity;
+reabstracting it recovers the same structure. Domain typing remains a separate
+constraint. These operations are not yet wired into Clean translation. See the
+<a href="../studies/parameterized-literals/README.md#opening-and-instantiating-symbolic-binders">structural rules and tests</a>.</p>
+</section></llm>
 </body>
 </html>

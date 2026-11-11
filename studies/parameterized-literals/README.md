@@ -1863,3 +1863,50 @@ type keys and TypePlans; it does not produce these Binder nodes yet. Native
 regression checks exercise that existing adapter, not a claimed native mapping
 for the new representation. Production integration remains pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Opening and instantiating symbolic binders
+
+`instantiate(Binder(c,D,B,s),a)` performs structural substitution into B. The
+binder and argument must be well scoped at their own roots: a may contain free
+lexical references and closed nested binders, but no dangling bound reference.
+The caller must separately constrain a's type to D; this operation does not
+establish domain typing, choose an overload, or infer an implicit parameter.
+
+Traversal starts at depth zero in B. A bound reference at the current depth is
+replaced by a, with an exact sort check. References at smaller depths belong to
+nested binders and remain unchanged. A larger depth is malformed for a validated
+root binder. Nested domains preserve depth and nested bodies increment it.
+Because a is well scoped at its own root, it can be inserted under nested binders
+without capturing its free references or changing its internally bound references.
+The result is checked for well-scoping again. Opaque atoms and scope-independent
+metavariables remain unchanged. The operation preserves constructor identities and
+sorts. Resource exhaustion, unknown nodes, and malformed representations are
+incomplete; an explicit bound-occurrence sort mismatch rejects.
+
+`open_binder(B,ℓ,s)` instantiates B with `Reference(ℓ,s)`, after checking that ℓ
+occurs nowhere free in B's domain or body, including atom dependency metadata and
+metavariable permission sets. A nonfresh identity is incomplete rather than
+silently renamed. This makes reopening deterministic under a caller-selected fresh
+identity and supports reabstracting that identity without capturing an outer one.
+An unused binder still requires a well-scoped argument; domain typing remains the
+caller's obligation even when there are no bound occurrences to check its sort.
+
+Tests independently specify direct substitution, nested domain/body behavior,
+insertion of a closed binder, preservation of an outer free reference, mismatched
+sorts, malformed arguments, freshness collisions, and resource failures. A bounded
+family of 80 terms checks both abstract/instantiate and open/reabstract round trips.
+A separate check verifies commutation with a scope-independent metavariable
+substitution. These are executable model properties, not universal proofs or
+native Clean-to-Lean target checks.
+
+Validation: all 315 experimental Python tests pass. This addition changes only
+the standalone model, tests, and documentation; the native adapter checks were
+not rerun for unused helper functions. Full production discovery and active-label
+regeneration are confirmed live and remain pending.
+
+The new operations are not yet used by the Clean adapter. Contextual metavariables,
+checked lowering, and embedded lambda inference remain the next integration work;
+no additional source programs are claimed supported by these model operations.
+:::
