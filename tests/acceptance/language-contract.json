@@ -4182,8 +4182,8 @@
       ],
       "expected_lean": "Declared wrapper with inferred K and explicit field,S,h,n. Native body installs field and calls CategoryTheory.ShortComplex.ShortExact.δ h (n+1) n rfl. Domain H(S.X₃,n+1), codomain H(S.X₁,n). No inference policy or new syntax is introduced.",
       "checks": [
-        "studies/topology/verify_homology_sequence.py: thirteen independently authored canonical targets and two zero-composition proofs",
-        "tests/test_homology_sequence.py: independent call tree, degree shift/direction, wrong-sequence evidence rejection and authored composites"
+        "studies/topology/verify_homology_sequence.py: eighteen independently authored canonical targets, two zero-composition proofs and three range-equals-kernel exactness proofs",
+        "tests/test_homology_sequence.py: independent call tree, degree shift/direction, wrong-sequence evidence rejection, authored composites/induced maps and composable exactness pairs"
       ],
       "pending": [
         "Geometric short exact sequence, excision, identification with Mayer–Vietoris maps, exactness and degree-zero endpoint",

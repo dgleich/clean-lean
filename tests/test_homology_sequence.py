@@ -31,8 +31,17 @@ class HomologySequence(unittest.TestCase):
  def test_evidence_must_belong_to_the_sequence(self):
   for text in ['connecting homology map(field,S,other,n)', 'connecting homology map(field,S,n,n)']:
    with self.subTest(text=text), self.assertRaises(CleanError):self.expr(text)
+ def test_exactness_pairs_have_matching_middle_modules(self):
+  for text in [
+    'exact(connecting homology map(field,S,h,n),sequence first homology map(field,S,n))',
+    'exact(sequence first homology map(field,S,n),sequence last homology map(field,S,n))',
+    'exact(sequence last homology map(field,S,n+1),connecting homology map(field,S,h,n))']:
+   with self.subTest(text=text):
+    self.assertEqual(self.expr(text).type,self.env.type('Proposition',self.scope))
+  with self.assertRaises(CleanError):
+   self.expr('exact(sequence last homology map(field,S,n),connecting homology map(field,S,h,n))')
  def test_composites_are_authored(self):
-  for name in ['connecting then first','last then connecting']:
+  for name in ['connecting then first','last then connecting','sequence first homology map','sequence last homology map']:
    self.assertEqual(self.env.definitions[name]['implementation'],'equals')
 
 if __name__ == '__main__': unittest.main()

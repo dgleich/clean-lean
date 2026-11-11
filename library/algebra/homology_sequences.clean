@@ -4,6 +4,7 @@ Import "graded_maps.clean"
 Import "exact_sequences.clean"
 Import "../logic/evidence.clean"
 Import Lean Mathlib.Algebra.Homology.HomologySequence
+Import Lean Mathlib.Algebra.Homology.ShortComplex.ModuleCat
 
 Type ChainShortSequence(K: Type,field: FieldStructure(K)):
   Universe: 1
@@ -87,7 +88,7 @@ Define connecting then first(field,S,h,n):
   Let n: Natural
   Returns: ModuleMap(K,field,(chain homology(field,sequence last chain(field,S),n+1)),(chain homology(field,sequence middle chain(field,S),n)))
   Equals: module composition(field,chain homology(field,sequence last chain(field,S),n+1),chain homology(field,sequence first chain(field,S),n),chain homology(field,sequence middle chain(field,S),n),connecting homology map(field,S,h,n),induced chain homology map(field,sequence first chain(field,S),sequence middle chain(field,S),sequence first chain map(field,S),n))
-  Render latex: \operatorname{{connecting then first}}({S},{n})
+  Render latex: H_{{{n}}}(f({S}))\circ\delta_{{{n}+1}}({S})
 
 Define last then connecting(field,S,h,n):
   Let K: Type
@@ -97,6 +98,24 @@ Define last then connecting(field,S,h,n):
   Let n: Natural
   Returns: ModuleMap(K,field,(chain homology(field,sequence middle chain(field,S),n+1)),(chain homology(field,sequence first chain(field,S),n)))
   Equals: module composition(field,chain homology(field,sequence middle chain(field,S),n+1),chain homology(field,sequence last chain(field,S),n+1),chain homology(field,sequence first chain(field,S),n),induced chain homology map(field,sequence middle chain(field,S),sequence last chain(field,S),sequence last chain map(field,S),n+1),connecting homology map(field,S,h,n))
-  Render latex: \operatorname{{last then connecting}}({S},{n})
+  Render latex: \delta_{{{n}+1}}({S})\circ H_{{{n}+1}}(g({S}))
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Define sequence first homology map(field,S,n):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Let n: Natural
+  Returns: ModuleMap(K,field,(chain homology(field,sequence first chain(field,S),n)),(chain homology(field,sequence middle chain(field,S),n)))
+  Equals: induced chain homology map(field,sequence first chain(field,S),sequence middle chain(field,S),sequence first chain map(field,S),n)
+  Render latex: H_{{{n}}}(f({S}))
+
+Define sequence last homology map(field,S,n):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Let n: Natural
+  Returns: ModuleMap(K,field,(chain homology(field,sequence middle chain(field,S),n)),(chain homology(field,sequence last chain(field,S),n)))
+  Equals: induced chain homology map(field,sequence middle chain(field,S),sequence last chain(field,S),sequence last chain map(field,S),n)
+  Render latex: H_{{{n}}}(g({S}))

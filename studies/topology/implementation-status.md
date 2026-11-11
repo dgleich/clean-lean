@@ -135,8 +135,9 @@ are distinct from unfinished production joint inference and validation.
 
 The [algebraic homology sequence study](homology-sequence.md) now exposes
 Mathlib's connecting map for a short exact chain sequence. Its two adjacent
-composites are authored in Clean, with thirteen canonical-target comparisons and
-two native proofs. The missing Mayer–Vietoris connecting sequence above refers
+composites and induced-map names are authored in Clean, with eighteen
+canonical-target comparisons and five native proofs. Three of those proofs
+establish range-equals-kernel exactness at the adjacent homology objects. The missing Mayer–Vietoris connecting sequence above refers
 to the geometric construction and its identification/exactness, not the absence
 of a generic algebraic connecting map. These checks add no new syntax and do not
 resolve the broader inference or full-regeneration validation obligations.

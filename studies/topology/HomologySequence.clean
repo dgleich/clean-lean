@@ -7,7 +7,7 @@ Source homology_sequence:
   Label: Mathlib homology sequence
 
 Result connecting then first vanishes:
-  Attribution: homology_sequence; CategoryTheory.ShortComplex.ShortExact.δ_comp; specialized
+  Attribution: homology_sequence; δ_comp; specialized
   Let K: Type
   Let field: FieldStructure(K)
   Let S: ChainShortSequence(K,field)
@@ -16,7 +16,7 @@ Result connecting then first vanishes:
   Conclude: connecting then first(field,S,h,n) = module zero map(field,chain homology(field,sequence last chain(field,S),n+1),chain homology(field,sequence middle chain(field,S),n))
 
 Result last then connecting vanishes:
-  Attribution: homology_sequence; CategoryTheory.ShortComplex.ShortExact.comp_δ; specialized
+  Attribution: homology_sequence; comp_δ; specialized
   Let K: Type
   Let field: FieldStructure(K)
   Let S: ChainShortSequence(K,field)
@@ -25,3 +25,30 @@ Result last then connecting vanishes:
   Conclude: last then connecting(field,S,h,n) = module zero map(field,chain homology(field,sequence middle chain(field,S),n+1),chain homology(field,sequence first chain(field,S),n))
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Result homology exact at first:
+  Attribution: homology_sequence; homology_exact₁; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Let n: Natural
+  Assume h: short exact chain sequence(field,S)
+  Conclude: exact(connecting homology map(field,S,h,n),sequence first homology map(field,S,n))
+
+Result homology exact at middle:
+  Attribution: homology_sequence; homology_exact₂; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Let n: Natural
+  Assume h: short exact chain sequence(field,S)
+  Conclude: exact(sequence first homology map(field,S,n),sequence last homology map(field,S,n))
+
+Result homology exact at last:
+  Attribution: homology_sequence; homology_exact₃; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let S: ChainShortSequence(K,field)
+  Let n: Natural
+  Assume h: short exact chain sequence(field,S)
+  Conclude: exact(sequence last homology map(field,S,n+1),connecting homology map(field,S,h,n))

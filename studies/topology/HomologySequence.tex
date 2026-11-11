@@ -1,0 +1,47 @@
+% Generated statements, not proof certificates.
+\begin{cleanresult}{connecting then first vanishes}\cleanattribution{[Mathlib homology sequence, δ\_comp]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $S$ be a composable pair of chain maps with zero composite over $K$.
+Let $n$ be a natural number.
+Assume $S\text{ is short exact}$ (\texttt{h}).
+Then \[H_{n}(f(S))\circ\delta_{n+1}(S)=0.\]
+\end{cleanresult}
+
+\begin{cleanresult}{last then connecting vanishes}\cleanattribution{[Mathlib homology sequence, comp\_δ]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $S$ be a composable pair of chain maps with zero composite over $K$.
+Let $n$ be a natural number.
+Assume $S\text{ is short exact}$ (\texttt{h}).
+Then \[\delta_{n+1}(S)\circ H_{n+1}(g(S))=0.\]
+\end{cleanresult}
+
+\begin{cleanresult}{homology exact at first}\cleanattribution{[Mathlib homology sequence, homology\_exact₁]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $S$ be a composable pair of chain maps with zero composite over $K$.
+Let $n$ be a natural number.
+Assume $S\text{ is short exact}$ (\texttt{h}).
+Then \[\operatorname{exact}(\delta_{n+1}(S),H_{n}(f(S))).\]
+\end{cleanresult}
+
+\begin{cleanresult}{homology exact at middle}\cleanattribution{[Mathlib homology sequence, homology\_exact₂]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $S$ be a composable pair of chain maps with zero composite over $K$.
+Let $n$ be a natural number.
+Assume $S\text{ is short exact}$ (\texttt{h}).
+Then \[\operatorname{exact}(H_{n}(f(S)),H_{n}(g(S))).\]
+\end{cleanresult}
+
+\begin{cleanresult}{homology exact at last}\cleanattribution{[Mathlib homology sequence, homology\_exact₃]}
+Let $K$ be a type.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $S$ be a composable pair of chain maps with zero composite over $K$.
+Let $n$ be a natural number.
+Assume $S\text{ is short exact}$ (\texttt{h}).
+Then \[\operatorname{exact}(H_{n+1}(g(S)),\delta_{n+1}(S)).\]
+\end{cleanresult}
+
+% generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

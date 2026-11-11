@@ -19,6 +19,7 @@ import Mathlib.Algebra.Homology.HomologicalComplexAbelian
 import Mathlib.Algebra.Homology.ShortComplex.HomologicalComplex
 import Mathlib.Algebra.Exact
 import Mathlib.Algebra.Homology.HomologySequence
+import Mathlib.Algebra.Homology.ShortComplex.ModuleCat
 
 /-!
 Basic topology with explicit carrier types and topologies.
@@ -468,6 +469,12 @@ noncomputable def cleanDefine_connecting_then_first_45e42436c760729b2808 {«K» 
 noncomputable def cleanDefine_last_then_connecting_5f2127ff3cfa386ab9e3 {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («S» : (_root_.cleanType_ChainShortSequence_b1d8b3a8c3dab01aa7e0 («K») («field»))) («h» : ((@_root_.cleanDefine_short_exact_chain_sequence_26e98e075adf0d90318c («K») («field») («S»)))) («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_middle_chain_c1aeaa7e51220cd070b6 («K») («field») («S»))) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_first_chain_a6698e1bb246719c9915 («K») («field») («S»))) («n»)))) :=
   (@_root_.cleanNotation_module_composition_622cd851b0bc174c8369 («K») («field») ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_middle_chain_c1aeaa7e51220cd070b6 («K») («field») («S»))) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_last_chain_9ec2fc2d4fb6699a1c09 («K») («field») («S»))) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_first_chain_a6698e1bb246719c9915 («K») («field») («S»))) («n»))) ((@_root_.cleanNotation_induced_chain_homology_map_3952f2d3986b4912e6ec («K») («field») ((@_root_.cleanNotation_sequence_middle_chain_c1aeaa7e51220cd070b6 («K») («field») («S»))) ((@_root_.cleanNotation_sequence_last_chain_9ec2fc2d4fb6699a1c09 («K») («field») («S»))) ((@_root_.cleanNotation_sequence_last_chain_map_c0bd91d59675093d2fd4 («K») («field») («S»))) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((@_root_.cleanNotation_connecting_homology_map_e9e9e7af119c4bfdfc4b («K») («field») («S») («h») («n»))))
 
+noncomputable def cleanDefine_sequence_first_homology_map_fa1110f924261ba7c629 {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («S» : (_root_.cleanType_ChainShortSequence_b1d8b3a8c3dab01aa7e0 («K») («field»))) («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_first_chain_a6698e1bb246719c9915 («K») («field») («S»))) («n»))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_middle_chain_c1aeaa7e51220cd070b6 («K») («field») («S»))) («n»)))) :=
+  (@_root_.cleanNotation_induced_chain_homology_map_3952f2d3986b4912e6ec («K») («field») ((@_root_.cleanNotation_sequence_first_chain_a6698e1bb246719c9915 («K») («field») («S»))) ((@_root_.cleanNotation_sequence_middle_chain_c1aeaa7e51220cd070b6 («K») («field») («S»))) ((@_root_.cleanNotation_sequence_first_chain_map_947aa93d310480a37bef («K») («field») («S»))) («n»))
+
+noncomputable def cleanDefine_sequence_last_homology_map_4d390a5380a24b43f205 {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («S» : (_root_.cleanType_ChainShortSequence_b1d8b3a8c3dab01aa7e0 («K») («field»))) («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_middle_chain_c1aeaa7e51220cd070b6 («K») («field») («S»))) («n»))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_last_chain_9ec2fc2d4fb6699a1c09 («K») («field») («S»))) («n»)))) :=
+  (@_root_.cleanNotation_induced_chain_homology_map_3952f2d3986b4912e6ec («K») («field») ((@_root_.cleanNotation_sequence_middle_chain_c1aeaa7e51220cd070b6 («K») («field») («S»))) ((@_root_.cleanNotation_sequence_last_chain_9ec2fc2d4fb6699a1c09 («K») («field») («S»))) ((@_root_.cleanNotation_sequence_last_chain_map_c0bd91d59675093d2fd4 («K») («field») («S»))) («n»))
+
 
 open scoped Matrix
 
@@ -478,7 +485,7 @@ namespace CleanStatements
 
 /--
 source: homology_sequence
-reference: CategoryTheory.ShortComplex.ShortExact.δ_comp
+reference: δ_comp
 relationship: specialized
 -/
 def «connecting_then_first_vanishes» : Prop :=
@@ -491,7 +498,7 @@ def «connecting_then_first_vanishes» : Prop :=
 
 /--
 source: homology_sequence
-reference: CategoryTheory.ShortComplex.ShortExact.comp_δ
+reference: comp_δ
 relationship: specialized
 -/
 def «last_then_connecting_vanishes» : Prop :=
@@ -501,6 +508,45 @@ def «last_then_connecting_vanishes» : Prop :=
   ∀ («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
   ∀ («h» : (@_root_.cleanDefine_short_exact_chain_sequence_26e98e075adf0d90318c («K») («field») («S»))),
   (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((@_root_.cleanDefine_last_then_connecting_5f2127ff3cfa386ab9e3 («K») («field») («S») («h») («n»))) ((@_root_.cleanNotation_module_zero_map_79f61b4235399bfd978b («K») («field») ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_middle_chain_c1aeaa7e51220cd070b6 («K») («field») («S»))) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_first_chain_a6698e1bb246719c9915 («K») («field») («S»))) («n»))))))
+
+/--
+source: homology_sequence
+reference: homology_exact₁
+relationship: specialized
+-/
+def «homology_exact_at_first» : Prop :=
+  ∀ («K» : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))),
+  ∀ («S» : (_root_.cleanType_ChainShortSequence_b1d8b3a8c3dab01aa7e0 («K») («field»))),
+  ∀ («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
+  ∀ («h» : (@_root_.cleanDefine_short_exact_chain_sequence_26e98e075adf0d90318c («K») («field») («S»))),
+  (@_root_.cleanDefine_exact_b36288aa2a8dfa579243 («K») («field») ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_last_chain_9ec2fc2d4fb6699a1c09 («K») («field») («S»))) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_first_chain_a6698e1bb246719c9915 («K») («field») («S»))) («n»))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_middle_chain_c1aeaa7e51220cd070b6 («K») («field») («S»))) («n»))) ((@_root_.cleanNotation_connecting_homology_map_e9e9e7af119c4bfdfc4b («K») («field») («S») («h») («n»))) ((@_root_.cleanDefine_sequence_first_homology_map_fa1110f924261ba7c629 («K») («field») («S») («n»))))
+
+/--
+source: homology_sequence
+reference: homology_exact₂
+relationship: specialized
+-/
+def «homology_exact_at_middle» : Prop :=
+  ∀ («K» : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))),
+  ∀ («S» : (_root_.cleanType_ChainShortSequence_b1d8b3a8c3dab01aa7e0 («K») («field»))),
+  ∀ («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
+  ∀ («h» : (@_root_.cleanDefine_short_exact_chain_sequence_26e98e075adf0d90318c («K») («field») («S»))),
+  (@_root_.cleanDefine_exact_b36288aa2a8dfa579243 («K») («field») ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_first_chain_a6698e1bb246719c9915 («K») («field») («S»))) («n»))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_middle_chain_c1aeaa7e51220cd070b6 («K») («field») («S»))) («n»))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_last_chain_9ec2fc2d4fb6699a1c09 («K») («field») («S»))) («n»))) ((@_root_.cleanDefine_sequence_first_homology_map_fa1110f924261ba7c629 («K») («field») («S») («n»))) ((@_root_.cleanDefine_sequence_last_homology_map_4d390a5380a24b43f205 («K») («field») («S») («n»))))
+
+/--
+source: homology_sequence
+reference: homology_exact₃
+relationship: specialized
+-/
+def «homology_exact_at_last» : Prop :=
+  ∀ («K» : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))),
+  ∀ («S» : (_root_.cleanType_ChainShortSequence_b1d8b3a8c3dab01aa7e0 («K») («field»))),
+  ∀ («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
+  ∀ («h» : (@_root_.cleanDefine_short_exact_chain_sequence_26e98e075adf0d90318c («K») («field») («S»))),
+  (@_root_.cleanDefine_exact_b36288aa2a8dfa579243 («K») («field») ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_middle_chain_c1aeaa7e51220cd070b6 («K») («field») («S»))) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_last_chain_9ec2fc2d4fb6699a1c09 («K») («field») («S»))) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_sequence_first_chain_a6698e1bb246719c9915 («K») («field») («S»))) («n»))) ((@_root_.cleanDefine_sequence_last_homology_map_4d390a5380a24b43f205 («K») («field») («S») ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((@_root_.cleanNotation_connecting_homology_map_e9e9e7af119c4bfdfc4b («K») («field») («S») («h») («n»))))
 
 end CleanStatements
 
