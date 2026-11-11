@@ -14,12 +14,15 @@ The source PDF is not redistributed here.
 ## Read this first
 
 For a single-file reading view, start with [Paper-expanded.clean](Paper-expanded.clean):
-it includes the implemented study definitions beside the explanatory text.
+it includes the implemented study definitions beside the explanatory text,
+followed by the four main theorem drafts and FMA corollary in an explicitly
+untranslated `Text:` appendix. That appendix is literal prose: its missing imports
+are not loaded and its results do not become Lean declarations.
 The shorter [Paper.clean](Paper.clean) remains the authored entry point; its
 imports are expanded by `build_reading.py`, not maintained as a second copy.
 Library imports remain explicit. Neither edition includes the pending IEEE
-theorems as executable statements. Then read
-[the unimplemented paper theorem targets](Paper.clean.proposed) and follow their
+theorems as executable statements. The appendix is generated from
+[the unimplemented paper theorem targets](Paper.clean.proposed). Follow their
 imports into [Models.clean](Models.clean), [Bounds.clean](Bounds.clean) and
 [CSR.clean](CSR.clean). Those three modules translate today. The draft deliberately
 uses a `.proposed` extension: its IEEE754 import does not exist yet. No dummy
