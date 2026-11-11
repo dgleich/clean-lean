@@ -2,14 +2,17 @@
 
 # Parameterized literals: proposed declaration and inference contract
 
-**Not implemented in production or accepted as fully specified.**
-An [isolated typed-literal prototype](../studies/literal-annotations/README.md)
-now tests declaration selection and annotation targets, with explicit representation
-and inference gaps. The current
-compiler's closed-carrier numeral rule cannot express `(0: Vector(n,Complex))`
-or infer that interpretation in `x != 0`. Adding another closed carrier or
-replacing zero by a named function in every theorem would not solve that problem.
-The intended end state includes ordinary unannotated mathematical uses.
+**Current status:** explicit annotated exact literals and retained bindings are
+implemented. The [standard zero module](standard-zeros.md) now supplies real and
+complex vector/matrix constructors. Unannotated joint inference, including
+`x != 0` for a vector, remains incomplete. This document records the earlier
+design stages and the remaining general contract; historical references to an
+isolated prototype or rejection of `Literal` do not describe the current compiler.
+
+Explicit annotations such as `(0: Vector(n,Complex))` work with an imported
+matching declaration. Replacing unannotated zero throughout theorem statements
+would not complete the intended language. The end state includes ordinary
+unannotated mathematical uses.
 
 The proposed extension attaches an exact literal to an ordinary declared
 constructor. Mathematical meaning remains in explicit Clean modules. It does not

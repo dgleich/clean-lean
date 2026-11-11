@@ -1,0 +1,26 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "../operators.clean"
+
+-- Exact zero interpretations. Dimensions are recovered from a determined
+-- result carrier; these declarations do not implement unannotated inference.
+Notation complex vector zero(n: Natural): Vector(n,Complex):
+  Means: fun _ => (0 : Complex)
+  Literal: 0
+  Render latex: 0_{{{n}}}
+
+Notation complex matrix zero(m: Natural,n: Natural): Matrix(m,n,Complex):
+  Means: fun _ _ => (0 : Complex)
+  Literal: 0
+  Render latex: 0_{{{m}\times {n}}}
+
+Notation real vector zero(n: Natural): Vector(n,Real):
+  Means: fun _ => (0 : Real)
+  Literal: 0
+  Render latex: 0_{{{n}}}
+
+Notation real matrix zero(m: Natural,n: Natural): Matrix(m,n,Real):
+  Means: fun _ _ => (0 : Real)
+  Literal: 0
+  Render latex: 0_{{{m}\times {n}}}
+
+-- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

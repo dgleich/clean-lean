@@ -1631,3 +1631,14 @@ and the atomic-expression exclusion affect work only. Public comparisons retain
 fresh validation. See [comparison-reuse.md](comparison-reuse.md) for the precise
 preconditions, unchanged target rule, tests and pending performance evidence.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Explicit standard zero constructors
+
+The linear algebra module imports four module-declared exact zero attachments
+for real/complex vectors and rectangular matrices. Determined annotations select
+them by the existing retained-literal rule; no type-name dispatch or new syntax
+is introduced. [Standard zeros](standard-zeros.md) records constructive targets,
+ambiguity checks and the still-open unannotated inference requirement.
+:::

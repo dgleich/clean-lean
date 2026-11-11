@@ -1,0 +1,31 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "../library/linear_algebra.clean"
+
+Source local:
+  Kind: other
+  Label: Standard zero wrappers
+  Title: Explicit literal interpretations for vectors and rectangular matrices
+
+-- These examples use determined annotations. Inferring the carrier from x != 0
+-- is still a compiler obligation; named constructors are not a replacement for it.
+Result complex vector zero interpretation:
+  Attribution: local; constructor identity; original
+  Let n: Natural
+  Conclude: (0: Vector(n,Complex)) = complex vector zero(n)
+
+Result complex matrix zero interpretation:
+  Attribution: local; constructor identity; original
+  Let m,n: Natural
+  Conclude: (0: Matrix(m,n,Complex)) = complex matrix zero(m,n)
+
+Result real vector zero interpretation:
+  Attribution: local; constructor identity; original
+  Let n: Natural
+  Conclude: (0: Vector(n,Real)) = real vector zero(n)
+
+Result real matrix zero interpretation:
+  Attribution: local; constructor identity; original
+  Let m,n: Natural
+  Conclude: (0: Matrix(m,n,Real)) = real matrix zero(m,n)
+
+-- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

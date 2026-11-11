@@ -1232,5 +1232,13 @@ local bindings and owned binder identities. The emitted Lean call is unchanged.
 Reuse ends with the outer comparison; new public comparisons recheck declarations.
 See the <a href="comparison-reuse.md">contract and validation limits</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="standard-zeros">
+<h2>Standard typed zeros</h2>
+<p>With the linear algebra module, <code>(0: Matrix(m,n,Complex))</code>
+selects the declared complex matrix zero wrapper with explicit arguments m and n.
+The wrapper body is <code>fun _ _ =&gt; (0 : Complex)</code>. Real matrices and
+real/complex vectors have corresponding declarations. Unannotated vector zero
+inference remains incomplete. See <a href="standard-zeros.md">targets and checks</a>.</p>
+</section></llm>
 </body>
 </html>

@@ -8348,6 +8348,62 @@
         "# ",
         ""
       ]
+    },
+    "library/algebra/matrix_zeros.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "examples/typed_zeros.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "tests/test_standard_zeros.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/check_standard_zero_targets.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "generated/StandardZeros.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "docs/standard-zeros.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "markdown"
     }
   }
 }

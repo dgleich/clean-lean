@@ -3195,6 +3195,25 @@
         "Whole active-label translation and native targets",
         "Full regression"
       ]
+    },
+    {
+      "id": "standard_vector_matrix_zero_declarations",
+      "status": "implemented-slice",
+      "constructive_rule": "docs/standard-zeros.md",
+      "source": "examples/typed_zeros.clean",
+      "tests": [
+        "tests/test_standard_zeros.py",
+        "tools/check_standard_zero_targets.py"
+      ],
+      "native_oracles": "Four independent constructor targets, four statement targets and four proofs in generated/StandardZeros.lean",
+      "negative_cases": [
+        "Competing constructor ambiguity",
+        "Rectangular matrix one is not zero or identity"
+      ],
+      "pending": [
+        "Unannotated joint literal/operator inference",
+        "Full regression"
+      ]
     }
   ]
 }

@@ -1,4 +1,5 @@
 Import "operators.clean"
+Import "algebra/matrix_zeros.clean"
 
 Notation det(x0):
     Let n: Natural
