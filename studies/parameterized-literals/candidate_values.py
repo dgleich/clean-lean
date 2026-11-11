@@ -107,6 +107,16 @@ class CandidateValues:
                     from cleanlang.operator_bindings import token
                     fixity='infix' if kind=='Operator' else 'prefix'
                     result.append([fixity,token(node[1],fixity)])
+                checked=Expressions(env,scope).elaborate(result)
+                formal,_=b.telescope(spec,where)
+                inferred=dict(checked.inferred_args)
+                for p in b.signature(spec).parameters:
+                    if p.visibility!='implicit':continue
+                    expected=resolve(formal[p.name],bindings)
+                    if variables(expected):raise Incomplete('Candidate implicit argument remains unresolved')
+                    if p.name not in inferred:raise Incomplete('Candidate implicit argument lacks checked evidence')
+                    if b.typ(inferred[p.name],{})!=expected:
+                        raise NoSolution('Checked implicit argument differs from candidate substitution')
                 return result
             raise Incomplete('Candidate value reconstruction does not cover '+kind)
         plans=[]

@@ -1905,3 +1905,15 @@ same checks without expected-result constraints. Selected replay preserves origi
 The [operational mapping and stricter experimental boundary](../studies/parameterized-literals/README.md#demanded-candidate-values-before-selection)
 record the remaining general-validity gaps. No grammar or production change.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental candidate implicit-argument checks
+
+A reconstructed candidate call must have checked inferred implicit arguments equal
+to its solved symbolic arguments. Missing or unresolved arguments are incomplete;
+a checked mismatch cannot pass merely because the output value is equal. Dynamic
+call/projection readiness includes child/base recovery parameters. The
+[operational rule and independent targets](../studies/parameterized-literals/README.md#checking-inferred-arguments-during-candidate-reconstruction)
+extend the experimental adapter without changing grammar or production elaboration.
+:::

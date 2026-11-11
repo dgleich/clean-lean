@@ -3519,6 +3519,23 @@
         "Nonconcrete formal-index witnesses",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_candidate_implicit_arguments",
+      "status": "experimental-slice",
+      "environment": "Explicit linear algebra modules and Clean-authored shared vector count with implicit Natural dimension",
+      "source": "vector cell(shared vector count(x,0),0)",
+      "expected_lean": "vectorCell (@sharedVectorCount n x (complexVectorZero n)) (complexVectorZero n), with exact explicit wrapper identities",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Compare each checked inferred argument with the ground symbolic candidate; wait for child recovery parameters; equal output values cannot hide differing instantiations",
+      "pending": [
+        "General dependent candidate validity",
+        "Computed formal-index witnesses",
+        "Production integration"
+      ]
     }
   ]
 }

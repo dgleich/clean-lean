@@ -1403,5 +1403,14 @@ literal origins are retained, and expected results cannot break operator input
 ties. This is an experimental extension, not full production inference. See the
 <a href="../studies/parameterized-literals/README.md#demanded-candidate-values-before-selection">demand, reconstruction and validation rules</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="candidate-implicit-arguments">
+<h2>Experimental candidate implicit arguments</h2>
+<p>For <code>shared vector count(x,0)</code>, where the dimension is inferred from
+<code>x</code>, candidate reconstruction verifies the checked implicit dimension
+against the solved symbolic argument. Nested calls wait for child recovery
+parameters. An equal result value alone is insufficient to validate a Lean
+instantiation. See the
+<a href="../studies/parameterized-literals/README.md#checking-inferred-arguments-during-candidate-reconstruction">rule, limits and native oracles</a>.</p>
+</section></llm>
 </body>
 </html>

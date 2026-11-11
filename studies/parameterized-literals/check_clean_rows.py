@@ -247,8 +247,26 @@ noncomputable def expectedOpaqueCandidate : {cell} ({extent}) :=
 same_basic_target actualOpaqueCandidate expectedOpaqueCandidate
 theorem meaningOpaqueCandidate : actualOpaqueCandidate.entry = (fun _ => (0 : Complex)) := by rfl
 """)
+notation('Define shared vector count(x,y):',
+ ['Let n: Natural','Let x,y: Vector(n,Complex)','Returns: Natural','Equals: n',
+  'Render latex: len({x},{y})'],env,authored=True)
+for i,(source,nested) in enumerate([
+ ('vector cell(shared vector count(x,0),0)',False),
+ ('vector cell(vector count(shared vector count(x,0),0),0)',True)]):
+ zero=f"@{f('complex vector zero')} n"
+ count=f"@{f('shared vector count')} n x ({zero})"
+ if nested:count=f"@{f('vector count')} ({count}) ({zero})"
+ value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ checks.append(f"""
+noncomputable def actualImplicitCandidate{i} (n : {t('Natural')}) (x : {vec}) : {cell} n := {value.lean}
+noncomputable def expectedImplicitCandidate{i} (n : {t('Natural')}) (x : {vec}) : {cell} n :=
+  @{f('vector cell')} ({count}) ({zero})
+same_basic_target actualImplicitCandidate{i} expectedImplicitCandidate{i}
+theorem meaningImplicitCandidate{i} (n : {t('Natural')}) (x : {vec}) :
+  (actualImplicitCandidate{i} n x).entry = (fun _ => (0 : Complex)) := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Thirty-seven experimental joint-row targets and thirty-seven meaning proofs passed; production joint inference remains unimplemented.')
+print('Thirty-nine experimental joint-row targets and thirty-nine meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

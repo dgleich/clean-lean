@@ -532,6 +532,41 @@ class CleanRows(unittest.TestCase):
   self.assertEqual(first.lean,second.lean)
   self.assertEqual(first.tree,second.tree)
 
+ def implicit_vector_count(self):
+  self.record()
+  notation('Define shared vector count(x,y):',
+   ['Let n: Natural','Let x,y: Vector(n,Complex)','Returns: Natural','Equals: n',
+    'Render latex: len({x},{y})'],self.e,authored=True)
+ def test_candidate_checks_implicit_dimension_from_known_operand(self):
+  self.implicit_vector_count()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(shared vector count(x,0),0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('VectorCell(n)',self.scope))
+ def test_nested_candidate_waits_for_child_implicit_arguments(self):
+  self.implicit_vector_count()
+  notation('Define vector count(n: Natural,x: Vector(n,Complex)): Natural:',
+   ['Equals: n','Render latex: len({x})'],self.e,authored=True)
+  source='vector cell(vector count(shared vector count(x,0),0),0)'
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('VectorCell(n)',self.scope))
+ def test_candidate_reconstruction_rejects_inconsistent_implicit_binding(self):
+  self.record()
+  notation('Define inspect(x):',['Let T: Type','Let x: T','Returns: Natural',
+   'Equals: (1:Natural)','Render latex: inspect({x})'],self.e,authored=True)
+  tree=expression_tree(parse('vector cell(inspect(1),0)','expression'))
+  builder=Builder(self.e,{})
+  rows=builder.rows(tree)
+  values=next(builder.row_values[row.choices] for row in rows
+   if any(k=='numeral' and key==self.e.data['types']['Natural']['numerals']['native_binding']
+          for k,path,key in row.choices))
+  path=(2,0)
+  formal,_=builder.telescope(self.e.data['functions']['inspect'],path)
+  bindings=dict(values.bindings);bindings[formal['T']]=builder.typ(self.e.type('Real'))
+  with self.assertRaisesRegex(NoSolution,'implicit argument differs'):
+   values.expression(path,bindings)
+  del bindings[formal['T']]
+  with self.assertRaisesRegex(Incomplete,'implicit argument remains unresolved'):
+   values.expression(path,bindings)
+
  def test_computed_formal_competitor_is_not_dropped(self):
   notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
    ['Means: fun _ _ => (0 : Complex)','Literal: 0','Render latex: 0'],self.e)

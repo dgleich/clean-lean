@@ -969,7 +969,7 @@ that declared call rather than depending on reduction to a scalar numeral.
 Each candidate fragment carries value plans for parameterized literals and calls
 or projections without concrete argument syntax. A plan identifies its output
 symbol, source path and required literal parameters; call plans additionally
-require their inferred parameters. Plans are propagated child before parent.
+require child recovery parameters and their own inferred parameters. Plans are propagated child before parent.
 They do not replace the parsed source tree or create an alternative parse.
 
 For each candidate row, first unify its ordinary equations. A conclusive
@@ -1029,4 +1029,54 @@ caller/scalar/nested calls and an opaque computed index; all 37 exact targets an
 unknown competitors, declaration-order independence, codec replay and an operator
 input tie that the expected dimension must not resolve. Production full discovery
 and active-label verification remain in their existing fixed-snapshot jobs.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Checking inferred arguments during candidate reconstruction
+
+Reconstructing a call now checks its inferred implicit arguments against the solved
+symbolic candidate, not just the call's resulting value index. This distinction
+matters when a function's result ignores an implicit type: equal result values do
+not establish that the same Lean instantiation was used.
+
+After recursively reconstructing a selected call/operator's arguments, elaborate
+its retained module call in the fixed scope. For every implicit parameter in the
+captured signature, require a ground solved candidate argument and an entry in the
+checked call's inferred arguments. Convert that checked argument to its symbolic
+type/index representation and compare it with the candidate's solved term. Missing
+or unresolved evidence is incomplete. A checked unequal argument is a conclusive
+mismatch. Only then may the enclosing expression use the reconstructed call.
+
+Dynamic call plans include the recovery parameters carried by every child fragment,
+as well as their own implicit parameters. Projection plans include the base's
+recovery parameters. Deduplication preserves their specified order. This ensures
+that nested reconstruction does not start merely because outer literal parameters
+are solved while a child's implicit assignment is still unavailable. Existing
+checks on static concrete calls and the operator input-ambiguity audit remain.
+
+For example:
+
+```clean
+Define shared vector count(x,y):
+  Let n: Natural
+  Let x,y: Vector(n,Complex)
+  Returns: Natural
+  Equals: n
+```
+
+With a caller vector `x: Vector(n,Complex)`, the experimental expression
+`vector cell(shared vector count(x,0),0)` checks the inferred `n` before using the
+call as a dimension. Nesting it inside vector count also checks the child's
+implicit assignment. Independent native expectations explicitly apply the shared
+count wrapper at `n`; they do not obtain that argument from translated output.
+
+Three new regressions cover the known-vector and nested cases and an intentionally
+inconsistent internal implicit-type binding. The latter also checks that removing
+the binding reports incomplete; a constant result cannot conceal either failure.
+All 170 experimental tests pass, and all 39 independent exact native targets and
+39 supporting proofs pass. The production compiler is unchanged. General dependent
+candidate validity, computed formal-index witness integration and production
+inference remain open; full discovery and active-label checks remain in their
+existing fixed-snapshot jobs.
 :::

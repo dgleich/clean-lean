@@ -193,7 +193,7 @@ class Builder:
                 witnesses+=((output,witness),)
             plans=base.plans
             if syntax is None:
-                requirements=tuple(dict.fromkeys(t for p in plans for t in p.requirements))
+                requirements=tuple(dict.fromkeys(tuple(t for p in plans for t in p.requirements)+base.arguments))
                 plans+=(ValuePlan(output,path,requirements),)
             results.append(Fragment(typ,output,
                 base.choices+(('projection',path,(spec['key'],tree[2])),),base.carriers,
@@ -324,7 +324,7 @@ class Builder:
                     witnesses+=((output,witness),)
                 plans=tuple(p for a in actuals for p in a.plans)
                 if syntax is None:
-                    requirements=tuple(dict.fromkeys(tuple(t for p in plans for t in p.requirements)+implicit))
+                    requirements=tuple(dict.fromkeys(tuple(t for p in plans for t in p.requirements)+tuple(t for a in actuals for t in a.arguments)+implicit))
                     plans+=(ValuePlan(output,path,requirements),)
                 fields=();record_arguments=()
                 if isinstance(result,Carrier):
