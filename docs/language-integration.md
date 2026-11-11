@@ -103,3 +103,10 @@ snapshot. Pending translations are explicit; 16 focused tests and Chromium
 source/navigation/notes/mobile checks pass. The full translation build exited with status 143 before completing the
 active-label module; the saved snapshot is partial. Native Emacs startup remains unavailable. See [editor validation](../editors/README.md).
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+A [bounded active-label profile](active-label-performance.md) identifies repeated
+elaboration and contextual comparison as the dominant sampled work. It is not
+a completed module validation; full regression remains pending.
+:::

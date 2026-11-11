@@ -8161,6 +8161,20 @@
         ""
       ],
       "model": "gpt-6"
+    },
+    "tools/profile_declaration.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6"
+    },
+    "docs/active-label-performance.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown",
+      "model": "gpt-6"
     }
   }
 }
