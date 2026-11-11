@@ -353,7 +353,7 @@ source: local
 reference: carrier package projection
 relationship: original
 -/
-def packaged_space_entry : Prop :=
+def «packaged_space_entry» : Prop :=
   ∀ (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)),
   (@_root_.cleanDefine_equal_large_a55b893a2f6758313499 ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (X) (X))
 
@@ -362,7 +362,7 @@ source: local
 reference: reflexivity
 relationship: original
 -/
-def stored_entry_reflexivity : Prop :=
+def «stored_entry_reflexivity» : Prop :=
   ∀ (P : _root_.cleanStructure_SpacePackage_ddde31c9159aa634dd61),
   (@_root_.cleanDefine_equal_large_a55b893a2f6758313499 (((@_root_.cleanStructure_SpacePackage_ddde31c9159aa634dd61.«carrier» (P)))) ((@_root_.cleanStructure_SpacePackage_ddde31c9159aa634dd61.«point» (P))) ((@_root_.cleanStructure_SpacePackage_ddde31c9159aa634dd61.«point» (P))))
 

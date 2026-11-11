@@ -8230,6 +8230,38 @@
         ""
       ],
       "model": "gpt-6"
+    },
+    "tests/test_result_names.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/check_result_names.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "generated/ResultNames.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "docs/result-identifiers.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "markdown"
     }
   }
 }

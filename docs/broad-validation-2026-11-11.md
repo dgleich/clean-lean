@@ -106,3 +106,13 @@ basic suites and the newly discovered native keyword failure remain unresolved.
 The original 1,054-test result stays failed; complete discovery still includes the
 two pending heavy modules and has no final result.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The [result-title escaping repair](result-identifiers.md) now makes the original
+projected-condition native specimen compile and its reflexivity proof pass.
+All normalized result identifiers are quoted without renaming. A separate native
+probe confirms that keyword local-object names still require binder/reference
+repair. The vector-zero inference failure is unchanged; the historical failing
+supplementary summary above is not relabelled as passing.
+:::

@@ -17,7 +17,7 @@ class GradedModules(unittest.TestCase):
         self.assertEqual(self.e.data['types']['GradedModule']['universe'],1)
         self.assertEqual([n for n,_ in self.e.structures['GradedModule']['fields']],['component'])
         self.assertEqual(len(self.rs),1)
-        self.assertIn('def graded_homology_component : Prop',lean(self.rs,self.e,[]))
+        self.assertIn('def «graded_homology_component» : Prop',lean(self.rs,self.e,[]))
     def test_component_field_is_callable(self):
         local={}
         for n,t in [('K','Type'),('field','FieldStructure(K)'),('M','GradedModule(K,field)'),('p','Natural')]:

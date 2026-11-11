@@ -3122,6 +3122,31 @@
         "General universe polymorphism",
         "Complete native-environment freshness"
       ]
+    },
+    {
+      "id": "quoted_native_result_identifiers",
+      "status": "implemented-slice",
+      "environment": "Explicit library/operators.clean and local attribution source; pinned Lean parser.",
+      "source": "Result example:\n  Attribution: local; identity; original\n  Let x: Real\n  Conclude: x = x\n",
+      "constructive_rule": "docs/result-identifiers.md",
+      "expected_native_name": [
+        "CleanStatements",
+        "example"
+      ],
+      "expected_native_declaration_prefix": "def «example» : Prop :=",
+      "tests": [
+        "tests/test_result_names.py",
+        "tools/check_result_names.py"
+      ],
+      "native_oracles": "Twelve independent canonical proposition targets and twelve proofs in generated/ResultNames.lean",
+      "negative_cases": [
+        "normalized duplicate titles",
+        "title containing quote delimiter"
+      ],
+      "pending": [
+        "Full regression",
+        "Other user-derived binder escaping"
+      ]
     }
   ]
 }

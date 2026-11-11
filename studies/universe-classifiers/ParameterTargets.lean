@@ -355,7 +355,7 @@ source: local
 reference: parameterized record projection
 relationship: original
 -/
-def packaged_topology_entry : Prop :=
+def «packaged_topology_entry» : Prop :=
   ∀ (P : _root_.cleanStructure_Package_7cd95b2a5e8f21d506b0 ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b))),
   (@_root_.cleanDefine_equal_large_a55b893a2f6758313499 ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) ((@_root_.cleanDefine_unpack_7322d475f61e7d218487 ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (P))) ((@_root_.cleanStructure_Package_7cd95b2a5e8f21d506b0.«point» ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (P))))
 

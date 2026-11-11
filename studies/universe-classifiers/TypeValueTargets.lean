@@ -349,7 +349,7 @@ source: local
 reference: identity
 relationship: original
 -/
-def explicit_topology_carrier : Prop :=
+def «explicit_topology_carrier» : Prop :=
   ∀ (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)),
   (@_root_.cleanDefine_equal_large_a55b893a2f6758313499 ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) ((@_root_.cleanDefine_retain_in_6d72c1e1d3208fff7d7e ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (X))) (X))
 
@@ -358,7 +358,7 @@ source: local
 reference: identity
 relationship: original
 -/
-def inferred_topology_carrier : Prop :=
+def «inferred_topology_carrier» : Prop :=
   ∀ (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)),
   (@_root_.cleanDefine_equal_large_a55b893a2f6758313499 ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) ((@_root_.cleanDefine_retain_inferred_5787951d13d834b9ec15 ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (X))) (X))
 
@@ -367,7 +367,7 @@ source: local
 reference: identity
 relationship: original
 -/
-def named_topology_carrier : Prop :=
+def «named_topology_carrier» : Prop :=
   ∀ (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)),
   (@_root_.cleanDefine_equal_large_a55b893a2f6758313499 ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) ((@_root_.cleanDefine_retain_in_6d72c1e1d3208fff7d7e ((_root_.cleanDefine_topology_carrier_9a68fb8a4eaf687edd65)) (X))) (X))
 

@@ -346,7 +346,7 @@ source: local
 reference: polymorphic identity
 relationship: original
 -/
-def identity_family_on_spaces : Prop :=
+def «identity_family_on_spaces» : Prop :=
   ∀ (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)),
   (@_root_.cleanDefine_equal_large_a55b893a2f6758313499 ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) ((((@_root_.cleanDefine_identity_family_f793965a6fcca7d939f8) (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) X)) (X))
 

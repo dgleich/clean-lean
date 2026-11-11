@@ -33,7 +33,7 @@ class ExtremeImages(unittest.TestCase):
         self.assertEqual(len([r for r in self.results if isinstance(r,Result)]),4)
         self.assertEqual(len([r for r in self.candidate if isinstance(r,Result)]),1)
         target=lean(self.candidate,self.e,[])
-        self.assertIn('def interlevel_two_image_candidate : Prop :=',target)
+        self.assertIn('def «interlevel_two_image_candidate» : Prop :=',target)
         self.assertNotIn('theorem interlevel_two_image_candidate',target)
         self.assertNotIn('axiom interlevel_two_image_candidate',target)
         self.assertIn('«compactness_of_P_u2e_space»',target)

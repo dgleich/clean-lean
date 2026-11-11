@@ -1588,3 +1588,14 @@ retain explicit universe checks. Existing grammar is unchanged. See the
 [classified-parameter contract](classified-parameters.md) for syntax trees,
 constructive translation, arrow compatibility boundary and validation limits.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Quoted native result identifiers
+
+Emit every normalized result identifier as a quoted Lean identifier, preserving
+its Name and namespace rather than renaming keywords. This fixes accepted titles
+such as `Result example`. Title parsing, normalization/collision rejection and
+LaTeX display remain unchanged. See [result-identifiers.md](result-identifiers.md)
+for the constructive lexical rule, native oracles and remaining binder audit.
+:::

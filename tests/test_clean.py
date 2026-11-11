@@ -52,7 +52,7 @@ class CleanTests(unittest.TestCase):
         with self.assertRaisesRegex(CleanError,'Cyclic'): self.reg.type('Cycle')
     def test_no_implicit_truth(self):
         s=lean(parse(SOURCE,self.reg),self.reg,[])
-        self.assertIn('def similarity_transforms_eigenvector : Prop',s)
+        self.assertIn('def «similarity_transforms_eigenvector» : Prop',s)
         self.assertNotIn('theorem similarity_transforms_eigenvector',s)
     def test_periods_and_escaping(self):
         s=latex(parse(SOURCE,self.reg),self.reg)
@@ -108,7 +108,7 @@ class CleanTests(unittest.TestCase):
         self.assertEqual(r.title,'determinant left swap')
         self.assertEqual(r.name,'determinant_left_swap')
         self.assertIn(r'\begin{cleanresult}{determinant left swap}',latex([r],self.reg))
-        self.assertIn('def determinant_left_swap : Prop',lean([r],self.reg,[]))
+        self.assertIn('def «determinant_left_swap» : Prop',lean([r],self.reg,[]))
     def test_legacy_underscore_title_is_equivalent(self):
         readable=parse(SOURCE,self.reg)
         legacy=parse(SOURCE.replace('similarity transforms eigenvector','similarity_transforms_eigenvector'),self.reg)

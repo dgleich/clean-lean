@@ -926,7 +926,7 @@ def lean(results,reg,imports):
             continue
         statement_reg=r.environment or reg
         doc=r.documentation.body.replace('/-','/ -').replace('-/','- /') if r.documentation else ''
-        out+=['/--']+([doc,''] if doc else [])+[k+': '+v.replace('/-','/ -').replace('-/','- /') for k,v in r.attribution.items()]+['-/',f'def {r.name} : Prop :=']
+        out+=['/--']+([doc,''] if doc else [])+[k+': '+v.replace('/-','/ -').replace('-/','- /') for k,v in r.attribution.items()]+['-/',f'def «{r.name}» : Prop :=']
         for c in r.clauses:
             if c.kind=='let': out+=['  ∀ ('+' '.join(c.names)+' : '+statement_reg.render_type(c.value,'lean')+'),']
             elif c.kind=='assume': out+=[f'  ∀ («{c.names[0]}» : {c.value.lean}),']

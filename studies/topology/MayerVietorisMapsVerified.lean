@@ -609,7 +609,7 @@ source: construction
 reference: functoriality and signed cancellation
 relationship: original
 -/
-def intersection_then_union_vanishes : Prop :=
+def «intersection_then_union_vanishes» : Prop :=
   ∀ (K : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
   ∀ (field : (_root_.cleanType_FieldStructure_473fae039b953a4e35cf (K))),
   ∀ (H : _root_.cleanStructure_HomologyTheory_f4058490561c3b80c6d9 (K) (field)),
