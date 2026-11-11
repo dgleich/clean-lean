@@ -1,0 +1,85 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "../../library/algebra/chain_cokernel_transport.clean"
+Source cokernel_transport:
+  Kind: other
+  Label: Mathlib cokernel equality transport
+  Title: Mathlib.CategoryTheory.Limits.Shapes.Kernels
+
+Result cokernel reverse after transport:
+  Attribution: cokernel_transport; cokernelIsoOfEq; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f,g: ChainMap(K,field,C,D)
+  Assume h: f = g
+  Let Q = chain cokernel(field,C,D,f)
+  Let R = chain cokernel(field,C,D,g)
+  Conclude: compose chain maps(field,Q,R,Q,chain cokernel reverse transport(field,C,D,f,g,h),chain cokernel transport(field,C,D,f,g,h)) = identity chain map(field,Q)
+
+Result cokernel transport after reverse:
+  Attribution: cokernel_transport; cokernelIsoOfEq; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f,g: ChainMap(K,field,C,D)
+  Assume h: f = g
+  Let Q = chain cokernel(field,C,D,f)
+  Let R = chain cokernel(field,C,D,g)
+  Conclude: compose chain maps(field,R,Q,R,chain cokernel transport(field,C,D,f,g,h),chain cokernel reverse transport(field,C,D,f,g,h)) = identity chain map(field,R)
+
+Result cokernel transport preserves projection:
+  Attribution: cokernel_transport; π_comp_cokernelIsoOfEq_hom; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f,g: ChainMap(K,field,C,D)
+  Assume h: f = g
+  Let Q = chain cokernel(field,C,D,f)
+  Let R = chain cokernel(field,C,D,g)
+  Conclude: compose chain maps(field,D,Q,R,chain cokernel transport(field,C,D,f,g,h),chain cokernel projection(field,C,D,f)) = chain cokernel projection(field,C,D,g)
+
+Result vanishing reduction after projection:
+  Attribution: cokernel_transport; zero cokernel comparison; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Assume h: f = zero chain map(field,C,D)
+  Let Q = chain cokernel(field,C,D,f)
+  Conclude: compose chain maps(field,D,Q,D,vanishing quotient reduction(field,C,D,f,h),chain cokernel projection(field,C,D,f)) = identity chain map(field,D)
+
+Result vanishing projection after reduction:
+  Attribution: cokernel_transport; zero cokernel comparison; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Assume h: f = zero chain map(field,C,D)
+  Let Q = chain cokernel(field,C,D,f)
+  Conclude: compose chain maps(field,Q,D,Q,chain cokernel projection(field,C,D,f),vanishing quotient reduction(field,C,D,f,h)) = identity chain map(field,Q)
+
+Result vanishing homology forward after backward:
+  Attribution: cokernel_transport; homology functor preserves inverse maps; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Assume h: f = zero chain map(field,C,D)
+  Let p: Natural
+  Let M = chain homology(field,D,p)
+  Let N = chain homology(field,chain cokernel(field,C,D,f),p)
+  Conclude: module composition(field,M,N,M,vanishing quotient homology backward(field,C,D,f,p),vanishing quotient homology forward(field,C,D,f,h,p)) = module identity(field,M)
+
+Result vanishing homology backward after forward:
+  Attribution: cokernel_transport; homology functor preserves inverse maps; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Assume h: f = zero chain map(field,C,D)
+  Let p: Natural
+  Let M = chain homology(field,D,p)
+  Let N = chain homology(field,chain cokernel(field,C,D,f),p)
+  Conclude: module composition(field,N,M,N,vanishing quotient homology forward(field,C,D,f,h,p),vanishing quotient homology backward(field,C,D,f,p)) = module identity(field,N)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -9116,6 +9116,50 @@
     "studies/topology/empty-chains.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "library/algebra/chain_cokernel_transport.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/CokernelTransport.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/CokernelTransport.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/CokernelTransportVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/verify_cokernel_transport.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/topology/cokernel-transport.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

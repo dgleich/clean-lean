@@ -1,0 +1,57 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "zero_chain_quotients.clean"
+Import "../logic/equality_chains.clean"
+
+Notation chain cokernel transport(field,C,D,f,g,h):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f,g: ChainMap(K,field,C,D)
+  Let h: Evidence((f = g))
+  Returns: ChainMap(K,field,(chain cokernel(field,C,D,f)),(chain cokernel(field,C,D,g)))
+  Means: (letI : Field K := field; (CategoryTheory.Limits.cokernelIsoOfEq h).hom)
+  Render latex: T_{{{h}}}
+
+Define chain cokernel reverse transport(field,C,D,f,g,h):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f,g: ChainMap(K,field,C,D)
+  Let h: Evidence((f = g))
+  Returns: ChainMap(K,field,(chain cokernel(field,C,D,g)),(chain cokernel(field,C,D,f)))
+  Equals: chain cokernel transport(field,C,D,g,f,equality symmetry(f,g,h))
+  Render latex: T_{{{h}}}^{{-1}}
+
+Define vanishing quotient reduction(field,C,D,f,h):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Let h: Evidence((f = zero chain map(field,C,D)))
+  Returns: ChainMap(K,field,(chain cokernel(field,C,D,f)),D)
+  Equals: compose chain maps(field,chain cokernel(field,C,D,f),zero chain quotient(field,C,D),D,
+    zero quotient reduction(field,C,D),chain cokernel transport(field,C,D,f,zero chain map(field,C,D),h))
+  Render latex: \rho_{{{h}}}
+
+Define vanishing quotient homology forward(field,C,D,f,h,p):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Let h: Evidence((f = zero chain map(field,C,D)))
+  Let p: Natural
+  Returns: ModuleMap(K,field,(chain homology(field,chain cokernel(field,C,D,f),p)),(chain homology(field,D,p)))
+  Equals: induced chain homology map(field,chain cokernel(field,C,D,f),D,vanishing quotient reduction(field,C,D,f,h),p)
+  Render latex: H_{{{p}}}(\rho_{{{h}}})
+
+Define vanishing quotient homology backward(field,C,D,f,p):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let f: ChainMap(K,field,C,D)
+  Let p: Natural
+  Returns: ModuleMap(K,field,(chain homology(field,D,p)),(chain homology(field,chain cokernel(field,C,D,f),p)))
+  Equals: induced chain homology map(field,D,chain cokernel(field,C,D,f),chain cokernel projection(field,C,D,f),p)
+  Render latex: H_{{{p}}}(\pi_{{{f}}})
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

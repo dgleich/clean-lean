@@ -59,10 +59,10 @@ LAKE=lake python3 studies/topology/verify_empty_chains.py
 ## Remaining bridge
 
 The inclusion-zero theorem supplies the hypothesis needed to compare the relative
-chain cokernel with the [zero cokernel](zero-chain-quotients.md). That comparison
-still requires transporting the cokernel along the proven equality, preserving
-its projection and induced maps, and connecting the chain-homology object to the
-ordinary-homology interface. The level-set data must supply the appropriate empty
+chain cokernel with the [zero cokernel](zero-chain-quotients.md). The [cokernel transport study](cokernel-transport.md) now transports along a
+supplied equality, preserves the projection and proves inverse induced homology
+maps. Connecting the chain-homology object to the ordinary-homology interface
+and assembling naturality remain pending. The level-set data must supply the appropriate empty
 relative-part certificates. These results do not yet prove that whole natural
 identification, either well-group formula, or the closed-cover/excision argument.
 :::

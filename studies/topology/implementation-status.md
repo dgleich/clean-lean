@@ -375,3 +375,13 @@ foundational conditions import IsEmpty and IsZero explicitly; the relative condi
 uses an authored Clean definition. Cokernel transport along the inclusion equality,
 its compatibility and the ordinary-homology identification remain open.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The [cokernel transport study](cokernel-transport.md) supplies explicit equality
+transport and Clean-authored vanishing-map reductions. Its verification scope is
+five definition targets, seven statement targets and seven inverse/projection
+proofs. This addresses the algebraic equality-transport step; level-set empty-part
+certificates, naturality and ordinary-homology identification remain separate
+obligations. It adds no syntax or implicit proof synthesis.
+:::
