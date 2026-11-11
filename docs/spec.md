@@ -1738,3 +1738,15 @@ conversion rules decide equality, and enumeration cannot choose representatives.
 See the [construction and unresolved-call boundary](../studies/parameterized-literals/README.md#checked-computed-arguments).
 Production parsing and inference are unchanged.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental forward deferred constraints
+
+The symbolic inference model has forward-only ground-input obligations. All must
+finish before defaults and declaration selection; unresolved checks block analysis
+instead of disappearing as mismatches. Results are equations, never inverse
+function rules. The [scheduler contract](../studies/parameterized-literals/README.md#forward-deferred-constraint-model)
+specifies batching, incomplete-result precedence and budget boundaries. This is
+not yet connected to the Clean adapter and introduces no language syntax.
+:::

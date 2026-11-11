@@ -3249,7 +3249,8 @@
         "Every candidate validated before selection",
         "Full production regression",
         "General dependent-default interactions",
-        "General dependent telescope constraints and checked candidate applicability"
+        "General dependent telescope constraints and checked candidate applicability",
+        "Checked deferred call reconstruction in the Clean adapter"
       ],
       "retention_checks": [
         "Simultaneous defaulted position trace",
@@ -3261,6 +3262,14 @@
       "checked_signature_tests": [
         "tests/test_callable_signatures.py",
         "studies/parameterized-literals/test_clean_rows.py"
+      ],
+      "deferred_model_checks": [
+        "Ground forward results constrain dependent indices",
+        "Chains are independent of obligation order",
+        "No inverse-function inference",
+        "Unresolved competitors block selection and defaults",
+        "Incomplete ready checks are not hidden by mismatches",
+        "Cycles, non-ground results and exhausted budgets remain incomplete"
       ]
     }
   ]

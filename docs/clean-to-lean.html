@@ -1289,5 +1289,13 @@ index conversion; it does not infer arithmetic identities. Nested calls containi
 unresolved literals still require deferred constraints. See the
 <a href="../studies/parameterized-literals/README.md#checked-computed-arguments">rules and limits</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="deferred-constraint-model">
+<h2>Experimental deferred checking model</h2>
+<p>The symbolic inference model can schedule forward checks once their inputs are
+known, then constrain later types with their checked results. It cannot invert
+functions or use defaults to guess applicability. This is not yet connected to
+Clean call reconstruction and has no new Lean mapping. See the
+<a href="../studies/parameterized-literals/README.md#forward-deferred-constraint-model">model contract and integration obligations</a>.</p>
+</section></llm>
 </body>
 </html>

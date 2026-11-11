@@ -438,3 +438,56 @@ status of successor(2) while its literal is still a hole. This changes only the
 study adapter, tests and documentation; full production validation jobs remain
 separate and incomplete.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Forward deferred constraint model
+
+The symbolic Row model now admits ordered deferred obligations, each with an
+output term, input terms and a deterministic forward checker. The checker is
+called only with ground inputs. It returns a ground term representing a checked
+result, raises NoSolution for a conclusively established mismatch, or raises
+Incomplete when the check is unavailable. It must be pure under the fixed
+environment and enforce its own checking budget; the symbolic scheduler cannot
+bound arbitrary callback computation. This Python callback API is an experimental
+model boundary, not Clean syntax, native code, or evidence that the checker itself
+is sound.
+
+Saturation first unifies ordinary equations. It then resolves inputs and batches
+all ready obligations. Every successful result adds an output equality; these
+are unified before the next batch. Completed obligations are removed. No inverse
+rule is applied: an equation f(x)=y does not determine x, even when y is known.
+A chain of ready computations can determine subsequent dependent indices.
+
+A batch with incomplete checking remains incomplete even if another independent
+check rejects it; that conservative priority avoids ordering-dependent results.
+A conclusive mismatch with no incomplete check rejects the row. A non-ground or
+missing callback result is incomplete. If no remaining obligation is ready,
+analysis is incomplete rather than successful or an empty set of solutions.
+The scheduler counts obligation visits, including waiting obligations, against
+the supplied limit; the existing unification limit applies to each unification
+phase. This is not a total runtime budget for the combined solver.
+
+Every row must finish deferred checking before the existing simultaneous-default
+analysis runs. A default cannot establish the applicability of a still-unchecked
+candidate. Ground checks may remove invalid rows before defaults, so rejected
+rows cannot create artificial default restrictions. Distinct valid declaration
+rows remain distinct interpretations even when their results agree.
+
+The adapter does not yet emit these obligations. Its call-value placeholders must
+be connected to checked argument reconstruction and retained native identities;
+all candidate rows need sound checks before selection. Consequently
+`vector cell(successor(2),0)` still reports unresolved inference. This commit is
+the tested constraint-model prerequisite, not a claim that nested Clean calls or
+production inference are implemented.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Deferred-model validation: 97 combined experimental tests pass, including twelve
+new forward-scheduler tests. The unchanged fourteen native target checks and
+fourteen supporting proofs also pass (`/tmp/clean-deferred-model-native.log`).
+Those native checks still exercise the adapter without deferred obligations;
+they are not evidence for the future Clean-call reconstruction. Production code
+is unchanged and full discovery remains outstanding.
+:::

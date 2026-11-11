@@ -1,7 +1,7 @@
 # generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
 """Independent symbolic row oracles; not production Clean acceptance tests."""
 import unittest
-from constraint_model import Variable as V,Atom as A,Carrier as C,Row,select,select_with_trace,unify
+from constraint_model import Variable as V,Atom as A,Carrier as C,Row,select,select_with_trace,unify,Deferred,saturate
 from constraint_model import NoSolution,Underdetermined,Ambiguous,Incomplete
 NAT=C('Nat');REAL=C('Real');COMPLEX=C('Complex')
 N=A('caller/n','index');M=A('caller/m','index')
@@ -9,6 +9,67 @@ def vector(n):return C('Vector',(n,COMPLEX))
 def vector_row(equations=(),name='vector-zero'):
  n=V('literal/n','index')
  return Row((name,),(vector(n),),(n,),tuple(equations))
+
+class DeferredConstraints(unittest.TestCase):
+    def test_ground_forward_value_determines_dependent_dimension(self):
+        output=V('successor/result','index');two=A('2','index');three=A('3','index')
+        row=Row(('constructor',),(vector(output),),(output,),(),
+                (Deferred(output,(two,),lambda args: three if args==(two,) else M),))
+        self.assertEqual(select([row]),(('constructor',),(three,)))
+    def test_chain_is_independent_of_obligation_order(self):
+        x,y=V('x','index'),V('y','index')
+        first=Deferred(x,(N,),lambda args:M)
+        second=Deferred(y,(x,),lambda args:A('after/'+args[0].identity,'index'))
+        for obligations in [(first,second),(second,first)]:
+            row=Row(('chain',),(),(y,),(),obligations)
+            self.assertEqual(select([row]),(('chain',),(A('after/caller/m','index'),)))
+    def test_outputs_are_checked_against_existing_equations(self):
+        x=V('x','index')
+        row=Row(('mismatch',),(),(x,),((x,N),),(Deferred(x,(),lambda args:M),))
+        with self.assertRaises(NoSolution):select([row])
+    def test_no_inverse_function_inference(self):
+        x,y=V('x','index'),V('y','index')
+        row=Row(('constant',),(),(x,),((y,N),),(Deferred(y,(x,),lambda args:N),))
+        with self.assertRaises(Incomplete):select([row])
+    def test_unresolved_competitor_cannot_be_dropped(self):
+        x,y=V('x','index'),V('y','index')
+        pending=Row(('pending',),(REAL,),(),(),(Deferred(y,(x,),lambda args:N),))
+        complete=Row(('complete',),(REAL,),())
+        for rows in [[pending,complete],[complete,pending]]:
+            with self.assertRaises(Incomplete):select(rows)
+    def test_default_does_not_guess_deferred_applicability(self):
+        t=V('T','type');out=V('out','index')
+        row=Row(('pending',),(t,),(),(),(Deferred(out,(t,),lambda args:N),))
+        with self.assertRaises(Incomplete):select([row],default=NAT)
+    def test_ground_checks_precede_simultaneous_defaults(self):
+        def reject(args):raise NoSolution('checked mismatch')
+        bad=Row(('bad',),(REAL,),(),(),(Deferred(N,(),reject),))
+        good=Row(('good',),(NAT,),())
+        chosen=select_with_trace([bad,good],default=NAT)
+        self.assertEqual(chosen.choices,('good',))
+        self.assertEqual(chosen.defaulted_positions,())
+    def test_distinct_valid_declarations_remain_ambiguous(self):
+        rows=[Row((name,),(NAT,),(),(),(Deferred(N,(),lambda args:N),)) for name in ['a','b']]
+        with self.assertRaises(Ambiguous):select(rows)
+    def test_incomplete_ready_check_is_not_hidden_by_mismatch(self):
+        def unknown(args):raise Incomplete('unavailable')
+        def reject(args):raise NoSolution('mismatch')
+        for checks in [(unknown,reject),(reject,unknown)]:
+            row=Row(('row',),(),(),(),tuple(Deferred(N,(),f) for f in checks))
+            with self.assertRaises(Incomplete):select([row])
+    def test_callback_must_return_ground_value(self):
+        for result in [None,V('unresolved','index'),C('Family',(V('T','type'),))]:
+            row=Row(('bad',),(),(),(),(Deferred(N,(),lambda args:result),))
+            with self.assertRaises(Incomplete):select([row])
+    def test_cycle_is_incomplete_not_an_empty_solution(self):
+        x,y=V('x','index'),V('y','index')
+        row=Row(('cycle',),(),(),(),(Deferred(x,(y,),lambda args:args[0]),Deferred(y,(x,),lambda args:args[0])))
+        with self.assertRaises(Incomplete):select([row])
+    def test_budget_exhaustion_is_incomplete(self):
+        x,y=V('x','index'),V('y','index')
+        row=Row(('chain',),(),(y,),(),(Deferred(y,(x,),lambda args:N),Deferred(x,(),lambda args:N)))
+        with self.assertRaises(Incomplete):select([row],limit=2)
+
 
 class JointLiteralConstraints(unittest.TestCase):
     def test_operand_orders_recover_same_dimension(self):

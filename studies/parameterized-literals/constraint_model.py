@@ -29,11 +29,20 @@ class Carrier:
     sort: str='type'
 
 @dataclass(frozen=True)
+class Deferred:
+    """Pure forward check: ground inputs -> checked ground value, no inversion."""
+    output: object
+    inputs: tuple
+    evaluate: object
+
+
+@dataclass(frozen=True)
 class Row:
     choices: tuple
     carriers: tuple
     arguments: tuple
     equations: tuple=()
+    deferred: tuple=()
 
 
 def resolve(term,bindings):
@@ -68,6 +77,42 @@ def unify(equations,bindings=None,*,limit=4096):
     return bindings
 
 
+def saturate(row,*,limit=4096):
+    """Resolve all forward obligations before considering defaults or selection.
+
+    Callbacks must be deterministic and side-effect free under a fixed checked
+    environment. NoSolution means a proved mismatch, never unavailable checking.
+    Unsupported checking raises Incomplete and cannot discard a competitor.
+    """
+    bindings=unify(row.equations,limit=limit)
+    pending=list(row.deferred);visits=0
+    while pending:
+        ready=[];waiting=[]
+        for obligation in pending:
+            visits+=1
+            if visits>limit:raise Incomplete('Deferred constraint step limit exceeded')
+            inputs=tuple(resolve(t,bindings) for t in obligation.inputs)
+            if any(variables(t) for t in inputs):waiting.append(obligation)
+            else:ready.append((obligation,inputs))
+        if not ready:
+            raise Incomplete('Deferred checking has unresolved inputs; defaults cannot establish applicability')
+        equations=[];incomplete=False;mismatch=False
+        for obligation,inputs in ready:
+            try:
+                value=obligation.evaluate(inputs)
+                if not isinstance(value,(Atom,Carrier)) or variables(value):
+                    raise Incomplete('Deferred check did not return a checked ground value')
+                equations.append((obligation.output,value))
+            except Incomplete:incomplete=True
+            except NoSolution:mismatch=True
+        # Batch outcomes do not depend on the order of independent ready checks.
+        if incomplete:raise Incomplete('A deferred applicability check is incomplete')
+        if mismatch:raise NoSolution('A deferred applicability check rejected the row')
+        bindings=unify(equations,bindings,limit=limit)
+        pending=waiting
+    return bindings
+
+
 @dataclass(frozen=True)
 class Selection:
     choices: tuple
@@ -92,7 +137,7 @@ def select_with_trace(rows,*,default=None,enumeration_complete=True,limit=4096):
     if len(widths)>1:raise ValueError('Rows must describe the same literal positions')
     solutions=[]
     for row in rows:
-        try:bindings=unify(row.equations,limit=limit)
+        try:bindings=saturate(row,limit=limit)
         except NoSolution:continue
         solutions.append((row,bindings))
     if not solutions:raise NoSolution('No consistent interpretation')
