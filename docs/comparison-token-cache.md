@@ -442,3 +442,25 @@ is `sharing_independent_snapshots_active_observation` in the compatibility repor
 This confirms remaining expensive work in the target rather than an import-only
 observation. It still establishes neither completion nor an end-to-end speedup.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Computed-index substitution now reuses identical retained sources within one
+dependent call, invalidating on every inferred-argument assignment and binder
+allocation. The controlled repeated-dimension fixture needs one substitution
+instead of three with identical source tree, Lean term and Lean type. A separate
+case retains a later comparison-equal local representative in the result type.
+Sixty focused tests and fourteen canonical native targets plus five supporting
+proofs pass. These are implementation checks, not new topology proofs or evidence
+of complete active-label throughput. Full regression remains pending. The exact
+rule is in [the specification](spec.md#computed-index-reuse-within-a-dependent-call).
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The computed-index change also passes the four-document compatibility check:
+legacy and joint generated Lean text is identical under stable fingerprints,
+and all 92 corpus proofs check. The records are `computed_index_reuse_corpus`
+and `computed_index_reuse_diagnostic` in
+[the compatibility report](../studies/parameterized-literals/compatibility.json).
+:::

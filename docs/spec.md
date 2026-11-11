@@ -2923,3 +2923,36 @@ checks and failed-snapshot behavior remain unchanged. No parser, emitted Lean te
 retained-tree serialization version or mathematical equality rule changes. The
 snapshot is an ephemeral implementation key, not a published file format.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Computed index reuse within a dependent call
+
+A synchronous dependent-call check may reuse substitution of an exact
+`ComputedIndex` or `DimensionIndex` when its class and serialized source match,
+the inferred-argument assignment revision is unchanged, the temporary substitution
+scope is empty, caller locals are the original objects, and the comparison pool
+and its owned binder identities have not changed. Module declarations and caller
+semantic values remain fixed during this synchronous operation. This does not
+permit reuse across calls or arbitrary mutation of those values.
+
+Each assignment to an inferred argument advances the revision and clears these
+entries, including replacement by a comparison-equal value. Thus if `k` is first
+inferred as `n`, then as a local definition `m = n`, a result indexed by `k+1`
+retains `m+1`. Comparison equality is insufficient to justify retaining `n+1`.
+Store a result only if substitution does not allocate comparison binder identities;
+clear the table at 64 entries. Proof indices, subclass-specific indices and
+substitutions under temporary scopes use the existing checking path.
+
+The substitution rule itself is unchanged: decode the retained source, substitute
+the current bindings, elaborate it in the caller scope, then construct the checked
+value or dimension index. Under the fixed inputs above these operations have the
+same inputs and exact output on each occurrence. The cache therefore only removes
+repeated execution; it adds no conversion, parser choice, inference choice or Lean
+term selection. No grammar or retained-data format changes.
+
+For `pick(n,x,y)` with both vector arguments and the result indexed by `n+1`,
+three substitutions become one. Independent expected source trees and native
+wrapper applications cover this case and replacement of inferred `n` by `m`.
+Full regression and whole-study performance remain separate obligations.
+:::

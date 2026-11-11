@@ -149,3 +149,58 @@ class DependentCalls(unittest.TestCase):
         self.assertEqual(self.e.data['functions']['ordered'],other.data['functions']['ordered'])
 
 # generated: gpt-6 2026-11-06 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+class ComputedIndexReuse(unittest.TestCase):
+    def setUp(self):
+        self.e=Environment();load_module(ROOT/'library/operators.clean',self.e)
+        notation('Notation pick(n: Natural,x: Vector((n+1),Complex),y: Vector((n+1),Complex)): Vector((n+1),Complex):',
+                 ['Means: x','Render latex: p({n},{x},{y})'],self.e)
+        self.local={'n':Expr('n','n',self.e.type('Natural'),tree=['Local','n'])}
+        self.vectors()
+    def vectors(self):
+        for name in ['x','y']:
+            self.local[name]=Expr(name,name,self.e.type('Vector((n+1),Complex)',self.local),tree=['Local',name])
+    def expr(self,source):return Expressions(self.e,self.local).parse(source)
+    def count_substitutions(self,action,allocate=False):
+        from unittest.mock import patch
+        from cleanlang import indices
+        original=indices.substitute_index;visits=[]
+        wanted=self.e.data['functions']['pick']['dependent_signature']['result'].args[0].syntax
+        def counted(index,*args,**kwargs):
+            if getattr(index,'syntax',None)==wanted:
+                visits.append(index)
+                if allocate:self.e._comparison_pool.fresh(self.local)
+            return original(index,*args,**kwargs)
+        with patch.object(indices,'substitute_index',side_effect=counted):result=action()
+        return result,visits
+    def test_equal_computed_sources_substitute_once_per_call(self):
+        result,visits=self.count_substitutions(lambda:self.expr('pick(n,x,y)'))
+        self.assertEqual(len(visits),1)
+        self.assertEqual(result.type,self.e.type('Vector((n+1),Complex)',self.local))
+        self.assertEqual(result.tree,['Call','pick',[['Local','n'],['Local','x'],['Local','y']]])
+    def test_computed_reuse_does_not_cross_caller_scopes(self):
+        first,_=self.count_substitutions(lambda:self.expr('pick(n,x,y)'))
+        self.local['n']=Expr('changed','n',self.e.type('Natural'),tree=['Local','n']);self.vectors()
+        second,visits=self.count_substitutions(lambda:self.expr('pick(n,x,y)'))
+        self.assertEqual(len(visits),1)
+        self.assertNotEqual(first.type,second.type)
+        self.assertIn('changed',second.type.args[0].lean)
+    def test_computed_reuse_stops_when_pool_allocates(self):
+        from cleanlang.binder_keys import Pool
+        self.e._comparison_pool=Pool(self.e,self.local,[])
+        try:result,visits=self.count_substitutions(lambda:self.expr('pick(n,x,y)'),allocate=True)
+        finally:del self.e._comparison_pool
+        self.assertEqual(len(visits),3)
+        self.assertEqual(result.type,self.local['x'].type)
+    def test_inferred_representative_update_invalidates_computed_result(self):
+        from cleanlang.conversion import local_definition
+        notation('Notation inferred pick(x,y,z):', ['Let k: Natural','Let x: Vector(k,Complex)',
+                 'Let y: Vector((k+1),Complex)','Let z: Vector(k,Complex)',
+                 'Returns: Vector((k+1),Complex)','Means: y','Render latex: p({x},{y},{z})'],self.e)
+        self.local['m']=local_definition('m',self.expr('n'),self.e,self.local)
+        self.local['x']=Expr('x','x',self.e.type('Vector(n,Complex)',self.local),tree=['Local','x'])
+        self.local['z']=Expr('z','z',self.e.type('Vector(m,Complex)',self.local),tree=['Local','z'])
+        result=self.expr('inferred pick(x,y,z)')
+        self.assertEqual('m',dict(result.inferred_args)['k'].lean)
+        self.assertEqual(self.e.type('Vector((m+1),Complex)',self.local).args[0].lean,result.type.args[0].lean)
+        self.assertEqual(result.type,self.e.type('Vector((m+1),Complex)',self.local))

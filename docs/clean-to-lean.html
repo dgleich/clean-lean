@@ -1903,5 +1903,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p>The comparison memo now gives equal stored semantic values the same key whether their Python objects are shared or copied. It interns exact structural tuples after canonicalizing their children; it still rereads mutable fields and rejects cycles or unsupported snapshots. Resource exhaustion disables optional reuse, not comparison.</p>
 <p>This changes reuse only. A source such as <code>producer argument(n)</code> retains the same declared Lean wrapper application. Public source rechecking, declaration identity and binder-allocation restrictions remain in force. See the <a href="spec.md#sharing-independent-comparison-snapshots">constructive snapshot rule</a> and <a href="../tools/check_projection_dependency_targets.py">native key oracle</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="computed-index-reuse">
+<h2>Repeated computed dimensions retain their source</h2>
+<p>For <code>pick(n,x,y)</code> with argument and result types <code>Vector((n+1),Complex)</code>, one dependent-call check can reuse substitution of that dimension. Lean still receives the declared pick, addition and numeral wrappers with the same explicit arguments.</p>
+<p>If later inference replaces n with a local definition m equal to n, reuse is invalidated: the result retains <code>m+1</code>. Proof indices and temporary binder scopes use the existing checking path. This is an implementation optimization, not a new syntax or conversion rule. See the <a href="spec.md#computed-index-reuse-within-a-dependent-call">precise rule</a> and <a href="../tools/check_projection_dependency_targets.py">independent native targets</a>. Full regression and whole-study throughput remain pending.</p>
+</section></llm>
 </body>
 </html>

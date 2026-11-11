@@ -4958,6 +4958,38 @@
       "pending": [
         "Full current-revision regression and end-to-end active-label throughput"
       ]
+    },
+    {
+      "id": "computed_index_substitution_reuse",
+      "status": "implemented-slice",
+      "environment": "Explicit operators/types imports and pick(n,x,y) with vector dimensions n+1; fixed synchronous caller inputs.",
+      "source": "pick(n,x,y)",
+      "expected_tree": [
+        "Call",
+        "pick",
+        [
+          [
+            "Local",
+            "n"
+          ],
+          [
+            "Local",
+            "x"
+          ],
+          [
+            "Local",
+            "y"
+          ]
+        ]
+      ],
+      "expected_lean": "Declared pick wrapper applied to n, x, y; result Vector indexed by declared natural sum n and declared numeral 1. An inferred representative subsequently replaced by m must retain m in the call and result type.",
+      "checks": [
+        "test_dependent_calls.ComputedIndexReuse: work count, changed caller scope, binder allocation, inferred representative replacement",
+        "check_projection_dependency_targets.py: independent explicit and inferred computed-dimension targets"
+      ],
+      "pending": [
+        "Full regression and whole-study throughput"
+      ]
     }
   ]
 }

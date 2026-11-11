@@ -429,12 +429,18 @@ class Environment:
         # the original objects so identity checks cannot suffer id reuse.
         entry_locals=tuple(locals.items())
         actual_indices={}
+        computed_indices={}
+        substitution_revision=0
 
 
         def bind(n,value):
+            nonlocal substitution_revision
             if n in substitutions and substitutions[n]!=value:
                 raise SignatureMismatch('Inconsistent dependent argument: '+n,mismatch_owner)
-            if n not in substitutions or (implicit.get(n)==NAT or self.classifier_info(implicit.get(n)) is not None):substitutions[n]=value
+            if n not in substitutions or (implicit.get(n)==NAT or self.classifier_info(implicit.get(n)) is not None):
+                substitutions[n]=value
+                substitution_revision+=1
+                computed_indices.clear()
 
         def replacement_bindings(scope):
             from .inferred_conversion import reify
@@ -473,7 +479,23 @@ class Environment:
             if isinstance(t,ProofType):return ProofType(replace(t.args[0],scope))
             if isinstance(t,DimensionIndex) and t.name in substitutions:return substitutions[t.name]
             if isinstance(t,ComputedIndex):
-                return substitute_index(t,replacement_bindings(scope),self,locals)
+                # Only these two index forms depend solely on serialized source.
+                # ProofIndex also captures a lexical scope and is not reusable here.
+                unchanged=(type(t) in (ComputedIndex,DimensionIndex) and not scope and
+                           len(locals)==len(entry_locals) and
+                           all(locals.get(k) is v for k,v in entry_locals))
+                pool=getattr(self,'_comparison_pool',None)
+                epoch=(pool,frozenset(pool.owned)) if pool is not None else (None,())
+                cache_key=(type(t),t.syntax,substitution_revision,epoch) if unchanged else None
+                if cache_key is not None and cache_key in computed_indices:
+                    return computed_indices[cache_key]
+                value=substitute_index(t,replacement_bindings(scope),self,locals)
+                after=getattr(self,'_comparison_pool',None)
+                end=(after,frozenset(after.owned)) if after is not None else (None,())
+                if cache_key is not None and epoch==end:
+                    if len(computed_indices)>=64:computed_indices.clear()
+                    computed_indices[cache_key]=value
+                return value
             if isinstance(t,ValueIndex):return index(t.name,scope)
             if isinstance(t,LocalType):return substitutions.get(t.name,t)
             if isinstance(t,ComputedCarrier):

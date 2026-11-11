@@ -73,6 +73,37 @@ Define projection producer(n: Natural): ProducerBox:
             f'noncomputable def rebuiltExpected (n : {nat}) : {nat} := {arg} n',
             'same_basic_target rebuiltKey rebuiltExpected',
             f'theorem rebuiltAgreement (n : {nat}) : rebuiltKey n = n := by rfl']
+ # Repeated computed dimensions retain their declared operations and the latest
+ # inferred representative, even when that representative is definitionally equal.
+ from cleanlang.modules import notation
+ from cleanlang.conversion import local_definition
+ load_module(ROOT/'library/operators.clean',e)
+ notation('Notation computed pick(n: Natural,x: Vector((n+1),Complex),y: Vector((n+1),Complex)): Vector((n+1),Complex):',
+          ['Means: x','Render latex: p({n},{x},{y})'],e)
+ notation('Notation inferred pick(x,y,z):',['Let k: Natural','Let x: Vector(k,Complex)',
+          'Let y: Vector((k+1),Complex)','Let z: Vector(k,Complex)',
+          'Returns: Vector((k+1),Complex)','Means: y','Render latex: p({x},{y},{z})'],e)
+ v=e.data['types']['Vector']['native_binding'];cx=e.data['types']['Complex']['native_binding']
+ add=e.data['functions']['natural sum']['native_binding']
+ numeral=e.data['types']['Natural']['numerals']['native_binding']
+ dimension=lambda name:f'({add} {name} ({numeral} (nat_lit 1)))'
+ vector=lambda size:f'({v} {size} {cx})'
+ scope={'n':Expr('n','n',e.type('Natural'),tree=['Local','n'])}
+ for name in ['x','y']:scope[name]=Expr(name,name,e.type('Vector((n+1),Complex)',scope),tree=['Local',name])
+ term=Expressions(e,scope).parse('computed pick(n,x,y)')
+ pick=e.data['functions']['computed pick']['native_binding']
+ checks += [f'noncomputable def computedPick (n : {nat}) (x y : {vector(dimension("n"))}) : {e.render_type(term.type,"lean",scope)} := {term.lean}',
+            f'noncomputable def computedPickExpected (n : {nat}) (x y : {vector(dimension("n"))}) : {vector(dimension("n"))} := @{pick} n x y',
+            'same_basic_target computedPick computedPickExpected']
+ scope['m']=local_definition('m',Expressions(e,scope).parse('n'),e,scope)
+ scope['x']=Expr('x','x',e.type('Vector(n,Complex)',scope),tree=['Local','x'])
+ scope['z']=Expr('z','z',e.type('Vector(m,Complex)',scope),tree=['Local','z'])
+ term=Expressions(e,scope).parse('inferred pick(x,y,z)')
+ pick=e.data['functions']['inferred pick']['native_binding']
+ # The inner type annotation preserves m even though its enclosing type uses n.
+ checks += [f'noncomputable def inferredPick (n : {nat}) (x z : {vector("n")}) (y : {vector(dimension("n"))}) : {vector(dimension("n"))} := let m := n; ({term.lean} : {e.render_type(term.type,"lean",scope)})',
+            f'noncomputable def inferredPickExpected (n : {nat}) (x z : {vector("n")}) (y : {vector(dimension("n"))}) : {vector(dimension("n"))} := let m := n; (@{pick} m x y z : {vector(dimension("m"))})',
+            'same_basic_target inferredPick inferredPickExpected']
  native=Path(d)/'Checks.lean';native.write_text(lean([],e,['Lean'])+comparison+'\n'.join(checks)+'\n')
  subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(native)],cwd=ROOT,check=True)
 print(f'{sum(line.startswith("same_basic_target") for line in checks)} canonical projection/producer/key targets and {sum(line.startswith("theorem ") for line in checks)} agreement proofs passed.')
