@@ -1323,6 +1323,35 @@ class CleanRows(unittest.TestCase):
   second=Builder(self.e,self.scope).materialize(tree,use_default=False)
   self.assertEqual(first.lean,second.lean)
 
+ def test_dependent_argument_from_parameterized_literal_producer(self):
+  notation('Notation make vector family(n: Natural,x: Vector(n,Complex)): Function(k: Natural,Vector(k,Complex)):',
+   ['Means: fun _ _ => (0 : Complex)','Render latex: family({n},{x})'],self.e)
+  notation('Notation read family(f,x):',
+   ['Let T: Type','Let f: Function(k: Natural,Vector(k,T))','Let x: T','Returns: T',
+    'Means: x','Render latex: read({f},{x})'],self.e)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('read family(make vector family(n,0),0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Complex'))
+  self.assertEqual(dict(value.inferred_args)['T'],self.e.type('Complex'))
+
+ def matrix_family_fixture(self):
+  notation('Notation make matrix family(n: Natural,x: Vector(n,Complex)): Function(k: Natural,Matrix(k,n,Complex)):',
+   ['Means: fun _ _ _ => (0 : Complex)','Render latex: family({n},{x})'],self.e)
+  notation('Notation inspect matrix family(f,x):',
+   ['Let width: Natural','Let f: Function(k: Natural,Matrix(k,width,Complex))','Let x: Real','Returns: Real',
+    'Means: x','Render latex: inspect({f},{x})'],self.e)
+ def test_deferred_producer_type_substitutes_caller_parameter(self):
+  self.matrix_family_fixture()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('inspect matrix family(make matrix family(n,0),0)','expression')),use_default=False)
+  self.assertEqual(dict(value.inferred_args)['width'],self.e.type('Vector(n,Complex)',self.scope).args[0])
+ def test_deferred_producer_type_substitutes_literal_parameter(self):
+  self.matrix_family_fixture()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('inspect matrix family(make matrix family(2,0),0)','expression')),use_default=False)
+  self.assertEqual(dict(value.inferred_args)['width'],self.e.type('Vector(2,Complex)',self.scope).args[0])
+ def test_deferred_producer_still_checks_its_literal_argument(self):
+  self.matrix_family_fixture()
+  with self.assertRaises(NoSolution):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('inspect matrix family(make matrix family(n,1),0)','expression')),use_default=False)
+
 if __name__=='__main__':unittest.main()
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

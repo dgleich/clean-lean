@@ -4106,6 +4106,22 @@
         "Embedded lambda inference",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_deferred_producer_parameter_recovery",
+      "status": "experimental-slice",
+      "source": "read family(make vector family(n,0),0); width inferred from make matrix family(2,0)",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Wait for producer return-template dependencies; use checked substitution and structural parameter equations; retain child and forward checks; two independent whole-call native targets",
+      "pending": [
+        "Contextual metavariables",
+        "Embedded lambda inference",
+        "Inverse computed-expression inference",
+        "Production integration"
+      ]
     }
   ]
 }

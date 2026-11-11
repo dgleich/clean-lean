@@ -2280,3 +2280,49 @@ integration remains pending.
 Validation: 368 experimental Python tests, 94 exact native-target comparisons and
 94 supporting proofs pass. Full production validation remains separate.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Deferred parameter recovery from producer return types
+
+The row experiment now supports a function producer whose parameterized literal
+arguments do not yet have retained source syntax. For example:
+
+```clean
+Notation make vector family(n: Natural,x: Vector(n,Complex)): Function(k: Natural,Vector(k,Complex)):
+  Means: fun _ _ => (0 : Complex)
+  Render latex: family({n},{x})
+```
+
+`read family(make vector family(n,0),0)` determines the consumer's Complex
+parameter without first independently solving the producer. A matrix-family
+variant returning `Function(k: Natural,Matrix(k,n,Complex))` recovers the consumer's
+width after substituting n, including when the producer call is `(2,0)`.
+
+A ParameterPlan captures the consumer parameter variable, its checked dependent
+parameter type and formal-variable map, the checked consumer signature, and the
+producer's declared return template with its referenced formal-variable map. Only
+variables reached through Binder and nominal Carrier structure are eligible;
+variables hidden inside computed expressions are not inverse-inference targets.
+Referenced producer formals, in captured order, are the plan's dependencies.
+
+At saturation, ground dependencies are reconstructed using the existing witness
+resolver. Checked substitution produces the actual function type, and the binder
+bridge derives the consumer equations from that type. Unification resolves the
+requested parameter; a still-unsolved output is incomplete. This is a forward
+obligation on producer dependencies, not a separate producer candidate search.
+The consumer's complete forward TypePlan, all producer argument equations, and
+final checked applications remain in the same row. Invalid producer literal
+arguments are therefore still rejected even if their declared return type alone
+would satisfy the consumer.
+
+Two independent complete-call targets cover a fixed vector-family result and a
+matrix-family result whose width comes from a scalar literal. Python checks also
+cover a caller width and an invalid producer literal. Contextual metavariables,
+embedded lambda inference, reverse inference through computed operations and
+production integration remain pending.
+
+Validation: 372 experimental Python tests, 96 exact native-target comparisons and
+96 supporting proofs pass. Full production discovery and active-label regeneration
+remain separately running checks, not completed evidence for this experiment.
+:::

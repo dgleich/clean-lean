@@ -661,6 +661,24 @@ noncomputable def expectedProducedFamily : {t('Complex')} := @{f('read binder fa
 same_basic_target actualProducedFamily expectedProducedFamily
 theorem meaningProducedFamily : actualProducedFamily = (0 : Complex) := by simp [actualProducedFamily, {f('read binder family')}, {complex_numerals}]
 """)
+notation('Notation make binder vector family(n: Natural,x: Vector(n,Complex)): Function(k: Natural,Vector(k,Complex)):',
+ ['Means: fun _ _ => (0 : Complex)','Render latex: family({n},{x})'],env)
+notation('Notation make binder matrix family(n: Natural,x: Vector(n,Complex)): Function(k: Natural,Matrix(k,n,Complex)):',
+ ['Means: fun _ _ _ => (0 : Complex)','Render latex: family({n},{x})'],env)
+for name,source,parameter,result,expected,meaning in [
+ ('DeferredVectorFamily','read binder family(make binder vector family(n,0),0)',f"(n : {t('Natural')})",t('Complex'),
+  f"@{f('read binder family')} {t('Complex')} ({f('make binder vector family')} n ({f('complex vector zero')} n)) ({complex_numerals} (nat_lit 0))",
+  f"by simp [actualDeferredVectorFamily, {f('read binder family')}, {complex_numerals}]"),
+ ('DeferredMatrixFamily','read binder width(make binder matrix family(2,0),0)','',t('Real'),
+  f"@{f('read binder width')} ({ntwo}) ({f('make binder matrix family')} ({ntwo}) ({f('complex vector zero')} ({ntwo}))) ({nr} (nat_lit 0))",
+  f"by simp [actualDeferredMatrixFamily, {f('read binder width')}, {nr}]")]:
+ value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ checks.append(f"""
+noncomputable def actual{name} {parameter} : {result} := {value.lean}
+noncomputable def expected{name} {parameter} : {result} := {expected}
+same_basic_target actual{name} expected{name}
+theorem meaning{name} {parameter} : actual{name}{' n' if parameter else ''} = 0 := {meaning}
+""")
 source='for every (z: Vector(n,Complex), z != 0)'
 value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
 checks.append(f"""
@@ -708,6 +726,6 @@ theorem meaningScopedCarrier : actualScopedCarrier := by
 """)
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Ninety-four experimental targets and ninety-four meaning proofs passed; production joint inference remains unimplemented.')
+print('Ninety-six experimental targets and ninety-six meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

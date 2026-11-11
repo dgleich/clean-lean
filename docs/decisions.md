@@ -2274,3 +2274,17 @@ subexpression default is applied. See the
 Production integration and producers lacking reconstructible candidate syntax remain
 pending. The source grammar is unchanged.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental deferred producer parameter recovery
+
+When a producer has captured callable metadata but no reconstructed syntax, the row
+experiment can defer recovery of consumer parameters until the producer return type's
+referenced formals are ground. Checked substitution and structural binder constraints
+recover eligible parameters; child equations and full forward checks remain mandatory.
+No computed operation is inverted and no producer is independently defaulted. See the
+[constructive obligation and examples](../studies/parameterized-literals/README.md#deferred-parameter-recovery-from-producer-return-types).
+This is experimental row support; production integration and embedded lambda inference
+remain pending. No source grammar changes.
+:::

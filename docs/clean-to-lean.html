@@ -1687,5 +1687,15 @@ producer assignments reject only their certified candidate; unavailable checking
 remains incomplete. See the
 <a href="../studies/parameterized-literals/README.md#dependent-arguments-produced-by-candidate-calls">candidate-checking contract and limits</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="deferred-producer-parameters">
+<h2>Deferred producer return types (experimental rows)</h2>
+<p><code>read family(make vector family(n,0),0)</code> can recover the consumer's
+Complex parameter from the producer's declared return type while its vector zero
+still needs reconstruction. If that return type depends on n, the obligation waits
+for n's checked representative before substituting. Final Lean emission retains the
+producer's vector-zero wrapper and all inferred arguments; child argument checking
+is not bypassed. See the
+<a href="../studies/parameterized-literals/README.md#deferred-parameter-recovery-from-producer-return-types">obligation and remaining limits</a>.</p>
+</section></llm>
 </body>
 </html>

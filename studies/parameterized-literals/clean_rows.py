@@ -239,17 +239,33 @@ class Builder:
                     tuple(w for _,_,ws in children for w in ws))
         return self.typ(typ,formals),(),()
 
-    def dependent_argument_constraints(self,template,actual,formals,signature):
-        """Structural constraints from a checked caller argument, with no new witnesses."""
+    def dependent_template(self,template,formals,signature):
         from binder_types import CheckedBinderTypes
-        from constraint_model import Binder,IndexExpression
         from cleanlang.core import Expr,texid
         from cleanlang.lean_identifiers import quoted
         declared={p.name:Expr(quoted(p.name),texid(p.name),p.typ,tree=['Local',p.name])
                   for p in signature.parameters}
-        formal_codec=CheckedBinderTypes(self.env,declared,limit=self.limit)
+        codec=CheckedBinderTypes(self.env,declared,limit=self.limit)
+        return codec,codec.encode(template,formals)
+
+    def recoverable_parameters(self,template,formals,signature):
+        from constraint_model import Binder
+        _,term=self.dependent_template(template,formals,signature)
+        pending=[term];found=set();visits=0
+        while pending:
+            node=pending.pop();visits+=1
+            if visits>self.limit:raise Incomplete('Recoverable parameter traversal limit exceeded')
+            if isinstance(node,Variable):found.add(node)
+            elif isinstance(node,Binder):pending.extend((node.domain,node.body))
+            elif isinstance(node,Carrier):pending.extend(node.arguments)
+        return tuple(sorted(found,key=lambda v:v.identity))
+
+    def dependent_argument_constraints(self,template,actual,formals,signature):
+        """Structural constraints from a checked caller argument, with no new witnesses."""
+        from binder_types import CheckedBinderTypes
+        from constraint_model import Binder,IndexExpression
+        formal_codec,left=self.dependent_template(template,formals,signature)
         actual_codec=CheckedBinderTypes(self.env,self.scope,limit=self.limit)
-        left=formal_codec.encode(template,formals)
         right=actual_codec.encode(actual)
         def convert(term,codec):
             if isinstance(term,Atom):return self.typ(codec.atoms[term],{})
@@ -567,6 +583,14 @@ class Builder:
                         except CleanError as error:
                             raise Incomplete('Dependent argument candidate checking unavailable: '+str(error)) from error
                         equations+=self.dependent_argument_constraints(p.typ,actual.type,variables,signature)
+                    elif isinstance(p.typ,DependentFunctionType) and a.callable_signature is not None and any(occurs(p.typ,n) for n in variables):
+                        from candidate_values import ParameterPlan
+                        descriptor=a.callable_signature
+                        if descriptor.carrier!=a.typ:raise Incomplete('Producer callable metadata disagrees with carrier')
+                        dependencies=tuple((n,t) for n,t in descriptor.formals if occurs(descriptor.template,n))
+                        for variable in self.recoverable_parameters(p.typ,variables,signature):
+                            type_deferred+=(ParameterPlan(variable,p.typ,tuple(variables.items()),signature,
+                                                          descriptor.template,dependencies),)
                 if rejected:continue
                 equations+=tuple(zip(parameters,(a.typ for a in actuals)))
                 equations+=tuple((variables[p.name],a.value) for p,a in zip(explicit,actuals))

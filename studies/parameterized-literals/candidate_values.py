@@ -29,6 +29,21 @@ class IndexPlan:
 class TypePlan(IndexPlan):
     """Forward substitution into a checked type, without inverse type inference."""
 
+@dataclass(frozen=True)
+class ParameterPlan:
+    output: object
+    template: object
+    formals: tuple
+    signature: object
+    actual_template: object
+    actual_formals: tuple
+
+    @property
+    def inputs(self):return tuple(term for _,term in self.actual_formals)
+
+    @property
+    def requirements(self):return self.inputs
+
 class CandidateValues:
     def __init__(self,builder,tree,fragment,equations,arguments):
         self.builder=builder;self.tree=tree;self.fragment=fragment
@@ -81,7 +96,18 @@ class CandidateValues:
         if mismatch:raise NoSolution('Checked application differs from candidate type or index')
 
     def checks(self):
-        checks=[p for p in self.fragment.deferred if not isinstance(p,IndexPlan)]
+        checks=[p for p in self.fragment.deferred if not isinstance(p,(IndexPlan,ParameterPlan))]
+        for plan in self.fragment.deferred:
+            if not isinstance(plan,ParameterPlan):continue
+            def recover(inputs,plan=plan):
+                bindings=unify(tuple(zip(plan.requirements,inputs)),self.bindings,limit=self.builder.limit)
+                actual=self.index_expression(TypePlan(plan.output,plan.actual_template,plan.actual_formals),bindings)
+                equations=self.builder.dependent_argument_constraints(plan.template,actual,dict(plan.formals),plan.signature)
+                solved=unify(equations,bindings,limit=self.builder.limit)
+                result=resolve(plan.output,solved)
+                if variables(result):raise Incomplete('Dependent producer parameter is not structurally recoverable')
+                return result
+            checks.append(Deferred(plan.output,plan.requirements,recover))
         for plan in (*self.index_plans,*self.active):
             def evaluate(inputs,plan=plan):
                 bindings=unify(tuple(zip(plan.requirements,inputs)),self.bindings,limit=self.builder.limit)
