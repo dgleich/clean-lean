@@ -1458,3 +1458,14 @@ Retained carrier annotations must account for all free references, and those
 references must remain in scope; the retained classifier annotation is closed.
 These checks are implemented in the isolated type-values patch, not production.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The isolated classifier/storage composition uses clean-bound-tree version 2.
+LocalType encodes its universe and classifier identity explicitly; version 1
+rejects without an environment-based migration fallback. BoundTypeValue retains
+its checked annotations and tuple snapshot through the existing tagged encoding.
+Stored index payloads are authoritative over cached trees and must be re-elaborated.
+See studies/universe-classifiers/storage.md for the schema and validation boundary.
+This does not change production storage or claim full environment freshness.
+:::

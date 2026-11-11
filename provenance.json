@@ -7840,6 +7840,22 @@
       "model": "gpt-6",
       "date": "2026-11-11",
       "mode": "markdown"
+    },
+    "studies/universe-classifiers/codec-v2.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/universe-classifiers/test_value_storage.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/storage.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

@@ -332,3 +332,10 @@ LAKE=lake python3 studies/universe-classifiers/verify.py
 # Add --full for unrestricted unittest discovery after selected checks.
 ```
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The optional `--storage` reproduction composes version-2 index payload storage
+with this classifier stack. See [the storage contract](storage.md) for the exact
+schema, cache authority rule, validation evidence and remaining obligations.
+:::

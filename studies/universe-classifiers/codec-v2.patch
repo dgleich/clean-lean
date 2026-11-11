@@ -1,0 +1,44 @@
+--- a/cleanlang/retained_codec.py
++++ b/cleanlang/retained_codec.py
+@@ -8,10 +8,10 @@
+ from cleanlang.dependent_functions import DependentFunctionType
+ from cleanlang.binder_keys import ScopedKey
+ 
+-# The schema is explicit: dataclass changes do not silently change version 1.
++# The schema is explicit: dataclass changes do not silently change version 2.
+ SCHEMA={
+  'Type':(Type,('name','args')),
+- 'LocalType':(LocalType,('name','args','lean')),
++ 'LocalType':(LocalType,('name','args','lean','universe','classifier')),
+  'ValueIndex':(ValueIndex,('name','lean','tex','comparison')),
+  'ComputedIndex':(ComputedIndex,('name','lean','tex','comparison','syntax','resolved')),
+  'DimensionIndex':(DimensionIndex,('name','lean','tex','comparison','syntax','resolved')),
+@@ -41,7 +41,7 @@
+      return {'tag':tag,'fields':{name:encode(getattr(item,name)) for name in names}}
+    raise CleanError('Unsupported bound-tree value: '+type(item).__name__)
+   finally:active.remove(identity)
+- return json.dumps({'format':'clean-bound-tree','version':1,'value':encode(value)},ensure_ascii=False,sort_keys=True,separators=(',',':'))
++ return json.dumps({'format':'clean-bound-tree','version':2,'value':encode(value)},ensure_ascii=False,sort_keys=True,separators=(',',':'))
+ 
+ def loads(source):
+  def pairs(entries):
+@@ -54,7 +54,7 @@
+  try:document=json.loads(source,object_pairs_hook=pairs,parse_constant=constant)
+  except (ValueError,TypeError) as error:raise CleanError('Invalid bound-tree JSON') from error
+  if (type(document) is not dict or set(document)!={'format','version','value'} or
+-     document['format']!='clean-bound-tree' or type(document['version']) is not int or document['version']!=1):
++     document['format']!='clean-bound-tree' or type(document['version']) is not int or document['version']!=2):
+   raise CleanError('Unsupported bound-tree envelope or version')
+  def decode(item):
+   if type(item) in (str,int,bool) or item is None:return item
+@@ -79,6 +79,10 @@
+   values={name:decode(item['fields'][name]) for name in names}
+   if tag in ('Type','LocalType','ProofType','DependentFunctionType'):
+    if type(values['name']) is not str or type(values['args']) is not tuple:raise CleanError('Malformed type fields')
++  if tag=='LocalType':
++   if (type(values['lean']) is not str or type(values['classifier']) is not str or
++       type(values['universe']) is not int or values['universe']<0):
++    raise CleanError('Malformed local carrier metadata')
+   if tag=='ProofType':
+    if values['name']!='$proof' or len(values['args'])!=1 or not isinstance(values['args'][0],ValueIndex):raise CleanError('Malformed proof type')
+    return ProofType(values['args'][0])

@@ -15,6 +15,18 @@ assert comparison_normal_form(Expressions(env,scope).parse('retain inferred(X)')
 type_declaration('Type Indexed(T: LargeTypes):',['Means: Nat','Render latex: I({T})'],env)
 notation('Notation tag(x):',['Let A: LargeTypes','Let x: A','Returns: Indexed(A)','Means: 0','Render latex: t({x})'],env)
 indexed=Expressions(env,scope).parse('tag(X)')
+if '--payload-only' in sys.argv:
+ from dataclasses import replace
+ from cleanlang.indices import index_value
+ from cleanlang.dependent_functions import index_tree
+ from cleanlang.retained_codec import dumps,loads
+ # Reconstruct from encoded data with no cached tree. Lean targets below remain
+ # independently authored, and are compared with the freshly elaborated value.
+ stored=replace(loads(dumps(index_value(indexed,env,scope))),resolved=None)
+ indexed=Expressions(env,scope).elaborate(index_tree(stored))
+ carrier=Expressions(env,scope).parse('type(TopologicalSpace : LargeTypes)')
+ restored=Expressions(env,scope).elaborate(loads(dumps(carrier.tree)))
+ assert restored.lean==carrier.lean and restored.type==carrier.type
 f=lambda n:env.data['functions'][n]['native_binding']
 t=lambda n:env.data['types'][n]['native_binding']
 expected='''

@@ -109,7 +109,10 @@ expanded first-class/type-expression/conversion groups passed 79 tests before
 the final named-carrier case was added. The complete selected reproduction is
 tracked by [verify.py](verify.py): the fresh pinned reproduction passed 281
 selected tests in 98.132 seconds, including strict parser reproducibility. That
-run predates the five scope/result-index cases; a fresh reproduction is running.
+run predates the five scope/result-index cases. The refreshed selected suite
+passed 286 tests in 120.021 seconds and completed all native suites successfully.
+That snapshot used the earlier seven-target value checker; the separate final
+ten-target checker and its payload-only variant also passed.
 
 [TypeValueTargets.lean](TypeValueTargets.lean) checks ten independent exact
 native targets and proves all three example statements. The final native run
@@ -122,10 +125,13 @@ compiled twice and visually checked as a single landscape page with no overflow
 or unresolved references; only the existing `latex/clean` package-name warning
 remains after the second run.
 
-Stored payload support is **not complete**. The retained form requires checked
+Stored payload support is **not integrated into production**. The optional
+[version-2 storage composition](storage.md) now preserves these annotations and
+classifier identities and passes payload-only native replay. The following
+plain-JSON boundary still applies without that composition: The retained form requires checked
 annotations; a plain JSON round trip discards those annotations and is rejected.
-The versioned bound-tree codec and LocalType level/identity schema still need
-migration before payload-only replay can be claimed. The `.resolved` in-memory
+The version-2 composition explicitly migrates the LocalType level/identity
+schema; complete regression and production integration remain pending. The `.resolved` in-memory
 index path is covered; it is not evidence for persisted round trips.
 
 Higher computed/projected carriers, carrier-valued dependent function binders,

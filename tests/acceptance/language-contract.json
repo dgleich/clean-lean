@@ -2969,11 +2969,34 @@
       "expected_lean": "Replay preserves the original TopologicalSpace carrier term and selected classifier type. Fresh unannotated syntax now reports semantic ambiguity; changed selected classifier metadata/declaration rejects replay.",
       "checks": [
         "test_classified_values.py: selection independent of order/expected type, alias deduplication, retained replay after competing import, changed snapshot rejection and lost-annotation JSON rejection",
-        "check_value_targets.py: reification of a formal inferred carrier with two visible classifiers, and an authored carrier-returning definition"
+        "check_value_targets.py: reification of a formal inferred carrier with two visible classifiers, and an authored carrier-returning definition",
+        "test_value_storage.py and check_value_targets.py --payload-only: version-2 schema, identity and scope replay, authoritative index payload, ten native targets and three proofs"
       ],
       "pending": [
-        "Payload-only replay with the versioned codec and higher LocalType schema",
-        "Full mathematical adapter-environment freshness and production integration"
+        "Full mathematical adapter-environment freshness and production integration",
+        "Expanded classifier/storage composition, full regression and production integration"
+      ]
+    },
+    {
+      "id": "classified_value_payload_v2",
+      "status": "isolated-prototype",
+      "environment": "Classifier stack plus codec-v2.patch and bound-tree-codec/storage.patch; fixed explicit module environment.",
+      "source": "Save type(A : Large) as an index; discard its resolved tree; reload and substitute A.",
+      "expected_tree": [
+        "BoundTypeValue",
+        "checked carrier annotation",
+        "checked classifier annotation",
+        "tuple snapshot",
+        "explicit"
+      ],
+      "expected_lean": "Re-elaboration retains the formal classifier and emits the substituted carrier; index payload overrides a conflicting resolved cache.",
+      "checks": [
+        "test_value_storage.py: seven storage cases, including independent JSON schema and missing local rejection",
+        "check_value_targets.py --payload-only: restored indexed application compared with independently authored Lean target"
+      ],
+      "pending": [
+        "Expanded composition and full regression",
+        "Broader native dependency freshness and production integration"
       ]
     }
   ]
