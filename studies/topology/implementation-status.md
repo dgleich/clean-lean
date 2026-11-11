@@ -91,6 +91,14 @@ text with stable fingerprints; all 92 corpus proofs pass. The new record is
 `scoped_call_resolution_corpus`. Production routing remains unchanged, and full
 regression for this compiler remains pending.
 
+The latest comparison optimization makes optional memo snapshots independent of
+physical sharing while preserving exact structural values. It passes 114 focused
+checks, 462 solver tests, 157 runtime tests, twelve native targets/five proofs,
+and the 92-proof corpus. The controlled two-expression case needs one
+normalization instead of two, with identical keys. See the
+[comparison report](../../docs/comparison-token-cache.md#sharing-independent-comparison-snapshots).
+This does not establish full-study throughput or complete regression.
+
 Comparison optimizations preserve the public source recheck and exact target
 rules. Controlled fixtures reduce repeated work, but bounded active-label
 observations still end without completing the selected declaration. There is no

@@ -13,9 +13,10 @@ class SnapshotUnavailable(CleanError):
 def snapshot(value,*,limit=512):
     if type(limit) is not int or limit<1:raise ValueError('Snapshot limit must be positive')
     # Repeated objects are visited once per snapshot. Mutable values are read
-    # afresh on every invocation; sharing can cause a safe cache miss, not a hit
-    # between different semantic values. Retain references during traversal.
-    nodes=[];seen={};active=set();references=[];visits=0
+    # afresh on every invocation. Intern completed structural nodes so equal
+    # values have equal snapshots regardless of physical sharing. Object IDs
+    # only avoid revisiting this invocation's objects; they are not key data.
+    nodes=[];interned={};seen={};active=set();references=[];visits=0
     def visit(item):
         nonlocal visits
         visits+=1
@@ -25,7 +26,7 @@ def snapshot(value,*,limit=512):
         identity=id(item)
         if identity in active:raise SnapshotUnavailable('Comparison snapshots do not support cycles')
         if identity in seen:return ('ref',seen[identity])
-        ordinal=len(nodes);seen[identity]=ordinal;nodes.append(None);references.append(item)
+        references.append(item)
         active.add(identity)
         try:
             if isinstance(item,Annotation):
@@ -40,7 +41,10 @@ def snapshot(value,*,limit=512):
                         node=(tag,tuple(visit(getattr(item,name)) for name in names))
                         break
                 else:raise SnapshotUnavailable('Unsupported comparison snapshot value: '+type(item).__name__)
-            nodes[ordinal]=node
+            ordinal=interned.get(node)
+            if ordinal is None:
+                ordinal=len(nodes);interned[node]=ordinal;nodes.append(node)
+            seen[identity]=ordinal
             return ('ref',ordinal)
         finally:active.remove(identity)
     root=visit(value)

@@ -4934,6 +4934,30 @@
       "pending": [
         "Full regression and production routing"
       ]
+    },
+    {
+      "id": "sharing_independent_comparison_snapshots",
+      "status": "implemented-slice",
+      "environment": "Explicit native producer argument: Natural -> Natural; fixed declarations and one synchronous comparison pool.",
+      "source": "producer argument(n)",
+      "expected_tree": [
+        "Call",
+        "producer argument",
+        [
+          [
+            "Local",
+            "n"
+          ]
+        ]
+      ],
+      "expected_lean": "The same declared producer-argument wrapper applied to n before and after rebuilding equal semantic values with different physical sharing. No new conversion or retained-data format.",
+      "checks": [
+        "Independent snapshot graph oracle; shared/copied equality and mutation distinction; one normalization for two rebuilt equal values; existing cycle, budget, local-mutation and binder-identity tests",
+        "check_projection_dependency_targets.py: twelve exact native targets and five proofs, including rebuiltKey"
+      ],
+      "pending": [
+        "Full current-revision regression and end-to-end active-label throughput"
+      ]
     }
   ]
 }

@@ -1898,5 +1898,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p>The explicit joint API now matches ordinary resolution. In <code>h(function(x: Real,0))</code>, a callable local h takes precedence, including universal or implication evidence. If local h is noncallable, Clean resolves the explicitly declared module function h. Once selected, a callable local does not fall back to the module after a type or arity error.</p>
 <p>Lean therefore receives either the supplied local application <code>h (fun x =&gt; realZero)</code> or the declared module-wrapper application. These are schematic spellings of retained targets. A chained call applies its checked intermediate result and has no module fallback if that result is noncallable. Parentheses around a bare name are normalized away: <code>(h)(function(x: Real,0))</code> has the same Call node and resolution as the unparenthesized form. See the <a href="spec.md#scoped-call-local-precedence">resolution rule</a> and <a href="../tools/check_joint_proof_targets.py">independent native checks</a>. This repair does not switch production inference.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="sharing-independent-snapshots">
+<h2>Rebuilt comparison values retain the same Lean meaning</h2>
+<p>The comparison memo now gives equal stored semantic values the same key whether their Python objects are shared or copied. It interns exact structural tuples after canonicalizing their children; it still rereads mutable fields and rejects cycles or unsupported snapshots. Resource exhaustion disables optional reuse, not comparison.</p>
+<p>This changes reuse only. A source such as <code>producer argument(n)</code> retains the same declared Lean wrapper application. Public source rechecking, declaration identity and binder-allocation restrictions remain in force. See the <a href="spec.md#sharing-independent-comparison-snapshots">constructive snapshot rule</a> and <a href="../tools/check_projection_dependency_targets.py">native key oracle</a>.</p>
+</section></llm>
 </body>
 </html>

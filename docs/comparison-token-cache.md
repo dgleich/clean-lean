@@ -377,3 +377,68 @@ The post-change active-label diagnostic reached the selected declaration but its
 no full-study completion or speedup claim; the controlled work-count result above
 is the measured improvement.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Sharing-independent comparison snapshots
+
+The optional comparison memo's semantic snapshot now interns completed structural
+nodes, rather than assigning a distinct key node to every physical object.
+Object identity remains a traversal-local optimization only. It is not part of
+the resulting key. Mutable objects are reread on every snapshot invocation.
+
+Traverse lists, tuples and the existing explicit dataclass schema in their fixed
+field order. Preserve atom type tags, container tags, annotation payloads and all
+nontransient fields. After visiting a node's children, look up its exact immutable
+structural tuple in a per-snapshot intern table. Reuse its ordinal if equal;
+otherwise append it to the canonical node list. Save that ordinal in the separate
+object-visit table. Active-object detection still rejects cycles before consulting
+the completed-object table. The existing visit budget and unsupported-schema
+fallback are unchanged; no digest or object-identity comparison can establish a
+semantic cache hit.
+
+For example, a list containing the same `['Local','x']` object twice has the same
+snapshot as a list containing two separately allocated equal copies. Changing
+only one copy changes the snapshot. Sharing and copying are implementation details,
+not new Clean conversion rules. The same immutable structural tuple is interned
+only after its children are canonicalized; induction over finite acyclic values
+therefore gives the same graph for equal ordered semantic data, independent of
+sharing. Distinct atom types, field values, order and container kinds remain
+observable. A larger copied graph may exhaust the budget sooner, but that only
+prevents caching and does not establish equality or reject a valid comparison.
+
+Memo lifetime, binder-identity restrictions, public source rechecking, declaration
+checks and failed-snapshot behavior remain unchanged. No parser, emitted Lean term,
+retained-tree serialization version or mathematical equality rule changes. The
+snapshot is an ephemeral implementation key, not a published file format.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Sharing-independent snapshot validation passes 114 focused comparison tests,
+462 solver tests and 157 runtime tests. Twelve exact native targets and five
+agreement proofs pass, including the rebuilt-value comparison key. The native
+checker now reports counts from its checked declarations instead of a fixed label.
+Four corpus documents produce identical legacy/joint Lean under stable input
+fingerprints; all 92 corpus proofs pass. Records are stored as
+`sharing_independent_snapshots_corpus` and
+`sharing_independent_snapshots_diagnostic` in
+[the compatibility report](../studies/parameterized-literals/compatibility.json).
+
+A controlled same-pool fixture changes from two normalizations on `63a9686` to
+one for two equal expressions with different type-object sharing, with identical
+keys and types. An independent 20-second import observation stopped in the subpath
+prerequisites before reaching the selected active-label definition. It supplies
+no full-study throughput result. Full current-revision discovery and complete
+active-label validation remain pending; existing live jobs are preserved.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The follow-up observation armed its 20-second window only after entering
+`restricted active labels`. It reached that declaration but ended before it
+finished; total wall time including prerequisites was 38.55 seconds. The record
+is `sharing_independent_snapshots_active_observation` in the compatibility report.
+This confirms remaining expensive work in the target rather than an import-only
+observation. It still establishes neither completion nor an end-to-end speedup.
+:::

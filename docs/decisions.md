@@ -2876,3 +2876,38 @@ not choose between local and module meanings. Subsequent inference and retained
 Lean emission follow that path. The selected module wrapper or local proof/value
 head remains visible in the exact native target. Production routing is unchanged.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Sharing-independent comparison snapshots
+
+The optional comparison memo's semantic snapshot now interns completed structural
+nodes, rather than assigning a distinct key node to every physical object.
+Object identity remains a traversal-local optimization only. It is not part of
+the resulting key. Mutable objects are reread on every snapshot invocation.
+
+Traverse lists, tuples and the existing explicit dataclass schema in their fixed
+field order. Preserve atom type tags, container tags, annotation payloads and all
+nontransient fields. After visiting a node's children, look up its exact immutable
+structural tuple in a per-snapshot intern table. Reuse its ordinal if equal;
+otherwise append it to the canonical node list. Save that ordinal in the separate
+object-visit table. Active-object detection still rejects cycles before consulting
+the completed-object table. The existing visit budget and unsupported-schema
+fallback are unchanged; no digest or object-identity comparison can establish a
+semantic cache hit.
+
+For example, a list containing the same `['Local','x']` object twice has the same
+snapshot as a list containing two separately allocated equal copies. Changing
+only one copy changes the snapshot. Sharing and copying are implementation details,
+not new Clean conversion rules. The same immutable structural tuple is interned
+only after its children are canonicalized; induction over finite acyclic values
+therefore gives the same graph for equal ordered semantic data, independent of
+sharing. Distinct atom types, field values, order and container kinds remain
+observable. A larger copied graph may exhaust the budget sooner, but that only
+prevents caching and does not establish equality or reject a valid comparison.
+
+Memo lifetime, binder-identity restrictions, public source rechecking, declaration
+checks and failed-snapshot behavior remain unchanged. No parser, emitted Lean term,
+retained-tree serialization version or mathematical equality rule changes. The
+snapshot is an ephemeral implementation key, not a published file format.
+:::

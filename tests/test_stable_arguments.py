@@ -156,6 +156,39 @@ class ScopedComparisonReuse(StableArguments):
   self.assertEqual(len(before[1]),2)
   value[1]='y'
   self.assertNotEqual(before,snapshot(shared))
+ def test_snapshot_ignores_sharing_but_preserves_values(self):
+  from cleanlang.comparison_snapshot import snapshot
+  shared=['Local','x']
+  copied=[['Local','x'],['Local','x']]
+  self.assertEqual(snapshot([shared,shared]),snapshot(copied))
+  copied[1][1]='y'
+  self.assertNotEqual(snapshot([shared,shared]),snapshot(copied))
+ def test_snapshot_has_independent_canonical_nodes(self):
+  from cleanlang.comparison_snapshot import snapshot
+  leaf=('list',(('atom','str','Local'),('atom','str','x')))
+  root=('list',(('ref',0),('ref',0)))
+  self.assertEqual(snapshot([['Local','x'],['Local','x']]),(('ref',1),(leaf,root)))
+  self.assertNotEqual(snapshot([['Local','x']]),snapshot([('Local','x')]))
+ def test_equivalent_rebuilt_values_reuse_comparison(self):
+  from cleanlang.binder_keys import Pool
+  import cleanlang.conversion as conversion
+  from copy import deepcopy
+  value=self.expr('retain(x)')
+  value.type=self.scope['x'].type
+  rebuilt=deepcopy(value)
+  self.env._comparison_pool=Pool(self.env,self.scope,value.tree)
+  original=conversion._normal_form;calls=[]
+  def counted(value,*args,**kwargs):
+   if value.tree[0]=='Call' and value.tree[1]=='retain':calls.append(value.tree)
+   return original(value,*args,**kwargs)
+  try:
+   with patch('cleanlang.conversion._normal_form',side_effect=counted):
+    first=index_comparison(value,self.env,self.scope)
+    second=index_comparison(rebuilt,self.env,self.scope)
+   self.assertEqual(first,second);self.assertEqual(len(calls),1)
+   self.scope['x'].lean='changed'
+   self.assertIn('changed',str(index_comparison(rebuilt,self.env,self.scope)))
+  finally:del self.env._comparison_pool
  def test_snapshot_distinguishes_boolean_and_integer(self):
   from cleanlang.comparison_snapshot import snapshot
   self.assertNotEqual(snapshot([True]),snapshot([1]))

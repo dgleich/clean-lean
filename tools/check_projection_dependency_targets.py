@@ -58,8 +58,23 @@ Define projection producer(n: Natural): ProducerBox:
             f'noncomputable def opaqueProjectionExpected (b : {box}) : {nat} := {arg} ({arg} (@{box}.value b))',
             'same_basic_target opaqueProjectionKey opaqueProjectionExpected',
             f'theorem opaqueProjectionAgreement (b : {box}) : opaqueProjectionKey b = @{box}.value b := by rfl']
+ # Rebuilt equal values with different physical sharing use the same key.
+ from copy import deepcopy
+ from cleanlang.binder_keys import Pool
+ reuse_scope={'n':s['n']}
+ shared=Expressions(e,reuse_scope).parse('producer argument(n)');shared.type=reuse_scope['n'].type
+ rebuilt=deepcopy(shared);e._comparison_pool=Pool(e,reuse_scope,shared.tree)
+ try:
+  shared_key=index_comparison(shared,e,reuse_scope)
+  rebuilt_key=index_comparison(rebuilt,e,reuse_scope)
+  assert shared_key==rebuilt_key
+ finally:del e._comparison_pool
+ checks += [f'noncomputable def rebuiltKey (n : {nat}) : {nat} := {rebuilt_key}',
+            f'noncomputable def rebuiltExpected (n : {nat}) : {nat} := {arg} n',
+            'same_basic_target rebuiltKey rebuiltExpected',
+            f'theorem rebuiltAgreement (n : {nat}) : rebuiltKey n = n := by rfl']
  native=Path(d)/'Checks.lean';native.write_text(lean([],e,['Lean'])+comparison+'\n'.join(checks)+'\n')
  subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(native)],cwd=ROOT,check=True)
-print('Eleven canonical projection/producer/key targets and four agreement proofs passed.')
+print(f'{sum(line.startswith("same_basic_target") for line in checks)} canonical projection/producer/key targets and {sum(line.startswith("theorem ") for line in checks)} agreement proofs passed.')
 
 # generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
