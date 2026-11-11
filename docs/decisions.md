@@ -2359,3 +2359,18 @@ This remains experimental model infrastructure. Source binder/Builder integratio
 whole-expression Lean oracles and production inference are pending. No grammar or
 emission change is accepted by this entry.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental contextual selection and callable targets
+
+Contextual candidates must saturate completely before the ordinary selector applies
+simultaneous defaults. Incomplete competitors block selection; distinct surviving
+candidates remain ambiguous. A private association token is read only after
+uniqueness and cannot choose an interpretation. Type-valued contextual closures
+can be rechecked and converted through an explicitly declared function identity
+and the checked binder codec. See the
+[selection contract and independent native targets](../studies/parameterized-literals/README.md#contextual-candidate-selection-and-checked-callable-types).
+These are experimental callable-type targets. Source lambda-body integration,
+whole-call native oracles and production inference remain pending. No grammar change.
+:::

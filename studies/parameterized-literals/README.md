@@ -2374,8 +2374,9 @@ these results do not establish production joint-inference conformance.
 
 ## Contextual pattern inversion groundwork
 
-`contextual_terms.py` implements one ground contextual-pattern equation. It is not
-connected to `Builder`, the row unifier or production inference. In particular,
+`contextual_terms.py` implements one ground contextual-pattern equation. The standalone operation is now used by the contextual fixed point and selector
+described below. It is not connected to the source `Builder` or production
+inference. In particular,
 embedded lambda arguments remain unsupported; their bodies must not be solved or
 defaulted independently of the surrounding call.
 
@@ -2420,8 +2421,8 @@ right sides, domain/sort mismatches, malformed closure domains, computed express
 and resource limits. The expanded full experimental suite passes 391 tests, including all seventeen
 contextual-pattern cases. Reference HTML IDs/local links and provenance checks
 also pass.
-These model checks are not canonical Lean-target evidence. A next integration
-must represent contextual occurrences in the joint rows, solve all lambda/body
+These model checks are not canonical Lean-target evidence. A next source integration
+must represent contextual occurrences in source-derived joint rows, solve all lambda/body
 and surrounding-call constraints together, and recheck the complete selected
 Clean expression against independently authored native targets. That work and
 production integration remain pending.
@@ -2434,7 +2435,8 @@ production integration remain pending.
 `contextual_constraints.py` adds a fixed point over ordinary equations, typed
 contextual occurrences and existing `Deferred` checks. Its `saturate_contextual`
 adapter consumes an ordinary model `Row`'s equations and deferred obligations.
-It does not yet participate in the source Builder or candidate selection/defaults.
+The selector described below now uses this adapter before defaults. The source
+Builder still does not construct contextual occurrences.
 
 Each family has a unique string identity, fixed ordered formal telescope, output
 sort and allowed-free scope. References denote lexical binding identities, not
@@ -2487,4 +2489,71 @@ Reference HTML IDs/local links and provenance checks pass. No production compile
 files changed, and no new canonical Lean-target validation is claimed for this
 model-only addition. Existing full discovery and active-label snapshot jobs remain
 live and pending separately.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Contextual candidate selection and checked callable types
+
+`select_contextual` accepts exhaustively enumerated candidates, each carrying an
+ordinary Row, family declarations and contextual occurrences. It saturates each
+candidate before applying defaults. A proved inconsistency rejects that candidate;
+an incomplete contextual/forward check propagates and prevents selection. The
+resulting ordinary bindings become equations in a checked row retaining all
+literal carriers and emitted arguments. Contextual domains and outputs are already
+ground, so subsequent defaults cannot change their solutions. The existing selector
+then applies simultaneous defaults, checks remaining parameter determination and
+requires one surviving interpretation. Different declaration candidates remain
+ambiguous even when their carrier and meaning coincide.
+
+A private ordinal associates a checked row with its source choice tuple and solved
+families. It is never a preference: it is read only after the ordinary selector
+establishes uniqueness, then removed from the returned selection. This matters when
+two speculative rows have the same source choice tuple but different arguments.
+A row rejected by defaults must not be replayed against the selected row's arguments;
+that could incorrectly require conversion between unrelated computed expressions.
+Eight selection tests cover this case, row-order permutations, ambiguity, invalid
+and unresolved contextual competitors, unresolved emitted arguments, defaults,
+unfinished enumeration and row limits.
+
+`callable_type` interprets a type-valued contextual telescope using an explicitly
+supplied declared function identity. It first reapplies the stored closure at its
+formal locals, verifying that its domains agree with its parameter metadata. It
+then replaces exactly the outer Context binders with declared function binders;
+inner type syntax is unchanged. Non-type results and malformed telescopes are
+rejected. The checked binder codec still validates the declaration, domains,
+result and retained expression evidence. Three new tests cover this boundary.
+
+The [native driver](check_contextual_types.py) follows selection with this codec
+and emits [ContextualTargets.lean](ContextualTargets.lean). Its four independently
+authored target types are:
+
+```clean
+Function(k: Natural,Vector(k,Complex))
+Function(j: Natural,Function(k: Natural,Matrix(j,k,Complex)))
+Function(k: Natural,Vector((k+1),Complex))
+Function(k: Natural,Matrix(k,n,Complex))
+```
+
+The last type retains the caller's n. The computed dimension retains the declared
+natural-sum and numeral wrappers. The driver checks exact elaborated type bodies
+and four separate interpretation equalities in Lean. These are recovered callable
+**type** targets, not lambda bodies or complete calls. Reproduce with:
+
+```sh
+LAKE=lake python3 studies/parameterized-literals/check_contextual_types.py
+python3 -m unittest discover -s studies/parameterized-literals -p 'test_*.py'
+```
+
+The source Builder still needs to enumerate lambda-body and surrounding-call
+constraints together, encode contextual occurrences under lexical binders, retain
+selected body witnesses and recheck complete expressions. No production grammar or
+inference rule changes in this slice. Earlier experimental native cases retain
+their own validation scope; these four targets do not supersede them.
+
+Validation: all 419 experimental tests pass, including eight selection cases and
+three callable-type conversion cases. The four exact native targets and four
+interpretation proofs pass. Reference HTML IDs/local links and provenance checks
+pass. No production compiler files changed; the existing full-discovery and
+active-label snapshot jobs remain live and pending separately.
 :::

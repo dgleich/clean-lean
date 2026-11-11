@@ -4246,6 +4246,23 @@
         "Whole-expression canonical Lean targets",
         "Exhaustive candidate selection and production inference"
       ]
+    },
+    {
+      "id": "contextual_selection_callable_targets",
+      "status": "experimental-slice",
+      "environment": "Explicit candidate Rows and contextual families; declared Function and linear algebra types with a checked binder codec. No source lambda Builder integration.",
+      "source": "Function(k: Natural,Vector(k,Complex))",
+      "expected_lean": "A selected ground contextual closure is converted to the declared dependent callable type. Four independently authored native targets retain exact wrapper applications, binder dependencies, computed index operations and caller dimension.",
+      "checks": [
+        "studies/parameterized-literals/test_contextual_constraints.py: eight candidate-selection cases",
+        "studies/parameterized-literals/test_contextual_terms.py: three callable-type conversion cases",
+        "studies/parameterized-literals/check_contextual_types.py: four canonical callable-type targets and four interpretation proofs"
+      ],
+      "pending": [
+        "Joint source lambda-body/call constraints and selected body witnesses",
+        "Whole-call canonical Lean targets",
+        "Production integration and broad conformance"
+      ]
     }
   ]
 }

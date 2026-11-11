@@ -132,3 +132,28 @@ def apply_solution(solution,actuals,*,limit=4096):
     except RecursionError as error:raise Incomplete('Contextual application recursion exhausted') from error
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+
+def callable_type(solution,function_identity,*,limit=4096):
+    """Interpret a type-valued contextual telescope as a dependent callable type.
+
+    This is structural model conversion. The checked type codec must still verify
+    the supplied function declaration, domains, result and retained witnesses.
+    """
+    # Check that the stored closure actually has its declared telescope.
+    actuals=tuple(Actual(Reference(p.name,p.sort),p.domain) for p in solution.parameters)
+    apply_solution(solution,actuals,limit=limit)
+    walk=Walk(limit)
+    def convert(node,position):
+        walk.visit()
+        if position==len(solution.parameters):
+            if node.sort!='type':raise Incomplete('Contextual callable result is not a type')
+            return node
+        if not isinstance(node,Binder) or node.identity!='Context' or node.sort!='type':
+            raise Incomplete('Contextual callable requires a type-valued telescope')
+        return Binder(function_identity,node.domain,convert(node.body,position+1))
+    try:
+        result=convert(solution.closure,0)
+        well_scoped(result,limit=limit)
+        return result
+    except RecursionError as error:raise Incomplete('Contextual callable conversion exhausted recursion') from error

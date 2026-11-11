@@ -117,3 +117,46 @@ def saturate_contextual(row,families,occurrences,*,limit=4096):
     return solve(row.equations,families,occurrences,deferred=row.deferred,limit=limit)
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+@dataclass(frozen=True)
+class Candidate:
+    row: object
+    families: tuple=()
+    occurrences: tuple=()
+
+@dataclass(frozen=True)
+class Selected:
+    selection: object
+    solutions: dict
+
+
+def select_contextual(candidates,*,default=None,enumeration_complete=True,limit=4096):
+    """Check every contextual candidate before ordinary simultaneous defaults.
+
+    The fully checked bindings are retained as equations in an ordinary Row.
+    Contextual outputs/domains are already ground and cannot be changed by defaults.
+    """
+    from constraint_model import Row,Selection,select_with_trace
+    if not enumeration_complete:raise Incomplete('Contextual candidate enumeration unfinished')
+    candidates=tuple(candidates)
+    if len(candidates)>limit:raise Incomplete('Contextual candidate row limit exceeded')
+    if len({len(c.row.carriers) for c in candidates})>1:
+        raise ValueError('Contextual rows must describe the same literal positions')
+    checked=[];closures=[];source_choices=[]
+    for candidate in candidates:
+        try:result=saturate_contextual(candidate.row,candidate.families,candidate.occurrences,limit=limit)
+        except NoSolution:continue
+        row=candidate.row
+        # No check is dropped: saturation has discharged every occurrence and
+        # forward obligation. Selection retains all arguments and literal positions.
+        checked.append(Row((len(checked),),row.carriers,row.arguments,tuple(result.bindings.items())))
+        source_choices.append(row.choices)
+        closures.append(result.solutions)
+    selected=select_with_trace(checked,default=default,limit=limit)
+    # The ordinal is an opaque association token, not a tie-breaker. The existing
+    # selector must prove uniqueness before returning it; rejected rows are never
+    # replayed against the selected row's emitted argument values.
+    index=selected.choices[0]
+    restored=Selection(source_choices[index],selected.arguments,
+                       selected.defaulted_positions,selected.default_carrier)
+    return Selected(restored,closures[index])

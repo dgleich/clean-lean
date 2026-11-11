@@ -1,6 +1,6 @@
 # generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
 import unittest
-from contextual_terms import Parameter,Actual,Solution,solve_pattern,apply_solution
+from contextual_terms import Parameter,Actual,Solution,solve_pattern,apply_solution,callable_type
 from constraint_model import (Atom,Carrier,IndexExpression,Reference,Bound,Binder,
                               Variable,Incomplete,NoSolution)
 N=Carrier('Natural');C=Carrier('Complex')
@@ -74,6 +74,15 @@ class ContextualPatterns(unittest.TestCase):
  def test_foreign_local_named_like_a_formal_cannot_be_captured(self):
   with self.assertRaises(NoSolution):
    solve_pattern((Parameter('n',N,'index'),),(Actual(Reference('k','index'),N),),V(Reference('n','index')))
+ def test_callable_type_uses_explicit_function_identity(self):
+  result=solve_pattern((Parameter('n',N,'index'),),(Actual(Reference('k','index'),N),),V(Reference('k','index')))
+  self.assertEqual(callable_type(result,'DeclaredFunction'),Binder('DeclaredFunction',N,V(Bound(0,'index'))))
+ def test_callable_type_rechecks_stored_telescope(self):
+  bad=Solution((Parameter('n',N,'index'),),Binder('Context',C,C),frozenset())
+  with self.assertRaises(NoSolution):callable_type(bad,'DeclaredFunction')
+ def test_index_valued_context_is_not_a_callable_type(self):
+  result=solve_pattern((Parameter('n',N,'index'),),(Actual(Reference('k','index'),N),),Reference('k','index'))
+  with self.assertRaises(Incomplete):callable_type(result,'DeclaredFunction')
  def test_resource_limit_is_incomplete(self):
   with self.assertRaises(Incomplete):
    solve_pattern((Parameter('n',N,'index'),),(Actual(Reference('k','index'),N),),V(Reference('k','index')),limit=1)
