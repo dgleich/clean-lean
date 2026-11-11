@@ -131,8 +131,24 @@ noncomputable def expectedDefaultPrefix : {f('implication')} {predicate} {predic
 same_basic_target actualDefaultPrefix expectedDefaultPrefix
 theorem meaningDefaultPrefix : actualDefaultPrefix = expectedDefaultPrefix := by rfl
 ''')
+# Bare-call resolution depends on whether the same-named local is callable,
+# not on whether the module can accept the argument after a local mismatch.
+notation('Notation h(g: Function(Real,Real)): Real:', ['Means: g 0','Render latex: h({g})'],env)
+shadow_scope={'n':Expr('n','n',env.type('Natural'),tree=['Local','n'])}
+for suffix,local_type,local_lean,result_type,expected_body in [
+ ('NoncallableShadow','Evidence((n=n))',eq,t('Real'),f'{f("h")} (fun (x : {t("Real")}) => {realzero})'),
+ ('CallableShadow','Evidence((for every(g: Function(Real,Real),n=n)))',f'∀ (g : {t("Real")} → {t("Real")}), {eq}',eq,f'h (fun (x : {t("Real")}) => {realzero})'),
+]:
+ shadow_scope['h']=Expr('h','h',env.type(local_type,shadow_scope),tree=['Local','h'])
+ value=complete(expression_tree(parse('h(function(x: Real,0))','expression')),env,shadow_scope,use_default=False)
+ checks.append(f'''
+noncomputable def actual{suffix} (n : {t('Natural')}) (h : {local_lean}) : {env.render_type(value.type,'lean',shadow_scope)} := {value.lean}
+noncomputable def expected{suffix} (n : {t('Natural')}) (h : {local_lean}) : {result_type} := {expected_body}
+same_basic_target actual{suffix} expected{suffix}
+theorem meaning{suffix} (n : {t('Natural')}) (h : {local_lean}) : actual{suffix} n h = expected{suffix} n h := by rfl
+''')
 path=ROOT/'studies/parameterized-literals/ProofTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Seventeen exact evidence/prefix targets and seventeen interpretation proofs passed; general contextual recovery and production integration remain pending.')
+print('Nineteen exact evidence/prefix/resolution targets and nineteen interpretation proofs passed; general contextual recovery and production integration remain pending.')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

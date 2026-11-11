@@ -249,6 +249,68 @@ class JointCompletion(unittest.TestCase):
   with self.assertRaises(Incomplete):
    complete(expression_tree(parse('(function(k: Natural,indexed zero(k,0)))(2)','expression')),self.env,self.scope,limit=1)
 
+ def shadowed_consumer(self,local_type):
+  load_module(ROOT/'library/logic/evidence.clean',self.env)
+  notation('Notation h(g: Function(Real,Real)): Real:', ['Means: g 0','Render latex: h({g})'],self.env)
+  self.scope['h']=Expr('h','h',self.env.type(local_type,self.scope),tree=['Local','h'])
+
+ def test_scoped_noncallable_local_preserves_module_resolution(self):
+  for local_type in ['Real','Evidence((n=n))']:
+   with self.subTest(local_type=local_type):
+    self.setUp();self.shadowed_consumer(local_type)
+    source='h(function(x: Real,0))'
+    tree=expression_tree(parse(source,'expression'))
+    self.assertEqual(tree,['Call','h',[['Lambda','x','Real',['Decimal','0']]]])
+    value=complete(tree,self.env,self.scope,use_default=False)
+    explicit=Expressions(self.env,self.scope).parse('h(function(x: Real,(0: Real)))')
+    self.assertEqual((value.type,value.lean),(explicit.type,explicit.lean))
+    self.assertIn(self.env.data['functions']['h']['native_binding'],value.lean)
+
+ def test_scoped_callable_local_preserves_precedence(self):
+  for local_type in ['Function(Function(Real,Real),Real)',
+                     'Evidence((for every(g: Function(Real,Real),n=n)))']:
+   with self.subTest(local_type=local_type):
+    self.setUp();self.shadowed_consumer(local_type)
+    value=complete(expression_tree(parse('h(function(x: Real,0))','expression')),self.env,self.scope,use_default=False)
+    explicit=Expressions(self.env,self.scope).parse('h(function(x: Real,(0: Real)))')
+    self.assertEqual((value.type,value.lean),(explicit.type,explicit.lean))
+    self.assertTrue(value.lean.startswith('(h '))
+    self.assertNotIn(self.env.data['functions']['h']['native_binding'],value.lean)
+
+ def test_scoped_callable_local_mismatch_never_retries_module(self):
+  self.shadowed_consumer('Function(Function(Complex,Complex),Real)')
+  with self.assertRaises(NoSolution):
+   complete(expression_tree(parse('h(function(x: Real,0))','expression')),self.env,self.scope,use_default=False)
+
+ def test_scoped_callable_local_arity_error_never_retries_module(self):
+  notation('Notation acceptor(f: Function(Real,Real),g: Function(Real,Real)): Real:', ['Means: f 0','Render latex: a({f},{g})'],self.env)
+  self.scope['acceptor']=Expr('acceptor','acceptor',self.env.type('Function(Function(Real,Real),Real)'),tree=['Local','acceptor'])
+  with self.assertRaises(NoSolution):
+   complete(expression_tree(parse('acceptor(function(x: Real,0),function(y: Real,0))','expression')),self.env,self.scope,use_default=False)
+
+ def test_scoped_explicit_application_does_not_use_module_fallback(self):
+  self.shadowed_consumer('Real')
+  source='h(function(x: Real,0))(function(y: Real,0))'
+  tree=expression_tree(parse(source,'expression'))
+  self.assertEqual(tree,['Apply',['Call','h',[['Lambda','x','Real',['Decimal','0']]]],
+                         [['Lambda','y','Real',['Decimal','0']]]])
+  with self.assertRaises(NoSolution):complete(tree,self.env,self.scope,use_default=False)
+
+ def test_scoped_grouped_name_preserves_bare_call_resolution(self):
+  self.shadowed_consumer('Evidence((n=n))')
+  expected=['Call','h',[['Lambda','x','Real',['Decimal','0']]]]
+  values=[]
+  for source in ['h(function(x: Real,0))','(h)(function(x: Real,0))']:
+   tree=expression_tree(parse(source,'expression'))
+   self.assertEqual(tree,expected)
+   values.append(complete(tree,self.env,self.scope,use_default=False))
+  self.assertEqual((values[0].type,values[0].lean),(values[1].type,values[1].lean))
+
+ def test_scoped_noncallable_without_module_is_not_callable(self):
+  self.scope['h']=Expr('h','h',self.env.type('Real'),tree=['Local','h'])
+  with self.assertRaises(NoSolution):
+   complete(expression_tree(parse('h(function(x: Real,0))','expression')),self.env,self.scope,use_default=False)
+
  def test_direct_dependent_lambda_checks_result_expectation(self):
   notation('Notation indexed zero(k: Natural,z: Real): Vector(k,Complex):', ['Means: fun _ => 0','Render latex: z({k},{z})'],self.env)
   tree=expression_tree(parse('(function(k: Natural,indexed zero(k,0)))(n)','expression'))

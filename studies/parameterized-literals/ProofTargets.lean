@@ -301,6 +301,9 @@ noncomputable def cleanNotation_vector_maker_8a5ba828e98cb12be53b  («k» : (_ro
 noncomputable def cleanNotation_carry_e8246d605d3ac3daee58  («p» : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) («f» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) : ((_root_.cleanDefine_implication_9ee60e270a27b91f2307 («p») («p»))) :=
   fun h => h
 
+noncomputable def cleanNotation_h_b005fbc73804229a6902  («g» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  g 0
+
 
 open scoped Matrix
 
@@ -429,5 +432,17 @@ noncomputable def actualDefaultPrefix : ((_root_.cleanDefine_implication_9ee60e2
 noncomputable def expectedDefaultPrefix : cleanDefine_implication_9ee60e270a27b91f2307 (∀ (x : cleanType_Real_107b6641a486642ad8e1), cleanDefine_equal_5fac732a65dd209a83f4 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) (∀ (x : cleanType_Real_107b6641a486642ad8e1), cleanDefine_equal_5fac732a65dd209a83f4 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) := cleanNotation_carry_e8246d605d3ac3daee58 (∀ (x : cleanType_Real_107b6641a486642ad8e1), cleanDefine_equal_5fac732a65dd209a83f4 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) (fun (y : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
 same_basic_target actualDefaultPrefix expectedDefaultPrefix
 theorem meaningDefaultPrefix : actualDefaultPrefix = expectedDefaultPrefix := by rfl
+
+
+noncomputable def actualNoncallableShadow (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : (_root_.cleanType_Real_107b6641a486642ad8e1) := (_root_.cleanNotation_h_b005fbc73804229a6902 ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))))
+noncomputable def expectedNoncallableShadow (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_h_b005fbc73804229a6902 (fun (x : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualNoncallableShadow expectedNoncallableShadow
+theorem meaningNoncallableShadow (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : actualNoncallableShadow n h = expectedNoncallableShadow n h := by rfl
+
+
+noncomputable def actualCallableShadow (n : cleanType_Natural_469c53b6dafb7a218246) (h : ∀ (g : cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1), cleanDefine_equal_5fac732a65dd209a83f4 n n) : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 (n) (n))) := (h (fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedCallableShadow (n : cleanType_Natural_469c53b6dafb7a218246) (h : ∀ (g : cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1), cleanDefine_equal_5fac732a65dd209a83f4 n n) : cleanDefine_equal_5fac732a65dd209a83f4 n n := h (fun (x : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualCallableShadow expectedCallableShadow
+theorem meaningCallableShadow (n : cleanType_Natural_469c53b6dafb7a218246) (h : ∀ (g : cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1), cleanDefine_equal_5fac732a65dd209a83f4 n n) : actualCallableShadow n h = expectedCallableShadow n h := by rfl
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

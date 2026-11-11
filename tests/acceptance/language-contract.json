@@ -4905,6 +4905,35 @@
         "Full regression and production routing",
         "General backward contextual recovery and direct-lambda alternative codomain discovery"
       ]
+    },
+    {
+      "id": "scoped_call_local_precedence",
+      "status": "implemented-experimental-api",
+      "environment": "Explicit linear_algebra/evidence imports; module h: Function(Real,Real) -> Real; local h is either Evidence(n=n) or callable universal evidence over Function(Real,Real).",
+      "source": "h(function(x: Real,0))",
+      "expected_tree": [
+        "Call",
+        "h",
+        [
+          [
+            "Lambda",
+            "x",
+            "Real",
+            [
+              "Decimal",
+              "0"
+            ]
+          ]
+        ]
+      ],
+      "expected_lean": "Noncallable local h: declared module h wrapper applied to the Real-zero lambda. Callable local h: supplied local h applied to that lambda. No fallback after selecting a callable local.",
+      "checks": [
+        "Seven API cases: noncallable scalar/proof, callable function/proof, local domain/arity failure, chained Apply rejection, absent module rejection, and grouped bare-name equivalence",
+        "Two independent exact targets and proofs in check_joint_proof_targets.py"
+      ],
+      "pending": [
+        "Full regression and production routing"
+      ]
     }
   ]
 }

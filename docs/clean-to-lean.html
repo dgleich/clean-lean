@@ -1893,5 +1893,10 @@ disposable metadata cannot authorize reuse across calls. See the
   (fun (x : Real) =&gt; complexVectorZero (naturalNumeral 2))</code></pre>
 <p>Each possible prefix is checked without defaults before its value is substituted into later types. Distinct alternatives remain available to the enclosing solve, including in chained application heads and proof-valued results. The final trace retains the same constructors, arguments, and default origins. This supersedes the earlier blanket selected-value restriction, while unresolved backward contextual recovery and production routing remain open. See the <a href="spec.md#value-dependent-scoped-argument-prefixes">constructive rule</a> and <a href="../tools/check_joint_proof_targets.py">independent native targets</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="scoped-call-resolution">
+<h2>A local assumption and a function with the same name</h2>
+<p>The explicit joint API now matches ordinary resolution. In <code>h(function(x: Real,0))</code>, a callable local h takes precedence, including universal or implication evidence. If local h is noncallable, Clean resolves the explicitly declared module function h. Once selected, a callable local does not fall back to the module after a type or arity error.</p>
+<p>Lean therefore receives either the supplied local application <code>h (fun x =&gt; realZero)</code> or the declared module-wrapper application. These are schematic spellings of retained targets. A chained call applies its checked intermediate result and has no module fallback if that result is noncallable. Parentheses around a bare name are normalized away: <code>(h)(function(x: Real,0))</code> has the same Call node and resolution as the unparenthesized form. See the <a href="spec.md#scoped-call-local-precedence">resolution rule</a> and <a href="../tools/check_joint_proof_targets.py">independent native checks</a>. This repair does not switch production inference.</p>
+</section></llm>
 </body>
 </html>

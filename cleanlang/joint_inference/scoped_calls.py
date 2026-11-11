@@ -129,7 +129,7 @@ def prepare_call_alternatives(builder,tree,expected=None):
     """
     if builder.limit<=1:raise Incomplete('Scoped expression resource limit exceeded')
     env=builder.env;scope=builder.scope;name=tree[1] if tree[0]=='Call' else None
-    local=tree[0]=='Apply' or name in scope
+    local=tree[0]=='Apply' or (name in scope and env.is_function_type(scope[name].type))
     implicit_actuals={};head_tree=None;steps=0
     if local:
         if len(tree[2])!=1:raise NoSolution('Local scoped application requires exactly one argument')

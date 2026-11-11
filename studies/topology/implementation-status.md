@@ -17,7 +17,7 @@ current-revision validation.
 |---|---|---|
 | Relative and ordinary homology | [Clean-authored comparison maps](relative-ordinary-comparison.md), with six canonical targets and four inverse/naturality proofs; canonical pair-inclusion maps are used | Level-specific perturbation diagrams and image transport |
 | Level-set application | [Three assembled comparisons](level-homology-comparison.md), with four exact targets and three application proofs plus four generic helpers; nesting and zero inclusion are proved, not assumed | Identifying separately named fiber/band spaces, well-group equality and cover/excision |
-| Explicit joint API | Scoped proof lambdas, implicit domain recovery and value-dependent argument prefixes; seventeen native targets/proofs in the [evidence driver](../../tools/check_joint_proof_targets.py), 72 API/adapter/checker tests, 462 solver tests and 157 runtime tests | Production routing, general backward contextual recovery and direct-lambda alternative codomain discovery |
+| Explicit joint API | Scoped proof lambdas, implicit domain recovery and value-dependent argument prefixes; nineteen native targets/proofs in the [evidence driver](../../tools/check_joint_proof_targets.py), 79 API/adapter/checker tests, 462 solver tests and 157 runtime tests | Production routing, general backward contextual recovery and direct-lambda alternative codomain discovery |
 | Corpus compatibility | All four documents produce identical legacy/joint text with stable fingerprints; all 92 corpus proofs pass after the latest change | This does not establish general target uniqueness or full regression |
 | Full Python discovery | Immutable full jobs are running. The alphabetically first class loads active labels in `setUpClass`, before unittest prints a test name | No full discovery pass at the current revision |
 | Complementary Python discovery | A separate immutable `f84aa3b` run contains the other 1,234 tests and logs class setup; it excludes exactly the four `test_active_labels` cases | The run has recorded failures and is still running; it cannot substitute for the preserved full jobs |
@@ -74,14 +74,22 @@ under stable fingerprints, and all 92 corpus proofs pass; the record is
 for the new compiler remains pending; earlier immutable jobs are preserved and
 do not validate this change. These checks do not enable production routing.
 
-A separate joint-routing probe remains unresolved: with a module function
-`h(g: Function(Real,Real)): Real` and a local assumption `h: n=n`, ordinary
-elaboration of `h(function(x: Real,(0: Real)))` correctly calls the module.
-The joint API currently rejects `h(function(x: Real,0))` as no solution because
-its scoped-call dispatch treats any local with that name as the head. The existing
-production rule gives precedence only to callable locals. This mismatch predates
-the prefix change and needs repair before production integration; none of the
-positive counts above covers it.
+The separately recorded local/module-resolution mismatch is now repaired. A local
+assumption `h: n=n` no longer hides a module function
+`h(g: Function(Real,Real)): Real` when completing `h(function(x: Real,0))`.
+The scoped path uses the same callability predicate as ordinary elaboration and
+the unscoped builder. Callable locals still take precedence, and a local domain
+or arity error never retries the module. Parentheses around a bare name normalize
+to the same Call node; actual chained Apply nodes always use their checked head.
+See [the resolution rule](../../docs/spec.md#scoped-call-local-precedence).
+
+This repair passes 79 API/adapter/checker tests (seven added), 462 solver tests,
+157 runtime tests, and nineteen independent native targets with nineteen proofs
+(two added pairs). The explicit source-tree tests distinguish grouped bare names
+from chained applications. Four corpus documents retain identical legacy/joint
+text with stable fingerprints; all 92 corpus proofs pass. The new record is
+`scoped_call_resolution_corpus`. Production routing remains unchanged, and full
+regression for this compiler remains pending.
 
 Comparison optimizations preserve the public source recheck and exact target
 rules. Controlled fixtures reduce repeated work, but bounded active-label

@@ -2858,3 +2858,33 @@ that normalized result type as well as the unreplaced proof application.
 General backward contextual recovery, higher classifier inference and production
 integration remain separate obligations.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Scoped-call local precedence
+
+The explicit joint solver uses the same name-resolution predicate as ordinary
+elaboration and the unscoped row builder. For a bare `Call(name, arguments)`,
+choose the local application path exactly when the fixed scope contains `name`
+and its type satisfies the environment's existing `is_function_type` predicate.
+This includes source-derived callable evidence. Otherwise resolve the explicitly
+declared module function. A noncallable local does not hide that function.
+
+Resolve this choice before enumerating argument interpretations. Once a callable
+local is selected, a domain mismatch, wrong arity or incomplete analysis cannot
+retry the module function. Errors while determining callability also propagate;
+they do not establish noncallability. An explicit `Apply(head, arguments)` always
+uses the checked head expression and never performs bare-name module fallback.
+Chained application `h(function(x: Real,0))(function(y: Real,0))` applies the
+checked result of the inner call; if that result is noncallable, it rejects rather
+than retrying module h. Parentheses around a bare name do not force an Apply node:
+`h(function(x: Real,0))` and `(h)(function(x: Real,0))` normalize to the same Call
+constructor and use the same local/module rule.
+
+No grammar or precedence changes are introduced. The fixed source constructor,
+fixed scope and existing type predicate uniquely determine the application path;
+argument candidates, defaults, iteration order and successful type checking do
+not choose between local and module meanings. Subsequent inference and retained
+Lean emission follow that path. The selected module wrapper or local proof/value
+head remains visible in the exact native target. Production routing is unchanged.
+:::
