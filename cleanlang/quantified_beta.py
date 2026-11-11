@@ -24,6 +24,9 @@ def comparison_expression(expression,environment,locals):
             body=walk(tree[3],{**scope,tree[1]:value})
             return [kind,tree[1],tree[2],body]
         if kind=='Lambda':return tree
+        if kind=='BoundLiteral':
+            from .literal_binding import rebuild
+            return rebuild(tree,lambda value:walk(value,scope))
         if kind=='ModuleCall':rebuilt=[kind,tree[1],[walk(a,scope) for a in tree[2]],*tree[3:]]
         elif kind=='Call':rebuilt=[kind,tree[1],[walk(a,scope) for a in tree[2]]]
         elif kind=='Apply':rebuilt=[kind,walk(tree[1],scope),[walk(a,scope) for a in tree[2]]]

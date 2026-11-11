@@ -23,7 +23,7 @@ class LinearSpaces(unittest.TestCase):
         self.assertEqual(self.e.notation_definitions[key].split(':=\n',1)[1],
                          '  @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action\n')
     def test_carrier_has_vector_type(self):
-        self.assertEqual(self.expr('subspace carrier(f,L,U)').type,Type('Set',(LocalType('V',(), 'V'),)))
+        self.assertEqual(self.expr('subspace carrier(f,L,U)').type,Type('Set',(LocalType('V',(), 'V',0,self.e.data['types']['Type']['native_binding']),)))
     def test_different_module_bundle_is_rejected(self):
         with self.assertRaisesRegex(CleanError,'index mismatch'):
             self.expr('subspace carrier(f,M,U)')
@@ -36,7 +36,7 @@ class LinearSpaces(unittest.TestCase):
     def test_intersection_retains_ambient_type(self):
         self.assertEqual(self.expr('intersection of subspaces(f,L,A,spaces)').type,self.local['U'].type)
     def test_wrong_index_set_rejected(self):
-        self.local['B']=Expr('B','B',Type('Set',(LocalType('V',(), 'V'),)))
+        self.local['B']=Expr('B','B',Type('Set',(LocalType('V',(), 'V',0,self.e.data['types']['Type']['native_binding']),)))
         with self.assertRaisesRegex(CleanError,'Inconsistent'):
             self.expr('intersection of subspaces(f,L,B,spaces)')
     def test_intersection_is_authored_not_an_adapter(self):

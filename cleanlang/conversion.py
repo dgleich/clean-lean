@@ -5,7 +5,7 @@ from .core import Expr,Expressions,binary,Type
 
 def shadowed_globals(environment,locals):
     return any((name in environment.data['functions'] and environment.is_function_type(value.type)) or
-               (name in environment.data['types'] or name in environment.data['aliases']) and value.type==Type('Type')
+               (name in environment.data['types'] or name in environment.data['aliases']) and environment.classifier_info(value.type) is not None
                for name,value in locals.items())
 
 
@@ -57,7 +57,7 @@ def _producer_field(expression,field,env,locals):
             actual=inferred[n]
             if isinstance(actual,Type):
                 types[n]=actual
-                if n in values:bindings[n]=reify(actual,env,locals)
+                if n in values:bindings[n]=reify(actual,env,locals,classifier=env.type(p[2],phrases=False))
             else:bindings[n]=reify(actual,env,locals)
         expanded=substitute(body,bindings,env,locals,types)
     except UnrepresentableSubstitution:return None
@@ -75,11 +75,14 @@ def _normal_form(expression,environment,locals,*,fresh=False):
     tree=expression.tree
     if not tree:return expression
     kind=tree[0]
+    if kind=='BoundLiteral':
+        from .literal_binding import call
+        return _normal_form(call(tree,env,locals),env,locals,fresh=True)
     if kind=='Local':
         local=locals.get(tree[1])
         if local is None or local.local_normal is None:return expression
         return _normal_form(local.local_normal,env,locals) if local.local_expand and not shadowed_globals(env,locals) else local.local_normal
-    if kind in ('NumeralAnnotation','BoundNumeral'):return elaborate(tree)
+    if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue','NumeralAnnotation','BoundNumeral'):return elaborate(tree)
     if kind in ('Decimal','Lambda','Forall','Exists'):return expression
     if kind in ('Operator','Unary'):
         # Operators are declared calls too. Do not publish a hidden binder as
@@ -170,7 +173,7 @@ def _normal_form(expression,environment,locals,*,fresh=False):
                     actual=inferred[n]
                     if isinstance(actual,Type):
                         type_bindings[n]=actual
-                        if n in values:bindings[n]=reify(actual,env,locals)
+                        if n in values:bindings[n]=reify(actual,env,locals,classifier=env.type(p[2],phrases=False))
                     else:bindings[n]=reify(actual,env,locals)
                 expanded_tree=substitute(body,bindings,env,locals,type_bindings)
             except UnrepresentableSubstitution:return checked

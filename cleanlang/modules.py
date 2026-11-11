@@ -67,6 +67,43 @@ def universe_sort(level):
     return 'Type' if level==0 else 'Type '+str(level)
 
 
+def classifier_level(values, names):
+    """Validate classification before installing any declaration in the environment."""
+    if 'classifies' not in values:
+        return None
+    raw=values['classifies']
+    if not re.fullmatch(r'0|[1-9][0-9]*',raw):
+        raise CleanError('Classifies requires a nonnegative decimal integer without leading zeros')
+    try:level=int(raw)
+    except ValueError as e:
+        raise CleanError('Incomplete classifier analysis: integer exceeds runtime limit') from e
+    if names:
+        raise CleanError('Classifies requires a closed zero-parameter Type declaration')
+    if 'universe' not in values or universe_level(values)!=level+1:
+        raise CleanError('Classifies requires explicit Universe equal to the classified level plus one')
+    primitive=re.fullmatch(r'Type(?:\s+(0|[1-9][0-9]*))?',values['means'])
+    if primitive is None or (primitive[1] or '0')!=raw:
+        raise CleanError('Classifies requires Means to be the corresponding primitive Type level')
+    if 'numerals' in values:
+        raise CleanError('Classifiers cannot have Numerals')
+    return level
+
+
+def classifier_metadata(env, spelling):
+    """Query a closed type reference; transparent aliases preserve resolved identity.
+
+    This is declaration metadata only, not permission to elaborate a carrier binder.
+    Ordinary carriers return None, irrespective of their display name or universe.
+    """
+    resolved=env.type(spelling,phrases=False)
+    if not isinstance(resolved,Type) or resolved.args:
+        return None
+    spec=env.data['types'].get(resolved.name,{})
+    if 'classifies' not in spec:
+        return None
+    return (spec['native_binding'],spec['classifies'])
+
+
 def type_declaration(header, fields, env):
     from .syntax import parse as syntax_parse
     syntax=syntax_parse(header,'type_header')
@@ -96,8 +133,9 @@ def type_declaration(header, fields, env):
         env.data['types'][name] = spec
         env.type(name+'('+','.join(names)+')' if names else name, local)
         return
-    if not {'means','render latex'} <= values.keys() or values.keys()-{'means','render latex','describe','describe plural','universe','numerals'}:
-        raise CleanError('Type requires Means and Render latex; optional Describe, Describe plural, Universe and Numerals')
+    if not {'means','render latex'} <= values.keys() or values.keys()-{'means','render latex','describe','describe plural','universe','numerals','classifies'}:
+        raise CleanError('Type requires Means and Render latex; optional Describe, Describe plural, Universe, Numerals and Classifies')
+    classified=classifier_level(values,names)
     default_level=1 if values['means']=='Type' else 0
     level=universe_level(values,default_level)
     if 'numerals' in values and (names or level!=0 or values['means'].strip() in ('Prop','Type')):
@@ -105,6 +143,7 @@ def type_declaration(header, fields, env):
     spec={'args': kinds, 'lean': substitute(values['means'], names), 'latex': template(values['render latex'], names),
           'parameter_names':names,'parameter_types':parameter_types}
     spec['universe']=level
+    if classified is not None:spec['classifies']=classified
     for src,dst in [('describe','prose'),('describe plural','prose_plural')]:
         if src in values: spec[dst] = template(values[src], names)
     env.data['types'][name] = spec
@@ -152,7 +191,7 @@ def notation(header, fields, env, *, authored=False):
         clause_kind,names,text=let_clause(field)
         if clause_kind!='let':raise CleanError('Declaration parameters require typed Let')
         # The group type is resolved before introducing any member of the group.
-        t = Type('Type') if text=='Type' else env.type(text,local)
+        t = env.type(text,local)
         for n in names:
             if n in local: raise CleanError('Duplicate parameter: '+n)
             if n not in params:
@@ -164,14 +203,18 @@ def notation(header, fields, env, *, authored=False):
     if list(types)!=params or 'returns' not in values:
         raise CleanError('Declare parameters in header order and provide Returns')
     implementations = set(values) & ({'equals', 'from lean'} if authored else {'means'})
-    allowed = {'returns', 'render', 'render latex', 'infix', 'prefix'} | ({'equals', 'from lean', 'attribution'} if authored else {'means'})
+    allowed = {'returns', 'render', 'render latex', 'infix', 'prefix', 'literal'} | ({'equals', 'from lean', 'attribution'} if authored else {'means'})
     if len(implementations) != 1 or values.keys() - allowed:
         raise CleanError('Provide exactly one Equals or From Lean' if authored else 'Provide Means')
     renders = set(values)&{'render','render latex'}
     if len(renders)>1 or (not authored and not renders):
         raise CleanError('Provide exactly one Render or Render latex field')
     result = env.type(values['returns'],local)
-    dependent=any(has_value_indices(t) for t in [result,*types.values()]) or Type('Type') in types.values()
+    attachment=None
+    if 'literal' in values:
+        from .exact_literals import prepare
+        attachment=prepare(values['literal'],result,local,env)
+    dependent=any(has_value_indices(t) for t in [result,*types.values()]) or any(env.classifier_info(t) is not None for t in types.values()) or any((info:=env.classifier_info(t)) is not None and info[1]>0 for t in [*implicit.values(),*types.values()])
     for fixity in ('infix','prefix'):
         if fixity in values:
             from .operator_bindings import validate
@@ -195,8 +238,11 @@ def notation(header, fields, env, *, authored=False):
         latex = template(values[render],params,plain=render=='render')
     else:
         latex = r'\operatorname{{' + textext(name).replace(' ', r'\ ').replace('{','{{').replace('}','}}') + '}}(' + ', '.join('{'+str(i)+'}' for i in range(len(params))) + ')'
-    signature=' '.join('{'+n+' : '+('Type' if t==Type('Type') else env.render_type(t,'lean'))+'}' for n,t in implicit.items())
-    signature+=' '+ ' '.join(f'({p} : {env.render_type(types[p],"lean")})' for p in params)
+    def parameter_sort(t):
+        info=env.classifier_info(t)
+        return universe_sort(info[1]) if info is not None else env.render_type(t,'lean')
+    signature=' '.join('{'+n+' : '+parameter_sort(t)+'}' for n,t in implicit.items())
+    signature+=' '+ ' '.join('('+p+' : '+parameter_sort(types[p])+')' for p in params)
     body=f'{signature} : {env.render_type(result,"lean")} :=\n  {meaning}'
     # Install the name only after its body is resolved: no recursion/forward references.
     def pattern(t):
@@ -208,7 +254,7 @@ def notation(header, fields, env, *, authored=False):
     # Every implicit parameter must be inferable from argument types.
     for n in implicit:
         from .dependent_functions import occurs
-        if implicit[n] not in (NAT,Type('Type')):
+        if implicit[n]!=NAT and env.classifier_info(implicit[n]) is None:
             from .dependent_functions import direct_index_occurs
             if not any(direct_index_occurs(t,n) for t in types.values()):
                 raise CleanError('Implicit value parameter needs a direct argument-type index: '+n)
@@ -229,6 +275,9 @@ def notation(header, fields, env, *, authored=False):
         env.data['functions'][name]['dependent_signature']={
             'implicit':list(implicit.items()),'parameters':list(types.items()),
             'result':result,'key':key}
+    if attachment is not None:
+        attachment['snapshot']=(key,env.data['functions'][name]['lean'],env.notation_definitions[key])
+        env.data['functions'][name]['literal']=attachment
     from .operator_bindings import scope_snapshot
     operator_scope=scope_snapshot(env)
     for fixity in ('infix','prefix'):
@@ -339,7 +388,9 @@ def load_module(path, env, *, document=False):
                             declare(line,fields,env)
                         else:
                             key=str(syntax_parse(line,'source_header').children[0])
-                            env.sources.declare(key,fields_map(fields),file.parent)
+                            source_values=fields_map(fields)
+                            if 'literal' in source_values:raise CleanError('Literal is only valid on Notation or Define')
+                            env.sources.declare(key,source_values,file.parent)
                     if node.documentation:
                         keys=set(env.notation_definitions)-before
                         if node.kind=='declaration' and line.split(None,1)[0].lower()=='structure':

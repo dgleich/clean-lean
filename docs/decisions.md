@@ -1505,3 +1505,20 @@ studies/universe-classifiers/computed-carriers.md for the exact constructive rul
 schema and independent native checks. Production and general record-parameter
 inference remain outside this isolated extension.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Current compiler integration
+
+The working compiler now implements the literal/assumption/classifier/carrier
+rules described in the preceding isolated-study updates, including version-3
+stored index payloads. Their earlier deployment labels are historical. See
+[language-integration.md](language-integration.md) for installed scope, conflict
+resolutions, validation evidence and remaining obligations.
+
+Literal constructor arguments recovered from target types use each formal
+parameter's declared classifier when reified, both on initial selection and on
+retained replay. They do not rerun visible-classifier selection. A type annotation
+on fresh type(T) still cannot select among competing classifiers. The independent
+cross-feature regression and payload tests fix this distinction explicitly.
+:::

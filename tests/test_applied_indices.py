@@ -45,7 +45,8 @@ class AppliedIndices(unittest.TestCase):
             index_value(self.expr('function(t: Real,t)'),self.e,self.local)
     def assert_preserved_application(self,body,binder,operation,symbol):
         value=self.expr('equality congruence(function(t: Real,'+body+'),a,b,hab)')
-        tree=json.loads(value.type.args[0].syntax)
+        from cleanlang.retained_codec import loads
+        tree=loads(value.type.args[0].syntax)
         # Independently specify both the retained identity-bearing tree and its
         # source projection. Printed source cannot encode declaration identities.
         def branch(offset,argument,bound):
@@ -55,7 +56,9 @@ class AppliedIndices(unittest.TestCase):
             inner=(['ModuleCall',operation,operands,
                     self.e.data['functions'][operation]['lean'],['infix',symbol]]
                    if bound else ['Operator',symbol,*operands])
-            return ['Apply',['Lambda',t,'Real',[binder,u,'Real',inner]],[['Local',argument]]]
+            from cleanlang.annotations import Annotation
+            annotation=Annotation('Real',self.e.type('Real')) if bound else 'Real'
+            return ['Apply',['Lambda',t,annotation,[binder,u,annotation,inner]],[['Local',argument]]]
         expected=['ModuleCall','equal',[branch(0,'a',True),branch(2,'b',True)],
                   self.e.data['functions']['equal']['lean'],['infix','=']]
         self.assertEqual(tree,expected)
@@ -77,7 +80,8 @@ class AppliedIndices(unittest.TestCase):
                   attachment['native_binding'],attachment['native_declaration'],attachment['payload']]
         expected=['BoundNumeral','1','Real',identity,'inferred']
         self.assertEqual(value.resolved,expected)
-        self.assertEqual(json.loads(value.syntax),expected)
+        from cleanlang.retained_codec import loads
+        self.assertEqual(loads(value.syntax),expected)
         target='(_root_.'+attachment['native_binding']+' (nat_lit 1))'
         self.assertEqual(value.lean,target)
         self.assertEqual(value.comparison,target)

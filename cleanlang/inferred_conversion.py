@@ -2,12 +2,20 @@
 from .core import Type,LocalType,Expr,NAT,Expressions
 from .hygiene import UnrepresentableSubstitution
 
-def reify(value,environment,locals):
+def reify_parameter(value,parameter,environment,locals):
+    """Reconstruct a recovered value under its formal classifier, never visibility."""
+    classifier=environment.type(parameter[2],phrases=False) if isinstance(value,Type) else None
+    return reify(value,environment,locals,classifier=classifier)
+
+
+def reify(value,environment,locals,*,classifier=None):
     if isinstance(value,Type):
-        if isinstance(value,LocalType) and value.name in locals and locals[value.name].type==Type('Type') and locals[value.name].lean==value.lean:
+        if isinstance(value,LocalType) and value.name in locals and environment.classifier_info(locals[value.name].type)==(value.classifier,value.universe) and locals[value.name].lean==value.lean and (classifier is None or locals[value.name].type==classifier):
             return Expressions(environment,locals).elaborate(['Local',value.name])
         from .annotations import Annotation,references
-        tree=['TypeValue',Annotation(str(value),value,references(value,locals))]
+        from .type_values import select_classifier
+        classifier=select_classifier(value,environment) if classifier is None else classifier
+        tree=['ClassifiedTypeValue',Annotation(str(value),value,references(value,locals)),str(classifier)]
         return Expressions(environment,locals).elaborate(tree)
     from .core import ValueIndex
     from .dependent_functions import index_tree
@@ -36,6 +44,9 @@ def value_names(tree):
         if node[0]=='BoundTypeApply':return type_values(node[3])|type_values(node[4])
         return set()
     kind=tree[0]
+    if kind=='BoundLiteral':
+        from .literal_binding import names
+        return names(tree,value_names)
     if kind=='Local':return {tree[1]}
     if kind in ('Decimal','BoundNumeral'):return set()
     if kind=='NumeralAnnotation':
@@ -43,7 +54,7 @@ def value_names(tree):
         import re
         from .core import ID
         return set(re.findall(ID,type_source(tree[2])))
-    if kind=='TypeValue':return type_values(type_tree(parse(tree[1],'type_ref')))
+    if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):return type_values(type_tree(parse(tree[1],'type_ref')))
     if kind=='ModuleCall':return set().union(*(value_names(a) for a in tree[2]))
     if kind=='Call':return {tree[1]}|set().union(*(value_names(a) for a in tree[2]))
     if kind=='Projection':return value_names(tree[1])

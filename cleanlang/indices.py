@@ -11,6 +11,7 @@ class ComputedIndex(ValueIndex):
 
 
 def index_value(expression,environment=None,locals=None):
+    from .retained_codec import dumps
     from .structures import reference_name
     from .syntax import expression_spelling
     if environment is not None:
@@ -33,7 +34,7 @@ def index_value(expression,environment=None,locals=None):
     ref=reference_name(tree)
     if ref is not None:return ValueIndex(ref,expression.lean,expression.tex,comparison=comparison)
     return ComputedIndex('('+expression_spelling(tree)+')',expression.lean,expression.tex,
-                         json.dumps(tree,ensure_ascii=False,separators=(',',':')),comparison=comparison,resolved=tree)
+                         dumps(tree),comparison=comparison,resolved=tree)
 
 
 def substitute_index(index,bindings,env,locals):
@@ -52,7 +53,11 @@ def substitute_index(index,bindings,env,locals):
             return reify(value,env,locals).tree
         return expression_tree(parse(str(value),'expression'))
     def replace(node):
-        if node[0]=='TypeValue':
+        if node[0]=='BoundLiteral':
+            from .literal_binding import rebuild
+            from .annotations import replace as replace_annotation
+            return rebuild(node,replace,replace_annotation(node[6],bindings,env,locals))
+        if node[0] in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
             from .type_values import substitute
             return substitute(node,bindings,env,locals)
         if node[0]=='Local' and node[1] in bindings:return reference(bindings[node[1]])
@@ -86,6 +91,7 @@ class DimensionIndex(ComputedIndex):
 
 
 def dimension_index(expression,environment,locals):
+    from .retained_codec import dumps
     from .core import NAT,NUM
     if expression.type==NUM and expression.tree[0]=='Decimal':
         from .core import Expr
@@ -99,6 +105,6 @@ def dimension_index(expression,environment,locals):
     if negative(comparison_normal_form(expression,environment,locals).tree):
         raise CleanError('Natural dimensions do not support unary negation')
     value=index_value(expression,environment,locals)
-    syntax=value.syntax if isinstance(value,ComputedIndex) else json.dumps(expression.tree,ensure_ascii=False,separators=(',',':'))
+    syntax=value.syntax if isinstance(value,ComputedIndex) else dumps(expression.tree)
     name=expression.tree[1] if expression.tree[0]=='Decimal' else value.name
     return DimensionIndex(name,value.lean,value.tex,syntax,comparison=value.comparison,resolved=value.resolved if isinstance(value,ComputedIndex) else expression.tree)

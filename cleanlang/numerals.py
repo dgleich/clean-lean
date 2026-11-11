@@ -53,6 +53,10 @@ def bind(tree,env,locals):
 
 
 def elaborate(tree,env,locals):
+    if tree[0]=='NumeralAnnotation':
+        from .exact_literals import explicit
+        selected=explicit(tree,env,locals)
+        if selected is not None:return selected
     bound=bind(tree,env,locals)
     typ=Type(bound[2]);constructor=bound[3][3]
     lean='(_root_.'+constructor+' (nat_lit '+digits(bound[1])+'))'

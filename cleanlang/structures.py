@@ -2,7 +2,7 @@
 """Finite authored records and explicit field references; no structural subtyping."""
 import hashlib
 import re
-from .core import CleanError, Type, LocalType, ProofType, ValueIndex, Expr, NAT, ID, texid, textext
+from .core import CleanError, Type, LocalType, ComputedCarrier, ProofType, ValueIndex, Expr, NAT, ID, texid, textext
 
 
 def reference_name(tree):
@@ -18,6 +18,9 @@ def substitute_type(t, bindings, env=None, locals=None):
     from .indices import ComputedIndex, substitute_index
     from .dependent_functions import DependentFunctionType,substitute
     if isinstance(t,DependentFunctionType):return substitute(t,bindings,env,locals)
+    if isinstance(t,ComputedCarrier):
+        from .carrier_types import substitute_carrier
+        return substitute_carrier(t,bindings,env,locals)
     if isinstance(t,ProofType):return ProofType(substitute_index(t.args[0],bindings,env,locals))
     if isinstance(t,ComputedIndex):return substitute_index(t,bindings,env,locals)
     if isinstance(t,ValueIndex):
@@ -29,6 +32,10 @@ def substitute_type(t, bindings, env=None, locals=None):
         if isinstance(t,LocalType) and t.name in bindings:
             value=bindings[t.name]
             if not isinstance(value,Type):raise CleanError('Expected type parameter: '+t.name)
+            if env is not None:env.require_type_argument(value,t.universe)
+            elif isinstance(value,LocalType) and value.universe!=t.universe:
+                raise CleanError('Carrier substitution changed universe')
+            elif t.universe!=0:raise CleanError('Higher carrier substitution requires an environment')
             return value
         if isinstance(t,LocalType):return t
         return Type(t.name,tuple(substitute_type(a,bindings,env,locals) for a in t.args))
@@ -58,7 +65,7 @@ def projection_reduction(env, base, field, locals):
     if has_binder(body):return None
     bindings=dict(zip((p[1] for p in parameters),tree[2]))
     def replace(node):
-        if node[0]=='TypeValue':
+        if node[0] in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
             from .type_values import substitute
             return substitute(node,{n:Expressions(env,locals).elaborate(t) for n,t in bindings.items()},env,locals)
         if node[0]=='Local':return bindings.get(node[1],node)
@@ -108,7 +115,7 @@ def project(env, base, field, locals):
         value=Expr(target,tex,result_type,tree=['Projection',base.tree,name])
         if name==field:return value
         from .indices import index_value
-        if result_type==Type('Type'):
+        if env.classifier_info(result_type) is not None:
             from .carrier_types import carrier
             bindings[name]=carrier(value,env,locals)
         else:bindings[name]=index_value(value,env,locals)

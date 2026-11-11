@@ -11,6 +11,8 @@ Import Lean Mathlib.Data.List.Sort
 Import Lean Mathlib.Data.Nat.GCD.Basic
 
 Type Type():
+  Universe: 1
+  Classifies: 0
   Means: Type
   Render latex: \mathrm{{Type}}
   Describe: a type

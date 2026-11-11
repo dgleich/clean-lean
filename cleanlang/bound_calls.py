@@ -15,6 +15,10 @@ def identity(env,name):
 
 def bind(tree,env,locals,*,binders=False):
     kind=tree[0]
+    if kind=='BoundLiteral':
+        from .literal_binding import call
+        call(tree,env,locals)
+        return tree
     if kind in ('NumeralAnnotation','BoundNumeral'):
         from .numerals import bind as numeral
         return numeral(tree,env,locals)
@@ -42,9 +46,9 @@ def bind(tree,env,locals,*,binders=False):
         domain=annotation.typ
         value=Expr(tree[1],texid(tree[1]),domain,tree=['Local',tree[1]])
         return [kind,tree[1],annotation,bind(tree[3],env,{**locals,tree[1]:value},binders=True)]
-    if kind=='TypeValue':
-        from .annotations import checked
-        return [kind,checked(tree[1],env,locals)]
+    if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
+        from .type_values import elaborate
+        return elaborate(tree,env,locals).tree
     if kind=='Decimal':raise UnclosedBinding('Numeral binding requires a checked interpretation')
     if kind=='Local':return tree
     # Do not claim binding closure for source strings containing type expressions.

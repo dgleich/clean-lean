@@ -2847,7 +2847,7 @@
     },
     {
       "id": "closed_universe_classifier_syntax",
-      "status": "isolated-prototype",
+      "status": "integrated-validation-pending",
       "environment": "Pinned classifier stack including type-values.patch; explicit/unannotated values and retained identity implemented in isolation.",
       "source": "type(TopologicalSpace : LargeTypes)",
       "expected_tree": [
@@ -2866,17 +2866,18 @@
         "studies/universe-classifiers/carrier-fixtures.patch: thirteen fixtures migrated without weakening assertions; extra 29 regression checks pass",
         "studies/operator-integration/verify_foundations.py, verify_saved.py, verify_dispatch.py: 67 exact native targets and ten proofs on the migrated classifier stack",
         "studies/universe-classifiers/check_value_targets.py: independent type-value tree, ten exact targets and three proofs",
-        "studies/universe-classifiers/test_classified_values.py: 26 selection, scope, result-index, retention, substitution, naming, rendering and rejection cases"
+        "studies/universe-classifiers/test_classified_values.py: 26 selection, scope, result-index, retention, substitution, naming, rendering and rejection cases",
+        "Working compiler integration: 431 selected tests; tools/check_language_integration.py reproduces current checks without applying patches. Version-3 payload supersedes earlier experimental schemas."
       ],
       "pending": [
         "Versioned codec/schema migration and payload-only replay",
         "Higher projected carriers and carrier-valued records/dependent callables",
-        "Broader native-environment freshness contracts, full regression and production integration"
+        "Broader native-environment freshness contracts, full regression and full production validation"
       ]
     },
     {
       "id": "closed_universe_implicit_carrier",
-      "status": "isolated-prototype",
+      "status": "integrated-validation-pending",
       "environment": "Pinned dde5d8e with the classifier syntax, metadata, carrier and fixture patches. See studies/universe-classifiers/verify.py.",
       "source": "CarrierExample.clean: equal large(retain twice(X),X), with X: TopologicalSpace and generic implicit A: LargeTypes (Classifies: 1).",
       "expected_tree": [
@@ -2903,16 +2904,17 @@
       "checks": [
         "studies/universe-classifiers/check_carrier_targets.py: independent conclusion tree, five canonical native targets and a kernel-checked identity proof",
         "studies/universe-classifiers/test_carriers.py: exact-level rejection, ordinary-bundle rejection, aliases, repeated-argument agreement and substitution identity",
-        "studies/universe-classifiers/verify.py: 281 selected tests plus explicit-carrier, native foundation, saved-expression and dispatch checks"
+        "studies/universe-classifiers/verify.py: 281 selected tests plus explicit-carrier, native foundation, saved-expression and dispatch checks",
+        "Working compiler integration: 431 selected tests; tools/check_language_integration.py reproduces current checks without applying patches. Version-3 payload supersedes earlier experimental schemas."
       ],
       "pending": [
         "Carrier-valued dependent fields/callables, classifier ambiguity selection and storage schema migration",
-        "Full regression on the latest fixture snapshot and production integration"
+        "Full regression on the latest fixture snapshot and full production validation"
       ]
     },
     {
       "id": "closed_universe_explicit_carrier",
-      "status": "isolated-prototype",
+      "status": "integrated-validation-pending",
       "environment": "Pinned classifier stack plus explicit-carriers.patch and explicit-oracles.patch; production unchanged.",
       "source": "ExplicitCarrierExample.clean: equal in(A,retain large twice(A,x),x), with A: LargeTypes and x: A.",
       "expected_tree": [
@@ -2947,16 +2949,17 @@
       "checks": [
         "check_explicit_targets.py: two independent source trees, six exact native targets and two kernel-checked proofs",
         "test_explicit_carriers.py: eleven alias, grouping, telescope, normalization, level and rejection cases",
-        "explicit-oracles.patch: two dispatch declaration expectations migrated to primitive Type domains"
+        "explicit-oracles.patch: two dispatch declaration expectations migrated to primitive Type domains",
+        "Working compiler integration: 431 selected tests; tools/check_language_integration.py reproduces current checks without applying patches. Version-3 payload supersedes earlier experimental schemas."
       ],
       "pending": [
         "Carrier-valued dependent fields/callables and storage migration",
-        "Full regression and production integration"
+        "Full regression and full production validation"
       ]
     },
     {
       "id": "retained_classifier_identity",
-      "status": "isolated-prototype",
+      "status": "integrated-validation-pending",
       "environment": "Closed classifier stack with in-memory checked annotations; plain JSON replay is deliberately rejected.",
       "source": "Bind type(TopologicalSpace) with one visible level-1 classifier; add a second classifier; replay the bound value.",
       "expected_tree": [
@@ -2970,16 +2973,17 @@
       "checks": [
         "test_classified_values.py: selection independent of order/expected type, alias deduplication, retained replay after competing import, changed snapshot rejection and lost-annotation JSON rejection",
         "check_value_targets.py: reification of a formal inferred carrier with two visible classifiers, and an authored carrier-returning definition",
-        "test_value_storage.py and check_value_targets.py --payload-only: version-2 schema, identity and scope replay, authoritative index payload, ten native targets and three proofs"
+        "test_value_storage.py and check_value_targets.py --payload-only: version-2 schema, identity and scope replay, authoritative index payload, ten native targets and three proofs",
+        "Working compiler integration: 431 selected tests; tools/check_language_integration.py reproduces current checks without applying patches. Version-3 payload supersedes earlier experimental schemas."
       ],
       "pending": [
-        "Full mathematical adapter-environment freshness and production integration",
-        "Expanded classifier/storage composition, full regression and production integration"
+        "Full mathematical adapter-environment freshness and full production validation",
+        "Expanded classifier/storage composition, full regression and full production validation"
       ]
     },
     {
       "id": "classified_value_payload_v2",
-      "status": "isolated-prototype",
+      "status": "integrated-validation-pending",
       "environment": "Classifier stack plus codec-v2.patch and bound-tree-codec/storage.patch; fixed explicit module environment.",
       "source": "Save type(A : Large) as an index; discard its resolved tree; reload and substitute A.",
       "expected_tree": [
@@ -2992,16 +2996,17 @@
       "expected_lean": "Re-elaboration retains the formal classifier and emits the substituted carrier; index payload overrides a conflicting resolved cache.",
       "checks": [
         "test_value_storage.py: seven storage cases, including independent JSON schema and missing local rejection",
-        "check_value_targets.py --payload-only: restored indexed application compared with independently authored Lean target"
+        "check_value_targets.py --payload-only: restored indexed application compared with independently authored Lean target",
+        "Working compiler integration: 431 selected tests; tools/check_language_integration.py reproduces current checks without applying patches. Version-3 payload supersedes earlier experimental schemas."
       ],
       "pending": [
         "Expanded composition and full regression",
-        "Broader native dependency freshness and production integration"
+        "Broader native dependency freshness and full production validation"
       ]
     },
     {
       "id": "closed_classifier_dependent_function",
-      "status": "isolated-prototype",
+      "status": "integrated-validation-pending",
       "environment": "Classifier stack with carrier-binders.patch and version-2 storage; explicit closed classifiers and unique arrow binding.",
       "source": "Function(A: LargeTypes,Function(x: A,A))",
       "expected_tree": [
@@ -3035,17 +3040,18 @@
       "expected_lean": "(A : LargeTypesNative) → A → A, using fresh native binder identities and the declared classifier wrapper.",
       "checks": [
         "test_carrier_binders.py: ten cases including independent tree, alpha identity, inferred lambda, application, wrong classifier, capture avoidance and storage",
-        "check_carrier_function_targets.py: two independent canonical targets and topology-space identity proof"
+        "check_carrier_function_targets.py: two independent canonical targets and topology-space identity proof",
+        "Working compiler integration: 431 selected tests; tools/check_language_integration.py reproduces current checks without applying patches. Version-3 payload supersedes earlier experimental schemas."
       ],
       "pending": [
         "Expanded composition and full regression",
         "Higher computed/projected carriers and higher carrier record fields",
-        "Production integration and broader native environment freshness"
+        "Full production validation and broader native environment freshness"
       ]
     },
     {
       "id": "closed_computed_carrier",
-      "status": "isolated-prototype",
+      "status": "integrated-validation-pending",
       "environment": "Classifier stack with carrier binders, computed-carriers.patch and version-3 storage.",
       "source": "Structure SpacePackage(): Universe: 2; Let carrier: LargeTypes; Let point: carrier; Constructor: pack space. Then P.point.",
       "expected_tree": [
@@ -3059,10 +3065,11 @@
       "expected_lean": "The record point projection has the record carrier projection as its type, at retained Type 1. Constructor projection may reduce to the supplied topology space.",
       "checks": [
         "test_computed_carriers.py: metadata, substitution, classifier level, storage and rejection tests",
-        "check_carrier_record_targets.py: four independent exact native targets and two proofs"
+        "check_carrier_record_targets.py: four independent exact native targets and two proofs",
+        "Working compiler integration: 431 selected tests; tools/check_language_integration.py reproduces current checks without applying patches. Version-3 payload supersedes earlier experimental schemas."
       ],
       "pending": [
-        "Fresh composition, full regression and production integration",
+        "Fresh composition, full regression and full production validation",
         "General higher record/type-constructor parameters and full native dependency freshness"
       ]
     }

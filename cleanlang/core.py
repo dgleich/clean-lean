@@ -45,7 +45,7 @@ def _expression_lines(text, *, masked=False):
             if conclusion_column is not None and column <= conclusion_column:
                 conclusion_column = None
             assumption_list = bool(re.match(r'Assume\b',stripped,re.I))
-            if re.fullmatch(r'(?:Conclude|Equals|Holds when)\s*:', stripped, re.I):
+            if re.fullmatch(r'(?:Conclude|Equals|Holds when)\s*:', stripped, re.I) or re.fullmatch(r'Assume[ ]+[^:]+:', stripped, re.I):
                 conclusion_column = column
                 continue
             expression = conclusion_column is not None or re.match(
@@ -112,6 +112,14 @@ class Type:
 class LocalType(Type):
     """A local carrier reference, distinct from a module constructor."""
     lean: str = ''
+    universe: int = 0
+    classifier: str = ''
+
+@dataclass(frozen=True)
+class ComputedCarrier(Type):
+    """Carrier expression with retained closed level and classifier identity."""
+    universe: int = 0
+    classifier: str = ''
 
 @dataclass(frozen=True, eq=False)
 class ValueIndex:
@@ -145,6 +153,8 @@ def proof_type(condition,environment=None,locals=None,*,_fresh=False):
 
 
 def has_value_indices(t):
+    from .dependent_functions import DependentFunctionType
+    if isinstance(t,DependentFunctionType):return True
     return isinstance(t,Type) and any(isinstance(a,ValueIndex) or has_value_indices(a) for a in t.args)
 
 @dataclass
@@ -236,7 +246,7 @@ class Environment:
             tree=(expression_tree(syntax.children[0]) if syntax.data=='computed_index'
                   else expression_tree(parse(type_spelling(syntax),'expression')))
             value=Expressions(self,env or {}).elaborate(tree)
-            if value.type==Type('Type'):
+            if self.classifier_info(value.type) is not None:
                 from .carrier_types import carrier
                 return carrier(value,self,env or {})
             if syntax.data=='index_reference':raise CleanError('Type projection must have type Type')
@@ -247,8 +257,8 @@ class Environment:
         source_name=str(syntax.children[0])
         name=self.data.get('aliases',{}).get(source_name,source_name)
         args=[type_spelling(x) for x in syntax.children[1].children] if len(syntax.children)>1 else []
-        if env and source_name in env and env[source_name].type == Type('Type') and not args:
-            return LocalType(source_name,(),env[source_name].lean)
+        if env and source_name in env and not args and (info:=self.classifier_info(env[source_name].type)) is not None:
+            return LocalType(source_name,(),env[source_name].lean,info[1],info[0])
         if name in trail:raise CleanError('Cyclic type alias: '+name)
         if name not in self.data['types']: raise CleanError('Unknown type: '+name)
         kinds=self.data['types'][name].get('args',[])
@@ -305,7 +315,9 @@ class Environment:
         from .dependent_functions import DependentFunctionType
         bindings=bindings or {}
         if isinstance(t,LocalType):return t.lean if target=='lean' else texid(t.name)
-        if t.name=='$carrier':return '('+t.args[0].lean+')' if target=='lean' else t.args[0].tex
+        if t.name=='$carrier':
+            if not isinstance(t,ComputedCarrier):raise CleanError('Carrier type lacks retained classifier metadata')
+            return '('+t.args[0].lean+')' if target=='lean' else t.args[0].tex
         if isinstance(t,DependentFunctionType):
             domain=self.render_type(t.domain,target,bindings);codomain=self.render_type(t.codomain,target,bindings)
             if target=='lean':return '('+t.bound+' : '+domain+') → ('+codomain+')'
@@ -341,11 +353,18 @@ class Environment:
     def is_proof_type(self,t):
         if isinstance(t,ProofType):return True
         return isinstance(t,Type) and self.is_function_type(t) and len(t.args)==2 and self.is_proof_type(t.args[1])
+    def classifier_info(self,t):
+        """Resolved declaration metadata, independent of a classifier's name."""
+        if not isinstance(t,Type) or isinstance(t,LocalType) or t.args:return None
+        spec=self.data['types'].get(t.name,{})
+        if 'classifies' not in spec:return None
+        return (spec['native_binding'],spec['classifies'])
     def sort_level(self,t):
-        """Closed Lean Sort level; checked local carrier variables inhabit Type 0."""
+        """Closed Lean Sort level; local carrier variables retain their closed level."""
         if not isinstance(t,Type) or t==NUM:
             raise CleanError('Cannot determine a closed universe for an unresolved type')
-        if isinstance(t,LocalType):return 1
+        if isinstance(t,(LocalType,ComputedCarrier)):return t.universe+1
+        if t.name=='$carrier':raise CleanError('Carrier type lacks retained classifier metadata')
         if isinstance(t,ProofType):return 0
         if self.is_function_type(t) and len(t.args)==2:
             codomain=self.sort_level(t.args[1])
@@ -354,10 +373,10 @@ class Environment:
         if spec is None:return 1
         if 'canonical' in spec:raise CleanError('Universe checking requires a resolved type alias')
         return spec.get('universe',0)+1
-    def require_type_argument(self,t):
+    def require_type_argument(self,t,required=0):
         level=self.sort_level(t)
         if level==0:raise CleanError('Proof types cannot instantiate Type parameters')
-        if level!=1:raise CleanError('Type parameter requires Lean Type 0; got Type '+str(level-1))
+        if level!=required+1:raise CleanError('Type parameter requires Lean Type '+str(required)+'; got Type '+str(level-1))
     def function_type(self,domain,codomain):
         names=[name for name in self.data['types'] if self.is_function_type(Type(name))]
         if len(names)!=1:
@@ -404,25 +423,37 @@ class Environment:
         def bind(n,value):
             if n in substitutions and substitutions[n]!=value:
                 raise SignatureMismatch('Inconsistent dependent argument: '+n,mismatch_owner)
-            if n not in substitutions or implicit.get(n) in (NAT,Type('Type')):substitutions[n]=value
+            if n not in substitutions or (implicit.get(n)==NAT or self.classifier_info(implicit.get(n)) is not None):substitutions[n]=value
+
+        def replacement_bindings(scope):
+            from .inferred_conversion import reify
+            values=dict(substitutions)
+            for n,value in substitutions.items():
+                classifier=implicit.get(n)
+                if isinstance(value,Type) and self.classifier_info(classifier) is not None:
+                    values[n]=reify(value,self,locals,classifier=classifier)
+            return {**values,**actuals,**scope}
 
         def index(n,scope):
             from .indices import index_value, substitute_index
             if n in scope:return index_value(scope[n],self,locals)
             if n in actuals:return index_value(actuals[n],self,locals)
-            return substitute_index(ValueIndex(n,'',''),{**substitutions,**actuals,**scope},self,locals)
+            return substitute_index(ValueIndex(n,'',''),replacement_bindings(scope),self,locals)
 
         def replace(t,scope=None):
             scope={} if scope is None else scope
             from .indices import ComputedIndex, DimensionIndex, substitute_index
             from .dependent_functions import DependentFunctionType,substitute
-            if isinstance(t,DependentFunctionType):return substitute(t,{**substitutions,**actuals,**scope},self,locals)
+            if isinstance(t,DependentFunctionType):return substitute(t,replacement_bindings(scope),self,locals)
             if isinstance(t,ProofType):return ProofType(replace(t.args[0],scope))
             if isinstance(t,DimensionIndex) and t.name in substitutions:return substitutions[t.name]
             if isinstance(t,ComputedIndex):
-                return substitute_index(t,{**substitutions,**actuals,**scope},self,locals)
+                return substitute_index(t,replacement_bindings(scope),self,locals)
             if isinstance(t,ValueIndex):return index(t.name,scope)
             if isinstance(t,LocalType):return substitutions.get(t.name,t)
+            if isinstance(t,ComputedCarrier):
+                from .carrier_types import substitute_carrier
+                return substitute_carrier(t,replacement_bindings(scope),self,locals)
             if isinstance(t,Type):
                 return Type(t.name,tuple(replace(a,scope) for a in t.args))
             return substitutions.get(t,t)
@@ -471,13 +502,17 @@ class Environment:
             elif isinstance(pattern,ValueIndex):
                 if replace(pattern,scope)!=actual:
                     raise SignatureMismatch('Dependent index mismatch: '+pattern.name,mismatch_owner)
+            elif isinstance(pattern,ComputedCarrier):
+                if replace(pattern,scope)!=actual:
+                    raise SignatureMismatch('Computed carrier mismatch',mismatch_owner)
             elif isinstance(pattern,Type):
                 if isinstance(pattern,LocalType) and pattern.name in implicit:
-                    if implicit[pattern.name]!=Type('Type') or not isinstance(actual,Type) or self.is_proof_type(actual):
+                    info=self.classifier_info(implicit[pattern.name])
+                    if info is None or not isinstance(actual,Type) or self.is_proof_type(actual):
                         raise SignatureMismatch('Expected a type argument: '+pattern.name,mismatch_owner)
                     level=self.sort_level(actual)
-                    if level!=1:
-                        raise SignatureMismatch('Type parameter requires Lean Type 0; got Type '+str(level-1),mismatch_owner)
+                    if level!=info[1]+1:
+                        raise SignatureMismatch('Type parameter requires Lean Type '+str(info[1])+'; got Type '+str(level-1),mismatch_owner)
                     bind(pattern.name,actual)
                 elif isinstance(pattern,LocalType) and pattern.name in substitutions:
                     if substitutions[pattern.name]!=actual:raise SignatureMismatch('Dependent type mismatch: '+pattern.name,mismatch_owner)
@@ -490,10 +525,10 @@ class Environment:
 
         for n,t in parameters:
             match(t,actuals[n].type)
-            if t==Type('Type'):
+            if (info:=self.classifier_info(t)) is not None:
                 from .carrier_types import carrier
                 value=carrier(actuals[n],self,locals)
-                self.require_type_argument(value)
+                self.require_type_argument(value,info[1])
                 bind(n,value)
         for n in implicit:
             if n not in substitutions:raise CleanError('Cannot infer implicit parameter: '+n)
@@ -503,13 +538,13 @@ class Environment:
         from .inferred_conversion import reify
         inferred_targets={}
         for n,t in signature['implicit']:
-            if t not in (NAT,Type('Type')):
+            if t!=NAT and self.classifier_info(t) is None:
                 value=reify(substitutions[n],self,locals)
                 inferred_targets[n]=value.lean
                 if not compatible(value.type,replace(t)):
                     raise SignatureMismatch('Inferred value has the wrong dependent type: '+n,mismatch_owner)
         # With every inferred value fixed, verify the complete operand telescope.
-        if any(t not in (NAT,Type('Type')) for _,t in signature['implicit']):
+        if any(t!=NAT and self.classifier_info(t) is None for _,t in signature['implicit']):
             for n,t in parameters:match(t,actuals[n].type)
         targets=[]
         for n,t in signature['implicit']:
@@ -549,13 +584,12 @@ class Expressions:
     def _elaborate(self,tree):
         from .annotations import Annotation
         kind=tree[0]
-        if kind=='TypeValue':
-            sort=self.reg.data['types'].get('Type',{})
-            if sort.get('args')!=[] or sort.get('lean','').strip()!='Type' or sort.get('universe')!=1:
-                raise CleanError('Type expressions require the foundational Type binding to Lean Type')
-            value=self.reg.type(tree[1],self.env,phrases=False)
-            self.reg.require_type_argument(value)
-            return Expr(self.reg.render_type(value,'lean',self.env),self.reg.render_type(value,'latex',self.env),Type('Type'),tree=['TypeValue',tree[1] if isinstance(tree[1],Annotation) else str(value)])
+        if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
+            from .type_values import elaborate
+            return elaborate(tree,self.reg,self.env)
+        if kind=='BoundLiteral':
+            from .literal_binding import elaborate
+            return elaborate(tree,self.reg,self.env)
         if kind in ('NumeralAnnotation','BoundNumeral'):
             from .numerals import elaborate
             return elaborate(tree,self.reg,self.env)
@@ -745,7 +779,7 @@ def _parse_flat(text,reg):
                 if payload[0] in ('Local','Call') and (payload[1] in reg.data['types'] or payload[1] in reg.data['aliases']):
                     raise CleanError('Cannot use let x = Type; use let x: Type or let x be Type')
                 value=Expressions(reg,env).elaborate(payload)
-                if value.type==Type('Type'):raise CleanError('Type-valued local definitions are not implemented; use a top-level Type declaration')
+                if reg.classifier_info(value.type) is not None:raise CleanError('Type-valued local definitions are not implemented; use a top-level Type declaration')
                 if value.type==NUM:raise CleanError('Local definition requires a resolved numeral interpretation')
                 if value.type==PROP:raise CleanError('Local condition abbreviations are not implemented; use a top-level Condition declaration')
                 from .conversion import local_definition

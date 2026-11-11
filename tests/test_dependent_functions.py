@@ -56,13 +56,15 @@ class DependentFunctions(unittest.TestCase):
         matrix=self.e.data['types']['Matrix']['native_binding']
         self.assertIn(matrix+' (clean_pi_bound_1) (clean_pi_bound_0)',self.e.render_type(t,'lean'))
     def test_scope_and_module_gate(self):
-        for s in ['Matrix(n: Natural,Real)','Function(T: Type,T)',
+        for s in ['Matrix(n: Natural,Real)',
                   'Function(n: Natural,Function(n: Natural,Vector(n,Real)))',
                   'Function(n: Vertex(n),Real)','Function(Real: Natural,Real)']:
             with self.subTest(s=s),self.assertRaises(CleanError):self.typ(s)
         with self.assertRaises(CleanError):self.typ('Vector(n,Real)')
         self.e.data['types']['Mapping']=self.e.data['types'].pop('Function')
         self.assertIsInstance(self.typ('Mapping(n: Natural,Vector(n,Real))'),DependentFunctionType)
+    def test_carrier_binder_is_dependent(self):
+        self.assertIsInstance(self.typ('Function(T: Type,T)'),DependentFunctionType)
     def test_infer_free_type_from_dependent_codomain(self):
         notation('Notation family identity(f):',[
           'Let T: Type','Let f: Function(n: Natural,Vector(n,T))',

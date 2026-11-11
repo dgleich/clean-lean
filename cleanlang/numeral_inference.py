@@ -18,7 +18,7 @@ def holes(tree):
     def visit(node,path):
         kind=node[0]
         if kind=='Decimal':digits(node[1]);found.append((path,node[1]));return
-        if kind in ('Local','TypeValue','NumeralAnnotation','BoundNumeral'):return
+        if kind in ('Local','TypeValue','ClassifiedTypeValue','BoundTypeValue','NumeralAnnotation','BoundNumeral','BoundLiteral'):return
         if kind in ('Call','ModuleCall'):
             for i,arg in enumerate(node[2]):visit(arg,path+(2,i))
         elif kind=='Apply':

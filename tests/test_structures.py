@@ -11,7 +11,7 @@ ROOT=Path(__file__).resolve().parents[1]
 class Structures(unittest.TestCase):
     def setUp(self):
         self.e=Environment();load_module(ROOT/'library/topology/bundles.clean',self.e)
-        self.local={'X':Expr('X','X',Type('Type')),'P':Expr('P','P',Type('BasedPath',(LocalType('X',(), 'X'),))),
+        self.local={'X':Expr('X','X',Type('Type')),'P':Expr('P','P',Type('BasedPath',(LocalType('X',(), 'X',0,self.e.data['types']['Type']['native_binding']),))),
                     'I':Expr('I','I',Type('Endpoints')),'a':Expr('a','a',Type('Real')),
                     'b':Expr('b','b',Type('Real'))}
     def expr(self,s):return Expressions(self.e,self.local).parse(s)
@@ -52,7 +52,7 @@ class Structures(unittest.TestCase):
         self.assertEqual(self.expr('based path(X,P.topology,P.start,P.finish,P.path)').type,self.local['P'].type)
     def test_explicit_type_substitution(self):
         self.local['Y']=Expr('Y','Y',Type('Type'))
-        self.local['Q']=Expr('Q','Q',Type('BasedPath',(LocalType('Y',(), 'Y'),)))
+        self.local['Q']=Expr('Q','Q',Type('BasedPath',(LocalType('Y',(), 'Y',0,self.e.data['types']['Type']['native_binding']),)))
         self.assertEqual(self.expr('reversed bundle(Y,Q)').type,self.local['Q'].type)
         with self.assertRaises(CleanError):self.expr('reversed bundle(X,Q)')
     def test_two_records_are_not_interchanged(self):

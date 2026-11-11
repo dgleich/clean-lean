@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 class ValueIndices(unittest.TestCase):
     def setUp(self):
         self.e=Environment();load_module(ROOT/'library/topology/indexed.clean',self.e)
-        X=LocalType('X',(), 'X')
+        X=LocalType('X',(), 'X',0,self.e.data['types']['Type']['native_binding'])
         self.locals={'X':Expr('X','X',Type('Type')),
                      't':Expr('t','t',Type('Topology',(X,))),
                      'x':Expr('x','x',X),'y':Expr('y','y',X),
@@ -34,7 +34,7 @@ class ValueIndices(unittest.TestCase):
             with self.subTest(source=source),self.assertRaises(CleanError):syntax.parse(source,'type_ref')
     def test_binding_and_explicit_target(self):
         t=self.e.type('Path(X,t,x,y)',self.locals)
-        self.assertEqual(t,Type('Path',(LocalType('X',(), 'X'),ValueIndex('t','t','t'),ValueIndex('x','x','x'),ValueIndex('y','y','y'))))
+        self.assertEqual(t,Type('Path',(LocalType('X',(), 'X',0,self.e.data['types']['Type']['native_binding']),ValueIndex('t','t','t'),ValueIndex('x','x','x'),ValueIndex('y','y','y'))))
         key=self.e.data['types']['Path']['native_binding']
         self.assertEqual(self.e.render_type(t,'lean'),f'(_root_.{key} (X) (t) (x) (y))')
     def test_prose_equivalence(self):
@@ -81,7 +81,7 @@ class ValueIndices(unittest.TestCase):
         notation('Notation forget(S,x):',['Let X: Type','Let S: Set(X)','Let x: Element(X,S)',
             'Returns: X','Means: x.val','Render latex: {x}'],self.e)
         locals={**self.locals,'a':Expr('a','a',self.e.type('Element(X,S)',self.locals))}
-        self.assertEqual(Expressions(self.e,locals).parse('forget(S,a)').type,LocalType('X',(), 'X'))
+        self.assertEqual(Expressions(self.e,locals).parse('forget(S,a)').type,LocalType('X',(), 'X',0,self.e.data['types']['Type']['native_binding']))
     def test_real_study_parses_and_renders(self):
         e=Environment();rs=load_document(ROOT/'studies/topology/ValueIndices.clean',e)
         self.assertEqual(len(rs),4)

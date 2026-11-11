@@ -21,6 +21,9 @@ def references(value,locals):
     from .dependent_functions import index_tree,DependentFunctionType
     def tree_names(tree):
         kind=tree[0]
+        if kind=='BoundLiteral':
+            from .literal_binding import names
+            return names(tree,tree_names)
         if kind=='Local':return {tree[1]}
         if kind in ('Decimal','BoundNumeral'):return set()
         if kind=='NumeralAnnotation':
@@ -28,7 +31,7 @@ def references(value,locals):
             from .core import ID
             import re
             return set(re.findall(ID,type_source(tree[2]))).intersection(locals)
-        if kind=='TypeValue':
+        if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
             if isinstance(tree[1],Annotation):return set(tree[1].names)
             from .core import ID
             import re
@@ -81,10 +84,16 @@ def resolve(annotation,env,locals):
 
 
 def validate(typ,env,locals):
-    from .core import Type,ValueIndex
+    from .core import Type,ComputedCarrier,ValueIndex,CleanError
     from .dependent_functions import index_tree
     from .bound_calls import bind
+    if isinstance(typ,ComputedCarrier):
+        from .carrier_types import substitute_carrier
+        fresh=substitute_carrier(typ,{},env,locals)
+        if env.render_type(typ,'lean',locals)!=env.render_type(fresh,'lean',locals):
+            raise CleanError('Stale computed carrier native target')
     if isinstance(typ,Type):
+        if typ.name=='$carrier' and not isinstance(typ,ComputedCarrier):raise CleanError('Carrier type lacks retained classifier metadata')
         for arg in typ.args:validate(arg,env,locals)
     elif isinstance(typ,ValueIndex):bind(index_tree(typ),env,locals,binders=True)
 

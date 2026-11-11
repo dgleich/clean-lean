@@ -11,6 +11,7 @@ class ProofIndex(ComputedIndex):
 
 
 def index(expression,env,locals,*,_fresh=False):
+    from .retained_codec import dumps
     from .beta_indices import contract_index
     expression=contract_index(expression,env,locals)
     from .conversion import index_comparison
@@ -20,7 +21,7 @@ def index(expression,env,locals,*,_fresh=False):
     from .bound_calls import bind,_bind_checked
     tree=_bind_checked(expression,env,locals,binders=True) if _fresh else bind(expression.tree,env,locals,binders=True)
     return ProofIndex('('+condition_spelling(expression.tree)+')',expression.lean,expression.tex,
-                      json.dumps(tree,ensure_ascii=False),tuple(locals.items()),
+                      dumps(tree),tuple(locals.items()),
                       comparison=index_comparison(comparison,env,locals,_fresh=_fresh),resolved=tree)
 
 

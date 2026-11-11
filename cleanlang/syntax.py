@@ -62,6 +62,9 @@ def expression_spelling(tree):
     """Canonical, fully grouped source for binder-free index expressions."""
     from .core import CleanError
     kind=tree[0]
+    if kind=='BoundLiteral':
+        from .literal_binding import spelling
+        return spelling(tree)
     if kind in ('NumeralAnnotation','BoundNumeral'):
         from .numerals import spelling
         return spelling(tree)
@@ -69,7 +72,9 @@ def expression_spelling(tree):
         from .bound_calls import source_operator
         return source_operator(tree,expression_spelling)
     if kind in ('Local','Decimal'):return tree[1]
-    if kind=='TypeValue':return 'type('+tree[1]+')'
+    if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
+        from .type_values import spelling
+        return spelling(tree)
     if kind in ('Call','ModuleCall'):return tree[1]+'('+','.join(map(expression_spelling,tree[2]))+')'
     if kind=='Projection':
         base=expression_spelling(tree[1])
@@ -115,6 +120,7 @@ def expression_tree(tree):
         return result
     if kind=='group':return expression_tree(c[0])
     if kind=='local':return ['Local',str(c[0])]
+    if kind=='classified_type_value':return ['ClassifiedTypeValue',type_spelling(c[1]),type_spelling(c[2])]
     if kind=='type_value':return ['TypeValue',type_spelling(c[1])]
     if kind=='numeral_annotation':
         digits=str(c[0])
@@ -217,7 +223,23 @@ def document(normalized):
             elif node.kind=='phrase_stmt':node.payload=parse(text,'phrase_line')
             elif node.kind=='default_numerals_stmt':node.payload=parse(text,'default_numerals_line')
             elif node.kind.endswith('_let'):node.payload=parse(text,'let_clause')
-            elif node.kind.endswith('_assume'):node.payload=parse(text.split(None,1)[1],'assumptions')
+            elif node.kind.endswith('_assume'):
+                body=text.split(None,1)[1]
+                if node.children:
+                    if not body.endswith(':'):
+                        raise CleanError('Assumption block requires an empty named header')
+                    label=body[:-1].strip()
+                    # Validate the label using the existing name grammar, before binding.
+                    candidate=parse(label+': '+ ' '.join(c.text for c in node.children),'assumptions')
+                    if len(candidate.children)!=1:
+                        raise CleanError('A named assumption block contains one expression, not an assumption list')
+                    assumption=candidate.children[0]
+                    if len(assumption.children)!=2:
+                        raise CleanError('Assumption block requires a name')
+                    node.text=text+' '+ ' '.join(c.text for c in node.children)
+                    body=node.text.split(None,1)[1]
+                    node.children=[]
+                node.payload=parse(body,'assumptions')
             elif node.kind in ('expression_field','conclusion'):
                 import re
                 body=(re.sub(r'^Conclude\b\s*:?\s*','',text,flags=re.I) if node.kind=='conclusion' else text.split(':',1)[1]).strip()
@@ -257,6 +279,9 @@ def condition_spelling(tree):
     """Canonical source for scoped condition expressions; no environment lookup."""
     from .core import CleanError
     kind=tree[0]
+    if kind=='BoundLiteral':
+        from .literal_binding import spelling
+        return spelling(tree)
     if kind in ('NumeralAnnotation','BoundNumeral'):
         from .numerals import spelling
         return spelling(tree)
@@ -264,7 +289,9 @@ def condition_spelling(tree):
         from .bound_calls import source_operator
         return source_operator(tree,condition_spelling)
     if kind in ('Local','Decimal'):return tree[1]
-    if kind=='TypeValue':return 'type('+tree[1]+')'
+    if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
+        from .type_values import spelling
+        return spelling(tree)
     if kind in ('Call','ModuleCall'):return tree[1]+'('+','.join(map(condition_spelling,tree[2]))+')'
     if kind=='Projection':
         base=condition_spelling(tree[1])

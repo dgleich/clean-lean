@@ -22,6 +22,7 @@ postfix_suffix: "." ID -> field_suffix
      | "(" expression ")" -> group
      | "(" NUMBER ":" type_ref ")" -> numeral_annotation
      | TYPE_VALUE "(" type_ref ")" -> type_value
+     | TYPE_VALUE "(" type_ref ":" type_ref ")" -> classified_type_value
      | FUNCTION "(" ID ":" type_ref "," expression ")" -> function
      | FOR EVERY "(" ID ":" type_ref "," expression ")" -> universal
      | THERE EXISTS "(" ID ":" type_ref "," expression ")" -> existential
@@ -80,17 +81,17 @@ declaration: HEADER_LINE _NL _INDENT declaration_field+ _DEDENT
 expression_line: EXPR_LINE _NL
 result: RESULT_LINE _NL _INDENT result_field* conclusion _DEDENT
 ?result_field: LET_LINE _NL -> result_let
-             | ASSUME_LINE _NL -> result_assume
+             | ASSUME_LINE _NL (_INDENT expression_line+ _DEDENT)? -> result_assume
              | ATTRIBUTION_LINE _NL (_INDENT attribution_entry+ _DEDENT)? -> attribution
 conclusion: CONCLUDE_LINE _NL (_INDENT expression_line+ _DEDENT)?
 attribution_entry: FIELD_LINE _NL
 context: CONTEXT_LINE _NL _INDENT (context_clause | prose)* (result | context | documented_result) (result | context | prose | documented_result)* _DEDENT
 ?context_clause: LET_LINE _NL -> context_let
-               | ASSUME_LINE _NL -> context_assume
+               | ASSUME_LINE _NL (_INDENT expression_line+ _DEDENT)? -> context_assume
 DECL: /(?i:Notation|Define|Condition)(?!\w)/
 LET: /(?i:Let)(?!\w)/
 DEFINE: /(?i:Define)(?!\w)/
-FIELD: /(?i:Numerals|Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
+FIELD: /(?i:Classifies|Literal|Numerals|Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Equals|Holds when|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)(?!\w)/
 IFF: "↔"
 IMPLIES: "→"
 OR: /(?i:or)(?=\W)/ | "∨"
@@ -130,7 +131,7 @@ ASSUME_LINE: /(?i:Assume)[ ]+[^\n]+/
 ATTRIBUTION_LINE: /(?i:Attribution)[ ]*:[^\n]*/
 CONCLUDE_LINE: /(?i:Conclude)(?!\w)[^\n]*/
 EXPR_FIELD_LINE: /(?i:Equals|Holds when)[ ]*:[^\n]*/
-FIELD_LINE: /(?i:Numerals|Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
+FIELD_LINE: /(?i:Classifies|Literal|Numerals|Prefix|Infix|Universe|Constructor|Means|From Lean|Returns|Assumption name|Render latex|Render|Describe plural|Describe|Attribution|Kind|Label|Title|Author|Year|Version|Revision|Url|References|Source|Reference|Relationship|Scope|Changes|Note|Publisher|Declaration|Location)[ ]*:[^\n]*/
 EXPR_LINE: /\S[^\n]*/
 _NL: /\n[ ]*/
 %declare _INDENT _DEDENT

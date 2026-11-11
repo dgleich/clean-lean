@@ -17,7 +17,7 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
     """
     type_bindings=dict(type_bindings or {})
     for n,value in bindings.items():
-        if value.type==Type('Type') and value.tree[0]!='Local':
+        if environment.classifier_info(value.type) is not None and value.tree[0]!='Local':
             from .carrier_types import carrier
             type_bindings[n]=carrier(value,environment,locals)
     occupied=set(locals)|set(environment.data['types'])|set(environment.data['aliases'])|set(environment.data['functions'])|tree_names(tree)
@@ -80,12 +80,18 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
         from .core import Expressions,Expr
         replacements={}
         scope=dict(locals)
+        resolved={}
+        # Raw syntax substitution stays syntactic. Resolve enclosing binder
+        # domains only when a checked annotation needs their semantic scope.
+        for original,(fresh_name,domain) in bound_values.items():
+            value=Expr(fresh_name,fresh_name,environment.type(domain,scope,phrases=False),tree=['Local',fresh_name])
+            resolved[original]=value;scope[fresh_name]=value
         # Fresh binder references have not yet entered the caller's semantic scope.
         for name,tree in mapping.items():
             if name in bindings and tree==bindings[name].tree:replacements[name]=bindings[name]
             elif tree[0]=='Local':
                 from .dependent_functions import tree_names
-                original=bound_values.get(name) or locals.get(name)
+                original=resolved.get(name) or locals.get(name)
                 if original is not None:
                     value=Expr(tree[1],tree[1],original.type,tree=tree)
                     scope[tree[1]]=value;replacements[name]=value
@@ -94,6 +100,9 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
         return replace(source,{**replacements,**type_bindings},environment,scope)
     def expr(node,mapping,callheads):
         kind=node[0]
+        if kind=='BoundLiteral':
+            from .literal_binding import rebuild
+            return rebuild(node,lambda value:expr(value,mapping,callheads),annotation(node[6],mapping,callheads))
         if kind=='Local':return mapping.get(node[1],node)
         if kind=='Decimal':return node
         if kind=='BoundNumeral':
@@ -101,6 +110,8 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
             return bind(node,environment,locals)
         if kind=='NumeralAnnotation':raise UnrepresentableSubstitution('Bind numeral annotations before substitution')
         if kind=='TypeValue':return ['TypeValue',annotation(node[1],mapping,callheads)]
+        if kind=='ClassifiedTypeValue':return [kind,annotation(node[1],mapping,callheads),annotation(node[2],mapping,callheads)]
+        if kind=='BoundTypeValue':return [kind,annotation(node[1],mapping,callheads),node[2],node[3],node[4]]
         if kind=='ModuleCall':return [kind,node[1],[expr(a,mapping,callheads) for a in node[2]],*node[3:]]
         if kind=='Call':
             args=[expr(a,mapping,callheads) for a in node[2]]
@@ -117,7 +128,7 @@ def substitute(tree,bindings,environment,locals,type_bindings=None):
             from .annotations import Annotation
             from .core import Expr
             previous=bound_values.get(node[1])
-            if isinstance(domain,Annotation):bound_values[node[1]]=Expr(name,name,domain.typ,tree=['Local',name])
+            bound_values[node[1]]=(name,domain)
             try:body=expr(node[3],{**mapping,node[1]:['Local',name]},callheads|{node[1]})
             finally:
                 if previous is None:bound_values.pop(node[1],None)

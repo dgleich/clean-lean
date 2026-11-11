@@ -46,6 +46,10 @@ See the [typeset examples](generated/specimen.pdf),
 [language specification](docs/spec.md). For the direction of the design, see
 [aspirational syntax](docs/aspirational-syntax.md).
 
+See the [current compiler integration report](docs/language-integration.md) for
+classified type values, dependent carrier records, stored replay and validation
+status.
+
 ## More examples, with annotations
 
 Clean supports full-line and trailing `--` comments. Nested block comments use

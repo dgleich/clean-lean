@@ -11,9 +11,24 @@ def comparison_key(expression,env,locals,*,fresh=False):
     previous=pool
     if pool is None:pool=Pool(env,locals,expression.tree)
     before=set(pool.owned);env._comparison_pool=pool
-    def emit(value):
+    def stable_opaque(value):
+        # Only called on freshly normalized children, within this fixed traversal.
+        tree=value.tree
+        if not tree:return False
+        if tree[0]=='Local':
+            local=locals.get(tree[1])
+            return local is not None and local.local_normal is None
+        if tree[0]=='Decimal':return True
+        if tree[0] not in ('Call','ModuleCall'):return False
+        name=tree[1]
+        if tree[0]=='Call' and name in locals:return False
+        definition=env.definitions.get(name)
+        if definition and definition['implementation']=='equals':return False
+        if value.checked_args is None:return False
+        return all(stable_opaque(arg) for arg in value.checked_args)
+    def emit(value,normalized=False):
         original=value
-        value=_normal_form(value,env,locals,fresh=True)
+        if not normalized:value=_normal_form(value,env,locals,fresh=True)
         if value.type!=original.type:raise CleanError('Contextual comparison changed a type')
         tree=value.tree;kind=tree[0]
         if kind not in ('Call','ModuleCall','Operator','Unary'):return value.lean
@@ -27,7 +42,7 @@ def comparison_key(expression,env,locals,*,fresh=False):
         if target!=identity(env,name):raise CleanError('Changed comparison callable')
         spec=env.data['functions'][name]
         if value.checked_args is None:raise CleanError('Missing freshly checked call arguments')
-        arguments=[emit(arg) for arg in value.checked_args]
+        arguments=[emit(arg,normalized=stable_opaque(arg)) for arg in value.checked_args]
         if 'dependent_signature' not in spec:
             raw='('+spec['lean'].format(*(a.lean for a in value.checked_args))+')'
             if raw!=value.lean:raise CleanError('Unchecked comparison call template')
@@ -35,7 +50,7 @@ def comparison_key(expression,env,locals,*,fresh=False):
         signature=spec['dependent_signature'];inferred=dict(value.inferred_args);implicit=[]
         for n,t in signature['implicit']:
             v=inferred[n]
-            if t not in (NAT,Type('Type')):rendered=reify(v,env,locals).lean
+            if t!=NAT and env.classifier_info(t) is None:rendered=reify(v,env,locals).lean
             elif isinstance(v,Type):rendered=env.render_type(v,'lean',locals)
             elif isinstance(v,ValueIndex):rendered=v.lean
             elif v in locals:rendered=locals[v].lean

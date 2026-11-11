@@ -2,24 +2,28 @@
 """Explicit dependent arrows: scoped identities, alpha keys and substitution."""
 from dataclasses import dataclass
 import json,re
-from .core import Type,LocalType,ProofType,ValueIndex,Expr,CleanError,ID,NUM,texid
+from .core import Type,LocalType,ComputedCarrier,ProofType,ValueIndex,Expr,CleanError,ID,NUM,texid
 
 
 def index_tree(index):
+    from .retained_codec import loads
     from .indices import ComputedIndex
     from .syntax import parse,expression_tree
-    if isinstance(index,ComputedIndex):return index.resolved if index.resolved is not None else json.loads(index.syntax)
+    if isinstance(index,ComputedIndex):return loads(index.syntax)
     return expression_tree(parse(index.name,'expression'))
 
 
 def tree_names(tree):
     kind=tree[0]
+    if kind=='BoundLiteral':
+        from .literal_binding import names
+        return names(tree,tree_names)
     if kind=='Local':return {tree[1]}
     if kind in ('Decimal','BoundNumeral'):return set()
     if kind=='NumeralAnnotation':
         from .numerals import type_source
         return set(re.findall(ID,type_source(tree[2])))
-    if kind=='TypeValue':
+    if kind in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
         from .annotations import Annotation
         return set(tree[1].names) if isinstance(tree[1],Annotation) else set(re.findall(ID,tree[1]))
     if kind=='ModuleCall':return set().union(*(tree_names(a) for a in tree[2]))
@@ -127,8 +131,9 @@ def type_key(typ,bound=()):
         if not contains_free(codomain,typ.bound):
             return ('type',typ.constructor,(type_key(typ.domain,bound),codomain))
         return ('Pi',typ.constructor,type_key(typ.domain,bound),type_key(typ.codomain,bound+(typ.bound,)))
+    if isinstance(typ,ComputedCarrier):return ('computed-carrier',typ.universe,typ.classifier,type_key(typ.args[0],bound))
     if isinstance(typ,ValueIndex):return ('index',abstract_template(typ.comparison_key(),bound))
-    if isinstance(typ,LocalType):return ('local-type',abstract_template(typ.lean,bound))
+    if isinstance(typ,LocalType):return ('local-type',typ.universe,typ.classifier,abstract_template(typ.lean,bound))
     if isinstance(typ,Type):return ('type',typ.name,tuple(type_key(a,bound) for a in typ.args))
     return ('literal',typ)
 
@@ -169,7 +174,6 @@ def parse_type(syntax,env,locals,trail=()):
     if binder in locals or binder in env.data['types'] or binder in env.data['aliases'] or binder in env.data['functions']:
         raise CleanError('Dependent function binder must be fresh')
     domain=env.type(type_spelling(domain),locals,phrases=False,trail=trail)
-    if domain==Type('Type'):raise CleanError('Type-valued dependent function binders are not implemented')
     bound=fresh_bound(env,locals)
     scope={**locals,binder:Expr(bound,texid(binder),domain)}
     codomain=env.type(type_spelling(codomain),scope,phrases=False,trail=trail)
@@ -186,6 +190,9 @@ def substitute(typ,bindings,env,locals):
         replacement={**bindings,typ.binder:scope[binder]}
         codomain=substitute(typ.codomain,replacement,env,scope)
         return make(typ.constructor,binder,bound,domain,codomain)
+    if isinstance(typ,ComputedCarrier):
+        from .carrier_types import substitute_carrier
+        return substitute_carrier(typ,bindings,env,locals)
     if isinstance(typ,ProofType):return ProofType(substitute_index(typ.args[0],bindings,env,locals))
     if isinstance(typ,ValueIndex):
         if not tree_names(index_tree(typ)).intersection(bindings):return typ
@@ -193,10 +200,15 @@ def substitute(typ,bindings,env,locals):
     if isinstance(typ,Type):
         if isinstance(typ,LocalType) and typ.name in bindings:
             value=bindings[typ.name]
-            if isinstance(value,Type):return value
-            if isinstance(value,Expr) and value.type==Type('Type'):
+            if isinstance(value,Type):
+                env.require_type_argument(value,typ.universe)
+                return value
+            if isinstance(value,Expr) and (info:=env.classifier_info(value.type)) is not None:
                 from .carrier_types import carrier
-                return carrier(value,env,locals)
+                if info!=(typ.classifier,typ.universe):raise CleanError('Carrier substitution changed classifier identity')
+                result=carrier(value,env,locals)
+                env.require_type_argument(result,typ.universe)
+                return result
             raise CleanError('Expected a named type argument: '+typ.name)
         if isinstance(typ,LocalType):return typ
         return Type(typ.name,tuple(substitute(a,bindings,env,locals) for a in typ.args))
@@ -216,7 +228,6 @@ def application(function,args,env,locals,tree,tex):
 
 def inferred_type(name,bound,domain,codomain,env,locals):
     if not occurs(codomain,name):return env.function_type(domain,codomain)
-    if domain==Type('Type'):raise CleanError('Type-valued dependent function binders are not implemented')
     constructor=env.function_type(domain,domain).name
     identity=fresh_bound(env,locals)
     scope={**locals,name:Expr(identity,texid(name),domain,tree=['Local',name])}

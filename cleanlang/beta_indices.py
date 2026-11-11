@@ -4,7 +4,7 @@ from .core import Expressions, CleanError
 
 
 def has_binder(tree):
-    if isinstance(tree,list) and tree and tree[0]=='TypeValue':
+    if isinstance(tree,list) and tree and tree[0] in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
         from .syntax import parse,type_tree
         def inside(node):
             if not isinstance(node,list):return False
@@ -21,13 +21,21 @@ def contract_index(expression, environment, locals):
     def reduce(tree):
         if not isinstance(tree,list) or not tree:return tree
         if tree[0] in ('Lambda','Forall','Exists'):return tree
+        if tree[0]=='BoundLiteral':
+            from .literal_binding import rebuild
+            return rebuild(tree,reduce)
         if tree[0]=='Apply':
             function=reduce(tree[1]);args=[reduce(a) for a in tree[2]]
             if (function[0]=='Lambda' and len(args)==1 and
                 not has_binder(function[3]) and not has_binder(args[0])):
                 name=function[1];actual=args[0]
                 def substitute(body):
-                    if body[0]=='TypeValue':
+                    if body[0]=='BoundLiteral':
+                        from .literal_binding import rebuild
+                        from .annotations import replace
+                        value=Expressions(environment,locals).elaborate(actual)
+                        return rebuild(body,substitute,replace(body[6],{name:value},environment,locals))
+                    if body[0] in ('TypeValue','ClassifiedTypeValue','BoundTypeValue'):
                         from .type_values import substitute as replace_type
                         return replace_type(body,{name:Expressions(environment,locals).elaborate(actual)},environment,locals)
                     if body[0]=='Local':return actual if body[1]==name else body
