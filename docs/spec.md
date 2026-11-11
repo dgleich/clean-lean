@@ -2643,3 +2643,26 @@ This does not add lambda construction against a proof-valued expected type,
 inference from unknown proof signatures, or recovery of result types depending
 on selected literal-bearing arguments. Production routing remains unchanged.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Fresh projection result reuse
+
+Public comparison entry for a projection first re-elaborates the complete source
+projection in the current environment and scope. Stored types and checked-argument
+payloads do not certify that entry. Inside the synchronous traversal, producer-field
+selection and base normalization use the freshly checked base. If producer selection
+has not supplied a reduced field and the normalized base contains no hidden binder,
+compare its tree, emitted expression, rendering, precedence, type, rendered Lean
+type and inferred arguments with the checked base. If all are unchanged, return the
+freshly checked projection itself. Otherwise reconstruct the projection and its
+dependent field type. Hidden-binder and producer-reduction rules remain unchanged.
+
+This avoids repeating dependent field substitution for an unchanged projection.
+The witness is restricted to the current traversal under fixed declarations and
+scope; no projection cache survives a public call. Failed source checks propagate.
+No parsing, conversion equivalence, selected declaration or emitted target changes
+are intended. Eight-level unchanged projections have one `project` construction
+per level; changed local values/types and normalized bases remain separately tested.
+:::

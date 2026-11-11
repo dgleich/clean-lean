@@ -4588,6 +4588,31 @@
         "Result types depending on selected literal-bearing arguments",
         "Production routing and complete active-label validation"
       ]
+    },
+    {
+      "id": "fresh_projection_result_reuse",
+      "status": "implemented-focused-validation",
+      "source": "record.child.value",
+      "expected_parse": [
+        "Projection",
+        [
+          "Projection",
+          [
+            "Local",
+            "record"
+          ],
+          "child"
+        ],
+        "value"
+      ],
+      "expected_lean": "The original declared accessor chain and dependent result type; no replacement proof, coercion, or cast.",
+      "checks": [
+        "tests/test_bound_comparison_reuse.py: FreshProjectionResultReuse; one construction per unchanged level, changed base rebuild, dependent carrier and stale payload checks",
+        "tools/check_projection_dependency_targets.py: four source and four normalized canonical targets, two agreement proofs"
+      ],
+      "pending": [
+        "Full current-revision regression and active-label regeneration"
+      ]
     }
   ]
 }

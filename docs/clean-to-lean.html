@@ -1819,5 +1819,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p>For <code>h: Evidence((for every(f: Function(Real,Real),n=n)))</code>, explicit joint inference accepts <code>h(function(x: Real,0))</code>. The schematic target is <code>h (fun (x : RealAdapter) =&gt; realZero)</code>. The supplied proof is retained; its source-derived callable view determines the lambda domain and body expectation. Returned implication evidence can be applied again, as in <code>h(function(x: Real,0))(q)</code>.</p>
 <p>Argument alternatives still share one solve. Selected-value-dependent result types and construction of a lambda against a proof expectation remain separate gaps. See the <a href="spec.md#scoped-application-of-existing-evidence">translation rule</a> and <a href="../studies/parameterized-literals/ProofTargets.lean">independent native targets</a>. Production routing is unchanged.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="fresh-projection-results">
+<h2>Rechecking and reusing projection results</h2>
+<p>For a nested record field such as <code>record.child.value</code>, public comparison rechecks the complete source. Within that same traversal, an unchanged checked base lets the normalizer retain the already checked projection instead of substituting its dependent field type again. Changed bases are rebuilt. Stored payloads never certify a later public call.</p>
+<p>This is a comparison implementation change; the projection still emits its declared Lean accessor. The <a href="spec.md#fresh-projection-result-reuse">rule</a> preserves producer reduction and hidden-binder boundaries. <a href="../tools/check_projection_dependency_targets.py">Native checks</a> compare four authored and four normalized targets against independent field/type templates.</p>
+</section></llm>
 </body>
 </html>

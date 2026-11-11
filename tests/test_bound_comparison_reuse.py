@@ -206,3 +206,35 @@ class NestedProjectionReuse(unittest.TestCase):
         old=self.projection(3)
         with patch.object(Expressions,'elaborate',side_effect=TimeoutError('Unavailable projection')):
             with self.assertRaises(TimeoutError):comparison_normal_form(old,self.env,self.local)
+
+# generated: gpt-6 2026-11-11 role=assisted
+class FreshProjectionResultReuse(NestedProjectionReuse):
+    def test_each_unchanged_projection_is_constructed_once(self):
+        from cleanlang import structures
+        old=self.projection(8)
+        with patch.object(structures,'project',wraps=structures.project) as calls:
+            actual=comparison_normal_form(old,self.env,self.local)
+        self.assertEqual(calls.call_count,8)
+        self.assertEqual((actual.lean,actual.type,actual.tree),(old.lean,old.type,old.tree))
+
+    def test_changed_normal_base_rebuilds_projection(self):
+        old=self.projection(1)
+        original=self.local['b']
+        self.local['b']=Expr('b','b',original.type,tree=['Local','b'],
+                            local_normal=Expr('normalized','b',original.type,tree=['Local','normalized']))
+        self.local['normalized']=self.local['b'].local_normal
+        actual=comparison_normal_form(old,self.env,self.local)
+        self.assertIn('(normalized)',actual.lean)
+        self.assertNotEqual(actual.lean,old.lean)
+
+    def test_dependent_field_type_is_rechecked_at_public_entry(self):
+        from cleanlang.structures import declare
+        declare('Structure Family():',['Universe: 1','Let carrier: Type','Let value: carrier','Constructor: family'],self.env)
+        self.local['p']=Expr('first','p',self.env.type('Family'),tree=['Local','p'])
+        old=Expressions(self.env,self.local).parse('p.value')
+        old.checked_args=(Expr('forged','p',self.env.type('Family')),)
+        self.local['p']=Expr('second','p',self.env.type('Family'),tree=['Local','p'])
+        actual=comparison_normal_form(old,self.env,self.local)
+        expected=Expressions(self.env,self.local).parse('p.value')
+        self.assertEqual((actual.lean,actual.type),(expected.lean,expected.type))
+        self.assertNotIn('forged',actual.lean)

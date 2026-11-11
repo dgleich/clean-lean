@@ -5,6 +5,7 @@ ROOT=Path(__file__).resolve().parents[1];sys.path[:0]=[str(ROOT),str(ROOT/'tests
 from test_projection_dependencies import SOURCE
 from cleanlang.core import Environment,Expr,Expressions,lean
 from cleanlang.modules import load_module
+from cleanlang.conversion import comparison_normal_form
 comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_basic_targets.py').read_text()).body
  if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))
 with tempfile.TemporaryDirectory() as d:
@@ -21,9 +22,12 @@ with tempfile.TemporaryDirectory() as d:
   checks.append(f'noncomputable def actual{number} ({parameter} : {structure}) : {e.render_type(value.type,"lean",s)} := {value.lean}')
   checks.append(f'noncomputable def expected{number} ({parameter} : {structure}) : {expected_type} := @{structure}.{field} {parameter}')
   checks.append(f'same_basic_target actual{number} expected{number}')
+  normalized=comparison_normal_form(value,e,s)
+  checks.append(f'noncomputable def normalized{number} ({parameter} : {structure}) : {e.render_type(normalized.type,"lean",s)} := {normalized.lean}')
+  checks.append(f'same_basic_target normalized{number} expected{number}')
  checks += [f'theorem countAgreement (c : {c}) : actual0 c = {c}.count c := by rfl',f'theorem valueAgreement (c : {c}) : actual1 c = {c}.value c := by rfl']
  native=Path(d)/'Checks.lean';native.write_text(lean([],e,['Lean'])+comparison+'\n'.join(checks)+'\n')
  subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(native)],cwd=ROOT,check=True)
-print('Four canonical projection targets and two agreement proofs passed.')
+print('Eight canonical projection targets (four source, four normalized) and two agreement proofs passed.')
 
 # generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

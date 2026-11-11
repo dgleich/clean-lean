@@ -234,3 +234,49 @@ Earlier live runs are not restarted or counted as passes. Older operator
 active-label process 225099 was observed defunct with no completion log; it is
 incomplete evidence, not a successful validation.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Fresh projection result reuse
+
+Public comparison entry for a projection first re-elaborates the complete source
+projection in the current environment and scope. Stored types and checked-argument
+payloads do not certify that entry. Inside the synchronous traversal, producer-field
+selection and base normalization use the freshly checked base. If producer selection
+has not supplied a reduced field and the normalized base contains no hidden binder,
+compare its tree, emitted expression, rendering, precedence, type, rendered Lean
+type and inferred arguments with the checked base. If all are unchanged, return the
+freshly checked projection itself. Otherwise reconstruct the projection and its
+dependent field type. Hidden-binder and producer-reduction rules remain unchanged.
+
+This avoids repeating dependent field substitution for an unchanged projection.
+The witness is restricted to the current traversal under fixed declarations and
+scope; no projection cache survives a public call. Failed source checks propagate.
+No parsing, conversion equivalence, selected declaration or emitted target changes
+are intended. Eight-level unchanged projections have one `project` construction
+per level; changed local values/types and normalized bases remain separately tested.
+:::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Projection-result validation passes: 51 comparison/projection regressions,
+462 joint solver tests, 115 joint runtime tests, eight independent canonical Lean
+targets (four source and four normalized), and two agreement proofs. All four
+corpus documents have identical legacy/joint output with stable matching source
+fingerprints; all 92 corpus proofs pass. The reference HTML links/IDs and
+provenance checks pass. Corpus evidence and diagnostic scope are retained in
+`studies/parameterized-literals/compatibility.json` under
+`fresh_projection_results_corpus` and `fresh_projection_results_diagnostics`.
+
+Before this change, the selected `restricted active labels` declaration completed
+in the diagnostic; it was not the unresolved bottleneck. A separate 90-second
+stack-sampling window reached `active label equivalence` but did not complete.
+Its samples showed dependent projection substitution during comparison. These
+observations motivated the narrowly scoped reuse above; they are neither an
+end-to-end speedup measurement nor full-study validation. The post-change diagnostic also reached `active label equivalence`; its
+20-second selected-declaration observation ended without completion (exit 2).
+It remains separate from the preserved live validation jobs. Full current
+regression and active-label regeneration remain pending.
+:::

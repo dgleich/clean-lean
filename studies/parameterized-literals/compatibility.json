@@ -1689,5 +1689,185 @@
       "hole_calls": 19,
       "elapsed_seconds": 19.163
     }
+  },
+  "fresh_projection_results_corpus": {
+    "_provenance": {
+      "origin": "llm",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "role": "assisted"
+    },
+    "scope": "Isolated document/module translation; generated text hashes are diagnostics, not canonical Lean or proof validation.",
+    "snapshot_scope": "Before/after fingerprints of cleanlang Python, this driver, repository library/corpus/studies Clean files and direct input. External import closures, dependencies and transient edits restored between samples are not covered.",
+    "default_changed": false,
+    "files": [
+      {
+        "path": "corpus/linear_algebra.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "d2b5de98a5b660d5be01518ec5218d09ad7b59d5a9ea17075f80b0ec795329fb",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 1,
+          "elapsed_seconds": 0.511
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "d2b5de98a5b660d5be01518ec5218d09ad7b59d5a9ea17075f80b0ec795329fb",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 1,
+          "elapsed_seconds": 0.632
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "corpus/graph_theory.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "814f67cb776506949afb58851362bc0213400078f41ae24f50af1ebdc518b4e1",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.738
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "814f67cb776506949afb58851362bc0213400078f41ae24f50af1ebdc518b4e1",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.452
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "corpus/analysis.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "65e4af3f25d1850b43925d455d3b371f868ca9f3a2b53739df7df3d5d8b45fae",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 15,
+          "elapsed_seconds": 0.422
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "65e4af3f25d1850b43925d455d3b371f868ca9f3a2b53739df7df3d5d8b45fae",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 15,
+          "elapsed_seconds": 0.842
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "corpus/algorithms.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "8043f9740de75f8842ac3a98f136ab08b5e4ea5221f8cff0e6f07cc3da563985",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 3,
+          "elapsed_seconds": 0.423
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "8043f9740de75f8842ac3a98f136ab08b5e4ea5221f8cff0e6f07cc3da563985",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 3,
+          "elapsed_seconds": 0.539
+        },
+        "comparison": "same-generated-text"
+      }
+    ],
+    "corpus_proofs": {
+      "status": "proved",
+      "results": 92,
+      "lean_sha256": "8ff4e4b4826de95e63ac97a37b8d58dcb088316a66e57cd634986057ddc07413",
+      "input_kind": "corpus-proofs",
+      "snapshot": {
+        "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+        "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+      },
+      "inputs_stable": true,
+      "hole_calls": 19,
+      "elapsed_seconds": 24.939
+    }
+  },
+  "fresh_projection_results_diagnostics": {
+    "baseline": "9c32bb8",
+    "implementation_sha256": "fad17be90dcadcb0f212937dffc9953fd5cbf927da327d704098b037b8205e2c",
+    "before_change": {
+      "selected_restricted_active_labels_profile": "/tmp/clean-current-active-joint-profile.log",
+      "selected_declaration_completed": true,
+      "profile_seconds": 0.299,
+      "whole_module_observation": "/tmp/clean-active-module-joint-profile.log",
+      "whole_module_window_seconds": 20,
+      "whole_module_completed": false,
+      "stage": "Define subpath vertex(n,a,m,h,v):",
+      "active_labels_stack_observation": "/tmp/clean-active-current-stacks.log",
+      "stack_observation_window_seconds": 90,
+      "stack_observation_exit_code": 124,
+      "last_started_declaration": "Define active label equivalence(I,n,a,m,h,L,v,support,left,right):"
+    },
+    "after_change": {
+      "diagnostic_log": "/tmp/clean-fresh-projection-active-profile.log",
+      "status": "bounded observation ended; selected declaration incomplete",
+      "bounded_diagnostic_only": true,
+      "exit_code": 2,
+      "selected_window_seconds": 20,
+      "selected_declaration": "Define active label equivalence(I,n,a,m,h,L,v,support,left,right):",
+      "profile": "/tmp/clean-fresh-projection-active.pstats"
+    },
+    "validation": {
+      "focused_tests": 51,
+      "solver_tests": 462,
+      "runtime_tests": 115,
+      "canonical_targets": 8,
+      "agreement_proofs": 2
+    },
+    "scope": "Diagnostic windows are not validation timeouts. Earlier live validations remain independent and preserved."
   }
 }
