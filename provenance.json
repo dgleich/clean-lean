@@ -9292,6 +9292,50 @@
     "studies/topology/relative-ordinary-comparison.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "library/algebra/inverse_module_maps.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/LevelHomologyComparison.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/LevelHomologyComparison.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/LevelHomologyComparisonVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/verify_level_homology_comparison.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/topology/level-homology-comparison.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

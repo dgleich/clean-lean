@@ -1859,5 +1859,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p><code>relative to ordinary homology(field,H,X,Q,h)</code> is authored in Clean by composing the vanishing-quotient homology map with the singular comparison on the ambient subspace. Its evidence <code>h</code> says the actual pair chain inclusion is zero. The reverse map uses the inverse singular comparison and the homology of the canonical quotient projection, without a zero hypothesis.</p>
 <p>The <a href="../studies/topology/relative-ordinary-comparison.md">study</a> checks six canonical targets and four inverse/naturality laws, with three generic chain helper lemmas. There are no new native adapters or syntax rules. Local module lets and the supplied equality proof remain in the emitted targets. Naturality uses the existing canonical relative homology map and the supplied chain square. Only the forward direction needs zero-inclusion evidence. A complete level-set application remains pending.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="level-homology-comparison">
+<h2>Dependent proof witnesses in level homology</h2>
+<p>The <a href="../studies/topology/level-homology-comparison.md">assembled level study</a> uses <code>there exists (nesting: Evidence((nested pair(X,S))), there exists (alpha: ModuleMap(...certify pair data(X,S,nesting)...)), ...))</code>. This schematic excerpt maps to nested Lean <code>Exists</code>, retaining the proof witness in the certified pair and the later map's type. The complete statements use existing grammar and explicit imports.</p>
+<p>A Clean-authored <code>inverse module maps</code> condition expands to both composition identities. Four exact targets and three application proofs, with four generic helpers, cover expanded, perturbed and shifted level pairs. Proofs construct the witnesses; translation performs no proof search. The ordinary target is the actual ambient subspace. Named fiber/band identification, a level-specific perturbation diagram and well-group formulas remain separate work.</p>
+</section></llm>
 </body>
 </html>

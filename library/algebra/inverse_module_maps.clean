@@ -1,0 +1,15 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "graded_maps.clean"
+
+Condition inverse module maps(field,M,N,f,g):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let M,N: CoefficientModule(K,field)
+  Let f: ModuleMap(K,field,M,N)
+  Let g: ModuleMap(K,field,N,M)
+  Holds when:
+    module composition(field,M,N,M,f,g) = module identity(field,M) and
+    module composition(field,N,M,N,g,f) = module identity(field,N)
+  Render: {f} and {g} are inverse maps
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

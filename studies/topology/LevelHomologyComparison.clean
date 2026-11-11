@@ -1,0 +1,60 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "../../library/topology/level_sets.clean"
+Import "../../library/topology/empty_pair_data.clean"
+Import "../../library/topology/relative_ordinary_comparison.clean"
+Import "../../library/algebra/inverse_module_maps.clean"
+
+Source level_comparison:
+  Kind: other
+  Label: Level-pair ordinary homology comparison
+  Title: Empty relative part, certification and inverse homology maps
+
+Result expanded level pair admits ordinary comparison:
+  Attribution: level_comparison; assembled level specialization; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let f: ContinuousRealMap(X)
+  Let a,r: Real
+  Let S = expanded pair(level problem(X,f,a),r)
+  Conclude:
+    there exists (nesting: Evidence((nested pair(X,S))),
+      there exists (alpha: ModuleMap(K,field,(relative homology(field,H,X,certify pair data(X,S,nesting))),(homology module(field,H,subspace(X,S.ambient)))),
+        inverse module maps(field,relative homology(field,H,X,certify pair data(X,S,nesting)),
+          homology module(field,H,subspace(X,S.ambient)),alpha,
+          ordinary to relative homology(field,H,X,certify pair data(X,S,nesting)))))
+
+Result perturbed level pair admits ordinary comparison:
+  Attribution: level_comparison; assembled level specialization; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let f,g: ContinuousRealMap(X)
+  Let a: Real
+  Let S = perturbed pair(level problem(X,f,a),g)
+  Conclude:
+    there exists (nesting: Evidence((nested pair(X,S))),
+      there exists (alpha: ModuleMap(K,field,(relative homology(field,H,X,certify pair data(X,S,nesting))),(homology module(field,H,subspace(X,S.ambient)))),
+        inverse module maps(field,relative homology(field,H,X,certify pair data(X,S,nesting)),
+          homology module(field,H,subspace(X,S.ambient)),alpha,
+          ordinary to relative homology(field,H,X,certify pair data(X,S,nesting)))))
+
+Result shifted level pair admits ordinary comparison:
+  Attribution: level_comparison; assembled level specialization; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let f: ContinuousRealMap(X)
+  Let a,t: Real
+  Let S = shifted pair(level problem(X,f,a),t)
+  Conclude:
+    there exists (nesting: Evidence((nested pair(X,S))),
+      there exists (alpha: ModuleMap(K,field,(relative homology(field,H,X,certify pair data(X,S,nesting))),(homology module(field,H,subspace(X,S.ambient)))),
+        inverse module maps(field,relative homology(field,H,X,certify pair data(X,S,nesting)),
+          homology module(field,H,subspace(X,S.ambient)),alpha,
+          ordinary to relative homology(field,H,X,certify pair data(X,S,nesting)))))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -2753,5 +2753,91 @@
       "hole_calls": 19,
       "elapsed_seconds": 23.862
     }
+  },
+  "assembled_level_homology_comparison": {
+    "_provenance": {
+      "origin": "llm",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "role": "assisted"
+    },
+    "scope": "Isolated document/module translation; generated text hashes are diagnostics, not canonical Lean or proof validation.",
+    "snapshot_scope": "Before/after fingerprints of cleanlang Python, this driver, repository library/corpus/studies Clean files and direct input. External import closures, dependencies and transient edits restored between samples are not covered.",
+    "default_changed": false,
+    "files": [
+      {
+        "path": "library/algebra/inverse_module_maps.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 0,
+          "lean_sha256": "8e112733a97c1e823ef5a6be088452f55be58211e563bc94b2a18c3007b9c2f2",
+          "input_kind": "module",
+          "snapshot": {
+            "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+            "clean_sources_sha256": "9dce16b025a49b74e34a955b8abbb98149811618632a4795655c75aae982a11c"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.701
+        },
+        "joint": {
+          "status": "translated",
+          "results": 0,
+          "lean_sha256": "8e112733a97c1e823ef5a6be088452f55be58211e563bc94b2a18c3007b9c2f2",
+          "input_kind": "module",
+          "snapshot": {
+            "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+            "clean_sources_sha256": "9dce16b025a49b74e34a955b8abbb98149811618632a4795655c75aae982a11c"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.771
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/LevelHomologyComparison.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 3,
+          "lean_sha256": "eaeec626aefe137f587a9d055555c590453263679cba21710d3a137e0a23f12f",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+            "clean_sources_sha256": "9dce16b025a49b74e34a955b8abbb98149811618632a4795655c75aae982a11c"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 11.77
+        },
+        "joint": {
+          "status": "translated",
+          "results": 3,
+          "lean_sha256": "eaeec626aefe137f587a9d055555c590453263679cba21710d3a137e0a23f12f",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+            "clean_sources_sha256": "9dce16b025a49b74e34a955b8abbb98149811618632a4795655c75aae982a11c"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 11.045
+        },
+        "comparison": "same-generated-text"
+      }
+    ],
+    "corpus_proofs": {
+      "status": "proved",
+      "results": 92,
+      "lean_sha256": "8ff4e4b4826de95e63ac97a37b8d58dcb088316a66e57cd634986057ddc07413",
+      "input_kind": "corpus-proofs",
+      "snapshot": {
+        "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+        "clean_sources_sha256": "9dce16b025a49b74e34a955b8abbb98149811618632a4795655c75aae982a11c"
+      },
+      "inputs_stable": true,
+      "hole_calls": 19,
+      "elapsed_seconds": 20.319
+    }
   }
 }

@@ -429,3 +429,15 @@ well-group/excision results remain pending. Multiword display labels remain
 unavailable as bare proof arguments; this example uses `sourceZero` and
 `targetZero` under the existing single-identifier evidence rule.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The [assembled level comparisons](level-homology-comparison.md) now construct
+nesting, certification, zero chain inclusion and inverse homology maps for
+expanded, perturbed and shifted level pair data. Four canonical targets and
+three application proofs (plus four generic helpers) pass. The conclusions use
+an existential proof binder followed by a map binder whose type depends on it.
+No nesting or zero-inclusion hypothesis is assumed. Named fiber/band-space
+identifications, the level-specific perturbation diagram and the well-group
+formula remain pending; the target currently uses the actual ambient subspace.
+:::

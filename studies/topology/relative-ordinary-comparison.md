@@ -66,9 +66,10 @@ chain square and both zero-inclusion proofs; it requires no additional equality
 between those proofs. The reverse naturality statement holds without either
 zero-inclusion hypothesis. It uses the canonical cokernel projection identity.
 
-A complete level-set application must still connect the explicit emptiness,
-certification and inclusion-zero proofs to these maps in its own checked
-statement. Well-group formulas and closed-cover/excision remain unproved.
+The [assembled level study](level-homology-comparison.md) now connects
+emptiness, certification and inclusion-zero proofs to these maps in three checked
+statements. Identifications with named fiber/band spaces and a level-specific
+perturbation diagram remain pending. Well-group formulas and closed-cover/excision remain unproved.
 
 ## Readability boundary encountered
 

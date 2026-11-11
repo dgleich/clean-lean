@@ -4704,7 +4704,21 @@
         "studies/topology/verify_relative_ordinary_comparison.py: two definition and four statement targets, four inverse/naturality proofs and three generic chain helper lemmas"
       ],
       "pending": [
-        "Complete level-set application",
+        "Level-specific perturbation diagram and named fiber/band identifications",
+        "Well-group formulas and closed-cover/excision audit"
+      ]
+    },
+    {
+      "id": "assembled_level_homology_comparison",
+      "status": "checked-mathematical-module-no-new-syntax",
+      "source": "library/algebra/inverse_module_maps.clean; studies/topology/LevelHomologyComparison.clean",
+      "expected_lean": "A local pair-data let followed by nested Exists: a nesting proof and a module map whose type and inverse condition retain that proof through certification. The inverse condition is the declared conjunction of two module composition identities.",
+      "checks": [
+        "studies/topology/verify_level_homology_comparison.py: four exact targets, three application proofs, four generic helper proofs"
+      ],
+      "pending": [
+        "Identification with separately named fiber/band spaces",
+        "Level-specific perturbation naturality diagram",
         "Well-group formulas and closed-cover/excision audit"
       ]
     }
