@@ -1,5 +1,6 @@
 -- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
 Import "../../library/topology/relative_ordinary_comparison.clean"
+Import "../../library/topology/relative_maps.clean"
 
 Source relative_ordinary:
   Kind: other
@@ -31,3 +32,37 @@ Result relative after ordinary comparison:
   Conclude: module composition(field,N,M,N,ordinary to relative homology(field,H,X,Q),relative to ordinary homology(field,H,X,Q,h)) = module identity(field,N)
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Result relative to ordinary comparison commutes:
+  Attribution: relative_ordinary; natural comparison; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Assume square: pair chain commutes(field,H,X,Q)
+  Assume sourceZero: pair chain inclusion(field,H,X,Q.source) = zero chain map(field,singular chains(field,H,subspace(X,Q.source.relative)),singular chains(field,H,subspace(X,Q.source.ambient)))
+  Assume targetZero: pair chain inclusion(field,H,X,Q.target) = zero chain map(field,singular chains(field,H,subspace(X,Q.target.relative)),singular chains(field,H,subspace(X,Q.target.ambient)))
+  Let M = relative homology(field,H,X,Q.source)
+  Let N = relative homology(field,H,X,Q.target)
+  Let U = homology module(field,H,subspace(X,Q.source.ambient))
+  Let V = homology module(field,H,subspace(X,Q.target.ambient))
+  Conclude:
+    module composition(field,M,N,V,relative homology map(field,H,X,Q,square),relative to ordinary homology(field,H,X,Q.target,targetZero)) =
+      module composition(field,M,U,V,relative to ordinary homology(field,H,X,Q.source,sourceZero),homology linear map(field,H,subspace(X,Q.source.ambient),subspace(X,Q.target.ambient),ambient continuous map(X,Q)))
+
+Result ordinary to relative comparison commutes:
+  Attribution: relative_ordinary; natural quotient projection; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: PairInclusion(X)
+  Assume square: pair chain commutes(field,H,X,Q)
+  Let M = relative homology(field,H,X,Q.source)
+  Let N = relative homology(field,H,X,Q.target)
+  Let U = homology module(field,H,subspace(X,Q.source.ambient))
+  Let V = homology module(field,H,subspace(X,Q.target.ambient))
+  Conclude:
+    module composition(field,U,M,N,ordinary to relative homology(field,H,X,Q.source),relative homology map(field,H,X,Q,square)) =
+      module composition(field,U,V,N,homology linear map(field,H,subspace(X,Q.source.ambient),subspace(X,Q.target.ambient),ambient continuous map(X,Q)),ordinary to relative homology(field,H,X,Q.target))

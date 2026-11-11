@@ -416,3 +416,16 @@ lemmas) pass. The forward map retains explicit zero-inclusion evidence; the
 reverse map uses the canonical quotient projection. Naturality for pair
 inclusions and a fully assembled level-set application remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The [relative-to-ordinary study](relative-ordinary-comparison.md) now proves
+naturality for the canonical relative homology map of a pair inclusion. Forward
+naturality takes both zero-inclusion proofs; backward naturality does not need
+these hypotheses. Both retain the explicit commutative chain square. The updated
+suite checks six canonical targets, four inverse/naturality proofs and three
+generic chain helper lemmas. Complete level-set certificate assembly and the
+well-group/excision results remain pending. Multiword display labels remain
+unavailable as bare proof arguments; this example uses `sourceZero` and
+`targetZero` under the existing single-identifier evidence rule.
+:::
