@@ -346,6 +346,18 @@ noncomputable def cleanDefine_commonNeighbors_52da06f30c8f3ae9229e {«n» : (_ro
 noncomputable def cleanDefine_nonadjacent_c907b99b2fe1b47ebd4d {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («G» : (_root_.cleanType_Graph_77c3210322e2c575cc5f («n»))) («u» : (_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) («v» : (_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   (_root_.cleanDefine_negation_9ec0af386428c726e6c3 ((@_root_.cleanNotation_adjacent_5f91e051f0b7d3f5346c («n») («G») («u») («v»))))
 
+noncomputable def cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  fun _ => (0 : Complex)
+
+noncomputable def cleanNotation_complex_matrix_zero_dfd79b21223faff778db  («m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  fun _ _ => (0 : Complex)
+
+noncomputable def cleanNotation_real_vector_zero_9d24f55d9796fb0f8645  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  fun _ => (0 : Real)
+
+noncomputable def cleanNotation_real_matrix_zero_f70710a3eff59f14747a  («m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  fun _ _ => (0 : Real)
+
 noncomputable def cleanNotation_det_9c9bd1c7c3f8362a9bee {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x0» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d) :=
   Matrix.det x0
 

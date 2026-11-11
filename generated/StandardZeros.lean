@@ -368,3 +368,5 @@ same_basic_target CleanStatements.real_matrix_zero_interpretation expectedRealMa
 theorem proofRealMatrix : CleanStatements.real_matrix_zero_interpretation := by
  intro m n
  rfl
+
+-- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md
