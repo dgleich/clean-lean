@@ -630,6 +630,27 @@ noncomputable def expectedRecoveredFamily (family : (k : {t('Natural')}) → {t(
 same_basic_target actualRecoveredFamily expectedRecoveredFamily
 theorem meaningRecoveredFamily (family : (k : {t('Natural')}) → {t('Vector')} k {t('Complex')}) : actualRecoveredFamily family = (0 : Complex) := by simp [actualRecoveredFamily, {f('read binder family')}, {complex_numerals}]
 """)
+notation('Notation read binder width(f,x):',
+ ['Let width: Natural','Let f: Function(k: Natural,Matrix(k,width,Complex))','Let x: Real','Returns: Real',
+  'Means: x','Render latex: read({f},{x})'],env)
+notation('Notation inspect binder carrier(f,x):',
+ ['Let T: Type','Let f: Function(k: Natural,Vector(k,T))','Let x: Real','Returns: Real',
+  'Means: x','Render latex: inspect({f},{x})'],env)
+for name,call,parameter,formal_type,argument in [
+ ('CallerWidth','read binder width',f"(n : {t('Natural')})",'Function(k: Natural,Matrix(k,n,Complex))','n'),
+ ('CallerCarrier','inspect binder carrier',f"(U : {t('Type')})",'Function(k: Natural,Vector(k,U))','U')]:
+ caller_scope={**scope,'U':Expr('U','U',env.type('Type'),tree=['Local','U'])}
+ family_type=env.type(formal_type,caller_scope)
+ caller_scope['family']=Expr('family','family',family_type,tree=['Local','family'])
+ value=Builder(env,caller_scope).materialize(expression_tree(parse(call+'(family,0)','expression')),use_default=False)
+ family_native=(f"(k : {t('Natural')}) → {t('Matrix')} k n {t('Complex')}" if name=='CallerWidth' else
+                f"(k : {t('Natural')}) → {t('Vector')} k U")
+ checks.append(f"""
+noncomputable def actual{name} {parameter} (family : {family_native}) : {t('Real')} := {value.lean}
+noncomputable def expected{name} {parameter} (family : {family_native}) : {t('Real')} := @{f(call)} {argument} family ({nr} (nat_lit 0))
+same_basic_target actual{name} expected{name}
+theorem meaning{name} {parameter} (family : {family_native}) : actual{name} {argument} family = (0 : Real) := by simp [actual{name}, {f(call)}, {nr}]
+""")
 source='for every (z: Vector(n,Complex), z != 0)'
 value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
 checks.append(f"""
@@ -677,6 +698,6 @@ theorem meaningScopedCarrier : actualScopedCarrier := by
 """)
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Ninety-one experimental targets and ninety-one meaning proofs passed; production joint inference remains unimplemented.')
+print('Ninety-three experimental targets and ninety-three meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

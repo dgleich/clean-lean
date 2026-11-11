@@ -458,6 +458,12 @@ noncomputable def cleanNotation_binder_vector_count_263281f0d62f9ee2ea74 {«n» 
 noncomputable def cleanNotation_read_binder_family_fd71cee4eff6645931b4 {«T» : Type} («f» : (clean_pi_bound_8 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (clean_pi_bound_8) («T»)))) («x» : «T») : «T» :=
   x
 
+noncomputable def cleanNotation_read_binder_width_ae4c245de7ee9c897a9b {«width» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («f» : (clean_pi_bound_9 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Matrix_4518cbfc13ff70fc0769 (clean_pi_bound_9) («width») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))))) («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  x
+
+noncomputable def cleanNotation_inspect_binder_carrier_06141ddae8de65bbddd4 {«T» : Type} («f» : (clean_pi_bound_10 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (clean_pi_bound_10) («T»)))) («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  x
+
 noncomputable def cleanNotation_opaque_count_4efa8df9a3534f27979e {«T» : Type} («item» : «T») : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
   0
 
@@ -1069,6 +1075,18 @@ noncomputable def expectedRecoveredFamily (family : (k : cleanType_Natural_469c5
   @cleanNotation_read_binder_family_fd71cee4eff6645931b4 cleanType_Complex_2d7f06a08f8ab1e3f46d family (cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0))
 same_basic_target actualRecoveredFamily expectedRecoveredFamily
 theorem meaningRecoveredFamily (family : (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 k cleanType_Complex_2d7f06a08f8ab1e3f46d) : actualRecoveredFamily family = (0 : Complex) := by simp [actualRecoveredFamily, cleanNotation_read_binder_family_fd71cee4eff6645931b4, cleanNumeral_Complex_311fd057b7f2e2b599a3]
+
+
+noncomputable def actualCallerWidth (n : cleanType_Natural_469c53b6dafb7a218246) (family : (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Matrix_4518cbfc13ff70fc0769 k n cleanType_Complex_2d7f06a08f8ab1e3f46d) : cleanType_Real_107b6641a486642ad8e1 := (@_root_.cleanNotation_read_binder_width_ae4c245de7ee9c897a9b (n) (family) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedCallerWidth (n : cleanType_Natural_469c53b6dafb7a218246) (family : (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Matrix_4518cbfc13ff70fc0769 k n cleanType_Complex_2d7f06a08f8ab1e3f46d) : cleanType_Real_107b6641a486642ad8e1 := @cleanNotation_read_binder_width_ae4c245de7ee9c897a9b n family (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualCallerWidth expectedCallerWidth
+theorem meaningCallerWidth (n : cleanType_Natural_469c53b6dafb7a218246) (family : (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Matrix_4518cbfc13ff70fc0769 k n cleanType_Complex_2d7f06a08f8ab1e3f46d) : actualCallerWidth n family = (0 : Real) := by simp [actualCallerWidth, cleanNotation_read_binder_width_ae4c245de7ee9c897a9b, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+
+
+noncomputable def actualCallerCarrier (U : cleanType_Type_c1fed1af64ab6f12e0ed) (family : (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 k U) : cleanType_Real_107b6641a486642ad8e1 := (@_root_.cleanNotation_inspect_binder_carrier_06141ddae8de65bbddd4 (U) (family) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedCallerCarrier (U : cleanType_Type_c1fed1af64ab6f12e0ed) (family : (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 k U) : cleanType_Real_107b6641a486642ad8e1 := @cleanNotation_inspect_binder_carrier_06141ddae8de65bbddd4 U family (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualCallerCarrier expectedCallerCarrier
+theorem meaningCallerCarrier (U : cleanType_Type_c1fed1af64ab6f12e0ed) (family : (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 k U) : actualCallerCarrier U family = (0 : Real) := by simp [actualCallerCarrier, cleanNotation_inspect_binder_carrier_06141ddae8de65bbddd4, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
 
 
 def actualQuantifiedZero (n : cleanType_Natural_469c53b6dafb7a218246) : Prop := (∀ (clean_bound_0 : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (n) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))), (_root_.cleanDefine_unequal_37c577a540f8692ae5c3 (clean_bound_0) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n)))))

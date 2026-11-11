@@ -1667,5 +1667,15 @@ function type is checked after the additional constraints are solved. See the
 <a href="../studies/parameterized-literals/README.md#recovering-parameters-from-dependent-callable-arguments">row construction and limits</a>.
 This is not yet production inference.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="dependent-caller-evidence">
+<h2>Caller evidence from function types (experimental rows)</h2>
+<p>A caller value of type <code>Function(k: Natural,Matrix(k,n,Complex))</code>
+can supply an inferred outer width n and the checked expression used to emit that
+argument in Lean. The function's own k is excluded. Evidence is collected before
+candidate enumeration in a fixed traversal order, preserving prior witnesses.
+The analogous carrier case retains U from <code>Vector(k,U)</code>. See the
+<a href="../studies/parameterized-literals/README.md#caller-evidence-inside-dependent-function-types">reconstruction rule and scope limits</a>.
+Production joint inference remains pending.</p>
+</section></llm>
 </body>
 </html>

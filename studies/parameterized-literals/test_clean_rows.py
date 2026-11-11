@@ -1263,6 +1263,39 @@ class CleanRows(unittest.TestCase):
   with self.assertRaises(Incomplete):
    Builder(self.e,self.scope).materialize(expression_tree(parse('read fixed width(family,0)','expression')),use_default=False)
 
+ def test_dependent_argument_recovers_caller_index_with_type_evidence(self):
+  notation('Notation read width(f,x):',
+   ['Let width: Natural','Let f: Function(k: Natural,Matrix(k,width,Complex))','Let x: Real','Returns: Real',
+    'Means: x','Render latex: read({f},{x})'],self.e)
+  self.scope['family']=Expr('family','family',self.e.type('Function(k: Natural,Matrix(k,n,Complex))',self.scope),tree=['Local','family'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('read width(family,0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Real'))
+  self.assertEqual(dict(value.inferred_args)['width'],self.e.type('Vector(n,Complex)',self.scope).args[0])
+ def test_dependent_argument_supplies_only_carrier_witness(self):
+  notation('Notation inspect family(f,x):',
+   ['Let T: Type','Let f: Function(k: Natural,Vector(k,T))','Let x: Real','Returns: Real',
+    'Means: x','Render latex: inspect({f},{x})'],self.e)
+  self.scope['U']=Expr('U','U',self.e.type('Type'),tree=['Local','U'])
+  self.scope['family']=Expr('family','family',self.e.type('Function(k: Natural,Vector(k,U))',self.scope),tree=['Local','family'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('inspect family(family,0)','expression')),use_default=False)
+  self.assertEqual(dict(value.inferred_args)['T'],self.e.type('U',self.scope))
+
+ def test_dependent_type_witnesses_follow_caller_visit_order(self):
+  from cleanlang.dependent_functions import index_tree
+  self.scope['alias']=Expr('alias','alias',self.e.type('Natural'),tree=['Local','alias'],local_normal=self.scope['n'],local_expand=True)
+  alias_type=self.e.type('Function(k: Natural,Matrix(k,alias,Complex))',self.scope)
+  plain_type=self.e.type('Function(k: Natural,Matrix(k,n,Complex))',self.scope)
+  index=self.e.type('Vector(n,Complex)',self.scope).args[0]
+  for first,second,name in [(alias_type,plain_type,'alias'),(plain_type,alias_type,'n')]:
+   builder=Builder(self.e,self.scope);builder.typ(first);builder.typ(second)
+   self.assertEqual(index_tree(builder.rigid[builder.typ(index,{})]),['Local',name])
+ def test_dependent_type_witnesses_exclude_opened_binder(self):
+  from cleanlang.annotations import references
+  typ=self.e.type('Function(k: Natural,Matrix(k,n,Complex))',self.scope)
+  builder=Builder(self.e,self.scope);builder.typ(typ)
+  for value in builder.rigid.values():
+   self.assertTrue(references(value,self.scope).issubset(self.scope))
+
 if __name__=='__main__':unittest.main()
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

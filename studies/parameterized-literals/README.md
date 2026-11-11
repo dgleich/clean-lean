@@ -2204,3 +2204,44 @@ Validation: 361 experimental Python tests, 91 exact native-target comparisons an
 the selected complex numeral with defaults disabled. Production full discovery and
 active-label regeneration were confirmed live separately; neither is counted here.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Caller evidence inside dependent function types
+
+The experimental row prepass now collects checked outer parameter representatives
+from caller-owned dependent types. A function of type
+`Function(k: Natural,Matrix(k,n,Complex))` can supply both the constraint width=n
+and the retained caller expression n needed to emit an inferred width argument.
+Likewise a function returning `Vector(k,U)` supplies a caller type parameter U even
+when no other argument uses U. This extends the preceding row integration beyond
+parameters already represented elsewhere in the expression.
+
+Collection runs only in the caller-capture form of `Builder.typ`, before candidate
+enumeration. It visits dependent domains before bodies and nominal type arguments
+in declaration order. A dependent body is opened with a fresh checked local; the
+set of these traversal-local names is tracked separately from caller binder scopes.
+An index or local carrier mentioning an opened local supplies no outer witness.
+Closed ValueIndices are re-elaborated in the original caller scope and converted
+with the existing checked index operation. LocalType representatives must still
+match their caller binding. Other carrier constructors supply no additional
+representatives; their absence is not a claim of successful general reconstruction.
+
+Discovered representatives are staged until traversal succeeds, then inserted with
+first-witness priority. Existing witnesses retain priority. Candidate declarations
+cannot invoke this capture path through structural argument matching: their atom
+conversion still uses `typ(...,{})`. Witness scope checks continue to apply during
+reconstruction, including memoized lookups. A computed expression involving both an
+opened local and a caller local is not split to invent a representative here.
+
+Two complete-call native oracles check an inferred caller dimension and an inferred
+caller carrier, each known only through the function argument's type. Additional
+Python checks compare alias-first versus plain-name-first collection and ensure
+that no traversal-local reference becomes caller evidence. This does not add
+contextual metavariables or inferred function-producing argument support, and
+production joint inference remains pending.
+
+Validation: 365 experimental Python tests, 93 exact native-target comparisons and
+93 supporting proofs pass. These checks cover the experimental caller-evidence path;
+they are not a completed production conformance run.
+:::

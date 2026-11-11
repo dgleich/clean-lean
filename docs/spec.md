@@ -2238,3 +2238,16 @@ remains subject to the existing forward checked obligation. See the
 This extends the row experiment; production integration, inferred callable arguments
 and embedded lambda inference remain pending. No source grammar changes.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental dependent caller-type evidence
+
+Caller evidence collection visits supported dependent domains/bodies and nominal
+arguments in fixed type order before candidate enumeration. It stages checked outer
+indices/carriers and excludes freshly opened inner references, preserving existing
+first-witness priority and scope checks. Candidate matching cannot register these
+representatives. See the
+[construction and limits](../studies/parameterized-literals/README.md#caller-evidence-inside-dependent-function-types).
+This extends experimental row reconstruction, not the production language or grammar.
+:::

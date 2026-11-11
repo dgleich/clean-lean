@@ -4075,6 +4075,22 @@
         "Embedded lambda inference",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_dependent_caller_type_evidence",
+      "status": "experimental-slice",
+      "source": "Function(k: Natural,Matrix(k,n,Complex)) supplies outer n; Vector(k,U) supplies U",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Collect caller-owned representatives before candidates in fixed type order; exclude opened locals and preserve first-witness priority; two independent whole-call native targets",
+      "pending": [
+        "Mixed bound/caller computed subexpression evidence",
+        "Inferred function-producing arguments",
+        "Contextual metavariables",
+        "Production integration"
+      ]
     }
   ]
 }

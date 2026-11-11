@@ -125,6 +125,38 @@ class Builder:
         self.rigid.setdefault(atom,index)
         return atom
 
+    def capture_dependent_parameters(self,typ):
+        """Collect caller-owned representatives in type order, before candidates."""
+        from cleanlang.dependent_functions import DependentFunctionType,fresh_source,fresh_bound,substitute
+        from cleanlang.annotations import references
+        from cleanlang.inferred_conversion import reify
+        from cleanlang.core import Expr,texid
+        pending=[(typ,self.scope,frozenset())];staged={};visits=0
+        while pending:
+            current,scope,opened=pending.pop();visits+=1
+            if visits>self.limit:raise Incomplete('Dependent parameter evidence traversal limit exceeded')
+            if isinstance(current,DependentFunctionType):
+                name=fresh_source(current.binder,self.env,scope,{})
+                local=Expr(fresh_bound(self.env,scope),texid(name),current.domain,tree=['Local',name])
+                inner={**scope,name:local}
+                body=substitute(current.codomain,{current.binder:local},self.env,inner)
+                pending.extend(((body,inner,opened|{name}),(current.domain,scope,opened)))
+            elif isinstance(current,(ValueIndex,LocalType)):
+                if references(current,scope).intersection(opened):continue
+                if isinstance(current,ValueIndex):
+                    checked=reify(current,self.env,self.scope)
+                    term,value=self.index(checked)
+                else:
+                    local=self.scope.get(current.name)
+                    if local is None or local.lean!=current.lean:
+                        raise Incomplete('Dependent type parameter lacks a checked caller representative')
+                    term,value=self.typ(current,{}),current
+                staged.setdefault(term,value)
+            elif type(current) is Type:
+                pending.extend((a,scope,opened) for a in reversed(current.args))
+            # Other carrier constructors supply no new representatives here.
+        for term,value in staged.items():self.rigid.setdefault(term,value)
+
     def typ(self,typ,formals=None):
         capture=formals is None
         formals={} if formals is None else formals
@@ -134,7 +166,9 @@ class Builder:
             if any(occurs(typ,name) for name in formals):
                 raise Incomplete('Symbolic dependent function template requires binder constraints')
             atom=Atom(repr(('dependent function',type_key(typ))),'type',self.dependencies(typ))
-            if capture:self.rigid.setdefault(atom,typ)
+            if capture:
+                self.rigid.setdefault(atom,typ)
+                self.capture_dependent_parameters(typ)
             return atom
         if isinstance(typ,LocalType):
             if typ.name in formals:return formals[typ.name]
