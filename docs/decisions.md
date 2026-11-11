@@ -2466,3 +2466,17 @@ See the [API contract and validation](../studies/parameterized-literals/README.m
 Default routing still requires compatibility validation and outstanding inference
 coverage; packaging alone is not conformance evidence.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Structural refutation before joint row products
+
+The packaged joint solver may discard a completed child fragment only when its
+structural equation conjunction is refuted (`NoSolution`). Adding parent equations
+cannot make that conjunction satisfiable. Undecided conversion (`Incomplete`)
+retains the fragment; pruning performs no defaults, callback evaluation or selection
+and uses no parent expected result. This prevents already-impossible child choices
+from inflating later Cartesian products. Surviving rows receive the unchanged full
+analysis. See the [rule, corpus comparison and topology gaps](../studies/parameterized-literals/README.md#document-compatibility-and-structural-contradiction-pruning).
+No syntax change; default production routing remains unchanged.
+:::

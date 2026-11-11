@@ -41,6 +41,14 @@ class JointCompletion(unittest.TestCase):
   complete(expression_tree(parse('0','expression')),self.env,self.scope,self.env.type('Real'))
   self.assertEqual(self.scope,before)
 
+ def test_analysis_identity_does_not_expand_impossible_child_rows(self):
+  load_module(ROOT/'library/analysis.clean',self.env)
+  self.scope['x']=Expr('x','x',self.env.type('Real'),tree=['Local','x'])
+  tree=expression_tree(parse('sin(x)^2 + cos(x)^2 = 1','expression'))
+  value=complete(tree,self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.env.type('Proposition'))
+  self.assertEqual(Expressions(self.env,self.scope).elaborate(value.tree).lean,value.lean)
+
 if __name__=='__main__':unittest.main()
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

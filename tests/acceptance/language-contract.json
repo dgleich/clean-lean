@@ -4383,6 +4383,23 @@
         "General contextual and value-dependent inference coverage",
         "Bundled standard-library distribution"
       ]
+    },
+    {
+      "id": "joint_structural_child_refutation",
+      "status": "explicit-api-not-default",
+      "environment": "Declared analysis operators, scalar numeral interpretations and explicit Real x.",
+      "source": "sin(x)^2 + cos(x)^2 = 1",
+      "expected_lean": "Declared real sine/cosine, natural powers and real sum/equality; child contradictions are removed without defaults or parent result-based overload selection.",
+      "checks": [
+        "tests/test_joint_completion.py: no-default trigonometric regression",
+        "tools/check_joint_compatibility.py: isolated corpus and topology comparison; optional 92 corpus proofs",
+        "studies/parameterized-literals: solver ambiguity/incomplete regression suite"
+      ],
+      "pending": [
+        "Higher-universe topology carrier encoding",
+        "Default production routing",
+        "Full conformance beyond the compatibility inputs"
+      ]
     }
   ]
 }

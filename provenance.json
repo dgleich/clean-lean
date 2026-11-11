@@ -8820,6 +8820,18 @@
         "# ",
         ""
       ]
+    },
+    "tools/check_joint_compatibility.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/parameterized-literals/compatibility.json": {
+      "origin": "llm-assisted",
+      "mode": "sidecar"
     }
   }
 }

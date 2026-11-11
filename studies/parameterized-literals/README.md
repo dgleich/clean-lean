@@ -2913,3 +2913,65 @@ Provenance and reference HTML IDs/local links pass. The old production validatio
 snapshot processes remain confirmed live; their results are still pending.
 
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Document compatibility and structural contradiction pruning
+
+`tools/check_joint_compatibility.py` loads each input in two isolated subprocesses:
+one uses legacy numeral completion, the other routes every hole-bearing expression
+to the packaged joint API. Hole-free expressions retain the ordinary checked
+elaborator. A failed joint load is recorded, never retried with legacy completion.
+Reports distinguish incomplete analysis, no solution, ambiguity, underdetermination,
+other errors and worker failures. Generated-source hashes are diagnostic comparisons,
+not independently authored canonical-target oracles. A zero-hole document offers
+no evidence about numeral inference even if its output agrees.
+
+The first corpus run found a row-limit failure on `sin(x)^2 + cos(x)^2 = 1`.
+Callable child fragments included already-contradictory scalar combinations, so
+the parent Cartesian product exceeded the budget before checking those equations.
+The solver now unifies each completed callable fragment's structural equations
+before returning it to its parent. It drops only `NoSolution` fragments; success
+or `Incomplete` retains the fragment unchanged for the enclosing solve. It does
+not evaluate deferred callbacks, select a carrier, apply a default or use an
+expected parent result during pruning.
+
+This preserves the accepted interpretations: the parent adds constraints to a
+child's conjunction, and adding constraints cannot satisfy an already-refuted
+conjunction. Scope, occurs and rigid-constructor contradictions are refutations;
+unavailable computed-index conversion is not. Surviving candidates still undergo
+the full solver, operator ambiguity audit, simultaneous defaults and retained
+reconstruction. Existing Cartesian and solver limits remain enforced.
+
+After the fix, all four curated corpus documents (92 results) produce identical
+Lean source under isolated legacy and joint routing. This includes 19 hole-bearing
+completion calls; the graph-theory document has none. All 92 generated corpus
+proofs also pass under joint routing. The dedicated API regression checks the
+trigonometric expression without defaults, and all 462 solver tests plus five API
+tests pass.
+
+Topology compatibility remains incomplete. `CompactImage.clean` agrees, while
+`ExactSequences.clean`, `HomologySequence.clean` and `MayerVietorisMaps.clean` stop
+at higher-universe carrier encoding, first encountered in `object(n+1)`. These are
+solver coverage gaps, not missing topology theorems or syntax ambiguities. Default
+production routing therefore remains unchanged.
+
+Reproduce:
+
+```sh
+LAKE=lake python3 tools/check_joint_compatibility.py --verify-corpus --output /tmp/joint-corpus.json
+python3 tools/check_joint_compatibility.py studies/topology/CompactImage.clean studies/topology/ExactSequences.clean studies/topology/HomologySequence.clean studies/topology/MayerVietorisMaps.clean --output /tmp/joint-topology.json
+```
+
+The second command intentionally exits nonzero for incomplete compatibility.
+`--verify-corpus` regenerates the tracked corpus proof fixture and checks it with
+the pinned Lean environment. Completed per-document observations are saved as the
+run proceeds; an unfinished report is not proof that remaining inputs pass.
+The [recorded report](compatibility.json) retains the initial failure, successful
+corpus comparison/proof check, and the topology incomplete-analysis observations.
+
+The existing 97 canonical target comparisons and 97 supporting proofs also pass
+after pruning. These supplement the 92 corpus proofs; they do not validate the
+currently incomplete higher-universe topology cases.
+
+:::

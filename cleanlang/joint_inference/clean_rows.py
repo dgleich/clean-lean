@@ -641,7 +641,16 @@ class Builder:
                     tuple(t for a in actuals for t in a.arguments)+implicit,equations,
                     deferred,witnesses,syntax,origins,fields,record_arguments,plans,
                     self.callable_head(signature.result,variables,evidence,result)))
-        return rows
+        # A child's contradictory equations cannot become satisfiable in a
+        # larger conjunction. Keep undecided checks for the enclosing solve;
+        # this is neither candidate selection nor a defaulting pass.
+        viable=[]
+        for row in rows:
+            try:unify(row.equations,limit=self.limit)
+            except NoSolution:continue
+            except Incomplete:pass
+            viable.append(row)
+        return viable
 
     def rows(self,tree,expected=None):
         # Caller representatives are collected in source order before any
