@@ -8968,6 +8968,22 @@
     "studies/topology/cover-homology.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "tools/check_joint_proof_targets.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/parameterized-literals/ProofTargets.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

@@ -4510,6 +4510,22 @@
         "Geometric cover sequence/excision, connecting map identification and exactness",
         "Zero composition alone does not establish a Mayer–Vietoris theorem"
       ]
+    },
+    {
+      "id": "joint_checked_proof_carriers",
+      "status": "explicit-api-not-default",
+      "environment": "Explicit evidence module, checked scope and proof-producing/consuming declarations; no implicit proof search.",
+      "source": "keep evidence(n,h,0); self equality(n+1); for every(k: Natural,keep evidence(k,self equality(k),0)=k)",
+      "expected_lean": "Explicit declaration calls retaining h or the supplied reflexivity proof, Real zero and Natural one; proof result is the checked equality condition after forward substitution.",
+      "checks": [
+        "tests/test_joint_completion.py: six evidence/scope/negative cases",
+        "tools/check_joint_proof_targets.py: three independent canonical targets and three interpretation proofs"
+      ],
+      "pending": [
+        "General callable proof discovery and contextual inference",
+        "Implicit scoped consumers in active-label study",
+        "Default production routing"
+      ]
     }
   ]
 }

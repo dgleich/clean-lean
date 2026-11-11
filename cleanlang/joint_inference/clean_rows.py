@@ -7,7 +7,7 @@ Incomplete; they are never discarded as mismatches.
 """
 from dataclasses import dataclass
 from itertools import product
-from cleanlang.core import Type,LocalType,ValueIndex,Expressions,CleanError
+from cleanlang.core import Type,LocalType,ProofType,ValueIndex,Expressions,CleanError
 from cleanlang.callable_signatures import require
 from cleanlang.numeral_inference import holes,default_carrier
 from cleanlang.numerals import digits,identity
@@ -80,6 +80,7 @@ class Builder:
                 except (CleanError,RecursionError) as error:
                     raise Incomplete('Dependent binder dependency checking unavailable: '+str(error)) from error
                 pending.append(current.domain)
+            elif isinstance(current,ProofType):pending.extend(current.args)
             elif type(current) is Type:pending.extend(current.args)
             elif isinstance(current,Type):
                 raise Incomplete('Binder dependencies of this type constructor remain unsupported')
@@ -153,7 +154,7 @@ class Builder:
                         raise Incomplete('Dependent type parameter lacks a checked caller representative')
                     term,value=self.typ(current,{}),current
                 staged.setdefault(term,value)
-            elif type(current) is Type:
+            elif type(current) is Type or isinstance(current,ProofType):
                 pending.extend((a,scope,opened) for a in reversed(current.args))
             # Other carrier constructors supply no new representatives here.
         for term,value in staged.items():self.rigid.setdefault(term,value)
@@ -162,6 +163,14 @@ class Builder:
         capture=formals is None
         formals={} if formals is None else formals
         from cleanlang.dependent_functions import DependentFunctionType,type_key,occurs
+        if isinstance(typ,ProofType):
+            if any(occurs(typ,name) for name in formals):
+                raise Incomplete('Symbolic proof type requires forward substitution')
+            atom=Atom(repr(('proof type',typ.args[0].comparison_key())),'type',self.dependencies(typ))
+            if capture:
+                self.rigid.setdefault(atom,typ)
+                self.capture_dependent_parameters(typ)
+            return atom
         if isinstance(typ,DependentFunctionType):
             if self.env.sort_level(typ)!=1:raise Incomplete('Higher dependent function carrier')
             if any(occurs(typ,name) for name in formals):
@@ -201,7 +210,7 @@ class Builder:
         Evidence is row-local and rechecked, including before retained emission.
         """
         from cleanlang.dependent_functions import occurs,DependentFunctionType
-        if isinstance(typ,DependentFunctionType):
+        if isinstance(typ,(DependentFunctionType,ProofType)):
             names=tuple(n for n in formals if occurs(typ,n))
             if names:
                 from .candidate_values import TypePlan

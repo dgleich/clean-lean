@@ -2564,3 +2564,27 @@ infer a family from a sampled result or add contextual value recovery. Recheck
 the retained head type and final application type before emission. No syntax,
 parse-tree, implicit-coercion or production-routing changes are introduced.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Checked proof types in joint constraints
+
+Encode a checked `ProofType` as a rigid symbolic type atom tagged `proof type`,
+keyed by the condition's existing checked comparison key and lexical dependencies.
+The symbolic category does not assert Lean Type 0: the retained type remains the
+condition in Sort 0. Preserve its checked source representative and traverse its
+condition index for caller-owned parameter evidence and binder-scope validation.
+
+When a proof-type template mentions formal parameters, use the existing row-local
+forward `TypePlan`: recover determined arguments, substitute through the captured
+proof condition, and encode/check the resulting type. Never solve an arbitrary
+condition for its parameters, fabricate evidence, or use logical equivalence as
+conversion. Keep explicit proof arguments and proof-producing declaration identities
+in the retained expression. Reject mismatched checked proof types through the
+ordinary constraint rules; unresolved checking remains incomplete.
+
+Callable proof discovery, contextual proof inference, and inferred Type-0 carrier
+arguments supplied by proof values remain separate boundaries. This rule changes
+only explicit joint inference; no grammar or default routing change is made.
+:::

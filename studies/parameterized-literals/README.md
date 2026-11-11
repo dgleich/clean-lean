@@ -3256,3 +3256,58 @@ scoped native driver passes 22 independent canonical targets and 22 interpretati
 proofs. HTML IDs/local paths and provenance checks pass. These bounded checks do
 not establish general contextual inference or completion of the topology papers.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Checked proof carriers and forward substitution
+
+Joint inference can now pass already checked `Evidence(...)` arguments through
+literal-bearing calls and determine proof result types by forward substitution.
+For example, with explicitly declared `self equality(n)` proving `n=n` and
+`keep evidence(n,h,z)` returning n for a supplied proof h and Real z:
+
+```clean
+keep evidence(n,h,0)
+self equality(n+1)
+for every(k: Natural,keep evidence(k,self equality(k),0)=k)
+```
+
+The zero is Real, the one Natural, and the proof result in the second example is
+evidence of `(n+1)=(n+1)`. No proof is searched for or silently inserted. The
+checked condition's comparison key and lexical dependencies identify its proof
+type; the retained target preserves explicit proof terms and declarations. A
+proof depending on a binder cannot be reused outside its permitted scope.
+
+Six API cases cover explicit evidence, forward proof-result substitution,
+incompatible proof types, lexical scope, quantified use, and rejection of a
+proof value as an inferred ordinary Type-0 carrier. The new native driver
+`tools/check_joint_proof_targets.py` compares three independently authored exact
+targets and proves their interpretations. This extends carrier encoding, not
+callable proof discovery or general contextual inference.
+
+An isolated active-label run at `dceffc1` failed in `subpaths.clean:49` with an
+unsupported ProofType. With this change, a separate source snapshot passed that
+point and failed later at `interval_clipping.clean:32`: scoped consumers with
+implicit parameters still need joint signature recovery. Neither run is a full
+active-label pass. The snapshots and error boundaries are recorded in
+[compatibility.json](compatibility.json). Older legacy validation processes are
+preserved; their elapsed time is not passing evidence.
+:::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Validation: 462 solver tests, 40 joint API/adapter/checker tests, the 115-case
+runtime suite, three new canonical evidence targets and three interpretation
+proofs pass. The four corpus documents still generate identical text with stable
+source fingerprints, and all 92 corpus proofs pass under joint routing.
+
+Subpath translation now completes and its generated declarations pass Lean. Its
+six statements generate identical text under legacy and joint routing in the
+patched snapshot. However, the standalone subpath verifier fails on missing actual
+target names, canonical body mismatches and two unsolved proof scripts. The earlier
+nineteen-target/six-proof milestone is not a current pass; repairing and rerunning
+that independent verifier remains an acceptance obligation. These failures do not
+justify changing expected targets to whatever the compiler happens to emit.
+:::

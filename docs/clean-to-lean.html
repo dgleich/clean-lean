@@ -1799,5 +1799,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p><code>cover ambient map(field,H,X,C)</code> maps the product of the homology modules of <code>C.left.carrier</code> and <code>C.right.carrier</code> into the homology of <code>X</code>. Its Clean definition applies the declared merge operation to two actual inclusion-induced homology maps. The subtype inclusion imports <code>continuous_subtype_val</code>; there is no implicit identification of <code>X</code> with its full-set subtype.</p>
 <p>The <a href="../studies/topology/cover-homology.md">native target and proof checks</a> retain the local module names as Lean <code>let</code> expressions. The signed intersection map followed by the ambient map is proved zero. This establishes composition, not exactness; the geometric Mayer–Vietoris construction remains pending.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="joint-proof-carriers">
+<h2>Explicit evidence in joint inference</h2>
+<p>A checked <code>Evidence(condition)</code> keeps the condition itself as its Lean type. Joint constraints now retain its checked comparison identity and lexical dependencies, and forward-substitute determined arguments into dependent evidence types. Explicit proof arguments and proof-producing declarations remain in the target; no proof search is performed.</p>
+<p>For a declared reflexivity function, <code>self equality(n+1)</code> has evidence type <code>(n+1)=(n+1)</code>. Supplying it to a declared consumer is supported, including under a quantified binder. Callable proof discovery and scoped consumers with implicit parameters remain incomplete; production routing is unchanged. See the <a href="../studies/parameterized-literals/README.md#checked-proof-carriers-and-forward-substitution">rule, native targets and active-label probe</a>.</p>
+</section></llm>
 </body>
 </html>

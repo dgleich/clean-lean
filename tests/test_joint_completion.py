@@ -163,6 +163,52 @@ class JointCompletion(unittest.TestCase):
   tree=expression_tree(parse('(function(k: Natural,indexed zero(k,0)))(n)','expression'))
   with self.assertRaises(NoSolution):complete(tree,self.env,self.scope,self.env.type('Real'),use_default=False)
 
+
+ def test_checked_evidence_argument_with_joint_literal(self):
+  load_module(ROOT/'library/logic/evidence.clean',self.env)
+  typ=self.env.type('Evidence((n=n))',self.scope)
+  self.scope['h']=Expr('h','h',typ,tree=['Local','h'])
+  notation('Notation keep evidence(n: Natural,h: Evidence((n=n)),z: Real): Natural:', ['Means: n','Render latex: k({n},{h},{z})'],self.env)
+  value=complete(expression_tree(parse('keep evidence(n,h,0)','expression')),self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.env.type('Natural'))
+  self.assertEqual(value.tree[2][2][2],'Real')
+
+ def test_dependent_evidence_result_uses_forward_substitution(self):
+  load_module(ROOT/'library/logic/evidence.clean',self.env)
+  notation('Notation self equality(n: Natural): Evidence((n=n)):', ['Means: rfl','Render latex: e({n})'],self.env)
+  value=complete(expression_tree(parse('self equality(n+1)','expression')),self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.env.type('Evidence(((n+1)=(n+1)))',self.scope))
+  self.assertEqual(Expressions(self.env,self.scope).elaborate(value.tree).lean,value.lean)
+
+ def test_proof_type_mismatch_is_not_proof_search(self):
+  load_module(ROOT/'library/logic/evidence.clean',self.env)
+  notation('Notation self equality(n: Natural): Evidence((n=n)):', ['Means: rfl','Render latex: e({n})'],self.env)
+  with self.assertRaises(NoSolution):
+   complete(expression_tree(parse('self equality(n+1)','expression')),self.env,self.scope,self.env.type('Evidence((n!=n))',self.scope),use_default=False)
+
+ def test_proof_carrier_retains_lexical_dependency(self):
+  load_module(ROOT/'library/logic/evidence.clean',self.env)
+  from cleanlang.joint_inference.clean_rows import Builder
+  owner=('binder',(7,))
+  builder=Builder(self.env,self.scope,binder_ids={'n':owner})
+  typ=self.env.type('Evidence((n=n))',self.scope)
+  self.assertEqual(builder.dependencies(typ,normalize=False),frozenset({owner}))
+  self.assertFalse(builder.witness_available(typ,frozenset()))
+
+ def test_proof_carrier_under_quantified_binder(self):
+  load_module(ROOT/'library/logic/evidence.clean',self.env)
+  notation('Notation self equality(n: Natural): Evidence((n=n)):', ['Means: rfl','Render latex: e({n})'],self.env)
+  notation('Notation keep evidence(n: Natural,h: Evidence((n=n)),z: Real): Natural:', ['Means: n','Render latex: k({n},{h},{z})'],self.env)
+  value=complete(expression_tree(parse('for every(k: Natural,keep evidence(k,self equality(k),0)=k)','expression')),self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.env.type('Proposition'))
+
+ def test_evidence_is_not_silently_an_inferred_type_zero_carrier(self):
+  load_module(ROOT/'library/logic/evidence.clean',self.env)
+  self.scope['h']=Expr('h','h',self.env.type('Evidence((n=n))',self.scope),tree=['Local','h'])
+  notation('Notation value consumer(x,z):', ['Let T: Type','Let x: T','Let z: Real','Returns: Real','Means: z','Render latex: c({x},{z})'],self.env)
+  with self.assertRaises(Incomplete):
+   complete(expression_tree(parse('value consumer(h,0)','expression')),self.env,self.scope,use_default=False)
+
 if __name__=='__main__':unittest.main()
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

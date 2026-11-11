@@ -234,3 +234,27 @@ zero composite is proved by functoriality and cancellation, which does not requi
 openness or coverage. The geometric exactness and connecting-map obligations above
 remain open. No language syntax or inference default changes are made.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Active-label joint-routing probe
+
+A frozen `dceffc1` joint-routing run stopped on a checked evidence argument in
+`subpaths.clean`. Joint proof-carrier encoding and forward proof-type substitution
+now get past that failure. A separate patched snapshot next stops in interval
+clipping on a scoped consumer with implicit parameters. Full active-label
+regeneration under joint inference therefore remains incomplete. This is a concrete
+inference integration gap, separate from the native-checked historical snapshot
+and from the mathematical basis-extension theorem.
+:::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The patched joint snapshot also translates the six subpath statements; its generated
+declarations pass Lean and match legacy routing text. The standalone subpath
+canonical/proof verifier fails on unresolved target names, body comparisons and two
+proof goals. Its older nineteen-target/six-proof pass is historical evidence, not a
+current gate. Independent oracle/proof migration and revalidation remain required.
+:::
