@@ -1756,5 +1756,9 @@ disposable metadata cannot authorize reuse across calls. See the
 <h2>Local scoped applications (experimental)</h2>
 <p>A local <code>h: Function(Function(Real,Real),Real)</code> can consume <code>h(function (a: Real,0))</code>. Its Lean interpretation applies the local <code>h</code> to a typed lambda carrying the selected Real zero. Curried dependent heads use <code>h(n)(function (a: Real,0))</code>; local application is unary. Heads requiring joint inference remain incomplete, and production integration is pending. See the <a href="../studies/parameterized-literals/README.md#local-scoped-consumers-and-explicit-application-experimental">precise boundary and native oracles</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="joint-scoped-heads">
+<h2>Function-producing heads (experimental)</h2>
+<p><code>h(function (a: Real,0))(0)</code> now selects the lambda body and final argument together when the checked type of <code>h</code> determines the intermediate function type. Its Lean interpretation is the curried application <code>h (fun a =&gt; realZero) complexZero</code> for the documented fixture. A module factory works the same way. This extends the earlier hole-free-head boundary; types depending on unresolved actual arguments remain incomplete. See the <a href="../studies/parameterized-literals/README.md#joint-preparation-of-function-producing-heads-experimental">rule and independent targets</a>. Production inference is unchanged.</p>
+</section></llm>
 </body>
 </html>

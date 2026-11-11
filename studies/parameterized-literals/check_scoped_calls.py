@@ -57,6 +57,12 @@ theorem scopedCallMeaning{i} (n m : {t('Natural')}) : actualScopedCall{i} n m = 
   simp [actualScopedCall{i}, {f(name)}, {f('inner')}, {num(result)}]
 ''')
 local_cases=[
+ ('Function(Function(Real,Real),Function(Complex,Real))',
+  f'({t("Real")} → {t("Real")}) → {t("Complex")} → {t("Real")}',
+  'h(function (a: Real,0))(0)',f'h (fun (a : {t("Real")}) => {zr}) ({zc})'),
+ ('Function(Complex,Function(Function(Real,Real),Real))',
+  f'{t("Complex")} → ({t("Real")} → {t("Real")}) → {t("Real")}',
+  'h(0)(function (a: Real,0))',f'h ({zc}) (fun (a : {t("Real")}) => {zr})'),
  ('Function(Function(Real,Real),Real)',f'({t("Real")} → {t("Real")}) → {t("Real")}',
   'h(function (a: Real,0))',f'h (fun (a : {t("Real")}) => {zr})'),
  ('Function(k: Natural,Function(Function(Real,Vector(k,Complex)),Real))',
@@ -74,8 +80,17 @@ noncomputable def expectedLocalScoped{i} (n : {t('Natural')}) (h : {native}) : {
 same_basic_target actualLocalScoped{i} expectedLocalScoped{i}
 theorem localScopedMeaning{i} (n : {t('Natural')}) (h : {native}) : actualLocalScoped{i} n h = {expected} := by rfl
 """)
+notation('Notation factory(f: Function(Real,Real)): Function(Complex,Real):',
+ ['Means: fun _ => f 0','Render latex: factory({f})'],env)
+factory=Builder(env,scope).materialize(expression_tree(parse('factory(function (a: Real,0))(0)','expression')),use_default=False)
+checks.append(f"""
+noncomputable def actualFactory : {t('Real')} := {factory.lean}
+noncomputable def expectedFactory : {t('Real')} := {f('factory')} (fun (a : {t('Real')}) => {zr}) ({zc})
+same_basic_target actualFactory expectedFactory
+theorem factoryMeaning : actualFactory = 0 := by simp [actualFactory, {f('factory')}, {num('Real')}]
+""")
 path=HERE/'ScopedCallTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Fourteen automatic scoped-call targets and fourteen interpretation proofs passed; implicit/contextually unresolved consumers and production integration remain pending.')
+print('Seventeen automatic scoped-call targets and seventeen interpretation proofs passed; implicit/contextually unresolved consumers and production integration remain pending.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

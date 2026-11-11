@@ -13,15 +13,22 @@ from scoped_bodies import ScopedBody
 from clean_rows import Builder
 
 
-def prepare_call(builder,tree,expected=None):
+def prepare_typed_call(builder,tree,expected=None):
+    if builder.limit<=1:raise Incomplete('Scoped expression resource limit exceeded')
     env=builder.env;scope=builder.scope;name=tree[1] if tree[0]=='Call' else None
-    inputs=[]
+    inputs=[];head_part=None
     if tree[0]=='Apply' or name in scope:
         if len(tree[2])!=1:raise NoSolution('Local scoped application requires exactly one argument')
         head_tree=tree[1] if tree[0]=='Apply' else ['Local',name]
-        if holes(head_tree):raise Incomplete('Scoped application head needs joint result recovery')
-        head=builder.check_candidate(head_tree)
-        current=head.type
+        if holes(head_tree):
+            if head_tree[0] not in ('Call','Apply'):
+                raise Incomplete('Scoped application head needs contextual type recovery')
+            child=Builder(env,scope,builder.limit-1,binder_ids=builder.binder_ids,
+                          binder_path=builder.binder_path,row_namespace=builder.row_namespace+(1,))
+            head_rows,head_retain,head_type=prepare_typed_call(child,head_tree)
+            head_part=(head_rows,head_retain)
+        else:head_type=builder.check_candidate(head_tree).type
+        current=head_type
         for source in tree[2]:
             if not env.is_function_type(current):
                 from cleanlang.proof_types import callable_view
@@ -37,7 +44,7 @@ def prepare_call(builder,tree,expected=None):
             else:current=current.args[1]
         result_type=current
         def revalidate():
-            if builder.check_candidate(head_tree).type!=head.type:
+            if head_part is None and builder.check_candidate(head_tree).type!=head_type:
                 raise Incomplete('Local scoped consumer type changed during reconstruction')
     else:
         spec=env.data['functions'].get(name)
@@ -57,7 +64,7 @@ def prepare_call(builder,tree,expected=None):
             raise Incomplete('Scoped result depends on an unresolved selected value')
         result_type=substitute(signature.result,known,env,scope)
         revalidate=lambda:builder.signature(spec)
-    parts=[]
+    parts=[] if head_part is None else [head_part]
     for i,(typ,source) in enumerate(inputs):
         path=builder.row_namespace+(2,i)
         child=Builder(env,scope,builder.limit-1,binder_ids=builder.binder_ids,
@@ -87,11 +94,21 @@ def prepare_call(builder,tree,expected=None):
             arguments.append(retain(trace))
             argument_offset+=width;carrier_offset+=count
         revalidate() # Recheck the local head or module declaration before emission.
-        value=builder.check_candidate([tree[0],tree[1],[arg.tree for arg in arguments]])
+        retained_head=tree[1]
+        if head_part is not None:
+            retained=arguments.pop(0)
+            if retained.type!=head_type:raise Incomplete('Retained application head type mismatch')
+            retained_head=retained.tree
+        value=builder.check_candidate([tree[0],retained_head,[arg.tree for arg in arguments]])
         if builder.typ(value.type,{})!=result_term:
             raise Incomplete('Reconstructed scoped consumer result differs from the selected type')
         return value
-    return tuple(c.row for c in candidates),retain
+    return tuple(c.row for c in candidates),retain,result_type
+
+
+def prepare_call(builder,tree,expected=None):
+    rows,retain,_=prepare_typed_call(builder,tree,expected)
+    return rows,retain
 
 
 def contains_scoped_holes(tree):

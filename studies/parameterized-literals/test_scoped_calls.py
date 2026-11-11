@@ -136,6 +136,34 @@ class ScopedCalls(unittest.TestCase):
   value=self.solve('h(function (a: Real,0))')
   self.assertEqual(Expressions(self.env,self.scope).elaborate(loads(dumps(value.tree))).lean,value.lean)
 
+ def test_scoped_local_head_and_argument_are_joint(self):
+  self.local_consumer('Function(Function(Real,Real),Function(Complex,Real))')
+  with patch.object(Builder,'solve_with_trace',side_effect=AssertionError('inner selection')):
+   value=self.solve('h(function (a: Real,0))(0)',use_default=False)
+  self.assertEqual(value.tree[2][0][2],'Complex')
+  self.assertEqual(value.tree[1][2][0][3][2],'Real')
+ def test_scoped_module_head(self):
+  notation('Notation factory(f: Function(Real,Real)): Function(Complex,Real):',
+   ['Means: fun _ => f 0','Render latex: factory({f})'],self.env)
+  value=self.solve('factory(function (a: Real,0))(0)',use_default=False)
+  self.assertEqual(value.tree[2][0][2],'Complex')
+ def test_nonscoped_literal_head_with_scoped_argument(self):
+  self.local_consumer('Function(Complex,Function(Function(Real,Real),Real))')
+  value=self.solve('h(0)(function (a: Real,0))',use_default=False)
+  self.assertEqual(value.tree[1][2][0][2],'Complex')
+ def test_nested_head_round_trip(self):
+  self.local_consumer('Function(Function(Real,Real),Function(Complex,Real))')
+  value=self.solve('h(function (a: Real,0))(0)')
+  self.assertEqual(Expressions(self.env,self.scope).elaborate(loads(dumps(value.tree))).lean,value.lean)
+ def test_head_operator_ambiguity_blocks_outer_selection(self):
+  self.local_consumer('Function(Function(Real,Real),Function(Complex,Real))')
+  notation('Notation alternative(x: Real,y: Real): Complex:', ['Means: 0','Infix: +','Render latex: {x}+{y}'],self.env)
+  with self.assertRaises(Ambiguous):self.solve('h(function (a: Real,a+0))(0)')
+ def test_head_resource_limit(self):
+  self.local_consumer('Function(Function(Real,Real),Function(Complex,Real))')
+  tree=expression_tree(parse('h(function (a: Real,0))(0)','expression'))
+  with self.assertRaises(Incomplete):Builder(self.env,self.scope,limit=3).materialize(tree)
+
 if __name__=='__main__':unittest.main()
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

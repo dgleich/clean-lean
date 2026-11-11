@@ -2435,3 +2435,18 @@ result dependencies remain incomplete. Reconstruction rechecks the head type and
 whole application. See the [constructive rule and examples](../studies/parameterized-literals/README.md#local-scoped-consumers-and-explicit-application-experimental).
 No grammar change or production integration is claimed.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental joint application heads
+
+A scoped `Apply` may recursively prepare a literal-bearing `Call` or `Apply` head
+when checked explicit signatures determine its result type without selecting any
+arguments. Head rows and argument rows enter the same enclosing product and one
+outer selection. Reconstruction projects the trace into the head, checks its type
+and rechecks the whole application. Source paths distinguish heads from arguments;
+recursion decreases the budget. The [constructive rule](../studies/parameterized-literals/README.md#joint-preparation-of-function-producing-heads-experimental)
+supersedes the prior blanket hole-free-head restriction. Value-dependent unresolved
+results, implicit signature recovery and production integration remain pending.
+No grammar change.
+:::

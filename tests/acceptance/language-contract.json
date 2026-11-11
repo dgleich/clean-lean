@@ -4349,6 +4349,23 @@
         "Proof-type callable views",
         "Production integration"
       ]
+    },
+    {
+      "id": "joint_scoped_application_heads",
+      "status": "experimental-slice",
+      "environment": "Checked explicit callable signatures determine all intermediate result types; experimental scoped Builder.",
+      "source": "h(function (a: Real,0))(0)",
+      "expected_lean": "Local h applied to a Real-to-Real lambda with selected Real zero, then selected Complex zero, with both selections made in one product.",
+      "checks": [
+        "test_scoped_calls.py: six function-producing head cases",
+        "check_scoped_calls.py: three additional full targets and interpretation proofs, seventeen scoped targets total"
+      ],
+      "pending": [
+        "Head result dependencies on unresolved values",
+        "Direct lambda heads without a determined callable type",
+        "General implicit and contextual inference",
+        "Production integration"
+      ]
     }
   ]
 }

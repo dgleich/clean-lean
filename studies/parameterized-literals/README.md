@@ -2815,3 +2815,55 @@ is unchanged; the separately confirmed live full-discovery and active-label runs
 remain pending.
 
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Joint preparation of function-producing heads (experimental)
+
+The scoped application experiment now prepares a hole-bearing `Call` or `Apply`
+head recursively when its result type follows from its checked explicit signature
+without selecting any argument. Examples:
+
+```clean
+-- h: Function(Function(Real,Real),Function(Complex,Real))
+h(function (a: Real,0))(0)
+-- h: Function(Complex,Function(Function(Real,Real),Real))
+h(0)(function (a: Real,0))
+-- factory(f: Function(Real,Real)): Function(Complex,Real)
+factory(function (a: Real,0))(0)
+```
+
+Typed call preparation returns candidate rows, a reconstruction operation and a
+checked result type. This type is independent of the still-unselected argument
+alternatives: implicit signature parameters and dependencies on unresolved actual
+values still block preparation. For `Apply`, a prepared head occupies source path
+`(1,)`; arguments occupy `(2,i)`. The head rows are the first factor in the same
+Cartesian product as the outer argument rows. All carriers, equations, deferred
+checks and selected arguments remain in that product until the single outer
+selection. Recursion decreases the preparation budget.
+
+Reconstruction first projects the selected trace into the head, rechecks its
+result type against the prepared type, and inserts its retained syntax into the
+outer `Apply`. It then rechecks the complete application. Ordinary checked heads
+continue to use their existing type and whole-expression recheck. Product order
+only records provenance and positions; it cannot resolve competing meanings.
+
+This supersedes the blanket hole-free-head restriction of the preceding stage.
+Heads whose result depends on unresolved actuals, directly applied source lambdas
+without a determined callable type, proof-type callable views and general implicit
+signature recovery remain incomplete. For example, the dependent `h(2)(...)`
+case still requires joint value-dependent type recovery. No syntax or production
+inference change is claimed.
+
+Six additional tests cover local and module heads, a nonscoped literal-bearing
+head, retained serialization, ambiguity within a head and resource exhaustion.
+Three independent complete Lean targets cover both head orders and the module
+factory, with interpretation proofs. Head preparation never calls the independent
+selector, and the tests assert this for the curried local example.
+Validation: all 462 experimental tests pass, including 43 scoped cases. Seventeen
+independent scoped Lean targets and seventeen interpretation proofs pass. Provenance,
+HTML IDs/local links and whitespace checks pass. The production full-discovery and
+active-label snapshot processes are still confirmed live; their completion remains
+pending and is not inferred from these experimental checks.
+
+:::
