@@ -428,11 +428,12 @@ class Builder:
         types={self.carrier_identity(n):n for n,s in self.env.data['types'].items()
                if 'native_binding' in s or n in self.env.structures}
         functions={s['native_binding']:n for n,s in self.env.data['functions'].items()}
-        def actual(term):
-            term=resolve(term,bindings)
-            if isinstance(term,Carrier):return Type(types[term.identity],tuple(actual(a) for a in term.arguments))
-            if isinstance(term,Atom) and term in self.rigid:return self.rigid[term]
-            raise Incomplete('No checked representative for recovered parameter')
+        from witness_model import Resolver,Seed
+        representatives=Resolver(bindings,
+            tuple(Seed(term,value,(i,)) for i,(term,value) in enumerate(self.rigid.items())),
+            validate=lambda term,value:self.typ(value,{})==term,
+            assemble=lambda term,args:Type(types[term.identity],args),limit=self.limit)
+        actual=representatives.get
         def replace(node,path):
             if node[0]=='Decimal':
                 origin='defaulted' if path in defaulted else 'inferred'

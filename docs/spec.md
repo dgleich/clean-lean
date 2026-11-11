@@ -1872,3 +1872,14 @@ priority. Classifier and unsupported index children remain without value evidenc
 and opaque producers are not unfolded. See the [construction and boundaries](../studies/parameterized-literals/README.md#known-constructors-inside-literal-bearing-expressions).
 No grammar or production elaboration rule changes.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental checked parameter reconstruction
+
+Selected experimental row parameters now pass through a ground witness resolver
+with explicit representative priority, semantic agreement checks, cycle/resource
+failure and nominal type assembly. No declaration-selection or grammar rule
+changes. A forward-plan model is present but is not yet wired into pre-selection
+parameterized literal/call checks. See the [operational rules and integration boundary](../studies/parameterized-literals/README.md#checked-ground-witness-reconstruction).
+:::

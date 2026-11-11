@@ -873,3 +873,71 @@ unchanged. Full production discovery and active-label verification remain live
 in their existing fixed-snapshot jobs, with no completion claim.
 
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Checked ground witness reconstruction
+
+`witness_model.py` separates reconstruction of a checked parameter value from
+selection of a declaration/literal interpretation. The adapter now uses this
+resolver when materializing the selected row's recovered parameters and target
+types. It uses the existing checked representative table as ordered seeds and
+reconstructs nominal types from their declared identities and checked arguments.
+Every returned value must agree with the solved symbolic term under `Builder.typ`.
+This replaces the previous unchecked dictionary lookup/recursive type assembly;
+it does not select new interpretations or relax candidate validity.
+
+The model also supports forward reconstruction plans, preparatory to dependent
+calls containing parameterized literals. A plan declares a solved output term,
+input terms, a pure checked-value builder, and an explicit priority. Plans are not
+yet generated for those calls by the adapter. Their presence in the model does
+not establish support for the previously incomplete `count(0)` examples.
+
+The constructive rule is:
+
+1. Copy the solved binding map for this synchronous reconstruction. Resolve seed
+   and plan output terms through that map; unresolved outputs are incomplete.
+2. Group entries by exact solved symbolic term. Priorities are nonempty tuples of
+   natural integers, compared lexicographically. Duplicate priorities within a
+   group are incomplete, including when different variables resolve to the same
+   term. Dictionary or declaration enumeration order cannot choose a spelling.
+3. For a requested term, require it to be ground. Use its least-priority entry.
+   A seed supplies its previously checked representation. A plan recursively
+   reconstructs its inputs in declared order, then invokes its builder. If no entry
+   exists, a nominal Carrier may be assembled from its argument representatives;
+   other missing terms are incomplete.
+4. Check the result against the exact solved term. An inconsistent witness, cycle,
+   missing input, unresolved term or exhausted budget is incomplete. A failed
+   preferred plan does not fall through to another representation. A builder's
+   `NoSolution` is converted to incomplete reconstruction, not permission to prune
+   a competing declaration.
+5. Memoize successes only within this resolver and fixed environment. Each request
+   consumes one budget visit, even when it finds a memo entry. Python recursion
+   exhaustion is separately reported as incomplete. The limit bounds visits, not
+   arbitrary callback runtime or initial input size. No cross-row or cross-public
+   cache is introduced.
+
+The current adapter assigns seed priorities in the already specified order:
+caller representatives from the prepass, selected scalar witnesses in source order,
+then selected computed witnesses in their existing order. It does not register
+unselected candidates as caller evidence. Nominal assembly uses the retained type
+identity, never its mathematical display spelling. These rules preserve existing
+Lean output and literal provenance.
+
+Builders, validators and nominal assembly callbacks must operate on checked values
+under fixed declarations and scope. This model does not itself prove their Lean
+types or implement their checks. The adapter's current seed/assembly integration
+uses its existing checked type/index conversion and independently checked native
+oracles. Introducing pre-selection literal/call plans still requires a precise
+mapping from each candidate's solved parameters to witnesses, a readiness rule,
+retained origins, and exhaustive applicability checking before defaults. Those
+requirements remain open; they are not discharged by post-selection reconstruction.
+
+Validation: 158 experimental tests pass, including 18 independent witness-model
+cases for priority, aliases, nominal assembly, forward plans, sharing, cycles,
+validation failure and resource limits. All 33 existing independent native targets
+and 33 supporting proofs pass with the resolver used by materialization. This
+checks preservation of the current translated slice, not pre-selection plan
+integration or production inference.
+
+:::

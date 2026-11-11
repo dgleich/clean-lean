@@ -3460,6 +3460,24 @@
         "Opaque producer evidence",
         "General dependent candidate validity"
       ]
+    },
+    {
+      "id": "experimental_ground_witness_reconstruction",
+      "status": "experimental-slice",
+      "environment": "Fixed selected row, solved symbolic bindings and checked caller/selected witness table",
+      "source": "Existing experimental literal expressions; no new syntax",
+      "expected_lean": "Unchanged existing declared wrapper terms, with every recovered parameter checked against its solved symbolic term",
+      "checks": [
+        "studies/parameterized-literals/test_witness_model.py",
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Explicit stable representative priority; no first-success fallback, cross-row cache or inference from spelling; resource/validation failures remain incomplete",
+      "pending": [
+        "Pre-selection parameterized literal/call plans",
+        "Exhaustive dependent candidate validity",
+        "Production integration"
+      ]
     }
   ]
 }

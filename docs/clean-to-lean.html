@@ -1385,5 +1385,14 @@ producer does not. See the
 <a href="../studies/parameterized-literals/README.md#known-constructors-inside-literal-bearing-expressions">construction and independent Lean checks</a>.
 The production compiler and parser are unchanged.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="ground-witness-reconstruction">
+<h2>Experimental checked parameter reconstruction</h2>
+<p>After selecting a literal interpretation, the study reconstructs each solved
+parameter from checked caller/selected witnesses in an explicit order, validates
+agreement, and assembles nominal type applications. Existing Lean terms are
+preserved. Forward reconstruction plans are modeled but do not yet establish
+candidate validity before selection. See the
+<a href="../studies/parameterized-literals/README.md#checked-ground-witness-reconstruction">operational contract and remaining work</a>.</p>
+</section></llm>
 </body>
 </html>

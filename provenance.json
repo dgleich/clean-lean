@@ -8476,6 +8476,22 @@
         "-- ",
         ""
       ]
+    },
+    "studies/parameterized-literals/witness_model.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/parameterized-literals/test_witness_model.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }
