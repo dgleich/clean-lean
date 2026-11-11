@@ -9204,6 +9204,50 @@
     "studies/topology/level-empty-pairs.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "library/topology/singular_homology_comparison.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/SingularComparison.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/SingularComparison.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/SingularComparisonVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/verify_singular_comparison.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/topology/singular-comparison.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

@@ -1849,5 +1849,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p><code>empty relative data(X,Q)</code> is authored as <code>empty space(subspace(X,Q.relative))</code> for <code>Q : SpacePairData(X)</code>. It describes the empty subtype carrier without requiring a nesting proof. <code>empty relative part</code> instead accepts a certified <code>TopologicalPair(X)</code>.</p>
 <p>The <a href="../studies/topology/level-empty-pairs.md">level-pair study</a> checks six canonical targets and five proofs: expanded, perturbed and shifted level data are empty; emptiness implies nesting; certification with a supplied nesting proof preserves emptiness. These are existing syntax and declared bindings, with no inferred conversion or replacement proof. The complete natural homology identification remains pending.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="singular-homology-comparison">
+<h2>Comparing the two singular-homology interfaces</h2>
+<p><code>singular homology comparison(field,H,X)</code> and its inverse connect <code>chain homology(field,singular chains(field,H,X),H.degree)</code> with <code>homology module(field,H,X)</code>. Each adapter emits the categorical identity on Mathlib's ordinary singular homology object with the supplied field instance. Mathlib defines that functor by composition, so the underlying source and target agree by unfolding.</p>
+<p>The <a href="../studies/topology/singular-comparison.md">study</a> supplies six independent targets and four inverse/naturality proofs. This is an explicit interface between declared operations, not a general Clean conversion rule. The full relative-to-ordinary comparison still needs composition with the vanishing quotient maps and its own naturality proof.</p>
+</section></llm>
 </body>
 </html>

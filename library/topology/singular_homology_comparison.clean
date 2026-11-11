@@ -1,0 +1,23 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "relative_homology.clean"
+Import "../algebra/graded_chain_homology.clean"
+
+Notation singular homology comparison(field,H,X):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Returns: ModuleMap(K,field,(chain homology(field,singular chains(field,H,X),H.degree)),(homology module(field,H,X)))
+  Means: (letI : Field K := field; CategoryTheory.CategoryStruct.id (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))
+  Render latex: \eta_{{{H},{X}}}
+
+Notation singular homology comparison inverse(field,H,X):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Returns: ModuleMap(K,field,(homology module(field,H,X)),(chain homology(field,singular chains(field,H,X),H.degree)))
+  Means: (letI : Field K := field; CategoryTheory.CategoryStruct.id (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} K) H.degree).obj H.coefficients).obj X))
+  Render latex: \eta_{{{H},{X}}}^{{-1}}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

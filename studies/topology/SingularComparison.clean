@@ -1,0 +1,63 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "../../library/topology/singular_homology_comparison.clean"
+
+Source singular_comparison:
+  Kind: other
+  Label: Mathlib singular homology functor
+  Title: Mathlib.AlgebraicTopology.SingularHomology.Basic
+
+Result singular comparison inverse after forward:
+  Attribution: singular_comparison; singularHomologyFunctor; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let M = chain homology(field,singular chains(field,H,X),H.degree)
+  Let N = homology module(field,H,X)
+  Conclude: module composition(field,M,N,M,singular homology comparison(field,H,X),singular homology comparison inverse(field,H,X)) = module identity(field,M)
+
+Result singular comparison forward after inverse:
+  Attribution: singular_comparison; singularHomologyFunctor; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let M = chain homology(field,singular chains(field,H,X),H.degree)
+  Let N = homology module(field,H,X)
+  Conclude: module composition(field,N,M,N,singular homology comparison inverse(field,H,X),singular homology comparison(field,H,X)) = module identity(field,N)
+
+Result singular comparison commutes with induced maps:
+  Attribution: singular_comparison; singularHomologyFunctor; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X,Y: TopologicalSpace
+  Let g: ContinuousMap(X,Y)
+  Let C = singular chains(field,H,X)
+  Let D = singular chains(field,H,Y)
+  Let M = chain homology(field,C,H.degree)
+  Let N = chain homology(field,D,H.degree)
+  Let U = homology module(field,H,X)
+  Let V = homology module(field,H,Y)
+  Conclude:
+    module composition(field,M,N,V,induced chain homology map(field,C,D,induced chain map(field,H,X,Y,g),H.degree),singular homology comparison(field,H,Y)) =
+      module composition(field,M,U,V,singular homology comparison(field,H,X),homology linear map(field,H,X,Y,g))
+
+Result singular inverse comparison commutes with induced maps:
+  Attribution: singular_comparison; singularHomologyFunctor; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X,Y: TopologicalSpace
+  Let g: ContinuousMap(X,Y)
+  Let C = singular chains(field,H,X)
+  Let D = singular chains(field,H,Y)
+  Let M = chain homology(field,C,H.degree)
+  Let N = chain homology(field,D,H.degree)
+  Let U = homology module(field,H,X)
+  Let V = homology module(field,H,Y)
+  Conclude:
+    module composition(field,U,V,N,homology linear map(field,H,X,Y,g),singular homology comparison inverse(field,H,Y)) =
+      module composition(field,U,M,N,singular homology comparison inverse(field,H,X),induced chain homology map(field,C,D,induced chain map(field,H,X,Y,g),H.degree))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

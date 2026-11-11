@@ -4681,6 +4681,19 @@
         "Assembly of ordinary/relative homology maps and naturality",
         "Well-group formula and closed-cover/excision audit"
       ]
+    },
+    {
+      "id": "singular_homology_comparison",
+      "status": "checked-mathematical-module-no-new-syntax",
+      "source": "library/topology/singular_homology_comparison.clean; studies/topology/SingularComparison.clean",
+      "expected_lean": "Explicit categorical identity on the ordinary singular-homology object in both typed directions; induced-map naturality statements retain local chain/module lets.",
+      "checks": [
+        "studies/topology/verify_singular_comparison.py: two definition and four statement targets; four inverse/naturality proofs"
+      ],
+      "pending": [
+        "Assembly and naturality of the relative-to-ordinary comparison",
+        "Well-group formulas and closed-cover/excision audit"
+      ]
     }
   ]
 }

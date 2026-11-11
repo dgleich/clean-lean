@@ -459,3 +459,13 @@ the existing distinction between pair data and certified topological pairs; it
 does not add an implicit conversion. Ordinary/relative homology comparison and
 naturality still need assembly; the well-group formulas remain unproved.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The [singular homology comparison](singular-comparison.md) makes the identity
+between the ordinary singular-homology functor and homology of singular chains
+explicit in both directions. Its verification scope is six exact targets and
+four inverse/naturality proofs. It introduces no syntax or general conversion
+rule. Assembly with the vanishing relative quotient, and naturality of that
+complete comparison, remain pending.
+:::
