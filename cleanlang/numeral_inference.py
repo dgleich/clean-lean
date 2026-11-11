@@ -50,6 +50,37 @@ def default_carrier(env):
     return name
 
 
+def complete_joint(tree,env,locals,expected=None,*,limit=4096):
+    """Translator-facing joint completion, explicit until default migration.
+
+    Preserve compiler error categories and trial ownership; never retry a failed
+    joint solve under another interpretation policy. The symbolic API remains
+    available separately with its precise analysis exception classes.
+    """
+    if type(limit) is not int or limit<1:raise ValueError('Numeral trial limit must be a positive integer')
+    if not holes(tree):
+        worker=Expressions(env,dict(locals));worker.bound_counter=0
+        result=worker._elaborate(tree)
+        if expected is not None and result.type!=expected:
+            mismatch(env,f'Expression has type {result.type}; expected {expected}')
+        return result
+    from .joint_inference import complete as joint
+    from .joint_inference.constraint_model import Incomplete,NoSolution,DefaultConflict,Ambiguous,Underdetermined
+    try:return joint(tree,env,locals,expected,limit=limit)
+    except Incomplete as error:
+        raise IncompleteNumeralAnalysis('Incomplete numeral analysis: '+str(error)) from error
+    except DefaultConflict as error:
+        raise CleanError('Numeral default conflicts across ambiguous positions; add annotations') from error
+    except NoSolution as error:
+        raise CleanError('No consistent numeral interpretation: '+str(error)) from error
+    except Ambiguous as error:
+        if error.interpretations is not None:
+            raise CleanError(f'Ambiguous numeral interpretation: {error.interpretations} interpretations') from error
+        raise CleanError('Ambiguous expression interpretation: '+str(error)) from error
+    except Underdetermined as error:
+        raise CleanError('Underdetermined numeral interpretation: '+str(error)) from error
+
+
 def complete(tree,env,locals,expected=None,*,limit=4096):
     if type(limit) is not int or limit<1:raise ValueError('Numeral trial limit must be a positive integer')
     positions=holes(tree)

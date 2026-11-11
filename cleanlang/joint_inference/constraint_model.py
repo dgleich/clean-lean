@@ -8,8 +8,12 @@ rigid; it does not invert arithmetic or inspect Lean terms.
 from dataclasses import dataclass
 
 class NoSolution(ValueError): pass
+class DefaultConflict(NoSolution): pass
 class Underdetermined(ValueError): pass
-class Ambiguous(ValueError): pass
+class Ambiguous(ValueError):
+    def __init__(self,message,*,interpretations=None):
+        super().__init__(message)
+        self.interpretations=interpretations
 class Incomplete(RuntimeError): pass
 
 @dataclass(frozen=True)
@@ -331,12 +335,12 @@ def select_with_trace(rows,*,default=None,enumeration_complete=True,limit=4096):
             try:bindings=unify([(row.carriers[i],default) for i in restrictions],bindings,limit=limit)
             except NoSolution:continue
             narrowed.append((row,bindings))
-        if not narrowed:raise NoSolution('Simultaneous defaults conflict')
+        if not narrowed:raise DefaultConflict('Simultaneous defaults conflict')
         solutions=narrowed
     for row,bindings in solutions:
         if any(variables(resolve(term,bindings)) for term in row.carriers+row.arguments):
             raise Underdetermined('A competing interpretation has unresolved parameters')
-    if len(solutions)!=1:raise Ambiguous('Multiple declaration interpretations')
+    if len(solutions)!=1:raise Ambiguous('Multiple declaration interpretations',interpretations=len(solutions))
     row,bindings=solutions[0]
     return Selection(row.choices,tuple(resolve(arg,bindings) for arg in row.arguments),
                      tuple(restrictions),default if restrictions else None)

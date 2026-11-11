@@ -1776,5 +1776,9 @@ disposable metadata cannot authorize reuse across calls. See the
 <h2>Direct lambda application in joint inference</h2>
 <p><code>(function(x: Natural,x+1))(2)</code> now jointly resolves the body and argument. The output retains the Lean lambda application rather than replacing it with its computed value. All viable body rows must first establish the same ground, binder-independent codomain without defaults or selection. General dependent or unresolved codomains remain incomplete. See the <a href="../studies/parameterized-literals/README.md#direct-lambda-application-with-a-common-determined-codomain">rule, exhaustive scalar comparison and native target</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="joint-translator-errors">
+<h2>Joint inference at the translator boundary</h2>
+<p>The explicit <code>numeral_inference.complete_joint</code> adapter preserves the joint solver's Lean target and maps analysis failures into compiler error categories. Incomplete analysis stays distinct; failures never trigger legacy inference or become forged trial-owned mismatches. A 115-case isolated runtime slice passes, with two historical limitation tests replaced by positive migration checks. The ordinary default remains unchanged. See the <a href="../studies/parameterized-literals/README.md#translator-facing-joint-error-boundary">mapping and validation scope</a>.</p>
+</section></llm>
 </body>
 </html>

@@ -3078,3 +3078,52 @@ and eighteen interpretation proofs pass. The broader topology compatibility swee
 remains running; completed entries are observations only, not a completed suite.
 
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Translator-facing joint error boundary
+
+`cleanlang.numeral_inference.complete_joint` adapts the packaged solver to the
+translator's error interface while leaving `complete` as the existing default.
+Hole-free inputs use the ordinary checked elaborator and expected-type check.
+Hole-bearing inputs invoke the joint API once; a failure is never retried under
+legacy inference. The returned retained expression is unchanged.
+
+| Joint outcome | Translator-facing outcome |
+|---|---|
+| `Incomplete` | `IncompleteNumeralAnalysis`, preserving the cause |
+| `NoSolution` | `CleanError` identifying inconsistent numeral interpretation |
+| `DefaultConflict` | `CleanError` identifying conflicting simultaneous defaults |
+| `Ambiguous` | `CleanError`; final interpretation count when available |
+| `Underdetermined` | `CleanError` identifying unresolved interpretation parameters |
+
+`DefaultConflict` is a structured `NoSolution` subtype. `Ambiguous.interpretations`
+is populated only after exhaustive saturation/default processing leaves multiple
+fully determined rows; it is not a count of an interrupted search. Operator-audit
+ambiguity without a complete row count retains its explanatory diagnostic.
+The adapter does not match diagnostic strings to decide an outcome.
+
+No-solution and default failures are not converted into a trial-owned
+`SignatureMismatch`: doing so could incorrectly authorize a surrounding checker to
+discard a competing candidate. Existing owned mismatches from checking assigned
+expressions and foreign checking errors retain their identities. The adapter does
+not change an enclosing trial owner. The lower-level joint API still exposes its
+analysis exception classes directly.
+
+`tools/run_joint_driver.py` now routes through this translator-facing entry point.
+`tools/check_joint_runtime.py` runs 115 regression cases in one isolated process:
+113 original tests are unchanged; two obsolete limitation expectations are replaced
+by named positive checks for a long determined binder and inferred vector zero.
+Neither case is skipped. The ordinary default-route tests remain unchanged.
+
+The 115-case runtime slice passes, as do nineteen API/adapter tests and the thirteen
+legacy numeral tests under ordinary routing. The adapter tests check retained target
+agreement, complete ambiguity counts, incomplete propagation without fallback,
+no forged trial ownership, and preservation of assigned-expression mismatch owners.
+This is a migration boundary, not a switch of the production default or proof of
+full compatibility.
+All 462 solver tests also pass with the structured exception metadata. The ongoing
+full topology sweep is separate and remains incomplete; default-routing completion
+is not inferred from this bounded regression slice.
+
+:::

@@ -4432,6 +4432,23 @@
         "Dependent or unresolved direct-lambda codomain recovery",
         "Default production routing"
       ]
+    },
+    {
+      "id": "joint_translator_error_boundary",
+      "status": "explicit-adapter-not-default",
+      "environment": "Translator-facing complete_joint entry, with fixed environment and optional enclosing mismatch owner.",
+      "source": "1+2",
+      "expected_lean": "On success the packaged solver retained target is returned unchanged; incomplete/ambiguous/inconsistent outcomes never produce a fallback target.",
+      "checks": [
+        "tests/test_joint_error_adapter.py: six retained-target/error/ownership cases",
+        "tools/check_joint_runtime.py: 113 unchanged regressions plus two explicit positive migration checks",
+        "tests/test_numeral_pruning.py: unchanged default-route behavior"
+      ],
+      "pending": [
+        "Full migration compatibility",
+        "Default routing",
+        "Remaining contextual inference boundaries"
+      ]
     }
   ]
 }

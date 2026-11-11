@@ -2509,3 +2509,17 @@ retains the lambda application and audits body operator ambiguity. See the
 Unknown/competing/dependent codomains remain incomplete. No syntax or default
 production-routing change.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Joint completion at the translator error boundary
+
+The explicit `numeral_inference.complete_joint` entry point preserves retained
+results while mapping joint analysis outcomes to compiler error categories. It
+never falls back to legacy inference. Incomplete analysis remains distinct from
+inconsistency; exhaustive ambiguity counts and simultaneous default conflicts use
+structured exception data. Solver failures cannot acquire a surrounding trial's
+mismatch ownership. Assigned expressions retain normal checking behavior. See the
+[error mapping and migration checks](../studies/parameterized-literals/README.md#translator-facing-joint-error-boundary).
+Default routing remains unchanged. No grammar or Lean-emission rule changes.
+:::
