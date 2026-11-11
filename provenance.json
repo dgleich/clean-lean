@@ -8460,6 +8460,22 @@
         "# ",
         ""
       ]
+    },
+    "tools/check_dimension_prefix_targets.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "generated/DimensionPrefixes.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

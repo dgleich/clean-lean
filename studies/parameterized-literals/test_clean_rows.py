@@ -189,6 +189,13 @@ class CleanRows(unittest.TestCase):
   value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(2+2,0)','expression')))
   self.assertIn(self.e.data['functions']['plus']['native_binding'],value.lean)
   self.assertNotIn('(f)',value.lean)
+ def test_declared_natural_prefix_can_supply_constructor_dimension(self):
+  self.record()
+  notation('Notation truncated opposite(x: Natural): Natural:',
+   ['Means: 0 - x','Prefix: -','Render latex: -{x}'],self.e)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(-2,0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('VectorCell((-(2:Natural)))',self.scope))
+  self.assertIn(self.e.data['functions']['truncated opposite']['native_binding'],value.lean)
  def solve(self,source,**kw):
   return Builder(self.e,self.scope).solve(expression_tree(parse(source,'expression')),**kw)
  def literal(self,result):return [key for kind,_,key in result[0] if kind=='literal']

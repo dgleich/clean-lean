@@ -99,13 +99,6 @@ def dimension_index(expression,environment,locals,*,_fresh=False):
         from .core import Expr
         expression=Expr(expression.lean,expression.tex,NAT,expression.precedence,expression.tree)
     if expression.type!=NAT:raise CleanError('Dimension reference must be Natural')
-    from .conversion import comparison_normal_form
-    def negative(node):
-        if node[0]=='Unary' and node[1]=='-':return True
-        if node[0]=='Operator':return negative(node[2]) or negative(node[3])
-        return False
-    if negative(comparison_normal_form(expression,environment,locals).tree):
-        raise CleanError('Natural dimensions do not support unary negation')
     value=index_value(expression,environment,locals,_fresh=_fresh)
     syntax=value.syntax if isinstance(value,ComputedIndex) else dumps(expression.tree)
     name=expression.tree[1] if expression.tree[0]=='Decimal' else value.name

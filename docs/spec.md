@@ -1763,3 +1763,16 @@ with correct default-origin metadata. The [construction and limitations](../stud
 define this supported fragment. General candidate validity and production
 integration are still pending; no new parse rule is introduced.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Natural dimensions follow declared prefix meanings
+
+Dimension checking no longer rejects a checked Natural value merely because its
+source/comparison tree contains unary `-`. Existing input-signature resolution
+must yield one declared callable, and its result must be Natural. Missing meanings,
+ambiguous overloads and Real results still fail. Store and substitute the resulting
+checked index without extra token-based mathematics. The [dimension contract](dimension-indices.md#module-declared-prefix-values-in-dimensions)
+specifies the unchanged parse and constructive native mapping. The standard
+module still has no Natural prefix-minus declaration.
+:::

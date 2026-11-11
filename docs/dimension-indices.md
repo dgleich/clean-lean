@@ -29,12 +29,14 @@ slot as Natural; no Matrix/Vector/Graph name dispatch is added here.
 Elaborate the argument in the current earlier-local environment. A decimal literal
 receives Natural in this slot, with or without the expression parentheses; an otherwise checked value
 must have Natural type. Undeclared names and Real values are rejected. Bare negative
-numerals are not type-argument syntax. Unary negation exposed in the arithmetic
-comparison tree is rejected, because Natural has no negation operation. Binary
-Natural subtraction retains its truncated semantics. Literal-only computations
-such as `(1+1)` still lack a determined Natural type and are rejected; this extension
-does not supply general contextual numeric-expression inference. Calls retain
-their declared types and existing native-adapter obligations.
+numerals are not type-argument syntax. Parenthesized prefix expressions are checked
+through their explicit module declarations like other expressions; a unique
+Natural-valued interpretation is allowed. The standard module has no Natural
+prefix-minus meaning, so ordinary negative dimensions remain rejected. This rule
+does not assign a mathematical meaning to a token or insert a numeric conversion.
+Binary Natural subtraction retains its declared truncated semantics. Determined
+literal computations such as `(1+1)` are accepted without proving arithmetic
+equality to 2. Calls retain their declared types and native-adapter obligations.
 
 Store a DimensionIndex containing the source name/spelling, checked Lean term,
 LaTeX, source expression tree, and comparison key. It is a value index with a known
@@ -90,4 +92,49 @@ contract, not a claim of complete language conformance.
 
 General dependent function types, binder-bearing local conversion, universe
 polymorphism and the topology research-theorem obligations remain separate work.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Module-declared prefix values in dimensions
+
+The previous token-based veto on unary minus has been removed. It ran after
+Natural type checking and contradicted the explicit-module rule: a module may
+declare a Natural-valued prefix callable. Dimension formation now requires the
+same unique checked interpretation as any Natural value and then uses the existing
+index storage/comparison rule. For example, a module may explicitly define a
+truncated opposite with body `0 - x`; `Vector((-n),Real)` then carries that
+wrapper application, not an inferred negative integer or a coerced Real.
+
+The parse remains `ComputedIndex(Unary("-",Local("n")))`. Resolve the prefix
+through the existing declared overload set using its input signature; reject
+ambiguity and non-Natural results. Retain the chosen binding and original term
+in the DimensionIndex. Substitution rechecks the retained call through the same
+rule. No grammar, implicit conversion, or arithmetic normalization is added.
+
+Six regression cases cover the independent source tree, native spelling, local
+alias, payload-only substitution, duplicate meanings and Real-valued rejection.
+The existing standard-negative tests remain unchanged. The standalone
+`tools/check_dimension_prefix_targets.py` compares three independent native
+targets and proves the declared operation's value and two identity examples.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Validation in this step: 24 focused dimension/storage tests and 107 experimental
+integration tests pass. Three independent exact prefix-dimension targets and
+three supporting Lean proofs pass (`/tmp/clean-prefix-dimensions-native.log`).
+Full unittest discovery is running from the immutable snapshot
+`/tmp/clean-prefix-dimensions-full-w05n2vyi`, with output in
+`/tmp/clean-prefix-dimensions-full.log`; it is not a completed pass. Prior snapshot
+jobs were confirmed live and were not restarted or counted as successes.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The production integration run finished with `Failures: []`: strict parser
+regeneration, 527 Python tests, native target/proof checks (including the new
+prefix oracle), and the regenerated 92-result proved corpus. Log:
+`/tmp/clean-prefix-dimensions-integration.log`. This is scoped integration
+evidence; full discovery remains running and is not reported as passing.
 :::

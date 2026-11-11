@@ -563,3 +563,13 @@ zero-vector index. The production compiler is unchanged in this step. Existing
 full discovery/active-label processes were confirmed live, not restarted or
 counted as successes.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The previously reported production veto on Natural-valued prefix dimensions is
+now repaired: [dimension checking follows declared prefix meanings](../../docs/dimension-indices.md#module-declared-prefix-values-in-dimensions).
+The original `vector cell(-2,0)` probe passes when an explicit Natural-valued
+prefix declaration is present. This does not add such a declaration to standard
+imports or change the other deferred-inference limitations. The experimental
+suite now has 107 passing tests.
+:::

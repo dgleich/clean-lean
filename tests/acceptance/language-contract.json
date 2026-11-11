@@ -3271,6 +3271,50 @@
         "Incomplete ready checks are not hidden by mismatches",
         "Cycles, non-ground results and exhausted budgets remain incomplete"
       ]
+    },
+    {
+      "id": "declared_natural_prefix_dimension",
+      "status": "implemented-slice",
+      "environment": "Pinned Lean/Mathlib; explicit standard modules plus a Natural-valued prefix declaration with body 0 - x",
+      "source_fragment": "Vector((-n),Real)",
+      "expected_tree": [
+        "Apply",
+        "Vector",
+        [
+          [
+            "ComputedIndex",
+            [
+              "Unary",
+              "-",
+              [
+                "Local",
+                "n"
+              ]
+            ]
+          ],
+          [
+            "Name",
+            "Real"
+          ]
+        ]
+      ],
+      "expected_lean": "VectorWrapper (truncatedOpposite n) RealWrapper, with exact named native wrappers retained",
+      "checks": [
+        "tests/test_dimension_indices.py",
+        "tools/check_dimension_prefix_targets.py",
+        "studies/parameterized-literals/test_clean_rows.py"
+      ],
+      "native_oracles": "Three independent exact targets and three supporting proofs in generated/DimensionPrefixes.lean",
+      "negative_cases": [
+        "No Natural prefix declaration in standard imports",
+        "Ambiguous Natural prefix declarations",
+        "Real-valued dimension",
+        "Bare negative numeral is not type-argument syntax"
+      ],
+      "obligation": "Resolve the existing prefix syntax through declared input signatures, require Natural result, retain checked index and selected binding through aliasing and payload-only substitution; no token-specific mathematical veto or coercion",
+      "pending": [
+        "Full production discovery"
+      ]
     }
   ]
 }

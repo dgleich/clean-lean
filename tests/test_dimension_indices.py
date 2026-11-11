@@ -48,6 +48,40 @@ class DimensionIndices(unittest.TestCase):
         for text in ['Vector(-1,Real)','Vector((-1),Real)','Vector((-n),Real)',
                      'Vector((n + (-1)),Real)']:
             with self.subTest(text=text),self.assertRaises(CleanError):self.typ(text)
+    def declare_natural_prefix(self):
+        notation('Notation truncated opposite(x: Natural): Natural:',
+                 ['Means: 0 - x','Prefix: -','Render latex: -{x}'],self.e)
+    def test_declared_natural_prefix_is_a_dimension(self):
+        self.declare_natural_prefix()
+        d=self.typ('Vector((-n),Real)').args[0]
+        key=self.e.data['functions']['truncated opposite']['native_binding']
+        self.assertEqual(d.lean,'(_root_.'+key+' (n))')
+        self.assertEqual(d,self.typ('Vector((truncated opposite(n)),Real)').args[0])
+    def test_prefix_dimension_has_independent_source_tree(self):
+        from cleanlang.syntax import parse,type_tree
+        self.assertEqual(type_tree(parse('Vector((-n),Real)','type_ref')),
+          ['Apply','Vector',[['ComputedIndex',['Unary','-',['Local','n']]],['Name','Real']]])
+    def test_declared_prefix_survives_local_alias(self):
+        self.declare_natural_prefix()
+        self.local['size']=local_definition('size',self.expr('-n'),self.e,self.local)
+        self.assertEqual(self.typ('Vector(size,Real)'),self.typ('Vector((-n),Real)'))
+    def test_prefix_dimension_survives_payload_only_substitution(self):
+        from dataclasses import replace
+        from cleanlang.indices import substitute_index
+        from cleanlang.retained_codec import dumps,loads
+        self.declare_natural_prefix()
+        saved=self.typ('Vector((-n),Real)').args[0]
+        saved=replace(loads(dumps(saved)),resolved=None)
+        changed=substitute_index(saved,{'n':self.expr('k')},self.e,self.local)
+        self.assertEqual(changed,self.typ('Vector((-k),Real)').args[0])
+    def test_ambiguous_prefix_does_not_choose_dimension(self):
+        self.declare_natural_prefix()
+        notation('Notation other opposite(x: Natural): Natural:',
+                 ['Means: 0 - x','Prefix: -','Render latex: -{x}'],self.e)
+        with self.assertRaises(CleanError):self.typ('Vector((-n),Real)')
+    def test_declared_real_prefix_is_still_not_a_dimension(self):
+        self.local['a']=Expr('a','a',self.typ('Real'))
+        with self.assertRaises(CleanError):self.typ('Vector((-a),Real)')
     def test_determined_literal_sum_is_a_dimension_without_arithmetic_solving(self):
         dimension=self.typ('Vector((1+1),Real)').args[0]
         add=self.e.data['functions']['natural sum']['native_binding']

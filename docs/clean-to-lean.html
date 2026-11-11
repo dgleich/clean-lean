@@ -1306,5 +1306,14 @@ implicit arguments and default origins are retained. This remains a supported
 experimental fragment, not general production inference. See the
 <a href="../studies/parameterized-literals/README.md#deferred-calls-in-the-clean-adapter">constructive mapping and remaining obligations</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="declared-prefix-dimensions">
+<h2>Declared prefix meanings in dimensions</h2>
+<p>If an explicitly imported module declares a Natural-valued prefix callable,
+<code>Vector((-n),Real)</code> retains that callable's application as its dimension.
+For a declared truncated opposite, the abbreviated Lean carrier is
+<code>VectorWrapper (truncatedOpposite n) RealWrapper</code>. Missing/ambiguous
+meanings and non-Natural results are rejected. Standard imports provide no Natural
+prefix-minus meaning. See the <a href="dimension-indices.md#module-declared-prefix-values-in-dimensions">checking and retention rule</a>.</p>
+</section></llm>
 </body>
 </html>
