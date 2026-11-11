@@ -1,0 +1,36 @@
+% Generated statements, not proof certificates.
+Reindexing changes the labels of a basis. Applying e and then f uses the
+composite f after e; evaluating the resulting basis follows the inverse maps.
+\par
+
+\begin{cleanresult}{successive basis reindexing}\cleanattribution{[Basis transport, composition law from Module.Basis.reindex\_apply]}
+Let $K$, $I$, $J$ and $L$ be types.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $M$ be a module over $K$.
+Let $b$ be a basis of $M$ indexed by $I$.
+Let $e$ be an equivalence from $I$ to $J$.
+Let $f$ be an equivalence from $J$ to $L$.
+Then \[b[e][f]=b[\left(f\circ e\right)].\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{identity basis reindexing}\cleanattribution{[Basis transport, identity law from Module.Basis.reindex\_apply]}
+Let $K$ and $I$ be types.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $M$ be a module over $K$.
+Let $b$ be a basis of $M$ indexed by $I$.
+Then \[b[\operatorname{id}_{I}]=b.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+\begin{cleanresult}{reversing basis reindexing}\cleanattribution{[Basis transport, inverse law from Module.Basis.reindex\_apply]}
+Let $K$, $I$ and $J$ be types.
+Let $\mathit{field}$ be a field structure on $K$.
+Let $M$ be a module over $K$.
+Let $b$ be a basis of $M$ indexed by $I$.
+Let $e$ be an equivalence from $I$ to $J$.
+Then \[b[e][e^{-1}]=b.\]
+\par\smallskip{\footnotesize Adapted from the cited source.}
+\end{cleanresult}
+
+% generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

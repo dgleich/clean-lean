@@ -1560,5 +1560,16 @@ such as <code>type(Real:Type)</code>. See the
 <a href="../studies/parameterized-literals/README.md#forward-substitution-into-dependent-function-signatures">forward substitution and trial ownership rules</a>.
 Unresolved inputs are incomplete; this is not inverse inference from function types.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="basis-transport-laws">
+<h2>Repeated basis transport</h2>
+<p>The checked <a href="../studies/basis-reindexing/Composition.clean">basis transport specimen</a>
+uses existing Clean syntax. Its first conclusion reads
+<code>reindex module basis(field,M,reindex module basis(field,M,b,e),f) = reindex module basis(field,M,b,compose equivalences(e,f))</code>.
+The expanded mathematical Lean form is <code>(b.reindex e).reindex f = b.reindex (e.trans f)</code>.
+The canonical generated target retains the Clean-authored composition wrapper,
+including its inverse-law proofs; it does not replace that wrapper by
+<code>Equiv.trans</code>. Three exact target comparisons and three proofs check
+composition, identity, and reversal on the working compiler.</p>
+</section></llm>
 </body>
 </html>

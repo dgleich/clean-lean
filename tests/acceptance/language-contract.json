@@ -3912,6 +3912,20 @@
         "Universal symbolic-family validity",
         "Production integration"
       ]
+    },
+    {
+      "id": "basis_transport_laws",
+      "status": "implemented-slice",
+      "source": "studies/basis-reindexing/Composition.clean",
+      "checks": [
+        "studies/basis-reindexing/verify_composition.py"
+      ],
+      "obligation": "Three canonical statement targets preserve explicit wrappers and authored equivalence composition; three kernel proofs validate basis equalities",
+      "pending": [
+        "Geometric restriction composition",
+        "Basis extension and pyramid theorem",
+        "Full current compiler regression"
+      ]
     }
   ]
 }

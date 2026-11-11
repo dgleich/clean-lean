@@ -1,0 +1,43 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "../../library/algebra/basis_reindexing.clean"
+Import "../../library/logic/equivalence_operations.clean"
+Source transport:
+  Kind: other
+  Label: Basis transport
+  Title: Composition and reversal of basis reindexing
+
+Text:
+  Reindexing changes the labels of a basis. Applying e and then f uses the
+  composite f after e; evaluating the resulting basis follows the inverse maps.
+
+Result successive basis reindexing:
+  Attribution: transport; composition law from Module.Basis.reindex_apply; adapted
+  Let K,I,J,L: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let b: ModuleBasis(K,field,M,I)
+  Let e: Equivalence(I,J)
+  Let f: Equivalence(J,L)
+  Conclude:
+    reindex module basis(field,M,reindex module basis(field,M,b,e),f) =
+      reindex module basis(field,M,b,compose equivalences(e,f))
+
+Result identity basis reindexing:
+  Attribution: transport; identity law from Module.Basis.reindex_apply; adapted
+  Let K,I: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let b: ModuleBasis(K,field,M,I)
+  Conclude: reindex module basis(field,M,b,identity equivalence(I)) = b
+
+Result reversing basis reindexing:
+  Attribution: transport; inverse law from Module.Basis.reindex_apply; adapted
+  Let K,I,J: Type
+  Let field: FieldStructure(K)
+  Let M: CoefficientModule(K,field)
+  Let b: ModuleBasis(K,field,M,I)
+  Let e: Equivalence(I,J)
+  Conclude:
+    reindex module basis(field,M,reindex module basis(field,M,b,e),inverse equivalence(e)) = b
+
+-- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -22,6 +22,7 @@ for script,flags in [
  ('tools/check_dimension_prefix_targets.py',[]),
  ('studies/identifier-quoting/verify.py',[]),
  ('studies/topology/verify_mayer_vietoris_maps.py',[]),
+ ('studies/basis-reindexing/verify_composition.py',[]),
  ('verify_corpus.py',[])]:commands.append([python,script,*flags])
 commands.append([lake,'env','lean','generated/VerifiedCorpus.lean'])
 if args.full:commands.append([python,'-m','unittest','discover','-s','tests','-v'])

@@ -44,3 +44,38 @@ The earlier codomain fix remains part of the compiler used to validate them.
 The full-suite snapshot started before this study does not include its new files;
 these are separate focused checks. The review browser inventory will need a refresh.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Composition, identity, and reversal
+
+[Composition.clean](Composition.clean) adds three transport laws using the existing
+Clean-authored identity, inverse, and composition of equivalences. Reindexing by e
+and then f equals reindexing by `compose equivalences(e,f)`; reindexing by the
+identity fixes a basis; reindexing by e and its inverse returns the original basis.
+These are equalities of bases, not just equalities of vector spans.
+
+Run `LAKE=lake python3 studies/basis-reindexing/verify_composition.py` against the
+working compiler. It regenerates [Composition.lean](Composition.lean), the statement
+TeX, and [CompositionVerified.lean](CompositionVerified.lean). Three independently
+authored exact statement targets and three Lean proofs pass. The oracles retain
+the explicit type, equality, and operation wrappers. The proofs use basis-vector
+evaluation and function extensionality; no extra assumptions, axioms or placeholder
+proofs are introduced. The mathematical definitions of composition and inverse
+remain authored in Clean. This adds no syntax or native adapter.
+
+The driver is also registered in `tools/check_language_integration.py`; the whole
+integration suite was not rerun for this statement-only addition.
+
+[Composition.pdf](Composition.pdf) presents the statements in one page. It was
+compiled twice and visually inspected, with no overfull boxes or unresolved
+references. Its driver
+is `composition-latex.tex`; compile twice from the repository root with
+`pdflatex -jobname=Composition -output-directory=studies/basis-reindexing
+studies/basis-reindexing/composition-latex.tex`.
+
+These laws support composing label transports in the topology study. They do not
+prove that two independently constructed geometric restrictions coincide, nor do
+they prove the paper's interval-basis extension or pyramid theorem. The interval
+restriction construction already has its own [study](../interval-basis-restriction/README.md).
+:::

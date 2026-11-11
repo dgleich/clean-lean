@@ -101,3 +101,32 @@ stores a TopologicalSpace under a declared Type-1 carrier parameter. The
 validation boundary. This addresses the earlier closed generic-parameter gap;
 it does not supply missing topology constructions or general universe polymorphism.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Reconciliation of later study evidence
+
+The earlier mathematical-gap table predates two study milestones and must not be
+read as their current implementation inventory. The
+[interval-basis restriction study](../interval-basis-restriction/README.md) contains
+pointwise basis transport, full restricted-record assembly, four canonical targets,
+and proofs of both generated results. The
+[active-label study](../active-labels/README.md#current-specialized-validation)
+records fifteen exact checks and four proofs against its retained generated
+snapshot. Those historical snapshot checks do not validate every subsequent
+compiler change. Current full regeneration and Python discovery remain running;
+no completion is inferred from their elapsed time.
+
+The working compiler now additionally checks three
+[basis transport laws](../basis-reindexing/Composition.clean): composition,
+identity, and reversal. Their [driver](../basis-reindexing/verify_composition.py)
+passes three independent exact statement targets and three proofs. These laws use
+existing explicit modules and Clean-authored equivalence constructions. They
+provide algebraic consistency for repeated label transport, without asserting
+geometric restriction composition or a pyramid/basis-extension theorem.
+
+The remaining research mathematics still includes basis extension and pyramid
+construction, filtered complexes and lazy-reduction invariants, well-group reverse
+inclusions and cover/excision, and the Mayer–Vietoris connecting sequence. These
+are distinct from unfinished production joint inference and validation.
+:::

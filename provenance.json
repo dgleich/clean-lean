@@ -8500,6 +8500,72 @@
         "# ",
         ""
       ]
+    },
+    "studies/basis-reindexing/Composition.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "studies/basis-reindexing/Composition.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "studies/basis-reindexing/CompositionVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "studies/basis-reindexing/Composition.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "studies/basis-reindexing/Composition.pdf": {
+      "origin": "derived-from-authored-sources; cited data retains source origin",
+      "mode": "sidecar",
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "studies/basis-reindexing/composition-latex.tex": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "% ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "studies/basis-reindexing/verify_composition.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
     }
   }
 }
