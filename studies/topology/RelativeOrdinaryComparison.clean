@@ -1,0 +1,33 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "../../library/topology/relative_ordinary_comparison.clean"
+
+Source relative_ordinary:
+  Kind: other
+  Label: Relative homology with zero chain inclusion
+  Title: Composition of cokernel and singular-homology comparisons
+
+Result ordinary after relative comparison:
+  Attribution: relative_ordinary; inverse comparison; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: TopologicalPair(X)
+  Assume h: pair chain inclusion(field,H,X,Q) = zero chain map(field,singular chains(field,H,subspace(X,Q.relative)),singular chains(field,H,subspace(X,Q.ambient)))
+  Let M = relative homology(field,H,X,Q)
+  Let N = homology module(field,H,subspace(X,Q.ambient))
+  Conclude: module composition(field,M,N,M,relative to ordinary homology(field,H,X,Q,h),ordinary to relative homology(field,H,X,Q)) = module identity(field,M)
+
+Result relative after ordinary comparison:
+  Attribution: relative_ordinary; inverse comparison; original
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: TopologicalPair(X)
+  Assume h: pair chain inclusion(field,H,X,Q) = zero chain map(field,singular chains(field,H,subspace(X,Q.relative)),singular chains(field,H,subspace(X,Q.ambient)))
+  Let M = relative homology(field,H,X,Q)
+  Let N = homology module(field,H,subspace(X,Q.ambient))
+  Conclude: module composition(field,N,M,N,ordinary to relative homology(field,H,X,Q),relative to ordinary homology(field,H,X,Q,h)) = module identity(field,N)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

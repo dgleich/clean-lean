@@ -4694,6 +4694,20 @@
         "Assembly and naturality of the relative-to-ordinary comparison",
         "Well-group formulas and closed-cover/excision audit"
       ]
+    },
+    {
+      "id": "relative_ordinary_homology_comparison",
+      "status": "checked-mathematical-module-no-new-syntax",
+      "source": "library/topology/relative_ordinary_comparison.clean; studies/topology/RelativeOrdinaryComparison.clean",
+      "expected_lean": "Declared module composites through chain homology and ordinary singular homology, with explicit zero-inclusion evidence and retained local lets.",
+      "checks": [
+        "studies/topology/verify_relative_ordinary_comparison.py: two definition and two statement targets, two inverse proofs and two generic chain helper lemmas"
+      ],
+      "pending": [
+        "Naturality for pair inclusions",
+        "Complete level-set application",
+        "Well-group formulas and closed-cover/excision audit"
+      ]
     }
   ]
 }

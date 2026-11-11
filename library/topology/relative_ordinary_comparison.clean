@@ -1,0 +1,38 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "singular_homology_comparison.clean"
+Import "../algebra/chain_cokernel_transport.clean"
+
+Define relative to ordinary homology(field,H,X,Q,h):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: TopologicalPair(X)
+  Let h: Evidence((pair chain inclusion(field,H,X,Q) = zero chain map(field,singular chains(field,H,subspace(X,Q.relative)),singular chains(field,H,subspace(X,Q.ambient)))))
+  Returns: ModuleMap(K,field,(relative homology(field,H,X,Q)),(homology module(field,H,subspace(X,Q.ambient))))
+  Equals:
+    module composition(field,relative homology(field,H,X,Q),
+      chain homology(field,singular chains(field,H,subspace(X,Q.ambient)),H.degree),
+      homology module(field,H,subspace(X,Q.ambient)),
+      vanishing quotient homology forward(field,singular chains(field,H,subspace(X,Q.relative)),
+        singular chains(field,H,subspace(X,Q.ambient)),pair chain inclusion(field,H,X,Q),h,H.degree),
+      singular homology comparison(field,H,subspace(X,Q.ambient)))
+  Render latex: \alpha_{{{Q},{h}}}
+
+Define ordinary to relative homology(field,H,X,Q):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let Q: TopologicalPair(X)
+  Returns: ModuleMap(K,field,(homology module(field,H,subspace(X,Q.ambient))),(relative homology(field,H,X,Q)))
+  Equals:
+    module composition(field,homology module(field,H,subspace(X,Q.ambient)),
+      chain homology(field,singular chains(field,H,subspace(X,Q.ambient)),H.degree),
+      relative homology(field,H,X,Q),
+      singular homology comparison inverse(field,H,subspace(X,Q.ambient)),
+      vanishing quotient homology backward(field,singular chains(field,H,subspace(X,Q.relative)),
+        singular chains(field,H,subspace(X,Q.ambient)),pair chain inclusion(field,H,X,Q),H.degree))
+  Render latex: \beta_{{{Q}}}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -65,10 +65,11 @@ Outputs: [definitions and statements](SingularComparison.lean),
 ## Remaining assembly
 
 These comparisons apply to the ambient singular chains in an empty-relative-part
-pair. They still need to be composed with the [vanishing quotient comparison](cokernel-transport.md),
-using the [empty-inclusion theorem](empty-chains.md) and
-[level emptiness certificates](level-empty-pairs.md). Naturality of the complete
-relative-to-ordinary comparison remains pending. Neither well-group equality nor
+pair. The [relative-to-ordinary module](relative-ordinary-comparison.md) now composes
+them with the vanishing quotient comparison, using explicit zero-inclusion
+evidence. The [empty-inclusion theorem](empty-chains.md) and
+[level emptiness certificates](level-empty-pairs.md) supply the relevant premises.
+Naturality and a complete level-set application remain pending. Neither well-group equality nor
 closed-cover/excision follows merely from the ordinary singular-homology bridge.
 :::
 

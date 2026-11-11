@@ -406,3 +406,13 @@ four inverse/naturality proofs. It introduces no syntax or general conversion
 rule. Assembly with the vanishing relative quotient, and naturality of that
 complete comparison, remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The [relative-to-ordinary comparison](relative-ordinary-comparison.md) now
+composes the vanishing quotient and singular-homology maps entirely in Clean.
+Four canonical targets and two inverse proofs (with two generic chain helper
+lemmas) pass. The forward map retains explicit zero-inclusion evidence; the
+reverse map uses the canonical quotient projection. Naturality for pair
+inclusions and a fully assembled level-set application remain pending.
+:::

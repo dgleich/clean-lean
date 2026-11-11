@@ -20,6 +20,7 @@ individual milestones.
 | [comparison.md](comparison.md) | GitHub-readable theorem comparisons; historical proposed interfaces |
 | [comparison.html](comparison.html) | Same comparison with side-by-side panels |
 | [requirements.md](requirements.md) | Current decisions, precise next-slice design, blockers and proof obligations |
+| [RelativeOrdinaryComparison.clean](RelativeOrdinaryComparison.clean) | Clean-authored inverse relative/ordinary homology maps; [scope](relative-ordinary-comparison.md) |
 | [SingularComparison.clean](SingularComparison.clean) | Explicit natural comparison of chain and ordinary singular homology; [scope](singular-comparison.md) |
 | [LevelEmptyPairs.clean](LevelEmptyPairs.clean) | Empty relative data, nesting and certification for level pairs; [scope](level-empty-pairs.md) |
 | [CokernelTransport.clean](CokernelTransport.clean) | Equality-dependent cokernel transport and inverse homology maps; [scope](cokernel-transport.md) |

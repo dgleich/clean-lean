@@ -9248,6 +9248,50 @@
     "studies/topology/singular-comparison.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "library/topology/relative_ordinary_comparison.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/RelativeOrdinaryComparison.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/RelativeOrdinaryComparison.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/RelativeOrdinaryComparisonVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/verify_relative_ordinary_comparison.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/topology/relative-ordinary-comparison.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

@@ -1854,5 +1854,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p><code>singular homology comparison(field,H,X)</code> and its inverse connect <code>chain homology(field,singular chains(field,H,X),H.degree)</code> with <code>homology module(field,H,X)</code>. Each adapter emits the categorical identity on Mathlib's ordinary singular homology object with the supplied field instance. Mathlib defines that functor by composition, so the underlying source and target agree by unfolding.</p>
 <p>The <a href="../studies/topology/singular-comparison.md">study</a> supplies six independent targets and four inverse/naturality proofs. This is an explicit interface between declared operations, not a general Clean conversion rule. The full relative-to-ordinary comparison still needs composition with the vanishing quotient maps and its own naturality proof.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="relative-ordinary-comparison">
+<h2>Relative-to-ordinary homology maps</h2>
+<p><code>relative to ordinary homology(field,H,X,Q,h)</code> is authored in Clean by composing the vanishing-quotient homology map with the singular comparison on the ambient subspace. Its evidence <code>h</code> says the actual pair chain inclusion is zero. The reverse map uses the inverse singular comparison and the homology of the canonical quotient projection, without a zero hypothesis.</p>
+<p>The <a href="../studies/topology/relative-ordinary-comparison.md">study</a> checks four canonical targets and two inverse laws, with two generic chain helper lemmas. There are no new native adapters or syntax rules. Local module lets and the supplied equality proof remain in the emitted targets. Naturality for pair inclusions and a complete level-set application remain pending.</p>
+</section></llm>
 </body>
 </html>
