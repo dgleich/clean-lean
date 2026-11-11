@@ -69,3 +69,43 @@ declaration and target jumps, note persistence/export, responsive layout, and th
 no-JavaScript fallback. Emacs and the full VS Code application were unavailable;
 the native Emacs check is provided but not yet run. See `tools/check_review.py` for
 the optional Playwright check; no browser dependency is required to build the page.
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Reviewing study drafts
+
+The inventory includes `studies` as well as `library`, `corpus`, and `examples`.
+Both `.clean` and `.clean.proposed` sources are searchable. Files ending in
+`.clean.proposed`, and files under `examples/proposed`, are labeled **Proposed
+syntax · no translation attempted**. Their source, outline, imports and notes
+remain available, but they are never sent to the translator. An ordinary `.clean`
+file that fails translation still displays its error; a neighboring draft does
+not change that status.
+
+For the topology work, open `studies/topology/Targets.clean.proposed` beside the
+implemented `OpenCovers.clean` and `CoverHomology.clean` examples. For LAProof,
+`studies/laproof/Paper.clean.proposed` records the pending IEEE theorem interfaces.
+Imports whose targets are absent from the inventory say **not in snapshot**
+instead of appearing as navigation links. This label means the viewer has no
+embedded source for that path; it does not determine whether the module exists
+elsewhere or whether the mathematics can be implemented.
+
+Use `python3 tools/build_review.py --progressive` to publish the current source
+inventory before all translations finish. A partial snapshot explicitly counts
+pending translations. Proposed files retain their separate status throughout;
+neither a completed browser build nor a translated statement certifies a proof.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Draft-review validation: seven progressive-inventory tests and seven lexical
+review tests pass. A saved partial snapshot contains 205 sources, including 34
+`.clean.proposed` files. The Chromium check passes source fidelity, draft status,
+topology declaration navigation, LAProof missing-import labels and valid import
+navigation, note persistence, and desktop/mobile layout. Long import paths now
+wrap on narrow screens. These checks do not establish translation or proof
+coverage. The full progressive rebuild remains running; its published snapshot
+is explicitly incomplete. The two whole-inventory translation tests are not
+rerun as part of this focused UI check.
+:::

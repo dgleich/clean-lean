@@ -1,5 +1,6 @@
 # generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
 import importlib.util,json,tempfile,unittest
+from unittest.mock import patch
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('progressive_review',ROOT/'tools/build_review.py')
@@ -40,6 +41,26 @@ class ProgressiveReview(unittest.TestCase):
   files=review.collect(self.root)
   self.assertFalse(any(f['status']=='Translation pending' for f in files))
   self.assertEqual(sum(f['error'] is not None for f in files),1)
+ def test_proposed_study_is_readable_without_attempting_translation(self):
+  study=self.root/'studies/topology';study.mkdir(parents=True)
+  source='Import "Missing.clean"\nResult pending geometry:\n  Conclude: unimplemented syntax\n'
+  (study/'Targets.clean.proposed').write_text(source)
+  file=next(f for f in review.inventory(self.root) if f['path'].endswith('.proposed'))
+  self.assertEqual(file['source'],source)
+  self.assertEqual(file['symbols'][0]['name'],'pending geometry')
+  self.assertEqual(file['imports'][0]['path'],'studies/topology/Missing.clean')
+  self.assertTrue(file['highlighted'])
+  with patch.object(review,'load_module',side_effect=AssertionError('draft must not load')), patch.object(review,'load_document',side_effect=AssertionError('draft must not load')):
+   review.translate(file,self.root)
+  self.assertEqual(file['status'],'Proposed syntax · no translation attempted')
+  self.assertIsNone(file['error']);self.assertEqual(file['lean'],'')
+ def test_proposed_suffix_does_not_hide_an_ordinary_translation_error(self):
+  (self.root/'library/bad.clean').write_text('not a declaration')
+  (self.root/'library/bad.clean.proposed').write_text('not a declaration')
+  files={f['path']:f for f in review.collect(self.root)}
+  self.assertEqual(files['library/bad.clean']['status'],'Translation unavailable')
+  self.assertIsNotNone(files['library/bad.clean']['error'])
+  self.assertEqual(files['library/bad.clean.proposed']['status'],'Proposed syntax · no translation attempted')
 
 if __name__=='__main__':unittest.main()
 

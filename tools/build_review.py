@@ -79,7 +79,8 @@ def inventory(root=ROOT):
     """Capture sources before translation; pending does not mean successful."""
     files=[]
     for folder in ('library','corpus','examples','studies'):
-        for path in sorted((root/folder).rglob('*.clean')):
+        paths=set((root/folder).rglob('*.clean')) | set((root/folder).rglob('*.clean.proposed'))
+        for path in sorted(paths):
             source=path.read_text(); symbols=[]; imports=[]
             try:
                 masked = comment_lines(source)
@@ -92,7 +93,7 @@ def inventory(root=ROOT):
                 if m:=re.fullmatch(r'Import\s+"([^"\n]+)"',line,re.I):
                     target=(path.parent/m[1]).resolve()
                     imports.append({'label':m[1], 'path':str(target.relative_to(root)) if target.is_relative_to(root) else None})
-            proposed=path.is_relative_to(root/'examples/proposed')
+            proposed=path.name.endswith('.clean.proposed') or path.is_relative_to(root/'examples/proposed')
             files.append({'path':str(path.relative_to(root)), 'source':source,
                 'highlighted':highlight_source(source), 'symbols':symbols,
                 'imports':imports,'lean':'',

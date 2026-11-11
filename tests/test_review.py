@@ -67,7 +67,9 @@ class ReviewTests(unittest.TestCase):
         self.assertEqual(len(sample['sha256']),64)
         for file in files.values():
             for imported in file['imports']:
-                self.assertIn(imported['path'],files)
+                # Draft interfaces may deliberately name unimplemented modules.
+                if 'Proposed syntax' not in file['status']:
+                    self.assertIn(imported['path'],files)
 
     def test_proposed_algorithms_are_not_claimed_translated(self):
         files=self.collected_files()
