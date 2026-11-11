@@ -1,0 +1,478 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+-- Reading edition: regenerate with studies/laproof/build_reading.py.
+-- Implemented mathematics only; numbered paper theorems remain proposed.
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Text:
+  LAProof in Clean: an executable companion in progress.
+  Source: Kellison, Appel, Tekriwal and Bindel, LAProof (2023).
+  This document is an original adaptation. See README.md for source locations,
+  interpretation decisions, and a section-by-section completion checklist.
+
+Text:
+  Arithmetic models.
+  The imported definitions make traversal order and empty accumulators explicit.
+  Arithmetic callbacks describe algorithms; they do not establish IEEE behavior.
+
+-- Begin definitions from Models.clean
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+Import "../../library/Common.clean"
+Import "../../library/analysis.clean"
+
+Source laproof:
+  Kind: other
+  Label: Kellison, Appel, Tekriwal and Bindel (2023)
+  Title: LAProof: A Library of Formal Proofs of Accuracy and Correctness for Linear Algebra Programs
+  Author: Ariel E. Kellison, Andrew W. Appel, Mohit Tekriwal, David Bindel
+  Url: https://www.cs.princeton.edu/~appel/papers/LAProof.pdf
+  Note: DOI 10.1109/ARITH58626.2023.00021; adaptations and unresolved source discrepancies are recorded in README.md
+
+-- Generic list primitives are the only new Lean adapters in this module.
+Notation zip with(f,x,y):
+  Let T,U,V: Type
+  Let f: Function(T,Function(U,V))
+  Let x: List(T)
+  Let y: List(U)
+  Returns: List(V)
+  Means: List.zipWith f x y
+  Render latex: \operatorname{{zipWith}}({f},{x},{y})
+
+Notation fold left(f,z,x):
+  Let T,U: Type
+  Let f: Function(U,Function(T,U))
+  Let z: U
+  Let x: List(T)
+  Returns: U
+  Means: List.foldl f z x
+  Render latex: \operatorname{{foldl}}({f},{z},{x})
+
+Notation fold right(f,z,x):
+  Let T,U: Type
+  Let f: Function(T,Function(U,U))
+  Let z: U
+  Let x: List(T)
+  Returns: U
+  Means: List.foldr f z x
+  Render latex: \operatorname{{foldr}}({f},{z},{x})
+
+Notation list transpose(A):
+  Let T: Type
+  Let A: List(List(T))
+  Returns: List(List(T))
+  Means: List.transpose A
+  Render latex: \operatorname{{transpose}}({A})
+
+-- u denotes unit roundoff, eta denotes the underflow error bound.
+Define accumulated rounding(u: Real,n: Natural): Real:
+  Equals: (1+u)^n-1
+  Render latex: h_{{{u}}}({n})
+
+Define accumulated underflow(u: Real,eta: Real,n: Natural,m: Natural): Real:
+  Equals: real index(n)*eta*(1+accumulated rounding(u,m))
+  Render latex: g_{{{u},{eta}}}({n},{m})
+
+Define unit roundoff(p: Natural): Real:
+  Equals: 1/(2^p)
+
+-- Division avoids subtraction of natural exponents.
+Define underflow bound(p: Natural,e: Natural): Real:
+  Equals: 4/((2^e)*(2^p))
+
+-- The explicit initial value specifies the empty-list case omitted in the paper.
+Define dot(add,mul,z,x,y):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let z: T
+  Let x,y: List(T)
+  Returns: T
+  Equals: fold left(add,z,zip with(mul,x,y))
+
+Define vector sum(add,z,x):
+  Let T: Type
+  Let add: Function(T,Function(T,T))
+  Let z: T
+  Let x: List(T)
+  Returns: T
+  Equals: fold right(add,z,x)
+
+Define vector add(add,x,y):
+  Let T: Type
+  Let add: Function(T,Function(T,T))
+  Let x,y: List(T)
+  Returns: List(T)
+  Equals: zip with(add,x,y)
+
+Define vector scale(mul,a,x):
+  Let T: Type
+  Let mul: Function(T,Function(T,T))
+  Let a: T
+  Let x: List(T)
+  Returns: List(T)
+  Equals: map(mul(a),x)
+
+Define vector axpby(add,mul,a,x,b,y):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let a: T
+  Let x: List(T)
+  Let b: T
+  Let y: List(T)
+  Returns: List(T)
+  Equals: vector add(add,vector scale(mul,a,x),vector scale(mul,b,y))
+
+Define matrix vector(add,mul,z,A,x):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let z: T
+  Let A: List(List(T))
+  Let x: List(T)
+  Returns: List(T)
+  Equals: map(function(row: List(T),dot(add,mul,z,row,x)),A)
+
+Define scaled matrix vector(add,mul,z,a,A,x):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let z,a: T
+  Let A: List(List(T))
+  Let x: List(T)
+  Returns: List(T)
+  Equals: vector scale(mul,a,matrix vector(add,mul,z,A,x))
+
+Define general matrix vector(add,mul,z,a,A,x,b,y):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let z,a: T
+  Let A: List(List(T))
+  Let x: List(T)
+  Let b: T
+  Let y: List(T)
+  Returns: List(T)
+  Equals: vector add(add,scaled matrix vector(add,mul,z,a,A,x),vector scale(mul,b,y))
+
+Define matrix scale(mul,a,A):
+  Let T: Type
+  Let mul: Function(T,Function(T,T))
+  Let a: T
+  Let A: List(List(T))
+  Returns: List(List(T))
+  Equals: map(function(row: List(T),vector scale(mul,a,row)),A)
+
+Define matrix add(add,A,B):
+  Let T: Type
+  Let add: Function(T,Function(T,T))
+  Let A,B: List(List(T))
+  Returns: List(List(T))
+  Equals: zip with(function(x: List(T),function(y: List(T),vector add(add,x,y))),A,B)
+
+-- Explicit row-major convention; not the untransposed MM snippet on page 5.
+Define matrix product(add,mul,z,A,B):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let z: T
+  Let A,B: List(List(T))
+  Returns: List(List(T))
+  Equals: map(function(row: List(T),map(function(column: List(T),dot(add,mul,z,row,column)),list transpose(B))),A)
+
+Define scaled matrix product(add,mul,z,a,A,B):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let z,a: T
+  Let A,B: List(List(T))
+  Returns: List(List(T))
+  Equals: matrix scale(mul,a,matrix product(add,mul,z,A,B))
+
+Define matrix axpby(add,mul,a,A,b,B):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let a: T
+  Let A: List(List(T))
+  Let b: T
+  Let B: List(List(T))
+  Returns: List(List(T))
+  Equals: matrix add(add,matrix scale(mul,a,A),matrix scale(mul,b,B))
+
+Define general matrix product(add,mul,z,a,A,X,b,Y):
+  Let T: Type
+  Let add,mul: Function(T,Function(T,T))
+  Let z,a: T
+  Let A,X: List(List(T))
+  Let b: T
+  Let Y: List(List(T))
+  Returns: List(List(T))
+  Equals: matrix axpby(add,mul,a,matrix product(add,mul,z,A,X),b,Y)
+
+Define fused dot(fma,z,x,y):
+  Let T: Type
+  Let fma: Function(T,Function(T,Function(T,T)))
+  Let z: T
+  Let x,y: List(T)
+  Returns: T
+  Equals:
+    fold left(function(s: T,function(step: Function(T,T),step(s))),z,
+      zip with(function(a: T,function(b: T,function(s: T,fma(a)(b)(s)))),x,y))
+
+Define exact sum(x: List(Real)): Real:
+  Equals: vector sum(function(a: Real,function(b: Real,a+b)),0,x)
+
+Define exact dot(x: List(Real),y: List(Real)): Real:
+  Equals: dot(function(a: Real,function(b: Real,a+b)),function(a: Real,function(b: Real,a*b)),0,x,y)
+
+Define absolute product sum(x: List(Real),y: List(Real)): Real:
+  Equals: exact sum(zip with(function(a: Real,function(b: Real,abs(a*b))),x,y))
+
+Define vector norm one(x: List(Real)): Real:
+  Equals: exact sum(map(function(a: Real,abs(a)),x))
+
+Define vector norm two(x: List(Real)): Real:
+  Equals: sqrt(exact dot(x,x))
+
+Condition floating equivalence(finite,value,x,y):
+  Let T: Type
+  Let finite: Function(T,Proposition)
+  Let value: Function(T,Real)
+  Let x,y: T
+  Holds when: (finite(x) and finite(y) and value(x) = value(y)) or (not finite(x) and not finite(y))
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- End definitions from Models.clean
+
+
+Text:
+  Numerical accuracy.
+  Named conditions describe perturbations, residuals, and entry bounds.
+  Defining a conclusion does not prove that floating arithmetic satisfies it.
+
+-- Begin definitions from Bounds.clean
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+
+-- Equation (1), for a finite real interpretation of one exact operation.
+-- An IEEE bridge must prove this relation under its precise side conditions.
+Condition single operation error(u,eta,exact,rounded):
+  Let u,eta,exact,rounded: Real
+  Holds when:
+    there exists(delta: Real,there exists(epsilon: Real,
+      rounded = exact*(1+delta)+epsilon and
+      abs(delta) ≤ u and abs(epsilon) ≤ eta and delta*epsilon = 0))
+
+Define forward error(exact: Real,rounded: Real): Real:
+  Equals: abs(exact-rounded)
+
+Notation list length(x):
+  Let T: Type
+  Let x: List(T)
+  Returns: Natural
+  Means: List.length x
+  Render latex: \operatorname{{length}}({x})
+
+Condition all entries(p,x):
+  Let T: Type
+  Let p: Function(T,Proposition)
+  Let x: List(T)
+  From Lean: List.Forall p x
+  Render latex: \operatorname{{all}}({p},{x})
+
+-- Forall2 requires matching lengths, not truncating zip semantics.
+Condition corresponding entries(p,x,y):
+  Let T,U: Type
+  Let p: Function(T,Function(U,Proposition))
+  Let x: List(T)
+  Let y: List(U)
+  From Lean: List.Forall₂ p x y
+  Render latex: \operatorname{{corresponding}}({p},{x},{y})
+
+Condition relative perturbation(bound,x,y):
+  Let bound: Real
+  Let x,y: List(Real)
+  Holds when:
+    corresponding entries(function(a: Real,function(b: Real,
+      there exists(d: Real,b = a*(1+d) and abs(d) ≤ bound))),x,y)
+
+Condition dot accuracy(u,eta,x,y,r):
+  Let u,eta: Real
+  Let x,y: List(Real)
+  Let r: Real
+  Holds when:
+    list length(x) = list length(y) and
+    there exists(perturbed: List(Real),there exists(c: Real,
+      r = exact dot(perturbed,y)+c and
+      relative perturbation(accumulated rounding(u,list length(x)),x,perturbed) and
+      abs(c) ≤ accumulated underflow(u,eta,list length(x),list length(x))))
+
+Condition sum accuracy(u,x,r):
+  Let u: Real
+  Let x: List(Real)
+  Let r: Real
+  Holds when:
+    there exists(perturbed: List(Real),
+      r = exact sum(perturbed) and
+      relative perturbation(accumulated rounding(u,list length(x)-1),x,perturbed))
+
+Define exact matrix vector(A: List(List(Real)),x: List(Real)): List(Real):
+  Equals: matrix vector(function(a: Real,function(b: Real,a+b)),function(a: Real,function(b: Real,a*b)),0,A,x)
+
+Condition entrywise matrix perturbation(bound,A,E):
+  Let bound: Real
+  Let A,E: List(List(Real))
+  Holds when:
+    corresponding entries(function(row: List(Real),function(error: List(Real),
+      corresponding entries(function(a: Real,function(e: Real,abs(e) ≤ bound*abs(a))),row,error))),A,E)
+
+Condition matrix vector accuracy(u,eta,A,x,r):
+  Let u,eta: Real
+  Let A: List(List(Real))
+  Let x,r: List(Real)
+  Holds when:
+    all entries(function(row: List(Real),list length(row) = list length(x)),A) and
+    there exists(E: List(List(Real)),there exists(residual: List(Real),
+      list length(residual) = list length(A) and
+      r = vector add(function(a: Real,function(b: Real,a+b)),
+        exact matrix vector(matrix add(function(a: Real,function(b: Real,a+b)),A,E),x),residual) and
+      entrywise matrix perturbation(accumulated rounding(u,list length(x)),A,E) and
+      all entries(function(c: Real,abs(c) ≤ accumulated underflow(u,eta,list length(x),list length(x))),residual)))
+
+Define safe entry bound(u: Real,eta: Real,e: Natural,n: Natural): Real:
+  Equals:
+    sqrt(((2^e-eta)/(1+u)-accumulated underflow(u,eta,n,n-1)) /
+      (1+real index(n)*(1+u)^n))
+
+Condition safe matrix vector input(u,eta,e,A,x):
+  Let u,eta: Real
+  Let e: Natural
+  Let A: List(List(Real))
+  Let x: List(Real)
+  Holds when:
+    accumulated underflow(u,eta,list length(x)+1,list length(x)) ≤ 2^e and
+    all entries(function(row: List(Real),list length(row) = list length(x)),A) and
+    all entries(function(a: Real,abs(a) ≤ safe entry bound(u,eta,e,list length(x))),x) and
+    all entries(function(row: List(Real),
+      all entries(function(a: Real,abs(a) ≤ safe entry bound(u,eta,e,list length(x))),row)),A)
+
+-- Conservative forward condition derived from the stated g(n,n) mixed bound.
+-- This does not silently repair equation (8)'s undefined two-argument h.
+Condition dot forward accuracy(u,eta,x,y,r):
+  Let u,eta: Real
+  Let x,y: List(Real)
+  Let r: Real
+  Holds when:
+    abs(r-exact dot(x,y)) ≤
+      absolute product sum(x,y)*accumulated rounding(u,list length(x)) +
+      accumulated underflow(u,eta,list length(x),list length(x))
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- End definitions from Bounds.clean
+
+
+Text:
+  Sparse storage and computation.
+  The CSR model separates storage validity from the pure row computation.
+  A C correctness proof additionally requires a memory and execution model.
+
+-- Begin definitions from CSR.clean
+-- generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
+
+Notation initial indices(n: Natural): List(Natural):
+  Means: List.range n
+  Render latex: [0,\ldots,{n}-1]
+
+Notation list entry(x,i,fallback):
+  Let T: Type
+  Let x: List(T)
+  Let i: Natural
+  Let fallback: T
+  Returns: T
+  Means: List.getD x i fallback
+  Render latex: \operatorname{{getD}}({x},{i},{fallback})
+
+Structure CSR(T: Type):
+  Let rows,columns: Natural
+  Let values: List(T)
+  Let indices,pointers: List(Natural)
+  Constructor: csr storage
+  Render latex: \operatorname{{CSR}}({T})
+  Describe: compressed sparse row storage over ${T}$
+  Describe plural: compressed sparse row representations over ${T}$
+
+Define row start(C,i):
+  Let T: Type
+  Let C: CSR(T)
+  Let i: Natural
+  Returns: Natural
+  Equals: list entry(C.pointers,i,0)
+
+Define row positions(C,i):
+  Let T: Type
+  Let C: CSR(T)
+  Let i: Natural
+  Returns: List(Natural)
+  Equals: map(function(k: Natural,row start(C,i)+k),initial indices(row start(C,i+1)-row start(C,i)))
+
+Condition valid csr(C):
+  Let T: Type
+  Let C: CSR(T)
+  Holds when:
+    list length(C.pointers) = C.rows+1 and
+    list length(C.indices) = list length(C.values) and
+    row start(C,0) = 0 and row start(C,C.rows) = list length(C.values) and
+    all entries(function(i: Natural,row start(C,i) ≤ row start(C,i+1)),initial indices(C.rows)) and
+    all entries(function(j: Natural,j < C.columns),C.indices) and
+    all entries(function(i: Natural,
+      all entries(function(h: Natural,
+        all entries(function(k: Natural,
+          h < k → list entry(C.indices,h,0) < list entry(C.indices,k,0)),row positions(C,i))),row positions(C,i))),initial indices(C.rows))
+
+Define csr row(fma,z,C,x,i):
+  Let T: Type
+  Let fma: Function(T,Function(T,Function(T,T)))
+  Let z: T
+  Let C: CSR(T)
+  Let x: List(T)
+  Let i: Natural
+  Returns: T
+  Equals:
+    fold left(function(s: T,function(h: Natural,
+      fma(list entry(C.values,h,z))(list entry(x,list entry(C.indices,h,0),z))(s))),z,row positions(C,i))
+
+Define csr product(fma,z,C,x):
+  Let T: Type
+  Let fma: Function(T,Function(T,Function(T,T)))
+  Let z: T
+  Let C: CSR(T)
+  Let x: List(T)
+  Returns: List(T)
+  Equals: map(function(i: Natural,csr row(fma,z,C,x,i)),initial indices(C.rows))
+
+-- getD makes these functions total. Correct-use statements must assume valid csr,
+-- list length(x) = C.columns, and the appropriate floating finiteness conditions.
+-- Strict per-row column order forbids duplicates and fixes the accumulation order.
+-- This is a mathematical model, not a proof about pointer-based C execution.
+
+-- generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
+-- End definitions from CSR.clean
+
+
+Text:
+  Checked supporting results.
+  We restate the two zero-case statements in Foundations.clean. Verified.lean proves them
+  and five agreement lemmas. These are not the four numbered paper theorems.
+Result no accumulated rounding at zero:
+  Attribution: laproof; equation 4; adapted
+  Let u: Real
+  Conclude: accumulated rounding(u,0) = 0
+
+Result no accumulated underflow at zero:
+  Attribution: laproof; equation 5; adapted
+  Let u,eta: Real
+  Let m: Natural
+  Conclude: accumulated underflow(u,eta,0,m) = 0
+
+
+
+Text:
+  Remaining paper results.
+  Paper.clean.proposed records the numbered theorem targets and the FMA target.
+  Its missing IEEE754 dependency is intentional and is not imported here.
+  IEEE semantics, numerical proofs, dense/sparse equivalence, and C correctness
+  remain completion obligations. This entry point checks only the implemented slice.
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+-- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

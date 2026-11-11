@@ -8262,6 +8262,26 @@
       "origin": "llm-assisted",
       "model": "gpt-6",
       "mode": "markdown"
+    },
+    "studies/laproof/build_reading.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "studies/laproof/Paper-expanded.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
     }
   }
 }

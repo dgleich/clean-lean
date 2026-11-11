@@ -13,7 +13,12 @@ The source PDF is not redistributed here.
 
 ## Read this first
 
-Start with [the executable literate entry point](Paper.clean), then read
+For a single-file reading view, start with [Paper-expanded.clean](Paper-expanded.clean):
+it includes the implemented study definitions beside the explanatory text.
+The shorter [Paper.clean](Paper.clean) remains the authored entry point; its
+imports are expanded by `build_reading.py`, not maintained as a second copy.
+Library imports remain explicit. Neither edition includes the pending IEEE
+theorems as executable statements. Then read
 [the unimplemented paper theorem targets](Paper.clean.proposed) and follow their
 imports into [Models.clean](Models.clean), [Bounds.clean](Bounds.clean) and
 [CSR.clean](CSR.clean). Those three modules translate today. The draft deliberately
@@ -167,9 +172,15 @@ From the repository root:
 
 ```sh
 python3 studies/laproof/verify.py
+python3 studies/laproof/build_reading.py
+python3 studies/laproof/verify.py --reading
 ```
 
 Use the repository's pinned Lean/Mathlib environment; set `LAKE` if necessary.
+The `--reading` check rejects a stale reading edition and runs the same seven
+supporting proofs against that edition in temporary files. It does not establish
+the four numbered paper theorems.
+
 The driver loads the literate `Paper.clean` entry point and regenerates [Generated.lean](Generated.lean) and
 [Verified.lean](Verified.lean), checks both, and proves two supporting zero cases
 plus five agreement lemmas (dot, sum, row-major MM, fused dot and floating
