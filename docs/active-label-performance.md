@@ -137,3 +137,22 @@ and declares equality before selecting its default. Historical study sources are
 unchanged. All 44 focused checks now pass, including retained numeral-constructor
 replay under a different default. Broader integration remains pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The integrated strict parser reproduction and 453 selected Python tests pass
+(65.843 seconds). Full discovery uses immutable commit c914d6d in a separate
+checkout. A direct active-label native verifier was also launched against this
+compiler; it must complete translation before any generated-target result can be
+claimed. These runs remain pending at this checkpoint.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The native integration batch completed with `Failures: []`: 32 exact targets,
+12 supporting proofs, and all 92 corpus proofs pass after the operator traversal
+repair. Generated artifacts retain their prior content after provenance stamping.
+This includes the Mayer–Vietoris maps and zero composite, not a full exact sequence.
+The separate active-label verifier and full discovery have not completed; this
+change is not evidence of a whole-module speedup or full language conformance.
+:::
