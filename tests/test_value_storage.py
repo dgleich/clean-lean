@@ -15,7 +15,7 @@ class ValueStorage(unittest.TestCase):
  def expr(self,text):return self.fixture.expr(text)
  def test_independent_local_type_schema(self):
   value=LocalType('A',(),'A',universe=1,classifier='native_large')
-  expected={'format':'clean-bound-tree','version':3,'value':{'tag':'LocalType','fields':
+  expected={'format':'clean-bound-tree','version':4,'value':{'tag':'LocalType','fields':
    {'name':'A','args':{'tag':'Tuple','items':[]},'lean':'A','universe':1,'classifier':'native_large'}}}
   self.assertEqual(json.loads(dumps(value)),expected)
   restored=loads(json.dumps(expected))

@@ -3072,6 +3072,23 @@
         "Fresh composition, full regression and full production validation",
         "General higher record/type-constructor parameters and full native dependency freshness"
       ]
+    },
+    {
+      "id": "payload_transient_cache_exclusion",
+      "status": "integrated-validation-pending",
+      "environment": "clean-bound-tree version 4; semantic fields retained and replay re-elaborated.",
+      "source": "Encode the same Expr with absent or deeply shared checked_args, or the same index with absent or conflicting resolved data.",
+      "expected_tree": "Identical encoded payloads; decoded transient fields are None. Removed fields and older schema versions reject.",
+      "expected_lean": "Re-elaborated native targets are unchanged; stored caches cannot authorize reuse.",
+      "checks": [
+        "test_payload_cache_policy.py: four independent schema/cache checks",
+        "115 selected tests; 19 exact native targets and eight proofs after stored replay"
+      ],
+      "pending": [
+        "Immutable full discovery",
+        "Active-label module and review-browser performance",
+        "Broader native environment freshness"
+      ]
     }
   ]
 }

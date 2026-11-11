@@ -19,7 +19,7 @@ class Codec(unittest.TestCase):
   return restored
  def test_independent_annotation_schema(self):
   value=Annotation('T',LocalType('T',(),'native_T'),{'T'})
-  self.assertEqual(json.loads(dumps(value)),{'format':'clean-bound-tree','version':3,'value':
+  self.assertEqual(json.loads(dumps(value)),{'format':'clean-bound-tree','version':4,'value':
    {'tag':'Annotation','source':'T','type':{'tag':'LocalType','fields':{'name':'T','args':{'tag':'Tuple','items':[]},'lean':'native_T','universe':0,'classifier':''}},'names':['T']}})
   self.assertEqual(self.roundtrip(value),value)
  def test_module_and_local_carriers_stay_distinct(self):
@@ -73,9 +73,9 @@ class Codec(unittest.TestCase):
  def test_invalid_envelopes_and_tags_reject(self):
   for source in ['[]','{"format":"clean-bound-tree","version":true,"value":null}',
    '{"format":"clean-bound-tree","version":2,"value":null}',
-   '{"format":"clean-bound-tree","version":3,"value":{"tag":"Unknown"}}',
-   '{"format":"clean-bound-tree","version":3,"value":NaN}',
-   '{"format":"clean-bound-tree","version":3,"version":3,"value":null}']:
+   '{"format":"clean-bound-tree","version":4,"value":{"tag":"Unknown"}}',
+   '{"format":"clean-bound-tree","version":4,"value":NaN}',
+   '{"format":"clean-bound-tree","version":4,"version":4,"value":null}']:
    with self.subTest(source=source),self.assertRaises(CleanError):loads(source)
  def test_unknown_fields_and_lossy_annotation_reject(self):
   doc=json.loads(dumps(Annotation('Real',Type('Real'))));doc['value']['extra']=0

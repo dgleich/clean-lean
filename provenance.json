@@ -8124,6 +8124,18 @@
         "# ",
         ""
       ]
+    },
+    "docs/payload-cache-policy.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "tests/test_payload_cache_policy.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

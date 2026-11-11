@@ -16,8 +16,10 @@ or the topology research theorems are finished. Selected native checks pass; ful
   unannotated `type(T)` selection. Inferred carriers use their formal classifier.
 - Dependent functions may bind types. Higher computed/projected carriers preserve
   their level and classifier through substitution and dependent record fields.
-- Version-3 index payloads preserve checked annotations and carrier metadata.
-  Stored payloads are authoritative over cached trees, and replay re-elaborates
+- Version-4 index payloads preserve checked annotations and carrier metadata.
+  Disposable checked-child and resolved-tree caches are excluded; see
+  [the payload policy](payload-cache-policy.md). Stored payloads are authoritative,
+  and replay re-elaborates
   them. Old payload versions reject; this remains an experimental internal format.
 - Traversal-local lazy name reservation and stable checked arguments preserve
   collision checking while avoiding repeated work inside a single comparison.

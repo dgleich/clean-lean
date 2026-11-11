@@ -1,4 +1,4 @@
-# generated: gpt-6 2026-11-10 role=assisted; isolated prototype; see PROVENANCE.md
+# generated: gpt-6 2026-11-10 role=assisted; see PROVENANCE.md
 """Versioned data encoding, not an elaboration or an environment loader."""
 import json
 from cleanlang.annotations import Annotation
@@ -8,20 +8,24 @@ from cleanlang.proof_types import ProofIndex
 from cleanlang.dependent_functions import DependentFunctionType
 from cleanlang.binder_keys import ScopedKey
 
-# The schema is explicit: dataclass changes do not silently change version 3.
+# The schema is explicit: dataclass changes do not silently change version 4.
 SCHEMA={
  'Type':(Type,('name','args')),
  'ComputedCarrier':(ComputedCarrier,('name','args','universe','classifier')),
  'LocalType':(LocalType,('name','args','lean','universe','classifier')),
  'ValueIndex':(ValueIndex,('name','lean','tex','comparison')),
- 'ComputedIndex':(ComputedIndex,('name','lean','tex','comparison','syntax','resolved')),
- 'DimensionIndex':(DimensionIndex,('name','lean','tex','comparison','syntax','resolved')),
- 'ProofIndex':(ProofIndex,('name','lean','tex','comparison','syntax','resolved','scope')),
+ 'ComputedIndex':(ComputedIndex,('name','lean','tex','comparison','syntax')),
+ 'DimensionIndex':(DimensionIndex,('name','lean','tex','comparison','syntax')),
+ 'ProofIndex':(ProofIndex,('name','lean','tex','comparison','syntax','scope')),
  'ProofType':(ProofType,('name','args')),
  'DependentFunctionType':(DependentFunctionType,('name','args','constructor','binder','bound')),
- 'Expr':(Expr,('lean','tex','type','precedence','tree','local_normal','local_expand','inferred_args','checked_args','operator_binding')),
+ 'Expr':(Expr,('lean','tex','type','precedence','tree','local_normal','local_expand','inferred_args','operator_binding')),
  'ScopedKey':(ScopedKey,('parts',)),
 }
+
+# These fields are disposable caches. They are neither persisted nor restored.
+TRANSIENT={'Expr':{'checked_args'},'ComputedIndex':{'resolved'},
+           'DimensionIndex':{'resolved'},'ProofIndex':{'resolved'}}
 
 def dumps(value):
  active=set()
@@ -38,11 +42,11 @@ def dumps(value):
    for tag,(cls,names) in SCHEMA.items():
     if type(item) is cls:
      from dataclasses import fields
-     if {f.name for f in fields(item)}!=set(names):raise CleanError('Bound-tree schema requires a version change: '+tag)
+     if {f.name for f in fields(item)}!=set(names)|TRANSIENT.get(tag,set()):raise CleanError('Bound-tree schema requires a version change: '+tag)
      return {'tag':tag,'fields':{name:encode(getattr(item,name)) for name in names}}
    raise CleanError('Unsupported bound-tree value: '+type(item).__name__)
   finally:active.remove(identity)
- return json.dumps({'format':'clean-bound-tree','version':3,'value':encode(value)},ensure_ascii=False,sort_keys=True,separators=(',',':'))
+ return json.dumps({'format':'clean-bound-tree','version':4,'value':encode(value)},ensure_ascii=False,sort_keys=True,separators=(',',':'))
 
 def loads(source):
  def pairs(entries):
@@ -55,7 +59,7 @@ def loads(source):
  try:document=json.loads(source,object_pairs_hook=pairs,parse_constant=constant)
  except (ValueError,TypeError) as error:raise CleanError('Invalid bound-tree JSON') from error
  if (type(document) is not dict or set(document)!={'format','version','value'} or
-     document['format']!='clean-bound-tree' or type(document['version']) is not int or document['version']!=3):
+     document['format']!='clean-bound-tree' or type(document['version']) is not int or document['version']!=4):
   raise CleanError('Unsupported bound-tree envelope or version')
  def decode(item):
   if type(item) in (str,int,bool) or item is None:return item

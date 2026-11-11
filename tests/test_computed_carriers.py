@@ -45,7 +45,7 @@ class ComputedCarriers(unittest.TestCase):
   self.assertNotEqual(type_key(t),type_key(replace(t,classifier='other')))
  def test_schema_and_replay(self):
   t=self.expr('P.point').type;doc=json.loads(dumps(t))
-  self.assertEqual(doc['version'],3);self.assertEqual(doc['value']['tag'],'ComputedCarrier')
+  self.assertEqual(doc['version'],4);self.assertEqual(doc['value']['tag'],'ComputedCarrier')
   self.assertEqual(set(doc['value']['fields']),{'name','args','universe','classifier'})
   restored=loads(json.dumps(doc));validate(restored,self.e,self.scope)
   self.assertEqual(restored,t)
@@ -70,7 +70,7 @@ class ComputedCarriers(unittest.TestCase):
   self.assertEqual(self.e.sort_level(t),1)
  def test_older_payload_version_rejected(self):
   doc=json.loads(dumps(self.expr('P.point').type))
-  for version in (1,2):
+  for version in (1,2,3):
    doc['version']=version
    with self.assertRaises(CleanError):loads(json.dumps(doc))
  def test_wrong_record_universe_rejected(self):

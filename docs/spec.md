@@ -1513,3 +1513,15 @@ retained replay. They do not rerun visible-classifier selection. A type annotati
 on fresh type(T) still cannot select among competing classifiers. The independent
 cross-feature regression and payload tests fix this distinction explicitly.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Payload schema version 4
+
+Version 4 supersedes version 3 in the working compiler. The stored Expr schema
+omits checked_args, and stored computed/dimension/proof indices omit resolved.
+Those fields are disposable caches and decode to None. All other semantic fields
+remain; older versions and explicitly supplied removed fields reject. Encoding
+never traverses the omitted caches. See [payload-cache-policy.md](payload-cache-policy.md)
+for the deterministic representation rule, tests and remaining performance limits.
+:::
