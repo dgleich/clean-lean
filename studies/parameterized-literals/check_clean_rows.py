@@ -265,8 +265,42 @@ same_basic_target actualImplicitCandidate{i} expectedImplicitCandidate{i}
 theorem meaningImplicitCandidate{i} (n : {t('Natural')}) (x : {vec}) :
   (actualImplicitCandidate{i} n x).entry = (fun _ => (0 : Complex)) := by rfl
 """)
+notation('Define dependent copy(n: Natural,x: Vector(n,Complex),y: Vector((vector extent(n,x)),Complex)): Vector((vector extent(n,x)),Complex):',
+ ['Equals: y','Render latex: copy({n},{x},{y})'],env,authored=True)
+declare('Structure DependentPayload(n: Natural):',
+ ['Let input: Vector(n,Complex)','Let output: Vector((vector extent(n,input)),Complex)',
+  'Constructor: dependent payload'],env)
+for i,(source,arg,projection) in enumerate([
+ ('dependent copy(n,0,0)','n',False),('dependent copy(2,0,0)',ntwo,False),
+ ('dependent payload(n,0,0).output','n',True)]):
+ first_zero=f"@{f('complex vector zero')} ({arg})"
+ index=f"@{f('vector extent')} ({arg}) ({first_zero})"
+ second_zero=f"@{f('complex vector zero')} ({index})"
+ result=f"{t('Vector')} ({index}) {t('Complex')}"
+ expected=second_zero if projection else f"@{f('dependent copy')} ({arg}) ({first_zero}) ({second_zero})"
+ value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ checks.append(f"""
+noncomputable def actualDynamicFormal{i} (n : {t('Natural')}) : {result} := {value.lean}
+noncomputable def expectedDynamicFormal{i} (n : {t('Natural')}) : {result} := {expected}
+same_basic_target actualDynamicFormal{i} expectedDynamicFormal{i}
+theorem meaningDynamicFormal{i} (n : {t('Natural')}) :
+  actualDynamicFormal{i} n = (fun _ => (0 : Complex)) := by rfl
+""")
+notation('Notation make padded cell(n: Natural,data: Vector((n+1),Complex)): PaddedCell(n):',
+ ['Means: '+f('padded cell')+' n data','Render latex: C({n},{data})'],env)
+value=Builder(env,{}).materialize(expression_tree(parse('make padded cell(2,0).data','expression')),use_default=False)
+index=f"{f('natural sum')} ({ntwo}) ({one})"
+result=f"{t('Vector')} ({index}) {t('Complex')}"
+padded=env.structures['PaddedCell']['key']
+checks.append(f"""
+noncomputable def actualOpaqueParameter : {result} := {value.lean}
+noncomputable def expectedOpaqueParameter : {result} :=
+  @{padded}.data ({ntwo}) (@{f('make padded cell')} ({ntwo}) (@{f('complex vector zero')} ({index})))
+same_basic_target actualOpaqueParameter expectedOpaqueParameter
+theorem meaningOpaqueParameter : actualOpaqueParameter = (fun _ => (0 : Complex)) := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Thirty-nine experimental joint-row targets and thirty-nine meaning proofs passed; production joint inference remains unimplemented.')
+print('Forty-three experimental joint-row targets and forty-three meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

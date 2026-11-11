@@ -86,6 +86,9 @@ class Builder:
             names=tuple(n for n in formals if occurs(typ,n))
             if names:
                 output=Variable(repr((path,'computed formal index')),'index')
+                if any(n not in evidence for n in names):
+                    from candidate_values import IndexPlan
+                    return output,(IndexPlan(output,typ,tuple((n,formals[n]) for n in names)),),()
                 def witness(defaulted=()):
                     from cleanlang.indices import substitute_index
                     from cleanlang.inferred_conversion import reify
@@ -371,7 +374,7 @@ class Builder:
             try:values=CandidateValues(self,tree,f,equations,arguments)
             except NoSolution:continue
             self.row_values[f.choices]=values
-            rows.append(Row(f.choices,f.carriers,arguments,equations,f.deferred+values.checks()))
+            rows.append(Row(f.choices,f.carriers,arguments,equations,values.checks()))
         return rows
 
     def solve_with_trace(self,tree,expected=None,*,use_default=True):
@@ -402,7 +405,7 @@ class Builder:
                     try:
                         from candidate_values import CandidateValues
                         values=CandidateValues(self,tree,f,constraints,f.carriers+f.arguments)
-                        bindings=saturate(Row((),(),(),constraints,f.deferred+values.checks()),limit=self.limit)
+                        bindings=saturate(Row((),(),(),constraints,values.checks()),limit=self.limit)
                     except NoSolution:continue
                     if any(variables(resolve(t,bindings)) for t in f.arguments):
                         raise Incomplete('Operator input applicability remains unresolved')
@@ -449,6 +452,10 @@ class Builder:
             if self.index(value)[0]!=resolve(output,bindings):raise Incomplete('Deferred result changed during retention')
             self.known_index(value)
         values=self.row_values[choices]
+        for plan in values.index_plans:
+            value=values.index_expression(plan,bindings,defaulted)
+            if self.index(value)[0]!=resolve(plan.output,bindings):raise Incomplete('Formal index changed during retention')
+            self.known_index(value)
         for plan in values.active:
             value=values.expression(plan.path,bindings,defaulted)
             if self.index(value)[0]!=resolve(plan.output,bindings):raise Incomplete('Candidate value changed during retention')

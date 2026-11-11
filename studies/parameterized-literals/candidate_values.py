@@ -12,10 +12,23 @@ class ValuePlan:
     path: tuple
     requirements: tuple
 
+@dataclass(frozen=True)
+class IndexPlan:
+    output: object
+    template: object
+    formals: tuple
+
+    @property
+    def inputs(self):return tuple(term for _,term in self.formals)
+
+    @property
+    def requirements(self):return self.inputs
+
 class CandidateValues:
     def __init__(self,builder,tree,fragment,equations,arguments):
         self.builder=builder;self.tree=tree;self.fragment=fragment
         self.bindings=unify(equations,limit=builder.limit)
+        self.index_plans=tuple(p for p in fragment.deferred if isinstance(p,IndexPlan))
         self.positions=dict(holes(tree))
         self.choices={(kind,path):key for kind,path,key in fragment.choices}
         self.functions={s['native_binding']:n for n,s in builder.env.data['functions'].items()}
@@ -41,11 +54,12 @@ class CandidateValues:
         self.active=tuple(p for p in fragment.plans if p in active)
 
     def checks(self):
-        checks=[]
-        for plan in self.active:
+        checks=[p for p in self.fragment.deferred if not isinstance(p,IndexPlan)]
+        for plan in (*self.index_plans,*self.active):
             def evaluate(inputs,plan=plan):
                 bindings=unify(tuple(zip(plan.requirements,inputs)),self.bindings,limit=self.builder.limit)
-                value=self.expression(plan.path,bindings)
+                value=(self.index_expression(plan,bindings) if isinstance(plan,IndexPlan)
+                       else self.expression(plan.path,bindings))
                 try:return self.builder.index(value)[0]
                 except CleanError as error:
                     raise Incomplete('Candidate index checking unavailable: '+str(error)) from error
@@ -53,11 +67,30 @@ class CandidateValues:
         return tuple(checks)
 
     def expression(self,path,bindings,defaulted=()):
-        try:return self._expression(path,bindings,defaulted)
+        try:
+            _,reconstruct,source=self._context(bindings,defaulted)
+            return Expressions(self.builder.env,self.builder.scope).elaborate(reconstruct(source(path),path))
         except (CleanError,RecursionError) as error:
             raise Incomplete('Candidate value checking unavailable: '+str(error)) from error
 
-    def _expression(self,path,bindings,defaulted=()):
+    def index_expression(self,plan,bindings,defaulted=()):
+        from cleanlang.inferred_conversion import reify
+        try:
+            representatives,_,_=self._context(bindings,defaulted)
+            return reify(self._index_value(plan,representatives),self.builder.env,self.builder.scope)
+        except (CleanError,RecursionError) as error:
+            raise Incomplete('Candidate formal-index checking unavailable: '+str(error)) from error
+
+    def _index_value(self,plan,representatives):
+        from cleanlang.inferred_conversion import reify
+        from cleanlang.indices import substitute_index
+        if any(term.sort!='index' for _,term in plan.formals):
+            raise Incomplete('Computed formal classifier arguments remain unsupported')
+        b=self.builder
+        actuals={name:reify(representatives.get(term),b.env,b.scope) for name,term in plan.formals}
+        return substitute_index(plan.template,actuals,b.env,b.scope)
+
+    def _context(self,bindings,defaulted=()):
         b=self.builder;env=b.env;scope=b.scope
         from cleanlang.numerals import identity,digits
         from cleanlang.inferred_conversion import reify
@@ -120,16 +153,21 @@ class CandidateValues:
                 return result
             raise Incomplete('Candidate value reconstruction does not cover '+kind)
         plans=[]
+        for i,plan in enumerate(self.index_plans):
+            output=resolve(plan.output,bindings)
+            if variables(output):continue
+            plans.append(Plan(output,plan.requirements,
+                lambda _,plan=plan:self._index_value(plan,representatives),(3,i)))
         for i,plan in enumerate(self.fragment.plans):
             output=resolve(plan.output,bindings)
             if variables(output):continue
             def build(_,plan=plan):
                 value=Expressions(env,scope).elaborate(reconstruct(source(plan.path),plan.path))
                 return b.index(value)[1]
-            plans.append(Plan(output,plan.requirements,build,(3,i)))
+            plans.append(Plan(output,plan.requirements,build,(4,i)))
         representatives=Resolver(bindings,seeds,plans,
             validate=lambda term,value:b.typ(value,{})==term,
             assemble=lambda term,args:Type(self.types[term.identity],args),limit=b.limit)
-        return Expressions(env,scope).elaborate(reconstruct(source(path),path))
+        return representatives,reconstruct,source
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

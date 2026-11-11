@@ -1080,3 +1080,58 @@ candidate validity, computed formal-index witness integration and production
 inference remain open; full discovery and active-label checks remain in their
 existing fixed-snapshot jobs.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Computed indices from reconstructed arguments
+
+The experimental adapter now applies checked formal-index substitution after
+reconstructing literal-valued arguments. For example, given an explicitly declared
+`vector extent(n,x): Natural`, the following definition can accept
+`dependent copy(n,0,0)`:
+
+```clean
+Define dependent copy(n: Natural,x: Vector(n,Complex),y: Vector((vector extent(n,x)),Complex)): Vector((vector extent(n,x)),Complex):
+  Equals: y
+  Render latex: copy({n},{x},{y})
+```
+
+Its schematic Lean application is
+`dependentCopy n (complexVectorZero n)
+  (complexVectorZero (vectorExtent n (complexVectorZero n)))`.
+The native oracle uses the actual declared wrapper identities. It does not replace
+`vectorExtent` by its implementation, even when that implementation returns `n`.
+
+For a computed index with missing concrete formal evidence, retain an IndexPlan
+containing the checked index template, a fresh output variable, and the ordered
+formal-name/symbolic-argument pairs. Its inputs seed the same demand fixed point
+as other forward checks. Once all inputs are ground, unify them with the original
+row bindings, recover checked representatives, reify them in the fixed caller
+scope, and invoke checked index substitution. The resulting checked index supplies
+an ordinary output equation. No arithmetic inversion or default-based applicability
+is introduced. Missing evidence or resource exhaustion remains incomplete analysis.
+
+Representative priority is caller evidence, scalar candidates in source order,
+static computed witnesses, computed index plans in dependency order, then value
+plans child-before-parent. Each recovered representative must match its solved
+symbolic term. Plans cannot invent a value from an unresolved variable or fall
+back after a preferred reconstruction fails. Selected replay repeats the checks,
+compares each index with its solved output, and preserves literal origins.
+
+A checked nominal record type can provide a parameter without exposing the
+producer's body. Thus an opaque producer of `PaddedCell(2)` can support a field
+type depending on `2+1`. A field type depending on an unknown preceding field's
+value still lacks evidence: that case remains incomplete, even if a same-named
+local variable exists. Direct constructor field evidence remains supported.
+This refines the earlier opaque-producer limitation; it does not authorize
+unfolding arbitrary producers.
+
+Validation: 177 experimental tests pass, including conflicting expected indices,
+codec replay, retained default origins and rejection of unavailable field values.
+All 43 independent exact Lean targets and 43 supporting proofs pass. Four new
+oracles cover caller/scalar dependent calls, a dependent constructor projection,
+and opaque-producer parameter recovery with the original projection retained.
+There is no grammar or production compiler change. Classifier-dependent computed
+indices, computed exact-literal result patterns, general binder/evidence checking,
+exhaustive dependent candidate validity and production integration remain open.
+:::

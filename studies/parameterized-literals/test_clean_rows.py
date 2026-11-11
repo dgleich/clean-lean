@@ -408,12 +408,14 @@ class CleanRows(unittest.TestCase):
   source='wrapped cell(2,padded cell(2,0)).cell.data'
   value=Builder(self.e,{}).materialize(expression_tree(parse(source,'expression')),use_default=False)
   self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+1),Complex)'))
- def test_opaque_record_does_not_inherit_parameter_witnesses(self):
+ def test_opaque_record_recovers_parameter_from_checked_nominal_type(self):
   self.padded_cell();key=self.e.data['functions']['padded cell']['native_binding']
   notation('Notation make padded cell(n: Natural,data: Vector((n+1),Complex)): PaddedCell(n):',
    ['Means: '+key+' n data','Render latex: C({n},{data})'],self.e)
-  with self.assertRaises(Incomplete):
-   Builder(self.e,{}).materialize(expression_tree(parse('make padded cell(2,0).data','expression')),use_default=False)
+  value=Builder(self.e,{}).materialize(expression_tree(parse('make padded cell(2,0).data','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+1),Complex)'))
+  self.assertEqual(value.tree[0],'Projection')
+  self.assertEqual(value.tree[1][1],'make padded cell')
  def test_record_parameter_evidence_respects_literal_origin(self):
   self.padded_cell()
   notation('Notation count(x):',['Let T: Type','Let x: T','Returns: Natural','Means: 0','Render latex: count({x})'],self.e)
@@ -566,6 +568,65 @@ class CleanRows(unittest.TestCase):
   del bindings[formal['T']]
   with self.assertRaisesRegex(Incomplete,'implicit argument remains unresolved'):
    values.expression(path,bindings)
+
+ def dependent_copy(self):
+  notation('Notation vector extent(n: Natural,x: Vector(n,Complex)): Natural:',
+   ['Means: n','Render latex: extent({x})'],self.e)
+  notation('Define dependent copy(n: Natural,x: Vector(n,Complex),y: Vector((vector extent(n,x)),Complex)): Vector((vector extent(n,x)),Complex):',
+   ['Equals: y','Render latex: copy({n},{x},{y})'],self.e,authored=True)
+ def test_computed_formal_index_uses_parameterized_literal_value(self):
+  self.dependent_copy()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('dependent copy(n,0,0)','expression')),use_default=False)
+  expected=self.e.type('Vector((vector extent(n,(0:Vector(n,Complex)))),Complex)',self.scope)
+  self.assertEqual(value.type,expected)
+ def test_computed_formal_literal_value_recovers_scalar_dimension(self):
+  self.dependent_copy()
+  value=Builder(self.e,{}).materialize(expression_tree(parse('dependent copy(2,0,0)','expression')),use_default=False)
+  expected=self.e.type('Vector((vector extent((2:Natural),(0:Vector(2,Complex)))),Complex)')
+  self.assertEqual(value.type,expected)
+ def test_computed_formal_literal_value_rejects_conflicting_expected_index(self):
+  self.dependent_copy()
+  with self.assertRaises(NoSolution):
+   Builder(self.e,{}).materialize(expression_tree(parse('dependent copy(2,0,0)','expression')),self.e.type('Vector(3,Complex)'))
+ def test_computed_record_field_index_uses_literal_field_value(self):
+  from cleanlang.structures import declare
+  self.dependent_copy()
+  declare('Structure DependentPayload(n: Natural):',
+   ['Let input: Vector(n,Complex)','Let output: Vector((vector extent(n,input)),Complex)',
+    'Constructor: dependent payload'],self.e)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('dependent payload(n,0,0).output','expression')),use_default=False)
+  expected=self.e.type('Vector((vector extent(n,(0:Vector(n,Complex)))),Complex)',self.scope)
+  self.assertEqual(value.type,expected)
+ def test_computed_formal_literal_value_codec_replay(self):
+  from cleanlang.core import Expressions
+  from cleanlang.retained_codec import dumps,loads
+  self.dependent_copy()
+  value=Builder(self.e,{}).materialize(expression_tree(parse('dependent copy(2,0,0)','expression')),use_default=False)
+  self.assertEqual(Expressions(self.e,{}).elaborate(loads(dumps(value.tree))).lean,value.lean)
+
+ def test_dynamic_formal_index_does_not_invent_opaque_field_values(self):
+  from cleanlang.structures import declare
+  self.dependent_copy()
+  declare('Structure DependentPayload(n: Natural):',
+   ['Let input: Vector(n,Complex)','Let output: Vector((vector extent(n,input)),Complex)',
+    'Constructor: dependent payload'],self.e)
+  key=self.e.data['functions']['dependent payload']['native_binding']
+  notation('Notation make dependent payload(n: Natural,x: Vector(n,Complex),y: Vector((vector extent(n,x)),Complex)): DependentPayload(n):',
+   ['Means: '+key+' n x y','Render latex: P({n},{x},{y})'],self.e)
+  self.scope['input']=self.scope['x']
+  with self.assertRaises(Incomplete):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('make dependent payload(n,0,0).output','expression')),use_default=False)
+ def test_dynamic_formal_index_retains_default_origins(self):
+  self.dependent_copy()
+  notation('Notation count(x):',['Let T: Type','Let x: T','Returns: Natural','Means: 0','Render latex: count({x})'],self.e)
+  value=Builder(self.e,{}).materialize(expression_tree(parse('dependent copy(count(1),0,0)','expression')))
+  def origins(node):
+   if not isinstance(node,list):return []
+   if node and node[0]=='BoundNumeral' and node[1]=='1':return [node[4]]
+   return [o for child in node for o in origins(child)]
+  found=origins(value.tree)
+  self.assertTrue(found)
+  self.assertEqual(set(found),{'defaulted'})
 
  def test_computed_formal_competitor_is_not_dropped(self):
   notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',

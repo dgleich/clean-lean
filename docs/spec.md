@@ -1908,3 +1908,17 @@ call/projection readiness includes child/base recovery parameters. The
 [operational rule and independent targets](../studies/parameterized-literals/README.md#checking-inferred-arguments-during-candidate-reconstruction)
 extend the experimental adapter without changing grammar or production elaboration.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental computed formal-index reconstruction
+
+Computed formal indices can now recover checked literal-valued arguments before
+substitution. Readiness follows ground symbolic inputs; substitution produces a
+checked output equation, and selected replay verifies the same output and literal
+origins. Nominal record parameters may be recovered from a checked type even when
+its producer is opaque; unknown field values may not. See the
+[constructive mapping and limits](../studies/parameterized-literals/README.md#computed-indices-from-reconstructed-arguments).
+This changes the experimental adapter only. Classifier-dependent indices and
+production inference remain pending; no grammar change is introduced.
+:::

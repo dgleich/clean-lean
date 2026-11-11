@@ -3536,6 +3536,24 @@
         "Computed formal-index witnesses",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_computed_formal_indices",
+      "status": "experimental-slice",
+      "environment": "Explicit linear algebra modules and declared vector extent and dependent copy wrappers",
+      "source": "dependent copy(n,0,0)",
+      "expected_lean": "dependentCopy n (complexVectorZero n) (complexVectorZero (vectorExtent n (complexVectorZero n))), using exact declared wrapper identities",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Ground formal inputs, checked representative reconstruction and index substitution before defaults; selected replay retains origins; nominal type parameters do not supply unknown field values",
+      "pending": [
+        "Classifier-dependent computed indices",
+        "Computed exact-literal result patterns",
+        "General dependent candidate validity",
+        "Production integration"
+      ]
     }
   ]
 }

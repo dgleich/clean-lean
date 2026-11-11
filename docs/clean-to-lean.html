@@ -1412,5 +1412,15 @@ parameters. An equal result value alone is insufficient to validate a Lean
 instantiation. See the
 <a href="../studies/parameterized-literals/README.md#checking-inferred-arguments-during-candidate-reconstruction">rule, limits and native oracles</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="computed-formal-index-reconstruction">
+<h2>Experimental computed formal indices</h2>
+<p><code>dependent copy(n,0,0)</code> can translate schematically to
+<code>dependentCopy n (complexVectorZero n) (complexVectorZero (vectorExtent n (complexVectorZero n)))</code>.
+Checked argument reconstruction precedes index substitution. The declared extent
+wrapper is retained. A nominal record type can provide its parameters without
+revealing unknown field values. See the
+<a href="../studies/parameterized-literals/README.md#computed-indices-from-reconstructed-arguments">precise rules, independent native oracles and remaining limits</a>.
+This is experimental, not production inference.</p>
+</section></llm>
 </body>
 </html>
