@@ -1478,3 +1478,16 @@ Stored index payloads are authoritative over cached trees and must be re-elabora
 See studies/universe-classifiers/storage.md for the schema and validation boundary.
 This does not change production storage or claim full environment freshness.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The optional classifier/carrier-binder composition accepts existing dependent
+function syntax with a declared classifier domain. A type binder retains the
+classifier identity and level in LocalType; application substitutes only a
+matching checked carrier. Function domains retain their declared wrappers, and
+alpha comparison, fresh binder allocation and capture avoidance use the existing
+rules. Callable signatures containing DependentFunctionType always use structural
+dispatch, even without value indices. No grammar or token change is introduced.
+See studies/universe-classifiers/carrier-binders.md for the constructive rule,
+independent syntax/native evidence and remaining limits. Production is unchanged.
+:::

@@ -339,3 +339,11 @@ The optional `--storage` reproduction composes version-2 index payload storage
 with this classifier stack. See [the storage contract](storage.md) for the exact
 schema, cache authority rule, validation evidence and remaining obligations.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The optional `--carrier-binders` composition adds dependent functions with
+classifier domains, including authored families such as the identity on every
+Type-1 carrier. See [the binding specification](carrier-binders.md) and
+[the Clean example](CarrierFunctions.clean). It includes version-2 storage.
+:::

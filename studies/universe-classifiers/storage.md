@@ -49,10 +49,13 @@ application, deletes the cached tree, decodes and elaborates it again, then comp
 its native target against the same independently written Lean oracle. It also
 round-trips an explicit classified carrier. The native run passed ten exact targets and three proofs after payload-only
 replay. The expanded storage/dependent-call/dependent-function/applied-index/quantified
-run passed 113 tests in 55.873 seconds. A fresh pinned `--storage` reproduction
-is running; full regression and integration are not claimed.
+run passed 113 tests in 55.873 seconds. The fresh pinned `--storage` reproduction completed successfully: 286 selected
+tests in 116.696 seconds, 29 additional storage/index tests in 26.757 seconds,
+strict parser reproducibility and all native suites. Full regression and
+integration are not claimed.
 
-Higher carrier-valued fields and dependent callable binders, complete native
+Higher carrier-valued fields (with dependent callable binders now handled by the
+optional [carrier-binder composition](carrier-binders.md)), complete native
 freshness, full regression, and production integration remain unfinished. This
 storage experiment neither implements IEEE arithmetic nor proves the topology
 or LAProof paper theorems.

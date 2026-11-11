@@ -1,0 +1,29 @@
+--- a/cleanlang/dependent_functions.py
++++ b/cleanlang/dependent_functions.py
+@@ -170,7 +170,6 @@
+     if binder in locals or binder in env.data['types'] or binder in env.data['aliases'] or binder in env.data['functions']:
+         raise CleanError('Dependent function binder must be fresh')
+     domain=env.type(type_spelling(domain),locals,phrases=False,trail=trail)
+-    if env.classifier_info(domain) is not None:raise CleanError('Type-valued dependent function binders are not implemented')
+     bound=fresh_bound(env,locals)
+     scope={**locals,binder:Expr(bound,texid(binder),domain)}
+     codomain=env.type(type_spelling(codomain),scope,phrases=False,trail=trail)
+@@ -222,7 +221,6 @@
+ 
+ def inferred_type(name,bound,domain,codomain,env,locals):
+     if not occurs(codomain,name):return env.function_type(domain,codomain)
+-    if env.classifier_info(domain) is not None:raise CleanError('Type-valued dependent function binders are not implemented')
+     constructor=env.function_type(domain,domain).name
+     identity=fresh_bound(env,locals)
+     scope={**locals,name:Expr(identity,texid(name),domain,tree=['Local',name])}
+--- a/cleanlang/core.py
++++ b/cleanlang/core.py
+@@ -147,6 +147,8 @@
+ 
+ 
+ def has_value_indices(t):
++    from .dependent_functions import DependentFunctionType
++    if isinstance(t,DependentFunctionType):return True
+     return isinstance(t,Type) and any(isinstance(a,ValueIndex) or has_value_indices(a) for a in t.args)
+ 
+ @dataclass

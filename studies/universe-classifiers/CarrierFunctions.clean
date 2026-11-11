@@ -1,0 +1,14 @@
+-- generated: gpt-6 2026-11-11 role=assisted; isolated carrier-binder prototype
+Import "TypeValueCommon.clean"
+
+-- The result is one callable that accepts a type, then an element of that type.
+Define identity family():
+  Returns: Function(A: LargeTypes,Function(x: A,A))
+  Equals: function(A: LargeTypes,function(x: A,x))
+
+Result identity family on spaces:
+  Attribution: local; polymorphic identity; original
+  Let X: TopologicalSpace
+  Conclude: equal large(identity family()(type(TopologicalSpace : LargeTypes))(X),X)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

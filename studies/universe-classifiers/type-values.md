@@ -134,7 +134,8 @@ The version-2 composition explicitly migrates the LocalType level/identity
 schema; complete regression and production integration remain pending. The `.resolved` in-memory
 index path is covered; it is not evidence for persisted round trips.
 
-Higher computed/projected carriers, carrier-valued dependent function binders,
+The optional [carrier-binder composition](carrier-binders.md) now supports
+carrier-valued dependent function binders. Higher computed/projected carriers,
 full higher-carrier record/type-constructor handling, and type-valued local
 Let definitions remain unsupported or incomplete. The local-definition rejection
 now recognizes all declared classifiers, rather than only the name Type.

@@ -7856,6 +7856,58 @@
     "studies/universe-classifiers/storage.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "studies/universe-classifiers/carrier-binders.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/universe-classifiers/carrier-binder-fixtures.patch": {
+      "origin": "llm-assisted",
+      "mode": "manifest"
+    },
+    "studies/universe-classifiers/carrier-binders.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
+    },
+    "studies/universe-classifiers/CarrierFunctions.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/TypeValueCommon.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/test_carrier_binders.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/check_carrier_function_targets.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/CarrierFunctionTargets.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

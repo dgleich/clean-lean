@@ -2998,6 +2998,50 @@
         "Expanded composition and full regression",
         "Broader native dependency freshness and production integration"
       ]
+    },
+    {
+      "id": "closed_classifier_dependent_function",
+      "status": "isolated-prototype",
+      "environment": "Classifier stack with carrier-binders.patch and version-2 storage; explicit closed classifiers and unique arrow binding.",
+      "source": "Function(A: LargeTypes,Function(x: A,A))",
+      "expected_tree": [
+        "type_ref",
+        "Function",
+        [
+          "bound_type_arguments",
+          "A",
+          [
+            "type_ref",
+            "LargeTypes"
+          ],
+          [
+            "type_ref",
+            "Function",
+            [
+              "bound_type_arguments",
+              "x",
+              [
+                "type_ref",
+                "A"
+              ],
+              [
+                "type_ref",
+                "A"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "expected_lean": "(A : LargeTypesNative) → A → A, using fresh native binder identities and the declared classifier wrapper.",
+      "checks": [
+        "test_carrier_binders.py: ten cases including independent tree, alpha identity, inferred lambda, application, wrong classifier, capture avoidance and storage",
+        "check_carrier_function_targets.py: two independent canonical targets and topology-space identity proof"
+      ],
+      "pending": [
+        "Expanded composition and full regression",
+        "Higher computed/projected carriers and higher carrier record fields",
+        "Production integration and broader native environment freshness"
+      ]
     }
   ]
 }

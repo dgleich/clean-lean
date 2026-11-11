@@ -1,0 +1,34 @@
+--- a/tests/test_dependent_functions.py
++++ b/tests/test_dependent_functions.py
+@@ -56,13 +56,15 @@
+         matrix=self.e.data['types']['Matrix']['native_binding']
+         self.assertIn(matrix+' (clean_pi_bound_1) (clean_pi_bound_0)',self.e.render_type(t,'lean'))
+     def test_scope_and_module_gate(self):
+-        for s in ['Matrix(n: Natural,Real)','Function(T: Type,T)',
++        for s in ['Matrix(n: Natural,Real)',
+                   'Function(n: Natural,Function(n: Natural,Vector(n,Real)))',
+                   'Function(n: Vertex(n),Real)','Function(Real: Natural,Real)']:
+             with self.subTest(s=s),self.assertRaises(CleanError):self.typ(s)
+         with self.assertRaises(CleanError):self.typ('Vector(n,Real)')
+         self.e.data['types']['Mapping']=self.e.data['types'].pop('Function')
+         self.assertIsInstance(self.typ('Mapping(n: Natural,Vector(n,Real))'),DependentFunctionType)
++    def test_carrier_binder_is_dependent(self):
++        self.assertIsInstance(self.typ('Function(T: Type,T)'),DependentFunctionType)
+     def test_infer_free_type_from_dependent_codomain(self):
+         notation('Notation family identity(f):',[
+           'Let T: Type','Let f: Function(n: Natural,Vector(n,T))',
+--- a/studies/universe-classifiers/test_carriers.py
++++ b/studies/universe-classifiers/test_carriers.py
+@@ -74,9 +74,9 @@
+   value=reify(self.e.type('A',self.local),self.e,self.local)
+   self.assertEqual(value.tree,['Local','A']);self.assertEqual(value.lean,'boundA')
+   self.assertEqual(value.type,self.e.type('Large'))
+- def test_higher_dependent_type_binder_is_explicitly_pending(self):
+-  with self.assertRaisesRegex(CleanError,'Type-valued dependent function binders are not implemented'):
+-   self.e.type('Function(A: Large,A)')
++ def test_higher_dependent_type_binder_is_supported(self):
++  from cleanlang.dependent_functions import DependentFunctionType
++  self.assertIsInstance(self.e.type('Function(A: Large,A)'),DependentFunctionType)
+ if __name__=='__main__':unittest.main()
+ 
+ # generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
