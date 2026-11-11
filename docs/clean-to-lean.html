@@ -1707,5 +1707,13 @@ cannot capture k. See the
 <a href="../studies/parameterized-literals/README.md#checked-evidence-for-recovered-producer-parameters">witness construction and priority rules</a>.
 Production inference remains pending.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="fresh-application-comparison">
+<h2>Application comparison: checked-child reuse</h2>
+<p>The existing mapping from function application to Lean application is unchanged.
+Production comparison can reuse a head and arguments checked synchronously in the
+same traversal. Public comparison still rechecks saved source in the current scope;
+disposable metadata cannot authorize reuse across calls. See the
+<a href="comparison-token-cache.md#fresh-application-child-reuse">implementation and validation limits</a>.</p>
+</section></llm>
 </body>
 </html>

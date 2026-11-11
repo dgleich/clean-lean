@@ -138,3 +138,56 @@ was started only after terminal status was confirmed; it is pending, not passing
 The signature-chain changes in the experimental study do not change this
 production compiler snapshot.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Fresh application-child reuse
+
+The production application checker now retains the synchronously checked head and
+arguments of an Apply expression in disposable `checked_args` metadata, with the
+head first. Calls retain their existing argument-only convention. Normalization
+uses these children only with the existing traversal-local freshness witness. A
+public application comparison re-elaborates the complete saved source before using
+its children, so mutated caches and changed caller bindings are not trusted.
+An incompatible changed argument type is rejected rather than being paired with a
+saved application result type. Missing checking still propagates as unavailable.
+
+The metadata remains excluded from versioned retained-tree serialization and from
+semantic comparison snapshots. No parser rule, declaration target or source
+representation changes. Beta reduction, hidden-binder publication restrictions,
+normalization order and the final type checks retain their existing rules. Audited
+consumers either explicitly dispatch on Apply or inspect argument caches only for
+Call, ModuleCall, Operator and Unary; the experimental dependency scan may visit
+all checked children, including the application head.
+
+An attach attempt using py-spy 0.4.1 was denied by the environment. No live process
+was stopped. A separate 20-second cProfile loading diagnostic reached `restricted
+active labels`; it observed repeated application elaboration among the comparison
+costs. Before/after windows both ended without finishing the module, with 36,248,063
+and 28,782,090 calls respectively. They ran amid other jobs and are not throughput
+measurements or validation passes.
+
+A controlled comparison loaded the previous normalizer from Git and compared a
+12-level opaque application chain. Lean, LaTeX, type and source tree were identical.
+Leaf checking fell from 12 to 1 per traversal. One run of 100 traversals measured
+0.16555 seconds before and 0.03508 after; this is a small diagnostic, not a claimed
+whole-topology speedup. Four production regressions cover single leaf checking,
+mutated saved children plus caller rebinding, incompatible changed arguments, and
+unavailable checking.
+
+The focused suite passes 69 tests. Integration Python checks pass 569 tests. The
+experimental suite passes 374 tests and 97 exact native targets with 97 supporting
+proofs. The complete integration driver subsequently passed strict parser checks,
+all native integration targets and supporting proofs, and the regenerated 92-proof
+corpus (`Failures: []`). Reference HTML IDs/local links and provenance checks pass.
+
+Full discovery and active-label regeneration now also run against immutable snapshot
+`/tmp/clean-application-validation-aujg29lh`, based on `0c3f5ba` plus this production
+patch. Metadata and file hashes are in `/tmp/clean-application-validation.json`.
+The conversion SHA-256 is
+`c463ad038581ea1af3bd09467cfa40554da6c08bc14ff744467d49ef8c70356d`.
+Detached wrappers record live child PIDs and eventual exit codes in
+`/tmp/clean-application-full.json` and `/tmp/clean-application-active.json`. These
+are new validation runs for changed compiler code; older live snapshots remain
+untouched. None is counted as a completed validation from its running status.
+:::

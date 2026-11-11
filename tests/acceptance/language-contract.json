@@ -4137,6 +4137,21 @@
         "Embedded lambda inference",
         "Production integration"
       ]
+    },
+    {
+      "id": "production_fresh_application_children",
+      "status": "implemented-optimization",
+      "source": "Apply normalization and public comparison under changed caller bindings",
+      "checks": [
+        "tests/test_bound_comparison_reuse.py",
+        "tests/test_comparison_reuse.py",
+        "tools/check_language_integration.py"
+      ],
+      "obligation": "Reuse checked head and arguments only within one fresh traversal; public source recheck; transient metadata excluded from persistence; same emitted targets",
+      "pending": [
+        "Full production discovery",
+        "Current active-label regeneration"
+      ]
     }
   ]
 }

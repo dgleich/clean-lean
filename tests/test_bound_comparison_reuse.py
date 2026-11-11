@@ -118,3 +118,46 @@ class ProjectionBaseReuse(unittest.TestCase):
     def test_projection_unavailable_base_check_propagates(self):
         with patch.object(self.env,'call',side_effect=TimeoutError('Unavailable base check')):
             with self.assertRaises(TimeoutError):comparison_normal_form(self.old,self.env,self.local)
+
+
+# generated: gpt-6 2026-11-11 role=assisted
+class ApplicationChildrenReuse(unittest.TestCase):
+    def setUp(self):
+        self.env=Environment();load_module(ROOT/'library/operators.clean',self.env)
+        real=self.env.type('Real')
+        self.local={'x':Expr('first','x',real,tree=['Local','x']),
+                    'f':Expr('f','f',self.env.type('Function(Real,Real)'),tree=['Local','f'])}
+
+    def application(self,depth=1):
+        tree=['Local','x']
+        for _ in range(depth):tree=['Apply',['Local','f'],[tree]]
+        return Expressions(self.env,self.local).elaborate(tree)
+
+    def test_nested_application_checks_leaf_once(self):
+        old=self.application(12);original=Expressions._elaborate;leaves=[]
+        def counted(worker,tree):
+            if tree==['Local','x']:leaves.append(tree)
+            return original(worker,tree)
+        with patch.object(Expressions,'_elaborate',counted):
+            result=comparison_normal_form(old,self.env,self.local)
+        self.assertEqual(len(leaves),1)
+        self.assertEqual((result.lean,result.type,result.tree),(old.lean,old.type,old.tree))
+
+    def test_public_application_ignores_saved_children_and_rechecks_scope(self):
+        old=self.application(2)
+        old.checked_args=(Expr('bogus','bogus',self.local['f'].type),self.local['x'])
+        self.local['x']=Expr('second','x',self.env.type('Real'),tree=['Local','x'])
+        result=comparison_normal_form(old,self.env,self.local)
+        expected=self.application(2)
+        self.assertEqual((result.lean,result.type,result.tree),(expected.lean,expected.type,expected.tree))
+        self.assertNotIn('bogus',result.lean)
+
+    def test_public_application_rejects_changed_argument_type(self):
+        old=self.application()
+        self.local['x']=Expr('wrong','x',self.env.type('Complex'),tree=['Local','x'])
+        with self.assertRaises(CleanError):comparison_normal_form(old,self.env,self.local)
+
+    def test_application_unavailable_check_propagates(self):
+        old=self.application()
+        with patch.object(Expressions,'elaborate',side_effect=TimeoutError('Unavailable application')):
+            with self.assertRaises(TimeoutError):comparison_normal_form(old,self.env,self.local)

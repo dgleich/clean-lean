@@ -2293,3 +2293,16 @@ retention. See the
 [constructive rule and oracle](../studies/parameterized-literals/README.md#checked-evidence-for-recovered-producer-parameters).
 This is experimental reconstruction support, not production integration or new syntax.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Fresh application comparison children
+
+Apply elaboration retains its checked head followed by arguments in transient
+metadata. Only a synchronous traversal's freshness witness permits reuse. Public
+comparison rechecks the complete saved application in the current scope, rejects
+incompatible changed argument types, and propagates unavailable checking. Metadata
+is neither serialized nor used as a semantic snapshot field. Source grammar and
+Lean targets are unchanged. See the
+[implementation boundary and validation](comparison-token-cache.md#fresh-application-child-reuse).
+:::

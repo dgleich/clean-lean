@@ -223,7 +223,8 @@ def application(function,args,env,locals,tree,tex):
         from .numeral_inference import mismatch
         mismatch(env,'Function field argument mismatch' if tree[0]=='Apply' else 'Function argument mismatch')
     result=substitute(typ.codomain,{typ.binder:args[0]},env,locals) if isinstance(typ,DependentFunctionType) else typ.args[1]
-    return Expr('('+function.lean+' '+args[0].lean+')',tex,result,tree=tree)
+    return Expr('('+function.lean+' '+args[0].lean+')',tex,result,tree=tree,
+                checked_args=(function,*args) if tree[0]=='Apply' else None)
 
 
 def inferred_type(name,bound,domain,codomain,env,locals):

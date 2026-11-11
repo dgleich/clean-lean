@@ -114,7 +114,13 @@ def _normal_form(expression,environment,locals,*,fresh=False):
         from .operator_bindings import apply_prefix
         return apply_prefix(env,tree[1],args[0],locals)
     if kind=='Apply':
-        f=normal(tree[1]);args=[normal(a) for a in tree[2]]
+        # Application metadata is disposable. Only a synchronous check in this
+        # traversal certifies its head and operands under the current scope.
+        if not fresh or expression.checked_args is None:
+            return _normal_form(elaborate(tree),env,locals,fresh=True)
+        head,*operands=expression.checked_args
+        f=_normal_form(head,env,locals,fresh=True)
+        args=[_normal_form(a,env,locals,fresh=True) for a in operands]
         result=Expr('('+f.lean+' '+args[0].lean+')',expression.tex,expression.type,
                     tree=['Apply',f.tree,[a.tree for a in args]])
         from .beta_indices import contract_index
