@@ -374,8 +374,29 @@ noncomputable def expectedCarrierProjection : {t('Vector')} ({index}) {t('Comple
 same_basic_target actualCarrierProjection expectedCarrierProjection
 theorem meaningCarrierProjection : actualCarrierProjection = (fun _ => (0 : Complex)) := by rfl
 """)
+for i,(function_type,source,binders,result,expected,meaning) in enumerate([
+ ('Function(Vector(n,Complex),Real)','callback(0)',
+  f"(n : {t('Natural')}) (local_f : {t('Function')} ({vec}) {t('Real')})",
+  t('Real'),f"local_f (@{f('complex vector zero')} n)",None),
+ ('Function(k: Natural,Vector((k+1),Complex))','callback(2)',
+  f"(n : {t('Natural')}) (local_f : (k : {t('Natural')}) → {t('Vector')} ({f('natural sum')} k ({one})) {t('Complex')})",
+  f"{t('Vector')} ({f('natural sum')} ({ntwo}) ({one})) {t('Complex')}",f"local_f ({ntwo})",None),
+ ('Function(Vector(n,Complex),Natural)','vector cell(callback(0),0)',
+  f"(n : {t('Natural')}) (local_f : {t('Function')} ({vec}) {t('Natural')})",
+  f"{cell} (local_f (@{f('complex vector zero')} n))",
+  f"@{f('vector cell')} (local_f (@{f('complex vector zero')} n)) (@{f('complex vector zero')} (local_f (@{f('complex vector zero')} n)))",'entry')]):
+ local_scope=dict(scope)
+ local_scope['callback']=Expr('local_f','f',env.type(function_type,scope),tree=['Local','callback'])
+ value=Builder(env,local_scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ checks.append(f"""
+noncomputable def actualLocalCall{i} {binders} : {result} := {value.lean}
+noncomputable def expectedLocalCall{i} {binders} : {result} := {expected}
+same_basic_target actualLocalCall{i} expectedLocalCall{i}
+theorem meaningLocalCall{i} {binders} :
+  {'(actualLocalCall'+str(i)+' n local_f).entry = (fun _ => (0 : Complex))' if meaning else 'actualLocalCall'+str(i)+' n local_f = '+expected} := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Fifty-two experimental joint-row targets and fifty-two meaning proofs passed; production joint inference remains unimplemented.')
+print('Fifty-five experimental joint-row targets and fifty-five meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

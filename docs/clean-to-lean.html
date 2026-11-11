@@ -1477,5 +1477,13 @@ Lean projection is unchanged; the opaque native body is not unfolded by this
 optimization. Changed locals and unavailable checking still reach the checker.
 See the <a href="comparison-token-cache.md#projection-base-reuse-2026-11-11">reuse boundary and validation evidence</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="local-function-inference">
+<h2>Experimental local callback inference</h2>
+<p>With <code>f: Function(Vector(n,Complex),Real)</code>, <code>f(0)</code> maps
+schematically to <code>f (complexVectorZero n)</code>. Dependent callback results
+use checked substitution, and a callback's value may supply another dimension.
+A local function shadows a same-named module callable; a nonfunction local does
+not. See the <a href="../studies/parameterized-literals/README.md#local-function-calls-in-joint-inference">construction and remaining higher-order limits</a>.</p>
+</section></llm>
 </body>
 </html>

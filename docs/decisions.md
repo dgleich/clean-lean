@@ -2006,3 +2006,16 @@ reuse stored payloads across public calls or suppress failed checking. The selec
 Lean expression and parsing rules do not change. See the
 [rule and measured validation scope](comparison-token-cache.md#projection-base-reuse-2026-11-11).
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental local function inference
+
+Unary local Function calls now constrain literal arguments by their checked
+domain and substitute arguments into dependent codomains. Local functions shadow
+same-named module callables; nonfunction locals do not. Reconstruction retains
+the local call and validates nested selected module calls. See the
+[constructive rule and independent expectations](../studies/parameterized-literals/README.md#local-function-calls-in-joint-inference).
+General Apply/binder regions and production integration remain open; no syntax
+change is introduced.
+:::

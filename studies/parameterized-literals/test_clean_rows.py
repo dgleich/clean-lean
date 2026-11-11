@@ -759,6 +759,50 @@ class CleanRows(unittest.TestCase):
    ['Let data: Vector((carrier extent(T)),Complex)','Constructor: typed payload'],self.e)
   value=Builder(self.e,self.scope).materialize(expression_tree(parse('typed payload(type(Real),0).data','expression')),use_default=False)
   self.assertEqual(value.type,self.e.type('Vector((carrier extent(type(Real))),Complex)',self.scope))
+ def test_local_function_constrains_vector_literal(self):
+  self.scope['f']=Expr('f','f',self.e.type('Function(Vector(n,Complex),Real)',self.scope),tree=['Local','f'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('f(0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Real'))
+  self.assertEqual(value.tree[2][0][3],'complex vector zero')
+ def test_local_dependent_function_computes_result_index(self):
+  self.scope['f']=Expr('f','f',self.e.type('Function(k: Natural,Vector((k+1),Complex))',self.scope),tree=['Local','f'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('f(2)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+1),Complex)',self.scope))
+ def test_local_function_result_supplies_dependent_argument(self):
+  self.record()
+  self.scope['f']=Expr('f','f',self.e.type('Function(Vector(n,Complex),Natural)',self.scope),tree=['Local','f'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(f(0),0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('VectorCell((f((0:Vector(n,Complex)))))',self.scope))
+ def test_local_function_shadows_same_named_module_call(self):
+  notation('Notation f(x: Real): Real:',['Means: x','Render latex: f({x})'],self.e)
+  self.scope['f']=Expr('local_f','f',self.e.type('Function(Vector(n,Complex),Natural)',self.scope),tree=['Local','f'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('f(0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Natural'))
+  self.assertIn('local_f',value.lean)
+  self.assertNotIn(self.e.data['functions']['f']['native_binding'],value.lean)
+ def test_nonfunction_local_does_not_shadow_module_call(self):
+  notation('Notation f(x: Real): Real:',['Means: x','Render latex: f({x})'],self.e)
+  self.scope['f']=Expr('local_f','f',self.e.type('Real'),tree=['Local','f'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('f(0)','expression')),use_default=False)
+  self.assertIn(self.e.data['functions']['f']['native_binding'],value.lean)
+ def test_local_function_wrong_literal_rejected(self):
+  self.scope['f']=Expr('f','f',self.e.type('Function(Vector(n,Complex),Real)',self.scope),tree=['Local','f'])
+  with self.assertRaises(NoSolution):self.solve('f(1)',use_default=False)
+ def test_local_function_literal_codec(self):
+  from cleanlang.core import Expressions
+  from cleanlang.retained_codec import dumps,loads
+  self.scope['f']=Expr('f','f',self.e.type('Function(Vector(n,Complex),Real)',self.scope),tree=['Local','f'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('f(0)','expression')),use_default=False)
+  self.assertEqual(Expressions(self.e,self.scope).elaborate(loads(dumps(value.tree))).lean,value.lean)
+ def test_nonfunction_local_without_module_has_no_call_interpretation(self):
+  self.scope['f']=Expr('f','f',self.e.type('Real'),tree=['Local','f'])
+  with self.assertRaises(NoSolution):self.solve('f(0)',use_default=False)
+ def test_nested_local_calls_constrain_literal(self):
+  self.scope['f']=Expr('f','f',self.e.type('Function(Vector(n,Complex),Natural)',self.scope),tree=['Local','f'])
+  self.scope['g']=Expr('g','g',self.e.type('Function(Real,Vector(n,Complex))',self.scope),tree=['Local','g'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('f(g(0))','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Natural'))
+  self.assertEqual(value.tree[2][0][2][0][2],'Real')
  def shifted_literal(self):
   notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
    ['Means: fun _ _ => (0 : Complex)','Literal: 7','Render latex: 7'],self.e)

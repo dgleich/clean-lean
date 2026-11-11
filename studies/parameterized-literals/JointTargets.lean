@@ -799,4 +799,25 @@ noncomputable def expectedCarrierProjection : cleanType_Vector_cce915f2d60cfd4f8
 same_basic_target actualCarrierProjection expectedCarrierProjection
 theorem meaningCarrierProjection : actualCarrierProjection = (fun _ => (0 : Complex)) := by rfl
 
+
+noncomputable def actualLocalCall0 (n : cleanType_Natural_469c53b6dafb7a218246) (local_f : cleanType_Function_bb05fd158cbe096d7b2f (cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) cleanType_Real_107b6641a486642ad8e1) : cleanType_Real_107b6641a486642ad8e1 := (local_f (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n)))
+noncomputable def expectedLocalCall0 (n : cleanType_Natural_469c53b6dafb7a218246) (local_f : cleanType_Function_bb05fd158cbe096d7b2f (cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) cleanType_Real_107b6641a486642ad8e1) : cleanType_Real_107b6641a486642ad8e1 := local_f (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)
+same_basic_target actualLocalCall0 expectedLocalCall0
+theorem meaningLocalCall0 (n : cleanType_Natural_469c53b6dafb7a218246) (local_f : cleanType_Function_bb05fd158cbe096d7b2f (cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) cleanType_Real_107b6641a486642ad8e1) :
+  actualLocalCall0 n local_f = local_f (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n) := by rfl
+
+
+noncomputable def actualLocalCall1 (n : cleanType_Natural_469c53b6dafb7a218246) (local_f : (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 k (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := (local_f (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+noncomputable def expectedLocalCall1 (n : cleanType_Natural_469c53b6dafb7a218246) (local_f : (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 k (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := local_f (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
+same_basic_target actualLocalCall1 expectedLocalCall1
+theorem meaningLocalCall1 (n : cleanType_Natural_469c53b6dafb7a218246) (local_f : (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 k (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d) :
+  actualLocalCall1 n local_f = local_f (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) := by rfl
+
+
+noncomputable def actualLocalCall2 (n : cleanType_Natural_469c53b6dafb7a218246) (local_f : cleanType_Function_bb05fd158cbe096d7b2f (cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) cleanType_Natural_469c53b6dafb7a218246) : cleanStructure_VectorCell_ea235d5395205122748e (local_f (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)) := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((local_f (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n)))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((local_f (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n)))))))
+noncomputable def expectedLocalCall2 (n : cleanType_Natural_469c53b6dafb7a218246) (local_f : cleanType_Function_bb05fd158cbe096d7b2f (cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) cleanType_Natural_469c53b6dafb7a218246) : cleanStructure_VectorCell_ea235d5395205122748e (local_f (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)) := @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (local_f (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (local_f (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)))
+same_basic_target actualLocalCall2 expectedLocalCall2
+theorem meaningLocalCall2 (n : cleanType_Natural_469c53b6dafb7a218246) (local_f : cleanType_Function_bb05fd158cbe096d7b2f (cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) cleanType_Natural_469c53b6dafb7a218246) :
+  (actualLocalCall2 n local_f).entry = (fun _ => (0 : Complex)) := by rfl
+
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

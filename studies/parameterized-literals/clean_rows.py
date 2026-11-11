@@ -210,6 +210,31 @@ class Builder:
                 selected_field.parameters if selected_field is not None else (),plans))
         return results
 
+    def local_call_fragments(self,tree,path):
+        from candidate_values import ValuePlan
+        from cleanlang.dependent_functions import DependentFunctionType
+        function=self.scope[tree[1]]
+        if not self.env.is_function_type(function.type) or len(tree[2])!=1:
+            raise Incomplete('Local application requires a checked unary function')
+        domain,codomain=function.type.args
+        domain_term=self.typ(domain)
+        results=[]
+        for argument in self.fragments(tree[2][0],path+(2,0)):
+            formals={};evidence={}
+            if isinstance(function.type,DependentFunctionType):
+                name=function.type.binder;formals[name]=argument.value
+                if argument.syntax is not None:
+                    evidence[name]=self.call_witness(None,None,argument.syntax,argument.origins)
+            result,deferred,witnesses=self.dependent_type(codomain,formals,evidence,path+('local result',))
+            output=Variable(repr((path,'local application value')),'index')
+            requirements=tuple(dict.fromkeys(tuple(t for p in argument.plans for t in p.requirements)+argument.arguments+(argument.typ,result)))
+            results.append(Fragment(result,output,
+                argument.choices+(('local call',path,tree[1]),),argument.carriers,
+                argument.arguments,argument.equations+((argument.typ,domain_term),),
+                argument.deferred+deferred,argument.witnesses+witnesses,
+                plans=argument.plans+(ValuePlan(output,path,requirements,result),)))
+        return results
+
     def known_fragment(self,value,atom=None,*,optional=False):
         """Expose direct, checked constructor evidence without claiming new holes.
 
@@ -251,6 +276,8 @@ class Builder:
             return [self.known_fragment(self.known[path],self.known_values[path])]
         kind=tree[0]
         if kind=='Projection':return self.projection_fragments(tree,path)
+        if kind=='Call' and tree[1] in self.scope and self.env.is_function_type(self.scope[tree[1]].type):
+            return self.local_call_fragments(tree,path)
         if kind=='Decimal':
             text=digits(tree[1]);found=[]
             for name,spec in sorted(self.env.data['types'].items()):
@@ -279,7 +306,8 @@ class Builder:
             fixity='infix' if kind=='Operator' else 'prefix'
             names=getattr(self.env,'operator_overloads' if kind=='Operator' else 'prefix_overloads',{}).get(token(tree[1],fixity),[])
             children=[(tree[i],path+(i,)) for i in range(2,len(tree))]
-        elif kind=='Call' and tree[1] not in self.scope:
+        elif kind=='Call':
+            if tree[1] not in self.env.data['functions']:return []
             names=[tree[1]];children=[(arg,path+(2,i)) for i,arg in enumerate(tree[2])]
         else:raise Incomplete('Joint row generation does not cover '+kind)
         parts=[self.fragments(child,childpath) for child,childpath in children]
@@ -507,6 +535,10 @@ class Builder:
             for i in path:source=source[i]
             if source[0]=='Projection':
                 check(Expressions(self.env,self.scope).elaborate(source[1]),path+(1,))
+                return
+            if source[0]=='Call' and ('local call',path,source[1]) in choices:
+                for i,arg in enumerate(source[2]):
+                    check(Expressions(self.env,self.scope).elaborate(arg),path+(2,i))
                 return
             if path not in expected_calls:return
             if value.tree[0] in ('Operator','Unary'):

@@ -3709,6 +3709,34 @@
         "Full working-compiler discovery",
         "Full active-label validation"
       ]
+    },
+    {
+      "id": "experimental_local_function_inference",
+      "status": "experimental-slice",
+      "environment": "Explicit linear algebra modules and local f: Function(Vector(n,Complex),Real)",
+      "source": "f(0)",
+      "expected_tree": [
+        "Call",
+        "f",
+        [
+          [
+            "Decimal",
+            "0"
+          ]
+        ]
+      ],
+      "expected_lean": "f (complexVectorZero n), with the declared vector-zero wrapper",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Use checked local domain constraints and dependent codomain substitution; retain callback identity and validate nested native choices; apply existing function-only shadowing rule",
+      "pending": [
+        "General Apply and binder regions",
+        "Higher-order dependent carrier results and callable proof views",
+        "Universal symbolic-family validity",
+        "Production integration"
+      ]
     }
   ]
 }

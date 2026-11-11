@@ -1359,3 +1359,46 @@ Validation: all 200 experimental tests, 52 exact native targets and 52 supportin
 proofs pass. Provenance checks pass. The full production and active-label
 fixed-snapshot jobs remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Local function calls in joint inference
+
+The experimental adapter now handles unary calls through checked local Function
+values. A local `f: Function(Vector(n,Complex),Real)` constrains `f(0)` to the
+vector-zero interpretation, with schematic Lean target
+`f (complexVectorZero n)`. For a dependent
+`f: Function(k: Natural,Vector((k+1),Complex))`, `f(2)` substitutes the checked
+Natural argument into the result index. A call returning Natural can also supply
+a subsequent index, as in `vector cell(f(0),0)`.
+
+Resolve a Call head by the existing language rule: a same-named local whose type
+is Function supplies the callable; a nonfunction local does not shadow a module
+callable. For the local branch require one argument. Convert the checked domain
+to its symbolic term and equate it with the argument fragment's type. For a
+dependent codomain bind its formal to the argument's symbolic value and use the
+existing checked forward-index substitution rule; concrete argument evidence is
+retained when available. Record the local choice separately from native module
+choices, combine child obligations, and create a value reconstruction plan whose
+requirements include the argument and result types.
+
+Reconstruction keeps the local Call and recursively reconstructs its argument;
+it does not replace the callback with a module declaration. The post-saturation
+application checker validates the determined result type and any solved value
+index. Selected emission traverses local-call arguments too, so nested native
+call choices are still checked. All interpretation occurs under the fixed checked
+caller scope; this adds neither a name registry nor native-body dispatch.
+
+Tests cover domain-driven literal recovery, a dependent result, using a callback
+result as a record index, local-function shadowing, nonfunction nonshadowing,
+wrong-digit rejection and retained codec replay. Three native targets independently
+spell the ordinary, dependent and index-producing callback applications.
+General Apply expressions, lambda/binder regions, higher-order dependent carrier
+results, callable proof views and unresolved symbolic-family validity remain
+outside this slice. Production joint inference remains unimplemented.
+
+Validation: all 209 experimental tests, 55 exact native targets and 55 supporting
+proofs pass. Nested local calls and nonfunction locals with no module callable
+also have regressions. Provenance checks pass. Production full discovery and
+active-label verification remain pending in the projection-reuse snapshot.
+:::
