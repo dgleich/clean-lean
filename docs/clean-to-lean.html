@@ -1752,5 +1752,9 @@ disposable metadata cannot authorize reuse across calls. See the
 <h2>Nested scoped consumers (experimental)</h2>
 <p>Explicit consumer signatures can now guide recursively nested lambdas, quantifiers and module calls. For example, <code>nested(function (a: Real,function (b: Real,0)),0)</code> retains the nested Lean lambda <code>fun a =&gt; fun b =&gt; realZero</code>, with declared types and the selected literal witness. One outer selection covers all child alternatives. This extends the direct-only experiment above; implicit signature recovery and production integration remain pending. See the <a href="../studies/parameterized-literals/README.md#recursive-scoped-expression-preparation-experimental">constructive rule</a>. The snippet is explanatory; the native driver supplies exact target oracles.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="local-scoped-consumers">
+<h2>Local scoped applications (experimental)</h2>
+<p>A local <code>h: Function(Function(Real,Real),Real)</code> can consume <code>h(function (a: Real,0))</code>. Its Lean interpretation applies the local <code>h</code> to a typed lambda carrying the selected Real zero. Curried dependent heads use <code>h(n)(function (a: Real,0))</code>; local application is unary. Heads requiring joint inference remain incomplete, and production integration is pending. See the <a href="../studies/parameterized-literals/README.md#local-scoped-consumers-and-explicit-application-experimental">precise boundary and native oracles</a>.</p>
+</section></llm>
 </body>
 </html>

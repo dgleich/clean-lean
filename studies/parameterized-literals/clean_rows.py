@@ -770,7 +770,7 @@ class Builder:
             try:return self.materialize_binder(tree,expected,use_default)
             except RecursionError as error:raise Incomplete('Binder traversal recursion limit exceeded') from error
         from scoped_calls import contains_scoped_holes
-        if tree[0]=='Call' and contains_scoped_holes(tree):
+        if tree[0] in ('Call','Apply') and contains_scoped_holes(tree):
             from scoped_calls import materialize_call
             return materialize_call(self,tree,expected,use_default=use_default)
         selected=self.solve_with_trace(tree,expected,use_default=use_default)

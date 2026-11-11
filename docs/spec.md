@@ -2412,3 +2412,17 @@ specify the supported boundary. No grammar or production inference change.
 Implicit/contextual signature recovery and unsupported enclosing operators remain
 pending, as do mathematical topology proofs independently of this inference work.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental local scoped application
+
+Scoped-expression preparation now accepts local callable heads and explicit
+applications with checked hole-free heads. Local/explicit application remains
+unary; curried calls use `h(n)(f)`, unlike a module notation's declared arity.
+Domains constrain prepared arguments before the single enclosing selection.
+Dependent codomains may use checked hole-free arguments; unresolved heads or
+result dependencies remain incomplete. Reconstruction rechecks the head type and
+whole application. See the [constructive rule and examples](../studies/parameterized-literals/README.md#local-scoped-consumers-and-explicit-application-experimental).
+No grammar change or production integration is claimed.
+:::

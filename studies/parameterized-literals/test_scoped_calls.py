@@ -110,6 +110,32 @@ class ScopedCalls(unittest.TestCase):
   with self.assertRaises(Ambiguous):
    self.solve('consume(function (a: Real,consume(function (b: Real,b+0),0)),0)')
 
+ def local_consumer(self,typ):
+  self.scope['h']=Expr('h','h',self.env.type(typ,self.scope),tree=['Local','h'])
+ def test_local_consumer(self):
+  self.local_consumer('Function(Function(Real,Real),Real)')
+  with patch.object(Builder,'solve_with_trace',side_effect=AssertionError('inner selection')):
+   value=self.solve('h(function (a: Real,0))',use_default=False)
+  self.assertEqual(value.type,self.env.type('Real'))
+ def test_local_dependent_consumer(self):
+  self.local_consumer('Function(k: Natural,Function(Function(Real,Vector(k,Complex)),Real))')
+  value=self.solve('h(n)(function (a: Real,0))',use_default=False)
+  self.assertEqual(value.tree[2][0][3][3],'complex vector zero')
+ def test_local_unresolved_dependency_is_incomplete(self):
+  self.local_consumer('Function(k: Natural,Function(Function(Real,Vector(k,Complex)),Real))')
+  with self.assertRaises(Incomplete):self.solve('h(2)(function (a: Real,0))')
+ def test_local_quantified_consumer(self):
+  self.local_consumer('Function(Proposition,Real)')
+  value=self.solve('h(for every (a: Real,a = 0))',use_default=False)
+  self.assertEqual(value.tree[2][0][0],'Forall')
+ def test_local_arity_mismatch(self):
+  self.local_consumer('Function(Function(Real,Real),Real)')
+  with self.assertRaises(NoSolution):self.solve('h(function (a: Real,0),0)')
+ def test_local_consumer_round_trip(self):
+  self.local_consumer('Function(Function(Real,Real),Real)')
+  value=self.solve('h(function (a: Real,0))')
+  self.assertEqual(Expressions(self.env,self.scope).elaborate(loads(dumps(value.tree))).lean,value.lean)
+
 if __name__=='__main__':unittest.main()
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

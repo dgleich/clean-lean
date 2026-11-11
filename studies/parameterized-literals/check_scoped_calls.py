@@ -56,8 +56,26 @@ same_basic_target actualScopedCall{i} expectedScopedCall{i}
 theorem scopedCallMeaning{i} (n m : {t('Natural')}) : actualScopedCall{i} n m = 0 := by
   simp [actualScopedCall{i}, {f(name)}, {f('inner')}, {num(result)}]
 ''')
+local_cases=[
+ ('Function(Function(Real,Real),Real)',f'({t("Real")} → {t("Real")}) → {t("Real")}',
+  'h(function (a: Real,0))',f'h (fun (a : {t("Real")}) => {zr})'),
+ ('Function(k: Natural,Function(Function(Real,Vector(k,Complex)),Real))',
+  f'(k : {t("Natural")}) → ({t("Real")} → {t("Vector")} k {t("Complex")}) → {t("Real")}',
+  'h(n)(function (a: Real,0))',f'h n (fun (a : {t("Real")}) => {zv} n)'),
+ ('Function(Proposition,Real)',f'Prop → {t("Real")}',
+  'h(for every (a: Real,a = 0))',f'h (∀ (a : {t("Real")}), @{f("equal")} {t("Real")} a ({zr}))'),
+]
+for i,(typ,native,source,expected) in enumerate(local_cases):
+ local_scope={**scope,'h':Expr('h','h',env.type(typ,scope),tree=['Local','h'])}
+ value=Builder(env,local_scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ checks.append(f"""
+noncomputable def actualLocalScoped{i} (n : {t('Natural')}) (h : {native}) : {t('Real')} := {value.lean}
+noncomputable def expectedLocalScoped{i} (n : {t('Natural')}) (h : {native}) : {t('Real')} := {expected}
+same_basic_target actualLocalScoped{i} expectedLocalScoped{i}
+theorem localScopedMeaning{i} (n : {t('Natural')}) (h : {native}) : actualLocalScoped{i} n h = {expected} := by rfl
+""")
 path=HERE/'ScopedCallTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Eleven automatic scoped-call targets and eleven interpretation proofs passed; implicit/contextually unresolved consumers and production integration remain pending.')
+print('Fourteen automatic scoped-call targets and fourteen interpretation proofs passed; implicit/contextually unresolved consumers and production integration remain pending.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

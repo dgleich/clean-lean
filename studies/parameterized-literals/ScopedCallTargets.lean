@@ -406,4 +406,22 @@ same_basic_target actualScopedCall10 expectedScopedCall10
 theorem scopedCallMeaning10 (n m : cleanType_Natural_469c53b6dafb7a218246) : actualScopedCall10 n m = 0 := by
   simp [actualScopedCall10, cleanNotation_accept_f31b97787ce83dcca886, cleanNotation_inner_6ce71cef8970f1f6d0cf, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
 
+
+noncomputable def actualLocalScoped0 (n : cleanType_Natural_469c53b6dafb7a218246) (h : (cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1) → cleanType_Real_107b6641a486642ad8e1) : cleanType_Real_107b6641a486642ad8e1 := (h (fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedLocalScoped0 (n : cleanType_Natural_469c53b6dafb7a218246) (h : (cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1) → cleanType_Real_107b6641a486642ad8e1) : cleanType_Real_107b6641a486642ad8e1 := h (fun (a : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualLocalScoped0 expectedLocalScoped0
+theorem localScopedMeaning0 (n : cleanType_Natural_469c53b6dafb7a218246) (h : (cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1) → cleanType_Real_107b6641a486642ad8e1) : actualLocalScoped0 n h = h (fun (a : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) := by rfl
+
+
+noncomputable def actualLocalScoped1 (n : cleanType_Natural_469c53b6dafb7a218246) (h : (k : cleanType_Natural_469c53b6dafb7a218246) → (cleanType_Real_107b6641a486642ad8e1 → cleanType_Vector_cce915f2d60cfd4f85a3 k cleanType_Complex_2d7f06a08f8ab1e3f46d) → cleanType_Real_107b6641a486642ad8e1) : cleanType_Real_107b6641a486642ad8e1 := ((h n) (fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n))))
+noncomputable def expectedLocalScoped1 (n : cleanType_Natural_469c53b6dafb7a218246) (h : (k : cleanType_Natural_469c53b6dafb7a218246) → (cleanType_Real_107b6641a486642ad8e1 → cleanType_Vector_cce915f2d60cfd4f85a3 k cleanType_Complex_2d7f06a08f8ab1e3f46d) → cleanType_Real_107b6641a486642ad8e1) : cleanType_Real_107b6641a486642ad8e1 := h n (fun (a : cleanType_Real_107b6641a486642ad8e1) => cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)
+same_basic_target actualLocalScoped1 expectedLocalScoped1
+theorem localScopedMeaning1 (n : cleanType_Natural_469c53b6dafb7a218246) (h : (k : cleanType_Natural_469c53b6dafb7a218246) → (cleanType_Real_107b6641a486642ad8e1 → cleanType_Vector_cce915f2d60cfd4f85a3 k cleanType_Complex_2d7f06a08f8ab1e3f46d) → cleanType_Real_107b6641a486642ad8e1) : actualLocalScoped1 n h = h n (fun (a : cleanType_Real_107b6641a486642ad8e1) => cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n) := by rfl
+
+
+noncomputable def actualLocalScoped2 (n : cleanType_Natural_469c53b6dafb7a218246) (h : Prop → cleanType_Real_107b6641a486642ad8e1) : cleanType_Real_107b6641a486642ad8e1 := (h (∀ (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 (clean_bound_0) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))))
+noncomputable def expectedLocalScoped2 (n : cleanType_Natural_469c53b6dafb7a218246) (h : Prop → cleanType_Real_107b6641a486642ad8e1) : cleanType_Real_107b6641a486642ad8e1 := h (∀ (a : cleanType_Real_107b6641a486642ad8e1), @cleanDefine_equal_5fac732a65dd209a83f4 cleanType_Real_107b6641a486642ad8e1 a (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))
+same_basic_target actualLocalScoped2 expectedLocalScoped2
+theorem localScopedMeaning2 (n : cleanType_Natural_469c53b6dafb7a218246) (h : Prop → cleanType_Real_107b6641a486642ad8e1) : actualLocalScoped2 n h = h (∀ (a : cleanType_Real_107b6641a486642ad8e1), @cleanDefine_equal_5fac732a65dd209a83f4 cleanType_Real_107b6641a486642ad8e1 a (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) := by rfl
+
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

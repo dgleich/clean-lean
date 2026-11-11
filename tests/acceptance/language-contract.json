@@ -4332,6 +4332,23 @@
         "Unsupported enclosing operators and local callable consumers",
         "Production integration"
       ]
+    },
+    {
+      "id": "local_scoped_consumers",
+      "status": "experimental-slice",
+      "environment": "Explicit local callable types, checked hole-free heads and experimental scoped Builder.",
+      "source": "h(n)(function (a: Real,0))",
+      "expected_lean": "Unary application of the checked dependent local h n to a Real-domain lambda with selected dimension-n complex-vector zero.",
+      "checks": [
+        "test_scoped_calls.py: six local scoped application cases",
+        "check_scoped_calls.py: three local canonical targets and interpretation proofs, fourteen scoped targets total"
+      ],
+      "pending": [
+        "Heads requiring joint inference",
+        "Result dependencies on unresolved arguments",
+        "Proof-type callable views",
+        "Production integration"
+      ]
     }
   ]
 }

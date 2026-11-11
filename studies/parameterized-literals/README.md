@@ -2766,3 +2766,52 @@ and active-label snapshot processes remain live; these results do not substitute
 for their pending completion.
 
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Local scoped consumers and explicit application (experimental)
+
+The experimental scoped path also accepts a local callable or an explicit
+application whose head has no unresolved literal holes. Examples, with explicit
+local types:
+
+```clean
+-- h: Function(Function(Real,Real),Real)
+h(function (a: Real,0))
+-- h: Function(k: Natural,Function(Function(Real,Vector(k,Complex)),Real))
+h(n)(function (a: Real,0))
+-- h: Function(Proposition,Real)
+h(for every (a: Real,a = 0))
+```
+
+The parser already distinguishes `Call` from `Apply`. Each local or explicit
+application consumes exactly one argument; `h(n,f)` is not an alternative spelling
+for curried application. Module-declared notation retains its explicit declared
+arity. A local call checks its `Local` head; `Apply` checks its supplied head tree.
+Both read the domain from that checked callable type and recursively prepare the
+single argument using that domain as expectation. A dependent codomain is
+substituted only using a checked hole-free argument; a hole-bearing argument on
+which the codomain depends reports incomplete analysis. Ordinary codomains need
+no substitution. The existing joint product, outer selection, trace projection
+and whole-expression recheck then apply unchanged. The checked head type is
+revalidated during reconstruction.
+
+`h(n)(function (a: Real,0))` works because `h(n)` has a determined dependent
+result type. `h(2)(function (a: Real,0))` remains incomplete: its head contains an
+unresolved literal. More generally, a scoped application whose head itself needs
+joint inference is not solved separately. Proof-type callable views and general
+implicit/contextual discovery remain pending. This extends experimental source
+coverage only; it adds no grammar and changes no production inference rule.
+
+Six focused cases cover local lambdas, quantified arguments, dependent checked
+heads, unresolved heads, local arity rejection and retained serialization. Three
+additional independent full-expression Lean targets check local heads and their
+interpretations. The consumer itself is universally quantified in these native
+checks; its mathematical behavior is not assumed.
+Validation: all 456 experimental tests pass, including 37 scoped tests. All fourteen
+scoped canonical Lean targets and fourteen interpretation proofs pass. Provenance,
+reference HTML IDs/local links and whitespace checks pass. The production compiler
+is unchanged; the separately confirmed live full-discovery and active-label runs
+remain pending.
+
+:::

@@ -5,7 +5,7 @@ No child is independently selected/defaulted. Signature dependencies must alread
 be determined by checked hole-free arguments; general contextual discovery is pending.
 """
 from itertools import product
-from cleanlang.dependent_functions import occurs,substitute
+from cleanlang.dependent_functions import occurs,substitute,DependentFunctionType
 from cleanlang.numeral_inference import holes,default_carrier
 from constraint_model import Row,Selection,Incomplete,NoSolution
 from contextual_constraints import Candidate,select_contextual
@@ -14,30 +14,56 @@ from clean_rows import Builder
 
 
 def prepare_call(builder,tree,expected=None):
-    env=builder.env;scope=builder.scope;name=tree[1]
-    if name in scope and env.is_function_type(scope[name].type):
-        raise Incomplete('Scoped local-function calls need contextual signature integration')
-    spec=env.data['functions'].get(name)
-    if spec is None:raise NoSolution('Unknown scoped consumer')
-    signature=builder.signature(spec)
-    if any(p.visibility!='explicit' for p in signature.parameters):
-        raise Incomplete('Scoped consumers with implicit parameters need joint signature recovery')
-    if len(tree[2])!=len(signature.parameters):raise NoSolution('Scoped consumer arity mismatch')
-    known={};unresolved=set();parts=[]
-    for i,(parameter,source) in enumerate(zip(signature.parameters,tree[2])):
-        if any(occurs(parameter.typ,n) for n in unresolved):
-            raise Incomplete('Scoped parameter type depends on an unresolved earlier value')
-        typ=substitute(parameter.typ,known,env,scope)
+    env=builder.env;scope=builder.scope;name=tree[1] if tree[0]=='Call' else None
+    inputs=[]
+    if tree[0]=='Apply' or name in scope:
+        if len(tree[2])!=1:raise NoSolution('Local scoped application requires exactly one argument')
+        head_tree=tree[1] if tree[0]=='Apply' else ['Local',name]
+        if holes(head_tree):raise Incomplete('Scoped application head needs joint result recovery')
+        head=builder.check_candidate(head_tree)
+        current=head.type
+        for source in tree[2]:
+            if not env.is_function_type(current):
+                from cleanlang.proof_types import callable_view
+                if callable_view(current,env) is not None:
+                    raise Incomplete('Local scoped consumer evidence requires joint proof-type integration')
+                raise NoSolution('Local scoped consumer has too many arguments or is not callable')
+            inputs.append((current.args[0],source))
+            if isinstance(current,DependentFunctionType) and occurs(current.codomain,current.binder):
+                if holes(source):
+                    raise Incomplete('Local scoped result depends on an unresolved selected value')
+                actual=builder.check_candidate(source)
+                current=substitute(current.codomain,{current.binder:actual},env,scope)
+            else:current=current.args[1]
+        result_type=current
+        def revalidate():
+            if builder.check_candidate(head_tree).type!=head.type:
+                raise Incomplete('Local scoped consumer type changed during reconstruction')
+    else:
+        spec=env.data['functions'].get(name)
+        if spec is None:raise NoSolution('Unknown scoped consumer')
+        signature=builder.signature(spec)
+        if any(p.visibility!='explicit' for p in signature.parameters):
+            raise Incomplete('Scoped consumers with implicit parameters need joint signature recovery')
+        if len(tree[2])!=len(signature.parameters):raise NoSolution('Scoped consumer arity mismatch')
+        known={};unresolved=set()
+        for parameter,source in zip(signature.parameters,tree[2]):
+            if any(occurs(parameter.typ,n) for n in unresolved):
+                raise Incomplete('Scoped parameter type depends on an unresolved earlier value')
+            inputs.append((substitute(parameter.typ,known,env,scope),source))
+            if holes(source):unresolved.add(parameter.name)
+            else:known[parameter.name]=builder.check_candidate(source)
+        if any(occurs(signature.result,n) for n in unresolved):
+            raise Incomplete('Scoped result depends on an unresolved selected value')
+        result_type=substitute(signature.result,known,env,scope)
+        revalidate=lambda:builder.signature(spec)
+    parts=[]
+    for i,(typ,source) in enumerate(inputs):
         path=builder.row_namespace+(2,i)
         child=Builder(env,scope,builder.limit-1,binder_ids=builder.binder_ids,
                       binder_path=builder.binder_path,row_namespace=path)
         rows,retain=prepare_expression(child,source,typ)
         parts.append((rows,retain))
-        if holes(source):unresolved.add(parameter.name)
-        else:known[parameter.name]=builder.check_candidate(source)
-    if any(occurs(signature.result,n) for n in unresolved):
-        raise Incomplete('Scoped result depends on an unresolved selected value')
-    result_type=substitute(signature.result,known,env,scope)
     result_term=builder.typ(result_type,{})
     expected_equations=() if expected is None else ((result_term,builder.typ(expected,{})),)
     count=1
@@ -60,8 +86,8 @@ def prepare_call(builder,tree,expected=None):
                 selected.default_carrier)
             arguments.append(retain(trace))
             argument_offset+=width;carrier_offset+=count
-        builder.signature(spec) # Revalidate the declaration identity before final emission.
-        value=builder.check_candidate(['Call',name,[arg.tree for arg in arguments]])
+        revalidate() # Recheck the local head or module declaration before emission.
+        value=builder.check_candidate([tree[0],tree[1],[arg.tree for arg in arguments]])
         if builder.typ(value.type,{})!=result_term:
             raise Incomplete('Reconstructed scoped consumer result differs from the selected type')
         return value
@@ -91,7 +117,7 @@ def prepare_expression(builder,tree,expected=None):
         child=ScopedBody(builder.env,builder.scope,tree,expected,path=builder.row_namespace,
                          limit=builder.limit,binder_ids=builder.binder_ids)
         return child.rows(),child.retain
-    if tree[0]=='Call' and contains_scoped_holes(tree):
+    if tree[0] in ('Call','Apply') and contains_scoped_holes(tree):
         return prepare_call(builder,tree,expected)
     return builder.rows(tree,expected),lambda selection:builder.retain_selected(tree,selection,expected)
 
