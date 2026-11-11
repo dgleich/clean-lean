@@ -187,9 +187,11 @@ class Builder:
             return atom
         if type(typ) is not Type:raise Incomplete('Unsupported carrier constructor: '+type(typ).__name__)
         key=self.carrier_identity(typ.name)
-        classifier=self.env.classifier_info(typ)
-        if self.env.sort_level(typ)!=1 and (classifier is None or classifier[1]!=0):
-            raise Incomplete('Only Type-0 carriers and their closed classifiers in this adapter')
+        # Nominal identities already retain their declared closed universe.
+        # This does not infer universe variables or admit proof carriers.
+        level=self.env.sort_level(typ)
+        if type(level) is not int or level<1:
+            raise Incomplete('Nominal carrier requires a closed positive Sort level')
         return Carrier(key,tuple(self.typ(a,None if capture else formals) for a in typ.args))
 
     def dependent_type(self,typ,formals,evidence,path):

@@ -8832,6 +8832,30 @@
     "studies/parameterized-literals/compatibility.json": {
       "origin": "llm-assisted",
       "mode": "sidecar"
+    },
+    "tools/run_joint_driver.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tools/check_joint_higher_targets.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/parameterized-literals/HigherTargets.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
     }
   }
 }

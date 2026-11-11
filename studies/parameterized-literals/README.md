@@ -2975,3 +2975,61 @@ after pruning. These supplement the 92 corpus proofs; they do not validate the
 currently incomplete higher-universe topology cases.
 
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Closed higher-universe nominal carriers
+
+The joint solver now accepts nominal carriers whose declarations have any closed
+positive Lean `Sort` level. A carrier declared with `Universe: 1` therefore remains
+in `Type 1`, rather than being rejected by the former Type-0-only guard. Ordinary
+function carriers recursively retain their declared domain and codomain identities,
+including higher-universe codomains. This handles `object(n+1)` when `object`
+returns an explicitly declared module object or another closed nominal carrier.
+
+The symbolic `type` sort is a category of constraint terms, not Lean `Type 0`.
+A nominal `Carrier` retains its declaration binding identity and all arguments;
+the fixed declaration supplies its closed universe. Distinct carrier declarations
+remain distinct even when both are higher-universe types. Ground reconstruction
+still uses checked declarations and ordered argument validation. The encoding adds
+no universe metavariable, cumulative coercion or implicit universe choice. Non-Type
+constructors, unresolved universe levels, higher local carrier variables, higher
+classifier operands/parameters and general higher dependent binders retain their
+existing explicit incomplete-analysis boundaries.
+
+All three previously blocked topology documents now produce the same generated
+Lean under legacy and joint routing: `ExactSequences.clean`,
+`HomologySequence.clean` and `MayerVietorisMaps.clean`. The compatibility report
+retains both the earlier failures and this newer result. This removes that specific
+integration blocker; it does not prove the full geometric Mayer–Vietoris theorem.
+
+The API tests cover closed nominal results in `Type 1` and `Type 2`, rejection of a
+lower expected carrier, and continued incomplete analysis for higher-classifier
+inference. Independently authored native targets for `object(n+1)` at both universe
+levels compare exact elaborated bodies and prove their ordinary application meaning.
+All 462 solver tests and eight API tests pass; the two native targets/proofs pass.
+
+`tools/run_joint_driver.py` runs an existing validation driver in a process with
+joint routing for every hole-bearing expression. It preserves the ordinary
+no-hole checker and never retries a failed joint solve under legacy inference.
+It restores routing and command-line arguments on exit. This is a validation tool,
+not a production mode or a fallback policy. Reproduce the higher-carrier checks and
+the existing topology native checks with:
+
+```sh
+LAKE=lake python3 tools/check_joint_higher_targets.py
+LAKE=lake python3 tools/run_joint_driver.py studies/topology/verify_exact_sequences.py
+LAKE=lake python3 tools/run_joint_driver.py studies/topology/verify_homology_sequence.py
+LAKE=lake python3 tools/run_joint_driver.py studies/topology/verify_mayer_vietoris_maps.py
+```
+
+These drivers regenerate their existing tracked study artifacts. Production default
+routing remains unchanged pending wider compatibility and inference coverage.
+Joint-routed topology native validation passed: fifteen exact-sequence targets and
+eight proofs, eighteen homology-sequence targets and five proofs, and nine
+Mayer–Vietoris-map targets with one composition-to-zero proof. These 42 targets
+and 14 proofs supplement the two new universe targets/proofs. Regeneration also
+refreshes stale ExactSequences Lean fixtures to the existing quoted-identifier
+bindings; the paired legacy/joint document comparison remains identical.
+
+:::

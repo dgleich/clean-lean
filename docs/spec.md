@@ -2471,3 +2471,17 @@ from inflating later Cartesian products. Surviving rows receive the unchanged fu
 analysis. See the [rule, corpus comparison and topology gaps](../studies/parameterized-literals/README.md#document-compatibility-and-structural-contradiction-pruning).
 No syntax change; default production routing remains unchanged.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Closed nominal universes in joint inference
+
+The joint solver's nominal `Carrier` encoding accepts every declared closed positive
+Lean Sort level. Its symbolic `type` category does not mean Lean Type 0: declaration
+identity and arguments retain the concrete carrier and its universe. Ground
+reconstruction still checks the declared telescope. There is no universe inference,
+cumulative coercion or default universe. Higher classifier inference and higher
+local/dependent carrier boundaries remain separately incomplete. See the
+[rule, topology compatibility and independent native targets](../studies/parameterized-literals/README.md#closed-higher-universe-nominal-carriers).
+This removes the nominal Type-0 restriction, with no syntax or default-routing change.
+:::

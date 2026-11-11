@@ -1768,5 +1768,9 @@ disposable metadata cannot authorize reuse across calls. See the
 <h2>Joint completion compatibility</h2>
 <p>Isolated joint routing now reproduces the generated Lean for all 92 curated corpus results and checks their proofs. Structural contradiction pruning fixes the row-limit failure for <code>sin(x)^2 + cos(x)^2 = 1</code> without selecting child interpretations early. Topology studies using higher-universe carriers still report incomplete analysis; default translation is unchanged. See the <a href="../studies/parameterized-literals/README.md#document-compatibility-and-structural-contradiction-pruning">comparison procedure and precise pruning rule</a>. Text agreement alone is not a canonical target oracle.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="joint-closed-universes">
+<h2>Closed nominal universes in joint inference</h2>
+<p>A declared <code>Universe: 1</code> carrier remains in Lean <code>Type 1</code> during joint inference. Thus <code>object(n+1)</code> works when the local function returns a declared module-object carrier. The solver retains declaration identities and closed levels; it does not infer universes. The three topology documents blocked in the previous comparison now agree with legacy output. Higher classifier inference and default routing remain pending. See the <a href="../studies/parameterized-literals/README.md#closed-higher-universe-nominal-carriers">precise scope and native checks</a>.</p>
+</section></llm>
 </body>
 </html>

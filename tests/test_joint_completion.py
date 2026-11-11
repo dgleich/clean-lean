@@ -4,9 +4,9 @@ from pathlib import Path
 import unittest
 from unittest.mock import patch
 from cleanlang.core import Environment,Expr,Expressions
-from cleanlang.modules import load_module
+from cleanlang.modules import load_module,type_declaration,notation
 from cleanlang.syntax import parse,expression_tree
-from cleanlang.joint_inference import complete,Incomplete
+from cleanlang.joint_inference import complete,Incomplete,NoSolution
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -48,6 +48,29 @@ class JointCompletion(unittest.TestCase):
   value=complete(tree,self.env,self.scope,use_default=False)
   self.assertEqual(value.type,self.env.type('Proposition'))
   self.assertEqual(Expressions(self.env,self.scope).elaborate(value.tree).lean,value.lean)
+
+ def high_carrier(self,level):
+  name='High'+str(level)
+  type_declaration('Type '+name+'():',['Universe: '+str(level),'Means: ULift.{'+str(level)+',0} Nat','Render latex: H'],self.env)
+  return self.env.type(name)
+ def test_closed_higher_nominal_function_results(self):
+  for level in (1,2):
+   typ=self.high_carrier(level)
+   self.scope['object']=Expr('object','object',self.env.function_type(self.env.type('Natural'),typ),tree=['Local','object'])
+   value=complete(expression_tree(parse('object(n+1)','expression')),self.env,self.scope,use_default=False)
+   self.assertEqual(value.type,typ)
+   self.assertEqual(self.env.sort_level(value.type),level+1)
+ def test_higher_nominal_result_cannot_match_lower_expected_type(self):
+  typ=self.high_carrier(1)
+  self.scope['object']=Expr('object','object',self.env.function_type(self.env.type('Natural'),typ),tree=['Local','object'])
+  with self.assertRaises(NoSolution):
+   complete(expression_tree(parse('object(n+1)','expression')),self.env,self.scope,self.env.type('Natural'))
+ def test_higher_classifier_inference_remains_explicitly_incomplete(self):
+  self.high_carrier(1)
+  type_declaration('Type Large():',['Universe: 2','Classifies: 1','Means: Type 1','Render latex: L'],self.env)
+  notation('Notation take(T: Large,x: Natural): Natural:', ['Means: x','Render latex: t({T},{x})'],self.env)
+  with self.assertRaises(Incomplete):
+   complete(expression_tree(parse('take(type(High1),0)','expression')),self.env,self.scope)
 
 if __name__=='__main__':unittest.main()
 

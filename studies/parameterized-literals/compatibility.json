@@ -268,5 +268,71 @@
         "comparison": "joint-incomplete"
       }
     ]
+  },
+  "topology_after_closed_nominals": {
+    "_provenance": {
+      "origin": "llm",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "role": "assisted"
+    },
+    "scope": "Isolated document translation; generated text hashes are diagnostics, not canonical Lean or proof validation.",
+    "default_changed": false,
+    "files": [
+      {
+        "path": "studies/topology/ExactSequences.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "85aae67f535748cbf6e1e1721add1484de26928aa1297a90ef743a0f6ed82cc1",
+          "hole_calls": 4,
+          "elapsed_seconds": 0.678
+        },
+        "joint": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "85aae67f535748cbf6e1e1721add1484de26928aa1297a90ef743a0f6ed82cc1",
+          "hole_calls": 4,
+          "elapsed_seconds": 1.511
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/HomologySequence.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "361042f1f0f5e4d9c4ff53db67a453cc596c8df05ef1aaa11b98c484f4abd533",
+          "hole_calls": 11,
+          "elapsed_seconds": 0.927
+        },
+        "joint": {
+          "status": "translated",
+          "results": 5,
+          "lean_sha256": "361042f1f0f5e4d9c4ff53db67a453cc596c8df05ef1aaa11b98c484f4abd533",
+          "hole_calls": 11,
+          "elapsed_seconds": 3.785
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "studies/topology/MayerVietorisMaps.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 1,
+          "lean_sha256": "94cadbf493afd8aaba0bc688aab00df9638d8bed394e2f24381de680e85429f1",
+          "hole_calls": 3,
+          "elapsed_seconds": 1.129
+        },
+        "joint": {
+          "status": "translated",
+          "results": 1,
+          "lean_sha256": "94cadbf493afd8aaba0bc688aab00df9638d8bed394e2f24381de680e85429f1",
+          "hole_calls": 3,
+          "elapsed_seconds": 1.872
+        },
+        "comparison": "same-generated-text"
+      }
+    ]
   }
 }

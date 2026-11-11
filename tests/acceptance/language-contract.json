@@ -4400,6 +4400,23 @@
         "Default production routing",
         "Full conformance beyond the compatibility inputs"
       ]
+    },
+    {
+      "id": "joint_closed_higher_nominal_carriers",
+      "status": "explicit-api-not-default",
+      "environment": "Declared High1 : Type 1 and High2 : Type 2, with explicit Natural-domain local functions.",
+      "source": "object(n+1)",
+      "expected_lean": "Local object applied to the declared natural sum of n and the declared Natural numeral one, retaining its closed higher-universe result carrier.",
+      "checks": [
+        "tests/test_joint_completion.py: higher nominal results, lower expected-type mismatch and higher-classifier rejection",
+        "tools/check_joint_higher_targets.py: two exact targets and interpretation proofs",
+        "tools/run_joint_driver.py: existing topology native drivers under joint routing"
+      ],
+      "pending": [
+        "Higher classifier and local-carrier inference",
+        "General higher dependent binders",
+        "Default routing and full compatibility"
+      ]
     }
   ]
 }
