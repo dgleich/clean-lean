@@ -1811,3 +1811,15 @@ constructor evidence is preserved. Opaque record producers do not receive this
 evidence. The [construction and remaining bounds](../studies/parameterized-literals/README.md#constructor-field-evidence-for-dependent-projections)
 extend the experimental projection slice, with no grammar or production change.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Optional snapshot failure disables reuse within its pool
+
+After the first unavailable semantic snapshot, the transient comparison pool stops
+attempting reuse, clears prior entries, and suppresses storage by in-flight outer
+comparisons. Ordinary checking continues; a new public comparison has a fresh
+pool. This changes optional optimization effort only. The unchanged target rule,
+mutation checks and profiling limits are documented in the
+[comparison contract](comparison-reuse.md#stop-repeated-unavailable-snapshot-attempts).
+:::

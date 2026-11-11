@@ -18,12 +18,15 @@ def comparison_key(expression,env,locals,*,fresh=False):
     memo=getattr(pool,'comparison_memo',None)
     if memo is None:pool.comparison_memo={};memo=pool.comparison_memo
     cache_key=None
-    if previous is not None and expression.tree[0] in ('Call','ModuleCall','Operator','Unary','Apply','Projection'):
+    if previous is not None and not getattr(pool,'comparison_memo_disabled',False) and expression.tree[0] in ('Call','ModuleCall','Operator','Unary','Apply','Projection'):
         try:
             cache_key=(snapshot((expression.tree,expression.type,expression.lean,
                               tuple(sorted(locals.items())))),frozenset(before))
         except SnapshotUnavailable:
-            pass  # Optional reuse is not a semantic analysis or rejection gate.
+            # Repeated failed snapshots are pure overhead. Stop trying within
+            # this pool; ordinary checked comparison still runs every time.
+            pool.comparison_memo_disabled=True
+            memo.clear()
         if cache_key is not None and cache_key in memo:return memo[cache_key]
     def stable_opaque(value):
         # Only called on freshly normalized children, within this fixed traversal.
@@ -89,7 +92,7 @@ def comparison_key(expression,env,locals,*,fresh=False):
         import re
         from .core import ID
         result=key(result,owned) if any(t in owned for t in re.findall(ID,result)) else result
-        if cache_key is not None and pool.owned==before:
+        if cache_key is not None and pool.owned==before and not getattr(pool,'comparison_memo_disabled',False):
             # Eviction affects work only. A comparison that allocates identities
             # is never reusable, even when its emitted term hides those names.
             if len(memo)>=256:memo.clear()

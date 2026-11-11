@@ -135,6 +135,54 @@ class ScopedComparisonReuse(StableArguments):
    with patch('cleanlang.comparison_snapshot.snapshot',side_effect=SnapshotUnavailable('budget')):
     self.assertEqual(index_comparison(value,self.env,self.scope),expected)
   finally:del self.env._comparison_pool
+ def test_unavailable_snapshot_disables_only_current_pool(self):
+  from cleanlang.binder_keys import Pool
+  from cleanlang.comparison_snapshot import SnapshotUnavailable
+  value=self.expr('retain(x)');expected=index_comparison(value,self.env,self.scope)
+  self.env._comparison_pool=Pool(self.env,self.scope,value.tree)
+  try:
+   with patch('cleanlang.comparison_snapshot.snapshot',side_effect=SnapshotUnavailable('budget')) as snapshots:
+    self.assertEqual(index_comparison(value,self.env,self.scope),expected)
+    self.assertEqual(index_comparison(value,self.env,self.scope),expected)
+    self.assertEqual(snapshots.call_count,1)
+   self.scope['x'].lean='changed'
+   self.assertIn('changed',str(index_comparison(value,self.env,self.scope)))
+  finally:del self.env._comparison_pool
+  self.env._comparison_pool=Pool(self.env,self.scope,value.tree)
+  try:
+   from cleanlang.comparison_snapshot import snapshot
+   with patch('cleanlang.comparison_snapshot.snapshot',wraps=snapshot) as snapshots:
+    index_comparison(value,self.env,self.scope)
+    self.assertGreater(snapshots.call_count,0)
+  finally:del self.env._comparison_pool
+ def test_unavailable_snapshot_clears_prior_entries(self):
+  from cleanlang.binder_keys import Pool
+  from cleanlang.comparison_snapshot import SnapshotUnavailable
+  value=self.expr('retain(x)');other=self.expr('retain(retain(x))')
+  pool=Pool(self.env,self.scope,value.tree);self.env._comparison_pool=pool
+  try:
+   index_comparison(value,self.env,self.scope)
+   self.assertTrue(pool.comparison_memo)
+   with patch('cleanlang.comparison_snapshot.snapshot',side_effect=SnapshotUnavailable('budget')):
+    index_comparison(other,self.env,self.scope)
+   self.assertTrue(pool.comparison_memo_disabled)
+   self.assertEqual(pool.comparison_memo,{})
+   index_comparison(value,self.env,self.scope)
+   self.assertEqual(pool.comparison_memo,{})
+  finally:del self.env._comparison_pool
+ def test_disable_during_normalization_prevents_outer_storage(self):
+  from cleanlang.binder_keys import Pool
+  import cleanlang.conversion as conversion
+  value=self.expr('retain(x)');pool=Pool(self.env,self.scope,value.tree)
+  self.env._comparison_pool=pool;original=conversion._normal_form
+  def disable(*args,**kwargs):
+   pool.comparison_memo_disabled=True
+   return original(*args,**kwargs)
+  try:
+   with patch('cleanlang.conversion._normal_form',side_effect=disable):
+    index_comparison(value,self.env,self.scope)
+   self.assertEqual(pool.comparison_memo,{})
+  finally:del self.env._comparison_pool
  def test_snapshot_budget_is_bounded(self):
   from cleanlang.comparison_snapshot import snapshot,SnapshotUnavailable
   with self.assertRaises(SnapshotUnavailable):snapshot(list(range(20)),limit=10)

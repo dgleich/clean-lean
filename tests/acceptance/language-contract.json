@@ -3188,7 +3188,8 @@
         "No source parse or emitted native term change",
         "Exact semantic local snapshots",
         "No stored allocation effects or errors",
-        "No reuse across public comparisons"
+        "No reuse across public comparisons",
+        "Unavailable snapshots disable reuse only within their transient pool; ordinary checks continue and outer storage is suppressed"
       ],
       "pending": [
         "Final integration",

@@ -29,7 +29,10 @@ operands, or diagnostic source spelling alone. Disposable caches remain excluded
 according to the retained-value codec contract.
 
 Snapshot construction stops after 512 visits. An unavailable or over-budget
-snapshot bypasses reuse and performs the ordinary checked comparison. This is
+snapshot disables further reuse attempts for the rest of that pool and performs
+the ordinary checked comparison. Existing memo entries are cleared; an outer
+comparison already in flight cannot store a result after disablement. A later
+public comparison receives a new pool and may try again. This is
 not the semantic analysis budget: it cannot reject an input, resolve ambiguity,
 or turn an incomplete semantic check into success. The limit bounds optional
 optimization overhead, while normal elaboration retains its existing rules.
@@ -81,4 +84,59 @@ and unbounded JSON-snapshot active-label verifier were confirmed live and explic
 retired as superseded. Their command/checkout records are in
 `/tmp/clean-bounded-memo-retired.json`; none is counted as passing.
 This document does not claim a whole-module speedup.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Stop repeated unavailable snapshot attempts
+
+A 20-second diagnostic of current active-label module loading spent 6.970
+cumulative seconds in optional snapshot traversal (6,417 root visits). The
+per-attempt 512-visit limit still allowed repeated failed attempts in the same
+pool. The pool now disables reuse after the first SnapshotUnavailable, clears
+existing entries and prevents in-flight outer calls from repopulating the memo.
+Ordinary checked comparison continues; failure to build an optional key is not a
+semantic failure and cannot select an interpretation.
+
+The new flag belongs only to the transient pool. It is not serialized, retained
+on the module Environment after a public comparison, or shared with later calls.
+This deliberately trades possible small-term cache hits for a bound on repeated
+failed-key overhead. Successful reuse before disablement obeys the same semantic
+snapshot and owned-identity rules. Recomputing after disablement adds no new
+semantic shortcut; targets and error rules remain unchanged.
+
+Three regression tests cover a single snapshot attempt per disabled pool, fresh
+attempts in a new pool, ordinary validation of changed local values, clearing of
+prior entries, and suppression of outer storage after nested disablement. The
+focused reuse/index/context suites pass 66 tests.
+
+A second 20-second diagnostic spent 3.446 cumulative seconds in snapshot traversal
+(3,286 root visits). Both observations ended before module loading completed and
+may cover different amounts of work; neither establishes a whole-module speedup
+or a validation pass. Logs: `/tmp/clean-whole-topology-diagnostic.log` and
+`/tmp/clean-snapshot-stop-diagnostic.log`. A first diagnostic that timed only the
+final declaration was explicitly retired because prerequisite loading was not
+bounded; `/tmp/clean-topology-diagnostic-retired.json` records that instrumentation
+change. Existing validation jobs were not modified by either profile.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The current integration run ends with `Failures: []`: strict parser regeneration,
+530 Python tests, native target/proof checks and the 92-result proved corpus.
+The experimental inference suite separately passes 120 tests and 24 independent
+native targets with 24 supporting proofs. Logs:
+`/tmp/clean-snapshot-stop-integration.log`,
+`/tmp/clean-snapshot-stop-experimental-tests.log`, and
+`/tmp/clean-snapshot-stop-experimental-native.log`.
+
+Full discovery and active-label native validation now run on the immutable
+`/tmp/clean-snapshot-stop-validation-i8ocpwa5` snapshot. Their logs are
+`/tmp/clean-snapshot-stop-full.log` and
+`/tmp/clean-snapshot-stop-active-native.log`; neither has completed. The older
+b3dc1e9 discovery/native pair, checked-signature discovery and prefix-dimension
+discovery were confirmed live, explicitly retired as superseded by this compiler
+change, and then confirmed absent. `/tmp/clean-snapshot-stop-retired.json` records
+the commands and checkouts. Their incomplete results are preserved, not counted
+as passes or treated as failures caused by an observation timeout.
 :::

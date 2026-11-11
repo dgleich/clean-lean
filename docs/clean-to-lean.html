@@ -1332,5 +1332,12 @@ Natural numeral 2. The constructor supplies the field evidence; an opaque produc
 of Payload does not. Nested direct constructors can pass this evidence through
 projections. See the <a href="../studies/parameterized-literals/README.md#constructor-field-evidence-for-dependent-projections">substitution and retention rules</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="unavailable-comparison-snapshots">
+<h2>Unavailable comparison snapshots</h2>
+<p>If an optional cache-key snapshot cannot be built, ordinary checked comparison
+continues and that transient pool stops trying to cache further comparisons.
+Later public comparisons start fresh. No Clean syntax or Lean target rule changes.
+See the <a href="comparison-reuse.md#stop-repeated-unavailable-snapshot-attempts">reuse and validation contract</a>.</p>
+</section></llm>
 </body>
 </html>
