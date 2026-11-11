@@ -238,3 +238,48 @@ class FreshProjectionResultReuse(NestedProjectionReuse):
         expected=Expressions(self.env,self.local).parse('p.value')
         self.assertEqual((actual.lean,actual.type),(expected.lean,expected.type))
         self.assertNotIn('forged',actual.lean)
+
+# generated: gpt-6 2026-11-11 role=assisted
+class FreshProducerArguments(unittest.TestCase):
+    def setUp(self):
+        from cleanlang.structures import declare
+        self.env=Environment();load_module(ROOT/'library/operators.clean',self.env)
+        declare('Structure ResultBox():',['Let value: Real','Let action: Function(Real,Real)','Constructor: result box'],self.env)
+        notation('Notation opaque(x: Real): Real:', ['Means: x','Render latex: O({x})'],self.env)
+        notation('Define produce(x: Real): ResultBox:', ['Equals: result box(x,function(y: Real,y))'],self.env,authored=True)
+        self.local={'x':Expr('first','x',self.env.type('Real'),tree=['Local','x'])}
+
+    def expression(self,depth=5):
+        arg='x'
+        for _ in range(depth):arg='opaque('+arg+')'
+        return Expressions(self.env,self.local).parse('produce('+arg+').value')
+
+    def test_producer_reuses_fresh_actuals_before_substitution(self):
+        old=self.expression();original=self.env.call
+        with patch.object(self.env,'call',wraps=original) as calls:
+            value=comparison_normal_form(old,self.env,self.local)
+        opaque=[c for c in calls.call_args_list if c.args[0]=='opaque']
+        # One source check and one selected substituted-body check. No third
+        # pass over the producer actuals or the freshly selected normal form.
+        self.assertEqual(len(opaque),10)
+        expected=Expressions(self.env,self.local).parse('opaque(opaque(opaque(opaque(opaque(x)))))')
+        self.assertEqual((value.lean,value.type),(expected.lean,expected.type))
+
+    def test_saved_producer_children_do_not_certify_public_entry(self):
+        old=self.expression(1)
+        old.checked_args[0].checked_args=(Expr('forged','forged',self.env.type('Real')),)
+        self.local['x']=Expr('second','x',self.env.type('Real'),tree=['Local','x'])
+        value=comparison_normal_form(old,self.env,self.local)
+        self.assertIn('second',value.lean);self.assertNotIn('first',value.lean);self.assertNotIn('forged',value.lean)
+
+    def test_direct_helper_rechecks_without_freshness(self):
+        from cleanlang.conversion import _producer_field
+        producer=Expressions(self.env,self.local).parse('produce(x)')
+        producer.checked_args=(Expr('forged','forged',self.env.type('Real')),)
+        self.local['x']=Expr('second','x',self.env.type('Real'),tree=['Local','x'])
+        self.assertEqual(_producer_field(producer,'value',self.env,self.local).lean,'second')
+
+    def test_failed_source_check_is_not_hidden(self):
+        old=self.expression()
+        with patch.object(self.env,'call',side_effect=TimeoutError('source unavailable')):
+            with self.assertRaises(TimeoutError):comparison_normal_form(old,self.env,self.local)

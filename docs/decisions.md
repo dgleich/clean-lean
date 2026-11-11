@@ -2654,3 +2654,28 @@ No parsing, conversion equivalence, selected declaration or emitted target chang
 are intended. Eight-level unchanged projections have one `project` construction
 per level; changed local values/types and normalized bases remain separately tested.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Fresh producer arguments during field selection
+
+A comparison traversal that has freshly checked a projection may pass the checked
+producer arguments to field selection. The witness is local to that synchronous
+traversal with fixed declarations and lexical scope. A stored `checked_args`
+payload does not establish freshness. Direct helper calls without this witness
+continue to elaborate source arguments; missing or arity-mismatched payloads also
+use that path. Retained module producers still validate their declaration identity.
+
+For a freshly checked constructor, select its already checked field argument.
+For an authored producer, substitute its freshly checked explicit arguments into
+the frozen body using the existing hygienic substitution. Check the selected
+substituted field as before. If selection needs an intermediate producer, check
+that producer first and carry freshness only into its immediate selection. The
+selected expression is fresh for subsequent comparison normalization.
+
+Public projection comparison still checks the complete source expression,
+including unused actual arguments. Implicit-argument reification, shadowing,
+hidden-binder handling and dependent field-type checks are unchanged. No parser,
+conversion equivalence, inference policy or emitted target changes are introduced;
+no checked value is cached across public invocations. Failed checks propagate.
+:::

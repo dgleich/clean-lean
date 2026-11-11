@@ -9,7 +9,17 @@ from cleanlang.conversion import comparison_normal_form
 comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_basic_targets.py').read_text()).body
  if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))
 with tempfile.TemporaryDirectory() as d:
- path=Path(d)/'Records.clean';path.write_text('Import "'+str(ROOT/'library/logic/proof_equality.clean')+'"\n'+SOURCE)
+ path=Path(d)/'Records.clean';path.write_text('Import "'+str(ROOT/'library/logic/proof_equality.clean')+'"\n'+SOURCE+'''
+Structure ProducerBox():
+  Let value: Natural
+  Let unused: Function(Natural,Natural)
+  Constructor: producer box
+Notation producer argument(n: Natural): Natural:
+  Means: n
+  Render latex: a({n})
+Define projection producer(n: Natural): ProducerBox:
+  Equals: producer box(n,function(k: Natural,k))
+''')
  e=Environment();load_module(path,e)
  c,t,i=[e.structures[name]['key'] for name in ['Choice','Tower','Indexed']]
  nat=e.data['types']['Natural']['native_binding']
@@ -26,8 +36,23 @@ with tempfile.TemporaryDirectory() as d:
   checks.append(f'noncomputable def normalized{number} ({parameter} : {structure}) : {e.render_type(normalized.type,"lean",s)} := {normalized.lean}')
   checks.append(f'same_basic_target normalized{number} expected{number}')
  checks += [f'theorem countAgreement (c : {c}) : actual0 c = {c}.count c := by rfl',f'theorem valueAgreement (c : {c}) : actual1 c = {c}.value c := by rfl']
+ # A binder-bearing producer is retained in source emission but its selected
+ # field reduces during comparison; the unused lambda is not normalized.
+ s['n']=Expr('n','n',e.type('Natural'),tree=['Local','n'])
+ term=Expressions(e,s).parse('projection producer(producer argument(producer argument(n))).value')
+ reduced=comparison_normal_form(term,e,s)
+ box=e.structures['ProducerBox']['key']
+ producer=e.data['functions']['projection producer']['native_binding']
+ arg=e.data['functions']['producer argument']['native_binding']
+ checks += [f'noncomputable def producerSource (n : {nat}) : {nat} := {term.lean}',
+            f'noncomputable def producerExpected (n : {nat}) : {nat} := @{box}.value ({producer} ({arg} ({arg} n)))',
+            'same_basic_target producerSource producerExpected',
+            f'noncomputable def producerNormal (n : {nat}) : {nat} := {reduced.lean}',
+            f'noncomputable def producerNormalExpected (n : {nat}) : {nat} := {arg} ({arg} n)',
+            'same_basic_target producerNormal producerNormalExpected',
+            f'theorem producerAgreement (n : {nat}) : producerSource n = producerNormal n := by rfl']
  native=Path(d)/'Checks.lean';native.write_text(lean([],e,['Lean'])+comparison+'\n'.join(checks)+'\n')
  subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(native)],cwd=ROOT,check=True)
-print('Eight canonical projection targets (four source, four normalized) and two agreement proofs passed.')
+print('Ten canonical projection/producer targets and three agreement proofs passed.')
 
 # generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md

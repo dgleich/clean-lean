@@ -4721,6 +4721,40 @@
         "Level-specific perturbation naturality diagram",
         "Well-group formulas and closed-cover/excision audit"
       ]
+    },
+    {
+      "id": "fresh_producer_argument_reuse",
+      "status": "implementation-optimization-full-validation-pending",
+      "source": "tests/test_bound_comparison_reuse.py: FreshProducerArguments; tools/check_projection_dependency_targets.py",
+      "expected_tree": [
+        "Projection",
+        [
+          "Call",
+          "projection producer",
+          [
+            [
+              "Call",
+              "producer argument",
+              [
+                [
+                  "Local",
+                  "n"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "value"
+      ],
+      "expected_lean": "Source retains the declared producer accessor; comparison reduces only the selected field to the declared argument call. No new inferred argument, proof, cast or target is chosen.",
+      "checks": [
+        "FreshProducerArguments: nested work count, public stale-child rejection, direct-helper scope recheck and source failure propagation",
+        "check_projection_dependency_targets.py: ten canonical source/normalized targets and three agreement proofs"
+      ],
+      "pending": [
+        "Full updated-revision regression",
+        "Complete active-label validation"
+      ]
     }
   ]
 }

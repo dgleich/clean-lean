@@ -28,7 +28,7 @@ def index_comparison(expression,environment,locals,*,_fresh=False):
 
 
 
-def _producer_field(expression,field,env,locals):
+def _producer_field(expression,field,env,locals,*,fresh=False):
     """Select a checked authored producer field before normalizing sibling fields."""
     from .hygiene import substitute,UnrepresentableSubstitution
     from .dependent_functions import tree_names
@@ -38,9 +38,18 @@ def _producer_field(expression,field,env,locals):
     if not tree or tree[0] not in ('Call','ModuleCall'):return None
     spec=env.structures.get(expression.type.name)
     if spec is None:return None
+    # Freshness is supplied only by a check in this synchronous traversal.
+    # Direct callers continue to check authored argument trees; stored payloads
+    # alone never establish freshness.
+    checked=expression.checked_args if fresh else None
+    if checked is not None and len(checked)!=len(tree[2]):checked=None
+    if fresh and tree[0]=='ModuleCall':
+        from .bound_calls import identity
+        from .core import CleanError
+        if tree[3]!=identity(env,tree[1]):raise CleanError('Changed bound module callable: '+tree[1])
     if tree[1]==spec['constructor']:
         pos=len(spec['parameters'])+[n for n,_ in spec['fields']].index(field)
-        return Expressions(env,locals).elaborate(tree[2][pos])
+        return checked[pos] if checked is not None else Expressions(env,locals).elaborate(tree[2][pos])
     definition=env.definitions.get(tree[1])
     if not definition or definition['implementation']!='equals':return None
     from .operator_bindings import scope_unchanged
@@ -48,6 +57,7 @@ def _producer_field(expression,field,env,locals):
     parameters=env.data['functions'][tree[1]]['signature_tree'][2]
     body=definition.get('bound_tree') or definition['tree']
     bindings=dict(zip((p[1] for p in parameters if p[3]=='explicit'),
+                      checked if checked is not None else
                       (Expressions(env,locals).elaborate(a) for a in tree[2])))
     inferred=dict(expression.inferred_args);required=tree_names(body);values=value_names(body);types={}
     try:
@@ -66,7 +76,7 @@ def _producer_field(expression,field,env,locals):
         return Expressions(env,locals).elaborate(expanded[2][pos])
     value=Expressions(env,locals).elaborate(expanded)
     if value.type!=expression.type:return None
-    return _producer_field(value,field,env,locals)
+    return _producer_field(value,field,env,locals,fresh=True)
 
 def _normal_form(expression,environment,locals,*,fresh=False):
     env=environment
@@ -134,9 +144,9 @@ def _normal_form(expression,environment,locals,*,fresh=False):
         # One synchronous check supplies both producer inspection and base
         # normalization. Public entry still rechecks the stored source tree.
         checked_base=expression.checked_args[0]
-        selected=_producer_field(checked_base,tree[2],env,locals)
+        selected=_producer_field(checked_base,tree[2],env,locals,fresh=True)
         if selected is not None and selected.type==expression.type:
-            return _normal_form(selected,env,locals)
+            return _normal_form(selected,env,locals,fresh=True)
         base=_normal_form(checked_base,env,locals,fresh=True)
         if has_binder(base.tree):
             selected=projection_reduction(env,base,tree[2],locals)
