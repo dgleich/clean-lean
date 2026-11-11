@@ -8444,6 +8444,22 @@
         "-- ",
         ""
       ]
+    },
+    "cleanlang/callable_signatures.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_callable_signatures.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

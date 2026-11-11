@@ -1658,3 +1658,43 @@ The native constructor is unchanged by this presentation metadata. The
 and replay checks do not change production inference or resolve the remaining
 general dependent-constraint obligations.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Declaration-time callable signatures
+
+The compiler now retains the checked parameter types, their visibility and
+classifier identities, and the result type when a notation, definition, condition
+or structure constructor is declared. This is internal metadata, not new syntax.
+The experimental joint-literal adapter consumes it; production call elaboration
+and retained-literal serialization are unchanged.
+
+For each typed Let group, resolve its type in the preceding scope exactly once,
+then bind every name in the group to that checked type. Capture parameters in
+scope insertion order. In notation declarations, header parameters are explicit
+and preceding non-header parameters implicit; generated constructors make all
+parameters explicit. A classifier descriptor is the existing resolved native
+classifier identity and universe level, or absent for a value parameter. The
+result is the already checked Returns type (or constructed structure type).
+
+For example, with a declared Type-0 classifier Small, `Let Small,T: Small`
+binds both names as types. Separate `Let Small: Small` and `Let T: Small`
+bind a type and then a value of that type. Re-reading the grouped declaration
+as successive independent type strings is incorrect. The corresponding Lean
+binder shapes are `(Small T : Type)` and `(Small : Type) (T : Small)`;
+these are explanatory expansions, not the actual named wrapper targets.
+
+Consumers require the captured descriptor and validate its source signature,
+native binding/template/declaration and classifier metadata. Missing or changed
+metadata is an error (incomplete analysis in the experimental adapter), never a
+request to reinterpret source text. This does not deeply freeze retained type
+graphs or support arbitrary environment mutation: declarations remain fixed
+during checking. The descriptor is not a persistence or security boundary.
+
+There is no new parse choice or Lean target choice: capture records the output
+of the existing declaration rules, and row variables use its native identity,
+parameter name and expression path. The experiment still needs general dependent
+constraints, candidate validity checking and production integration. Constructor
+telescopes can now be inspected uniformly; general constructor row materialization
+is not claimed.
+:::

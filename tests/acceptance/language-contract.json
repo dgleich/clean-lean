@@ -3246,10 +3246,10 @@
       "pending": [
         "Production integration",
         "Binder and general dependent constraints",
-        "Retained declaration telescope audit",
         "Every candidate validated before selection",
         "Full production regression",
-        "General dependent-default interactions"
+        "General dependent-default interactions",
+        "General dependent telescope constraints and checked candidate applicability"
       ],
       "retention_checks": [
         "Simultaneous defaulted position trace",
@@ -3257,6 +3257,10 @@
         "Explicit annotations are not default holes",
         "Codec replay preserves origin after default change",
         "Same-carrier exact constructor and Numerals remain ambiguous"
+      ],
+      "checked_signature_tests": [
+        "tests/test_callable_signatures.py",
+        "studies/parameterized-literals/test_clean_rows.py"
       ]
     }
   ]

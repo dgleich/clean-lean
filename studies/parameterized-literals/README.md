@@ -218,3 +218,69 @@ its reflexive equality to the earlier five examples. This verifies the retained
 terms for these specimens, not production integration or the unresolved
 candidate-validity and dependent-constraint obligations listed above.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Declaration-time callable signatures
+
+The compiler now retains the checked parameter types, their visibility and
+classifier identities, and the result type when a notation, definition, condition
+or structure constructor is declared. This is internal metadata, not new syntax.
+The experimental joint-literal adapter consumes it; production call elaboration
+and retained-literal serialization are unchanged.
+
+For each typed Let group, resolve its type in the preceding scope exactly once,
+then bind every name in the group to that checked type. Capture parameters in
+scope insertion order. In notation declarations, header parameters are explicit
+and preceding non-header parameters implicit; generated constructors make all
+parameters explicit. A classifier descriptor is the existing resolved native
+classifier identity and universe level, or absent for a value parameter. The
+result is the already checked Returns type (or constructed structure type).
+
+For example, with a declared Type-0 classifier Small, `Let Small,T: Small`
+binds both names as types. Separate `Let Small: Small` and `Let T: Small`
+bind a type and then a value of that type. Re-reading the grouped declaration
+as successive independent type strings is incorrect. The corresponding Lean
+binder shapes are `(Small T : Type)` and `(Small : Type) (T : Small)`;
+these are explanatory expansions, not the actual named wrapper targets.
+
+Consumers require the captured descriptor and validate its source signature,
+native binding/template/declaration and classifier metadata. Missing or changed
+metadata is an error (incomplete analysis in the experimental adapter), never a
+request to reinterpret source text. This does not deeply freeze retained type
+graphs or support arbitrary environment mutation: declarations remain fixed
+during checking. The descriptor is not a persistence or security boundary.
+
+There is no new parse choice or Lean target choice: capture records the output
+of the existing declaration rules, and row variables use its native identity,
+parameter name and expression path. The experiment still needs general dependent
+constraints, candidate validity checking and production integration. Constructor
+telescopes can now be inspected uniformly; general constructor row materialization
+is not claimed.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Validation for checked signatures: 68 experimental design/adapter tests pass;
+89 focused signature/classifier/structure/adapter tests pass (these suites
+overlap). The seven exact joint targets and seven supporting proofs still pass.
+A separate 26-test module/definition run passes after updating an old identity
+fixture to the already specified quoted-binder spelling. The original failure
+was also reproduced on the earlier b3dc1e9 snapshot.
+
+Full unittest discovery is running on the immutable
+`/tmp/clean-checked-signatures-full-eq0dfjs_` snapshot, with output in
+`/tmp/clean-checked-signatures-full.log`. That snapshot precedes the identity
+fixture repair and final documentation edits; it is not a completed regression
+pass. Older bounded-comparison full discovery and active-label native validation
+were confirmed live and were not restarted or counted as successes.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The working-compiler integration run finished with `Failures: []`: strict parser
+regeneration, 501 existing Python integration tests, native target/proof checks,
+and the regenerated 92-result proved corpus. The eight new signature tests were
+run separately in the focused suite; the integration runner now includes them
+for subsequent runs. Log: `/tmp/clean-checked-signatures-integration.log`.
+:::

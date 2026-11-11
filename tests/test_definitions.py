@@ -26,7 +26,7 @@ class DefinitionTests(unittest.TestCase):
         self.assertEqual(env.notation_definitions[real],
                          f'noncomputable abbrev {real}  : Type :=\n  ℝ\n')
         self.assertEqual(env.notation_definitions[key],
-                         f'noncomputable def {key}  (x : (_root_.{real})) : (_root_.{real}) :=\n  x\n')
+                         f'noncomputable def {key}  («x» : (_root_.{real})) : (_root_.{real}) :=\n  «x»\n')
 
     def test_fields_reordered(self):
         expected = self.load(IDENTITY).definitions['identity']['key']

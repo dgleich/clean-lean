@@ -14,6 +14,20 @@ class CleanRows(unittest.TestCase):
   self.scope={n:Expr(n,n,self.e.type('Natural'),tree=['Local',n]) for n in ('m','n')}
   for n,t in [('x','Vector(n,Complex)'),('A','Matrix(m,n,Real)'),('r','Real')]:
    self.scope[n]=Expr(n,n,self.e.type(t,self.scope),tree=['Local',n])
+ def test_group_classifier_is_not_reparsed_sequentially(self):
+  type_declaration('Type Small():',['Universe: 1','Classifies: 0','Means: Type','Render latex: S'],self.e)
+  notation('Notation count types(Small,T):',
+   ['Let Small,T: Small','Returns: Natural','Means: 0','Render latex: 0'],self.e)
+  variables,_=Builder(self.e,{}).telescope(self.e.data['functions']['count types'],())
+  self.assertEqual([(n,v.sort) for n,v in variables.items()],[('Small','type'),('T','type')])
+ def test_missing_checked_signature_is_incomplete(self):
+  del self.e.data['functions']['unequal']['checked_signature']
+  with self.assertRaisesRegex(Incomplete,'Missing checked'):self.solve('x != 0')
+ def test_constructor_telescope_uses_checked_descriptor(self):
+  from cleanlang.structures import declare
+  declare('Structure Cell(T: Type):',['Let entry: T','Constructor: cell'],self.e)
+  variables,_=Builder(self.e,{}).telescope(self.e.data['functions']['cell'],())
+  self.assertEqual([(n,v.sort) for n,v in variables.items()],[('T','type'),('entry','index')])
  def solve(self,source,**kw):
   return Builder(self.e,self.scope).solve(expression_tree(parse(source,'expression')),**kw)
  def literal(self,result):return [key for kind,_,key in result[0] if kind=='literal']

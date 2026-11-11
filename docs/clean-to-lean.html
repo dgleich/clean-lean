@@ -1249,5 +1249,16 @@ selected constructor across replay. This is not production inference: dependent
 constraints and full candidate validation remain open.
 See the <a href="../studies/parameterized-literals/README.md#rows-from-actual-clean-declarations">construction and boundaries</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="checked-callable-signatures">
+<h2>Checked callable signatures</h2>
+<p>Declaration metadata preserves each resolved parameter type and classifier.
+With a Type-0 classifier Small, <code>Let Small,T: Small</code> corresponds to
+<code>(Small T : Type)</code>; separate groups correspond to
+<code>(Small : Type) (T : Small)</code>. These are explanatory Lean binder shapes.
+The experimental inference adapter now reads checked types instead of reparsing
+spelling after shadowing. Native declaration emission is unchanged; general
+joint inference remains experimental. See the
+<a href="spec.md#declaration-time-callable-signatures">capture contract</a>.</p>
+</section></llm>
 </body>
 </html>

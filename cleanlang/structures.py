@@ -195,6 +195,8 @@ def declare(header, fields, env):
         'latex':r'\operatorname{{'+textext(constructor).replace(' ',r'\ ')+'}}('+', '.join('{'+str(i)+'}' for i in range(len(allparams)))+')',
         'dependent_signature':{'implicit':[],'parameters':allparams,'result':result,'key':ckey},
         'signature_tree':['Constructor',constructor,name,[[n,str(t)] for n,t in allparams]]}
+    from .callable_signatures import capture
+    capture(env,constructor,((n,t,'explicit') for n,t in allparams),result)
     env.definitions[constructor]={'key':ckey,'parameters':list(local),'implementation':'generated constructor',
                                   'tree':env.data['functions'][constructor]['signature_tree'],
                                   'body':'@_root_.'+key+'.mk','returns':str(result),'attribution':None}

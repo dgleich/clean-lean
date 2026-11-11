@@ -276,6 +276,9 @@ def notation(header, fields, env, *, authored=False):
         env.data['functions'][name]['dependent_signature']={
             'implicit':list(implicit.items()),'parameters':list(types.items()),
             'result':result,'key':key}
+    from .callable_signatures import capture
+    capture(env,name,((n,v.type,'implicit' if n in implicit else 'explicit')
+                      for n,v in local.items()),result)
     if attachment is not None:
         attachment['snapshot']=(key,env.data['functions'][name]['lean'],env.notation_definitions[key])
         env.data['functions'][name]['literal']=attachment

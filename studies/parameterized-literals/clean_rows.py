@@ -7,8 +7,8 @@ Incomplete; they are never discarded as mismatches.
 """
 from dataclasses import dataclass
 from itertools import product
-import re
-from cleanlang.core import Type,LocalType,ValueIndex,Expr,Expressions,split
+from cleanlang.core import Type,LocalType,ValueIndex,Expressions,CleanError
+from cleanlang.callable_signatures import require
 from cleanlang.numeral_inference import holes,default_carrier
 from cleanlang.numerals import digits,identity
 from cleanlang.operator_bindings import token
@@ -51,26 +51,18 @@ class Builder:
         if self.env.sort_level(typ)!=1:raise Incomplete('Only Type-0 carriers in this adapter')
         return Carrier(spec['native_binding'],tuple(self.typ(a,None if capture else formals) for a in typ.args))
 
-    def telescope(self,spec,path):
-        local={};variables={};implicit=[]
-        for _,name,source,visibility in spec['signature_tree'][2]:
-            typ=self.env.type(source,local,phrases=False)
-            info=self.env.classifier_info(typ)
-            if info is not None and info[1]!=0:raise Incomplete('Higher classifier parameter')
-            variables[name]=Variable(repr((path,spec['native_binding'],name)), 'type' if info is not None else 'index')
-            local[name]=Expr(name,name,typ,tree=['Local',name])
-            if visibility=='implicit':implicit.append(variables[name])
-        return variables,tuple(implicit)
+    def signature(self,spec):
+        try:return require(self.env,spec)
+        except CleanError as error:raise Incomplete(str(error)) from error
 
-    def pattern(self,text,variables):
-        if text.startswith('$'):
-            if text[1:] not in variables:raise Incomplete('Unknown signature formal')
-            return variables[text[1:]]
-        match=re.fullmatch(r'(\w+)(?:\((.*)\))?',text)
-        if match is None:raise Incomplete('Nonstructural signature pattern: '+text)
-        spec=self.env.data['types'].get(match[1])
-        if spec is None or 'native_binding' not in spec:raise Incomplete('Missing signature carrier')
-        return Carrier(spec['native_binding'],tuple(self.pattern(x,variables) for x in split(match[2] or '')))
+    def telescope(self,spec,path):
+        variables={};implicit=[]
+        for p in self.signature(spec).parameters:
+            info=p.classifier
+            if info is not None and info[1]!=0:raise Incomplete('Higher classifier parameter')
+            variables[p.name]=Variable(repr((path,spec['native_binding'],p.name)), 'type' if info is not None else 'index')
+            if p.visibility=='implicit':implicit.append(variables[p.name])
+        return variables,tuple(implicit)
 
     def fragments(self,tree,path=()):
         if not holes(tree):
@@ -119,14 +111,11 @@ class Builder:
             spec=self.env.data['functions'][name]
             if len(spec['params'])!=len(children):raise Incomplete('Callable arity mismatch')
             variables,implicit=self.telescope(spec,path)
-            dep=spec.get('dependent_signature')
-            if dep:
-                parameters=[self.typ(t,variables) for _,t in dep['parameters']]
-                result=self.typ(dep['result'],variables)
-            else:
-                parameters=[self.pattern(p,variables) for p in spec['params']]
-                result=self.pattern(spec['returns'],variables)
-            explicit=[p[1] for p in spec['signature_tree'][2] if p[3]=='explicit']
+            signature=self.signature(spec)
+            explicit=[p for p in signature.parameters if p.visibility=='explicit']
+            parameters=[self.typ(p.typ,variables) for p in explicit]
+            result=self.typ(signature.result,variables)
+            explicit=[p.name for p in explicit]
             for actuals in product(*parts):
                 equations=tuple(eq for a in actuals for eq in a.equations)
                 equations+=tuple(zip(parameters,(a.typ for a in actuals)))
@@ -207,7 +196,7 @@ class Builder:
         bindings=unify(row.equations+tuple(zip(row.arguments,actual_arguments)),limit=self.limit)
         from cleanlang.annotations import Annotation,references
         from cleanlang.bound_calls import bind
-        from cleanlang.inferred_conversion import reify_parameter
+        from cleanlang.inferred_conversion import reify
         from cleanlang.literal_binding import snapshot,elaborate as literal
         selected_literals={(kind,path):key for kind,path,key in choices if kind in ('literal','numeral')}
         types={s['native_binding']:n for n,s in self.env.data['types'].items() if 'native_binding' in s}
@@ -228,8 +217,9 @@ class Builder:
                 formal,_=self.telescope(spec,path)
                 recovered={n:actual(value) for n,value in formal.items()}
                 target=actual(self.typ(spec['literal']['result'],formal))
-                args=[[p[1],p[3],bind(reify_parameter(recovered[p[1]],p,self.env,self.scope).tree,
-                                     self.env,self.scope,binders=True)] for p in spec['signature_tree'][2]]
+                args=[[p.name,p.visibility,bind(reify(recovered[p.name],self.env,self.scope,
+                                     classifier=p.typ).tree,self.env,self.scope,binders=True)]
+                      for p in self.signature(spec).parameters]
                 retained=['BoundLiteral',digits(node[1]),node[1],name,snapshot(name,self.env),args,
                           Annotation(str(target),target,references(target,self.scope)),origin]
                 literal(retained,self.env,self.scope)
