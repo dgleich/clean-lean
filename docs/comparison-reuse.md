@@ -68,12 +68,14 @@ The unbounded graph profile still spent 19.876 cumulative seconds in the visitor
 within its 30-second observation. This motivated the 512-visit fallback; neither
 profile establishes a completed active-label translation or a speedup. The graph
 variant passed 494 integration tests before the budget fallback was added.
-The final bounded variant passes 99 focused tests. Its integration runner is
-`/tmp/clean-bounded-memo-integration.log`. Full discovery and the active-label
+The final bounded variant passes 99 focused tests. Its integration runner
+(`/tmp/clean-bounded-memo-integration.log`) completes strict parser reproduction,
+496 Python tests, 57 exact native targets, 30 supporting proofs and all 92 corpus
+proofs, ending with `Failures: []`. Full discovery and the active-label
 native verifier run from immutable commit `b3dc1e9` in
 `/tmp/clean-bounded-memo-full-u2dezlb3`; logs are
 `/tmp/clean-bounded-memo-full.log` and
-`/tmp/clean-bounded-memo-active-native.log`. These remain pending at this checkpoint.
+`/tmp/clean-bounded-memo-active-native.log`. Those two long-running checks remain pending at this checkpoint.
 The previous binder-repair discovery, old operator-repair active-label verifier,
 and unbounded JSON-snapshot active-label verifier were confirmed live and explicitly
 retired as superseded. Their command/checkout records are in
