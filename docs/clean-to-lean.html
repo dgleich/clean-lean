@@ -1656,5 +1656,16 @@ cannot capture the inner k, and reconstruction rechecks the resulting type. See 
 <a href="../studies/parameterized-literals/README.md#outer-parameter-constraints-under-dependent-binders">model mapping and limits</a>.
 The Clean row builder and production inference do not use this bridge yet.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="dependent-argument-inference">
+<h2>Inferring from dependent callable arguments (experimental rows)</h2>
+<p>Given a callable taking <code>f: Function(k: Natural,Vector(k,T))</code> and
+<code>x: T</code>, passing a complex vector family determines T=Complex. A remaining
+literal x can then select its complex interpretation without a default. The expanded
+Lean call has an explicit <code>@read_family Complex family</code> prefix; exact
+targets retain Clean's declared callable and numeral wrappers. The whole instantiated
+function type is checked after the additional constraints are solved. See the
+<a href="../studies/parameterized-literals/README.md#recovering-parameters-from-dependent-callable-arguments">row construction and limits</a>.
+This is not yet production inference.</p>
+</section></llm>
 </body>
 </html>

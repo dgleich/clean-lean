@@ -1230,6 +1230,39 @@ class CleanRows(unittest.TestCase):
   self.assertEqual(replay.lean,value.lean);self.assertEqual(replay.tex,value.tex)
   self.assertEqual(replay.tree[4],'defaulted')
 
+
+ def test_dependent_argument_recovers_implicit_carrier_before_literal_selection(self):
+  notation('Notation read family(f,x):',
+   ['Let T: Type','Let f: Function(k: Natural,Vector(k,T))','Let x: T','Returns: T',
+    'Means: x','Render latex: read({f},{x})'],self.e)
+  self.scope['family']=Expr('family','family',self.e.type('Function(j: Natural,Vector(j,Complex))',self.scope),tree=['Local','family'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('read family(family,0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Complex'))
+  self.assertEqual(dict(value.inferred_args)['T'],self.e.type('Complex'))
+  self.e.data['functions']=dict(reversed(list(self.e.data['functions'].items())))
+  replay=Builder(self.e,self.scope).materialize(expression_tree(parse('read family(family,0)','expression')),use_default=False)
+  self.assertEqual(replay.lean,value.lean)
+
+ def test_dependent_argument_constraints_preserve_caller_type_parameter(self):
+  notation('Notation read family(f,x):',
+   ['Let T: Type','Let f: Function(k: Natural,Vector(k,T))','Let x: T','Returns: T',
+    'Means: x','Render latex: read({f},{x})'],self.e)
+  self.scope['U']=Expr('U','U',self.e.type('Type'),tree=['Local','U'])
+  self.scope['family']=Expr('family','family',self.e.type('Function(j: Natural,Vector(j,U))',self.scope),tree=['Local','family'])
+  self.scope['item']=Expr('item','item',self.e.type('U',self.scope),tree=['Local','item'])
+  # The outer call still contains a literal, so this exercises candidate rows.
+  notation('Notation wrap value(x,y):', ['Let U: Type','Let x: Real','Let y: U','Returns: U','Means: y','Render latex: wrap({x},{y})'],self.e)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('read family(family,wrap value(0,item))','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('U',self.scope))
+
+ def test_dependent_argument_does_not_capture_inner_dimension(self):
+  notation('Notation read fixed width(f,x):',
+   ['Let n: Natural','Let f: Function(k: Natural,Matrix(k,n,Complex))','Let x: Real','Returns: Real',
+    'Means: x','Render latex: read({f},{x})'],self.e)
+  self.scope['family']=Expr('family','family',self.e.type('Function(k: Natural,Matrix(k,k,Complex))',self.scope),tree=['Local','family'])
+  with self.assertRaises(Incomplete):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('read fixed width(family,0)','expression')),use_default=False)
+
 if __name__=='__main__':unittest.main()
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -205,6 +205,53 @@ class Builder:
                     tuple(w for _,_,ws in children for w in ws))
         return self.typ(typ,formals),(),()
 
+    def dependent_argument_constraints(self,template,actual,formals,signature):
+        """Structural constraints from a checked caller argument, with no new witnesses."""
+        from binder_types import CheckedBinderTypes
+        from constraint_model import Binder,IndexExpression
+        from cleanlang.core import Expr,texid
+        from cleanlang.lean_identifiers import quoted
+        declared={p.name:Expr(quoted(p.name),texid(p.name),p.typ,tree=['Local',p.name])
+                  for p in signature.parameters}
+        formal_codec=CheckedBinderTypes(self.env,declared,limit=self.limit)
+        actual_codec=CheckedBinderTypes(self.env,self.scope,limit=self.limit)
+        left=formal_codec.encode(template,formals)
+        right=actual_codec.encode(actual)
+        def convert(term,codec):
+            if isinstance(term,Atom):return self.typ(codec.atoms[term],{})
+            if isinstance(term,(Carrier,IndexExpression)):
+                return type(term)(term.identity,tuple(convert(a,codec) for a in term.arguments),term.sort)
+            if isinstance(term,Binder):
+                return Binder(term.identity,convert(term.domain,codec),convert(term.body,codec),term.sort)
+            return term
+        # These are additional inference equations, not a replacement for the
+        # forward TypePlan that checks the complete instantiated signature.
+        from constraint_model import Bound,variables as unknowns
+        def closes_at_root(term):
+            todo=[(term,0)];visits=0
+            while todo:
+                node,depth=todo.pop();visits+=1
+                if visits>self.limit:raise Incomplete('Dependent argument scope traversal limit exceeded')
+                if isinstance(node,Bound) and node.level>=depth:return False
+                if isinstance(node,Binder):todo.extend(((node.domain,depth),(node.body,depth+1)))
+                elif isinstance(node,(Carrier,IndexExpression)):todo.extend((a,depth) for a in node.arguments)
+            return True
+        equations=[];pending=[(convert(left,formal_codec),convert(right,actual_codec))];visits=0
+        while pending:
+            visits+=1
+            if visits>self.limit:raise Incomplete('Dependent argument constraint limit exceeded')
+            left,right=pending.pop()
+            if isinstance(left,Variable):
+                if unknowns(right):raise Incomplete('Caller dependent type contains unknown constraints')
+                if not closes_at_root(right):continue  # Outer parameters cannot capture this binder.
+                equations.append((left,right))
+            elif isinstance(left,Binder) and isinstance(right,Binder) and left.identity==right.identity:
+                pending.extend(((left.domain,right.domain),(left.body,right.body)))
+            elif isinstance(left,Carrier) and isinstance(right,Carrier) and left.identity==right.identity and len(left.arguments)==len(right.arguments):
+                pending.extend(zip(left.arguments,right.arguments))
+            # Computed operands and mismatching shapes are left to forward checks.
+        return tuple(equations)
+
     def signature(self,spec):
         try:return require(self.env,spec)
         except CleanError as error:raise Incomplete(str(error)) from error
@@ -476,6 +523,11 @@ class Builder:
                 type_deferred=tuple(d for _,ds,_ in converted for d in ds)+result_deferred
                 type_witnesses=tuple(w for _,_,ws in converted for w in ws)+result_witnesses
                 equations=tuple(eq for a in actuals for eq in a.equations)
+                from cleanlang.dependent_functions import DependentFunctionType,occurs
+                for p,a in zip(explicit,actuals):
+                    if isinstance(p.typ,DependentFunctionType) and a.syntax is not None and any(occurs(p.typ,n) for n in variables):
+                        actual=Expressions(self.env,self.scope).elaborate(a.syntax)
+                        equations+=self.dependent_argument_constraints(p.typ,actual.type,variables,signature)
                 equations+=tuple(zip(parameters,(a.typ for a in actuals)))
                 equations+=tuple((variables[p.name],a.value) for p,a in zip(explicit,actuals))
                 output=self.variable(repr((path,spec['native_binding'],'value')),'index')

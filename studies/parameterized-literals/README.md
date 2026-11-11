@@ -2148,3 +2148,59 @@ Validation: all 358 experimental Python tests pass, with 90 exact native-target
 comparisons and 90 supporting proofs. The two new native checks reconstruct solved
 dependent types; they do not validate production candidate enumeration.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Recovering parameters from dependent callable arguments
+
+The experimental Clean row builder now uses the binder bridge to derive additional
+parameter constraints from a checked dependent function argument. For example:
+
+```clean
+Notation read family(f,x):
+  Let T: Type
+  Let f: Function(k: Natural,Vector(k,T))
+  Let x: T
+  Returns: T
+  Means: x
+  Render latex: read({f},{x})
+```
+
+With a caller `family: Function(j: Natural,Vector(j,Complex))`, the expression
+`read family(family,0)` determines T=Complex and the complex numeral interpretation
+without a default. The native oracle checks the complete call, including its
+implicit Complex argument and selected numeral wrapper.
+
+For each candidate declaration and dependent parameter whose actual source is
+already available, the builder encodes the captured parameter type in a separate
+declaration-local scope and the checked argument type in the caller scope. Formal
+parameters use that candidate's existing variables. Private atom evidence is
+converted to the builder's established comparison terms without registering new
+candidate-provided witnesses. This keeps declaration locals distinct from caller
+locals and preserves the existing representative priority policy.
+
+The bridge derives equations only at variable positions reached through matching
+Binder or nominal Carrier constructors. A proposed outer solution containing a
+reference to an enclosing inner binder is not inferred. Computed expressions and
+mismatching shapes contribute no reverse equations. Traversal limits remain
+incomplete analysis. These equations augment the row's other constraints; they do
+not themselves accept the function argument.
+
+The existing forward TypePlan still substitutes every recovered parameter and
+checks the complete actual/expected function type before candidate selection.
+This matters for computed indices: eagerly adding a full structural equation would
+incorrectly block an already-supported offset whose explicit argument determines
+its value. Regression tests retain that forward path and keep a hidden, undetermined
+offset incomplete. Final callable reconstruction still checks all implicit arguments.
+
+The scope here is checked argument syntax. Inferred function-producing expressions,
+embedded lambda bodies, contextual unknowns, and full production integration remain
+unfinished. New reverse equations do not create missing value representatives: an
+index recovered from a function type still needs independently available checked
+evidence for emission. This is the experimental row builder, not production Clean.
+
+Validation: 361 experimental Python tests, 91 exact native-target comparisons and
+91 supporting proofs pass. The new whole-call oracle checks inferred Complex and
+the selected complex numeral with defaults disabled. Production full discovery and
+active-label regeneration were confirmed live separately; neither is counted here.
+:::

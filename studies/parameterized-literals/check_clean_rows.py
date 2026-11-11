@@ -616,6 +616,20 @@ def expected{name} : Type := {expected}
 same_basic_target actual{name} expected{name}
 theorem meaning{name} : actual{name} = expected{name} := by rfl
 """)
+notation('Notation read binder family(f,x):',
+ ['Let T: Type','Let f: Function(k: Natural,Vector(k,T))','Let x: T','Returns: T',
+  'Means: x','Render latex: read({f},{x})'],env)
+family_type=env.type('Function(j: Natural,Vector(j,Complex))',scope)
+family_scope={**scope,'family':Expr('family','family',family_type,tree=['Local','family'])}
+value=Builder(env,family_scope).materialize(expression_tree(parse('read binder family(family,0)','expression')),use_default=False)
+complex_numerals=env.data['types']['Complex']['numerals']['native_binding']
+checks.append(f"""
+noncomputable def actualRecoveredFamily (family : (k : {t('Natural')}) → {t('Vector')} k {t('Complex')}) : {t('Complex')} := {value.lean}
+noncomputable def expectedRecoveredFamily (family : (k : {t('Natural')}) → {t('Vector')} k {t('Complex')}) : {t('Complex')} :=
+  @{f('read binder family')} {t('Complex')} family ({complex_numerals} (nat_lit 0))
+same_basic_target actualRecoveredFamily expectedRecoveredFamily
+theorem meaningRecoveredFamily (family : (k : {t('Natural')}) → {t('Vector')} k {t('Complex')}) : actualRecoveredFamily family = (0 : Complex) := by simp [actualRecoveredFamily, {f('read binder family')}, {complex_numerals}]
+""")
 source='for every (z: Vector(n,Complex), z != 0)'
 value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
 checks.append(f"""
@@ -663,6 +677,6 @@ theorem meaningScopedCarrier : actualScopedCarrier := by
 """)
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Ninety experimental targets and ninety meaning proofs passed; production joint inference remains unimplemented.')
+print('Ninety-one experimental targets and ninety-one meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

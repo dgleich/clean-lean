@@ -4059,6 +4059,22 @@
         "Embedded lambda inference",
         "Clean row builder and production integration"
       ]
+    },
+    {
+      "id": "experimental_dependent_callable_argument_inference",
+      "status": "experimental-slice",
+      "source": "read family(family,0), with family: Function(j: Natural,Vector(j,Complex))",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Derive candidate parameter equations from checked dependent arguments; preserve separate scopes and forward TypePlan validation; one independent whole-call native target",
+      "pending": [
+        "Inferred function-producing arguments",
+        "Contextual metavariables",
+        "Embedded lambda inference",
+        "Production integration"
+      ]
     }
   ]
 }

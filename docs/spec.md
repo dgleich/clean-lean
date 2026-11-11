@@ -2224,3 +2224,17 @@ assumed injective. See the
 This connects the representation to the standalone model, not the production or
 Clean-row inference path. Contextual metavariables remain unimplemented.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental dependent argument inference
+
+The Clean row experiment derives outer parameter equations from a checked dependent
+callable argument using matching binder and nominal type structure. Separate formal
+and caller scopes prevent identifier capture. It does not reverse computed operations
+or add candidate-provided representatives. The complete substituted function type
+remains subject to the existing forward checked obligation. See the
+[constructive rule, example and limits](../studies/parameterized-literals/README.md#recovering-parameters-from-dependent-callable-arguments).
+This extends the row experiment; production integration, inferred callable arguments
+and embedded lambda inference remain pending. No source grammar changes.
+:::
