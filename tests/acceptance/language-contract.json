@@ -3943,6 +3943,23 @@
         "Inverse dependent-type inference",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_symbolic_binder_abstraction",
+      "status": "experimental-model-only",
+      "source": "Reference, Bound, Binder terms in the standalone constraint model",
+      "checks": [
+        "studies/parameterized-literals/test_constraint_model.py"
+      ],
+      "obligation": "Alpha-stable explicit abstraction, domain/body scope distinction, occurs checks, sort preservation, no metavariable capture, incomplete unsupported contextual/opaque abstraction",
+      "pending": [
+        "Clean-to-symbolic lowering",
+        "Contextual metavariable substitution",
+        "Opening and instantiation",
+        "Embedded lambda inference",
+        "Independent native targets for binder nodes",
+        "Production integration"
+      ]
     }
   ]
 }

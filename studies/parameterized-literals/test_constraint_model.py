@@ -195,3 +195,94 @@ class ScopedConstraints(unittest.TestCase):
         for constructor in (V,A):
             with self.subTest(constructor=constructor),self.assertRaises(TypeError):
                 constructor('x','index',{'binder/0'})
+
+
+class BinderAbstraction(unittest.TestCase):
+    def test_bound_names_have_one_structural_representation(self):
+        from constraint_model import Reference,Bound,Binder,abstract
+        expected=Binder('Pi',NAT,vector(Bound(0,'index')))
+        self.assertEqual(abstract('n',NAT,vector(Reference('n','index'))),expected)
+        self.assertEqual(abstract('m',NAT,vector(Reference('m','index'))),expected)
+    def test_outer_reference_is_not_discharged(self):
+        from constraint_model import Reference,Bound,Binder,abstract
+        body=C('Pair',(Reference('n','index'),Reference('outer','index')))
+        self.assertEqual(abstract('n',NAT,body),Binder('Pi',NAT,C('Pair',(Bound(0,'index'),Reference('outer','index')))))
+    def test_nested_reference_depth_and_domain_scope(self):
+        from constraint_model import Reference,Bound,Binder,abstract
+        inner=abstract('j',vector(Reference('n','index')),C('Pair',(Reference('n','index'),Reference('j','index'))))
+        expected=Binder('Pi',NAT,Binder('Pi',vector(Bound(0,'index')),C('Pair',(Bound(1,'index'),Bound(0,'index')))))
+        self.assertEqual(abstract('n',NAT,inner),expected)
+    def test_unused_binder_preserves_free_atom(self):
+        from constraint_model import abstract,Binder
+        self.assertEqual(abstract('n',NAT,vector(N)),Binder('Pi',NAT,vector(N)))
+    def test_opaque_dependency_is_not_guessed_from_atom_text(self):
+        from constraint_model import abstract
+        with self.assertRaises(Incomplete):abstract('n',NAT,vector(A('n + 1','index',frozenset({'n'}))))
+    def test_contextual_metavariable_needs_explicit_future_representation(self):
+        from constraint_model import abstract
+        with self.assertRaises(Incomplete):abstract('n',NAT,V('T','type',frozenset({'n'})))
+    def test_scope_independent_metavariable_unifies_under_binder(self):
+        from constraint_model import abstract,resolve
+        t=V('T','type')
+        bindings=unify([(abstract('n',NAT,t),abstract('m',NAT,REAL))])
+        self.assertEqual(resolve(t,bindings),REAL)
+    def test_local_reference_cannot_solve_outer_metavariable(self):
+        from constraint_model import abstract,Reference
+        x=V('x','index')
+        with self.assertRaises(NoSolution):unify([(abstract('n',NAT,vector(x)),abstract('m',NAT,vector(Reference('m','index'))))])
+    def test_free_reference_permissions_remain_checked(self):
+        from constraint_model import abstract,Reference
+        closed=V('T','type');inner=V('U','type',frozenset({'outer'}))
+        typ=abstract('n',NAT,vector(Reference('outer','index')))
+        with self.assertRaises(NoSolution):unify([(closed,typ)])
+        self.assertEqual(unify([(inner,typ)])[inner],typ)
+    def test_occurs_check_visits_binder_domain_and_body(self):
+        from constraint_model import Binder
+        t=V('T','type')
+        for rhs in [Binder('Pi',t,REAL),Binder('Pi',NAT,t)]:
+            with self.subTest(rhs=rhs),self.assertRaises(NoSolution):unify([(t,rhs)])
+    def test_different_binder_constructor_rejects(self):
+        from constraint_model import Binder
+        with self.assertRaises(NoSolution):unify([(Binder('Pi',NAT,REAL),Binder('Lambda',NAT,REAL))])
+    def test_dangling_bound_input_is_incomplete_even_without_variables(self):
+        from constraint_model import Bound,Binder
+        for term in [Bound(0,'index'),Binder('Pi',NAT,Bound(1,'index'))]:
+            with self.subTest(term=term),self.assertRaises(Incomplete):unify([(term,term)])
+    def test_forward_check_can_return_closed_binder(self):
+        from constraint_model import abstract,Reference
+        t=V('T','type');typ=abstract('n',NAT,vector(Reference('n','index')))
+        self.assertEqual(select([Row(('pi',),(),(t,),(),(Deferred(t,(),lambda _:typ),))]),(('pi',),(typ,)))
+    def test_sort_preserved_when_resolving_structural_term(self):
+        from constraint_model import resolve,abstract
+        t=V('t','index');app=C('f',(t,),sort='index')
+        self.assertEqual(resolve(app,{t:N}),C('f',(N,),sort='index'))
+        self.assertEqual(abstract('unused',NAT,app).body.sort,'index')
+    def test_abstraction_resource_limit_is_incomplete(self):
+        from constraint_model import abstract,Reference
+        with self.assertRaises(Incomplete):abstract('n',NAT,vector(Reference('n','index')),limit=1)
+    def test_bound_level_requires_nonnegative_integer(self):
+        from constraint_model import Bound
+        for level in [-1,True,1.0]:
+            with self.subTest(level=level),self.assertRaises(ValueError):Bound(level,'index')
+
+
+class BinderScopeRegressions(unittest.TestCase):
+    def test_outer_alias_cannot_hide_later_bound_escape(self):
+        from constraint_model import abstract,Reference
+        x,y=V('x','index'),V('y','index')
+        bindings=unify([(x,y)])
+        with self.assertRaises(NoSolution):
+            unify([(abstract('n',NAT,vector(y)),abstract('m',NAT,vector(Reference('m','index'))))],bindings)
+    def test_nested_bound_positions_are_not_interchangeable(self):
+        from constraint_model import Binder,Bound
+        outer=Binder('Pi',NAT,Binder('Pi',NAT,vector(Bound(1,'index'))))
+        inner=Binder('Pi',NAT,Binder('Pi',NAT,vector(Bound(0,'index'))))
+        with self.assertRaises(NoSolution):unify([(outer,inner)])
+    def test_unknown_body_constructor_is_incomplete(self):
+        from constraint_model import abstract
+        with self.assertRaises(Incomplete):abstract('n',NAT,object())
+    def test_binder_scope_check_keeps_domain_dependencies(self):
+        from constraint_model import abstract,Reference
+        t=V('T','type')
+        typ=abstract('n',vector(Reference('outer','index')),REAL)
+        with self.assertRaises(NoSolution):unify([(t,typ)])

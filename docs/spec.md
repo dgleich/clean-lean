@@ -2125,3 +2125,18 @@ Source grouping remains the existing left-associated postfix grammar. See the
 [constructive chain rule and examples](../studies/parameterized-literals/README.md#chained-callable-signatures).
 No production or grammar change is claimed; embedded lambda inference remains open.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental symbolic binder representation
+
+The standalone constraint model now distinguishes explicit lexical references,
+de Bruijn bound references, and binder nodes. Abstraction preserves outer
+references and refuses opaque/contextual dependencies it cannot close. Structural
+unification admits scope-independent unknowns under binders while rejecting escape
+into metavariable solutions. See the
+[constructive rules and precise boundary](../studies/parameterized-literals/README.md#explicit-symbolic-binder-abstraction).
+These nodes have no Clean lowering yet and accept no new source syntax. Contextual
+metavariables and embedded lambda inference remain open; native regression checks
+must not be described as conformance evidence for this representation.
+:::

@@ -1582,5 +1582,15 @@ the exact target retains declared numeral and vector-literal wrappers. Ordinary
 function layers preserve dependencies needed by later dependent layers. See the
 <a href="../studies/parameterized-literals/README.md#chained-callable-signatures">scope and propagation rule</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="symbolic-binder-abstraction">
+<h2>Binder abstraction in the constraint model (not integrated)</h2>
+<p>The symbolic model represents a bound variable by its binder depth, so
+<code>(n : Nat) → Vector n Complex</code> and its bound-name-renamed form share
+one structure. Outer references remain distinct. Scope-independent metavariables
+may be solved under a binder; a solution cannot capture a bound reference.
+This is a prerequisite model, not a new Clean-to-Lean translation rule. Checked
+Clean lowering, contextual metavariables, and embedded lambda inference are
+pending. See the <a href="../studies/parameterized-literals/README.md#explicit-symbolic-binder-abstraction">abstraction and unification contract</a>.</p>
+</section></llm>
 </body>
 </html>

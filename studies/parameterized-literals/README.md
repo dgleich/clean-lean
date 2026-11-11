@@ -1812,3 +1812,54 @@ and every selected numeral/vector wrapper explicitly. This is not embedded lambd
 inference, higher-universe generalization, or inverse inference of hidden type
 parameters. Those limits and production integration remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Explicit symbolic binder abstraction
+
+The constraint model now has three additional constructors: `Reference(local,sort)`
+for an explicit lexical reference, `Bound(level,sort)` for a de Bruijn reference,
+and `Binder(constructor,domain,body,sort)`. Bound level zero refers to the nearest
+enclosing binder body. A binder does not bind its domain. Constructor identities
+and sorts are retained; different constructors or sorts do not unify. These are
+symbolic model nodes, not new Clean source syntax.
+
+To close local ℓ in body B, `abstract(ℓ,D,B)` traverses B with depth zero. It
+replaces `Reference(ℓ,s)` by `Bound(depth,s)`. Entering a nested binder's domain
+preserves depth; entering its body increments depth. Other lexical references and
+already bound references are preserved. An existing bound reference must have
+level smaller than the traversal depth. Thus closing n around a nested j binder
+produces level one for n and level zero for j, while n in j's domain has level zero.
+The caller must supply a checked outer-scope domain and immutable lexical identities.
+
+An opaque atom whose dependency metadata mentions ℓ cannot be structurally
+abstracted: its text is not parsed or rewritten. Likewise, an unresolved
+metavariable permitted to depend on ℓ requires contextual metavariable substitution
+and reports incomplete. A metavariable whose permission set excludes ℓ is safe to
+retain, since later solutions must remain independent of that local. These are
+explicit representation limits, not evidence that the corresponding mathematics
+is invalid.
+
+Before equation decomposition, well-scoping validates bound levels. Malformed
+input or an unknown node is incomplete. Binder unification decomposes matching
+constructors into domain and body equations. Occurs checks and substitution visit
+both children. Every metavariable substitution is checked from its own root:
+a bound reference cannot escape into a solution merely because the equation arose
+inside a binder. Genuine scope escape is a mismatch. Free references in both the
+domain and body must be permitted by the variable's outer scope. Structural
+resolution now also preserves the sort of Carrier nodes instead of reconstructing
+every carrier with the default type sort.
+
+Validation: all 299 experimental tests pass, including 20 new binder cases. The
+existing 71 native target comparisons and 71 supporting proofs also pass as
+regressions for the unchanged Clean adapter. Full production discovery and the
+active-label regeneration retry are confirmed live and remain pending.
+
+This permits closed binder comparison and inference of scope-independent unknowns
+under binders. It does not implement contextual metavariables, opening/instantiation,
+embedded lambda constraints, or lowering of these new nodes into checked Clean
+expressions. In particular, the Clean adapter still uses its checked dependent
+type keys and TypePlans; it does not produce these Binder nodes yet. Native
+regression checks exercise that existing adapter, not a claimed native mapping
+for the new representation. Production integration remains pending.
+:::

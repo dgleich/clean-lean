@@ -37,6 +37,73 @@ class Carrier:
     sort: str='type'
 
 @dataclass(frozen=True)
+class Reference:
+    """A lexical local reference, distinct from an opaque checked atom."""
+    binder: object
+    sort: str
+
+@dataclass(frozen=True)
+class Bound:
+    """De Bruijn reference: zero denotes the nearest enclosing Binder body."""
+    level: int
+    sort: str
+
+    def __post_init__(self):
+        if type(self.level) is not int or self.level<0:raise ValueError('Natural bound-reference level required')
+
+@dataclass(frozen=True)
+class Binder:
+    identity: str
+    domain: object
+    body: object
+    sort: str='type'
+
+
+def well_scoped(term,*,limit=4096):
+    """Validate explicit bound references before decomposing equations."""
+    pending=[(term,0)];visits=0
+    while pending:
+        visits+=1
+        if visits>limit:raise Incomplete('Binder well-scoping limit exceeded')
+        node,depth=pending.pop()
+        if isinstance(node,Bound):
+            if node.level>=depth:raise Incomplete('Malformed input contains a dangling bound reference')
+        elif isinstance(node,Carrier):pending.extend((a,depth) for a in node.arguments)
+        elif isinstance(node,Binder):pending.extend(((node.domain,depth),(node.body,depth+1)))
+        elif not isinstance(node,(Variable,Atom,Reference)):raise Incomplete('Unknown scoped term')
+
+
+def abstract(binder,domain,body,*,identity='Pi',sort='type',limit=4096):
+    """Close explicit lexical references, without inspecting opaque atom text.
+
+    A metavariable permitted to depend on the closing local needs contextual
+    metavariable substitution, which is deliberately not approximated here.
+    """
+    visits=0
+    def close(term,depth):
+        nonlocal visits
+        visits+=1
+        if visits>limit:raise Incomplete('Binder abstraction limit exceeded')
+        if isinstance(term,Reference):return Bound(depth,term.sort) if term.binder==binder else term
+        if isinstance(term,Bound):
+            if term.level>=depth:raise Incomplete('Input contains a dangling bound reference')
+            return term
+        if isinstance(term,Variable):
+            if binder in term.allowed_binders:raise Incomplete('Contextual metavariable abstraction is not implemented')
+            return term
+        if isinstance(term,Atom):
+            if binder in term.free_binders:raise Incomplete('Opaque binder dependency cannot be abstracted structurally')
+            return term
+        if isinstance(term,Carrier):return Carrier(term.identity,tuple(close(a,depth) for a in term.arguments),term.sort)
+        if isinstance(term,Binder):return Binder(term.identity,close(term.domain,depth),close(term.body,depth+1),term.sort)
+        raise Incomplete('Unknown binder abstraction term')
+    try:
+        well_scoped(domain,limit=limit)
+        return Binder(identity,domain,close(body,0),sort)
+    except RecursionError as error:raise Incomplete('Binder abstraction recursion exhausted') from error
+
+
+@dataclass(frozen=True)
 class Deferred:
     """Pure forward check: ground inputs -> checked ground value, no inversion."""
     output: object
@@ -55,13 +122,15 @@ class Row:
 
 def resolve(term,bindings):
     if isinstance(term,Variable) and term in bindings:return resolve(bindings[term],bindings)
-    if isinstance(term,Carrier):return Carrier(term.identity,tuple(resolve(a,bindings) for a in term.arguments))
+    if isinstance(term,Carrier):return Carrier(term.identity,tuple(resolve(a,bindings) for a in term.arguments),term.sort)
+    if isinstance(term,Binder):return Binder(term.identity,resolve(term.domain,bindings),resolve(term.body,bindings),term.sort)
     return term
 
 
 def variables(term):
     if isinstance(term,Variable):return {term}
     if isinstance(term,Carrier):return set().union(*(variables(a) for a in term.arguments))
+    if isinstance(term,Binder):return variables(term.domain)|variables(term.body)
     return set()
 
 
@@ -73,16 +142,21 @@ def check_scopes(bindings,*,limit=4096):
     """
     visits=0
     for variable,value in bindings.items():
-        pending=[value];seen=set()
+        pending=[(value,0)];seen=set()
         while pending:
             visits+=1
             if visits>limit:raise Incomplete('Scope dependency analysis limit exceeded')
-            term=pending.pop()
+            term,depth=pending.pop()
             if isinstance(term,Variable):
-                if term in seen:continue
-                seen.add(term)
-                if term in bindings:pending.append(bindings[term])
-            elif isinstance(term,Carrier):pending.extend(term.arguments)
+                if (term,depth) in seen:continue
+                seen.add((term,depth))
+                if term in bindings:pending.append((bindings[term],depth))
+            elif isinstance(term,Carrier):pending.extend((a,depth) for a in term.arguments)
+            elif isinstance(term,Binder):pending.extend(((term.domain,depth),(term.body,depth+1)))
+            elif isinstance(term,Bound):
+                if term.level>=depth:raise NoSolution('Metavariable solution contains a dangling bound reference')
+            elif isinstance(term,Reference):
+                if term.binder not in variable.allowed_binders:raise NoSolution('Metavariable solution escapes its binder scope')
             elif isinstance(term,Atom):
                 if not term.free_binders.issubset(variable.allowed_binders):
                     raise NoSolution('Metavariable solution escapes its binder scope')
@@ -91,6 +165,8 @@ def check_scopes(bindings,*,limit=4096):
 
 def unify(equations,bindings=None,*,limit=4096):
     bindings=dict(bindings or {});pending=list(equations);steps=0
+    for left,right in pending:
+        well_scoped(left,limit=limit);well_scoped(right,limit=limit)
     while pending:
         steps+=1
         if steps>limit:raise Incomplete('Constraint step limit exceeded')
@@ -105,6 +181,9 @@ def unify(equations,bindings=None,*,limit=4096):
             if left.identity!=right.identity or len(left.arguments)!=len(right.arguments):
                 raise NoSolution('Different carrier constructors')
             pending[0:0]=list(zip(left.arguments,right.arguments));continue
+        if isinstance(left,Binder) and isinstance(right,Binder):
+            if left.identity!=right.identity:raise NoSolution('Different binder constructors')
+            pending[0:0]=[(left.domain,right.domain),(left.body,right.body)];continue
         raise NoSolution('Unequal rigid terms')
     check_scopes(bindings,limit=limit)
     return bindings
@@ -133,7 +212,7 @@ def saturate(row,*,limit=4096):
         for obligation,inputs in ready:
             try:
                 value=obligation.evaluate(inputs)
-                if not isinstance(value,(Atom,Carrier)) or variables(value):
+                if not isinstance(value,(Atom,Carrier,Binder,Reference)) or variables(value):
                     raise Incomplete('Deferred check did not return a checked ground value')
                 equations.append((obligation.output,value))
             except Incomplete:incomplete=True
