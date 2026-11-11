@@ -422,6 +422,12 @@ noncomputable def cleanNotation_consume_dependent_f49a44b2e2418da0be18  («f» :
 noncomputable def cleanNotation_make_map_dabe59151c764f6fd203  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) → ((_root_.cleanType_Real_107b6641a486642ad8e1)) :=
   fun _ => x
 
+noncomputable def cleanNotation_make_dependent_0ab289a5e21e8e8743c5  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (clean_pi_bound_2 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (clean_pi_bound_2) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) :=
+  fun _ _ => (0 : Complex)
+
+noncomputable def cleanNotation_make_shifted_dependent_c7457e9ae9dbd5c757a0  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (clean_pi_bound_3 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (clean_pi_bound_3) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) :=
+  fun _ _ => (0 : Complex)
+
 noncomputable def cleanNotation_opaque_count_4efa8df9a3534f27979e {«T» : Type} («item» : «T») : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
   0
 
@@ -864,6 +870,24 @@ noncomputable def actualInferredApply (n : cleanType_Natural_469c53b6dafb7a21824
 noncomputable def expectedInferredApply (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (@cleanNotation_make_map_dabe59151c764f6fd203 n (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)
 same_basic_target actualInferredApply expectedInferredApply
 theorem meaningInferredApply (n : cleanType_Natural_469c53b6dafb7a218246) : actualInferredApply n = (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) := by rfl
+
+
+noncomputable def actualDependentHead0 : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) cleanType_Complex_2d7f06a08f8ab1e3f46d := ((@_root_.cleanNotation_make_dependent_0ab289a5e21e8e8743c5 ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+noncomputable def expectedDependentHead0 : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@cleanNotation_make_dependent_0ab289a5e21e8e8743c5 (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
+same_basic_target actualDependentHead0 expectedDependentHead0
+theorem meaningDependentHead0 : actualDependentHead0 = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualDependentHead1 : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := ((@_root_.cleanNotation_make_shifted_dependent_c7457e9ae9dbd5c757a0 ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+noncomputable def expectedDependentHead1 : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@cleanNotation_make_shifted_dependent_c7457e9ae9dbd5c757a0 (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
+same_basic_target actualDependentHead1 expectedDependentHead1
+theorem meaningDependentHead1 : actualDependentHead1 = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualDependentProjectionHead (callback : (j : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 j (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := (callback (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+noncomputable def expectedDependentProjectionHead (callback : (j : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 j (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := callback (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
+same_basic_target actualDependentProjectionHead expectedDependentProjectionHead
+theorem meaningDependentProjectionHead (callback : (j : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 j (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d) : actualDependentProjectionHead callback = callback (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) := by rfl
 
 
 def actualQuantifiedZero (n : cleanType_Natural_469c53b6dafb7a218246) : Prop := (∀ (clean_bound_0 : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (n) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))), (_root_.cleanDefine_unequal_37c577a540f8692ae5c3 (clean_bound_0) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n)))))

@@ -1676,3 +1676,44 @@ This changes no grammar and remains experimental. Inferred dependent function
 heads, embedded lambda constraints, unresolved dependent templates, universal
 symbolic-family validity, and production integration remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Applying inferred expressions with fixed dependent signatures
+
+The experimental adapter carries a checked dependent function signature on each
+candidate fragment produced by a module call or structure projection. This is
+row-local evidence, not a global representative cache. A signature is retained
+only when none of the producer's formal parameters occurs free in it; unresolved
+producer-dependent signatures remain incomplete.
+
+For `make dependent(0)(2)`, suppose the declared producer takes Real and returns
+`Function(k: Natural,Vector(k,Complex))`. The parsed Apply node is unchanged.
+For each head/argument candidate pair, the adapter verifies that the retained
+signature's rigid type key equals the head type, equates the argument type with
+the checked domain, and substitutes the argument's symbolic value into the
+codomain. Computed codomain indices use existing forward checks or IndexPlans;
+they do not invert arithmetic. Head and argument equations, witnesses and value
+plans remain in the same row. Thus the first numeral is Real, the second Natural,
+and the result is a complex vector of dimension two.
+
+Reconstruction retains both the producer call and the final application. A
+schematic expanded Lean expression is `(makeDependent (0 : Real)) (2 : Nat)`;
+the actual target uses the selected explicit module wrappers. The independently
+written native checks cover direct dimensions, computed dimensions, and a
+function obtained from an inferred structure constructor's field. For that direct
+constructor case the existing projection reduction rule selects the supplied
+callback, so the exact target is `callback 2`, not an unreduced projection. Wrong domains
+and expected results reject; ordering and codec checks preserve selected syntax.
+
+Validation: 262 experimental Python tests pass; the native driver passes 66
+exact-target comparisons and 66 supporting proofs. The initial projection oracle
+incorrectly expected an unreduced constructor projection; it was corrected to
+the existing specified reduction rule. Full production discovery and active-label
+verification remain live and are not counted as passes.
+
+This is fixed-signature application, not inference of arbitrary dependent function
+templates or embedded lambda bodies. It adds no grammar rule and does not change
+production elaboration. Those broader binder constraints, universal symbolic-family
+validity, and production integration remain pending.
+:::

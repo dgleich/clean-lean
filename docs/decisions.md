@@ -2094,3 +2094,17 @@ symbolic formals still require unsupported binder constraints. See the
 [constructive rule and example](../studies/parameterized-literals/README.md#checked-dependent-functions-as-rigid-carriers).
 No grammar or production behavior changes; embedded binder inference remains open.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental inferred dependent function application
+
+Module-call and projection fragments can retain fixed checked dependent signatures
+as row-local metadata. Applying such a head constrains its domain and substitutes
+the argument value into the codomain with the existing forward index rules. The
+retained signature must agree with the symbolic head type; metadata cannot select
+a different target. See the
+[constructive rule and remaining limitations](../studies/parameterized-literals/README.md#applying-inferred-expressions-with-fixed-dependent-signatures).
+Producer-dependent symbolic signatures and embedded lambda inference remain open.
+No grammar or production change is claimed.
+:::

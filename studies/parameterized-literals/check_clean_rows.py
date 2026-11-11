@@ -434,6 +434,36 @@ noncomputable def expectedInferredApply (n : {t('Natural')}) : {t('Real')} := {e
 same_basic_target actualInferredApply expectedInferredApply
 theorem meaningInferredApply (n : {t('Natural')}) : actualInferredApply n = ({nr} (nat_lit 0)) := by rfl
 """)
+for i,shifted in enumerate([False,True]):
+ name='make shifted dependent' if shifted else 'make dependent'
+ result='Vector((k+1),Complex)' if shifted else 'Vector(k,Complex)'
+ notation(f'Notation {name}(x: Real): Function(k: Natural,{result}):',
+  ['Means: fun _ _ => (0 : Complex)','Render latex: map({x})'],env)
+ value=Builder(env,scope).materialize(expression_tree(parse(f'{name}(0)(2)','expression')),use_default=False)
+ dimension=f"{f('natural sum')} ({ntwo}) ({one})" if shifted else ntwo
+ result_lean=f"{t('Vector')} ({dimension}) {t('Complex')}"
+ expected=f"(@{f(name)} ({nr} (nat_lit 0))) ({ntwo})"
+ checks.append(f"""
+noncomputable def actualDependentHead{i} : {result_lean} := {value.lean}
+noncomputable def expectedDependentHead{i} : {result_lean} := {expected}
+same_basic_target actualDependentHead{i} expectedDependentHead{i}
+theorem meaningDependentHead{i} : actualDependentHead{i} = (fun _ => (0 : Complex)) := by rfl
+""")
+local_scope=dict(scope)
+function_type=env.type('Function(j: Natural,Vector((j+1),Complex))',scope)
+local_scope['callback']=Expr('callback','f',function_type,tree=['Local','callback'])
+value=Builder(env,local_scope).materialize(expression_tree(parse('dependent holder(0,callback).map(2)','expression')),use_default=False)
+record=env.structures['DependentMapHolder']['key']
+# Existing direct-constructor projection reduction selects the supplied field.
+expected=f"callback ({ntwo})"
+function_lean=f"(j : {t('Natural')}) → {t('Vector')} ({f('natural sum')} j ({one})) {t('Complex')}"
+result_lean=f"{t('Vector')} ({f('natural sum')} ({ntwo}) ({one})) {t('Complex')}"
+checks.append(f"""
+noncomputable def actualDependentProjectionHead (callback : {function_lean}) : {result_lean} := {value.lean}
+noncomputable def expectedDependentProjectionHead (callback : {function_lean}) : {result_lean} := {expected}
+same_basic_target actualDependentProjectionHead expectedDependentProjectionHead
+theorem meaningDependentProjectionHead (callback : {function_lean}) : actualDependentProjectionHead callback = callback ({ntwo}) := by rfl
+""")
 source='for every (z: Vector(n,Complex), z != 0)'
 value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
 checks.append(f"""
@@ -481,6 +511,6 @@ theorem meaningScopedCarrier : actualScopedCarrier := by
 """)
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Sixty-three experimental joint-row targets and sixty-three meaning proofs passed; production joint inference remains unimplemented.')
+print('Sixty-six experimental joint-row targets and sixty-six meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

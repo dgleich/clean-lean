@@ -858,6 +858,49 @@ class CleanRows(unittest.TestCase):
   self.map_holder(True)
   value=Builder(self.e,self.scope).materialize(expression_tree(parse('q.map(2)','expression')),use_default=False)
   self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+1),Complex)',self.scope))
+ def dependent_map_producer(self,shifted=False):
+  result='Vector((k+1),Complex)' if shifted else 'Vector(k,Complex)'
+  notation(f'Notation make dependent(x: Real): Function(k: Natural,{result}):',
+   ['Means: fun _ _ => (0 : Complex)','Render latex: map({x})'],self.e)
+ def test_inferred_dependent_head(self):
+  self.dependent_map_producer()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('make dependent(0)(2)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(2,Complex)',self.scope))
+  self.assertEqual(value.tree[1][2][0][2],'Real')
+  self.assertEqual(value.tree[2][0][2],'Natural')
+ def test_inferred_dependent_head_computed_codomain(self):
+  self.dependent_map_producer(True)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('make dependent(0)(2)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+1),Complex)',self.scope))
+ def test_inferred_dependent_head_computed_argument(self):
+  self.dependent_map_producer(True)
+  notation('Define count real(x: Real): Natural:', ['Equals: (2:Natural)','Render latex: count({x})'],self.e,authored=True)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('make dependent(0)(count real(0))','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+1),Complex)',self.scope))
+ def test_inferred_dependent_projection_head(self):
+  self.map_holder(True)
+  typ=self.e.type('Function(j: Natural,Vector((j+1),Complex))',self.scope)
+  self.scope['f']=Expr('f','f',typ,tree=['Local','f'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('map holder(0,f).map(2)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+1),Complex)',self.scope))
+ def test_inferred_dependent_head_codec_and_order(self):
+  from cleanlang.retained_codec import dumps,loads
+  from cleanlang.core import Expressions
+  self.dependent_map_producer(True)
+  tree=expression_tree(parse('make dependent(0)(2)','expression'))
+  first=Builder(self.e,self.scope).materialize(tree,use_default=False)
+  self.e.data['functions']=dict(reversed(list(self.e.data['functions'].items())))
+  second=Builder(self.e,self.scope).materialize(tree,use_default=False)
+  self.assertEqual(first.tree,second.tree)
+  self.assertEqual(Expressions(self.e,self.scope).elaborate(loads(dumps(first.tree))).lean,first.lean)
+ def test_inferred_dependent_head_wrong_argument_rejects(self):
+  self.dependent_map_producer()
+  with self.assertRaises(NoSolution):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('make dependent(0)(r)','expression')),use_default=False)
+ def test_inferred_dependent_head_wrong_expected_result_rejects(self):
+  self.dependent_map_producer()
+  with self.assertRaises(NoSolution):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('make dependent(0)(2)','expression')),self.e.type('Real'),use_default=False)
  def map_producer(self):
   notation('Notation make map(n: Natural,x: Real): Function(Vector(n,Complex),Real):',
    ['Means: fun _ => x','Render latex: map({n},{x})'],self.e)

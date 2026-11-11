@@ -1539,5 +1539,15 @@ retains the selected field and callable wrappers, with zero constrained by the
 other parameter. Unresolved dependent templates remain incomplete. See the
 <a href="../studies/parameterized-literals/README.md#checked-dependent-functions-as-rigid-carriers">precise experimental boundary</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="inferred-dependent-application">
+<h2>Applying a dependent function produced by an expression (experimental)</h2>
+<p>With <code>make dependent(x: Real): Function(k: Natural,Vector(k,Complex))</code>,
+<code>make dependent(0)(2)</code> constrains the producer's zero to Real and its
+function argument to Natural. The schematic expanded Lean expression is
+<code>(makeDependent (0 : Real)) (2 : Nat)</code>; the actual target retains the
+explicit module wrappers. Computed dimensions are checked forward. See the
+<a href="../studies/parameterized-literals/README.md#applying-inferred-expressions-with-fixed-dependent-signatures">row-local signature rule</a>.
+Signatures depending on unresolved producer parameters remain incomplete.</p>
+</section></llm>
 </body>
 </html>

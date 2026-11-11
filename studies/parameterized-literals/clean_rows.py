@@ -29,6 +29,7 @@ class Fragment:
     fields: tuple=()
     parameters: tuple=()
     plans: tuple=()
+    dependent_function: object=None
 
 class Builder:
     def __init__(self,env,scope,limit=4096,*,binder_ids=None,binder_path=()):
@@ -273,7 +274,8 @@ class Builder:
                 base.choices+(('projection',path,(spec['key'],tree[2])),),base.carriers,
                 base.arguments,base.equations,deferred,witnesses,syntax,origins,
                 selected_field.fields if selected_field is not None else (),
-                selected_field.parameters if selected_field is not None else (),plans))
+                selected_field.parameters if selected_field is not None else (),plans,
+                self.fixed_dependent_function(field_type,formals)))
         return results
 
     def local_call_fragments(self,tree,path):
@@ -303,6 +305,12 @@ class Builder:
                 plans=argument.plans+(ValuePlan(output,path,requirements,result),)))
         return results
 
+    def fixed_dependent_function(self,typ,formals):
+        from cleanlang.dependent_functions import DependentFunctionType,occurs
+        if isinstance(typ,DependentFunctionType) and not any(occurs(typ,n) for n in formals):
+            return typ
+        return None
+
     def application_fragments(self,tree,path):
         from candidate_values import ValuePlan
         if len(tree[2])!=1:raise Incomplete('Application requires one argument')
@@ -314,16 +322,26 @@ class Builder:
         functions={self.carrier_identity(n) for n in self.env.data['types'] if self.env.is_function_type(Type(n))}
         results=[]
         for head,argument in product(heads,arguments):
-            if not isinstance(head.typ,Carrier):raise Incomplete('Application head type unresolved')
-            if head.typ.identity not in functions or len(head.typ.arguments)!=2:continue
-            domain,result=head.typ.arguments
+            deferred=();witnesses=()
+            if head.dependent_function is not None:
+                function=head.dependent_function
+                if self.typ(function,{})!=head.typ:raise Incomplete('Dependent head metadata disagrees with carrier')
+                domain=self.typ(function.domain,{})
+                formals={function.binder:argument.value};evidence={}
+                if argument.syntax is not None:
+                    evidence[function.binder]=self.call_witness(None,None,argument.syntax,argument.origins)
+                result,deferred,witnesses=self.dependent_type(function.codomain,formals,evidence,path+('application result',))
+            else:
+                if not isinstance(head.typ,Carrier):raise Incomplete('Application head type unresolved')
+                if head.typ.identity not in functions or len(head.typ.arguments)!=2:continue
+                domain,result=head.typ.arguments
             output=self.variable(repr((path,'application value')),'index')
             plans=head.plans+argument.plans
             requirements=tuple(dict.fromkeys(tuple(t for p in plans for t in p.requirements)+head.arguments+argument.arguments+(head.typ,argument.typ,result)))
             results.append(Fragment(result,output,
                 head.choices+argument.choices+(('application',path,'inferred'),),head.carriers+argument.carriers,
                 head.arguments+argument.arguments,head.equations+argument.equations+((argument.typ,domain),),
-                head.deferred+argument.deferred,head.witnesses+argument.witnesses,
+                head.deferred+argument.deferred+deferred,head.witnesses+argument.witnesses+witnesses,
                 plans=plans+(ValuePlan(output,path,requirements,result),)))
         return results
 
@@ -466,7 +484,8 @@ class Builder:
                     tuple(c for a in actuals for c in a.choices)+(('call',path,spec['native_binding']),),
                     tuple(t for a in actuals for t in a.carriers),
                     tuple(t for a in actuals for t in a.arguments)+implicit,equations,
-                    deferred,witnesses,syntax,origins,fields,record_arguments,plans))
+                    deferred,witnesses,syntax,origins,fields,record_arguments,plans,
+                    self.fixed_dependent_function(signature.result,variables)))
         return rows
 
     def rows(self,tree,expected=None):

@@ -3878,6 +3878,23 @@
         "Symbolic dependent templates",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_inferred_dependent_application",
+      "status": "experimental-slice",
+      "source": "make dependent(0)(2); dependent holder(0,callback).map(2)",
+      "expected_outcome": "Fixed dependent head domain constrains argument and forward substitution determines result dimension",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Retain row-local checked signature matching head key, all head/argument constraints, and independent exact native targets",
+      "pending": [
+        "Producer-dependent symbolic signatures",
+        "Embedded lambda inference",
+        "Universal symbolic-family validity",
+        "Production integration"
+      ]
     }
   ]
 }
