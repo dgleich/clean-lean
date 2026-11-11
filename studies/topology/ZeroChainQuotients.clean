@@ -1,0 +1,44 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "../../library/algebra/zero_chain_quotients.clean"
+Source zero_quotient:
+  Kind: other
+  Label: Mathlib zero cokernel
+  Title: Mathlib.CategoryTheory.Limits.Shapes.Kernels
+
+Result zero quotient reduction after projection:
+  Attribution: zero_quotient; cokernelZeroIsoTarget.inv_hom_id; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let Q = zero chain quotient(field,C,D)
+  Conclude: compose chain maps(field,D,Q,D,zero quotient reduction(field,C,D),zero quotient projection(field,C,D)) = identity chain map(field,D)
+
+Result zero quotient projection after reduction:
+  Attribution: zero_quotient; cokernelZeroIsoTarget.hom_inv_id; specialized
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let Q = zero chain quotient(field,C,D)
+  Conclude: compose chain maps(field,Q,D,Q,zero quotient projection(field,C,D),zero quotient reduction(field,C,D)) = identity chain map(field,Q)
+
+Result zero quotient homology forward after backward:
+  Attribution: zero_quotient; functor preserves inverse maps; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let p: Natural
+  Let M = chain homology(field,D,p)
+  Let N = chain homology(field,zero chain quotient(field,C,D),p)
+  Conclude: module composition(field,M,N,M,zero quotient homology backward(field,C,D,p),zero quotient homology forward(field,C,D,p)) = module identity(field,M)
+
+Result zero quotient homology backward after forward:
+  Attribution: zero_quotient; functor preserves inverse maps; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let p: Natural
+  Let M = chain homology(field,D,p)
+  Let N = chain homology(field,zero chain quotient(field,C,D),p)
+  Conclude: module composition(field,N,M,N,zero quotient homology forward(field,C,D,p),zero quotient homology backward(field,C,D,p)) = module identity(field,N)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

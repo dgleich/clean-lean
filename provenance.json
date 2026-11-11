@@ -9028,6 +9028,50 @@
     "studies/topology/level-sets.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "library/algebra/zero_chain_quotients.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/ZeroChainQuotients.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/ZeroChainQuotients.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/ZeroChainQuotientsVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/verify_zero_chain_quotients.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/topology/zero-chain-quotients.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

@@ -1829,5 +1829,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p><code>level problem(X,f,a)</code> constructs an interlevel problem with <code>endpoints(a,a)</code> and <code>no endpoints()</code>. Fibers and expanded bands are ordinary Clean definitions using the explicit set-builder, map evaluation, equality and order bindings. Their Lean targets retain those declared bindings; no level-set-specific syntax or native adapter is needed.</p>
 <p>The <a href="../studies/topology/level-sets.md">study</a> gives independent targets and proofs identifying fibers, bands, shifted fibers and empty relative subsets. This is set-level preparation: it does not identify relative with ordinary homology or prove the paper's well-group formula.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="zero-chain-quotients">
+<h2>Zero quotients and induced homology maps</h2>
+<p><code>zero chain quotient(field,C,D)</code> uses the declared cokernel of the declared zero map. Clean definitions construct its projection and both induced homology directions. The reduction map explicitly imports Mathlib's <code>cokernelZeroIsoTarget.hom</code>. Local object names in the four inverse-law statements remain Lean lets.</p>
+<p>The <a href="../studies/topology/zero-chain-quotients.md">study</a> checks nine canonical targets and proves the two chain inverse laws and two homology inverse laws. No new syntax is required. This supplies the algebraic comparison for a zero inclusion; identifying the empty-relative-subset chain map and checking naturality remain open.</p>
+</section></llm>
 </body>
 </html>

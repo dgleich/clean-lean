@@ -2037,5 +2037,100 @@
       "status": "passed"
     },
     "scope": "Set-level specialization, not the level well-group theorem. Final tagged-source check follows comment-only provenance additions."
+  },
+  "zero_chain_quotients": {
+    "comparison": {
+      "_provenance": {
+        "origin": "llm",
+        "model": "gpt-6",
+        "date": "2026-11-11",
+        "role": "assisted"
+      },
+      "scope": "Isolated document/module translation; generated text hashes are diagnostics, not canonical Lean or proof validation.",
+      "snapshot_scope": "Before/after fingerprints of cleanlang Python, this driver, repository library/corpus/studies Clean files and direct input. External import closures, dependencies and transient edits restored between samples are not covered.",
+      "default_changed": false,
+      "files": [
+        {
+          "path": "library/algebra/zero_chain_quotients.clean",
+          "legacy": {
+            "status": "translated",
+            "results": 0,
+            "lean_sha256": "3f6a0118c6ca56d84d2aeaeef47f3945c6d096e552239519afe968d48198c8fa",
+            "input_kind": "module",
+            "snapshot": {
+              "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+              "clean_sources_sha256": "c9fbaf3a8d32b135c9693248ee561b60c0dc9ed43f7d14d4aa31e2f0c6a9fc92"
+            },
+            "inputs_stable": true,
+            "hole_calls": 0,
+            "elapsed_seconds": 0.902
+          },
+          "joint": {
+            "status": "translated",
+            "results": 0,
+            "lean_sha256": "3f6a0118c6ca56d84d2aeaeef47f3945c6d096e552239519afe968d48198c8fa",
+            "input_kind": "module",
+            "snapshot": {
+              "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+              "clean_sources_sha256": "c9fbaf3a8d32b135c9693248ee561b60c0dc9ed43f7d14d4aa31e2f0c6a9fc92"
+            },
+            "inputs_stable": true,
+            "hole_calls": 0,
+            "elapsed_seconds": 0.67
+          },
+          "comparison": "same-generated-text"
+        },
+        {
+          "path": "studies/topology/ZeroChainQuotients.clean",
+          "legacy": {
+            "status": "translated",
+            "results": 4,
+            "lean_sha256": "78e094c6c47fece5e059c718216ab2fa6e002ff43144c089a2cae423338624ab",
+            "input_kind": "document",
+            "snapshot": {
+              "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+              "clean_sources_sha256": "c9fbaf3a8d32b135c9693248ee561b60c0dc9ed43f7d14d4aa31e2f0c6a9fc92"
+            },
+            "inputs_stable": true,
+            "hole_calls": 0,
+            "elapsed_seconds": 1.112
+          },
+          "joint": {
+            "status": "translated",
+            "results": 4,
+            "lean_sha256": "78e094c6c47fece5e059c718216ab2fa6e002ff43144c089a2cae423338624ab",
+            "input_kind": "document",
+            "snapshot": {
+              "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+              "clean_sources_sha256": "c9fbaf3a8d32b135c9693248ee561b60c0dc9ed43f7d14d4aa31e2f0c6a9fc92"
+            },
+            "inputs_stable": true,
+            "hole_calls": 0,
+            "elapsed_seconds": 0.993
+          },
+          "comparison": "same-generated-text"
+        }
+      ],
+      "corpus_proofs": {
+        "status": "proved",
+        "results": 92,
+        "lean_sha256": "8ff4e4b4826de95e63ac97a37b8d58dcb088316a66e57cd634986057ddc07413",
+        "input_kind": "corpus-proofs",
+        "snapshot": {
+          "implementation_sha256": "a6a45c376f3fc18b4c43f592c4c0ae1561952a7f1da01bbcc39cbe2699bfec07",
+          "clean_sources_sha256": "c9fbaf3a8d32b135c9693248ee561b60c0dc9ed43f7d14d4aa31e2f0c6a9fc92"
+        },
+        "inputs_stable": true,
+        "hole_calls": 19,
+        "elapsed_seconds": 19.957
+      }
+    },
+    "native": {
+      "status": "passed",
+      "canonical_targets": 9,
+      "proofs": 4,
+      "log": "/tmp/clean-zero-quotient-native.log"
+    },
+    "scope": "Actual zero cokernel and inverse homology maps; not an empty-subspace or well-group theorem."
   }
 }

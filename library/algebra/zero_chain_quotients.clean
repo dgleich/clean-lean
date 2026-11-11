@@ -1,0 +1,46 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "graded_chain_homology.clean"
+
+Define zero chain quotient(field,C,D):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Returns: ModuleChainComplex(K,field)
+  Equals: chain cokernel(field,C,D,zero chain map(field,C,D))
+  Render latex: Q_0({C},{D})
+
+Define zero quotient projection(field,C,D):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Returns: ChainMap(K,field,D,(zero chain quotient(field,C,D)))
+  Equals: chain cokernel projection(field,C,D,zero chain map(field,C,D))
+  Render latex: \pi_0
+
+Notation zero quotient reduction(field,C,D):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Returns: ChainMap(K,field,(zero chain quotient(field,C,D)),D)
+  Means: (letI : Field K := field; (CategoryTheory.Limits.cokernelZeroIsoTarget (X := C) (Y := D)).hom)
+  Render latex: \rho_0
+
+Define zero quotient homology forward(field,C,D,p):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let p: Natural
+  Returns: ModuleMap(K,field,(chain homology(field,zero chain quotient(field,C,D),p)),(chain homology(field,D,p)))
+  Equals: induced chain homology map(field,zero chain quotient(field,C,D),D,zero quotient reduction(field,C,D),p)
+  Render latex: H_{{{p}}}(\rho_0)
+
+Define zero quotient homology backward(field,C,D,p):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D: ModuleChainComplex(K,field)
+  Let p: Natural
+  Returns: ModuleMap(K,field,(chain homology(field,D,p)),(chain homology(field,zero chain quotient(field,C,D),p)))
+  Equals: induced chain homology map(field,D,zero chain quotient(field,C,D),zero quotient projection(field,C,D),p)
+  Render latex: H_{{{p}}}(\pi_0)
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

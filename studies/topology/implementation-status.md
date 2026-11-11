@@ -333,3 +333,17 @@ homology identification and the two-extreme-perturbation theorem remain separate
 mathematical obligations; the strict-endpoint interlevel candidate cannot be
 instantiated at a=a.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Algebraic step for empty relative pairs
+
+[Zero chain quotients](zero-chain-quotients.md) now provide the cokernel of a zero
+chain map, its projection/reduction maps and their induced homology maps. Nine
+independent targets and four inverse-map proofs check the actual Mathlib
+construction. This uses existing Clean syntax and one explicit foundational
+adapter for Mathlib's cokernel isomorphism. The singular chains of the empty
+relative subset, equality transport, compatibility/naturality and the well-group
+formula remain separate obligations.
+:::
