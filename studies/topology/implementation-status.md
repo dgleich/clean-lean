@@ -347,3 +347,17 @@ adapter for Mathlib's cokernel isomorphism. The singular chains of the empty
 relative subset, equality transport, compatibility/naturality and the well-group
 formula remain separate obligations.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Naturality of zero-quotient comparisons
+
+The [zero-quotient study](zero-chain-quotients.md#compatibility-with-chain-maps)
+now has a Clean-authored map between zero quotients and its homology map. Sixteen
+canonical targets and nine proofs cover the inverse laws, commuting comparison
+squares at the chain and homology levels, and agreement with Mathlib's cokernel
+map for a supplied commuting square. No new native adapter or syntax is added.
+The actual empty-subspace chain identification and compatible equality transport
+remain necessary before applying these results to the level well group.
+:::

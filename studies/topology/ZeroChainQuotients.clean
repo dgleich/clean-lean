@@ -42,3 +42,59 @@ Result zero quotient homology backward after forward:
   Conclude: module composition(field,N,M,N,zero quotient homology forward(field,C,D,p),zero quotient homology backward(field,C,D,p)) = module identity(field,N)
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Result zero quotient projection commutes:
+  Attribution: zero_quotient; inverse maps and associativity; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D,E,F: ModuleChainComplex(K,field)
+  Let v: ChainMap(K,field,D,F)
+  Let Q = zero chain quotient(field,C,D)
+  Let R = zero chain quotient(field,E,F)
+  Conclude: compose chain maps(field,D,Q,R,zero quotient map(field,C,D,E,F,v),zero quotient projection(field,C,D)) = compose chain maps(field,D,F,R,zero quotient projection(field,E,F),v)
+
+Result zero quotient reduction commutes:
+  Attribution: zero_quotient; inverse maps and associativity; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D,E,F: ModuleChainComplex(K,field)
+  Let v: ChainMap(K,field,D,F)
+  Let Q = zero chain quotient(field,C,D)
+  Let R = zero chain quotient(field,E,F)
+  Conclude: compose chain maps(field,Q,R,F,zero quotient reduction(field,E,F),zero quotient map(field,C,D,E,F,v)) = compose chain maps(field,Q,D,F,v,zero quotient reduction(field,C,D))
+
+Result zero quotient homology forward commutes:
+  Attribution: zero_quotient; functor preserves commuting squares; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D,E,F: ModuleChainComplex(K,field)
+  Let v: ChainMap(K,field,D,F)
+  Let p: Natural
+  Let Q = chain homology(field,zero chain quotient(field,C,D),p)
+  Let R = chain homology(field,zero chain quotient(field,E,F),p)
+  Let M = chain homology(field,D,p)
+  Let N = chain homology(field,F,p)
+  Conclude: module composition(field,Q,R,N,zero quotient homology map(field,C,D,E,F,v,p),zero quotient homology forward(field,E,F,p)) = module composition(field,Q,M,N,zero quotient homology forward(field,C,D,p),induced chain homology map(field,D,F,v,p))
+
+Result zero quotient homology backward commutes:
+  Attribution: zero_quotient; functor preserves commuting squares; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D,E,F: ModuleChainComplex(K,field)
+  Let v: ChainMap(K,field,D,F)
+  Let p: Natural
+  Let Q = chain homology(field,zero chain quotient(field,C,D),p)
+  Let R = chain homology(field,zero chain quotient(field,E,F),p)
+  Let M = chain homology(field,D,p)
+  Let N = chain homology(field,F,p)
+  Conclude: module composition(field,M,Q,R,zero quotient homology backward(field,C,D,p),zero quotient homology map(field,C,D,E,F,v,p)) = module composition(field,M,N,R,induced chain homology map(field,D,F,v,p),zero quotient homology backward(field,E,F,p))
+
+Result zero quotient map agrees with cokernel map:
+  Attribution: zero_quotient; cokernel hom extensionality; adapted
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D,E,F: ModuleChainComplex(K,field)
+  Let u: ChainMap(K,field,C,E)
+  Let v: ChainMap(K,field,D,F)
+  Assume square: compose chain maps(field,C,D,F,v,zero chain map(field,C,D)) = compose chain maps(field,C,E,F,zero chain map(field,E,F),u)
+  Conclude: zero quotient map(field,C,D,E,F,v) = chain cokernel map(field,C,D,E,F,zero chain map(field,C,D),zero chain map(field,E,F),u,v,square)

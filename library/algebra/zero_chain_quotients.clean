@@ -1,5 +1,6 @@
 -- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
 Import "graded_chain_homology.clean"
+Import "chain_squares.clean"
 
 Define zero chain quotient(field,C,D):
   Let K: Type
@@ -44,3 +45,27 @@ Define zero quotient homology backward(field,C,D,p):
   Render latex: H_{{{p}}}(\pi_0)
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+Define zero quotient map(field,C,D,E,F,v):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D,E,F: ModuleChainComplex(K,field)
+  Let v: ChainMap(K,field,D,F)
+  Returns: ChainMap(K,field,(zero chain quotient(field,C,D)),(zero chain quotient(field,E,F)))
+  Equals: compose chain maps(field,zero chain quotient(field,C,D),F,zero chain quotient(field,E,F),
+    zero quotient projection(field,E,F),
+    compose chain maps(field,zero chain quotient(field,C,D),D,F,v,zero quotient reduction(field,C,D)))
+  Render latex: Q_0({v})
+
+Define zero quotient homology map(field,C,D,E,F,v,p):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let C,D,E,F: ModuleChainComplex(K,field)
+  Let v: ChainMap(K,field,D,F)
+  Let p: Natural
+  Returns: ModuleMap(K,field,
+    (chain homology(field,zero chain quotient(field,C,D),p)),
+    (chain homology(field,zero chain quotient(field,E,F),p)))
+  Equals: induced chain homology map(field,zero chain quotient(field,C,D),zero chain quotient(field,E,F),
+    zero quotient map(field,C,D,E,F,v),p)
+  Render latex: H_{{{p}}}(Q_0({v}))

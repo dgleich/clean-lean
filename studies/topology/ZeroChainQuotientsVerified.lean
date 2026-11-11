@@ -24,6 +24,11 @@ Basic topology with explicit carrier types and topologies.
    This first module is restricted to carrier types in Lean Type 0.
 -/
 
+/-!
+Evidence is an ordinary transparent alias. A parenthesized condition used
+   as a type denotes proofs of that condition. This module supplies no proofs.
+-/
+
 noncomputable abbrev cleanType_Type_c1fed1af64ab6f12e0ed  : Type 1 :=
   Type
 
@@ -403,6 +408,25 @@ noncomputable def cleanDefine_graded_chain_homology_c645cddac66e4ea3e547  («K»
 noncomputable def cleanDefine_graded_chain_homology_map_34c867e216a203fecb05  («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («C» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («D» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («f» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («C») («D»))) : _root_.cleanStructure_GradedMap_fa003d7326d860423bd3 («K») («field») ((@_root_.cleanDefine_graded_chain_homology_c645cddac66e4ea3e547 («K») («field») («C»))) ((@_root_.cleanDefine_graded_chain_homology_c645cddac66e4ea3e547 («K») («field») («D»))) :=
   (@_root_.cleanConstructor_graded_map_2b412279c2662521f367 («K») («field») ((@_root_.cleanDefine_graded_chain_homology_c645cddac66e4ea3e547 («K») («field») («C»))) ((@_root_.cleanDefine_graded_chain_homology_c645cddac66e4ea3e547 («K») («field») («D»))) ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_induced_chain_homology_map_3952f2d3986b4912e6ec («K») («field») («C») («D») («f») (clean_bound_0)))))
 
+structure cleanStructure_ChainSquare_b657c07e7f6932dde596 («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («C» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («D» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («E» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («F» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) : Type where
+  «source» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («C») («D»))
+  «target» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («E») («F»))
+  «left» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («C») («E»))
+  «right» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («D») («F»))
+  «commutes» : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((@_root_.cleanNotation_compose_chain_maps_cef6124157281682085f («K») («field») («C») («D») («F») («right») («source»))) ((@_root_.cleanNotation_compose_chain_maps_cef6124157281682085f («K») («field») («C») («E») («F») («target») («left»)))))
+
+noncomputable def cleanConstructor_chain_square_513fd0d921289669d95f («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («C» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («D» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («E» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («F» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («source» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («C») («D»))) («target» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («E») («F»))) («left» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («C») («E»))) («right» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («D») («F»))) («commutes» : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((@_root_.cleanNotation_compose_chain_maps_cef6124157281682085f («K») («field») («C») («D») («F») («right») («source»))) ((@_root_.cleanNotation_compose_chain_maps_cef6124157281682085f («K») («field») («C») («E») («F») («target») («left»)))))) : _root_.cleanStructure_ChainSquare_b657c07e7f6932dde596 («K») («field») («C») («D») («E») («F») :=
+  @_root_.cleanStructure_ChainSquare_b657c07e7f6932dde596.mk «K» «field» «C» «D» «E» «F» «source» «target» «left» «right» «commutes»
+
+noncomputable def cleanNotation_chain_cokernel_map_5c85b6946e2072291af6 {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («C» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («D» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («E» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («F» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («f» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («C») («D»))) («g» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («E») («F»))) («p» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («C») («E»))) («q» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («D») («F»))) («h» : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((@_root_.cleanNotation_compose_chain_maps_cef6124157281682085f («K») («field») («C») («D») («F») («q») («f»))) ((@_root_.cleanNotation_compose_chain_maps_cef6124157281682085f («K») («field») («C») («E») («F») («g») («p»)))))) : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») ((@_root_.cleanNotation_chain_cokernel_80980b0f4c1fe4722fbd («K») («field») («C») («D») («f»))) ((@_root_.cleanNotation_chain_cokernel_80980b0f4c1fe4722fbd («K») («field») («E») («F») («g»)))) :=
+  (letI : Field K := field; CategoryTheory.Limits.cokernel.map f g p q h)
+
+noncomputable def cleanDefine_square_quotient_map_c2c617a3c82a8087cb54 {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («C» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («D» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («E» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («F» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («S» : _root_.cleanStructure_ChainSquare_b657c07e7f6932dde596 («K») («field») («C») («D») («E») («F»)) : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») ((@_root_.cleanNotation_chain_cokernel_80980b0f4c1fe4722fbd («K») («field») («C») («D») ((@_root_.cleanStructure_ChainSquare_b657c07e7f6932dde596.«source» («K») («field») («C») («D») («E») («F») («S»))))) ((@_root_.cleanNotation_chain_cokernel_80980b0f4c1fe4722fbd («K») («field») («E») («F») ((@_root_.cleanStructure_ChainSquare_b657c07e7f6932dde596.«target» («K») («field») («C») («D») («E») («F») («S»)))))) :=
+  (@_root_.cleanNotation_chain_cokernel_map_5c85b6946e2072291af6 («K») («field») («C») («D») («E») («F») ((@_root_.cleanStructure_ChainSquare_b657c07e7f6932dde596.«source» («K») («field») («C») («D») («E») («F») («S»))) ((@_root_.cleanStructure_ChainSquare_b657c07e7f6932dde596.«target» («K») («field») («C») («D») («E») («F») («S»))) ((@_root_.cleanStructure_ChainSquare_b657c07e7f6932dde596.«left» («K») («field») («C») («D») («E») («F») («S»))) ((@_root_.cleanStructure_ChainSquare_b657c07e7f6932dde596.«right» («K») («field») («C») («D») («E») («F») («S»))) ((@_root_.cleanStructure_ChainSquare_b657c07e7f6932dde596.«commutes» («K») («field») («C») («D») («E») («F») («S»))))
+
+noncomputable def cleanDefine_square_homology_map_4c4c9a581e05a5d99375 {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («C» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («D» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («E» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («F» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («S» : _root_.cleanStructure_ChainSquare_b657c07e7f6932dde596 («K») («field») («C») («D») («E») («F»)) («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_chain_cokernel_80980b0f4c1fe4722fbd («K») («field») («C») («D») ((@_root_.cleanStructure_ChainSquare_b657c07e7f6932dde596.«source» («K») («field») («C») («D») («E») («F») («S»))))) («n»))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanNotation_chain_cokernel_80980b0f4c1fe4722fbd («K») («field») («E») («F») ((@_root_.cleanStructure_ChainSquare_b657c07e7f6932dde596.«target» («K») («field») («C») («D») («E») («F») («S»))))) («n»)))) :=
+  (@_root_.cleanNotation_induced_chain_homology_map_3952f2d3986b4912e6ec («K») («field») ((@_root_.cleanNotation_chain_cokernel_80980b0f4c1fe4722fbd («K») («field») («C») («D») ((@_root_.cleanStructure_ChainSquare_b657c07e7f6932dde596.«source» («K») («field») («C») («D») («E») («F») («S»))))) ((@_root_.cleanNotation_chain_cokernel_80980b0f4c1fe4722fbd («K») («field») («E») («F») ((@_root_.cleanStructure_ChainSquare_b657c07e7f6932dde596.«target» («K») («field») («C») («D») («E») («F») («S»))))) ((@_root_.cleanDefine_square_quotient_map_c2c617a3c82a8087cb54 («K») («field») («C») («D») («E») («F») («S»))) («n»))
+
 noncomputable def cleanDefine_zero_chain_quotient_a00189717519ea1f14bf {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («C» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («D» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»)) :=
   (@_root_.cleanNotation_chain_cokernel_80980b0f4c1fe4722fbd («K») («field») («C») («D») ((@_root_.cleanNotation_zero_chain_map_accfad693693a946c3e6 («K») («field») («C») («D»))))
 
@@ -417,6 +441,12 @@ noncomputable def cleanDefine_zero_quotient_homology_forward_66db0133eebe0625712
 
 noncomputable def cleanDefine_zero_quotient_homology_backward_2e4083f9d09a2c2f1112 {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («C» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («D» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («p» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») («D») («p»))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («C») («D»))) («p»)))) :=
   (@_root_.cleanNotation_induced_chain_homology_map_3952f2d3986b4912e6ec («K») («field») («D») ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («C») («D»))) ((@_root_.cleanDefine_zero_quotient_projection_56136da15b0ed1341a7f («K») («field») («C») («D»))) («p»))
+
+noncomputable def cleanDefine_zero_quotient_map_dbac1825da60d29705c7 {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («C» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («D» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («E» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («F» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («v» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («D») («F»))) : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («C») («D»))) ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («E») («F»)))) :=
+  (@_root_.cleanNotation_compose_chain_maps_cef6124157281682085f («K») («field») ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («C») («D»))) («F») ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («E») («F»))) ((@_root_.cleanDefine_zero_quotient_projection_56136da15b0ed1341a7f («K») («field») («E») («F»))) ((@_root_.cleanNotation_compose_chain_maps_cef6124157281682085f («K») («field») ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («C») («D»))) («D») («F») («v») ((@_root_.cleanNotation_zero_quotient_reduction_710bb82257389ba90ade («K») («field») («C») («D»))))))
+
+noncomputable def cleanDefine_zero_quotient_homology_map_878b3cf9fc0561e9cf48 {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («C» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («D» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («E» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («F» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))) («v» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («D») («F»))) («p» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («C») («D»))) («p»))) ((@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («E») («F»))) («p»)))) :=
+  (@_root_.cleanNotation_induced_chain_homology_map_3952f2d3986b4912e6ec («K») («field») ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («C») («D»))) ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («E») («F»))) ((@_root_.cleanDefine_zero_quotient_map_dbac1825da60d29705c7 («K») («field») («C») («D») («E») («F») («v»))) («p»))
 
 
 open scoped Matrix
@@ -478,6 +508,82 @@ def «zero_quotient_homology_backward_after_forward» : Prop :=
   let «N» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)) := (@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («C») («D»))) («p»));
   (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((@_root_.cleanNotation_module_composition_622cd851b0bc174c8369 («K») («field») («N») («M») («N») ((@_root_.cleanDefine_zero_quotient_homology_forward_66db0133eebe06257127 («K») («field») («C») («D») («p»))) ((@_root_.cleanDefine_zero_quotient_homology_backward_2e4083f9d09a2c2f1112 («K») («field») («C») («D») («p»))))) ((@_root_.cleanNotation_module_identity_3cffa414133766d157c3 («K») («field») («N»))))
 
+/--
+source: zero_quotient
+reference: inverse maps and associativity
+relationship: adapted
+-/
+def «zero_quotient_projection_commutes» : Prop :=
+  ∀ («K» : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))),
+  ∀ («C» «D» «E» «F» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))),
+  ∀ («v» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («D») («F»))),
+  let «Q» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»)) := (@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («C») («D»));
+  let «R» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»)) := (@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («E») («F»));
+  (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((@_root_.cleanNotation_compose_chain_maps_cef6124157281682085f («K») («field») («D») («Q») («R») ((@_root_.cleanDefine_zero_quotient_map_dbac1825da60d29705c7 («K») («field») («C») («D») («E») («F») («v»))) ((@_root_.cleanDefine_zero_quotient_projection_56136da15b0ed1341a7f («K») («field») («C») («D»))))) ((@_root_.cleanNotation_compose_chain_maps_cef6124157281682085f («K») («field») («D») («F») («R») ((@_root_.cleanDefine_zero_quotient_projection_56136da15b0ed1341a7f («K») («field») («E») («F»))) («v»))))
+
+/--
+source: zero_quotient
+reference: inverse maps and associativity
+relationship: adapted
+-/
+def «zero_quotient_reduction_commutes» : Prop :=
+  ∀ («K» : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))),
+  ∀ («C» «D» «E» «F» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))),
+  ∀ («v» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («D») («F»))),
+  let «Q» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»)) := (@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («C») («D»));
+  let «R» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»)) := (@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («E») («F»));
+  (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((@_root_.cleanNotation_compose_chain_maps_cef6124157281682085f («K») («field») («Q») («R») («F») ((@_root_.cleanNotation_zero_quotient_reduction_710bb82257389ba90ade («K») («field») («E») («F»))) ((@_root_.cleanDefine_zero_quotient_map_dbac1825da60d29705c7 («K») («field») («C») («D») («E») («F») («v»))))) ((@_root_.cleanNotation_compose_chain_maps_cef6124157281682085f («K») («field») («Q») («D») («F») («v») ((@_root_.cleanNotation_zero_quotient_reduction_710bb82257389ba90ade («K») («field») («C») («D»))))))
+
+/--
+source: zero_quotient
+reference: functor preserves commuting squares
+relationship: adapted
+-/
+def «zero_quotient_homology_forward_commutes» : Prop :=
+  ∀ («K» : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))),
+  ∀ («C» «D» «E» «F» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))),
+  ∀ («v» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («D») («F»))),
+  ∀ («p» : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
+  let «Q» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)) := (@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («C») («D»))) («p»));
+  let «R» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)) := (@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («E») («F»))) («p»));
+  let «M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)) := (@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») («D») («p»));
+  let «N» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)) := (@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») («F») («p»));
+  (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((@_root_.cleanNotation_module_composition_622cd851b0bc174c8369 («K») («field») («Q») («R») («N») ((@_root_.cleanDefine_zero_quotient_homology_map_878b3cf9fc0561e9cf48 («K») («field») («C») («D») («E») («F») («v») («p»))) ((@_root_.cleanDefine_zero_quotient_homology_forward_66db0133eebe06257127 («K») («field») («E») («F») («p»))))) ((@_root_.cleanNotation_module_composition_622cd851b0bc174c8369 («K») («field») («Q») («M») («N») ((@_root_.cleanDefine_zero_quotient_homology_forward_66db0133eebe06257127 («K») («field») («C») («D») («p»))) ((@_root_.cleanNotation_induced_chain_homology_map_3952f2d3986b4912e6ec («K») («field») («D») («F») («v») («p»))))))
+
+/--
+source: zero_quotient
+reference: functor preserves commuting squares
+relationship: adapted
+-/
+def «zero_quotient_homology_backward_commutes» : Prop :=
+  ∀ («K» : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))),
+  ∀ («C» «D» «E» «F» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))),
+  ∀ («v» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («D») («F»))),
+  ∀ («p» : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
+  let «Q» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)) := (@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («C») («D»))) («p»));
+  let «R» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)) := (@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») ((@_root_.cleanDefine_zero_chain_quotient_a00189717519ea1f14bf («K») («field») («E») («F»))) («p»));
+  let «M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)) := (@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») («D») («p»));
+  let «N» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)) := (@_root_.cleanNotation_chain_homology_741de881939148c4d167 («K») («field») («F») («p»));
+  (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((@_root_.cleanNotation_module_composition_622cd851b0bc174c8369 («K») («field») («M») («Q») («R») ((@_root_.cleanDefine_zero_quotient_homology_backward_2e4083f9d09a2c2f1112 («K») («field») («C») («D») («p»))) ((@_root_.cleanDefine_zero_quotient_homology_map_878b3cf9fc0561e9cf48 («K») («field») («C») («D») («E») («F») («v») («p»))))) ((@_root_.cleanNotation_module_composition_622cd851b0bc174c8369 («K») («field») («M») («N») («R») ((@_root_.cleanNotation_induced_chain_homology_map_3952f2d3986b4912e6ec («K») («field») («D») («F») («v») («p»))) ((@_root_.cleanDefine_zero_quotient_homology_backward_2e4083f9d09a2c2f1112 («K») («field») («E») («F») («p»))))))
+
+/--
+source: zero_quotient
+reference: cokernel hom extensionality
+relationship: adapted
+-/
+def «zero_quotient_map_agrees_with_cokernel_map» : Prop :=
+  ∀ («K» : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))),
+  ∀ («C» «D» «E» «F» : (_root_.cleanType_ModuleChainComplex_319c7d057f5f821f7932 («K») («field»))),
+  ∀ («u» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («C») («E»))),
+  ∀ («v» : (_root_.cleanType_ChainMap_80ddfbec860449786302 («K») («field») («D») («F»))),
+  ∀ («square» : (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((@_root_.cleanNotation_compose_chain_maps_cef6124157281682085f («K») («field») («C») («D») («F») («v») ((@_root_.cleanNotation_zero_chain_map_accfad693693a946c3e6 («K») («field») («C») («D»))))) ((@_root_.cleanNotation_compose_chain_maps_cef6124157281682085f («K») («field») («C») («E») («F») ((@_root_.cleanNotation_zero_chain_map_accfad693693a946c3e6 («K») («field») («E») («F»))) («u»))))),
+  (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((@_root_.cleanDefine_zero_quotient_map_dbac1825da60d29705c7 («K») («field») («C») («D») («E») («F») («v»))) ((@_root_.cleanNotation_chain_cokernel_map_5c85b6946e2072291af6 («K») («field») («C») («D») («E») («F») ((@_root_.cleanNotation_zero_chain_map_accfad693693a946c3e6 («K») («field») («C») («D»))) ((@_root_.cleanNotation_zero_chain_map_accfad693693a946c3e6 («K») («field») («E») («F»))) («u») («v») («square»))))
+
 end CleanStatements
 
 namespace ZeroQuotientOracle
@@ -503,6 +609,35 @@ def homologyRight : Prop := ∀ (K : cleanType_Type_c1fed1af64ab6f12e0ed) (field
  let m : cleanType_CoefficientModule_cb06282c8e98b088950e K field := cleanNotation_chain_homology_741de881939148c4d167 field D p
  let n : cleanType_CoefficientModule_cb06282c8e98b088950e K field := cleanNotation_chain_homology_741de881939148c4d167 field (cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field C D) p
  cleanDefine_equal_5fac732a65dd209a83f4 (cleanNotation_module_composition_622cd851b0bc174c8369 field n m n (cleanDefine_zero_quotient_homology_forward_66db0133eebe06257127 field C D p) (cleanDefine_zero_quotient_homology_backward_2e4083f9d09a2c2f1112 field C D p)) (cleanNotation_module_identity_3cffa414133766d157c3 field n)
+
+noncomputable def map {K : Type} (field : cleanType_FieldStructure_6c5b3bc7a67ff898144f K) (C D E F : cleanType_ModuleChainComplex_319c7d057f5f821f7932 K field) (v : cleanType_ChainMap_80ddfbec860449786302 K field D F) : cleanType_ChainMap_80ddfbec860449786302 K field (cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field C D) (cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field E F) :=
+ cleanNotation_compose_chain_maps_cef6124157281682085f field (cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field C D) F (cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field E F) (cleanDefine_zero_quotient_projection_56136da15b0ed1341a7f field E F) (cleanNotation_compose_chain_maps_cef6124157281682085f field (cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field C D) D F v (cleanNotation_zero_quotient_reduction_710bb82257389ba90ade field C D))
+noncomputable def homologyMap {K : Type} (field : cleanType_FieldStructure_6c5b3bc7a67ff898144f K) (C D E F : cleanType_ModuleChainComplex_319c7d057f5f821f7932 K field) (v : cleanType_ChainMap_80ddfbec860449786302 K field D F) (p : cleanType_Natural_469c53b6dafb7a218246) : cleanType_ModuleMap_cf75ef13ca99ba60b566 K field (cleanNotation_chain_homology_741de881939148c4d167 field (cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field C D) p) (cleanNotation_chain_homology_741de881939148c4d167 field (cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field E F) p) :=
+ cleanNotation_induced_chain_homology_map_3952f2d3986b4912e6ec field (cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field C D) (cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field E F) (cleanDefine_zero_quotient_map_dbac1825da60d29705c7 field C D E F v) p
+
+def projectionNatural : Prop := ∀ (K : cleanType_Type_c1fed1af64ab6f12e0ed) (field : cleanType_FieldStructure_6c5b3bc7a67ff898144f K) (C D E F : cleanType_ModuleChainComplex_319c7d057f5f821f7932 K field) (v : cleanType_ChainMap_80ddfbec860449786302 K field D F),
+ let q : cleanType_ModuleChainComplex_319c7d057f5f821f7932 K field := cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field C D
+ let r : cleanType_ModuleChainComplex_319c7d057f5f821f7932 K field := cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field E F
+ cleanDefine_equal_5fac732a65dd209a83f4 (cleanNotation_compose_chain_maps_cef6124157281682085f field D q r (cleanDefine_zero_quotient_map_dbac1825da60d29705c7 field C D E F v) (cleanDefine_zero_quotient_projection_56136da15b0ed1341a7f field C D)) (cleanNotation_compose_chain_maps_cef6124157281682085f field D F r (cleanDefine_zero_quotient_projection_56136da15b0ed1341a7f field E F) v)
+def reductionNatural : Prop := ∀ (K : cleanType_Type_c1fed1af64ab6f12e0ed) (field : cleanType_FieldStructure_6c5b3bc7a67ff898144f K) (C D E F : cleanType_ModuleChainComplex_319c7d057f5f821f7932 K field) (v : cleanType_ChainMap_80ddfbec860449786302 K field D F),
+ let q : cleanType_ModuleChainComplex_319c7d057f5f821f7932 K field := cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field C D
+ let r : cleanType_ModuleChainComplex_319c7d057f5f821f7932 K field := cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field E F
+ cleanDefine_equal_5fac732a65dd209a83f4 (cleanNotation_compose_chain_maps_cef6124157281682085f field q r F (cleanNotation_zero_quotient_reduction_710bb82257389ba90ade field E F) (cleanDefine_zero_quotient_map_dbac1825da60d29705c7 field C D E F v)) (cleanNotation_compose_chain_maps_cef6124157281682085f field q D F v (cleanNotation_zero_quotient_reduction_710bb82257389ba90ade field C D))
+def homologyForwardNatural : Prop := ∀ (K : cleanType_Type_c1fed1af64ab6f12e0ed) (field : cleanType_FieldStructure_6c5b3bc7a67ff898144f K) (C D E F : cleanType_ModuleChainComplex_319c7d057f5f821f7932 K field) (v : cleanType_ChainMap_80ddfbec860449786302 K field D F) (p : cleanType_Natural_469c53b6dafb7a218246),
+ let q : cleanType_CoefficientModule_cb06282c8e98b088950e K field := cleanNotation_chain_homology_741de881939148c4d167 field (cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field C D) p
+ let r : cleanType_CoefficientModule_cb06282c8e98b088950e K field := cleanNotation_chain_homology_741de881939148c4d167 field (cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field E F) p
+ let m : cleanType_CoefficientModule_cb06282c8e98b088950e K field := cleanNotation_chain_homology_741de881939148c4d167 field D p
+ let n : cleanType_CoefficientModule_cb06282c8e98b088950e K field := cleanNotation_chain_homology_741de881939148c4d167 field F p
+ cleanDefine_equal_5fac732a65dd209a83f4 (cleanNotation_module_composition_622cd851b0bc174c8369 field q r n (cleanDefine_zero_quotient_homology_map_878b3cf9fc0561e9cf48 field C D E F v p) (cleanDefine_zero_quotient_homology_forward_66db0133eebe06257127 field E F p)) (cleanNotation_module_composition_622cd851b0bc174c8369 field q m n (cleanDefine_zero_quotient_homology_forward_66db0133eebe06257127 field C D p) (cleanNotation_induced_chain_homology_map_3952f2d3986b4912e6ec field D F v p))
+def homologyBackwardNatural : Prop := ∀ (K : cleanType_Type_c1fed1af64ab6f12e0ed) (field : cleanType_FieldStructure_6c5b3bc7a67ff898144f K) (C D E F : cleanType_ModuleChainComplex_319c7d057f5f821f7932 K field) (v : cleanType_ChainMap_80ddfbec860449786302 K field D F) (p : cleanType_Natural_469c53b6dafb7a218246),
+ let q : cleanType_CoefficientModule_cb06282c8e98b088950e K field := cleanNotation_chain_homology_741de881939148c4d167 field (cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field C D) p
+ let r : cleanType_CoefficientModule_cb06282c8e98b088950e K field := cleanNotation_chain_homology_741de881939148c4d167 field (cleanDefine_zero_chain_quotient_a00189717519ea1f14bf field E F) p
+ let m : cleanType_CoefficientModule_cb06282c8e98b088950e K field := cleanNotation_chain_homology_741de881939148c4d167 field D p
+ let n : cleanType_CoefficientModule_cb06282c8e98b088950e K field := cleanNotation_chain_homology_741de881939148c4d167 field F p
+ cleanDefine_equal_5fac732a65dd209a83f4 (cleanNotation_module_composition_622cd851b0bc174c8369 field m q r (cleanDefine_zero_quotient_homology_backward_2e4083f9d09a2c2f1112 field C D p) (cleanDefine_zero_quotient_homology_map_878b3cf9fc0561e9cf48 field C D E F v p)) (cleanNotation_module_composition_622cd851b0bc174c8369 field m n r (cleanNotation_induced_chain_homology_map_3952f2d3986b4912e6ec field D F v p) (cleanDefine_zero_quotient_homology_backward_2e4083f9d09a2c2f1112 field E F p))
+def agreement : Prop := ∀ (K : cleanType_Type_c1fed1af64ab6f12e0ed) (field : cleanType_FieldStructure_6c5b3bc7a67ff898144f K) (C D E F : cleanType_ModuleChainComplex_319c7d057f5f821f7932 K field) (u : cleanType_ChainMap_80ddfbec860449786302 K field C E) (v : cleanType_ChainMap_80ddfbec860449786302 K field D F)
+ (square : cleanDefine_equal_5fac732a65dd209a83f4 (cleanNotation_compose_chain_maps_cef6124157281682085f field C D F v (cleanNotation_zero_chain_map_accfad693693a946c3e6 field C D)) (cleanNotation_compose_chain_maps_cef6124157281682085f field C E F (cleanNotation_zero_chain_map_accfad693693a946c3e6 field E F) u)),
+ cleanDefine_equal_5fac732a65dd209a83f4 (cleanDefine_zero_quotient_map_dbac1825da60d29705c7 field C D E F v) (cleanNotation_chain_cokernel_map_5c85b6946e2072291af6 field C D E F (cleanNotation_zero_chain_map_accfad693693a946c3e6 field C D) (cleanNotation_zero_chain_map_accfad693693a946c3e6 field E F) u v square)
 end ZeroQuotientOracle
 
 open CategoryTheory CategoryTheory.Limits
@@ -527,6 +662,43 @@ theorem homologyRightInverse : CleanStatements.zero_quotient_homology_backward_a
  letI : Field K := field
  exact ((HomologicalComplex.homologyFunctor (ModuleCat.{0} K) (ComplexShape.down ℕ) p).mapIso (cokernelZeroIsoTarget (X := C) (Y := D))).hom_inv_id
 
+theorem chainProjectionNatural : CleanStatements.zero_quotient_projection_commutes := by
+ intro K field C D E F v
+ letI : Field K := field
+ change (cokernelZeroIsoTarget (X := C) (Y := D)).inv ≫ (((cokernelZeroIsoTarget (X := C) (Y := D)).hom ≫ v) ≫ (cokernelZeroIsoTarget (X := E) (Y := F)).inv) = v ≫ (cokernelZeroIsoTarget (X := E) (Y := F)).inv
+ simp [← Category.assoc]
+
+theorem chainReductionNatural : CleanStatements.zero_quotient_reduction_commutes := by
+ intro K field C D E F v
+ letI : Field K := field
+ change (((cokernelZeroIsoTarget (X := C) (Y := D)).hom ≫ v) ≫ (cokernelZeroIsoTarget (X := E) (Y := F)).inv) ≫ (cokernelZeroIsoTarget (X := E) (Y := F)).hom = (cokernelZeroIsoTarget (X := C) (Y := D)).hom ≫ v
+ simp [Category.assoc]
+
+theorem homologyForwardNatural : CleanStatements.zero_quotient_homology_forward_commutes := by
+ intro K field C D E F v p
+ letI : Field K := field
+ let Hf := HomologicalComplex.homologyFunctor (ModuleCat.{0} K) (ComplexShape.down ℕ) p
+ change Hf.map (cleanDefine_zero_quotient_map_dbac1825da60d29705c7 field C D E F v) ≫ Hf.map (cleanNotation_zero_quotient_reduction_710bb82257389ba90ade field E F) = Hf.map (cleanNotation_zero_quotient_reduction_710bb82257389ba90ade field C D) ≫ Hf.map v
+ rw [← Hf.map_comp, ← Hf.map_comp]
+ exact congrArg Hf.map (chainReductionNatural K field C D E F v)
+
+theorem homologyBackwardNatural : CleanStatements.zero_quotient_homology_backward_commutes := by
+ intro K field C D E F v p
+ letI : Field K := field
+ let Hf := HomologicalComplex.homologyFunctor (ModuleCat.{0} K) (ComplexShape.down ℕ) p
+ change Hf.map (cleanDefine_zero_quotient_projection_56136da15b0ed1341a7f field C D) ≫ Hf.map (cleanDefine_zero_quotient_map_dbac1825da60d29705c7 field C D E F v) = Hf.map v ≫ Hf.map (cleanDefine_zero_quotient_projection_56136da15b0ed1341a7f field E F)
+ rw [← Hf.map_comp, ← Hf.map_comp]
+ exact congrArg Hf.map (chainProjectionNatural K field C D E F v)
+
+theorem canonicalCokernelAgreement : CleanStatements.zero_quotient_map_agrees_with_cokernel_map := by
+ intro K field C D E F u v square
+ letI : Field K := field
+ change cleanDefine_zero_quotient_map_dbac1825da60d29705c7 field C D E F v = cokernel.map (0 : C ⟶ D) (0 : E ⟶ F) u v square
+ apply (cancel_epi (cokernel.π (0 : C ⟶ D))).1
+ calc
+  _ = v ≫ cokernel.π (0 : E ⟶ F) := chainProjectionNatural K field C D E F v
+  _ = _ := (cokernel.π_desc _ _ _).symm
+
 open Lean Elab Command
 private def canonical : Expr → Expr
   | .lam _ t b i => .lam Name.anonymous (canonical t) (canonical b) i
@@ -549,9 +721,16 @@ same_basic_target cleanDefine_zero_quotient_projection_56136da15b0ed1341a7f Zero
 same_basic_target cleanNotation_zero_quotient_reduction_710bb82257389ba90ade ZeroQuotientOracle.reduction
 same_basic_target cleanDefine_zero_quotient_homology_forward_66db0133eebe06257127 ZeroQuotientOracle.forward
 same_basic_target cleanDefine_zero_quotient_homology_backward_2e4083f9d09a2c2f1112 ZeroQuotientOracle.backward
+same_basic_target cleanDefine_zero_quotient_map_dbac1825da60d29705c7 ZeroQuotientOracle.map
+same_basic_target cleanDefine_zero_quotient_homology_map_878b3cf9fc0561e9cf48 ZeroQuotientOracle.homologyMap
 same_basic_target CleanStatements.zero_quotient_reduction_after_projection ZeroQuotientOracle.chainLeft
 same_basic_target CleanStatements.zero_quotient_projection_after_reduction ZeroQuotientOracle.chainRight
 same_basic_target CleanStatements.zero_quotient_homology_forward_after_backward ZeroQuotientOracle.homologyLeft
 same_basic_target CleanStatements.zero_quotient_homology_backward_after_forward ZeroQuotientOracle.homologyRight
+same_basic_target CleanStatements.zero_quotient_projection_commutes ZeroQuotientOracle.projectionNatural
+same_basic_target CleanStatements.zero_quotient_reduction_commutes ZeroQuotientOracle.reductionNatural
+same_basic_target CleanStatements.zero_quotient_homology_forward_commutes ZeroQuotientOracle.homologyForwardNatural
+same_basic_target CleanStatements.zero_quotient_homology_backward_commutes ZeroQuotientOracle.homologyBackwardNatural
+same_basic_target CleanStatements.zero_quotient_map_agrees_with_cokernel_map ZeroQuotientOracle.agreement
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

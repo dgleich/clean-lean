@@ -4635,11 +4635,11 @@
       "source": "library/algebra/zero_chain_quotients.clean; studies/topology/ZeroChainQuotients.clean",
       "expected_lean": "Declared zero cokernel, canonical projection, cokernelZeroIsoTarget.hom, and homology maps with explicit field/category and retained local lets.",
       "checks": [
-        "studies/topology/verify_zero_chain_quotients.py: five definition and four statement targets; four inverse-map proofs"
+        "studies/topology/verify_zero_chain_quotients.py: seven definition and nine statement targets; four inverse, four naturality and one cokernel-agreement proof"
       ],
       "pending": [
         "Empty-relative-subspace singular-chain inclusion is zero",
-        "Equality transport, naturality and ordinary-homology identification",
+        "Compatible equality transport and ordinary-homology identification",
         "Level well-group theorem"
       ]
     }
