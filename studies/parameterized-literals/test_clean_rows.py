@@ -62,6 +62,44 @@ class CleanRows(unittest.TestCase):
   self.e.data['functions']=dict(reversed(list(self.e.data['functions'].items())))
   second=Builder(self.e,self.scope).materialize(tree)
   self.assertEqual(first.lean,second.lean)
+ def test_literal_dimension_supplies_checked_zero_argument(self):
+  self.record();tree=expression_tree(parse('vector cell(2,0)','expression'))
+  value=Builder(self.e,{}).materialize(tree)
+  self.assertEqual(value.type,self.e.type('VectorCell(2)'))
+  dimension=value.tree[2][0]
+  self.assertEqual(dimension[:3],['BoundNumeral','2','Natural'])
+  self.assertEqual(dimension[4],'inferred')
+  self.assertEqual(value.tree[2][1][5],[['n','explicit',dimension]])
+ def test_annotated_dimension_and_inferred_dimension_have_same_target(self):
+  self.record()
+  values=[Builder(self.e,{}).materialize(expression_tree(parse(s,'expression')))
+   for s in ['vector cell(2,0)','vector cell((2:Natural),0)']]
+  self.assertEqual(values[0].lean,values[1].lean)
+ def test_literal_dimension_is_context_forced_without_default(self):
+  self.record();tree=expression_tree(parse('vector cell(2,0)','expression'))
+  value=Builder(self.e,{}).materialize(tree,use_default=False)
+  self.assertEqual(value.tree[2][0][4],'inferred')
+  self.assertEqual(value.tree[2][1][7],'inferred')
+ def test_literal_dimension_rejects_conflicting_expected_index(self):
+  self.record()
+  with self.assertRaises(NoSolution):
+   Builder(self.e,{}).materialize(expression_tree(parse('vector cell(2,0)','expression')),
+    self.e.type('VectorCell(3)'))
+ def test_literal_dimension_replays_selected_native_arguments(self):
+  from cleanlang.core import Expressions
+  from cleanlang.retained_codec import dumps,loads
+  self.record()
+  value=Builder(self.e,{}).materialize(expression_tree(parse('vector cell(2,0)','expression')))
+  from cleanlang.numerals import identity
+  self.e.numeral_default=('Real',tuple(identity('Real',self.e)))
+  replay=Expressions(self.e,{}).elaborate(loads(dumps(value.tree)))
+  self.assertEqual(value.lean,replay.lean)
+ def test_literal_dimension_enumeration_order_is_irrelevant(self):
+  self.record();tree=expression_tree(parse('vector cell(2,0)','expression'))
+  first=Builder(self.e,{}).materialize(tree)
+  self.e.data['types']=dict(reversed(list(self.e.data['types'].items())))
+  self.e.data['functions']=dict(reversed(list(self.e.data['functions'].items())))
+  self.assertEqual(first.lean,Builder(self.e,{}).materialize(tree).lean)
  def solve(self,source,**kw):
   return Builder(self.e,self.scope).solve(expression_tree(parse(source,'expression')),**kw)
  def literal(self,result):return [key for kind,_,key in result[0] if kind=='literal']

@@ -35,10 +35,14 @@ class Builder:
         if key is None:raise Incomplete('Undeclared carrier identity')
         return key
 
-    def known_index(self,value):
+    def index(self,value):
         from cleanlang.indices import index_value
         index=index_value(value,self.env,self.scope,_fresh=True)
         atom=Atom(repr(index.comparison_key()),'index')
+        return atom,index
+
+    def known_index(self,value):
+        atom,index=self.index(value)
         self.rigid.setdefault(atom,index)
         return atom
 
@@ -81,8 +85,8 @@ class Builder:
         if not holes(tree):
             value=self.known.get(path)
             if value is None:value=Expressions(self.env,self.scope).elaborate(tree)
-            # Only plain locals and retained scalar numerals have direct rigid
-            # value equations here. Other known values may still supply types.
+            # Locals, retained numerals and explicit numeral annotations supply
+            # rigid values. Other known values may still supply types.
             atom=(self.known_values[path] if path in self.known_values
                   else Variable(repr((path,'deferred known value')),'index'))
             return [Fragment(self.typ(value.type),atom)]
@@ -94,7 +98,7 @@ class Builder:
                 node=['BoundNumeral',text,name,identity(name,self.env),'inferred']
                 value=Expressions(self.env,self.scope).elaborate(node)
                 carrier=self.typ(value.type)
-                found.append(Fragment(carrier,Atom(repr(value.lean),'index'),
+                found.append(Fragment(carrier,self.index(value)[0],
                     (('numeral',path,spec['numerals']['native_binding']),),(carrier,)))
             for name,spec in sorted(self.env.data['functions'].items()):
                 attachment=spec.get('literal')
@@ -148,7 +152,7 @@ class Builder:
             if not holes(node):
                 value=Expressions(self.env,self.scope).elaborate(node)
                 self.known[path]=value;self.typ(value.type)
-                if node[0] in ('Local','BoundNumeral'):self.known_values[path]=self.known_index(value)
+                if node[0] in ('Local','BoundNumeral','NumeralAnnotation'):self.known_values[path]=self.known_index(value)
                 return
             if node[0]=='Call':
                 for i,arg in enumerate(node[2]):prepare(arg,path+(2,i))
@@ -214,6 +218,17 @@ class Builder:
         from cleanlang.inferred_conversion import reify
         from cleanlang.literal_binding import snapshot,elaborate as literal
         selected_literals={(kind,path):key for kind,path,key in choices if kind in ('literal','numeral')}
+        # Only the selected scalar interpretations can supply additional
+        # representatives. Visit holes in source order, after caller evidence.
+        for path,decimal in positions:
+            key=selected_literals.get(('numeral',path))
+            if key is None:continue
+            name=next(n for n,s in self.env.data['types'].items()
+                      if s.get('numerals',{}).get('native_binding')==key)
+            origin='defaulted' if path in defaulted else 'inferred'
+            value=Expressions(self.env,self.scope).elaborate(
+                ['BoundNumeral',decimal,name,identity(name,self.env),origin])
+            self.known_index(value)
         types={self.carrier_identity(n):n for n,s in self.env.data['types'].items()
                if 'native_binding' in s or n in self.env.structures}
         functions={s['native_binding']:n for n,s in self.env.data['functions'].items()}

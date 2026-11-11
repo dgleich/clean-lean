@@ -1271,5 +1271,14 @@ comparing normalized values. Nine exact targets and supporting proofs cover the
 study specimens; production joint inference is still pending. See the
 <a href="../studies/parameterized-literals/README.md#constructor-rows-and-caller-index-values">construction and limits</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="literal-valued-dimensions">
+<h2>Experimental literal-valued dimensions</h2>
+<p><code>vector cell(2,0)</code> and <code>vector cell((2:Natural),0)</code>
+select the same native term, abbreviated as
+<code>@vectorCellConstructor (naturalNumeral 2) (@complexVectorZero (naturalNumeral 2))</code>.
+The constructor constrains both literals without a default. Selected numeral
+indices retain their native wrappers; general dependent inference remains open.
+See the <a href="../studies/parameterized-literals/README.md#literal-valued-dimensions">selection and reconstruction rules</a>.</p>
+</section></llm>
 </body>
 </html>

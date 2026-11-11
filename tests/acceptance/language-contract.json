@@ -3234,7 +3234,7 @@
         "studies/parameterized-literals/check_clean_rows.py",
         "studies/parameterized-literals/test_constraint_model.py"
       ],
-      "native_oracles": "Nine independent exact targets and nine meaning proofs in studies/parameterized-literals/JointTargets.lean",
+      "native_oracles": "Eleven independent exact targets and eleven meaning proofs in studies/parameterized-literals/JointTargets.lean",
       "negative_cases": [
         "Duplicate zero constructors",
         "Unresolved families are not discarded",

@@ -73,8 +73,20 @@ same_basic_target actualConstructor{i} expectedConstructor{i}
 theorem meaningConstructor{i} {binders} :
   (actualConstructor{i} m n x A r).entry = {meaning} := {proof}
 """)
+ntwo=f"{nn} (nat_lit 2)"
+cell=env.structures['VectorCell']['key']
+for i,source in enumerate(['vector cell(2,0)','vector cell((2:Natural),0)']):
+ value=Builder(env,{}).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ checks.append(f"""
+noncomputable def actualLiteralDimension{i} : {cell} ({ntwo}) := {value.lean}
+noncomputable def expectedLiteralDimension{i} : {cell} ({ntwo}) :=
+  @{f('vector cell')} ({ntwo}) (@{f('complex vector zero')} ({ntwo}))
+same_basic_target actualLiteralDimension{i} expectedLiteralDimension{i}
+theorem meaningLiteralDimension{i} :
+  actualLiteralDimension{i}.entry = (fun _ => (0 : Complex)) := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Nine experimental joint-row targets and nine meaning proofs passed; production joint inference remains unimplemented.')
+print('Eleven experimental joint-row targets and eleven meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

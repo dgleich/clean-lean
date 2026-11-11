@@ -1712,3 +1712,16 @@ cases are recorded in the [study contract](../studies/parameterized-literals/REA
 There is no grammar or production elaboration change; general joint inference
 remains experimental.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental literal-valued indices
+
+Selected scalar numerals can supply checked representatives for dependent
+constructor indices in the joint-inference study. Scalar row values use checked
+index-comparison keys. Representatives are added only after unique selection,
+in source-hole order after caller evidence; enumeration does not choose spelling.
+Explicit annotated numerals also count as known index evidence. See the
+[construction and native mapping](../studies/parameterized-literals/README.md#literal-valued-dimensions).
+No grammar or production-inference change is implied.
+:::

@@ -341,3 +341,50 @@ This step changes only the experimental adapter and its documentation/checks.
 Production integration evidence remains the preceding checked-signature run;
 the still-running full discovery jobs are not counted as passes.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Literal-valued dimensions
+
+The constructor experiment now also handles `vector cell(2,0)` and
+`vector cell((2:Natural),0)`. The constructor fixes the first carrier to Natural;
+the second argument selects the complex-vector zero at that checked numeral
+index. Neither inference requires a default. Both generate the same canonical
+native wrapper application:
+
+```lean
+@vectorCellConstructor (naturalNumeral 2)
+  (@complexVectorZero (naturalNumeral 2))
+```
+
+Native names above are abbreviated. This is a statement about selected term
+structure, not a rewrite that replaces the declared numeral wrapper by Lean's
+literal 2. The independent native expectations retain both wrapper applications.
+
+Each scalar numeral row now uses the existing checked index-comparison key for
+its value equation, just as known caller indices do. No candidate adds a source
+representative during enumeration. After unique selection, the materializer
+visits selected scalar numeral holes in source order and adds their checked
+indices after caller/expected-type representatives. Only a missing representative
+is filled; an existing equivalent caller spelling remains preferred. Each stored
+numeral retains its selected constructor and inferred/defaulted origin. Exact
+literal attachments still require solved arguments; this does not invent a
+value equation for an arbitrary dependent call.
+
+Explicit numeral annotations are known checked values and now supply index
+representatives as well. A changed visible default cannot reinterpret saved
+arguments. A conflicting expected dimension (for example VectorCell(3)) is
+rejected. General computed arguments, binder/evidence constraints and exhaustive
+candidate validity remain open. This supersedes the earlier limitation for
+scalar-numeral dimensions only, not the general dependent-application limitation.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Literal-dimension validation: 79 experimental tests pass. Eleven independent
+exact native targets and eleven supporting proofs pass, including the raw and
+annotated dimension forms (`/tmp/clean-literal-dimension-native.log`). Codec
+replay after changing the visible numeral default to Real preserves the selected
+Natural argument. Production sources are unchanged in this step; running full
+discovery jobs remain separate, incomplete evidence.
+:::

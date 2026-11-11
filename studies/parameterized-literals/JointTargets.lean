@@ -369,4 +369,20 @@ same_basic_target actualConstructor1 expectedConstructor1
 theorem meaningConstructor1 (m n : cleanType_Natural_469c53b6dafb7a218246) (x : cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) (A : cleanType_Matrix_4518cbfc13ff70fc0769 m n cleanType_Real_107b6641a486642ad8e1) (r : cleanType_Real_107b6641a486642ad8e1) :
   (actualConstructor1 m n x A r).entry = (fun _ => (0 : Complex)) := by rfl
 
+
+noncomputable def actualLiteralDimension0 : cleanStructure_VectorCell_ea235d5395205122748e (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))))
+noncomputable def expectedLiteralDimension0 : cleanStructure_VectorCell_ea235d5395205122748e (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) :=
+  @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+same_basic_target actualLiteralDimension0 expectedLiteralDimension0
+theorem meaningLiteralDimension0 :
+  actualLiteralDimension0.entry = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualLiteralDimension1 : cleanStructure_VectorCell_ea235d5395205122748e (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))))
+noncomputable def expectedLiteralDimension1 : cleanStructure_VectorCell_ea235d5395205122748e (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) :=
+  @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+same_basic_target actualLiteralDimension1 expectedLiteralDimension1
+theorem meaningLiteralDimension1 :
+  actualLiteralDimension1.entry = (fun _ => (0 : Complex)) := by rfl
+
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md
