@@ -4783,6 +4783,45 @@
         "Full updated-revision regression",
         "Complete active-label validation"
       ]
+    },
+    {
+      "id": "scoped_callable_evidence_lambdas",
+      "status": "experimental-api-focused-validation-passed",
+      "source": "tests/test_joint_completion.py: ScopedProofLambdas; tools/check_joint_proof_targets.py",
+      "environment": "Explicit declared real/natural types, literal interpretations and proof operations; expected universal/implication condition already determined.",
+      "expected_tree": [
+        "Lambda",
+        "x",
+        "Real",
+        [
+          "Call",
+          "proof with scalar",
+          [
+            [
+              "Local",
+              "n"
+            ],
+            [
+              "Local",
+              "h"
+            ],
+            [
+              "Decimal",
+              "0"
+            ]
+          ]
+        ]
+      ],
+      "expected_lean": "An ordinary lambda over the declared domain, whose body applies the declared proof operation to supplied evidence and the uniquely constrained Real zero. Dependent proof conditions use the same binder; no Evidence cast or replacement proof.",
+      "checks": [
+        "Seven API cases: direct/nested universal, dependent binder, implication, wrong domain, wrong body, noncallable evidence",
+        "check_joint_proof_targets.py: nine independent targets and nine interpretation proofs (four new pairs)"
+      ],
+      "pending": [
+        "Full regression and production routing",
+        "Selected-value-dependent scoped result recovery",
+        "General contextual callable signature recovery"
+      ]
     }
   ]
 }

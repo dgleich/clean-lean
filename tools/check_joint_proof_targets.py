@@ -58,8 +58,27 @@ noncomputable def expected{suffix} (n : {t('Natural')}) (h : {proof_type}) {extr
 same_basic_target actual{suffix} expected{suffix}
 theorem meaning{suffix} (n : {t('Natural')}) (h : {proof_type}) {extra} : actual{suffix} {args} = expected{suffix} {args} := by rfl
 ''')
+# A supplied proof expectation constrains the lambda body through its callable
+# view; the lambda itself retains its ordinary function type and expression.
+notation('Notation proof with scalar(n: Natural,h: Evidence((n=n)),z: Real): Evidence((n=n)):', ['Means: h','Render latex: p({n},{h},{z})'],env)
+notation('Notation use universal(n: Natural,h: Evidence((for every(x: Real,n=n)))): Natural:', ['Means: n','Render latex: u({n},{h})'],env)
+scope['h']=Expr('h','h',env.type('Evidence((n=n))',scope),tree=['Local','h'])
+for suffix,source,expectation,result_type,expected_body in [
+ ('ProofLambda','function(x: Real,proof with scalar(n,h,0))','Evidence((for every(x: Real,n=n)))',f'{t("Real")} → {eq}',f'fun (x : {t("Real")}) => {f("proof with scalar")} n h ({realzero})'),
+ ('ProofConsumer','use universal(n,function(x: Real,proof with scalar(n,h,0)))',None,t('Natural'),f'{f("use universal")} n (fun (x : {t("Real")}) => {f("proof with scalar")} n h ({realzero}))'),
+ ('DependentProofLambda','function(j: Natural,proof with scalar(j,self equality(j),0))','Evidence((for every(k: Natural,k=k)))',f'∀ (j : {t("Natural")}), {f("equal")} j j',f'fun (j : {t("Natural")}) => {f("proof with scalar")} j ({f("self equality")} j) ({realzero})'),
+ ('ImplicationLambda','function(premise: Evidence((n=n)),proof with scalar(n,premise,0))','Evidence(((n=n) → (n=n)))',f'({eq}) → ({eq})',f'fun (q : {eq}) => {f("proof with scalar")} n q ({realzero})'),
+]:
+ expected=env.type(expectation,scope) if expectation else None
+ value=complete(expression_tree(parse(source,'expression')),env,scope,expected,use_default=False)
+ checks.append(f'''
+noncomputable def actual{suffix} (n : {t('Natural')}) (h : {eq}) : {env.render_type(value.type,'lean',scope)} := {value.lean}
+noncomputable def expected{suffix} (n : {t('Natural')}) (h : {eq}) : {result_type} := {expected_body}
+same_basic_target actual{suffix} expected{suffix}
+theorem meaning{suffix} (n : {t('Natural')}) (h : {eq}) : actual{suffix} n h = expected{suffix} n h := by rfl
+''')
 path=ROOT/'studies/parameterized-literals/ProofTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Five exact evidence targets and five interpretation proofs passed; selected-value proof dependencies and production integration remain pending.')
+print('Nine exact evidence targets and nine interpretation proofs passed; selected-value proof dependencies and production integration remain pending.')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

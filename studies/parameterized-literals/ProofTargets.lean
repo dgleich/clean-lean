@@ -277,6 +277,12 @@ noncomputable def cleanNotation_self_equality_526b199c032405311d5d  («n» : (_r
 noncomputable def cleanNotation_keep_evidence_8315a94e3f1b8fcba23e  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («h» : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 («n») («n»)))) («z» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
   n
 
+noncomputable def cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («h» : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 («n») («n»)))) («z» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 («n») («n»))) :=
+  h
+
+noncomputable def cleanNotation_use_universal_89cbb7cdfc0ec535fee0  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («h» : ((∀ (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 («n») («n»))))) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  n
+
 
 open scoped Matrix
 
@@ -333,5 +339,29 @@ noncomputable def actualImplication (n : cleanType_Natural_469c53b6dafb7a218246)
 noncomputable def expectedImplication (n : cleanType_Natural_469c53b6dafb7a218246) (h : ∀ (_ : (cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1)), (cleanDefine_equal_5fac732a65dd209a83f4 n n) → (cleanDefine_equal_5fac732a65dd209a83f4 n n)) (q : cleanDefine_equal_5fac732a65dd209a83f4 n n) : cleanDefine_equal_5fac732a65dd209a83f4 n n := h (fun (x : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) q
 same_basic_target actualImplication expectedImplication
 theorem meaningImplication (n : cleanType_Natural_469c53b6dafb7a218246) (h : ∀ (_ : (cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1)), (cleanDefine_equal_5fac732a65dd209a83f4 n n) → (cleanDefine_equal_5fac732a65dd209a83f4 n n)) (q : cleanDefine_equal_5fac732a65dd209a83f4 n n) : actualImplication n h q = expectedImplication n h q := by rfl
+
+
+noncomputable def actualProofLambda (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → (((_root_.cleanDefine_equal_5fac732a65dd209a83f4 (n) (n)))) := (fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (@_root_.cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70 (n) (h) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))))
+noncomputable def expectedProofLambda (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : cleanType_Real_107b6641a486642ad8e1 → cleanDefine_equal_5fac732a65dd209a83f4 n n := fun (x : cleanType_Real_107b6641a486642ad8e1) => cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70 n h (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualProofLambda expectedProofLambda
+theorem meaningProofLambda (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : actualProofLambda n h = expectedProofLambda n h := by rfl
+
+
+noncomputable def actualProofConsumer (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : (_root_.cleanType_Natural_469c53b6dafb7a218246) := (@_root_.cleanNotation_use_universal_89cbb7cdfc0ec535fee0 (n) ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (@_root_.cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70 (n) (h) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))))))
+noncomputable def expectedProofConsumer (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : cleanType_Natural_469c53b6dafb7a218246 := cleanNotation_use_universal_89cbb7cdfc0ec535fee0 n (fun (x : cleanType_Real_107b6641a486642ad8e1) => cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70 n h (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))
+same_basic_target actualProofConsumer expectedProofConsumer
+theorem meaningProofConsumer (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : actualProofConsumer n h = expectedProofConsumer n h := by rfl
+
+
+noncomputable def actualDependentProofLambda (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : (clean_pi_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → (((_root_.cleanDefine_equal_5fac732a65dd209a83f4 (clean_pi_bound_0) (clean_pi_bound_0)))) := (fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70 (clean_bound_0) ((@_root_.cleanNotation_self_equality_526b199c032405311d5d (clean_bound_0))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))))
+noncomputable def expectedDependentProofLambda (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : ∀ (j : cleanType_Natural_469c53b6dafb7a218246), cleanDefine_equal_5fac732a65dd209a83f4 j j := fun (j : cleanType_Natural_469c53b6dafb7a218246) => cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70 j (cleanNotation_self_equality_526b199c032405311d5d j) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualDependentProofLambda expectedDependentProofLambda
+theorem meaningDependentProofLambda (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : actualDependentProofLambda n h = expectedDependentProofLambda n h := by rfl
+
+
+noncomputable def actualImplicationLambda (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : (((_root_.cleanDefine_equal_5fac732a65dd209a83f4 (n) (n)))) → (((_root_.cleanDefine_equal_5fac732a65dd209a83f4 (n) (n)))) := (fun (clean_bound_0 : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 (n) (n)))) => (@_root_.cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70 (n) (clean_bound_0) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))))
+noncomputable def expectedImplicationLambda (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : (cleanDefine_equal_5fac732a65dd209a83f4 n n) → (cleanDefine_equal_5fac732a65dd209a83f4 n n) := fun (q : cleanDefine_equal_5fac732a65dd209a83f4 n n) => cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70 n q (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualImplicationLambda expectedImplicationLambda
+theorem meaningImplicationLambda (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : actualImplicationLambda n h = expectedImplicationLambda n h := by rfl
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

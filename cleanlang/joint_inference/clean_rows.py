@@ -767,7 +767,9 @@ class Builder:
             body_expected=self.env.type('Proposition')
             if expected is not None and expected!=body_expected:raise NoSolution('Quantifier expected type mismatch')
         elif expected is not None:
-            if not self.env.is_function_type(expected) or len(expected.args)!=2:
+            from cleanlang.proof_types import callable_view
+            expected=callable_view(expected,self.env)
+            if expected is None or not self.env.is_function_type(expected) or len(expected.args)!=2:
                 raise NoSolution('Lambda expected type is not a supported function')
             if domain!=expected.args[0]:raise NoSolution('Lambda domain mismatch')
             body_expected=(substitute(expected.codomain,{expected.binder:local},self.env,scope)

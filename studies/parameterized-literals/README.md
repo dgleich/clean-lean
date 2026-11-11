@@ -3425,3 +3425,59 @@ The live active-label validation remains a different, earlier immutable snapshot
 It has not completed, and this focused result does not establish its outcome or
 complete production integration. No paper theorem is added by this inference fix.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Scoped lambdas checked against callable evidence
+
+This supersedes the earlier scoped-evidence-head exclusion of lambda construction
+against a determined callable evidence expectation.
+
+In the explicit joint-inference API, a Lambda with a determined expected type
+first obtains that type's existing source-derived `callable_view`. Ordinary
+function types are unchanged. Evidence of a universal condition supplies a
+possibly dependent function signature; implication evidence supplies a function
+from its premise evidence to its conclusion evidence. Noncallable evidence is
+rejected as a noncallable expectation. No missing condition or proof is inferred.
+
+The authored domain annotation must equal the view's domain. For a dependent
+view, substitute the fresh lambda binder into the view's codomain before preparing
+body alternatives. For a nondependent view, use its fixed codomain. Prepare all
+body rows under that expectation and retain the enclosing joint-selection/default
+rules: a nested lambda does not select or default its body independently.
+
+Reconstruct the complete Lambda with its retained body and check it against the
+same callable view using ordinary no-hole elaboration. The emitted term is the
+ordinary authored lambda, and its intrinsic type remains the inferred function
+or dependent-function type. It is not relabeled with the expected Evidence type
+and no cast, proof search or replacement proof is inserted. Existing evidence
+compatibility allows a declared consumer to accept that callable value. Expected
+evidence and intrinsic function type are distinct representations of this
+specified callable compatibility, not a new unrestricted definitional equality.
+
+For example, when `h` proves `n=n` and `proof with scalar(n,h,z)` is an explicitly
+declared proof-preserving operation with real z, the authored
+`function(x: Real,proof with scalar(n,h,0))` checks against evidence of
+`for every(x: Real,n=n)`. Its body uses the declared Real zero. A dependent
+expectation `for every(k: Natural,k=k)` binds the expected proof condition to
+the authored lambda's binder, including when that binder is named j instead.
+
+The existing Lambda/Call/Apply parses are unchanged and unique before type
+checking. This extends the explicit experimental API only; default production
+routing is unchanged. Result types depending on a selected literal-bearing
+argument, missing proof signatures, and general contextual recovery remain
+separate incomplete-analysis boundaries.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Scoped proof-lambda validation passes 58 API/adapter/checker tests (seven new
+cases), 462 solver tests, 115 runtime tests, and nine independent canonical
+proof targets with nine interpretation proofs (four new target/proof pairs).
+Four corpus documents emit identical legacy/joint Lean under matching stable
+fingerprints; all 92 corpus proofs pass. Evidence is retained under
+`scoped_proof_lambdas_corpus` in [the compatibility report](compatibility.json).
+Reference HTML IDs/links and provenance checks pass. Updated full regression and
+complete active-label validation remain pending; earlier live jobs are preserved.
+Production routing is unchanged.
+:::

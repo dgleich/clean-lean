@@ -113,3 +113,18 @@ Native adapters, local aliases and the documented ineligible bodies stay opaque.
 The relative-map study exercises this rule with named source/target objects and
 explicit commutativity evidence, checked against independent native targets.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Joint checking of proof-producing lambdas
+
+The explicit joint-inference API now checks a lambda against a determined
+universal or implication Evidence expectation through its source-derived callable
+view. The domain annotation must match; dependent proof codomains are rebound to
+the authored lambda binder. The result retains the ordinary inferred function
+type and authored Lean lambda, with no cast or synthesized proof. Nested bodies
+participate in the enclosing solve. This does not change production routing or
+infer missing proof signatures. See the
+[constructive specification](spec.md#scoped-lambdas-checked-against-callable-evidence)
+and [independent native checks](../tools/check_joint_proof_targets.py).
+:::

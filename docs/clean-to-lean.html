@@ -1874,5 +1874,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p>After normalization, a checked projection over a recursively stable opaque base need not be normalized again at every enclosing native call. Its field and dependent type have already been checked. Authored producers, local definitions, hidden binders and unsupported forms remain outside this shortcut. Public comparison still checks the complete current source.</p>
 <p>The accessor, source target and comparison key are unchanged. This is traversal-local work reuse, with no new syntax or conversion rule. Independent native targets and rebinding tests are described in the <a href="comparison-token-cache.md">comparison report</a>; full regression remains a separate obligation.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="scoped-proof-lambdas">
+<h2>Checking a lambda against universal or implication evidence</h2>
+<p>The explicit joint API uses the existing source-derived callable view of an expected Evidence type. It matches the authored domain, substitutes the lambda binder into a dependent proof codomain, and checks the body under that expectation. A lambda such as <code>function(x: Real,proof with scalar(n,h,0))</code> can supply evidence of <code>for every(x: Real,n=n)</code> when the explicitly declared body operation returns that proof.</p>
+<p>Lean receives the authored lambda with its declared proof body and Real zero. The intrinsic result remains its ordinary inferred function type; no cast or proof replacement is emitted. Nested lambda rows participate in the enclosing solve. Wrong domains, wrong proof bodies and noncallable evidence reject. Production routing and selected-value-dependent result recovery remain unchanged. See the <a href="spec.md#scoped-lambdas-checked-against-callable-evidence">constructive rule</a> and <a href="../tools/check_joint_proof_targets.py">independent targets</a>.</p>
+</section></llm>
 </body>
 </html>

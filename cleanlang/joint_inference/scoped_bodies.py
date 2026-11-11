@@ -22,7 +22,9 @@ class ScopedBody:
             body_expected=env.type('Proposition')
             if expected is not None and expected!=body_expected:raise NoSolution('Quantifier result mismatch')
         elif expected is not None:
-            if not env.is_function_type(expected) or len(expected.args)!=2:raise NoSolution('Lambda result is not callable')
+            from cleanlang.proof_types import callable_view
+            expected=callable_view(expected,env)
+            if expected is None or not env.is_function_type(expected) or len(expected.args)!=2:raise NoSolution('Lambda result is not callable')
             if domain!=expected.args[0]:raise NoSolution('Lambda domain mismatch')
             body_expected=(substitute(expected.codomain,{expected.binder:local},env,inner)
                            if isinstance(expected,DependentFunctionType) else expected.args[1])

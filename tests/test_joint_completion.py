@@ -285,3 +285,48 @@ class JointCompletion(unittest.TestCase):
 if __name__=='__main__':unittest.main()
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+# generated: gpt-6 2026-11-11 role=assisted
+class ScopedProofLambdas(unittest.TestCase):
+ def setUp(self):
+  self.env=Environment();load_module(ROOT/'library/linear_algebra.clean',self.env)
+  load_module(ROOT/'library/logic/evidence.clean',self.env)
+  self.scope={'n':Expr('n','n',self.env.type('Natural'),tree=['Local','n'])}
+  self.scope['h']=Expr('h','h',self.env.type('Evidence((n=n))',self.scope),tree=['Local','h'])
+  notation('Notation proof with scalar(n: Natural,h: Evidence((n=n)),z: Real): Evidence((n=n)):', ['Means: h','Render latex: p({n},{h},{z})'],self.env)
+  notation('Notation use universal(n: Natural,h: Evidence((for every(x: Real,n=n)))): Natural:', ['Means: n','Render latex: u({n},{h})'],self.env)
+ def test_direct_lambda_against_universal_evidence(self):
+  from cleanlang.proof_types import compatible_evidence
+  expected=self.env.type('Evidence((for every(x: Real,n=n)))',self.scope)
+  value=complete(expression_tree(parse('function(x: Real,proof with scalar(n,h,0))','expression')),self.env,self.scope,expected,use_default=False)
+  self.assertTrue(compatible_evidence(value.type,expected,self.env,self.scope))
+  self.assertEqual(value.tree[3][2][2][2],'Real')
+  self.assertEqual(value.lean,Expressions(self.env,self.scope).elaborate(value.tree).lean)
+ def test_nested_lambda_consumed_as_universal_evidence(self):
+  value=complete(expression_tree(parse('use universal(n,function(y: Real,proof with scalar(n,h,0)))','expression')),self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.env.type('Natural'))
+  self.assertEqual(value.lean,Expressions(self.env,self.scope).elaborate(value.tree).lean)
+ def test_wrong_domain_rejected(self):
+  expected=self.env.type('Evidence((for every(x: Real,n=n)))',self.scope)
+  with self.assertRaises(NoSolution):
+   complete(expression_tree(parse('function(x: Complex,proof with scalar(n,h,0))','expression')),self.env,self.scope,expected,use_default=False)
+ def test_wrong_proof_body_rejected(self):
+  expected=self.env.type('Evidence((for every(x: Real,n!=n)))',self.scope)
+  with self.assertRaises(NoSolution):
+   complete(expression_tree(parse('function(x: Real,proof with scalar(n,h,0))','expression')),self.env,self.scope,expected,use_default=False)
+ def test_noncallable_evidence_rejected(self):
+  with self.assertRaises(NoSolution):
+   complete(expression_tree(parse('function(x: Real,proof with scalar(n,h,0))','expression')),self.env,self.scope,self.scope['h'].type,use_default=False)
+ def test_dependent_universal_body_uses_lambda_binder(self):
+  from cleanlang.proof_types import compatible_evidence
+  notation('Notation self equality(k: Natural): Evidence((k=k)):', ['Means: rfl','Render latex: e({k})'],self.env)
+  expected=self.env.type('Evidence((for every(k: Natural,k=k)))',self.scope)
+  value=complete(expression_tree(parse('function(j: Natural,proof with scalar(j,self equality(j),0))','expression')),self.env,self.scope,expected,use_default=False)
+  self.assertTrue(compatible_evidence(value.type,expected,self.env,self.scope))
+  self.assertEqual(value.lean,Expressions(self.env,self.scope).elaborate(value.tree).lean)
+ def test_implication_lambda_uses_supplied_evidence(self):
+  from cleanlang.proof_types import compatible_evidence
+  expected=self.env.type('Evidence(((n=n) → (n=n)))',self.scope)
+  value=complete(expression_tree(parse('function(q: Evidence((n=n)),proof with scalar(n,q,0))','expression')),self.env,self.scope,expected,use_default=False)
+  self.assertTrue(compatible_evidence(value.type,expected,self.env,self.scope))
+  self.assertEqual(value.lean,Expressions(self.env,self.scope).elaborate(value.tree).lean)

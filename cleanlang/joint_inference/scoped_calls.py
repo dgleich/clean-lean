@@ -229,10 +229,6 @@ def prepare_expression(builder,tree,expected=None):
     if tree[0] in ('Lambda','Forall','Exists'):
         if tree[0]=='Lambda' and expected is None:
             raise Incomplete('Nested lambda needs a determined callable expectation')
-        if tree[0]=='Lambda' and not builder.env.is_function_type(expected):
-            from cleanlang.proof_types import callable_view
-            if callable_view(expected,builder.env) is not None:
-                raise Incomplete('Scoped callable evidence needs joint proof-type integration')
         child=ScopedBody(builder.env,builder.scope,tree,expected,path=builder.row_namespace,
                          limit=builder.limit,binder_ids=builder.binder_ids)
         return child.rows(),child.retain
