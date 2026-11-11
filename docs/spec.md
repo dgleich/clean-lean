@@ -1883,3 +1883,16 @@ failure and nominal type assembly. No declaration-selection or grammar rule
 changes. A forward-plan model is present but is not yet wired into pre-selection
 parameterized literal/call checks. See the [operational rules and integration boundary](../studies/parameterized-literals/README.md#checked-ground-witness-reconstruction).
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental demanded candidate values
+
+Parameterized literals inside dependent calls can now be reconstructed and checked
+before selection when their values are demanded by type indices. Ordinary equations
+and a conservative demand fixed point determine forward obligations; missing
+parameters block defaults with incomplete analysis. Operator auditing uses the
+same checks without expected-result constraints. Selected replay preserves origins.
+The [operational mapping and stricter experimental boundary](../studies/parameterized-literals/README.md#demanded-candidate-values-before-selection)
+record the remaining general-validity gaps. No grammar or production change.
+:::

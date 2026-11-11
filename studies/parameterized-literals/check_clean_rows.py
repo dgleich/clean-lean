@@ -214,8 +214,41 @@ noncomputable def expectedKnownConstructor{i} : {result} := {expected}
 same_basic_target actualKnownConstructor{i} expectedKnownConstructor{i}
 theorem meaningKnownConstructor{i} : actualKnownConstructor{i} = {meaning} := by {proof}
 """)
+notation('Define vector count(n: Natural,x: Vector(n,Complex)): Natural:',
+ ['Equals: n','Render latex: len({x})'],env,authored=True)
+for i,(source,argument,nested) in enumerate([
+ ('vector cell(vector count(n,0),0)','n',False),
+ ('vector cell(vector count(2,0),0)',ntwo,False),
+ ('vector cell(vector count(vector count(2,0),0),0)',ntwo,True)]):
+ zero=f"@{f('complex vector zero')} ({argument})"
+ count=f"@{f('vector count')} ({argument}) ({zero})"
+ if nested:count=f"@{f('vector count')} ({count}) ({zero})"
+ result=f"{cell} ({argument})"
+ expected=f"@{f('vector cell')} ({count}) ({zero})"
+ value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ checks.append(f"""
+noncomputable def actualCandidateValue{i} (n : {t('Natural')}) : {result} := {value.lean}
+noncomputable def expectedCandidateValue{i} (n : {t('Natural')}) : {result} := {expected}
+same_basic_target actualCandidateValue{i} expectedCandidateValue{i}
+theorem meaningCandidateValue{i} (n : {t('Natural')}) :
+  (actualCandidateValue{i} n).entry = (fun _ => (0 : Complex)) := by rfl
+""")
+notation('Notation vector extent(n: Natural,x: Vector(n,Complex)): Natural:',
+ ['Means: n','Render latex: extent({x})'],env)
+extent=f"@{f('vector extent')} ({ntwo}) (@{f('complex vector zero')} ({ntwo}))"
+extent_zero=f"@{f('complex vector zero')} ({extent})"
+extent_count=f"@{f('vector count')} ({extent}) ({extent_zero})"
+source='vector cell(vector count(vector extent(2,0),0),0)'
+value=Builder(env,{}).materialize(expression_tree(parse(source,'expression')),use_default=False)
+checks.append(f"""
+noncomputable def actualOpaqueCandidate : {cell} ({extent}) := {value.lean}
+noncomputable def expectedOpaqueCandidate : {cell} ({extent}) :=
+  @{f('vector cell')} ({extent_count}) ({extent_zero})
+same_basic_target actualOpaqueCandidate expectedOpaqueCandidate
+theorem meaningOpaqueCandidate : actualOpaqueCandidate.entry = (fun _ => (0 : Complex)) := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Thirty-three experimental joint-row targets and thirty-three meaning proofs passed; production joint inference remains unimplemented.')
+print('Thirty-seven experimental joint-row targets and thirty-seven meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

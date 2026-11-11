@@ -1390,9 +1390,18 @@ The production compiler and parser are unchanged.</p>
 <p>After selecting a literal interpretation, the study reconstructs each solved
 parameter from checked caller/selected witnesses in an explicit order, validates
 agreement, and assembles nominal type applications. Existing Lean terms are
-preserved. Forward reconstruction plans are modeled but do not yet establish
-candidate validity before selection. See the
+preserved. Forward reconstruction plans now check demanded candidate values
+(see the next entry), but do not yet establish every candidate’s validity. See the
 <a href="../studies/parameterized-literals/README.md#checked-ground-witness-reconstruction">operational contract and remaining work</a>.</p>
+</section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="demanded-candidate-values">
+<h2>Experimental dependent literal-call values</h2>
+<p><code>vector cell(vector count(n,0),0)</code> can check its inner vector-zero
+argument before using the call's value as the outer dimension. Required parameters
+must be solved; unchecked competing values block defaulting. Checked wrappers and
+literal origins are retained, and expected results cannot break operator input
+ties. This is an experimental extension, not full production inference. See the
+<a href="../studies/parameterized-literals/README.md#demanded-candidate-values-before-selection">demand, reconstruction and validation rules</a>.</p>
 </section></llm>
 </body>
 </html>

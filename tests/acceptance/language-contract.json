@@ -3478,6 +3478,47 @@
         "Exhaustive dependent candidate validity",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_demanded_candidate_value",
+      "status": "experimental-slice",
+      "environment": "Explicit linear algebra modules, VectorCell constructor and Clean-authored vector count",
+      "source": "vector cell(vector count(n,0),0)",
+      "expected_tree": [
+        "Call",
+        "vector cell",
+        [
+          [
+            "Call",
+            "vector count",
+            [
+              [
+                "Local",
+                "n"
+              ],
+              [
+                "Decimal",
+                "0"
+              ]
+            ]
+          ],
+          [
+            "Decimal",
+            "0"
+          ]
+        ]
+      ],
+      "expected_lean": "vectorCell (vectorCount n (complexVectorZero n)) (complexVectorZero n), with exact declared wrapper identities and caller-priority index representation",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Demand fixed point and checked forward reconstruction before defaults; incomplete competing checks cannot be discarded; input-only operator audit; retained replay validates values/origins",
+      "pending": [
+        "General dependent candidate validity",
+        "Nonconcrete formal-index witnesses",
+        "Production integration"
+      ]
     }
   ]
 }

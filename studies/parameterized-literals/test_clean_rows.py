@@ -148,7 +148,7 @@ class CleanRows(unittest.TestCase):
   self.record()
   notation('Notation length of vector(x):',
    ['Let n: Natural','Let x: Vector(n,Complex)','Returns: Natural','Means: n','Render latex: len({x})'],self.e)
-  with self.assertRaises(Underdetermined):
+  with self.assertRaises(Incomplete):
    Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(length of vector(0),0)','expression')),use_default=False)
  def test_deferred_known_binding_change_is_incomplete(self):
   self.record();self.successor()
@@ -162,7 +162,7 @@ class CleanRows(unittest.TestCase):
  def test_default_origin_survives_copy_into_dependent_index(self):
   self.record()
   notation('Notation count(x):',['Let T: Type','Let x: T','Returns: Natural','Means: 0','Render latex: count({x})'],self.e)
-  value=Builder(self.e,{}).materialize(expression_tree(parse('vector cell(count(0),0)','expression')))
+  value=Builder(self.e,{}).materialize(expression_tree(parse('vector cell(count(1),0)','expression')))
   source_numeral=value.tree[2][0][2][0]
   index_call=value.tree[2][1][5][0][2]
   self.assertEqual(source_numeral[4],'defaulted')
@@ -470,6 +470,67 @@ class CleanRows(unittest.TestCase):
   source='certified(n,h,(1:Real))'
   value=Builder(self.e,self.scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
   self.assertEqual(value.type,self.e.type('Certified(n,h)',self.scope))
+
+ def vector_count(self):
+  self.record()
+  notation('Define vector count(n: Natural,x: Vector(n,Complex)): Natural:',
+   ['Equals: n','Render latex: len({x})'],self.e,authored=True)
+ def test_dependent_call_checks_parameterized_literal_before_selection(self):
+  self.vector_count()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(vector count(n,0),0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('VectorCell(n)',self.scope))
+  self.assertIn(self.e.data['functions']['vector count']['native_binding'],value.lean)
+ def test_dependent_call_recovers_literal_parameter_from_scalar_argument(self):
+  self.vector_count()
+  value=Builder(self.e,{}).materialize(expression_tree(parse('vector cell(vector count(2,0),0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('VectorCell(2)'))
+ def test_dependent_call_rejects_conflicting_expected_index(self):
+  self.vector_count()
+  with self.assertRaises(NoSolution):
+   Builder(self.e,{}).materialize(expression_tree(parse('vector cell(vector count(2,0),0)','expression')),self.e.type('VectorCell(3)'))
+ def test_unknown_literal_competitor_blocks_dependent_default(self):
+  self.record()
+  notation('Notation count(x):',['Let T: Type','Let x: T','Returns: Natural','Means: 0','Render latex: count({x})'],self.e)
+  with self.assertRaises(Incomplete):
+   Builder(self.e,{}).materialize(expression_tree(parse('vector cell(count(0),0)','expression')))
+ def test_candidate_value_codec_replay(self):
+  from cleanlang.core import Expressions
+  from cleanlang.retained_codec import dumps,loads
+  self.vector_count()
+  value=Builder(self.e,{}).materialize(expression_tree(parse('vector cell(vector count(2,0),0)','expression')),use_default=False)
+  self.assertEqual(Expressions(self.e,{}).elaborate(loads(dumps(value.tree))).lean,value.lean)
+
+ def test_nested_candidate_value_uses_checked_earlier_value(self):
+  self.vector_count()
+  source='vector cell(vector count(vector count(2,0),0),0)'
+  value=Builder(self.e,{}).materialize(expression_tree(parse(source,'expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('VectorCell(2)'))
+ def test_candidate_value_result_does_not_break_operator_input_tie(self):
+  self.record()
+  notation('Define vector size(n: Natural,x: Vector(n,Complex)): Natural:',
+   ['Equals: n','Infix: *','Render latex: size({x})'],self.e,authored=True)
+  notation('Define vector real size(n: Natural,x: Vector(n,Complex)): Real:',
+   ['Equals: (1:Real)','Infix: *','Render latex: size({x})'],self.e,authored=True)
+  with self.assertRaises(Ambiguous):
+   Builder(self.e,{}).materialize(expression_tree(parse('vector cell(2*0,0)','expression')),self.e.type('VectorCell(2)'),use_default=False)
+
+ def test_nested_candidate_reconstructs_opaque_computed_parameter(self):
+  self.vector_count()
+  notation('Notation vector extent(n: Natural,x: Vector(n,Complex)): Natural:',
+   ['Means: n','Render latex: extent({x})'],self.e)
+  source='vector cell(vector count(vector extent(2,0),0),0)'
+  value=Builder(self.e,{}).materialize(expression_tree(parse(source,'expression')),use_default=False)
+  expected=self.e.type('VectorCell((vector extent((2:Natural),(0:Vector(2,Complex)))))')
+  self.assertEqual(value.type,expected)
+  self.assertIn(self.e.data['functions']['vector extent']['native_binding'],value.lean)
+ def test_candidate_values_are_independent_of_declaration_enumeration(self):
+  self.vector_count();tree=expression_tree(parse('vector cell(vector count(2,0),0)','expression'))
+  first=Builder(self.e,{}).materialize(tree,use_default=False)
+  self.e.data['functions']=dict(reversed(list(self.e.data['functions'].items())))
+  self.e.data['types']=dict(reversed(list(self.e.data['types'].items())))
+  second=Builder(self.e,{}).materialize(tree,use_default=False)
+  self.assertEqual(first.lean,second.lean)
+  self.assertEqual(first.tree,second.tree)
 
  def test_computed_formal_competitor_is_not_dropped(self):
   notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',

@@ -28,6 +28,7 @@ class Fragment:
     origins: tuple=()
     fields: tuple=()
     parameters: tuple=()
+    plans: tuple=()
 
 class Builder:
     def __init__(self,env,scope,limit=4096):
@@ -152,6 +153,7 @@ class Builder:
         return checked
 
     def projection_fragments(self,tree,path):
+        from candidate_values import ValuePlan
         from cleanlang.dependent_functions import occurs
         results=[]
         for base in self.fragments(tree[1],path+(1,)):
@@ -189,11 +191,15 @@ class Builder:
                     except CleanError as error:raise Incomplete('Deferred projection checking is unavailable: '+str(error)) from error
                 deferred+=(Deferred(output,(base.value,typ),evaluate),)
                 witnesses+=((output,witness),)
+            plans=base.plans
+            if syntax is None:
+                requirements=tuple(dict.fromkeys(t for p in plans for t in p.requirements))
+                plans+=(ValuePlan(output,path,requirements),)
             results.append(Fragment(typ,output,
                 base.choices+(('projection',path,(spec['key'],tree[2])),),base.carriers,
                 base.arguments,base.equations,deferred,witnesses,syntax,origins,
                 selected_field.fields if selected_field is not None else (),
-                selected_field.parameters if selected_field is not None else ()))
+                selected_field.parameters if selected_field is not None else (),plans))
         return results
 
     def known_fragment(self,value,atom=None,*,optional=False):
@@ -231,6 +237,7 @@ class Builder:
             parameters=tuple((n,arguments[n]) for n in record['parameters'] if n in arguments))
 
     def fragments(self,tree,path=()):
+        from candidate_values import ValuePlan
         if not holes(tree):
             if path not in self.known or path not in self.known_values:
                 raise Incomplete('Known argument lacks checked index evidence')
@@ -255,8 +262,10 @@ class Builder:
                     raise Incomplete('Changed literal declaration')
                 variables,_=self.telescope(spec,path)
                 carrier=self.typ(attachment['result'],variables)
-                found.append(Fragment(carrier,Variable(repr((path,key,'value')),'index'),
-                    (('literal',path,key),),(carrier,),tuple(variables.values())))
+                output=Variable(repr((path,key,'value')),'index')
+                found.append(Fragment(carrier,output,
+                    (('literal',path,key),),(carrier,),tuple(variables.values()),
+                    plans=(ValuePlan(output,path,tuple(variables.values())),)))
             if len(found)>self.limit:raise Incomplete('Literal declaration row limit exceeded')
             return found
         if kind in ('Operator','Unary'):
@@ -313,6 +322,10 @@ class Builder:
                             raise Incomplete('Deferred checked index is unsupported: '+str(error)) from error
                     deferred+=(Deferred(output,tuple(a.value for a in actuals)+implicit,evaluate),)
                     witnesses+=((output,witness),)
+                plans=tuple(p for a in actuals for p in a.plans)
+                if syntax is None:
+                    requirements=tuple(dict.fromkeys(tuple(t for p in plans for t in p.requirements)+implicit))
+                    plans+=(ValuePlan(output,path,requirements),)
                 fields=();record_arguments=()
                 if isinstance(result,Carrier):
                     record=next((s for s in self.env.structures.values() if s['key']==result.identity),None)
@@ -325,7 +338,7 @@ class Builder:
                     tuple(c for a in actuals for c in a.choices)+(('call',path,spec['native_binding']),),
                     tuple(t for a in actuals for t in a.carriers),
                     tuple(t for a in actuals for t in a.arguments)+implicit,equations,
-                    deferred,witnesses,syntax,origins,fields,record_arguments))
+                    deferred,witnesses,syntax,origins,fields,record_arguments,plans))
         return rows
 
     def rows(self,tree,expected=None):
@@ -349,10 +362,17 @@ class Builder:
         prepare(tree,())
         if expected is not None:self.typ(expected)
         fragments=self.fragments(tree)
+        from candidate_values import CandidateValues
         self.row_witnesses={f.choices:f.witnesses for f in fragments}
-        return [Row(f.choices,f.carriers,f.carriers+f.arguments+(f.typ,),
-                    f.equations+(((f.typ,self.typ(expected)),) if expected is not None else ()),f.deferred)
-                for f in fragments]
+        self.row_values={};rows=[]
+        for f in fragments:
+            arguments=f.carriers+f.arguments+(f.typ,)
+            equations=f.equations+(((f.typ,self.typ(expected)),) if expected is not None else ())
+            try:values=CandidateValues(self,tree,f,equations,arguments)
+            except NoSolution:continue
+            self.row_values[f.choices]=values
+            rows.append(Row(f.choices,f.carriers,arguments,equations,f.deferred+values.checks()))
+        return rows
 
     def solve_with_trace(self,tree,expected=None,*,use_default=True):
         name=default_carrier(self.env) if use_default else None
@@ -379,7 +399,10 @@ class Builder:
                 for f in self.fragments(node,path):
                     if any(literals.get((k,p))!=key for k,p,key in f.choices if k in ('literal','numeral')):continue
                     constraints=f.equations+tuple((t,fixed[p]) for t,p in zip(f.carriers,local_paths))
-                    try:bindings=saturate(Row((),(),(),constraints,f.deferred),limit=self.limit)
+                    try:
+                        from candidate_values import CandidateValues
+                        values=CandidateValues(self,tree,f,constraints,f.carriers+f.arguments)
+                        bindings=saturate(Row((),(),(),constraints,f.deferred+values.checks()),limit=self.limit)
                     except NoSolution:continue
                     if any(variables(resolve(t,bindings)) for t in f.arguments):
                         raise Incomplete('Operator input applicability remains unresolved')
@@ -424,6 +447,11 @@ class Builder:
         for output,witness in self.row_witnesses[choices]:
             value=witness(defaulted)
             if self.index(value)[0]!=resolve(output,bindings):raise Incomplete('Deferred result changed during retention')
+            self.known_index(value)
+        values=self.row_values[choices]
+        for plan in values.active:
+            value=values.expression(plan.path,bindings,defaulted)
+            if self.index(value)[0]!=resolve(plan.output,bindings):raise Incomplete('Candidate value changed during retention')
             self.known_index(value)
         types={self.carrier_identity(n):n for n,s in self.env.data['types'].items()
                if 'native_binding' in s or n in self.env.structures}

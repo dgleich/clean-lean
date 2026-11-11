@@ -8492,6 +8492,14 @@
         "# ",
         ""
       ]
+    },
+    "studies/parameterized-literals/candidate_values.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

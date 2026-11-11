@@ -559,7 +559,10 @@ native target comparisons and seventeen supporting proofs pass
 successor(2), nested successor calls and n+1 as dimensions. Python checks cover
 module binding under local shadowing, conflicting expected indices, codec replay,
 and preservation of a defaulted numeral when count(0) is copied into a dependent
-zero-vector index. The production compiler is unchanged in this step. Existing
+zero-vector index. That count(0) acceptance was later superseded by the
+[demanded-value check](#demanded-candidate-values-before-selection); count(1) now
+covers origin retention, and count(0) has an explicit incomplete regression.
+The production compiler is unchanged in this step. Existing
 full discovery/active-label processes were confirmed live, not restarted or
 counted as successes.
 :::
@@ -889,9 +892,9 @@ it does not select new interpretations or relax candidate validity.
 
 The model also supports forward reconstruction plans, preparatory to dependent
 calls containing parameterized literals. A plan declares a solved output term,
-input terms, a pure checked-value builder, and an explicit priority. Plans are not
-yet generated for those calls by the adapter. Their presence in the model does
-not establish support for the previously incomplete `count(0)` examples.
+input terms, a pure checked-value builder, and an explicit priority. At this initial step plans were not generated for those calls by the adapter.
+The demand-driven extension below now uses them for checked candidate values;
+the previously incomplete `count(0)` examples remain unresolved.
 
 The constructive rule is:
 
@@ -940,4 +943,90 @@ and 33 supporting proofs pass with the resolver used by materialization. This
 checks preservation of the current translated slice, not pre-selection plan
 integration or production inference.
 
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Demanded candidate values before selection
+
+`candidate_values.py` connects ground witness reconstruction to the experimental
+row solver. A parameterized literal can now be checked as an argument of a call
+whose value is needed as a type index, before defaults or declaration selection.
+For example, with the existing VectorCell constructor and the Clean-authored
+function below:
+
+```clean
+Define vector count(n: Natural,x: Vector(n,Complex)): Natural:
+  Equals: n
+  Render latex: len({x})
+```
+
+`vector cell(vector count(n,0),0)`, its literal-dimension version with `2`, and a
+nested vector count now translate. An additional fixture uses a deliberately
+opaque Lean-backed vector extent to verify that reconstructed dimensions retain
+that declared call rather than depending on reduction to a scalar numeral.
+
+Each candidate fragment carries value plans for parameterized literals and calls
+or projections without concrete argument syntax. A plan identifies its output
+symbol, source path and required literal parameters; call plans additionally
+require their inferred parameters. Plans are propagated child before parent.
+They do not replace the parsed source tree or create an alternative parse.
+
+For each candidate row, first unify its ordinary equations. A conclusive
+contradiction rejects that row. Compute demand from resolved subterms of emitted
+carrier/parameter/result terms and inputs to existing forward checks. Activate a
+value plan when its resolved output occurs in that demand set, add its required
+inputs, and repeat to a fixed point. This is a conservative dependency rule, not
+a guarantee that every activated plan is minimally necessary. Keep activated
+plans in source child-before-parent order, independent of fixed-point visitation.
+
+Each activated plan becomes an ordinary forward obligation. All required inputs
+must be ground under the existing saturation rule. Unify those inputs with the
+row's original bindings, preserving aliases. Reconstruct its source subtree with
+the candidate's selected numeral/literal/call identities, recheck it through the
+existing Clean elaborator, and constrain its output to the checked comparison
+index. A known source subtree is rechecked as written. A selected operator is
+reconstructed as its retained module call with its original presentation.
+
+Literal reconstruction recovers each signature parameter through the checked
+resolver and creates the normal retained BoundLiteral with a checked target type.
+Its representative order is: caller evidence, candidate scalar numerals in source
+order, existing checked computed witnesses, then grounded candidate value plans
+in child-before-parent order. Only plans whose output has a solved term may serve
+as reconstruction evidence; their inputs still have to be available. None of
+these candidate witnesses is registered as a caller representative. Resource
+exhaustion, missing evidence and unavailable checking remain incomplete, not
+reasons to drop a competing interpretation. No arithmetic inverse is performed.
+
+Operator applicability auditing uses the same demanded checks on input-constrained
+rows, without importing the expected result type. A result constraint therefore
+cannot choose between two operators with the same valid input signature. After
+selection, replay active value plans with the selected default-origin marks,
+verify their output keys again, then register their checked representatives in
+the existing retention order. The final expression is rechecked as before.
+
+This closes a concrete earlier checking omission and makes one experimental
+boundary stricter: `vector cell(count(0),0)` previously reached defaulting despite
+an unmaterialized parameterized-zero competitor. It now reports incomplete because
+that competitor's demanded call value depends on unresolved literal parameters.
+The retained-origin test uses `count(1)`, whose scalar candidates are checkable,
+and a separate regression requires `count(0)` to remain incomplete. Likewise,
+`vector cell(length of vector(0),0)` reports incomplete demanded checking rather
+than reaching the later underdetermined-selection check. These changes do not
+alter production behavior: this adapter is still a study.
+
+This is demand-driven value checking, not proof that every dependent candidate is
+fully validated. Computed formal indices that need nonconcrete argument witnesses,
+computed exact-literal result patterns, general binder/evidence applications,
+opaque field evidence and production integration remain open. Undemanded value
+plans are not forced merely to manufacture a ground value; the existing symbolic
+constraints and selection rules still govern them. No blanket conformance claim
+is made from these examples.
+
+Validation: 167 experimental tests pass. Four new independent native oracles cover
+caller/scalar/nested calls and an opaque computed index; all 37 exact targets and
+37 supporting proofs pass. Regressions also cover expected-index conflicts,
+unknown competitors, declaration-order independence, codec replay and an operator
+input tie that the expected dimension must not resolve. Production full discovery
+and active-label verification remain in their existing fixed-snapshot jobs.
 :::

@@ -349,6 +349,12 @@ structure cleanStructure_GenericHolder_d88746e001eb134fd0d7  : Type where
 noncomputable def cleanConstructor_generic_holder_7ffb14ed66b48a9b7d2f («marker» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («cell» : _root_.cleanStructure_GenericCell_de7494ea478329f84f6e ((_root_.cleanType_Real_107b6641a486642ad8e1))) : _root_.cleanStructure_GenericHolder_d88746e001eb134fd0d7 :=
   @_root_.cleanStructure_GenericHolder_d88746e001eb134fd0d7.mk «marker» «cell»
 
+noncomputable def cleanDefine_vector_count_00ecd8c9844201a439bd  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («x» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  «n»
+
+noncomputable def cleanNotation_vector_extent_f9607c8ca9391aa99b30  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («x» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  n
+
 
 open scoped Matrix
 
@@ -605,5 +611,33 @@ noncomputable def actualKnownConstructor2 : cleanType_Real_107b6641a486642ad8e1 
 noncomputable def expectedKnownConstructor2 : cleanType_Real_107b6641a486642ad8e1 := cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 1)
 same_basic_target actualKnownConstructor2 expectedKnownConstructor2
 theorem meaningKnownConstructor2 : actualKnownConstructor2 = (1 : Real) := by simp [actualKnownConstructor2, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+
+
+noncomputable def actualCandidateValue0 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanStructure_VectorCell_ea235d5395205122748e (n) := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((@_root_.cleanDefine_vector_count_00ecd8c9844201a439bd (n) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n))))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n))))
+noncomputable def expectedCandidateValue0 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanStructure_VectorCell_ea235d5395205122748e (n) := @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (@cleanDefine_vector_count_00ecd8c9844201a439bd (n) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n))) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n))
+same_basic_target actualCandidateValue0 expectedCandidateValue0
+theorem meaningCandidateValue0 (n : cleanType_Natural_469c53b6dafb7a218246) :
+  (actualCandidateValue0 n).entry = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualCandidateValue1 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanStructure_VectorCell_ea235d5395205122748e (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((@_root_.cleanDefine_vector_count_00ecd8c9844201a439bd ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))))
+noncomputable def expectedCandidateValue1 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanStructure_VectorCell_ea235d5395205122748e (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) := @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (@cleanDefine_vector_count_00ecd8c9844201a439bd (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+same_basic_target actualCandidateValue1 expectedCandidateValue1
+theorem meaningCandidateValue1 (n : cleanType_Natural_469c53b6dafb7a218246) :
+  (actualCandidateValue1 n).entry = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualCandidateValue2 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanStructure_VectorCell_ea235d5395205122748e (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((@_root_.cleanDefine_vector_count_00ecd8c9844201a439bd ((@_root_.cleanDefine_vector_count_00ecd8c9844201a439bd ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))))
+noncomputable def expectedCandidateValue2 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanStructure_VectorCell_ea235d5395205122748e (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) := @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (@cleanDefine_vector_count_00ecd8c9844201a439bd (@cleanDefine_vector_count_00ecd8c9844201a439bd (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+same_basic_target actualCandidateValue2 expectedCandidateValue2
+theorem meaningCandidateValue2 (n : cleanType_Natural_469c53b6dafb7a218246) :
+  (actualCandidateValue2 n).entry = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualOpaqueCandidate : cleanStructure_VectorCell_ea235d5395205122748e (@cleanNotation_vector_extent_f9607c8ca9391aa99b30 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))) := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((@_root_.cleanDefine_vector_count_00ecd8c9844201a439bd ((@_root_.cleanNotation_vector_extent_f9607c8ca9391aa99b30 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((@_root_.cleanNotation_vector_extent_f9607c8ca9391aa99b30 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))))))))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((@_root_.cleanNotation_vector_extent_f9607c8ca9391aa99b30 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))))))))
+noncomputable def expectedOpaqueCandidate : cleanStructure_VectorCell_ea235d5395205122748e (@cleanNotation_vector_extent_f9607c8ca9391aa99b30 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))) :=
+  @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (@cleanDefine_vector_count_00ecd8c9844201a439bd (@cleanNotation_vector_extent_f9607c8ca9391aa99b30 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (@cleanNotation_vector_extent_f9607c8ca9391aa99b30 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))))) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (@cleanNotation_vector_extent_f9607c8ca9391aa99b30 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))))
+same_basic_target actualOpaqueCandidate expectedOpaqueCandidate
+theorem meaningOpaqueCandidate : actualOpaqueCandidate.entry = (fun _ => (0 : Complex)) := by rfl
 
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md
