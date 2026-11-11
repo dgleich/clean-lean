@@ -4496,6 +4496,20 @@
         "Geometric Mayer–Vietoris sequence construction, excision and homology identification",
         "No general canonical equivalence with Mathlib Opens is asserted"
       ]
+    },
+    {
+      "id": "topology_cover_homology_maps",
+      "status": "implemented-native-checked",
+      "environment": "Explicit cover_homology module; actual pinned Mathlib singular homology and continuous subtype inclusion.",
+      "source": "module composition(field,L,M,N,cover intersection map(field,H,X,C),cover ambient map(field,H,X,C)) = module zero map(field,L,N)",
+      "expected_lean": "Three retained local module lets followed by declared equality of composition and zero; N is ambient homology of X, with no implicit full-set subtype identification.",
+      "checks": [
+        "studies/topology/verify_cover_homology.py: five independent canonical targets and two native proofs"
+      ],
+      "pending": [
+        "Geometric cover sequence/excision, connecting map identification and exactness",
+        "Zero composition alone does not establish a Mayer–Vietoris theorem"
+      ]
     }
   ]
 }

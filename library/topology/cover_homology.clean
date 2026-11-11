@@ -1,0 +1,49 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "open_covers.clean"
+Import "mayer_vietoris_maps.clean"
+
+Notation subspace ambient map(X,S):
+  Let X: TopologicalSpace
+  Let S: Set(Point(X))
+  Returns: ContinuousMap((subspace(X,S)),X)
+  Means: (letI : TopologicalSpace X.carrier := X.str; (⟨Subtype.val, continuous_subtype_val⟩ : ContinuousMap S X.carrier))
+  Render latex: \iota_{{{S},{X}}}
+
+Define ambient homology inclusion(field,H,X,S):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let S: Set(Point(X))
+  Returns: ModuleMap(K,field,(subset homology(field,H,X,S)),(homology module(field,H,X)))
+  Equals: homology linear map(field,H,subspace(X,S),X,subspace ambient map(X,S))
+  Render latex: (\iota_{{{S},{X}}})_*
+
+Define cover intersection map(field,H,X,C):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let C: OpenCover(X)
+  Returns: ModuleMap(K,field,
+    (subset homology(field,H,X,(C.left.carrier ∩ C.right.carrier))),
+    (module product(field,subset homology(field,H,X,C.left.carrier),subset homology(field,H,X,C.right.carrier))))
+  Equals: intersection homology map(field,H,X,C.left.carrier,C.right.carrier)
+  Render latex: \alpha_{{{C}}}
+
+Define cover ambient map(field,H,X,C):
+  Let K: Type
+  Let field: FieldStructure(K)
+  Let H: HomologyTheory(K,field)
+  Let X: TopologicalSpace
+  Let C: OpenCover(X)
+  Returns: ModuleMap(K,field,
+    (module product(field,subset homology(field,H,X,C.left.carrier),subset homology(field,H,X,C.right.carrier))),
+    (homology module(field,H,X)))
+  Equals:
+    merge module maps(field,subset homology(field,H,X,C.left.carrier),subset homology(field,H,X,C.right.carrier),
+      homology module(field,H,X),
+      ambient homology inclusion(field,H,X,C.left.carrier),ambient homology inclusion(field,H,X,C.right.carrier))
+  Render latex: \beta_{{{C}}}
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

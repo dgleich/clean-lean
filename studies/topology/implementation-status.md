@@ -220,3 +220,17 @@ statement uses `OpenCover(X)` and explicit coefficients. Its geometric sequence
 and excision/identification proofs remain missing; supplying its inputs does not
 establish exactness or any paper theorem. This adds no language syntax.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Cover maps with the ambient homology target
+
+The [cover-homology study](cover-homology.md) now defines the signed intersection
+map and the sum of inclusion-induced maps into H(X), using the certified open-cover
+record. These are Clean definitions over the real singular-homology functor; a
+continuous subtype inclusion is the only new foundational native adapter. Their
+zero composite is proved by functoriality and cancellation, which does not require
+openness or coverage. The geometric exactness and connecting-map obligations above
+remain open. No language syntax or inference default changes are made.
+:::

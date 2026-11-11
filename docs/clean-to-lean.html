@@ -1794,5 +1794,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p>The explicit <code>topology/open_covers.clean</code> module defines <code>OpenSubset(X)</code> as a record with a set carrier and an <code>IsOpen</code> certificate for the topology of <code>X</code>. <code>OpenCover(X)</code> contains two such records and evidence that every point belongs to at least one. Its schematic Lean field type is <code>∀ x, x ∈ left.carrier ∨ x ∈ right.carrier</code>.</p>
 <p><code>open overlap(X,U,V)</code> is a Clean-authored constructor application. The proof field uses an explicit adapter for <code>IsOpen.inter</code>. These are ordinary record, condition, projection and evidence forms; no syntax or implicit instance rule is added. See the <a href="../studies/topology/open-covers.md">study and native target checks</a>. The geometric Mayer–Vietoris sequence remains unimplemented.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="cover-homology-maps">
+<h2>Homology maps from a certified cover</h2>
+<p><code>cover ambient map(field,H,X,C)</code> maps the product of the homology modules of <code>C.left.carrier</code> and <code>C.right.carrier</code> into the homology of <code>X</code>. Its Clean definition applies the declared merge operation to two actual inclusion-induced homology maps. The subtype inclusion imports <code>continuous_subtype_val</code>; there is no implicit identification of <code>X</code> with its full-set subtype.</p>
+<p>The <a href="../studies/topology/cover-homology.md">native target and proof checks</a> retain the local module names as Lean <code>let</code> expressions. The signed intersection map followed by the ambient map is proved zero. This establishes composition, not exactness; the geometric Mayer–Vietoris construction remains pending.</p>
+</section></llm>
 </body>
 </html>
