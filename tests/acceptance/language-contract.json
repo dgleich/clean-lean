@@ -3576,6 +3576,28 @@
         "General dependent candidate validity",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_ground_literal_validity",
+      "status": "experimental-slice",
+      "environment": "Explicit linear algebra modules with complex vector zero and optional competing constructor",
+      "source": "0",
+      "expected_type": "Vector(n,Complex)",
+      "expected_tree": [
+        "Decimal",
+        "0"
+      ],
+      "expected_lean": "complexVectorZero n, using exact declared wrapper identity",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Check determined literal applications after saturation and before selection; unavailable single/competing checks remain incomplete; operator checks exclude expected results",
+      "pending": [
+        "Universal validity of unresolved symbolic families",
+        "General dependent candidate validity",
+        "Production integration"
+      ]
     }
   ]
 }

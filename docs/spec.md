@@ -1936,3 +1936,16 @@ computed indices cannot be discarded or solved by defaults. See the
 This is experimental; production inference and general candidate validity remain
 open. There is no grammar change or implicit mathematical operator behavior.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental determined-literal validity phase
+
+After forward saturation, check each literal application whose parameters and
+result carrier are ground, before defaults and selection. Use the existing
+retained application/telescope checker; unavailable competing checks remain
+incomplete. The operator audit uses the same phase with input constraints only.
+Unresolved symbolic families retain the existing policy and are not claimed
+universally valid. See the [phase rule and integration gap](../studies/parameterized-literals/README.md#checking-determined-literal-applications-before-selection).
+No grammar or production compiler change is made.
+:::

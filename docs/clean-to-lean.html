@@ -1432,5 +1432,14 @@ result carrier. Unresolved competitors block defaults. See the
 <a href="../studies/parameterized-literals/README.md#computed-result-types-of-exact-literals">precise construction and native oracles</a>.
 This is an experimental adapter extension, not production inference.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="ground-literal-validity">
+<h2>Checking determined literal applications</h2>
+<p>For <code>0</code> under expected type <code>Vector(n,Complex)</code>, the
+experimental adapter checks the recovered <code>complexVectorZero n</code>
+application before selection, even when its value is not a dimension elsewhere.
+An unavailable competing application blocks selection. Unresolved symbolic
+families remain a separate validity gap. See the
+<a href="../studies/parameterized-literals/README.md#checking-determined-literal-applications-before-selection">phase rule and production boundary</a>.</p>
+</section></llm>
 </body>
 </html>

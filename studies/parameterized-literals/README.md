@@ -1182,3 +1182,47 @@ Validation: all 183 experimental tests, 45 exact native targets and 45 supportin
 proofs pass. Provenance checks pass. Production inference, classifier-dependent computed indices and exhaustive
 dependent candidate validity remain unfinished. No parsing rule changes.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Checking determined literal applications before selection
+
+The adapter now checks every fully determined exact-literal application after
+forward constraint saturation, including literals whose values are not demanded
+by a surrounding type index. Previously those applications could first be checked
+during selected emission. A surviving alternative must not avoid telescope
+checking merely because only its carrier is needed.
+
+For each row, saturate its ordinary equations and forward obligations. For each
+literal value plan whose parameters and complete result carrier are ground,
+reconstruct and elaborate its retained application in the fixed environment.
+This invokes the existing checked parameter telescope and result annotation
+validation. If the output value already has a solved index, compare it too.
+Unavailability propagates as incomplete analysis, never as a rejected alternative.
+Collect outcomes across determined literals: incomplete checking takes precedence
+over a definite mismatch, independent of their visitation order. Definite rejected
+rows are discarded before defaults. The input-only operator audit performs the
+same checks without expected-result constraints. Selection currently repeats
+saturation; avoiding this extra work requires a separately validated immutable
+checked-row representation.
+
+This does not validate symbolic families universally. Plans whose parameters or
+result carrier remain unresolved retain the existing symbolic/default policy;
+their validity remains an explicit integration gap. No success here establishes
+that production inference is ready. The production translator still enumerates
+scalar numeral interpretations and does not invoke the joint solver.
+
+An attempted earlier placement activated every literal plan as an ordinary forward
+obligation. That ran some reconstructions before all dependent computed indices
+were available and also changed bare-zero default behavior. The attempted run had
+15 errors among 183 tests and is not validation evidence. The implemented phase
+checks determined applications only after saturation and leaves the unresolved
+family policy visible rather than silently claiming those applications checked.
+
+New regressions observe checked literal application before selection and inject
+unavailable telescope checks both for a single interpretation and a competing
+interpretation. These verify the failure path independently of retained emission. A two-order
+batch regression checks that unavailable checking takes precedence over mismatch.
+All 187 experimental tests, 45 exact native targets and 45 supporting proofs pass.
+The existing full production and active-label jobs remain pending.
+:::

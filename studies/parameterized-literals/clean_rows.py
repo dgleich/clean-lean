@@ -374,7 +374,10 @@ class Builder:
             try:values=CandidateValues(self,tree,f,equations,arguments)
             except NoSolution:continue
             self.row_values[f.choices]=values
-            rows.append(Row(f.choices,f.carriers,arguments,equations,values.checks()))
+            row=Row(f.choices,f.carriers,arguments,equations,values.checks())
+            try:values.validate_ground_literals(saturate(row,limit=self.limit))
+            except NoSolution:continue
+            rows.append(row)
         return rows
 
     def solve_with_trace(self,tree,expected=None,*,use_default=True):
@@ -406,6 +409,7 @@ class Builder:
                         from candidate_values import CandidateValues
                         values=CandidateValues(self,tree,f,constraints,f.carriers+f.arguments)
                         bindings=saturate(Row((),(),(),constraints,values.checks()),limit=self.limit)
+                        values.validate_ground_literals(bindings)
                     except NoSolution:continue
                     if any(variables(resolve(t,bindings)) for t in f.arguments):
                         raise Incomplete('Operator input applicability remains unresolved')

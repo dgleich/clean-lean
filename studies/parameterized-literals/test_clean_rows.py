@@ -288,6 +288,45 @@ class CleanRows(unittest.TestCase):
  def test_expected_carrier_determines_bare_zero(self):
   result=self.solve('0',expected=self.scope['x'].type)
   self.assertEqual(self.literal(result),[self.e.data['functions']['complex vector zero']['native_binding']])
+ def test_ground_literal_is_checked_before_selection(self):
+  from unittest.mock import patch
+  from cleanlang.literal_binding import call
+  seen=[]
+  def checked(tree,env,scope):
+   seen.append(tree[3]);return call(tree,env,scope)
+  with patch('cleanlang.literal_binding.call',checked):
+   self.solve('0',expected=self.scope['x'].type,use_default=False)
+  self.assertIn('complex vector zero',seen)
+ def test_unavailable_ground_literal_check_blocks_selection(self):
+  from unittest.mock import patch
+  from cleanlang.core import CleanError
+  with patch('cleanlang.literal_binding.call',side_effect=CleanError('Injected unavailable telescope checking')):
+   with self.assertRaises(Incomplete):
+    self.solve('0',expected=self.scope['x'].type,use_default=False)
+ def test_unavailable_competing_ground_literal_is_not_dropped(self):
+  from unittest.mock import patch
+  from cleanlang.core import CleanError
+  from cleanlang.literal_binding import call
+  notation('Notation another(n: Natural): Vector(n,Complex):',
+   ['Means: fun _ => (0 : Complex)','Literal: 0','Render latex: 0'],self.e)
+  def checked(tree,env,scope):
+   if tree[3]=='another':raise CleanError('Injected unavailable competitor check')
+   return call(tree,env,scope)
+  with patch('cleanlang.literal_binding.call',checked):
+   with self.assertRaises(Incomplete):
+    self.solve('0',expected=self.scope['x'].type,use_default=False)
+ def test_ground_literal_batch_incomplete_precedes_mismatch(self):
+  from types import SimpleNamespace
+  from candidate_values import CandidateValues,ValuePlan
+  def check(path,bindings):
+   if path==(0,):raise NoSolution('Definite rejected application')
+   raise Incomplete('Unavailable application')
+  plans=(ValuePlan(Atom('a','index'),(0,),()),ValuePlan(Atom('b','index'),(1,),()))
+  for ordered in (plans,plans[::-1]):
+   with self.subTest(order=ordered):
+    candidate=SimpleNamespace(fragment=SimpleNamespace(
+     choices=(('literal',(0,),'a'),('literal',(1,),'b')),plans=ordered),expression=check)
+    with self.assertRaises(Incomplete):CandidateValues.validate_ground_literals(candidate,{})
  def test_unresolved_family_is_not_discarded(self):
   with self.assertRaises(Underdetermined):self.solve('0',use_default=False)
  def test_default_restricts_all_zeros_simultaneously(self):
