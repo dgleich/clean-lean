@@ -196,11 +196,45 @@ class Builder:
                 selected_field.parameters if selected_field is not None else ()))
         return results
 
+    def known_fragment(self,value,atom=None,*,optional=False):
+        """Expose direct, checked constructor evidence without claiming new holes.
+
+        Child checks do not register representatives: caller priority was already
+        established by the prepass. Classifier parameter witnesses stay unsupported.
+        """
+        try:
+            typ=self.typ(value.type,{})
+            atom=self.index(value)[0] if atom is None else atom
+        except (Incomplete,CleanError):
+            if optional:return None
+            raise
+        base=Fragment(typ,atom,syntax=value.tree)
+        tree=value.tree
+        if not tree or tree[0] not in ('Call','ModuleCall'):return base
+        if tree[0]=='Call' and tree[1] in self.scope and self.env.is_function_type(self.scope[tree[1]].type):return base
+        record=next((s for s in self.env.structures.values() if isinstance(typ,Carrier) and s['key']==typ.identity),None)
+        if record is None or tree[1]!=record['constructor']:return base
+        spec=self.env.data['functions'][tree[1]]
+        signature=self.signature(spec)
+        if tree[0]=='ModuleCall' and tree[3]!=spec['lean']:raise Incomplete('Changed known constructor binding')
+        parameters=signature.parameters
+        if len(tree[2])!=len(parameters):raise Incomplete('Known constructor arity mismatch')
+        arguments={}
+        for p,node in zip(parameters,tree[2]):
+            if p.classifier is not None:continue
+            try:checked=Expressions(self.env,self.scope).elaborate(node)
+            except CleanError as error:raise Incomplete('Known constructor argument check unavailable: '+str(error)) from error
+            child=self.known_fragment(checked,optional=True)
+            if child is not None:arguments[p.name]=child
+        return Fragment(typ,atom,syntax=value.tree,
+            fields=tuple((n,arguments[n]) for n,_ in record['fields'] if n in arguments),
+            parameters=tuple((n,arguments[n]) for n in record['parameters'] if n in arguments))
+
     def fragments(self,tree,path=()):
         if not holes(tree):
             if path not in self.known or path not in self.known_values:
                 raise Incomplete('Known argument lacks checked index evidence')
-            return [Fragment(self.typ(self.known[path].type),self.known_values[path],syntax=self.known[path].tree)]
+            return [self.known_fragment(self.known[path],self.known_values[path])]
         kind=tree[0]
         if kind=='Projection':return self.projection_fragments(tree,path)
         if kind=='Decimal':

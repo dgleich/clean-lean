@@ -322,6 +322,33 @@ structure cleanStructure_WrappedCell_70eb704e70f429e6291f («n» : (_root_.clean
 noncomputable def cleanConstructor_wrapped_cell_0df31d1b7c86256d5752 («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («cell» : _root_.cleanStructure_PaddedCell_160f6a93d8c1ee02afcf («n»)) : _root_.cleanStructure_WrappedCell_70eb704e70f429e6291f («n») :=
   @_root_.cleanStructure_WrappedCell_70eb704e70f429e6291f.mk «n» «cell»
 
+structure cleanStructure_PayloadHolder_01eca948063760ce3f49  : Type where
+  «marker» : (_root_.cleanType_Real_107b6641a486642ad8e1)
+  «payload» : _root_.cleanStructure_Payload_fb006548d81e980b3c12
+
+noncomputable def cleanConstructor_payload_holder_6b160ea0a9522140d75e («marker» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («payload» : _root_.cleanStructure_Payload_fb006548d81e980b3c12) : _root_.cleanStructure_PayloadHolder_01eca948063760ce3f49 :=
+  @_root_.cleanStructure_PayloadHolder_01eca948063760ce3f49.mk «marker» «payload»
+
+structure cleanStructure_PaddedHolder_84883ed1d0d27e951945 («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : Type where
+  «marker» : (_root_.cleanType_Real_107b6641a486642ad8e1)
+  «cell» : _root_.cleanStructure_PaddedCell_160f6a93d8c1ee02afcf («n»)
+
+noncomputable def cleanConstructor_padded_holder_b8c10e3905425f570d48 («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («marker» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («cell» : _root_.cleanStructure_PaddedCell_160f6a93d8c1ee02afcf («n»)) : _root_.cleanStructure_PaddedHolder_84883ed1d0d27e951945 («n») :=
+  @_root_.cleanStructure_PaddedHolder_84883ed1d0d27e951945.mk «n» «marker» «cell»
+
+structure cleanStructure_GenericCell_de7494ea478329f84f6e («T» : Type) : Type where
+  «data» : «T»
+
+noncomputable def cleanConstructor_generic_cell_ad871f450e8157eba59e («T» : Type) («data» : «T») : _root_.cleanStructure_GenericCell_de7494ea478329f84f6e («T») :=
+  @_root_.cleanStructure_GenericCell_de7494ea478329f84f6e.mk «T» «data»
+
+structure cleanStructure_GenericHolder_d88746e001eb134fd0d7  : Type where
+  «marker» : (_root_.cleanType_Real_107b6641a486642ad8e1)
+  «cell» : _root_.cleanStructure_GenericCell_de7494ea478329f84f6e ((_root_.cleanType_Real_107b6641a486642ad8e1))
+
+noncomputable def cleanConstructor_generic_holder_7ffb14ed66b48a9b7d2f («marker» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («cell» : _root_.cleanStructure_GenericCell_de7494ea478329f84f6e ((_root_.cleanType_Real_107b6641a486642ad8e1))) : _root_.cleanStructure_GenericHolder_d88746e001eb134fd0d7 :=
+  @_root_.cleanStructure_GenericHolder_d88746e001eb134fd0d7.mk «marker» «cell»
+
 
 open scoped Matrix
 
@@ -560,5 +587,23 @@ noncomputable def expectedParameterProjection2 (n : cleanType_Natural_469c53b6da
 same_basic_target actualParameterProjection2 expectedParameterProjection2
 theorem meaningParameterProjection2 (n : cleanType_Natural_469c53b6dafb7a218246) :
   actualParameterProjection2 n = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualKnownConstructor0 : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))))
+noncomputable def expectedKnownConstructor0 : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) cleanType_Complex_2d7f06a08f8ab1e3f46d := @cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
+same_basic_target actualKnownConstructor0 expectedKnownConstructor0
+theorem meaningKnownConstructor0 : actualKnownConstructor0 = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualKnownConstructor1 : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))
+noncomputable def expectedKnownConstructor1 : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := @cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))
+same_basic_target actualKnownConstructor1 expectedKnownConstructor1
+theorem meaningKnownConstructor1 : actualKnownConstructor1 = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualKnownConstructor2 : cleanType_Real_107b6641a486642ad8e1 := (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 1))
+noncomputable def expectedKnownConstructor2 : cleanType_Real_107b6641a486642ad8e1 := cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 1)
+same_basic_target actualKnownConstructor2 expectedKnownConstructor2
+theorem meaningKnownConstructor2 : actualKnownConstructor2 = (1 : Real) := by simp [actualKnownConstructor2, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
 
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -428,6 +428,49 @@ class CleanRows(unittest.TestCase):
    return [p for child in node for p in origins(child)]
   self.assertIn(('1','defaulted'),origins(value.tree))
 
+ def known_payload_holder(self):
+  from cleanlang.structures import declare
+  self.payload()
+  declare('Structure PayloadHolder():',
+   ['Let marker: Real','Let payload: Payload','Constructor: payload holder'],self.e)
+ def test_known_constructor_fields_survive_mixed_literal_region(self):
+  self.known_payload_holder()
+  source='payload holder(0,payload((2:Natural),(0:Vector(2,Complex)))).payload.data'
+  value=Builder(self.e,{}).materialize(expression_tree(parse(source,'expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(2,Complex)'))
+ def test_known_constructor_parameters_survive_mixed_literal_region(self):
+  from cleanlang.structures import declare
+  self.padded_cell()
+  declare('Structure PaddedHolder(n: Natural):',
+   ['Let marker: Real','Let cell: PaddedCell(n)','Constructor: padded holder'],self.e)
+  source='padded holder(2,0,padded cell((2:Natural),(0:Vector(((2:Natural)+1),Complex)))).cell.data'
+  value=Builder(self.e,{}).materialize(expression_tree(parse(source,'expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+1),Complex)'))
+ def test_known_opaque_producer_stays_without_field_evidence(self):
+  self.known_payload_holder();key=self.e.data['functions']['payload']['native_binding']
+  notation('Notation fixed payload(): Payload:',
+   ['Means: '+key+' 2 (fun _ => 0)','Render latex: P'],self.e)
+  with self.assertRaises(Incomplete):
+   Builder(self.e,{}).materialize(expression_tree(parse('payload holder(0,fixed payload()).payload.data','expression')),use_default=False)
+
+ def test_known_classifier_constructor_parameter_is_not_value_index(self):
+  from cleanlang.structures import declare
+  declare('Structure GenericCell(T: Type):',['Let data: T','Constructor: generic cell'],self.e)
+  declare('Structure GenericHolder():',
+   ['Let marker: Real','Let cell: GenericCell(Real)','Constructor: generic holder'],self.e)
+  source='generic holder(0,generic cell(type(Real),(1:Real))).cell.data'
+  value=Builder(self.e,{}).materialize(expression_tree(parse(source,'expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Real'))
+ def test_known_proof_parameter_does_not_require_index_evidence(self):
+  from cleanlang.structures import declare
+  load_module(ROOT/'library/logic/evidence.clean',self.e)
+  declare('Structure Certified(n: Natural,h: Evidence((n=n))):',
+   ['Let data: Real','Constructor: certified'],self.e)
+  self.scope['h']=Expr('h','h',self.e.type('Evidence((n=n))',self.scope),tree=['Local','h'])
+  source='certified(n,h,(1:Real))'
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Certified(n,h)',self.scope))
+
  def test_computed_formal_competitor_is_not_dropped(self):
   notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
    ['Means: fun _ _ => (0 : Complex)','Literal: 0','Render latex: 0'],self.e)

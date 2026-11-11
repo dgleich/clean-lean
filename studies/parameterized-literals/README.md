@@ -798,8 +798,9 @@ that selected field's parameter and field evidence forward, rather than borrowin
 the enclosing record's parameters. Literal origins follow the same source paths
 through witness replay and retained-tree encoding.
 
-This does not add witnesses for opaque producers or reconstruct constructor
-provenance for already elaborated, hole-free input fragments. Missing evidence is
+This does not add witnesses for opaque producers. This initial step did not
+reconstruct constructor evidence for already elaborated inputs; the extension
+below addresses direct checked constructors. Missing evidence is
 still incomplete, not a mismatch that can remove a competitor. The production
 compiler, grammar and existing Lean mapping are unchanged; general dependent
 inference and production integration remain open.
@@ -814,5 +815,61 @@ Validation: 135 experimental tests pass. The native checker passes 30 independen
 exact targets and 30 supporting proofs, including the three new projection cases.
 Full production discovery and active-label verification remain pending in their
 existing fixed-snapshot jobs; this study-only change does not restart them.
+
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Known constructors inside literal-bearing expressions
+
+The adapter now recovers direct-constructor evidence from already checked,
+hole-free input expressions. Thus explicitly annotating an inner constructor's
+arguments does not by itself erase evidence needed by an outer projection. For a
+holder with a Real marker and a Payload field, the expression
+
+```clean
+payload holder(0,payload((2:Natural),(0:Vector(2,Complex)))).payload.data
+```
+
+infers the outer marker and preserves the known Payload size/data relationship.
+The same construction supports computed parameter indices in an explicitly typed
+PaddedCell nested inside a holder, and a known generic cell built with
+`generic cell(type(Real),(1:Real))`.
+
+First perform the existing source-order prepass: elaborate each hole-free operand,
+reserve its caller type/value representatives, then visit the expected type. The
+new evidence pass neither adds representatives nor creates literal holes. It
+recognizes only a Call or retained ModuleCall naming the nominal record's own
+constructor. A same-named local function is not that constructor. Check the
+constructor's captured signature, retained identity where present, and argument
+arity; re-elaborate its source arguments in the same fixed scope rather than
+trusting stored checked-argument caches. Recurse into directly checked constructor
+children, storing admissible value parameter/field fragments in declaration order.
+
+Classifier parameters are not converted into value indices. An already checked
+child whose type/index is outside the experimental symbolic fragment contributes
+no optional constructor evidence. This does not remove the operand or a competing
+candidate: its checked root type/value remain in the ordinary row equations. A
+later operation needing the absent evidence still reports incomplete. Signature,
+identity and argument-rechecking failures are not silently ignored. A proof
+parameter consequently need not become a symbolic index merely to keep its
+otherwise checked enclosing constructor usable.
+
+Projection uses this evidence under the same forward substitution, witness replay,
+and constructor-reduction rules as literal-bearing constructors. No opaque native
+or authored producer body is inspected for hidden constructor calls. Missing
+implicit evidence, general dependent applications and production integration
+remain separate obligations; this extension does not solve them.
+
+Five regressions cover mixed explicit/inferred fields, computed parameters, opaque
+producer rejection, classifier parameters and proof parameters. Three additional
+independent native oracles check the two vector projections and the generic Real
+projection. The first two supporting proofs use constructor reduction; the Real
+numeral proof uses its declared conversion and `simp`.
+
+Validation: all 140 experimental tests pass, and the native checker passes 33
+independent exact targets and 33 supporting proofs. The production compiler is
+unchanged. Full production discovery and active-label verification remain live
+in their existing fixed-snapshot jobs, with no completion claim.
 
 :::

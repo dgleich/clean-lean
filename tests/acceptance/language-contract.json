@@ -3443,6 +3443,23 @@
         "Opaque producer parameter witnesses",
         "General dependent candidate validity"
       ]
+    },
+    {
+      "id": "experimental_known_constructor_evidence",
+      "status": "experimental-slice",
+      "environment": "Explicit linear algebra modules, Payload/holder declarations in studies/parameterized-literals/check_clean_rows.py",
+      "source": "payload holder(0,payload((2:Natural),(0:Vector(2,Complex)))).payload.data",
+      "expected_lean": "complexVectorZero (NaturalNumeral 2), retaining exact declared wrapper identities",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Recover only direct checked constructor evidence; recheck source arguments; preserve original caller representative order; missing optional evidence does not reject an already checked operand",
+      "pending": [
+        "Production integration",
+        "Opaque producer evidence",
+        "General dependent candidate validity"
+      ]
     }
   ]
 }

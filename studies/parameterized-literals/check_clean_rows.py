@@ -191,8 +191,31 @@ same_basic_target actualParameterProjection{i} expectedParameterProjection{i}
 theorem meaningParameterProjection{i} (n : {t('Natural')}) :
   actualParameterProjection{i} n = (fun _ => (0 : Complex)) := by rfl
 """)
+declare('Structure PayloadHolder():',
+ ['Let marker: Real','Let payload: Payload','Constructor: payload holder'],env)
+declare('Structure PaddedHolder(n: Natural):',
+ ['Let marker: Real','Let cell: PaddedCell(n)','Constructor: padded holder'],env)
+declare('Structure GenericCell(T: Type):',['Let data: T','Constructor: generic cell'],env)
+declare('Structure GenericHolder():',
+ ['Let marker: Real','Let cell: GenericCell(Real)','Constructor: generic holder'],env)
+padded_index=f"{f('natural sum')} ({ntwo}) ({one})"
+for i,(source,result,expected,meaning) in enumerate([
+ ('payload holder(0,payload((2:Natural),(0:Vector(2,Complex)))).payload.data',
+  f"{t('Vector')} ({ntwo}) {t('Complex')}",f"@{f('complex vector zero')} ({ntwo})",'(fun _ => (0 : Complex))'),
+ ('padded holder(2,0,padded cell((2:Natural),(0:Vector(((2:Natural)+1),Complex)))).cell.data',
+  f"{t('Vector')} ({padded_index}) {t('Complex')}",f"@{f('complex vector zero')} ({padded_index})",'(fun _ => (0 : Complex))'),
+ ('generic holder(0,generic cell(type(Real),(1:Real))).cell.data',
+  t('Real'),f"{nr} (nat_lit 1)",'(1 : Real)')]):
+ value=Builder(env,{}).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ proof='rfl' if i<2 else f'simp [actualKnownConstructor{i}, {nr}]'
+ checks.append(f"""
+noncomputable def actualKnownConstructor{i} : {result} := {value.lean}
+noncomputable def expectedKnownConstructor{i} : {result} := {expected}
+same_basic_target actualKnownConstructor{i} expectedKnownConstructor{i}
+theorem meaningKnownConstructor{i} : actualKnownConstructor{i} = {meaning} := by {proof}
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Thirty experimental joint-row targets and thirty meaning proofs passed; production joint inference remains unimplemented.')
+print('Thirty-three experimental joint-row targets and thirty-three meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

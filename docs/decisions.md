@@ -1869,3 +1869,15 @@ nested constructor-valued projection carries its own parameter evidence forward.
 Opaque record producers gain no such evidence. There is no grammar or production
 change. See the [construction and native oracles](../studies/parameterized-literals/README.md#constructor-parameters-in-computed-projection-types).
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental evidence from checked constructors
+
+A hole-free checked direct constructor can supply parameter/field evidence inside
+an experimental literal-inference region. Its source arguments are rechecked;
+optional child evidence neither creates holes nor changes caller representative
+priority. Classifier and unsupported index children remain without value evidence,
+and opaque producers are not unfolded. See the [construction and boundaries](../studies/parameterized-literals/README.md#known-constructors-inside-literal-bearing-expressions).
+No grammar or production elaboration rule changes.
+:::

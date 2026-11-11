@@ -1375,5 +1375,15 @@ Direct constructor arguments supply the parameter evidence; nested projections
 preserve the selected field's own evidence. Opaque producers remain incomplete.
 See the <a href="../studies/parameterized-literals/README.md#constructor-parameters-in-computed-projection-types">experimental contract and validation</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="known-constructor-inference">
+<h2>Known constructors in experimental inference</h2>
+<p>A fully annotated inner constructor may retain field and parameter evidence
+while an outer call infers a literal. For example, a known Payload of size 2 inside
+<code>payload holder(0, ...).payload.data</code> projects to the declared vector-zero
+wrapper at 2. Checked constructor source arguments supply evidence; an opaque
+producer does not. See the
+<a href="../studies/parameterized-literals/README.md#known-constructors-inside-literal-bearing-expressions">construction and independent Lean checks</a>.
+The production compiler and parser are unchanged.</p>
+</section></llm>
 </body>
 </html>
