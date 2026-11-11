@@ -1847,3 +1847,14 @@ public comparisons re-elaborate source and cannot trust stored operand caches.
 There is no grammar or target-rule change. The constructive preservation argument
 and validation boundaries are in the [comparison contract](comparison-reuse.md#reusing-a-freshly-checked-operator).
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental computed formal indices
+
+The joint-inference study forward-checks computed callable and field type indices
+from concrete candidate argument witnesses after their symbolic inputs are solved.
+Selected witnesses preserve literal origins during retained emission. It does not
+invert arithmetic or infer missing implicit evidence, and changes no grammar or
+production elaboration. See the [constructive mapping and remaining obligations](../studies/parameterized-literals/README.md#forward-evaluation-of-computed-formal-indices).
+:::

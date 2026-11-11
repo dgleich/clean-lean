@@ -315,6 +315,79 @@ class CleanRows(unittest.TestCase):
   with self.assertRaises(Incomplete):Builder(self.e,self.scope,limit=1).solve(tree)
  def test_binder_region_is_explicitly_incomplete(self):
   with self.assertRaises(Incomplete):self.solve('function(t: Real,t+0)')
+ def padded(self):
+  notation('Define padded(n: Natural,x: Vector((n+1),Complex)): Vector((n+1),Complex):',
+   ['Equals: x','Render latex: P({n},{x})'],self.e,authored=True)
+ def test_computed_formal_index_from_literal_argument(self):
+  self.padded()
+  value=Builder(self.e,{}).materialize(expression_tree(parse('padded(2,0)','expression')),use_default=False)
+  expected=self.e.type('Vector(((2:Natural)+1),Complex)')
+  self.assertEqual(value.type,expected)
+  self.assertEqual(value.tree[2][1][0],'BoundLiteral')
+ def test_computed_formal_index_from_caller_argument(self):
+  self.padded()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('padded(n,0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector((n+1),Complex)',self.scope))
+ def test_computed_formal_index_rejects_conflicting_expected(self):
+  self.padded()
+  with self.assertRaises(NoSolution):
+   Builder(self.e,{}).materialize(expression_tree(parse('padded(2,0)','expression')),
+    self.e.type('Vector(((3:Natural)+1),Complex)'))
+ def test_computed_formal_index_retains_target_under_candidate_reordering(self):
+  self.padded();tree=expression_tree(parse('padded(2,0)','expression'))
+  first=Builder(self.e,{}).materialize(tree,use_default=False)
+  self.e.data['functions']=dict(reversed(list(self.e.data['functions'].items())))
+  self.e.data['types']=dict(reversed(list(self.e.data['types'].items())))
+  second=Builder(self.e,{}).materialize(tree,use_default=False)
+  self.assertEqual(first.lean,second.lean)
+  self.assertEqual(first.tree,second.tree)
+
+ def test_computed_field_index_from_constructor_evidence(self):
+  from cleanlang.structures import declare
+  declare('Structure PaddedPayload():',
+   ['Let size: Natural','Let data: Vector((size+1),Complex)','Constructor: padded payload'],self.e)
+  value=Builder(self.e,{}).materialize(expression_tree(parse('padded payload(2,0).data','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+1),Complex)'))
+ def test_computed_implicit_index_without_evidence_is_incomplete(self):
+  notation('Notation implicit padded(x):',
+   ['Let n: Natural','Let x: Vector((n+1),Complex)','Returns: Vector((n+1),Complex)',
+    'Means: x','Render latex: P({x})'],self.e)
+  with self.assertRaises(Incomplete):
+   Builder(self.e,{}).materialize(expression_tree(parse('implicit padded(0)','expression')),
+    self.e.type('Vector(((2:Natural)+1),Complex)'))
+
+ def test_computed_formal_index_preserves_default_origin(self):
+  self.padded()
+  notation('Notation count(x):',['Let T: Type','Let x: T','Returns: Natural','Means: 0','Render latex: count({x})'],self.e)
+  value=Builder(self.e,{}).materialize(expression_tree(parse('padded(count(1),0)','expression')))
+  self.assertEqual(value.tree[2][0][2][0][4],'defaulted')
+  index=value.tree[2][1][5][0][2]
+  found=[]
+  def visit(node):
+   if not isinstance(node,list):return
+   if node and node[0]=='BoundNumeral' and node[4]=='defaulted':found.append(node[1])
+   for child in node:visit(child)
+  visit(index)
+  self.assertEqual(found,['1'])
+ def test_computed_formal_index_codec_replay(self):
+  from cleanlang.core import Expressions
+  from cleanlang.retained_codec import dumps,loads
+  self.padded()
+  value=Builder(self.e,{}).materialize(expression_tree(parse('padded(2,0)','expression')),use_default=False)
+  replay=Expressions(self.e,{}).elaborate(loads(dumps(value.tree)))
+  self.assertEqual(value.lean,replay.lean)
+  self.assertEqual(value.type,replay.type)
+ def test_computed_formal_argument_check_failure_remains_incomplete(self):
+  self.padded()
+  with self.assertRaises(Incomplete):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('padded(2,x)','expression')),use_default=False)
+
+ def test_computed_formal_index_does_not_default_unknown_competitor(self):
+  self.padded()
+  notation('Notation count(x):',['Let T: Type','Let x: T','Returns: Natural','Means: 0','Render latex: count({x})'],self.e)
+  with self.assertRaises(Incomplete):
+   Builder(self.e,{}).materialize(expression_tree(parse('padded(count(0),0)','expression')))
+
  def test_computed_formal_competitor_is_not_dropped(self):
   notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
    ['Means: fun _ _ => (0 : Complex)','Literal: 0','Render latex: 0'],self.e)

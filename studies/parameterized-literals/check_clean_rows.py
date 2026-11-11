@@ -153,8 +153,28 @@ noncomputable def expectedFieldValue{i} {computed_binders} : {result} := {expect
 same_basic_target actualFieldValue{i} expectedFieldValue{i}
 theorem meaningFieldValue{i} {computed_binders} : {claim} := by rfl
 """)
+notation('Define padded(n: Natural,x: Vector((n+1),Complex)): Vector((n+1),Complex):',
+ ['Equals: x','Render latex: P({n},{x})'],env,authored=True)
+declare('Structure PaddedPayload():',
+ ['Let size: Natural','Let data: Vector((size+1),Complex)','Constructor: padded payload'],env)
+one=f"{nn} (nat_lit 1)"
+for i,(source,argument,projected) in enumerate([
+ ('padded(2,0)',ntwo,False),('padded(n,0)','n',False),
+ ('padded payload(2,0).data',ntwo,True)]):
+ index=f"{f('natural sum')} ({argument}) ({one})"
+ result=f"{t('Vector')} ({index}) {t('Complex')}"
+ zero=f"@{f('complex vector zero')} ({index})"
+ expected=zero if projected else f"@{f('padded')} ({argument}) ({zero})"
+ value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ checks.append(f"""
+noncomputable def actualFormalIndex{i} (n : {t('Natural')}) : {result} := {value.lean}
+noncomputable def expectedFormalIndex{i} (n : {t('Natural')}) : {result} := {expected}
+same_basic_target actualFormalIndex{i} expectedFormalIndex{i}
+theorem meaningFormalIndex{i} (n : {t('Natural')}) :
+  actualFormalIndex{i} n = (fun _ => (0 : Complex)) := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Twenty-four experimental joint-row targets and twenty-four meaning proofs passed; production joint inference remains unimplemented.')
+print('Twenty-seven experimental joint-row targets and twenty-seven meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

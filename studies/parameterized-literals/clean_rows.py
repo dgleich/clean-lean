@@ -1,7 +1,7 @@
 # generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
 """Experimental Clean-signature adapter for the joint constraint model.
 
-Not production elaboration: binder/evidence/computed-formal constraints and general
+Not production elaboration: general binder/evidence/dependent constraints and
 retained-target construction remain explicit gaps. Unsupported competitors raise
 Incomplete; they are never discarded as mismatches.
 """
@@ -73,6 +73,49 @@ class Builder:
         if self.env.sort_level(typ)!=1:raise Incomplete('Only Type-0 carriers in this adapter')
         return Carrier(key,tuple(self.typ(a,None if capture else formals) for a in typ.args))
 
+    def dependent_type(self,typ,formals,evidence,path):
+        """Forward-check computed formal indices from concrete argument witnesses.
+
+        No inverse arithmetic and no candidate-provided caller representatives.
+        Evidence is row-local and rechecked, including before retained emission.
+        """
+        from cleanlang.dependent_functions import occurs
+        if isinstance(typ,ValueIndex) and typ.name not in formals:
+            names=tuple(n for n in formals if occurs(typ,n))
+            if names:
+                output=Variable(repr((path,'computed formal index')),'index')
+                def witness(defaulted=()):
+                    from cleanlang.indices import substitute_index
+                    from cleanlang.inferred_conversion import reify
+                    if any(getattr(formals[n],'sort',None)!='index' for n in names):
+                        raise Incomplete('Computed formal classifier arguments remain unsupported')
+                    if any(n not in evidence for n in names):
+                        raise Incomplete('Computed formal index lacks concrete argument evidence')
+                    try:
+                        actuals={n:evidence[n](defaulted) for n in names}
+                        return reify(substitute_index(typ,actuals,self.env,self.scope),self.env,self.scope)
+                    except CleanError as error:
+                        raise Incomplete('Computed formal index checking unavailable: '+str(error)) from error
+                def evaluate(inputs):
+                    if any(getattr(formals[n],'sort',None)!='index' for n in names):
+                        raise Incomplete('Computed formal classifier arguments remain unsupported')
+                    if any(n not in evidence for n in names):
+                        raise Incomplete('Computed formal index lacks concrete argument evidence')
+                    for n,expected in zip(names,inputs):
+                        actual=evidence[n]()
+                        if self.index(actual)[0]!=expected:
+                            raise NoSolution('Computed formal index argument mismatch')
+                    return self.index(witness())[0]
+                return output,(Deferred(output,tuple(formals[n] for n in names),evaluate),),((output,witness),)
+        if type(typ) is Type:
+            # The ordinary converter establishes the nominal carrier and sort.
+            head=self.typ(Type(typ.name),{})
+            children=[self.dependent_type(t,formals,evidence,path+(i,)) for i,t in enumerate(typ.args)]
+            return (Carrier(head.identity,tuple(t for t,_,_ in children)),
+                    tuple(d for _,ds,_ in children for d in ds),
+                    tuple(w for _,_,ws in children for w in ws))
+        return self.typ(typ,formals),(),()
+
     def signature(self,spec):
         try:return require(self.env,spec)
         except CleanError as error:raise Incomplete(str(error)) from error
@@ -123,23 +166,24 @@ class Builder:
                 if occurs(field_type,name):
                     if name not in fields:raise Incomplete('Projection type depends on unavailable record field values')
                     formals[name]=fields[name].value
-            typ=self.typ(field_type,formals)
+            evidence={n:self.call_witness(None,None,a.syntax,a.origins)
+                      for n,a in fields.items() if a.syntax is not None}
+            typ,type_deferred,type_witnesses=self.dependent_type(field_type,formals,evidence,path+('field type',))
             selected_field=fields.get(tree[2])
             output=(selected_field.value if selected_field is not None else
                     Variable(repr((path,spec['key'],tree[2])),'index'))
-            syntax=None;origins=();deferred=base.deferred;witnesses=base.witnesses
+            syntax=None;origins=();deferred=base.deferred+type_deferred;witnesses=base.witnesses+type_witnesses
             if base.syntax is not None:
                 syntax=['Projection',base.syntax,tree[2]]
                 origins=tuple(((1,)+local,source) for local,source in base.origins)
                 witness=self.call_witness(None,None,syntax,origins)
-                def evaluate(inputs,witness=witness,field_type=field_type,names=tuple(formals)):
+                def evaluate(inputs,witness=witness):
                     try:
                         value=witness()
-                        expected=self.typ(field_type,dict(zip(names,inputs[1:])))
-                        if self.typ(value.type,{})!=expected:raise NoSolution('Deferred projection type mismatch')
+                        if self.typ(value.type,{})!=inputs[1]:raise NoSolution('Deferred projection type mismatch')
                         return self.index(value)[0]
                     except CleanError as error:raise Incomplete('Deferred projection checking is unavailable: '+str(error)) from error
-                deferred+=(Deferred(output,(base.value,)+tuple(formals.values()),evaluate),)
+                deferred+=(Deferred(output,(base.value,typ),evaluate),)
                 witnesses+=((output,witness),)
             results.append(Fragment(typ,output,
                 base.choices+(('projection',path,(spec['key'],tree[2])),),base.carriers,
@@ -194,16 +238,20 @@ class Builder:
             variables,implicit=self.telescope(spec,path)
             signature=self.signature(spec)
             explicit=[p for p in signature.parameters if p.visibility=='explicit']
-            parameters=[self.typ(p.typ,variables) for p in explicit]
-            result=self.typ(signature.result,variables)
-            explicit=[p.name for p in explicit]
             for actuals in product(*parts):
+                evidence={p.name:self.call_witness(None,None,a.syntax,a.origins)
+                          for p,a in zip(explicit,actuals) if a.syntax is not None}
+                converted=[self.dependent_type(p.typ,variables,evidence,path+('parameter',p.name)) for p in explicit]
+                result,result_deferred,result_witnesses=self.dependent_type(signature.result,variables,evidence,path+('result',))
+                parameters=[t for t,_,_ in converted]
+                type_deferred=tuple(d for _,ds,_ in converted for d in ds)+result_deferred
+                type_witnesses=tuple(w for _,_,ws in converted for w in ws)+result_witnesses
                 equations=tuple(eq for a in actuals for eq in a.equations)
                 equations+=tuple(zip(parameters,(a.typ for a in actuals)))
-                equations+=tuple((variables[n],a.value) for n,a in zip(explicit,actuals))
+                equations+=tuple((variables[p.name],a.value) for p,a in zip(explicit,actuals))
                 output=Variable(repr((path,spec['native_binding'],'value')),'index')
-                deferred=tuple(d for a in actuals for d in a.deferred)
-                witnesses=tuple(w for a in actuals for w in a.witnesses)
+                deferred=tuple(d for a in actuals for d in a.deferred)+type_deferred
+                witnesses=tuple(w for a in actuals for w in a.witnesses)+type_witnesses
                 syntax=None;origins=()
                 if all(a.syntax is not None for a in actuals):
                     syntax=['ModuleCall',name,[a.syntax for a in actuals],spec['lean']]

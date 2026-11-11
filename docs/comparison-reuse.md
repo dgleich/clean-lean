@@ -172,9 +172,9 @@ operand expands, rejection of changed selected bindings, public prefix/infix
 ambiguity, ignored stale operand caches and equal fresh/rechecked encoded index
 payloads. The focused comparison suite passes 92 tests. The fixed snapshot also passes
 strict parser checks, 550 integration Python tests, 120 experimental inference
-tests, and 24 experimental native targets with 24 supporting proofs. Full discovery,
-active-label verification and remaining native integration checks for this step
-remain pending. No whole-topology speedup is claimed.
+tests, and 24 experimental native targets with 24 supporting proofs. Full discovery
+and active-label verification remain pending. The remaining native integration
+checks and the 92-proof corpus recheck completed with no failures. No whole-topology speedup is claimed.
 
 Older full-discovery and active-label processes were verified live and explicitly
 retired as superseded by this comparison change, not treated as passed or as

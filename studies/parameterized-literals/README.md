@@ -681,3 +681,85 @@ record projections. Rejection tests cover conflicting expected sizes and opaque
 record producers. Production sources are unchanged in this step; no full-regression
 completion claim is added.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Forward evaluation of computed formal indices
+
+The experimental adapter now handles computed indices in checked callable
+parameter/result types and in field-dependent projections when the referenced
+value parameters have concrete argument syntax in that candidate row. For example:
+
+```clean
+Define padded(n: Natural,x: Vector((n+1),Complex)): Vector((n+1),Complex):
+  Equals: x
+  Render latex: P({n},{x})
+
+Structure PaddedPayload():
+  Let size: Natural
+  Let data: Vector((size+1),Complex)
+  Constructor: padded payload
+```
+
+The experimental expressions `padded(2,0)`, `padded(n,0)` and
+`padded payload(2,0).data` select the declared vector-zero wrapper at the
+checked index `2+1` or `n+1`. The parser and production elaborator have not
+changed; this is an extension of the inference study, not production support
+for unannotated parameterized literals.
+
+For each computed index occurrence, create a fresh symbolic index variable and
+a forward obligation whose inputs are exactly the referenced formal values in
+signature order. The candidate row supplies witness functions for concrete
+explicit argument syntax, or for preceding constructor fields. Each witness
+retains module bindings and literal-origin paths. Ordinary equations and existing
+obligations first determine these input values. Then recheck each witness, compare
+its checked index with the solved input, substitute the checked expressions into
+the retained formal index, and check the substituted index through the existing
+index substitution/reification path. Its comparison key is the obligation's
+output. No arithmetic inverse, simplification rule, token dispatch or new
+mathematical equality is introduced.
+
+Only a conclusive mismatch may reject a candidate. Missing witnesses, classifier
+arguments, unsupported checking or unsolved input values remain incomplete; a
+result constraint cannot establish their applicability by itself. Computed
+formal indices in exact-literal declarations remain unsupported by the literal
+row generator, including competitors that cannot safely be discarded. Implicit
+parameters without concrete witness evidence, general dependent applications,
+and full candidate-validity checking remain open. Projection evidence currently
+covers preceding constructor fields, not computed references to structure
+parameters whose argument fragments are not retained on the projected base.
+
+Checking witnesses do not add caller representatives or modify the selected
+literal assignment. After selection, replay witnesses in the existing child-first
+order with the selected default origins, verify their comparison keys again, and
+register their checked values for retained argument construction. This preserves
+an authored computed index instead of substituting an arbitrary equal expression.
+Caller representatives still have priority; unselected candidates do not choose
+emitted spellings. Projection checking now consumes the solved field type as an
+input rather than attempting a second unsupported symbolic conversion.
+
+The native oracle independently writes the declared Natural-addition, numeral,
+vector-zero and padded wrappers, and checks three new exact targets with three
+proofs. It does not obtain expected bodies by translating a second Clean spelling.
+Tests additionally check expected-type conflicts, argument-type conflicts,
+candidate reordering, default-origin copying into an index, codec replay and an
+implicit index that must remain incomplete. These checks do not close the general
+production-inference acceptance obligations.
+
+Two interactions delimit this step. `padded(count(1),0)`, for a generic count
+returning Natural, preserves the default-origin mark on the scalar argument when
+copied into the computed index. With `count(0)`, the available parameterized-zero
+competitors lack concrete argument syntax and their computed values remain
+unresolved; the adapter reports incomplete before applying a default. Also,
+`padded(2,x)` with a conflicting known vector dimension can encounter both a
+conclusive computed-index mismatch and an unavailable parent-call check. The
+existing batch policy gives incomplete analysis precedence; this step does not
+silently discard the unavailable check.
+
+Validation: all 130 experimental tests pass, and the native checker passes 27
+independent exact targets and 27 supporting proofs. The production compiler is
+unchanged by this study step. Its last integration run completed 550 Python tests,
+all native integration checks and the 92-proof corpus recheck; full discovery and
+active-label verification are still running against that fixed production snapshot.
+
+:::

@@ -1355,5 +1355,16 @@ Changed operands are selected again; public comparisons recheck source and new
 overloads. Parsing and Lean targets are unchanged. See the
 <a href="comparison-reuse.md#reusing-a-freshly-checked-operator">freshness and preservation contract</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="computed-formal-index-inference">
+<h2>Experimental computed formal indices</h2>
+<p>For a declared <code>padded(n, x)</code> with
+<code>x: Vector((n+1),Complex)</code>, the inference study translates
+<code>padded(2,0)</code> using the declared Natural numeral 2, Natural addition
+with numeral 1, and the vector-zero wrapper at that computed index. Concrete
+argument witnesses establish the index forward; expected dimensions do not invert
+arithmetic. Field-dependent constructor projections use the same rule.
+This is experimental, not production literal inference. See the
+<a href="../studies/parameterized-literals/README.md#forward-evaluation-of-computed-formal-indices">construction and independent target checks</a>.</p>
+</section></llm>
 </body>
 </html>

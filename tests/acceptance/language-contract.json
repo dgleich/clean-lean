@@ -3376,6 +3376,38 @@
         "Full production discovery",
         "Native integration for this change"
       ]
+    },
+    {
+      "id": "experimental_computed_formal_index",
+      "status": "experimental-slice",
+      "environment": "Explicit linear algebra modules; declared padded function and PaddedPayload constructor in studies/parameterized-literals/check_clean_rows.py",
+      "source": "padded(2,0)",
+      "expected_tree": [
+        "Call",
+        "padded",
+        [
+          [
+            "Decimal",
+            "2"
+          ],
+          [
+            "Decimal",
+            "0"
+          ]
+        ]
+      ],
+      "expected_lean": "padded (NaturalNumeral 2) (complexVectorZero (naturalSum (NaturalNumeral 2) (NaturalNumeral 1))), using exact declared wrapper identities",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Forward-only checked substitution from row-local witnesses; no result-based arithmetic inversion or missing-evidence candidate elimination",
+      "pending": [
+        "Production integration",
+        "Computed implicit parameters without witnesses",
+        "Computed exact-literal result indices",
+        "General dependent candidate validity"
+      ]
     }
   ]
 }
