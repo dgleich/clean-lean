@@ -173,8 +173,26 @@ same_basic_target actualFormalIndex{i} expectedFormalIndex{i}
 theorem meaningFormalIndex{i} (n : {t('Natural')}) :
   actualFormalIndex{i} n = (fun _ => (0 : Complex)) := by rfl
 """)
+declare('Structure PaddedCell(n: Natural):',
+ ['Let data: Vector((n+1),Complex)','Constructor: padded cell'],env)
+declare('Structure WrappedCell(n: Natural):',
+ ['Let cell: PaddedCell(n)','Constructor: wrapped cell'],env)
+for i,(source,argument) in enumerate([
+ ('padded cell(2,0).data',ntwo),('padded cell(n,0).data','n'),
+ ('wrapped cell(2,padded cell(2,0)).cell.data',ntwo)]):
+ index=f"{f('natural sum')} ({argument}) ({one})"
+ result=f"{t('Vector')} ({index}) {t('Complex')}"
+ expected=f"@{f('complex vector zero')} ({index})"
+ value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ checks.append(f"""
+noncomputable def actualParameterProjection{i} (n : {t('Natural')}) : {result} := {value.lean}
+noncomputable def expectedParameterProjection{i} (n : {t('Natural')}) : {result} := {expected}
+same_basic_target actualParameterProjection{i} expectedParameterProjection{i}
+theorem meaningParameterProjection{i} (n : {t('Natural')}) :
+  actualParameterProjection{i} n = (fun _ => (0 : Complex)) := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Twenty-seven experimental joint-row targets and twenty-seven meaning proofs passed; production joint inference remains unimplemented.')
+print('Thirty experimental joint-row targets and thirty meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

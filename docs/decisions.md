@@ -1858,3 +1858,14 @@ Selected witnesses preserve literal origins during retained emission. It does no
 invert arithmetic or infer missing implicit evidence, and changes no grammar or
 production elaboration. See the [constructive mapping and remaining obligations](../studies/parameterized-literals/README.md#forward-evaluation-of-computed-formal-indices).
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental constructor parameter witnesses
+
+Direct constructor fragments now retain parameter arguments alongside field
+arguments. A projected computed field type uses these checked witnesses, and a
+nested constructor-valued projection carries its own parameter evidence forward.
+Opaque record producers gain no such evidence. There is no grammar or production
+change. See the [construction and native oracles](../studies/parameterized-literals/README.md#constructor-parameters-in-computed-projection-types).
+:::

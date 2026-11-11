@@ -310,6 +310,18 @@ structure cleanStructure_PaddedPayload_1e13bbd8b6938ad5d95f  : Type where
 noncomputable def cleanConstructor_padded_payload_e03e89c812d6bcc4b71f («size» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («data» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («size») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : _root_.cleanStructure_PaddedPayload_1e13bbd8b6938ad5d95f :=
   @_root_.cleanStructure_PaddedPayload_1e13bbd8b6938ad5d95f.mk «size» «data»
 
+structure cleanStructure_PaddedCell_160f6a93d8c1ee02afcf («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : Type where
+  «data» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))
+
+noncomputable def cleanConstructor_padded_cell_5ccc731b1064afbc4e96 («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («data» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : _root_.cleanStructure_PaddedCell_160f6a93d8c1ee02afcf («n») :=
+  @_root_.cleanStructure_PaddedCell_160f6a93d8c1ee02afcf.mk «n» «data»
+
+structure cleanStructure_WrappedCell_70eb704e70f429e6291f («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : Type where
+  «cell» : _root_.cleanStructure_PaddedCell_160f6a93d8c1ee02afcf («n»)
+
+noncomputable def cleanConstructor_wrapped_cell_0df31d1b7c86256d5752 («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («cell» : _root_.cleanStructure_PaddedCell_160f6a93d8c1ee02afcf («n»)) : _root_.cleanStructure_WrappedCell_70eb704e70f429e6291f («n») :=
+  @_root_.cleanStructure_WrappedCell_70eb704e70f429e6291f.mk «n» «cell»
+
 
 open scoped Matrix
 
@@ -527,5 +539,26 @@ noncomputable def expectedFormalIndex2 (n : cleanType_Natural_469c53b6dafb7a2182
 same_basic_target actualFormalIndex2 expectedFormalIndex2
 theorem meaningFormalIndex2 (n : cleanType_Natural_469c53b6dafb7a218246) :
   actualFormalIndex2 n = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualParameterProjection0 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))
+noncomputable def expectedParameterProjection0 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := @cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))
+same_basic_target actualParameterProjection0 expectedParameterProjection0
+theorem meaningParameterProjection0 (n : cleanType_Natural_469c53b6dafb7a218246) :
+  actualParameterProjection0 n = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualParameterProjection1 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (n) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (n) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))
+noncomputable def expectedParameterProjection1 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (n) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := @cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (n) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))
+same_basic_target actualParameterProjection1 expectedParameterProjection1
+theorem meaningParameterProjection1 (n : cleanType_Natural_469c53b6dafb7a218246) :
+  actualParameterProjection1 n = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualParameterProjection2 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))
+noncomputable def expectedParameterProjection2 (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := @cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))
+same_basic_target actualParameterProjection2 expectedParameterProjection2
+theorem meaningParameterProjection2 (n : cleanType_Natural_469c53b6dafb7a218246) :
+  actualParameterProjection2 n = (fun _ => (0 : Complex)) := by rfl
 
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -725,9 +725,8 @@ result constraint cannot establish their applicability by itself. Computed
 formal indices in exact-literal declarations remain unsupported by the literal
 row generator, including competitors that cannot safely be discarded. Implicit
 parameters without concrete witness evidence, general dependent applications,
-and full candidate-validity checking remain open. Projection evidence currently
-covers preceding constructor fields, not computed references to structure
-parameters whose argument fragments are not retained on the projected base.
+and full candidate-validity checking remain open. At this step projection evidence covered only preceding constructor fields;
+the constructor-parameter extension below also retains parameter arguments.
 
 Checking witnesses do not add caller representatives or modify the selected
 literal assignment. After selection, replay witnesses in the existing child-first
@@ -761,5 +760,59 @@ independent exact targets and 27 supporting proofs. The production compiler is
 unchanged by this study step. Its last integration run completed 550 Python tests,
 all native integration checks and the 92-proof corpus recheck; full discovery and
 active-label verification are still running against that fixed production snapshot.
+
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Constructor parameters in computed projection types
+
+A direct constructor fragment now retains both its parameter fragments and field
+fragments, in their declared order. Parameter names come from the nominal record's
+checked declaration; only that declaration's designated constructor supplies this
+evidence. Parameter arguments precede field arguments in the existing constructor
+signature. No native-body inspection or return-type guessing creates evidence.
+
+```clean
+Structure PaddedCell(n: Natural):
+  Let data: Vector((n+1),Complex)
+  Constructor: padded cell
+
+Structure WrappedCell(n: Natural):
+  Let cell: PaddedCell(n)
+  Constructor: wrapped cell
+```
+
+The experimental adapter now checks `padded cell(2,0).data`,
+`padded cell(n,0).data`, and
+`wrapped cell(2,padded cell(2,0)).cell.data`. In each case the computed field index
+comes from the retained constructor argument, even when a caller variable has the
+same spelling as the formal parameter.
+
+Projection forms its symbolic parameter substitution from the base's nominal type
+as before. Its concrete witness environment combines retained parameter fragments
+with preceding-field evidence; overlapping names are rejected. The existing
+forward computed-index obligation checks that these witnesses agree with the solved
+symbolic inputs before substitution. Projecting a constructor-valued field carries
+that selected field's parameter and field evidence forward, rather than borrowing
+the enclosing record's parameters. Literal origins follow the same source paths
+through witness replay and retained-tree encoding.
+
+This does not add witnesses for opaque producers or reconstruct constructor
+provenance for already elaborated, hole-free input fragments. Missing evidence is
+still incomplete, not a mismatch that can remove a competitor. The production
+compiler, grammar and existing Lean mapping are unchanged; general dependent
+inference and production integration remain open.
+
+Five regressions cover literal/caller parameters, nested projections, opaque
+producer rejection and default-origin/codec preservation. Three additional native
+oracles explicitly write the Natural-addition and vector-zero wrappers at their
+expected indices; the resulting projection reduces to that zero wrapper under
+the existing constructor rule.
+
+Validation: 135 experimental tests pass. The native checker passes 30 independent
+exact targets and 30 supporting proofs, including the three new projection cases.
+Full production discovery and active-label verification remain pending in their
+existing fixed-snapshot jobs; this study-only change does not restart them.
 
 :::

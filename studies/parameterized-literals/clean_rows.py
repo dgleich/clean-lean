@@ -27,6 +27,7 @@ class Fragment:
     syntax: object=None
     origins: tuple=()
     fields: tuple=()
+    parameters: tuple=()
 
 class Builder:
     def __init__(self,env,scope,limit=4096):
@@ -166,8 +167,11 @@ class Builder:
                 if occurs(field_type,name):
                     if name not in fields:raise Incomplete('Projection type depends on unavailable record field values')
                     formals[name]=fields[name].value
+            arguments=dict(base.parameters)
+            if set(arguments).intersection(fields):raise Incomplete('Record parameter/field name collision')
+            arguments.update(fields)
             evidence={n:self.call_witness(None,None,a.syntax,a.origins)
-                      for n,a in fields.items() if a.syntax is not None}
+                      for n,a in arguments.items() if a.syntax is not None}
             typ,type_deferred,type_witnesses=self.dependent_type(field_type,formals,evidence,path+('field type',))
             selected_field=fields.get(tree[2])
             output=(selected_field.value if selected_field is not None else
@@ -188,7 +192,8 @@ class Builder:
             results.append(Fragment(typ,output,
                 base.choices+(('projection',path,(spec['key'],tree[2])),),base.carriers,
                 base.arguments,base.equations,deferred,witnesses,syntax,origins,
-                selected_field.fields if selected_field is not None else ()))
+                selected_field.fields if selected_field is not None else (),
+                selected_field.parameters if selected_field is not None else ()))
         return results
 
     def fragments(self,tree,path=()):
@@ -274,10 +279,11 @@ class Builder:
                             raise Incomplete('Deferred checked index is unsupported: '+str(error)) from error
                     deferred+=(Deferred(output,tuple(a.value for a in actuals)+implicit,evaluate),)
                     witnesses+=((output,witness),)
-                fields=()
+                fields=();record_arguments=()
                 if isinstance(result,Carrier):
                     record=next((s for s in self.env.structures.values() if s['key']==result.identity),None)
                     if record is not None and record['constructor']==name:
+                        record_arguments=tuple(zip(record['parameters'],actuals[:len(record['parameters'])]))
                         values=actuals[len(record['parameters']):]
                         if len(values)!=len(record['fields']):raise Incomplete('Constructor field arity mismatch')
                         fields=tuple((n,a) for (n,_),a in zip(record['fields'],values))
@@ -285,7 +291,7 @@ class Builder:
                     tuple(c for a in actuals for c in a.choices)+(('call',path,spec['native_binding']),),
                     tuple(t for a in actuals for t in a.carriers),
                     tuple(t for a in actuals for t in a.arguments)+implicit,equations,
-                    deferred,witnesses,syntax,origins,fields))
+                    deferred,witnesses,syntax,origins,fields,record_arguments))
         return rows
 
     def rows(self,tree,expected=None):

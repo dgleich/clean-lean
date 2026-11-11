@@ -388,6 +388,46 @@ class CleanRows(unittest.TestCase):
   with self.assertRaises(Incomplete):
    Builder(self.e,{}).materialize(expression_tree(parse('padded(count(0),0)','expression')))
 
+ def padded_cell(self):
+  from cleanlang.structures import declare
+  declare('Structure PaddedCell(n: Natural):',
+   ['Let data: Vector((n+1),Complex)','Constructor: padded cell'],self.e)
+ def test_computed_record_parameter_projection(self):
+  self.padded_cell()
+  value=Builder(self.e,{}).materialize(expression_tree(parse('padded cell(2,0).data','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+1),Complex)'))
+ def test_computed_record_parameter_from_caller(self):
+  self.padded_cell()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('padded cell(n,0).data','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector((n+1),Complex)',self.scope))
+ def test_nested_projection_retains_constructor_parameters(self):
+  from cleanlang.structures import declare
+  self.padded_cell()
+  declare('Structure WrappedCell(n: Natural):',
+   ['Let cell: PaddedCell(n)','Constructor: wrapped cell'],self.e)
+  source='wrapped cell(2,padded cell(2,0)).cell.data'
+  value=Builder(self.e,{}).materialize(expression_tree(parse(source,'expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(((2:Natural)+1),Complex)'))
+ def test_opaque_record_does_not_inherit_parameter_witnesses(self):
+  self.padded_cell();key=self.e.data['functions']['padded cell']['native_binding']
+  notation('Notation make padded cell(n: Natural,data: Vector((n+1),Complex)): PaddedCell(n):',
+   ['Means: '+key+' n data','Render latex: C({n},{data})'],self.e)
+  with self.assertRaises(Incomplete):
+   Builder(self.e,{}).materialize(expression_tree(parse('make padded cell(2,0).data','expression')),use_default=False)
+ def test_record_parameter_evidence_respects_literal_origin(self):
+  self.padded_cell()
+  notation('Notation count(x):',['Let T: Type','Let x: T','Returns: Natural','Means: 0','Render latex: count({x})'],self.e)
+  value=Builder(self.e,{}).materialize(expression_tree(parse('padded cell(count(1),0).data','expression')))
+  from cleanlang.retained_codec import dumps,loads
+  from cleanlang.core import Expressions
+  replay=Expressions(self.e,{}).elaborate(loads(dumps(value.tree)))
+  self.assertEqual(value.lean,replay.lean)
+  def origins(node):
+   if not isinstance(node,list):return []
+   if node and node[0]=='BoundNumeral':return [(node[1],node[4])]
+   return [p for child in node for p in origins(child)]
+  self.assertIn(('1','defaulted'),origins(value.tree))
+
  def test_computed_formal_competitor_is_not_dropped(self):
   notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
    ['Means: fun _ _ => (0 : Complex)','Literal: 0','Render latex: 0'],self.e)

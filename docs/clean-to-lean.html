@@ -1366,5 +1366,14 @@ arithmetic. Field-dependent constructor projections use the same rule.
 This is experimental, not production literal inference. See the
 <a href="../studies/parameterized-literals/README.md#forward-evaluation-of-computed-formal-indices">construction and independent target checks</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="computed-record-parameter-projections">
+<h2>Experimental computed record-parameter projections</h2>
+<p>For <code>PaddedCell(n)</code> with a field of type
+<code>Vector((n+1),Complex)</code>, <code>padded cell(2,0).data</code>
+uses the declared zero-vector wrapper at the declared Natural sum of 2 and 1.
+Direct constructor arguments supply the parameter evidence; nested projections
+preserve the selected field's own evidence. Opaque producers remain incomplete.
+See the <a href="../studies/parameterized-literals/README.md#constructor-parameters-in-computed-projection-types">experimental contract and validation</a>.</p>
+</section></llm>
 </body>
 </html>

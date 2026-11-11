@@ -3408,6 +3408,41 @@
         "Computed exact-literal result indices",
         "General dependent candidate validity"
       ]
+    },
+    {
+      "id": "experimental_computed_record_parameter_projection",
+      "status": "experimental-slice",
+      "environment": "Explicit linear algebra modules, PaddedCell and WrappedCell declarations in studies/parameterized-literals/check_clean_rows.py",
+      "source": "padded cell(2,0).data",
+      "expected_tree": [
+        "Projection",
+        [
+          "Call",
+          "padded cell",
+          [
+            [
+              "Decimal",
+              "2"
+            ],
+            [
+              "Decimal",
+              "0"
+            ]
+          ]
+        ],
+        "data"
+      ],
+      "expected_lean": "complexVectorZero (naturalSum (NaturalNumeral 2) (NaturalNumeral 1)), retaining exact declared wrapper identities after constructor projection",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Use direct constructor parameter fragments only; validate agreement with solved inputs before computed-index substitution; nested projections inherit selected-field evidence",
+      "pending": [
+        "Production integration",
+        "Opaque producer parameter witnesses",
+        "General dependent candidate validity"
+      ]
     }
   ]
 }
