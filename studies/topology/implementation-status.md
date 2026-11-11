@@ -283,3 +283,21 @@ references and was visually inspected without clipped or overlapping text. The
 report is retained in `studies/parameterized-literals/compatibility.json` under
 `subpath_verifier_repaired`. The active-label implicit-signature gap remains open.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Scoped implicit recovery from source annotations
+
+Joint inference now recovers declared implicit parameters from checked argument
+types and explicit outer lambda domains. This handles the set-builder shape used
+by surviving interval labels, without choosing/defaulting body alternatives. Native
+checks cover the set-builder, a checked sibling and an indexed lambda domain.
+The source-ordered representative and reconstruction rules are documented in the
+[inference study](../parameterized-literals/README.md#scoped-implicit-recovery-from-checked-arguments).
+
+The active-label rerun remains live in its own snapshot. It has no completed result;
+this focused implementation does not establish full active-label validation or the
+paper's basis-extension theorem. Broader contextual inference and production joint
+routing remain open.
+:::

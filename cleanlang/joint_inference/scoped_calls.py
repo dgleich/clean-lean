@@ -51,10 +51,60 @@ def prepare_lambda_head(builder,tree,expected_result=None):
     return tuple(viable),child.retain,head_type
 
 
+def recover_scoped_implicits(builder,spec,signature,sources):
+    """Recover only from checked argument types and explicit lambda domains.
+
+    No body alternatives, defaults or result expectations participate here.
+    All evidence is collected before choosing source-ordered representatives.
+    """
+    from .constraint_model import unify
+    from cleanlang.inferred_conversion import reify
+    from cleanlang.core import CleanError
+    implicit=[p for p in signature.parameters if p.visibility!='explicit']
+    explicit=[p for p in signature.parameters if p.visibility=='explicit']
+    if len(sources)!=len(explicit):raise NoSolution('Scoped consumer arity mismatch')
+    formals,_=builder.telescope(spec,builder.row_namespace+('scoped signature',))
+    equations=[];evidence=[]
+    checked={p.name:builder.check_candidate(source) for p,source in zip(explicit,sources) if not holes(source)}
+    names={p.name for p in implicit}
+    for parameter,source in zip(explicit,sources):
+        template=parameter.typ
+        if not any(occurs(template,n) for n in names):continue
+        if source[0]=='Lambda':
+            if not builder.env.is_function_type(template):
+                raise Incomplete('Scoped implicit recovery needs a declared function domain')
+            template=template.args[0]
+            actual=builder.env.type(source[2],builder.scope,phrases=False)
+        elif parameter.name in checked:actual=checked[parameter.name].type
+        else:continue
+        if not any(occurs(template,n) for n in names):continue
+        eqs,values=builder.dependent_argument_constraints(template,actual,formals,signature,with_evidence=True)
+        equations.extend(eqs);evidence.extend(values)
+    bindings=unify(equations,limit=builder.limit)
+    recovered={}
+    for parameter in implicit:
+        variable=formals[parameter.name];term=resolve(variable,bindings)
+        if variables(term):raise Incomplete('Scoped implicit parameter lacks checked argument evidence: '+parameter.name)
+        values=[value for candidate,value in evidence if candidate==variable]
+        if not values:raise Incomplete('Scoped implicit parameter has no checked representative: '+parameter.name)
+        value=values[0]  # Source argument order, then structural type order.
+        if builder.typ(value,{})!=term:raise Incomplete('Scoped implicit representative disagrees with constraints')
+        known={**checked,**recovered}
+        if any(occurs(parameter.typ,p.name) and p.name not in known for p in signature.parameters):
+            raise Incomplete('Scoped implicit classifier depends on an unresolved argument')
+        classifier=substitute(parameter.typ,known,builder.env,builder.scope)
+        try:actual=reify(value,builder.env,builder.scope,classifier=classifier if parameter.classifier is not None else None)
+        except (CleanError,RecursionError) as error:
+            raise Incomplete('Scoped implicit representative cannot be rechecked: '+str(error)) from error
+        if actual.type!=classifier:raise NoSolution('Scoped implicit argument classifier mismatch')
+        recovered[parameter.name]=actual
+    return recovered
+
+
 def prepare_typed_call(builder,tree,expected=None):
     if builder.limit<=1:raise Incomplete('Scoped expression resource limit exceeded')
     env=builder.env;scope=builder.scope;name=tree[1] if tree[0]=='Call' else None
-    inputs=[];head_part=None
+    inputs=[];head_part=None;implicit_actuals={}
     if tree[0]=='Apply' or name in scope:
         if len(tree[2])!=1:raise NoSolution('Local scoped application requires exactly one argument')
         head_tree=tree[1] if tree[0]=='Apply' else ['Local',name]
@@ -90,11 +140,12 @@ def prepare_typed_call(builder,tree,expected=None):
         spec=env.data['functions'].get(name)
         if spec is None:raise NoSolution('Unknown scoped consumer')
         signature=builder.signature(spec)
-        if any(p.visibility!='explicit' for p in signature.parameters):
-            raise Incomplete('Scoped consumers with implicit parameters need joint signature recovery')
-        if len(tree[2])!=len(signature.parameters):raise NoSolution('Scoped consumer arity mismatch')
-        known={};unresolved=set()
-        for parameter,source in zip(signature.parameters,tree[2]):
+        implicit_actuals=(recover_scoped_implicits(builder,spec,signature,tree[2])
+                          if any(p.visibility!='explicit' for p in signature.parameters) else {})
+        explicit=[p for p in signature.parameters if p.visibility=='explicit']
+        if len(tree[2])!=len(explicit):raise NoSolution('Scoped consumer arity mismatch')
+        known=dict(implicit_actuals);unresolved=set()
+        for parameter,source in zip(explicit,tree[2]):
             if any(occurs(parameter.typ,n) for n in unresolved):
                 raise Incomplete('Scoped parameter type depends on an unresolved earlier value')
             inputs.append((substitute(parameter.typ,known,env,scope),source))
@@ -140,6 +191,17 @@ def prepare_typed_call(builder,tree,expected=None):
             if retained.type!=head_type:raise Incomplete('Retained application head type mismatch')
             retained_head=retained.tree
         value=builder.check_candidate([tree[0],retained_head,[arg.tree for arg in arguments]])
+        retained_implicits=dict(value.inferred_args)
+        for name,actual in implicit_actuals.items():
+            retained=retained_implicits.get(name)
+            if retained is not None:
+                from cleanlang.inferred_conversion import reify
+                from cleanlang.core import CleanError
+                try:retained=reify(retained,env,scope,classifier=actual.type if env.classifier_info(actual.type) is not None else None)
+                except (CleanError,RecursionError) as error:
+                    raise Incomplete('Retained scoped implicit cannot be rechecked: '+str(error)) from error
+            if retained is None or retained.type!=actual.type or retained.lean!=actual.lean:
+                raise Incomplete('Retained scoped implicit differs from its checked source representative')
         if builder.typ(value.type,{})!=result_term:
             raise Incomplete('Reconstructed scoped consumer result differs from the selected type')
         return value

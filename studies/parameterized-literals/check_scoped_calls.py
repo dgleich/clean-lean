@@ -9,7 +9,7 @@ from cleanlang.modules import load_module,notation
 from cleanlang.syntax import parse,expression_tree
 from cleanlang.joint_inference import complete
 
-env=Environment();load_module(ROOT/'library/linear_algebra.clean',env)
+env=Environment();load_module(ROOT/'library/linear_algebra.clean',env);load_module(ROOT/'library/topology/basic.clean',env)
 scope={n:Expr(n,n,env.type('Natural'),tree=['Local',n]) for n in ('n','m')}
 t=lambda name:env.data['types'][name]['native_binding']
 f=lambda name:env.data['functions'][name]['native_binding']
@@ -120,8 +120,32 @@ noncomputable def expectedDependent{label} (n : {t('Natural')}) : {t('Vector')} 
 same_basic_target actualDependent{label} expectedDependent{label}
 theorem dependentMeaning{label} (n : {t('Natural')}) : actualDependent{label} n = (fun _ => 0) := by rfl
 """)
+value=complete(expression_tree(parse('set of(function(x: Real,x=0))','expression')),env,scope,use_default=False)
+checks.append(f"""
+noncomputable def actualScopedSet : {t('Set')} {t('Real')} := {value.lean}
+noncomputable def expectedScopedSet : {t('Set')} {t('Real')} := @{f('set of')} {t('Real')} (fun (x : {t('Real')}) => @{f('equal')} {t('Real')} x ({zr}))
+same_basic_target actualScopedSet expectedScopedSet
+theorem scopedSetMeaning (x : {t('Real')}) : x ∈ actualScopedSet ↔ x = 0 := by simp [actualScopedSet, {f('set of')}, {f('equal')}, {num('Real')}]
+""")
+notation('Notation consume sibling(f,x):', ['Let T: Type','Let f: Function(Natural,T)','Let x: T','Returns: T','Means: x','Render latex: c({f},{x})'],env)
+local_scope={**scope,'r':Expr('r','r',env.type('Real'),tree=['Local','r'])}
+value=complete(expression_tree(parse('consume sibling(function(k: Natural,0),r)','expression')),env,local_scope,use_default=False)
+checks.append(f"""
+noncomputable def actualScopedSibling (r : {t('Real')}) : {t('Real')} := {value.lean}
+noncomputable def expectedScopedSibling (r : {t('Real')}) : {t('Real')} := @{f('consume sibling')} {t('Real')} (fun (k : {t('Natural')}) => {zr}) r
+same_basic_target actualScopedSibling expectedScopedSibling
+theorem scopedSiblingMeaning (r : {t('Real')}) : actualScopedSibling r = r := by rfl
+""")
+notation('Notation consume vector(f):', ['Let k: Natural','Let f: Function(Vector(k,Complex),Real)','Returns: Natural','Means: k','Render latex: c({f})'],env)
+value=complete(expression_tree(parse('consume vector(function(v: Vector(n,Complex),0))','expression')),env,scope,use_default=False)
+checks.append(f"""
+noncomputable def actualScopedDimension (n : {t('Natural')}) : {t('Natural')} := {value.lean}
+noncomputable def expectedScopedDimension (n : {t('Natural')}) : {t('Natural')} := @{f('consume vector')} n (fun (v : {t('Vector')} n {t('Complex')}) => {zr})
+same_basic_target actualScopedDimension expectedScopedDimension
+theorem scopedDimensionMeaning (n : {t('Natural')}) : actualScopedDimension n = n := by rfl
+""")
 path=HERE/'ScopedCallTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Twenty-two automatic scoped-call targets and twenty-two interpretation proofs passed; implicit/contextually unresolved consumers and production integration remain pending.')
+print('Twenty-five automatic scoped-call targets and twenty-five interpretation proofs passed; contextually unresolved consumers and production integration remain pending.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

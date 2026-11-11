@@ -209,6 +209,48 @@ class JointCompletion(unittest.TestCase):
   with self.assertRaises(Incomplete):
    complete(expression_tree(parse('value consumer(h,0)','expression')),self.env,self.scope,use_default=False)
 
+ def test_scoped_set_builder_recovers_implicit_domain_without_selection(self):
+  load_module(ROOT/'library/topology/basic.clean',self.env)
+  with patch('cleanlang.joint_inference.clean_rows.Builder.solve_with_trace',side_effect=AssertionError('independent child selection')):
+   value=complete(expression_tree(parse('set of(function(x: Real,x=0))','expression')),self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.env.type('Set(Real)'))
+  self.assertEqual(dict(value.inferred_args)['X'],self.env.type('Real'))
+
+ def test_scoped_implicit_recovers_from_checked_sibling(self):
+  notation('Notation consume sibling(f,x):', ['Let T: Type','Let f: Function(Natural,T)','Let x: T','Returns: T','Means: x','Render latex: c({f},{x})'],self.env)
+  self.scope['r']=Expr('r','r',self.env.type('Real'),tree=['Local','r'])
+  value=complete(expression_tree(parse('consume sibling(function(k: Natural,0),r)','expression')),self.env,self.scope,use_default=False)
+  self.assertEqual(value.tree[2][0][3][2],'Real')
+
+ def test_scoped_implicit_conflicting_domains_are_not_first_success(self):
+  notation('Notation consume both(f,g):', ['Let T: Type','Let f,g: Function(T,Real)','Returns: Real','Means: 0','Render latex: c({f},{g})'],self.env)
+  for domains in [('Real','Complex'),('Complex','Real')]:
+   source=f'consume both(function(x: {domains[0]},0),function(y: {domains[1]},0))'
+   with self.assertRaises(NoSolution):complete(expression_tree(parse(source,'expression')),self.env,self.scope,use_default=False)
+
+ def test_scoped_implicit_dimension_comes_from_checked_lambda_domain(self):
+  notation('Notation consume vector(f):', ['Let k: Natural','Let f: Function(Vector(k,Complex),Real)','Returns: Natural','Means: k','Render latex: c({f})'],self.env)
+  value=complete(expression_tree(parse('consume vector(function(v: Vector(n,Complex),0))','expression')),self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.env.type('Natural'))
+  self.assertEqual(value.tree[2][0][3][2],'Real')
+
+ def test_scoped_implicit_does_not_guess_codomain_from_unresolved_body(self):
+  notation('Notation hidden result(f):', ['Let T: Type','Let f: Function(Natural,T)','Returns: Real','Means: 0','Render latex: c({f})'],self.env)
+  with self.assertRaises(Incomplete):
+   complete(expression_tree(parse('hidden result(function(k: Natural,0))','expression')),self.env,self.scope,self.env.type('Real'))
+
+ def test_scoped_implicit_keeps_body_operator_ambiguity(self):
+  load_module(ROOT/'library/topology/basic.clean',self.env)
+  notation('Notation other sum(x: Real,y: Real): Real:', ['Means: x+y','Infix: +','Render latex: {x}+{y}'],self.env)
+  with self.assertRaises(Ambiguous):
+   complete(expression_tree(parse('set of(function(x: Real,x+0=x))','expression')),self.env,self.scope,use_default=False)
+
+ def test_scoped_implicit_unrepresentable_evidence_is_incomplete(self):
+  load_module(ROOT/'library/topology/basic.clean',self.env)
+  with patch('cleanlang.inferred_conversion.reify',side_effect=CleanError('unavailable witness')):
+   with self.assertRaisesRegex(Incomplete,'Scoped implicit representative cannot be rechecked'):
+    complete(expression_tree(parse('set of(function(x: Real,x=0))','expression')),self.env,self.scope,use_default=False)
+
 if __name__=='__main__':unittest.main()
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

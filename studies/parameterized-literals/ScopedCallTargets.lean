@@ -10,6 +10,13 @@ import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Analysis.Calculus.Deriv.Basic
 import Mathlib.Data.List.Sort
 import Mathlib.Data.Nat.GCD.Basic
+import Mathlib.Topology.Basic
+
+/-!
+Basic topology with explicit carrier types and topologies.
+   Mathematical preimages, images, composition, and continuity are authored here.
+   This first module is restricted to carrier types in Lean Type 0.
+-/
 
 noncomputable abbrev cleanType_Type_c1fed1af64ab6f12e0ed  : Type 1 :=
   Type
@@ -266,6 +273,33 @@ noncomputable def cleanDefine_commutator_7a2644a6d2b446ea132a {«n» : (_root_.c
 noncomputable def cleanDefine_matrix_square_f1a7bece54a54888d26a {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («A» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
   (@_root_.cleanNotation_complex_matrix_product_22b143895482c8d56a11 («n») («n») («n») («A») («A»))
 
+noncomputable abbrev cleanType_Topology_9cd8010cbc491576d39e («X» : Type) : Type :=
+  TopologicalSpace X
+
+noncomputable def cleanNotation_set_of_8cabccf85aa2fb91712d {«X» : Type} («condition» : («X») → ((_root_.cleanType_Proposition_ae4a13d2f060407bce35))) : (_root_.cleanType_Set_182ba6b3273812add6f5 («X»)) :=
+  setOf condition
+
+noncomputable def cleanDefine_open_in_8cd98278fdc255a021ab {«X» : Type} («S» : (_root_.cleanType_Set_182ba6b3273812add6f5 («X»))) («t» : (_root_.cleanType_Topology_9cd8010cbc491576d39e («X»))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  @IsOpen X t S
+
+noncomputable def cleanDefine_inverse_image_31011f72ff8e2a9ce261 {«X» : Type} {«Y» : Type} («f» : («X») → («Y»)) («S» : (_root_.cleanType_Set_182ba6b3273812add6f5 («Y»))) : (_root_.cleanType_Set_182ba6b3273812add6f5 («X»)) :=
+  (_root_.cleanNotation_set_of_8cabccf85aa2fb91712d ((fun (clean_bound_0 : «X») => (_root_.cleanDefine_set_member_e64b7ad19acfc0b8910d ((«f» clean_bound_0)) («S»)))))
+
+noncomputable def cleanDefine_image_878fa9ab87138e755ce8 {«X» : Type} {«Y» : Type} («f» : («X») → («Y»)) («S» : (_root_.cleanType_Set_182ba6b3273812add6f5 («X»))) : (_root_.cleanType_Set_182ba6b3273812add6f5 («Y»)) :=
+  (_root_.cleanNotation_set_of_8cabccf85aa2fb91712d ((fun (clean_bound_0 : «Y») => (@Exists («X») (fun (clean_bound_1 : «X») => (_root_.cleanDefine_conjunction_963f354411ee41f3dcd0 ((_root_.cleanDefine_set_member_e64b7ad19acfc0b8910d (clean_bound_1) («S»))) ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((«f» clean_bound_1)) (clean_bound_0)))))))))
+
+noncomputable def cleanDefine_compose_maps_845d87c3fbf105362035 {«X» : Type} {«Y» : Type} {«Z» : Type} («g» : («Y») → («Z»)) («f» : («X») → («Y»)) : («X») → («Z») :=
+  (fun (clean_bound_0 : «X») => («g» («f» clean_bound_0)))
+
+noncomputable def cleanDefine_continuous_between_80ea5c38df54a0974c20 {«X» : Type} {«Y» : Type} («f» : («X») → («Y»)) («t» : (_root_.cleanType_Topology_9cd8010cbc491576d39e («X»))) («u» : (_root_.cleanType_Topology_9cd8010cbc491576d39e («Y»))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (∀ (clean_bound_0 : (_root_.cleanType_Set_182ba6b3273812add6f5 («Y»))), (_root_.cleanDefine_implication_9ee60e270a27b91f2307 ((_root_.cleanDefine_open_in_8cd98278fdc255a021ab (clean_bound_0) («u»))) ((_root_.cleanDefine_open_in_8cd98278fdc255a021ab ((_root_.cleanDefine_inverse_image_31011f72ff8e2a9ce261 («f») (clean_bound_0))) («t»)))))
+
+noncomputable def cleanDefine_selected_elements_9755d64246c0fb9fcd0a {«X» : Type} («S» : (_root_.cleanType_Set_182ba6b3273812add6f5 («X»))) («condition» : («X») → ((_root_.cleanType_Proposition_ae4a13d2f060407bce35))) : (_root_.cleanType_Set_182ba6b3273812add6f5 («X»)) :=
+  (_root_.cleanNotation_set_of_8cabccf85aa2fb91712d ((fun (clean_bound_0 : «X») => (_root_.cleanDefine_conjunction_963f354411ee41f3dcd0 ((_root_.cleanDefine_set_member_e64b7ad19acfc0b8910d (clean_bound_0) («S»))) ((«condition» clean_bound_0))))))
+
+noncomputable def cleanDefine_intersection_family_ddeb64a0babf7d131f46 {«I» : Type} {«X» : Type} («sets» : («I») → ((_root_.cleanType_Set_182ba6b3273812add6f5 («X»)))) : (_root_.cleanType_Set_182ba6b3273812add6f5 («X»)) :=
+  (_root_.cleanNotation_set_of_8cabccf85aa2fb91712d ((fun (clean_bound_0 : «X») => (∀ (clean_bound_1 : «I»), (_root_.cleanDefine_set_member_e64b7ad19acfc0b8910d (clean_bound_0) ((«sets» clean_bound_1)))))))
+
 noncomputable def cleanNotation_inner_6ce71cef8970f1f6d0cf  («f» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
   x
 
@@ -310,6 +344,12 @@ noncomputable def cleanNotation_indexed_zero_direct_d2e6510a446e29d693ce  («k»
 
 noncomputable def cleanNotation_indexed_zero_shifted_46c90fc94b6934555992  («k» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («z» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («k») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
   fun _ => 0
+
+noncomputable def cleanNotation_consume_sibling_921a2fe194180604e6bb {«T» : Type} («f» : ((_root_.cleanType_Natural_469c53b6dafb7a218246)) → («T»)) («x» : «T») : «T» :=
+  x
+
+noncomputable def cleanNotation_consume_vector_9599470c3cf67b43c4d2 {«k» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («f» : ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («k») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  k
 
 
 open scoped Matrix
@@ -480,5 +520,23 @@ noncomputable def actualDependentShifted (n : cleanType_Natural_469c53b6dafb7a21
 noncomputable def expectedDependentShifted (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := (fun (k : cleanType_Natural_469c53b6dafb7a218246) => cleanNotation_indexed_zero_shifted_46c90fc94b6934555992 k (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) n
 same_basic_target actualDependentShifted expectedDependentShifted
 theorem dependentMeaningShifted (n : cleanType_Natural_469c53b6dafb7a218246) : actualDependentShifted n = (fun _ => 0) := by rfl
+
+
+noncomputable def actualScopedSet : cleanType_Set_182ba6b3273812add6f5 cleanType_Real_107b6641a486642ad8e1 := (_root_.cleanNotation_set_of_8cabccf85aa2fb91712d ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanDefine_equal_5fac732a65dd209a83f4 (clean_bound_0) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))))))
+noncomputable def expectedScopedSet : cleanType_Set_182ba6b3273812add6f5 cleanType_Real_107b6641a486642ad8e1 := @cleanNotation_set_of_8cabccf85aa2fb91712d cleanType_Real_107b6641a486642ad8e1 (fun (x : cleanType_Real_107b6641a486642ad8e1) => @cleanDefine_equal_5fac732a65dd209a83f4 cleanType_Real_107b6641a486642ad8e1 x (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))
+same_basic_target actualScopedSet expectedScopedSet
+theorem scopedSetMeaning (x : cleanType_Real_107b6641a486642ad8e1) : x ∈ actualScopedSet ↔ x = 0 := by simp [actualScopedSet, cleanNotation_set_of_8cabccf85aa2fb91712d, cleanDefine_equal_5fac732a65dd209a83f4, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+
+
+noncomputable def actualScopedSibling (r : cleanType_Real_107b6641a486642ad8e1) : cleanType_Real_107b6641a486642ad8e1 := (_root_.cleanNotation_consume_sibling_921a2fe194180604e6bb ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) (r))
+noncomputable def expectedScopedSibling (r : cleanType_Real_107b6641a486642ad8e1) : cleanType_Real_107b6641a486642ad8e1 := @cleanNotation_consume_sibling_921a2fe194180604e6bb cleanType_Real_107b6641a486642ad8e1 (fun (k : cleanType_Natural_469c53b6dafb7a218246) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) r
+same_basic_target actualScopedSibling expectedScopedSibling
+theorem scopedSiblingMeaning (r : cleanType_Real_107b6641a486642ad8e1) : actualScopedSibling r = r := by rfl
+
+
+noncomputable def actualScopedDimension (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Natural_469c53b6dafb7a218246 := (@_root_.cleanNotation_consume_vector_9599470c3cf67b43c4d2 (n) ((fun (clean_bound_0 : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (n) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))))
+noncomputable def expectedScopedDimension (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Natural_469c53b6dafb7a218246 := @cleanNotation_consume_vector_9599470c3cf67b43c4d2 n (fun (v : cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualScopedDimension expectedScopedDimension
+theorem scopedDimensionMeaning (n : cleanType_Natural_469c53b6dafb7a218246) : actualScopedDimension n = n := by rfl
 
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

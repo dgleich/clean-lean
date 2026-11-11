@@ -61,9 +61,11 @@ class ScopedCalls(unittest.TestCase):
   notation('Notation sized(n: Natural,f: Function(Real,Vector(n,Complex))): Real:',
    ['Means: 0','Render latex: sized({n},{f})'],self.env)
   with self.assertRaises(Incomplete):self.solve('sized(2,function (a: Real,0))')
- def test_implicit_consumer_is_explicitly_incomplete(self):
+ def test_implicit_consumer_uses_annotated_domain(self):
   notation('Notation generic(f):',['Let T: Type','Let f: Function(T,T)','Returns: Real','Means: 0','Render latex: g({f})'],self.env)
-  with self.assertRaises(Incomplete):self.solve('generic(function (a: Real,0))')
+  value=self.solve('generic(function (a: Real,0))',use_default=False)
+  self.assertEqual(value.tree[2][0][3][2],'Real')
+  self.assertEqual(dict(value.inferred_args)['T'],self.env.type('Real'))
  def test_lambda_domain_and_call_result_mismatch_reject(self):
   self.declare()
   with self.assertRaises(NoSolution):self.solve('consume(function (k: Real,0),0)')

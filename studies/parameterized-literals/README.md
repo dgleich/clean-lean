@@ -3323,3 +3323,54 @@ proofs, and one negative alias guard. See the
 The active-label scoped-implicit failure is still outstanding; no full active-label
 pass follows from the subpath result.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Scoped implicit recovery from checked arguments
+
+The joint path now handles a declared consumer's implicit parameters when they
+are determined by checked argument types or explicit lambda-domain annotations.
+For example:
+
+```clean
+set of(function(x: Real,x=0))
+```
+
+The explicit `set of` declaration expects `Function(X,Proposition)`. Its implicit
+X is recovered as Real from the annotation; the body then checks as a condition,
+with Real zero. Nothing is inferred from choosing a successful body interpretation.
+A checked sibling argument can similarly determine the return type of a lambda,
+and `Vector(n,Complex)` in a domain can supply an implicit dimension n.
+
+All supplied evidence contributes equations before a representative is chosen.
+Conflicting lambda annotations fail in either argument order. Unresolved body-only
+codomains remain incomplete, even when a result expectation or numeral default is
+available. Inverse arithmetic, general contextual recovery and scoped proof-callable
+recovery remain pending. Emission rechecks the chosen implicit arguments against
+the saved source representatives, including their emitted expressions.
+
+Seven API regressions cover set construction without child selection, checked
+siblings, conflicting domains, indexed domains, unresolved codomains, body-operator
+ambiguity and unavailable witness reconstruction. The old scoped-call test that
+required every implicit consumer to fail is replaced by a positive annotated-domain
+case. Three new independent native targets/proofs cover the set, sibling and
+dimension examples. The full scoped driver contains 25 target/proof pairs.
+:::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Final focused validation passes: 462 solver tests, 47 joint API/adapter/checker
+tests, the 115-case runtime suite, and 25 scoped canonical targets with 25
+interpretation proofs. The four corpus documents have matching unchanged source
+fingerprints and identical legacy/joint generated text; all 92 corpus proofs pass
+under joint routing. Reference HTML IDs/local paths and provenance checks pass.
+
+A separate immutable active-label snapshot with checked-source implicit recovery
+is still running; its process and source hash are recorded under
+`active_labels_scoped_implicit_probe` in the compatibility report. It predates the
+final normalization of unavailable-representative errors. No full-study pass or
+advance to a particular later source location is inferred from elapsed time. The
+existing legacy snapshot runs are preserved as well. Production routing is unchanged.
+:::

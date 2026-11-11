@@ -2588,3 +2588,32 @@ Callable proof discovery, contextual proof inference, and inferred Type-0 carrie
 arguments supplied by proof values remain separate boundaries. This rule changes
 only explicit joint inference; no grammar or default routing change is made.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Scoped consumer implicits from checked source evidence
+
+Before preparing a module call with scoped literal holes, its captured signature
+may recover implicit parameters from (1) the types of already checked hole-free
+explicit arguments and (2) the checked outer domain annotation of an explicit
+lambda. For a lambda, match only the corresponding declared function domain;
+do not inspect or select body alternatives to infer an implicit parameter.
+
+Collect structural equations and checked representatives from all such source
+arguments, using the existing dependent-type codec and its no-binder-escape rule.
+Unify them together without defaults, result expectations or body selection.
+Conflicting equations reject the call; every implicit parameter must become ground
+and have a checked representative. Choose representatives in source-argument order,
+then structural type order, and recheck their instantiated classifiers. Unknown
+parameters, unavailable reconstruction or unresolved classifier dependencies report
+incomplete analysis. Do not invert computed indices or infer an unobserved family.
+
+Substitute these actuals into the signature and prepare all explicit arguments
+using the ordinary recursive scoped rule. All body/literal alternatives still
+participate in one enclosing solve. Rechecking the retained call must recover the
+same implicit types and emitted expressions as the saved source representatives;
+a discrepancy is incomplete reconstruction, not permission to choose another target.
+Signature identity checks and operator-input ambiguity audits remain mandatory.
+No syntax, parser or production-default change is introduced.
+:::

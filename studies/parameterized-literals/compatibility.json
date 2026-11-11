@@ -1383,5 +1383,165 @@
       "unresolved_references": 0
     },
     "remaining": "Active-label scoped implicit signature recovery and mathematical extension/pyramid obligations are unchanged."
+  },
+  "scoped_implicit_corpus": {
+    "_provenance": {
+      "origin": "llm",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "role": "assisted"
+    },
+    "scope": "Isolated document/module translation; generated text hashes are diagnostics, not canonical Lean or proof validation.",
+    "snapshot_scope": "Before/after fingerprints of cleanlang Python, this driver, repository library/corpus/studies Clean files and direct input. External import closures, dependencies and transient edits restored between samples are not covered.",
+    "default_changed": false,
+    "files": [
+      {
+        "path": "corpus/algorithms.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "8043f9740de75f8842ac3a98f136ab08b5e4ea5221f8cff0e6f07cc3da563985",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "637ed36189ca67f2a5f5603603a778fb17f417cd8ed291dfad2baec5d4c1d1b4",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 3,
+          "elapsed_seconds": 0.595
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "8043f9740de75f8842ac3a98f136ab08b5e4ea5221f8cff0e6f07cc3da563985",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "637ed36189ca67f2a5f5603603a778fb17f417cd8ed291dfad2baec5d4c1d1b4",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 3,
+          "elapsed_seconds": 0.774
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "corpus/analysis.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "65e4af3f25d1850b43925d455d3b371f868ca9f3a2b53739df7df3d5d8b45fae",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "637ed36189ca67f2a5f5603603a778fb17f417cd8ed291dfad2baec5d4c1d1b4",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 15,
+          "elapsed_seconds": 0.412
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "65e4af3f25d1850b43925d455d3b371f868ca9f3a2b53739df7df3d5d8b45fae",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "637ed36189ca67f2a5f5603603a778fb17f417cd8ed291dfad2baec5d4c1d1b4",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 15,
+          "elapsed_seconds": 0.749
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "corpus/graph_theory.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "814f67cb776506949afb58851362bc0213400078f41ae24f50af1ebdc518b4e1",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "637ed36189ca67f2a5f5603603a778fb17f417cd8ed291dfad2baec5d4c1d1b4",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.42
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "814f67cb776506949afb58851362bc0213400078f41ae24f50af1ebdc518b4e1",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "637ed36189ca67f2a5f5603603a778fb17f417cd8ed291dfad2baec5d4c1d1b4",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 0,
+          "elapsed_seconds": 0.534
+        },
+        "comparison": "same-generated-text"
+      },
+      {
+        "path": "corpus/linear_algebra.clean",
+        "legacy": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "d2b5de98a5b660d5be01518ec5218d09ad7b59d5a9ea17075f80b0ec795329fb",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "637ed36189ca67f2a5f5603603a778fb17f417cd8ed291dfad2baec5d4c1d1b4",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 1,
+          "elapsed_seconds": 0.451
+        },
+        "joint": {
+          "status": "translated",
+          "results": 23,
+          "lean_sha256": "d2b5de98a5b660d5be01518ec5218d09ad7b59d5a9ea17075f80b0ec795329fb",
+          "input_kind": "document",
+          "snapshot": {
+            "implementation_sha256": "637ed36189ca67f2a5f5603603a778fb17f417cd8ed291dfad2baec5d4c1d1b4",
+            "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+          },
+          "inputs_stable": true,
+          "hole_calls": 1,
+          "elapsed_seconds": 0.491
+        },
+        "comparison": "same-generated-text"
+      }
+    ],
+    "corpus_proofs": {
+      "status": "proved",
+      "results": 92,
+      "lean_sha256": "8ff4e4b4826de95e63ac97a37b8d58dcb088316a66e57cd634986057ddc07413",
+      "input_kind": "corpus-proofs",
+      "snapshot": {
+        "implementation_sha256": "637ed36189ca67f2a5f5603603a778fb17f417cd8ed291dfad2baec5d4c1d1b4",
+        "clean_sources_sha256": "933b9115bdf9413baa1bac0c7837491da796954e60b3ccd311853a5198efa632"
+      },
+      "inputs_stable": true,
+      "hole_calls": 19,
+      "elapsed_seconds": 19.407
+    }
+  },
+  "active_labels_scoped_implicit_probe": {
+    "snapshot": "/tmp/clean-scoped-implicit-active-z4r91qre",
+    "baseline": "40ae8bb",
+    "change": "scoped implicit recovery from checked argument evidence",
+    "sha256": {
+      "cleanlang/joint_inference/scoped_calls.py": "926a2c5587d8add19d2419df432b4d2d4983de16b16e9fa4d7a6cf5e770fb7c9"
+    },
+    "routing": "joint adapter",
+    "status": "running",
+    "pid": 248549,
+    "started": 1794398028.5975983,
+    "observed_at": 1794398368.7243302,
+    "scope_note": "Isolated active-label run before the final unavailable-representative error normalization; source hash retained. Running is an observation, not success. Preserve process and log."
   }
 }

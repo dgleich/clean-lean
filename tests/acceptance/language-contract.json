@@ -4540,6 +4540,23 @@
         "Active-label scoped consumers with implicit signatures",
         "Geometric interval-basis extension and pyramid theorem"
       ]
+    },
+    {
+      "id": "joint_scoped_implicit_source_evidence",
+      "status": "explicit-api-not-default",
+      "environment": "Captured module signatures, checked hole-free explicit arguments and outer lambda-domain annotations, source-ordered representatives.",
+      "source": "set of(function(x: Real,x=0)); consume sibling(function(k: Natural,0),r); consume vector(function(v: Vector(n,Complex),0))",
+      "expected_lean": "Retained calls with implicit Real or n arguments from checked source evidence, declared Real zero, and unselected/default-free child preparation.",
+      "checks": [
+        "tests/test_joint_completion.py: seven recovery/conflict/incomplete/operator-ambiguity cases",
+        "studies/parameterized-literals/test_scoped_calls.py: migrated implicit-consumer positive",
+        "studies/parameterized-literals/check_scoped_calls.py: three additional independent targets and proofs"
+      ],
+      "pending": [
+        "General contextual recovery and inverse computed-index inference",
+        "Scoped proof-callable signatures",
+        "Production routing and complete active-label validation"
+      ]
     }
   ]
 }

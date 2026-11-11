@@ -1809,5 +1809,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p>The <a href="../studies/subpath-restrictions/README.md#current-verifier-migration">subpath verifier</a> uses declaration identities for lookup and explicitly authored expected terms retaining Clean's type, arithmetic, numeral and equality wrappers. Raw Lean operations may be definitionally equal without being the specified canonical target. A negative alias check enforces that distinction; the comparator does not unfold wrappers to make a comparison pass.</p>
 <p>The endpoint proofs unfold the wrappers before finite-index arithmetic. This is a validation repair for existing syntax and definitions, not a new inference rule or a proof of interval-basis extension.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="scoped-implicit-source-evidence">
+<h2>Implicit parameters from scoped argument annotations</h2>
+<p><code>set of(function(x: Real,x=0))</code> recovers the declared set-builder's implicit element type from the lambda domain. Its schematic Lean target is <code>@setOfAdapter RealAdapter (fun x =&gt; equalAdapter x realZero)</code>, with explicit declared bindings supplying the actual names.</p>
+<p>Recovery collects checked argument-type and outer lambda-domain evidence before body preparation, without defaults or expected-result inference. Conflicts reject the call; unknown parameters remain incomplete. Checked sibling types and indexed domains can also supply parameters. All body alternatives still enter one solve, and retained implicit arguments are rechecked. See the <a href="../studies/parameterized-literals/README.md#scoped-implicit-recovery-from-checked-arguments">constructive rule and native checks</a>. This extends explicit joint inference only; production routing remains unchanged.</p>
+</section></llm>
 </body>
 </html>
