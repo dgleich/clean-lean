@@ -2748,3 +2748,39 @@ routing is unchanged. Result types depending on a selected literal-bearing
 argument, missing proof signatures, and general contextual recovery remain
 separate incomplete-analysis boundaries.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Checked implicit domains of callable evidence
+
+When recovering implicit parameters for a module call with a Lambda argument,
+first take the parameter type's source-derived `callable_view`. Read the domain
+from that view, not from the raw Evidence representation. Ordinary function
+parameters retain the same view. If no supported callable domain is available,
+report incomplete analysis. The existing checked dependent-type encoder determines
+which domain equations can be represented; this rule does not invert arbitrary
+proof conditions.
+
+Compare that domain template with the authored lambda's explicit domain
+annotation using the existing dependent-argument constraints. Collect all such
+equations and all checked sibling-argument type evidence before unification.
+Choose representatives in source-argument/structural order and recheck their
+classifiers as already specified. Neither lambda bodies, expected results nor
+default numerals contribute to this implicit recovery step. A parameter occurring
+only in a nested proof codomain remains unresolved here, even if a body annotation
+could suggest a value. Conflicting annotations reject in either argument order.
+
+For example, a declared parameter `p: Evidence((for every(x: T,n=n)))` can
+recover implicit T as Real from `function(y: Real,...)`. A declared domain
+`Vector(m,Complex)` can recover implicit m from `function(y: Vector(n,Complex),...)`.
+After recovery, check the proof-producing lambda under the instantiated callable
+evidence expectation. The retained module application uses the recovered implicit
+argument and the authored lambda; the ordinary reconstruction rechecks both.
+No proof is synthesized or replaced.
+
+This is an explicit joint-API extension with unchanged parsing and production
+routing. The unique source annotation and the complete constraint set determine
+the implicit arguments; candidate order or successful proof-body selection does
+not choose them. Missing signatures and selected-value-dependent result recovery
+remain separate incomplete-analysis boundaries.
+:::

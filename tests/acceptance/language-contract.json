@@ -4822,6 +4822,55 @@
         "Selected-value-dependent scoped result recovery",
         "General contextual callable signature recovery"
       ]
+    },
+    {
+      "id": "scoped_implicit_proof_domains",
+      "status": "experimental-api-focused-validation-passed",
+      "source": "tests/test_joint_completion.py: ScopedProofImplicitDomains; tools/check_joint_proof_targets.py",
+      "environment": "Explicit universal Evidence parameter with an implicit carrier or vector dimension; authored lambda domain annotation supplies checked type evidence.",
+      "expected_tree": [
+        "Call",
+        "implicit universal",
+        [
+          [
+            "Local",
+            "n"
+          ],
+          [
+            "Lambda",
+            "y",
+            "Real",
+            [
+              "Call",
+              "proof with scalar",
+              [
+                [
+                  "Local",
+                  "n"
+                ],
+                [
+                  "Local",
+                  "h"
+                ],
+                [
+                  "Decimal",
+                  "0"
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "expected_lean": "Declared module application with explicit recovered Real carrier or caller dimension n and the authored proof lambda using Real zero; no inferred replacement proof.",
+      "checks": [
+        "Five API cases: carrier, dimension, conflicting domains in both orders, body-only parameter incomplete with and without defaults, wrong proof rejected",
+        "check_joint_proof_targets.py: eleven targets and eleven proofs, including two independent recovered-implicit targets"
+      ],
+      "pending": [
+        "Full regression and production routing",
+        "General proof-domain constraint recovery",
+        "Selected-value-dependent result recovery"
+      ]
     }
   ]
 }

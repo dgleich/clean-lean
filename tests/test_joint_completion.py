@@ -330,3 +330,35 @@ class ScopedProofLambdas(unittest.TestCase):
   value=complete(expression_tree(parse('function(q: Evidence((n=n)),proof with scalar(n,q,0))','expression')),self.env,self.scope,expected,use_default=False)
   self.assertTrue(compatible_evidence(value.type,expected,self.env,self.scope))
   self.assertEqual(value.lean,Expressions(self.env,self.scope).elaborate(value.tree).lean)
+
+# generated: gpt-6 2026-11-11 role=assisted
+class ScopedProofImplicitDomains(unittest.TestCase):
+ setUp=ScopedProofLambdas.setUp
+ def declare(self,header,fields):
+  notation(header,fields,self.env)
+ def test_implicit_carrier_from_universal_lambda_domain(self):
+  self.declare('Notation implicit universal(n,p):',['Let T: Type','Let n: Natural','Let p: Evidence((for every(x: T,n=n)))','Returns: Natural','Means: n','Render latex: u({n},{p})'])
+  value=complete(expression_tree(parse('implicit universal(n,function(y: Real,proof with scalar(n,h,0)))','expression')),self.env,self.scope,use_default=False)
+  self.assertEqual(dict(value.inferred_args)['T'],self.env.type('Real'))
+  self.assertEqual(value.lean,Expressions(self.env,self.scope).elaborate(value.tree).lean)
+ def test_implicit_dimension_from_universal_lambda_domain(self):
+  self.declare('Notation indexed universal(p):',['Let m: Natural','Let p: Evidence((for every(x: Vector(m,Complex),m=m)))','Returns: Natural','Means: m','Render latex: u({p})'])
+  value=complete(expression_tree(parse('indexed universal(function(y: Vector(n,Complex),proof with scalar(n,h,0)))','expression')),self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.env.type('Natural'))
+  self.assertEqual(value.lean,Expressions(self.env,self.scope).elaborate(value.tree).lean)
+  self.assertIn('m',dict(value.inferred_args))
+ def test_conflicting_domains_reject_in_either_order(self):
+  self.declare('Notation two universals(n,p,q):',['Let T: Type','Let n: Natural','Let p,q: Evidence((for every(x: T,n=n)))','Returns: Natural','Means: n','Render latex: u({n},{p},{q})'])
+  for first,second in [('Real','Complex'),('Complex','Real')]:
+   with self.subTest(first=first),self.assertRaises(NoSolution):
+    complete(expression_tree(parse(f'two universals(n,function(a: {first},proof with scalar(n,h,0)),function(b: {second},proof with scalar(n,h,0)))','expression')),self.env,self.scope,use_default=False)
+ def test_body_only_carrier_remains_incomplete(self):
+  self.declare('Notation body universal(n,p):',['Let T: Type','Let n: Natural','Let p: Evidence((for every(x: Real,for every(y: T,n=n))))','Returns: Natural','Means: n','Render latex: u({n},{p})'])
+  tree=expression_tree(parse('body universal(n,function(a: Real,function(b: Complex,proof with scalar(n,h,0))))','expression'))
+  for default in [False,True]:
+   with self.subTest(default=default),self.assertRaises(Incomplete):
+    complete(tree,self.env,self.scope,self.env.type('Natural'),use_default=default)
+ def test_recovered_domain_does_not_accept_wrong_proof(self):
+  self.declare('Notation impossible universal(n,p):',['Let T: Type','Let n: Natural','Let p: Evidence((for every(x: T,n!=n)))','Returns: Natural','Means: n','Render latex: u({n},{p})'])
+  with self.assertRaises(NoSolution):
+   complete(expression_tree(parse('impossible universal(n,function(y: Real,proof with scalar(n,h,0)))','expression')),self.env,self.scope,use_default=False)

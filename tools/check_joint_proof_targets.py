@@ -77,8 +77,21 @@ noncomputable def expected{suffix} (n : {t('Natural')}) (h : {eq}) : {result_typ
 same_basic_target actual{suffix} expected{suffix}
 theorem meaning{suffix} (n : {t('Natural')}) (h : {eq}) : actual{suffix} n h = expected{suffix} n h := by rfl
 ''')
+notation('Notation implicit universal(n,p):',['Let T: Type','Let n: Natural','Let p: Evidence((for every(x: T,n=n)))','Returns: Natural','Means: n','Render latex: u({n},{p})'],env)
+notation('Notation indexed universal(p):',['Let m: Natural','Let p: Evidence((for every(x: Vector(m,Complex),m=m)))','Returns: Natural','Means: m','Render latex: u({p})'],env)
+for suffix,source,expected_body in [
+ ('ImplicitProofDomain','implicit universal(n,function(y: Real,proof with scalar(n,h,0)))',f'@{f("implicit universal")} {t("Real")} n (fun (y : {t("Real")}) => {f("proof with scalar")} n h ({realzero}))'),
+ ('IndexedProofDomain','indexed universal(function(y: Vector(n,Complex),proof with scalar(n,h,0)))',f'@{f("indexed universal")} n (fun (y : {t("Vector")} n {t("Complex")}) => {f("proof with scalar")} n h ({realzero}))'),
+]:
+ value=complete(expression_tree(parse(source,'expression')),env,scope,use_default=False)
+ checks.append(f'''
+noncomputable def actual{suffix} (n : {t('Natural')}) (h : {eq}) : {t('Natural')} := {value.lean}
+noncomputable def expected{suffix} (n : {t('Natural')}) (h : {eq}) : {t('Natural')} := {expected_body}
+same_basic_target actual{suffix} expected{suffix}
+theorem meaning{suffix} (n : {t('Natural')}) (h : {eq}) : actual{suffix} n h = n := by rfl
+''')
 path=ROOT/'studies/parameterized-literals/ProofTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Nine exact evidence targets and nine interpretation proofs passed; selected-value proof dependencies and production integration remain pending.')
+print('Eleven exact evidence targets and eleven interpretation proofs passed; selected-value proof dependencies and production integration remain pending.')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

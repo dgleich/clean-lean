@@ -283,6 +283,12 @@ noncomputable def cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70  («n» :
 noncomputable def cleanNotation_use_universal_89cbb7cdfc0ec535fee0  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («h» : ((∀ (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 («n») («n»))))) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
   n
 
+noncomputable def cleanNotation_implicit_universal_92dd2bb05c7249f9b536 {«T» : Type} («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («p» : ((∀ (clean_bound_0 : «T»), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 («n») («n»))))) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  n
+
+noncomputable def cleanNotation_indexed_universal_afed3cec8d40e3951a47 {«m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («p» : ((∀ (clean_bound_0 : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («m») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 («m») («m»))))) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  m
+
 
 open scoped Matrix
 
@@ -363,5 +369,17 @@ noncomputable def actualImplicationLambda (n : cleanType_Natural_469c53b6dafb7a2
 noncomputable def expectedImplicationLambda (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : (cleanDefine_equal_5fac732a65dd209a83f4 n n) → (cleanDefine_equal_5fac732a65dd209a83f4 n n) := fun (q : cleanDefine_equal_5fac732a65dd209a83f4 n n) => cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70 n q (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
 same_basic_target actualImplicationLambda expectedImplicationLambda
 theorem meaningImplicationLambda (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : actualImplicationLambda n h = expectedImplicationLambda n h := by rfl
+
+
+noncomputable def actualImplicitProofDomain (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : cleanType_Natural_469c53b6dafb7a218246 := (@_root_.cleanNotation_implicit_universal_92dd2bb05c7249f9b536 ((_root_.cleanType_Real_107b6641a486642ad8e1)) (n) ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (@_root_.cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70 (n) (h) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))))))
+noncomputable def expectedImplicitProofDomain (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : cleanType_Natural_469c53b6dafb7a218246 := @cleanNotation_implicit_universal_92dd2bb05c7249f9b536 cleanType_Real_107b6641a486642ad8e1 n (fun (y : cleanType_Real_107b6641a486642ad8e1) => cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70 n h (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))
+same_basic_target actualImplicitProofDomain expectedImplicitProofDomain
+theorem meaningImplicitProofDomain (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : actualImplicitProofDomain n h = n := by rfl
+
+
+noncomputable def actualIndexedProofDomain (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : cleanType_Natural_469c53b6dafb7a218246 := (@_root_.cleanNotation_indexed_universal_afed3cec8d40e3951a47 (n) ((fun (clean_bound_0 : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (n) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) => (@_root_.cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70 (n) (h) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))))))
+noncomputable def expectedIndexedProofDomain (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : cleanType_Natural_469c53b6dafb7a218246 := @cleanNotation_indexed_universal_afed3cec8d40e3951a47 n (fun (y : cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) => cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70 n h (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))
+same_basic_target actualIndexedProofDomain expectedIndexedProofDomain
+theorem meaningIndexedProofDomain (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : actualIndexedProofDomain n h = n := by rfl
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

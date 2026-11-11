@@ -71,7 +71,9 @@ def recover_scoped_implicits(builder,spec,signature,sources):
         template=parameter.typ
         if not any(occurs(template,n) for n in names):continue
         if source[0]=='Lambda':
-            if not builder.env.is_function_type(template):
+            from cleanlang.proof_types import callable_view
+            template=callable_view(template,builder.env)
+            if template is None or not builder.env.is_function_type(template):
                 raise Incomplete('Scoped implicit recovery needs a declared function domain')
             template=template.args[0]
             actual=builder.env.type(source[2],builder.scope,phrases=False)

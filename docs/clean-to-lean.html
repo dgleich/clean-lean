@@ -1879,5 +1879,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p>The explicit joint API uses the existing source-derived callable view of an expected Evidence type. It matches the authored domain, substitutes the lambda binder into a dependent proof codomain, and checks the body under that expectation. A lambda such as <code>function(x: Real,proof with scalar(n,h,0))</code> can supply evidence of <code>for every(x: Real,n=n)</code> when the explicitly declared body operation returns that proof.</p>
 <p>Lean receives the authored lambda with its declared proof body and Real zero. The intrinsic result remains its ordinary inferred function type; no cast or proof replacement is emitted. Nested lambda rows participate in the enclosing solve. Wrong domains, wrong proof bodies and noncallable evidence reject. Production routing and selected-value-dependent result recovery remain unchanged. See the <a href="spec.md#scoped-lambdas-checked-against-callable-evidence">constructive rule</a> and <a href="../tools/check_joint_proof_targets.py">independent targets</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="implicit-proof-domains">
+<h2>Implicit carriers from annotated proof-lambda domains</h2>
+<p>In the explicit joint API, a declared parameter <code>Evidence((for every(x: T,n=n)))</code> can recover implicit T from a lambda annotated <code>function(y: Real,...)</code>. A vector domain can likewise supply its dimension. Recovery reads the existing callable view before extracting the domain, then uses the existing checked dependent-type constraints.</p>
+<p>All annotation and checked-sibling equations are collected first. Bodies, result expectations and defaults do not choose implicit parameters; conflicting domains reject, and body-only parameters remain incomplete. Emission retains the checked implicit argument and the authored lambda. See the <a href="spec.md#checked-implicit-domains-of-callable-evidence">precise rule</a> and <a href="../tools/check_joint_proof_targets.py">native oracles</a>. Production routing is unchanged.</p>
+</section></llm>
 </body>
 </html>
