@@ -1494,5 +1494,15 @@ literal. Checked dependent field types use forward substitution. Operator auditi
 also traverses the callee expression. See the
 <a href="../studies/parameterized-literals/README.md#function-valued-expressions-and-application">precise construction and remaining binder/dependent-head limits</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="outer-binder-inference">
+<h2>Experimental outer binder inference</h2>
+<p><code>for every (k: Natural, there exists (z: Vector(k,Complex), z = 0))</code>
+uses the bound <code>k</code> for its vector-zero interpretation. A lambda
+<code>function (k: Natural, 0)</code> under a dependent vector-valued function
+expectation maps schematically to <code>fun k =&gt; complexVectorZero k</code>.
+Whole-binder rechecking rebinds retained annotations. See the
+<a href="../studies/parameterized-literals/README.md#outermost-quantifier-and-lambda-inference">scope construction and outer-chain-only boundary</a>.
+Embedded binder candidates and production inference remain unfinished.</p>
+</section></llm>
 </body>
 </html>

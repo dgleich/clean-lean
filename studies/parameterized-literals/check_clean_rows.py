@@ -421,8 +421,40 @@ noncomputable def expectedInferredApply (n : {t('Natural')}) : {t('Real')} := {e
 same_basic_target actualInferredApply expectedInferredApply
 theorem meaningInferredApply (n : {t('Natural')}) : actualInferredApply n = ({nr} (nat_lit 0)) := by rfl
 """)
+source='for every (z: Vector(n,Complex), z != 0)'
+value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+checks.append(f"""
+def actualQuantifiedZero (n : {t('Natural')}) : Prop := {value.lean}
+def expectedQuantifiedZero (n : {t('Natural')}) : Prop :=
+  ∀ z : {vec}, @{f('unequal')} ({vec}) z (@{f('complex vector zero')} n)
+same_basic_target actualQuantifiedZero expectedQuantifiedZero
+theorem meaningQuantifiedZero (n : {t('Natural')}) :
+  actualQuantifiedZero n ↔ ∀ z : Fin n → Complex, z ≠ (fun _ => 0) := by rfl
+""")
+source='for every (k: Natural, there exists (z: Vector(k,Complex), z = 0))'
+value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+checks.append(f"""
+def actualBoundDimension : Prop := {value.lean}
+def expectedBoundDimension : Prop :=
+  ∀ k : {t('Natural')}, @Exists ({t('Vector')} k {t('Complex')})
+    (fun z => @{f('equal')} ({t('Vector')} k {t('Complex')}) z (@{f('complex vector zero')} k))
+same_basic_target actualBoundDimension expectedBoundDimension
+theorem meaningBoundDimension : actualBoundDimension := by
+  intro k
+  exact ⟨_, rfl⟩
+""")
+source='function (k: Natural, 0)'
+expected_type=env.type('Function(j: Natural,Vector(j,Complex))',scope)
+value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),expected_type,use_default=False)
+checks.append(f"""
+noncomputable def actualDependentLambda : (k : {t('Natural')}) → {t('Vector')} k {t('Complex')} := {value.lean}
+noncomputable def expectedDependentLambda : (k : {t('Natural')}) → {t('Vector')} k {t('Complex')} :=
+  fun k => @{f('complex vector zero')} k
+same_basic_target actualDependentLambda expectedDependentLambda
+theorem meaningDependentLambda (k : {t('Natural')}) : actualDependentLambda k = (fun _ => (0 : Complex)) := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Fifty-eight experimental joint-row targets and fifty-eight meaning proofs passed; production joint inference remains unimplemented.')
+print('Sixty-one experimental joint-row targets and sixty-one meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

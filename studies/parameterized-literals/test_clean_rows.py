@@ -841,6 +841,47 @@ class CleanRows(unittest.TestCase):
   notation('Notation alternative(x: Real,y: Real): Complex:',
    ['Means: 0','Infix: +','Render latex: {x}+{y}'],self.e)
   with self.assertRaises(Ambiguous):self.solve('make map(n,r+0)(0)',use_default=False)
+ def test_quantifier_body_infers_vector_zero(self):
+  tree=['Forall','z','Vector(n,Complex)',['Operator','≠',['Local','z'],['Decimal','0']]]
+  self.assertEqual(expression_tree(parse('for every (z: Vector(n,Complex), z != 0)','expression')),tree)
+  value=Builder(self.e,self.scope).materialize(tree,use_default=False)
+  self.assertEqual(value.type,self.e.type('Proposition'))
+  self.assertEqual(value.tree[3][3][3],'complex vector zero')
+ def test_nested_quantifier_retains_bound_dimension(self):
+  tree=['Forall','k','Natural',['Exists','z','Vector(k,Complex)',['Operator','=', ['Local','z'],['Decimal','0']]]]
+  value=Builder(self.e,self.scope).materialize(tree,use_default=False)
+  self.assertNotIn('clean_pi_bound_',value.lean)
+  self.assertIn('clean_bound_0',value.lean)
+ def test_lambda_expected_result_constrains_literal(self):
+  tree=['Lambda','z','Real',['Decimal','0']]
+  expected=self.e.type('Function(Real,Vector(n,Complex))',self.scope)
+  value=Builder(self.e,self.scope).materialize(tree,expected,use_default=False)
+  self.assertEqual(value.type,expected)
+  self.assertEqual(value.tree[3][3],'complex vector zero')
+ def test_lambda_dependent_expected_result_rebinds_annotation(self):
+  tree=['Lambda','k','Natural',['Decimal','0']]
+  expected=self.e.type('Function(j: Natural,Vector(j,Complex))',self.scope)
+  value=Builder(self.e,self.scope).materialize(tree,expected,use_default=False)
+  self.assertEqual(value.type,expected)
+  self.assertNotIn('clean_pi_bound_',value.lean)
+ def test_quantified_literal_codec_rebinds_dimensions(self):
+  from cleanlang.core import Expressions
+  from cleanlang.retained_codec import dumps,loads
+  tree=expression_tree(parse('for every (k: Natural, there exists (z: Vector(k,Complex), z = 0))','expression'))
+  value=Builder(self.e,self.scope).materialize(tree,use_default=False)
+  self.assertEqual(Expressions(self.e,self.scope).elaborate(loads(dumps(value.tree))).lean,value.lean)
+ def test_lambda_domain_mismatch_is_rejected(self):
+  with self.assertRaises(NoSolution):
+   Builder(self.e,self.scope).materialize(['Lambda','z','Real',['Decimal','0']],self.e.type('Function(Natural,Real)'))
+ def test_binder_name_collision_is_rejected(self):
+  with self.assertRaises(Incomplete):
+   Builder(self.e,self.scope).materialize(['Forall','n','Natural',['Operator','=', ['Local','n'],['Decimal','0']]])
+ def test_binder_resource_limit_is_incomplete(self):
+  with self.assertRaises(Incomplete):
+   Builder(self.e,self.scope,limit=1).materialize(['Forall','z','Real',['Operator','=', ['Local','z'],['Decimal','0']]])
+ def test_quantifier_wrong_expected_type_is_rejected(self):
+  with self.assertRaises(NoSolution):
+   Builder(self.e,self.scope).materialize(['Forall','z','Real',['Operator','=', ['Local','z'],['Decimal','0']]],self.e.type('Real'))
  def shifted_literal(self):
   notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
    ['Means: fun _ _ => (0 : Complex)','Literal: 7','Render latex: 7'],self.e)

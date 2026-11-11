@@ -1444,3 +1444,57 @@ Validation: all 215 experimental tests, 58 exact native targets and 58 supportin
 proofs pass. Provenance checks pass. The projection-reuse full discovery and
 active-label validation jobs remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Outermost quantifier and lambda inference
+
+The experimental materialization entry point now accepts an outermost binder or
+chain of binders. For example:
+
+```clean
+for every (k: Natural,
+  there exists (z: Vector(k,Complex), z = 0))
+```
+
+The body infers the declared vector-zero wrapper at the bound `k`. Its schematic
+Lean target is `∀ k : Natural, ∃ z : Vector k Complex, equal z (complexVectorZero k)`.
+For `function (k: Natural, 0)` with expected type
+`Function(j: Natural,Vector(j,Complex))`, the target is schematically
+`fun k => complexVectorZero k`. These are expressions in the existing grammar,
+not new statement forms.
+
+Check the source binder freshness and resolve its domain in the earlier caller
+scope. Introduce a temporary checked local with a fresh internal identity and run
+body inference in the extended scope. A quantifier constrains the body to the
+existing foundational Proposition binding and rejects a different expected result.
+For a lambda with a supplied function type, check domain equality and use the
+expected codomain; a dependent codomain is substituted with the new checked local.
+Without an expected function type, infer the lambda body under the existing rules.
+
+After inferring the body, re-elaborate the entire binder tree through the normal
+checker. Retained annotations rebind their captured source references to the
+compiler's final binder identities. Temporary checking names must not escape into
+the emitted Lean expression. Each nested binder consumes one unit of the adapter
+limit; exhausted budget or Python recursion is incomplete analysis. Existing
+fresh-name restrictions apply, including caller and module name collisions.
+
+This rule covers outer binder chains only. It does not independently solve binder
+arguments nested inside arbitrary call/operator inference regions: those still
+need a compositional scoped constraint representation. In particular, it does not
+claim to propagate unknown outer candidate types into an embedded lambda by
+running a separate solver. `solve`/raw row generation still lacks general binder
+fragments; this extension is in `materialize`. Production joint inference and
+universal symbolic-family validity remain open.
+
+Regressions cover parsed quantifiers, nested bound dimensions, expected lambda
+codomains, retained codec replay, domain/result conflicts, name collisions and
+resource exhaustion. Native oracles independently spell a universally quantified
+condition, a nested existence statement and a dependent lambda. The existence
+statement is proved by choosing the zero vector; the universally nonzero condition
+has an equivalence check, not a proof of that false condition.
+
+Validation: 224 experimental tests, 61 exact native targets and 61 supporting
+proofs pass. Provenance checks pass. The projection-reuse full discovery and
+active-label jobs remain pending.
+:::

@@ -492,12 +492,41 @@ class Builder:
         walk(tree,())
 
 
+    def materialize_binder(self,tree,expected,use_default):
+        from cleanlang.core import Expr,texid
+        from cleanlang.dependent_functions import fresh_bound,DependentFunctionType,substitute
+        kind,name,domain_source,body_tree=tree
+        if name in self.scope or any(name in self.env.data[k] for k in ('functions','types','aliases')):
+            raise Incomplete('Binder must be fresh in the fixed source scope')
+        domain=self.env.type(domain_source,self.scope,phrases=False)
+        bound=fresh_bound(self.env,self.scope)
+        local=Expr(bound,texid(name),domain,tree=['Local',name])
+        scope={**self.scope,name:local}
+        body_expected=None
+        if kind in ('Forall','Exists'):
+            body_expected=self.env.type('Proposition')
+            if expected is not None and expected!=body_expected:raise NoSolution('Quantifier expected type mismatch')
+        elif expected is not None:
+            if not self.env.is_function_type(expected) or len(expected.args)!=2:
+                raise NoSolution('Lambda expected type is not a supported function')
+            if domain!=expected.args[0]:raise NoSolution('Lambda domain mismatch')
+            body_expected=(substitute(expected.codomain,{expected.binder:local},self.env,scope)
+                           if isinstance(expected,DependentFunctionType) else expected.args[1])
+        if self.limit<=1:raise Incomplete('Binder traversal resource limit exceeded')
+        body=Builder(self.env,scope,self.limit-1).materialize(body_tree,body_expected,use_default=use_default)
+        # Re-elaborate the whole binder: annotations rebind their captured source
+        # references to the compiler's final binder, not the temporary check name.
+        return Expressions(self.env,self.scope).elaborate([kind,name,domain_source,body.tree],expected)
+
     def materialize(self,tree,expected=None,*,use_default=True):
         """Recheck one selected row while retaining simultaneous default origins.
 
         This demonstrates retained targets; it does not discharge exhaustive
         validation of every partially solved dependent row for production use.
         """
+        if tree[0] in ('Forall','Exists','Lambda'):
+            try:return self.materialize_binder(tree,expected,use_default)
+            except RecursionError as error:raise Incomplete('Binder traversal recursion limit exceeded') from error
         selected=self.solve_with_trace(tree,expected,use_default=use_default)
         choices,actual_arguments=selected.result
         positions=holes(tree)

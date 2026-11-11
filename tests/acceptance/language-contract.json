@@ -3772,6 +3772,45 @@
         "Universal symbolic-family validity",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_outer_binder_inference",
+      "status": "experimental-slice",
+      "environment": "Explicit linear algebra modules and fixed caller scope",
+      "source": "for every (k: Natural, there exists (z: Vector(k,Complex), z = 0))",
+      "expected_tree": [
+        "Forall",
+        "k",
+        "Natural",
+        [
+          "Exists",
+          "z",
+          "Vector(k,Complex)",
+          [
+            "Operator",
+            "=",
+            [
+              "Local",
+              "z"
+            ],
+            [
+              "Decimal",
+              "0"
+            ]
+          ]
+        ]
+      ],
+      "expected_lean": "∀ k : Natural, ∃ z : Vector k Complex, equal z (complexVectorZero k), using exact declared wrappers",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Infer body under fresh checked scope and known expectation; whole-binder rechecking must rebind captured annotations; resource exhaustion is incomplete",
+      "pending": [
+        "Embedded binder candidate constraints",
+        "Universal symbolic-family validity",
+        "Production integration"
+      ]
     }
   ]
 }

@@ -2032,3 +2032,15 @@ callee types use forward substitution. See the
 Inferred dependent heads, binder regions and production integration remain open.
 The existing grammar and parse are unchanged.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental outer binder inference
+
+Materialization of an outer quantifier/lambda chain checks each body under a fresh
+local scope and a known body expectation where available. Retained body annotations
+are rebound by whole-binder re-elaboration; temporary checking names do not choose
+the final Lean binder. See the [scope rule and precise coverage boundary](../studies/parameterized-literals/README.md#outermost-quantifier-and-lambda-inference).
+Embedded binders in joint candidate regions and production integration remain
+open. This uses the existing grammar without adding syntax.
+:::

@@ -853,4 +853,29 @@ noncomputable def expectedInferredApply (n : cleanType_Natural_469c53b6dafb7a218
 same_basic_target actualInferredApply expectedInferredApply
 theorem meaningInferredApply (n : cleanType_Natural_469c53b6dafb7a218246) : actualInferredApply n = (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) := by rfl
 
+
+def actualQuantifiedZero (n : cleanType_Natural_469c53b6dafb7a218246) : Prop := (∀ (clean_bound_0 : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (n) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))), (_root_.cleanDefine_unequal_37c577a540f8692ae5c3 (clean_bound_0) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n)))))
+def expectedQuantifiedZero (n : cleanType_Natural_469c53b6dafb7a218246) : Prop :=
+  ∀ z : cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d, @cleanDefine_unequal_37c577a540f8692ae5c3 (cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) z (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)
+same_basic_target actualQuantifiedZero expectedQuantifiedZero
+theorem meaningQuantifiedZero (n : cleanType_Natural_469c53b6dafb7a218246) :
+  actualQuantifiedZero n ↔ ∀ z : Fin n → Complex, z ≠ (fun _ => 0) := by rfl
+
+
+def actualBoundDimension : Prop := (∀ (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)), (@Exists ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (clean_bound_0) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) (fun (clean_bound_1 : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (clean_bound_0) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) => (_root_.cleanDefine_equal_5fac732a65dd209a83f4 (clean_bound_1) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (clean_bound_0)))))))
+def expectedBoundDimension : Prop :=
+  ∀ k : cleanType_Natural_469c53b6dafb7a218246, @Exists (cleanType_Vector_cce915f2d60cfd4f85a3 k cleanType_Complex_2d7f06a08f8ab1e3f46d)
+    (fun z => @cleanDefine_equal_5fac732a65dd209a83f4 (cleanType_Vector_cce915f2d60cfd4f85a3 k cleanType_Complex_2d7f06a08f8ab1e3f46d) z (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 k))
+same_basic_target actualBoundDimension expectedBoundDimension
+theorem meaningBoundDimension : actualBoundDimension := by
+  intro k
+  exact ⟨_, rfl⟩
+
+
+noncomputable def actualDependentLambda : (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 k cleanType_Complex_2d7f06a08f8ab1e3f46d := (fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (clean_bound_0)))
+noncomputable def expectedDependentLambda : (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 k cleanType_Complex_2d7f06a08f8ab1e3f46d :=
+  fun k => @cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 k
+same_basic_target actualDependentLambda expectedDependentLambda
+theorem meaningDependentLambda (k : cleanType_Natural_469c53b6dafb7a218246) : actualDependentLambda k = (fun _ => (0 : Complex)) := by rfl
+
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md
