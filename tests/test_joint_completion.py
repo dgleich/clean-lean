@@ -153,10 +153,101 @@ class JointCompletion(unittest.TestCase):
   self.assertEqual(values[0].type,values[1].type)
   self.assertEqual(values[0].lean,values[1].lean)
 
- def test_direct_dependent_lambda_unknown_argument_remains_incomplete(self):
+ def test_direct_dependent_lambda_uses_enumerated_argument(self):
+  notation('Notation indexed zero(k: Natural,z: Real): Vector(k,Complex):', ['Means: fun _ => 0','Render latex: z({k},{z})'],self.env)
+  with patch('cleanlang.joint_inference.clean_rows.Builder.solve_with_trace',side_effect=AssertionError('inner selection')):
+   value=complete(expression_tree(parse('(function(k: Natural,indexed zero(k,0)))(2)','expression')),self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.env.type('Vector(2,Complex)',self.scope))
+  self.assertEqual(value.tree[2][0][2],'Natural')
+  self.assertEqual(Expressions(self.env,self.scope).elaborate(value.tree).lean,value.lean)
+
+ def test_scoped_module_later_argument_uses_literal_dimension(self):
+  notation('Notation evaluate vector(k: Natural,f: Function(Real,Vector(k,Complex))): Vector(k,Complex):', ['Means: f 0','Render latex: e({k},{f})'],self.env)
+  for dimension in ['2','2+1']:
+   with self.subTest(dimension=dimension):
+    source=f'evaluate vector({dimension},function(x: Real,0))'
+    if dimension=='2':
+     self.assertEqual(expression_tree(parse(source,'expression')),
+      ['Call','evaluate vector',[['Decimal','2'],['Lambda','x','Real',['Decimal','0']]]])
+    with patch('cleanlang.joint_inference.clean_rows.Builder.solve_with_trace',side_effect=AssertionError('inner selection')):
+     value=complete(expression_tree(parse(source,'expression')),self.env,self.scope,use_default=False)
+    self.assertEqual(value.type,self.env.type(f'Vector(({dimension}),Complex)',self.scope))
+    self.assertEqual(value.tree[2][1][3][3],'complex vector zero')
+    self.assertEqual(Expressions(self.env,self.scope).elaborate(value.tree).lean,value.lean)
+
+ def test_dependent_scoped_prefix_checks_wrong_later_domain(self):
+  notation('Notation evaluate vector(k: Natural,f: Function(Real,Vector(k,Complex))): Vector(k,Complex):', ['Means: f 0','Render latex: e({k},{f})'],self.env)
+  with self.assertRaises(NoSolution):
+   complete(expression_tree(parse('evaluate vector(2,function(x: Complex,0))','expression')),self.env,self.scope,use_default=False)
+
+ def test_dependent_scoped_prefix_checks_result_expectation(self):
+  notation('Notation indexed zero(k: Natural,z: Real): Vector(k,Complex):', ['Means: fun _ => 0','Render latex: z({k},{z})'],self.env)
+  tree=expression_tree(parse('(function(k: Natural,indexed zero(k,0)))(2)','expression'))
+  with self.assertRaises(NoSolution):
+   complete(tree,self.env,self.scope,self.env.type('Vector(3,Complex)',self.scope),use_default=False)
+
+ def test_dependent_scoped_prefix_retains_competing_same_carrier_literals(self):
+  notation('Notation another two(): Natural:', ['Means: 2','Literal: 2','Render latex: two'],self.env)
+  notation('Notation indexed zero(k: Natural,z: Real): Vector(k,Complex):', ['Means: fun _ => 0','Render latex: z({k},{z})'],self.env)
+  tree=expression_tree(parse('(function(k: Natural,indexed zero(k,0)))(2)','expression'))
+  for use_default in [True,False]:
+   with self.subTest(use_default=use_default),self.assertRaises(Ambiguous):
+    complete(tree,self.env,self.scope,use_default=use_default)
+
+ def test_dependent_scoped_result_selects_across_all_prefix_rows(self):
+  from cleanlang.joint_inference import scoped_calls
+  notation('Notation another two(): Natural:', ['Means: 2','Literal: 2','Render latex: two'],self.env)
+  notation('Notation indexed zero(k: Natural,z: Real): Vector(k,Complex):', ['Means: fun _ => 0','Render latex: z({k},{z})'],self.env)
+  tree=expression_tree(parse('(function(k: Natural,indexed zero(k,0)))(2)','expression'))
+  expected=self.env.type('Vector(2,Complex)',self.scope)
+  original=scoped_calls.prepare_expression
+  def reversed_rows(*args,**kwargs):
+   rows,retain=original(*args,**kwargs)
+   return tuple(reversed(rows)),retain
+  value=complete(tree,self.env,self.scope,expected,use_default=False)
+  with patch.object(scoped_calls,'prepare_expression',side_effect=reversed_rows):
+   reordered=complete(tree,self.env,self.scope,expected,use_default=False)
+  self.assertEqual(value.tree[2][0][:3],['BoundNumeral','2','Natural'])
+  self.assertEqual((value.type,value.lean),(reordered.type,reordered.lean))
+
+ def test_dependent_scoped_incomplete_competitor_is_not_discarded(self):
+  from cleanlang.joint_inference import scoped_calls
+  notation('Notation another two(): Natural:', ['Means: 2','Literal: 2','Render latex: two'],self.env)
+  notation('Notation indexed zero(k: Natural,z: Real): Vector(k,Complex):', ['Means: fun _ => 0','Render latex: z({k},{z})'],self.env)
+  tree=expression_tree(parse('(function(k: Natural,indexed zero(k,0)))(2)','expression'))
+  expected=self.env.type('Vector(2,Complex)',self.scope)
+  original=scoped_calls.checked_prefix_value
+  def unavailable(builder,parts):
+   value=original(builder,parts)
+   if value.tree[0]=='BoundLiteral':raise Incomplete('unavailable competitor')
+   return value
+  with patch.object(scoped_calls,'checked_prefix_value',side_effect=unavailable):
+   with self.assertRaisesRegex(Incomplete,'unavailable competitor'):
+    complete(tree,self.env,self.scope,expected,use_default=False)
+
+ def test_dependent_scoped_prefix_preserves_global_default_origins(self):
+  load_module(ROOT/'library/logic/evidence.clean',self.env)
+  notation('Notation carry(p: Proposition,f: Function(Real,Real)): Evidence((p → p)):', ['Means: fun h => h','Render latex: c({p},{f})'],self.env)
+  tree=expression_tree(parse('carry(for every(x: Real,1=1),function(y: Real,0))','expression'))
+  with self.assertRaises(Ambiguous):complete(tree,self.env,{},use_default=False)
+  value=complete(tree,self.env,{})
+  for node in [value.tree[2][0][3][2],value.tree[2][0][3][3]]:
+   self.assertEqual((node[2],node[-1]),('Natural','defaulted'))
+  self.assertEqual((value.tree[2][1][3][2],value.tree[2][1][3][-1]),('Real','inferred'))
+  self.assertEqual(Expressions(self.env,{}).elaborate(value.tree).lean,value.lean)
+
+ def test_dependent_scoped_application_head_retains_instantiated_family(self):
+  notation('Notation vector maker(k: Natural,f: Function(Real,Real)): Function(Real,Vector(k,Complex)):', ['Means: fun _ _ => 0','Render latex: v({k},{f})'],self.env)
+  source='vector maker(2,function(x: Real,0))(0)'
+  value=complete(expression_tree(parse(source,'expression')),self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.env.type('Vector(2,Complex)',self.scope))
+  self.assertEqual(value.tree[2][0][2],'Real')
+  self.assertEqual(Expressions(self.env,self.scope).elaborate(value.tree).lean,value.lean)
+
+ def test_dependent_scoped_prefix_resource_exhaustion_is_incomplete(self):
   notation('Notation indexed zero(k: Natural,z: Real): Vector(k,Complex):', ['Means: fun _ => 0','Render latex: z({k},{z})'],self.env)
   with self.assertRaises(Incomplete):
-   complete(expression_tree(parse('(function(k: Natural,indexed zero(k,0)))(2)','expression')),self.env,self.scope,use_default=False)
+   complete(expression_tree(parse('(function(k: Natural,indexed zero(k,0)))(2)','expression')),self.env,self.scope,limit=1)
 
  def test_direct_dependent_lambda_checks_result_expectation(self):
   notation('Notation indexed zero(k: Natural,z: Real): Vector(k,Complex):', ['Means: fun _ => 0','Render latex: z({k},{z})'],self.env)
@@ -268,12 +359,14 @@ class JointCompletion(unittest.TestCase):
   self.assertEqual(value.type,self.scope['q'].type)
   self.assertTrue(value.lean.startswith('((h '))
 
- def test_scoped_evidence_dependent_on_selected_lambda_remains_incomplete(self):
+ def test_scoped_evidence_dependent_on_enumerated_lambda(self):
   load_module(ROOT/'library/logic/evidence.clean',self.env)
   self.scope['r']=Expr('r','r',self.env.type('Real'),tree=['Local','r'])
   self.scope['h']=Expr('h','h',self.env.type('Evidence((for every(f: Function(Real,Real),f(r)=f(r))))',self.scope),tree=['Local','h'])
-  with self.assertRaisesRegex(Incomplete,'unresolved selected value'):
-   complete(expression_tree(parse('h(function(x: Real,0))','expression')),self.env,self.scope,use_default=False)
+  with patch('cleanlang.joint_inference.clean_rows.Builder.solve_with_trace',side_effect=AssertionError('inner selection')):
+   value=complete(expression_tree(parse('h(function(x: Real,0))','expression')),self.env,self.scope,use_default=False)
+  explicit=Expressions(self.env,self.scope).parse('h(function(x: Real,(0: Real)))')
+  self.assertEqual((value.type,value.lean),(explicit.type,explicit.lean))
 
  def test_scoped_evidence_does_not_hide_body_operator_ambiguity(self):
   load_module(ROOT/'library/logic/evidence.clean',self.env)

@@ -2796,3 +2796,65 @@ the implicit arguments; candidate order or successful proof-body selection does
 not choose them. Missing signatures and selected-value-dependent result recovery
 remain separate incomplete-analysis boundaries.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Value-dependent scoped argument prefixes
+
+The explicit joint API now carries a separate instantiated signature for every
+checked argument interpretation. This supersedes the blanket exclusion of results
+or later parameters depending on a literal-bearing scoped argument. Production
+routing is unchanged. Parsing still uses the existing Call, Apply and Lambda
+constructors; no type or candidate information chooses the source syntax tree.
+
+For example, with an explicitly declared signature
+`evaluate vector(k: Natural,f: Function(Real,Vector(k,Complex))): Vector(k,Complex)`,
+the expression `evaluate vector(2,function(x: Real,0))` interprets the first
+argument using the declared Natural numeral constructor. That checked value
+instantiates the lambda's expected codomain and the result as `Vector(2,Complex)`.
+The body zero uses the declared complex-vector-zero constructor at exactly that
+index. No dimension is guessed and no intermediate argument is defaulted.
+
+Constructive rule:
+
+1. Recover implicit parameters by the existing checked-domain/sibling rule. Start
+   with every available application-head alternative, retaining its own callable
+   type. Direct lambda head discovery retains its existing common-codomain rule.
+2. Traverse explicit arguments in source order. For each live prefix, substitute
+   its checked values into the next parameter type; enumerate all child rows under
+   that expectation. Preserve declaration identities, equations, deferred checks,
+   numeral carriers and source-order positions for each branch.
+3. If this parameter occurs in a later explicit parameter type or the result,
+   saturate that candidate's prefix constraints. Reconstruct the current argument
+   with its resolved row arguments, no default positions and no default carrier.
+   Rechecking is validation of each candidate, not selection of a child. Use the
+   checked expression to substitute into the remaining signature. If required
+   arguments or deferred checks remain unresolved, report incomplete analysis;
+   this rule does not invert a future type to recover an earlier unknown value.
+4. Keep a distinct result type for each branch, including branches used as heads
+   of chained applications. Append the whole-expression result expectation to
+   each final row. Only the enclosing exhaustive selection applies simultaneous
+   defaults and distinguishes no solution, ambiguity, underdetermination and
+   incomplete analysis. Do not merge declaration-distinct interpretations merely
+   because their result types or values coincide.
+5. Reconstruct every selected child using its slice of the enclosing trace,
+   preserving final default-origin markers. Recheck the source head/signature,
+   recovered implicits, complete application and result type before emission.
+   Lean receives those same declared numeral/literal constructors and authored
+   lambdas, with the instantiated indices and proof arguments retained.
+
+A certified mismatch removes only that branch. Unsupported checking or resource
+exhaustion cannot remove a possible competitor or become successful inference.
+The number of argument-branch expansions is bounded by the requested limit;
+recursive preparation and individual saturation retain their existing limits.
+Enumeration order identifies rows but never chooses meaning. The finite Cartesian
+branch construction covers every child interpretation in this supported forward
+fragment, and one final selected trace determines the complete retained target.
+Proof-index substitution uses the existing checked normalization rule. Applying
+universal evidence to `function(x: Real,0)` retains that lambda in the proof term,
+while substituting it into a condition such as `f(r)=f(r)` beta-reduces the
+condition to the declared Real zero equated to itself. The native oracle compares
+that normalized result type as well as the unreplaced proof application.
+General backward contextual recovery, higher classifier inference and production
+integration remain separate obligations.
+:::

@@ -1877,12 +1877,21 @@ disposable metadata cannot authorize reuse across calls. See the
 <llm model="gpt-6" date="2026-11-11" role="assisted"><section id="scoped-proof-lambdas">
 <h2>Checking a lambda against universal or implication evidence</h2>
 <p>The explicit joint API uses the existing source-derived callable view of an expected Evidence type. It matches the authored domain, substitutes the lambda binder into a dependent proof codomain, and checks the body under that expectation. A lambda such as <code>function(x: Real,proof with scalar(n,h,0))</code> can supply evidence of <code>for every(x: Real,n=n)</code> when the explicitly declared body operation returns that proof.</p>
-<p>Lean receives the authored lambda with its declared proof body and Real zero. The intrinsic result remains its ordinary inferred function type; no cast or proof replacement is emitted. Nested lambda rows participate in the enclosing solve. Wrong domains, wrong proof bodies and noncallable evidence reject. Production routing and selected-value-dependent result recovery remain unchanged. See the <a href="spec.md#scoped-lambdas-checked-against-callable-evidence">constructive rule</a> and <a href="../tools/check_joint_proof_targets.py">independent targets</a>.</p>
+<p>Lean receives the authored lambda with its declared proof body and Real zero. The intrinsic result remains its ordinary inferred function type; no cast or proof replacement is emitted. Nested lambda rows participate in the enclosing solve. Wrong domains, wrong proof bodies and noncallable evidence reject. Production routing is unchanged. Value-dependent results are covered by the <a href="#dependent-scoped-prefixes">forward-prefix rule below</a>. See the <a href="spec.md#scoped-lambdas-checked-against-callable-evidence">constructive rule</a> and <a href="../tools/check_joint_proof_targets.py">independent targets</a>.</p>
 </section></llm>
 <llm model="gpt-6" date="2026-11-11" role="assisted"><section id="implicit-proof-domains">
 <h2>Implicit carriers from annotated proof-lambda domains</h2>
 <p>In the explicit joint API, a declared parameter <code>Evidence((for every(x: T,n=n)))</code> can recover implicit T from a lambda annotated <code>function(y: Real,...)</code>. A vector domain can likewise supply its dimension. Recovery reads the existing callable view before extracting the domain, then uses the existing checked dependent-type constraints.</p>
 <p>All annotation and checked-sibling equations are collected first. Bodies, result expectations and defaults do not choose implicit parameters; conflicting domains reject, and body-only parameters remain incomplete. Emission retains the checked implicit argument and the authored lambda. See the <a href="spec.md#checked-implicit-domains-of-callable-evidence">precise rule</a> and <a href="../tools/check_joint_proof_targets.py">native oracles</a>. Production routing is unchanged.</p>
+</section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="dependent-scoped-prefixes">
+<h2>Arguments that determine later types</h2>
+<p>Implemented in the explicit joint API. For a declared signature <code>evaluate vector(k: Natural,f: Function(Real,Vector(k,Complex))): Vector(k,Complex)</code>, this source supplies both an indexed lambda and its result dimension:</p>
+<pre><code>evaluate vector(2,function(x: Real,0))</code></pre>
+<p>Its Lean shape is shown schematically below; <code>naturalNumeral</code>, <code>evaluateVector</code>, and <code>complexVectorZero</code> stand for the retained declared wrappers, not built-in or automatically imported names:</p>
+<pre><code>evaluateVector (naturalNumeral 2)
+  (fun (x : Real) =&gt; complexVectorZero (naturalNumeral 2))</code></pre>
+<p>Each possible prefix is checked without defaults before its value is substituted into later types. Distinct alternatives remain available to the enclosing solve, including in chained application heads and proof-valued results. The final trace retains the same constructors, arguments, and default origins. This supersedes the earlier blanket selected-value restriction, while unresolved backward contextual recovery and production routing remain open. See the <a href="spec.md#value-dependent-scoped-argument-prefixes">constructive rule</a> and <a href="../tools/check_joint_proof_targets.py">independent native targets</a>.</p>
 </section></llm>
 </body>
 </html>

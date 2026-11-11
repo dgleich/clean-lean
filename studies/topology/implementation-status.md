@@ -8,7 +8,8 @@ catalog entries must not be read as a current all-green report.
 
 ## Current checkpoint: 2026-11-11
 
-Compiler changes through `f84aa3b` have the following newer evidence. The older
+The working compiler, including value-dependent scoped prefixes, has the following
+newer evidence. The older
 milestone counts below describe their own snapshots and are not cumulative
 current-revision validation.
 
@@ -16,7 +17,7 @@ current-revision validation.
 |---|---|---|
 | Relative and ordinary homology | [Clean-authored comparison maps](relative-ordinary-comparison.md), with six canonical targets and four inverse/naturality proofs; canonical pair-inclusion maps are used | Level-specific perturbation diagrams and image transport |
 | Level-set application | [Three assembled comparisons](level-homology-comparison.md), with four exact targets and three application proofs plus four generic helpers; nesting and zero inclusion are proved, not assumed | Identifying separately named fiber/band spaces, well-group equality and cover/excision |
-| Explicit joint API | Scoped proof-producing lambdas and implicit carrier/dimension recovery from their annotated domains; eleven native targets/proofs in the [evidence driver](../../tools/check_joint_proof_targets.py), 63 API/adapter checks, 462 solver tests and 115 runtime tests | Production routing, selected-value-dependent scoped results and general contextual signature recovery |
+| Explicit joint API | Scoped proof lambdas, implicit domain recovery and value-dependent argument prefixes; seventeen native targets/proofs in the [evidence driver](../../tools/check_joint_proof_targets.py), 72 API/adapter/checker tests, 462 solver tests and 157 runtime tests | Production routing, general backward contextual recovery and direct-lambda alternative codomain discovery |
 | Corpus compatibility | All four documents produce identical legacy/joint text with stable fingerprints; all 92 corpus proofs pass after the latest change | This does not establish general target uniqueness or full regression |
 | Full Python discovery | Immutable full jobs are running. The alphabetically first class loads active labels in `setUpClass`, before unittest prints a test name | No full discovery pass at the current revision |
 | Complementary Python discovery | A separate immutable `f84aa3b` run contains the other 1,234 tests and logs class setup; it excludes exactly the four `test_active_labels` cases | The run has recorded failures and is still running; it cannot substitute for the preserved full jobs |
@@ -53,6 +54,34 @@ The same regression run exposed an obsolete local-name expectation in
 `test_local_conversion`. Its repaired oracle checks that `R` remains a named
 local chain complex in both indices of `ChainMap`, and that its `let` precedes
 the map binder. All ten local-conversion tests pass after that repair.
+
+The value-dependent-prefix change carries every checked argument interpretation
+through later parameter types and the result, instead of rejecting such
+dependencies before enumeration. It covers literal and computed dimensions,
+dependent proof results, and instantiated chained-call heads. A result expectation
+may distinguish literal interpretations; declaration-distinct competitors remain
+ambiguous without such a constraint. Prefix checks do not select or default a
+child. An unavailable competitor still forces incomplete analysis. See the
+[constructive rule](../../docs/spec.md#value-dependent-scoped-argument-prefixes).
+
+Validation comprises a 71-case API/adapter/checker run plus one added global-default
+origin case; 462 solver tests; 157 runtime tests; and seventeen exact native
+targets with seventeen proofs. Six native pairs are new. The proof-result oracle
+checks the existing beta-normalized condition and the retained supplied proof
+application separately. Four corpus documents have identical legacy/joint text
+under stable fingerprints, and all 92 corpus proofs pass; the record is
+`dependent_scoped_prefixes_corpus` in the compatibility report. Full discovery
+for the new compiler remains pending; earlier immutable jobs are preserved and
+do not validate this change. These checks do not enable production routing.
+
+A separate joint-routing probe remains unresolved: with a module function
+`h(g: Function(Real,Real)): Real` and a local assumption `h: n=n`, ordinary
+elaboration of `h(function(x: Real,(0: Real)))` correctly calls the module.
+The joint API currently rejects `h(function(x: Real,0))` as no solution because
+its scoped-call dispatch treats any local with that name as the head. The existing
+production rule gives precedence only to callable locals. This mismatch predates
+the prefix change and needs repair before production integration; none of the
+positive counts above covers it.
 
 Comparison optimizations preserve the public source recheck and exact target
 rules. Controlled fixtures reduce repeated work, but bounded active-label

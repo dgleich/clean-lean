@@ -4871,6 +4871,40 @@
         "General proof-domain constraint recovery",
         "Selected-value-dependent result recovery"
       ]
+    },
+    {
+      "id": "dependent_scoped_argument_prefixes",
+      "status": "implemented-experimental-api",
+      "environment": "Explicit linear_algebra/evidence imports; evaluate vector has explicit k: Natural and f: Function(Real,Vector(k,Complex)), returning Vector(k,Complex). Production routing remains unchanged.",
+      "source": "evaluate vector(2,function(x: Real,0))",
+      "expected_tree": [
+        "Call",
+        "evaluate vector",
+        [
+          [
+            "Decimal",
+            "2"
+          ],
+          [
+            "Lambda",
+            "x",
+            "Real",
+            [
+              "Decimal",
+              "0"
+            ]
+          ]
+        ]
+      ],
+      "expected_lean": "Declared evaluate-vector application to the Natural numeral constructor at 2 and a Real-domain lambda using the declared complex-vector-zero constructor at that same retained dimension; result Vector(2,Complex).",
+      "checks": [
+        "test_joint_completion: independent source tree; forward prefixes, computed indices, result mismatch, competing literals in both enumeration orders, incomplete competitor, default origins, scoped proof-result substitution and chained heads",
+        "check_joint_proof_targets.py: six added independent targets and proofs for dependent prefixes"
+      ],
+      "pending": [
+        "Full regression and production routing",
+        "General backward contextual recovery and direct-lambda alternative codomain discovery"
+      ]
     }
   ]
 }

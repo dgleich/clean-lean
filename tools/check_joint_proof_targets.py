@@ -90,8 +90,49 @@ noncomputable def expected{suffix} (n : {t('Natural')}) (h : {eq}) : {t('Natural
 same_basic_target actual{suffix} expected{suffix}
 theorem meaning{suffix} (n : {t('Natural')}) (h : {eq}) : actual{suffix} n h = n := by rfl
 ''')
+# Value-dependent scoped prefixes: actual result types come from Clean; each
+# expected type and body below is independently written with explicit wrappers.
+notation('Notation indexed zero(k: Natural,z: Real): Vector(k,Complex):', ['Means: fun _ => 0','Render latex: z({k},{z})'],env)
+notation('Notation evaluate vector(k: Natural,f: Function(Real,Vector(k,Complex))): Vector(k,Complex):', ['Means: f 0','Render latex: e({k},{f})'],env)
+notation('Notation vector maker(k: Natural,f: Function(Real,Real)): Function(Real,Vector(k,Complex)):', ['Means: fun _ _ => 0','Render latex: v({k},{f})'],env)
+nattwo=f'{num("Natural")} (nat_lit 2)'
+three=f'{f("natural sum")} ({nattwo}) ({natone})'
+for suffix,source,index,expected_body in [
+ ('DirectPrefix','(function(k: Natural,indexed zero(k,0)))(2)',nattwo,f'(fun (k : {t("Natural")}) => {f("indexed zero")} k ({realzero})) ({nattwo})'),
+ ('ModulePrefix','evaluate vector(2,function(x: Real,0))',nattwo,f'{f("evaluate vector")} ({nattwo}) (fun (x : {t("Real")}) => @{f("complex vector zero")} ({nattwo}))'),
+ ('ComputedPrefix','evaluate vector(2+1,function(x: Real,0))',three,f'{f("evaluate vector")} ({three}) (fun (x : {t("Real")}) => @{f("complex vector zero")} ({three}))'),
+ ('AppliedPrefix','vector maker(2,function(x: Real,0))(0)',nattwo,f'{f("vector maker")} ({nattwo}) (fun (x : {t("Real")}) => {realzero}) ({realzero})'),
+]:
+ value=complete(expression_tree(parse(source,'expression')),env,{},use_default=False)
+ checks.append(f'''
+noncomputable def actual{suffix} : {env.render_type(value.type,'lean',{})} := {value.lean}
+noncomputable def expected{suffix} : {t('Vector')} ({index}) {t('Complex')} := {expected_body}
+same_basic_target actual{suffix} expected{suffix}
+theorem meaning{suffix} : actual{suffix} = expected{suffix} := by rfl
+''')
+proof_scope={'r':Expr('r','r',env.type('Real'),tree=['Local','r'])}
+proof_scope['h']=Expr('h','h',env.type('Evidence((for every(f: Function(Real,Real),f(r)=f(r))))',proof_scope),tree=['Local','h'])
+value=complete(expression_tree(parse('h(function(x: Real,0))','expression')),env,proof_scope,use_default=False)
+proof_head=f'∀ (f : {t("Real")} → {t("Real")}), {f("equal")} (f r) (f r)'
+# Existing proof-index substitution beta-reduces the authored constant lambda.
+application=f'({realzero})'
+checks.append(f'''
+noncomputable def actualDependentProof (r : {t('Real')}) (h : {proof_head}) : {env.render_type(value.type,'lean',proof_scope)} := {value.lean}
+noncomputable def expectedDependentProof (r : {t('Real')}) (h : {proof_head}) : {f('equal')} {application} {application} := h (fun (x : {t('Real')}) => {realzero})
+same_basic_target actualDependentProof expectedDependentProof
+theorem meaningDependentProof (r : {t('Real')}) (h : {proof_head}) : actualDependentProof r h = expectedDependentProof r h := by rfl
+''')
+notation('Notation carry(p: Proposition,f: Function(Real,Real)): Evidence((p → p)):', ['Means: fun h => h','Render latex: c({p},{f})'],env)
+value=complete(expression_tree(parse('carry(for every(x: Real,1=1),function(y: Real,0))','expression')),env,{})
+predicate=f'(∀ (x : {t("Real")}), {f("equal")} ({natone}) ({natone}))'
+checks.append(f'''
+noncomputable def actualDefaultPrefix : {env.render_type(value.type,'lean',{})} := {value.lean}
+noncomputable def expectedDefaultPrefix : {f('implication')} {predicate} {predicate} := {f('carry')} {predicate} (fun (y : {t('Real')}) => {realzero})
+same_basic_target actualDefaultPrefix expectedDefaultPrefix
+theorem meaningDefaultPrefix : actualDefaultPrefix = expectedDefaultPrefix := by rfl
+''')
 path=ROOT/'studies/parameterized-literals/ProofTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Eleven exact evidence targets and eleven interpretation proofs passed; selected-value proof dependencies and production integration remain pending.')
+print('Seventeen exact evidence/prefix targets and seventeen interpretation proofs passed; general contextual recovery and production integration remain pending.')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

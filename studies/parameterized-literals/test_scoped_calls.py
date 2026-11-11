@@ -57,10 +57,13 @@ class ScopedCalls(unittest.TestCase):
   value=self.solve('typed(type(Real),function (z: Real,0),0)',use_default=False)
   self.assertEqual(value.type,self.env.type('Real'))
   self.assertEqual(value.tree[2][1][3][2],'Real')
- def test_unresolved_earlier_dimension_is_incomplete(self):
+ def test_literal_earlier_dimension_is_substituted(self):
   notation('Notation sized(n: Natural,f: Function(Real,Vector(n,Complex))): Real:',
    ['Means: 0','Render latex: sized({n},{f})'],self.env)
-  with self.assertRaises(Incomplete):self.solve('sized(2,function (a: Real,0))')
+  with patch.object(Builder,'solve_with_trace',side_effect=AssertionError('inner selection')):
+   value=self.solve('sized(2,function (a: Real,0))',use_default=False)
+  explicit=Expressions(self.env,self.scope).parse('sized((2: Natural),function(a: Real,(0: Vector(2,Complex))))')
+  self.assertEqual((value.type,value.lean),(explicit.type,explicit.lean))
  def test_implicit_consumer_uses_annotated_domain(self):
   notation('Notation generic(f):',['Let T: Type','Let f: Function(T,T)','Returns: Real','Means: 0','Render latex: g({f})'],self.env)
   value=self.solve('generic(function (a: Real,0))',use_default=False)
@@ -123,9 +126,12 @@ class ScopedCalls(unittest.TestCase):
   self.local_consumer('Function(k: Natural,Function(Function(Real,Vector(k,Complex)),Real))')
   value=self.solve('h(n)(function (a: Real,0))',use_default=False)
   self.assertEqual(value.tree[2][0][3][3],'complex vector zero')
- def test_local_unresolved_dependency_is_incomplete(self):
+ def test_local_literal_dependency_is_substituted(self):
   self.local_consumer('Function(k: Natural,Function(Function(Real,Vector(k,Complex)),Real))')
-  with self.assertRaises(Incomplete):self.solve('h(2)(function (a: Real,0))')
+  with patch.object(Builder,'solve_with_trace',side_effect=AssertionError('inner selection')):
+   value=self.solve('h(2)(function (a: Real,0))',use_default=False)
+  explicit=Expressions(self.env,self.scope).parse('h((2: Natural))(function(a: Real,(0: Vector(2,Complex))))')
+  self.assertEqual((value.type,value.lean),(explicit.type,explicit.lean))
  def test_local_quantified_consumer(self):
   self.local_consumer('Function(Proposition,Real)')
   value=self.solve('h(for every (a: Real,a = 0))',use_default=False)

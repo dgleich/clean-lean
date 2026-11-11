@@ -289,6 +289,18 @@ noncomputable def cleanNotation_implicit_universal_92dd2bb05c7249f9b536 {«T» :
 noncomputable def cleanNotation_indexed_universal_afed3cec8d40e3951a47 {«m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («p» : ((∀ (clean_bound_0 : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («m») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 («m») («m»))))) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
   m
 
+noncomputable def cleanNotation_indexed_zero_cec220d20521872cce3e  («k» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («z» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («k») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  fun _ => 0
+
+noncomputable def cleanNotation_evaluate_vector_54abebe035387ee9d6f3  («k» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («f» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («k») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))))) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («k») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  f 0
+
+noncomputable def cleanNotation_vector_maker_8a5ba828e98cb12be53b  («k» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («f» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («k») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) :=
+  fun _ _ => 0
+
+noncomputable def cleanNotation_carry_e8246d605d3ac3daee58  («p» : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) («f» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) : ((_root_.cleanDefine_implication_9ee60e270a27b91f2307 («p») («p»))) :=
+  fun h => h
+
 
 open scoped Matrix
 
@@ -381,5 +393,41 @@ noncomputable def actualIndexedProofDomain (n : cleanType_Natural_469c53b6dafb7a
 noncomputable def expectedIndexedProofDomain (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : cleanType_Natural_469c53b6dafb7a218246 := @cleanNotation_indexed_universal_afed3cec8d40e3951a47 n (fun (y : cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) => cleanNotation_proof_with_scalar_694e49c6aff60e7d4d70 n h (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))
 same_basic_target actualIndexedProofDomain expectedIndexedProofDomain
 theorem meaningIndexedProofDomain (n : cleanType_Natural_469c53b6dafb7a218246) (h : cleanDefine_equal_5fac732a65dd209a83f4 n n) : actualIndexedProofDomain n h = n := by rfl
+
+
+noncomputable def actualDirectPrefix : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) := ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_indexed_zero_cec220d20521872cce3e (clean_bound_0) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))) (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+noncomputable def expectedDirectPrefix : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) cleanType_Complex_2d7f06a08f8ab1e3f46d := (fun (k : cleanType_Natural_469c53b6dafb7a218246) => cleanNotation_indexed_zero_cec220d20521872cce3e k (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
+same_basic_target actualDirectPrefix expectedDirectPrefix
+theorem meaningDirectPrefix : actualDirectPrefix = expectedDirectPrefix := by rfl
+
+
+noncomputable def actualModulePrefix : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) := (@_root_.cleanNotation_evaluate_vector_54abebe035387ee9d6f3 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))))))
+noncomputable def expectedModulePrefix : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) cleanType_Complex_2d7f06a08f8ab1e3f46d := cleanNotation_evaluate_vector_54abebe035387ee9d6f3 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (fun (x : cleanType_Real_107b6641a486642ad8e1) => @cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+same_basic_target actualModulePrefix expectedModulePrefix
+theorem meaningModulePrefix : actualModulePrefix = expectedModulePrefix := by rfl
+
+
+noncomputable def actualComputedPrefix : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) := (@_root_.cleanNotation_evaluate_vector_54abebe035387ee9d6f3 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))))))))
+noncomputable def expectedComputedPrefix : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d := cleanNotation_evaluate_vector_54abebe035387ee9d6f3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) (fun (x : cleanType_Real_107b6641a486642ad8e1) => @cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))
+same_basic_target actualComputedPrefix expectedComputedPrefix
+theorem meaningComputedPrefix : actualComputedPrefix = expectedComputedPrefix := by rfl
+
+
+noncomputable def actualAppliedPrefix : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) := ((@_root_.cleanNotation_vector_maker_8a5ba828e98cb12be53b ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))) ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))) (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))
+noncomputable def expectedAppliedPrefix : cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) cleanType_Complex_2d7f06a08f8ab1e3f46d := cleanNotation_vector_maker_8a5ba828e98cb12be53b (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (fun (x : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualAppliedPrefix expectedAppliedPrefix
+theorem meaningAppliedPrefix : actualAppliedPrefix = expectedAppliedPrefix := by rfl
+
+
+noncomputable def actualDependentProof (r : cleanType_Real_107b6641a486642ad8e1) (h : ∀ (f : cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1), cleanDefine_equal_5fac732a65dd209a83f4 (f r) (f r)) : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))) := (h (fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedDependentProof (r : cleanType_Real_107b6641a486642ad8e1) (h : ∀ (f : cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1), cleanDefine_equal_5fac732a65dd209a83f4 (f r) (f r)) : cleanDefine_equal_5fac732a65dd209a83f4 (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) := h (fun (x : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualDependentProof expectedDependentProof
+theorem meaningDependentProof (r : cleanType_Real_107b6641a486642ad8e1) (h : ∀ (f : cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1), cleanDefine_equal_5fac732a65dd209a83f4 (f r) (f r)) : actualDependentProof r h = expectedDependentProof r h := by rfl
+
+
+noncomputable def actualDefaultPrefix : ((_root_.cleanDefine_implication_9ee60e270a27b91f2307 ((∀ (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))))) ((∀ (clean_bound_1 : (_root_.cleanType_Real_107b6641a486642ad8e1)), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))))))) := (@_root_.cleanNotation_carry_e8246d605d3ac3daee58 ((∀ (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))))) ((fun (clean_bound_1 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))))
+noncomputable def expectedDefaultPrefix : cleanDefine_implication_9ee60e270a27b91f2307 (∀ (x : cleanType_Real_107b6641a486642ad8e1), cleanDefine_equal_5fac732a65dd209a83f4 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) (∀ (x : cleanType_Real_107b6641a486642ad8e1), cleanDefine_equal_5fac732a65dd209a83f4 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) := cleanNotation_carry_e8246d605d3ac3daee58 (∀ (x : cleanType_Real_107b6641a486642ad8e1), cleanDefine_equal_5fac732a65dd209a83f4 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) (fun (y : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualDefaultPrefix expectedDefaultPrefix
+theorem meaningDefaultPrefix : actualDefaultPrefix = expectedDefaultPrefix := by rfl
 
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -1,8 +1,8 @@
 # generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
 """Experimental recursive module calls with typed scoped arguments.
 
-No child is independently selected/defaulted. Signature dependencies must already
-be determined by checked hole-free arguments; general contextual discovery is pending.
+No child is independently selected/defaulted. Value-dependent signatures use
+checked candidate prefixes; general backward contextual discovery is pending.
 """
 from itertools import product
 from cleanlang.dependent_functions import occurs,substitute,DependentFunctionType
@@ -103,41 +103,51 @@ def recover_scoped_implicits(builder,spec,signature,sources):
     return recovered
 
 
-def prepare_typed_call(builder,tree,expected=None):
+def joined_row(parts,*,choice=0,result=(),equations=()):
+    rows=[row for row,_ in parts]
+    return Row((choice,),tuple(t for r in rows for t in r.carriers),
+               tuple(t for r in rows for t in r.arguments)+tuple(result),
+               tuple(eq for r in rows for eq in r.equations)+tuple(equations),
+               tuple(check for r in rows for check in r.deferred))
+
+
+def checked_prefix_value(builder,parts):
+    """Check one enumerated prefix, without selecting or applying defaults."""
+    bindings=saturate(joined_row(parts),limit=builder.limit)
+    row,retain=parts[-1]
+    arguments=tuple(resolve(t,bindings) for t in row.arguments)
+    if any(variables(t) for t in arguments):
+        raise Incomplete('Dependent scoped prefix needs unresolved contextual arguments')
+    return retain(Selection(row.choices,arguments,(),None))
+
+
+def prepare_call_alternatives(builder,tree,expected=None):
+    """Carry checked value-dependent signatures through every argument branch.
+
+    Prefix materialization is candidate validation, never a child selection.
+    Unavailable checking in any still-viable branch prevents a success claim.
+    """
     if builder.limit<=1:raise Incomplete('Scoped expression resource limit exceeded')
     env=builder.env;scope=builder.scope;name=tree[1] if tree[0]=='Call' else None
-    inputs=[];head_part=None;implicit_actuals={}
-    if tree[0]=='Apply' or name in scope:
+    local=tree[0]=='Apply' or name in scope
+    implicit_actuals={};head_tree=None;steps=0
+    if local:
         if len(tree[2])!=1:raise NoSolution('Local scoped application requires exactly one argument')
         head_tree=tree[1] if tree[0]=='Apply' else ['Local',name]
         if holes(head_tree):
             child=Builder(env,scope,builder.limit-1,binder_ids=builder.binder_ids,
                           binder_path=builder.binder_path,row_namespace=builder.row_namespace+(1,))
             if head_tree[0]=='Lambda':
-                head_rows,head_retain,head_type=prepare_lambda_head(child,head_tree,expected)
+                rows,retain,typ=prepare_lambda_head(child,head_tree,expected)
+                heads=[(row,retain,typ) for row in rows]
             elif head_tree[0] in ('Call','Apply'):
-                head_rows,head_retain,head_type=prepare_typed_call(child,head_tree)
+                heads=prepare_call_alternatives(child,head_tree)
             else:raise Incomplete('Scoped application head needs contextual type recovery')
-            head_part=(head_rows,head_retain)
-        else:head_type=builder.check_candidate(head_tree).type
-        # Evidence carries its condition, not a two-slot function signature.
-        # Use the existing source-derived view while retaining the original head.
-        from cleanlang.proof_types import callable_view
-        current=callable_view(head_type,env)
-        for source in tree[2]:
-            if current is None or not env.is_function_type(current):
-                raise NoSolution('Local scoped consumer has too many arguments or is not callable')
-            inputs.append((current.args[0],source))
-            if isinstance(current,DependentFunctionType) and occurs(current.codomain,current.binder):
-                if holes(source):
-                    raise Incomplete('Local scoped result depends on an unresolved selected value')
-                actual=builder.check_candidate(source)
-                current=substitute(current.codomain,{current.binder:actual},env,scope)
-            else:current=current.args[1]
-        result_type=current
-        def revalidate():
-            if head_part is None and builder.check_candidate(head_tree).type!=head_type:
-                raise Incomplete('Local scoped consumer type changed during reconstruction')
+            states=[(((row,retain),),{},typ,typ) for row,retain,typ in heads]
+        else:
+            typ=builder.check_candidate(head_tree).type
+            states=[((),{},typ,typ)]
+        explicit=None
     else:
         spec=env.data['functions'].get(name)
         if spec is None:raise NoSolution('Unknown scoped consumer')
@@ -146,72 +156,94 @@ def prepare_typed_call(builder,tree,expected=None):
                           if any(p.visibility!='explicit' for p in signature.parameters) else {})
         explicit=[p for p in signature.parameters if p.visibility=='explicit']
         if len(tree[2])!=len(explicit):raise NoSolution('Scoped consumer arity mismatch')
-        known=dict(implicit_actuals);unresolved=set()
-        for parameter,source in zip(explicit,tree[2]):
-            if any(occurs(parameter.typ,n) for n in unresolved):
-                raise Incomplete('Scoped parameter type depends on an unresolved earlier value')
-            inputs.append((substitute(parameter.typ,known,env,scope),source))
-            if holes(source):unresolved.add(parameter.name)
-            else:known[parameter.name]=builder.check_candidate(source)
-        if any(occurs(signature.result,n) for n in unresolved):
-            raise Incomplete('Scoped result depends on an unresolved selected value')
-        result_type=substitute(signature.result,known,env,scope)
-        revalidate=lambda:builder.signature(spec)
-    parts=[] if head_part is None else [head_part]
-    for i,(typ,source) in enumerate(inputs):
-        path=builder.row_namespace+(2,i)
-        child=Builder(env,scope,builder.limit-1,binder_ids=builder.binder_ids,
-                      binder_path=builder.binder_path,row_namespace=path)
-        rows,retain=prepare_expression(child,source,typ)
-        parts.append((rows,retain))
-    result_term=builder.typ(result_type,{})
-    expected_equations=() if expected is None else ((result_term,builder.typ(expected,{})),)
-    count=1
-    for rows,_ in parts:
-        count*=len(rows)
-        if count>builder.limit:raise Incomplete('Scoped consumer candidate limit exceeded')
-    combinations=[];candidates=[]
-    for rows in product(*(rows for rows,_ in parts)):
-        row=Row((len(combinations),),tuple(t for r in rows for t in r.carriers),
-                tuple(t for r in rows for t in r.arguments)+(result_term,),
-                tuple(eq for r in rows for eq in r.equations)+expected_equations,
-                tuple(check for r in rows for check in r.deferred))
-        combinations.append(rows);candidates.append(Candidate(row))
-    def retain(selected):
-        rows=combinations[selected.choices[0]];arguments=[];argument_offset=0;carrier_offset=0
-        for row,(_,retain) in zip(rows,parts):
-            width=len(row.arguments);count=len(row.carriers)
-            trace=Selection(row.choices,selected.arguments[argument_offset:argument_offset+width],
-                tuple(p-carrier_offset for p in selected.defaulted_positions if carrier_offset<=p<carrier_offset+count),
-                selected.default_carrier)
-            arguments.append(retain(trace))
-            argument_offset+=width;carrier_offset+=count
-        revalidate() # Recheck the local head or module declaration before emission.
-        retained_head=tree[1]
-        if head_part is not None:
-            retained=arguments.pop(0)
-            if retained.type!=head_type:raise Incomplete('Retained application head type mismatch')
-            retained_head=retained.tree
-        value=builder.check_candidate([tree[0],retained_head,[arg.tree for arg in arguments]])
-        retained_implicits=dict(value.inferred_args)
-        for name,actual in implicit_actuals.items():
-            retained=retained_implicits.get(name)
-            if retained is not None:
-                from cleanlang.inferred_conversion import reify
-                from cleanlang.core import CleanError
-                try:retained=reify(retained,env,scope,classifier=actual.type if env.classifier_info(actual.type) is not None else None)
-                except (CleanError,RecursionError) as error:
-                    raise Incomplete('Retained scoped implicit cannot be rechecked: '+str(error)) from error
-            if retained is None or retained.type!=actual.type or retained.lean!=actual.lean:
-                raise Incomplete('Retained scoped implicit differs from its checked source representative')
-        if builder.typ(value.type,{})!=result_term:
-            raise Incomplete('Reconstructed scoped consumer result differs from the selected type')
-        return value
-    return tuple(c.row for c in candidates),retain,result_type
+        states=[((),dict(implicit_actuals),None,None)]
+
+    for i,source in enumerate(tree[2]):
+        following=[]
+        for parts,known,current,head_type in states:
+            if local:
+                from cleanlang.proof_types import callable_view
+                view=callable_view(current,env)
+                if view is None or not env.is_function_type(view):continue
+                domain=view.args[0]
+                dependent=isinstance(view,DependentFunctionType) and occurs(view.codomain,view.binder)
+            else:
+                parameter=explicit[i]
+                domain=substitute(parameter.typ,known,env,scope)
+                dependent=(occurs(signature.result,parameter.name) or
+                           any(occurs(p.typ,parameter.name) for p in explicit[i+1:]))
+            child=Builder(env,scope,builder.limit-1,binder_ids=builder.binder_ids,
+                          binder_path=builder.binder_path,row_namespace=builder.row_namespace+(2,i))
+            try:rows,retain=prepare_expression(child,source,domain)
+            except NoSolution:continue
+            for row in rows:
+                steps+=1
+                if steps>builder.limit:raise Incomplete('Scoped consumer candidate limit exceeded')
+                candidate=parts+((row,retain),);values=dict(known)
+                try:
+                    actual=checked_prefix_value(builder,candidate) if dependent else None
+                    if local:
+                        result=(substitute(view.codomain,{view.binder:actual},env,scope)
+                                if dependent else view.args[1])
+                    else:
+                        if dependent:values[parameter.name]=actual
+                        result=None
+                except NoSolution:continue
+                following.append((candidate,values,result,head_type))
+        states=following
+        if not states:raise NoSolution('No checked scoped argument interpretation')
+
+    alternatives=[]
+    for parts,known,current,head_type in states:
+        result_type=current if local else substitute(signature.result,known,env,scope)
+        result_term=builder.typ(result_type,{})
+        equations=() if expected is None else ((result_term,builder.typ(expected,{})),)
+        row=joined_row(parts,result=(result_term,),equations=equations)
+        head_part=local and holes(head_tree)
+        def retain(selected,parts=parts,result_term=result_term,head_type=head_type,head_part=head_part):
+            arguments=[];argument_offset=0;carrier_offset=0
+            for child_row,child_retain in parts:
+                width=len(child_row.arguments);count=len(child_row.carriers)
+                trace=Selection(child_row.choices,selected.arguments[argument_offset:argument_offset+width],
+                    tuple(p-carrier_offset for p in selected.defaulted_positions if carrier_offset<=p<carrier_offset+count),
+                    selected.default_carrier)
+                arguments.append(child_retain(trace))
+                argument_offset+=width;carrier_offset+=count
+            if local:
+                if not head_part and builder.check_candidate(head_tree).type!=head_type:
+                    raise Incomplete('Local scoped consumer type changed during reconstruction')
+            else:builder.signature(spec)
+            retained_head=tree[1]
+            if head_part:
+                retained=arguments.pop(0)
+                if retained.type!=head_type:raise Incomplete('Retained application head type mismatch')
+                retained_head=retained.tree
+            value=builder.check_candidate([tree[0],retained_head,[arg.tree for arg in arguments]])
+            retained_implicits=dict(value.inferred_args)
+            for parameter_name,actual in implicit_actuals.items():
+                retained=retained_implicits.get(parameter_name)
+                if retained is not None:
+                    from cleanlang.inferred_conversion import reify
+                    from cleanlang.core import CleanError
+                    try:retained=reify(retained,env,scope,classifier=actual.type if env.classifier_info(actual.type) is not None else None)
+                    except (CleanError,RecursionError) as error:
+                        raise Incomplete('Retained scoped implicit cannot be rechecked: '+str(error)) from error
+                if retained is None or retained.type!=actual.type or retained.lean!=actual.lean:
+                    raise Incomplete('Retained scoped implicit differs from its checked source representative')
+            if builder.typ(value.type,{})!=result_term:
+                raise Incomplete('Reconstructed scoped consumer result differs from the selected type')
+            return value
+        alternatives.append((row,retain,result_type))
+    return alternatives
 
 
 def prepare_call(builder,tree,expected=None):
-    rows,retain,_=prepare_typed_call(builder,tree,expected)
+    alternatives=prepare_call_alternatives(builder,tree,expected)
+    rows=tuple(Row((i,),r.carriers,r.arguments,r.equations,r.deferred)
+               for i,(r,_,_) in enumerate(alternatives))
+    def retain(selected):
+        row,emit,_=alternatives[selected.choices[0]]
+        return emit(Selection(row.choices,selected.arguments,selected.defaulted_positions,selected.default_carrier))
     return rows,retain
 
 
