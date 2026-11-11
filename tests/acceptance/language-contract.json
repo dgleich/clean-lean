@@ -4122,6 +4122,21 @@
         "Inverse computed-expression inference",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_recovered_producer_parameter_evidence",
+      "status": "experimental-slice",
+      "source": "read width(make padded family(n,0),0) with recovered width n+1",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Retain checked closed-subtree evidence from producer return types; deterministic witness order and scope validation; recheck after selection; one independent whole-call native target",
+      "pending": [
+        "Contextual metavariables",
+        "Embedded lambda inference",
+        "Production integration"
+      ]
     }
   ]
 }

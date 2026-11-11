@@ -2279,3 +2279,17 @@ No computed operation is inverted and no producer is independently defaulted. Se
 This is experimental row support; production integration and embedded lambda inference
 remain pending. No source grammar changes.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental recovered producer evidence
+
+Deferred parameter recovery can supply checked closed-subtree witnesses from a
+substituted producer return type. Matching visits domains before bodies and arguments
+left to right; witness plans follow existing index/type plans in captured order.
+The resolver preserves prior witness priority, validates scope and semantic agreement,
+and reports missing evidence as incomplete. Selected evidence is rechecked before
+retention. See the
+[constructive rule and oracle](../studies/parameterized-literals/README.md#checked-evidence-for-recovered-producer-parameters).
+This is experimental reconstruction support, not production integration or new syntax.
+:::

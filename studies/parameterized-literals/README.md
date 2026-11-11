@@ -2326,3 +2326,46 @@ Validation: 372 experimental Python tests, 96 exact native-target comparisons an
 96 supporting proofs pass. Full production discovery and active-label regeneration
 remain separately running checks, not completed evidence for this experiment.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Checked evidence for recovered producer parameters
+
+A deferred producer can now supply the checked expression needed to emit a recovered
+consumer parameter. For example, if its return type is
+`Function(k: Natural,Matrix(k,(n+1),Complex))`, a consumer's inferred width retains
+the selected n+1 expression. Previously the constraint resolved but the witness
+resolver had no representative for this new computed width.
+
+The structural argument matcher can return checked evidence beside its equations.
+It traverses matching binder domains before bodies and nominal arguments left to
+right. At each eligible outer variable it retains the corresponding closed subtree
+of the checked actual type. Existing codec atom evidence supplies indices and local
+carriers; other closed type subtrees are reconstructed by the checked codec. Any
+subtree referring to an enclosing inner binder remains ineligible. Matching still
+does not register global candidate representatives.
+
+Each ground ParameterPlan with a non-nominal output contributes a witness plan
+after the existing forward index/type plans, in captured plan order. Nominal
+carriers retain existing structural assembly: a speculative witness must not mask
+a certified type mismatch in a rejected row. Its dependencies remain the producer return
+template's referenced formals. Reconstruction repeats checked substitution and
+structural matching, choosing the first source occurrence for that formal. The
+resolver validates the result against the solved parameter and applies its existing
+scope and priority rules. Missing evidence is incomplete; symbolic agreement alone
+cannot certify emission. Prior caller, scalar and static witnesses retain priority.
+
+After selection, recovered evidence is rechecked against the solved parameter before
+being retained alongside other selected representatives. Thus candidate-local plans
+do not install evidence for rejected alternatives. The complete producer argument
+and consumer signature checks remain mandatory.
+
+The independent whole-call Lean oracle includes the natural-sum and numeral wrappers
+for n+1, the vector-zero producer argument, and the consumer's Real zero. Python
+regressions cover the computed-width call and failure when its recovered evidence
+is unavailable. Production integration and embedded lambda inference remain pending.
+
+Validation: 374 experimental Python tests, 97 exact native-target comparisons and
+97 supporting proofs pass. The new oracle checks the retained computed-width argument;
+these results do not establish production joint-inference conformance.
+:::

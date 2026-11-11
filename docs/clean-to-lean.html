@@ -1697,5 +1697,15 @@ producer's vector-zero wrapper and all inferred arguments; child argument checki
 is not bypassed. See the
 <a href="../studies/parameterized-literals/README.md#deferred-parameter-recovery-from-producer-return-types">obligation and remaining limits</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="recovered-producer-evidence">
+<h2>Emitting recovered computed parameters (experimental rows)</h2>
+<p>A producer returning <code>Function(k: Natural,Matrix(k,(n+1),Complex))</code>
+can supply both the consumer width and its checked n+1 expression. The emitted Lean
+call retains the selected natural-addition and numeral wrappers. Evidence comes from
+the checked substituted return type, remains candidate-local before selection, and
+cannot capture k. See the
+<a href="../studies/parameterized-literals/README.md#checked-evidence-for-recovered-producer-parameters">witness construction and priority rules</a>.
+Production inference remains pending.</p>
+</section></llm>
 </body>
 </html>

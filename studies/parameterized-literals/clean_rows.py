@@ -260,7 +260,7 @@ class Builder:
             elif isinstance(node,Carrier):pending.extend(node.arguments)
         return tuple(sorted(found,key=lambda v:v.identity))
 
-    def dependent_argument_constraints(self,template,actual,formals,signature):
+    def dependent_argument_constraints(self,template,actual,formals,signature,*,with_evidence=False):
         """Structural constraints from a checked caller argument, with no new witnesses."""
         from binder_types import CheckedBinderTypes
         from constraint_model import Binder,IndexExpression
@@ -286,21 +286,24 @@ class Builder:
                 if isinstance(node,Binder):todo.extend(((node.domain,depth),(node.body,depth+1)))
                 elif isinstance(node,(Carrier,IndexExpression)):todo.extend((a,depth) for a in node.arguments)
             return True
-        equations=[];pending=[(convert(left,formal_codec),convert(right,actual_codec))];visits=0
+        equations=[];evidence=[];pending=[(convert(left,formal_codec),convert(right,actual_codec),right)];visits=0
         while pending:
             visits+=1
             if visits>self.limit:raise Incomplete('Dependent argument constraint limit exceeded')
-            left,right=pending.pop()
+            left,right,source=pending.pop()
             if isinstance(left,Variable):
                 if unknowns(right):raise Incomplete('Caller dependent type contains unknown constraints')
                 if not closes_at_root(right):continue  # Outer parameters cannot capture this binder.
                 equations.append((left,right))
+                if with_evidence:
+                    value=(actual_codec.atoms[source] if isinstance(source,Atom) else actual_codec.decode(source))
+                    evidence.append((left,value))
             elif isinstance(left,Binder) and isinstance(right,Binder) and left.identity==right.identity:
-                pending.extend(((left.domain,right.domain),(left.body,right.body)))
+                pending.extend(((left.body,right.body,source.body),(left.domain,right.domain,source.domain)))
             elif isinstance(left,Carrier) and isinstance(right,Carrier) and left.identity==right.identity and len(left.arguments)==len(right.arguments):
-                pending.extend(zip(left.arguments,right.arguments))
+                pending.extend(reversed(tuple(zip(left.arguments,right.arguments,source.arguments))))
             # Computed operands and mismatching shapes are left to forward checks.
-        return tuple(equations)
+        return (tuple(equations),tuple(evidence)) if with_evidence else tuple(equations)
 
     def signature(self,spec):
         try:return require(self.env,spec)
@@ -803,6 +806,11 @@ class Builder:
             else:
                 if self.index(value)[0]!=resolve(plan.output,bindings):raise Incomplete('Formal index changed during retention')
                 self.known_index(value)
+        for plan in values.parameter_plans:
+            value=values.parameter_value(plan,bindings,defaulted)
+            term=self.typ(value,{})
+            if term!=resolve(plan.output,bindings):raise Incomplete('Recovered parameter changed during retention')
+            self.rigid.setdefault(term,value)
         for plan in values.active:
             value=values.expression(plan.path,bindings,defaulted)
             if self.index(value)[0]!=resolve(plan.output,bindings):raise Incomplete('Candidate value changed during retention')

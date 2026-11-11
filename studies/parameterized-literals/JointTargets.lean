@@ -473,6 +473,9 @@ noncomputable def cleanNotation_make_binder_vector_family_28a14b0429d14674f064  
 noncomputable def cleanNotation_make_binder_matrix_family_6b27239777aae395dffd  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («x» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (clean_pi_bound_13 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Matrix_4518cbfc13ff70fc0769 (clean_pi_bound_13) («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) :=
   fun _ _ _ => (0 : Complex)
 
+noncomputable def cleanNotation_make_padded_binder_family_856481efc8d3c08b9c16  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («x» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (clean_pi_bound_14 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Matrix_4518cbfc13ff70fc0769 (clean_pi_bound_14) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) :=
+  fun _ _ _ => (0 : Complex)
+
 noncomputable def cleanNotation_opaque_count_4efa8df9a3534f27979e {«T» : Type} («item» : «T») : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
   0
 
@@ -1115,6 +1118,14 @@ noncomputable def actualDeferredMatrixFamily  : cleanType_Real_107b6641a486642ad
 noncomputable def expectedDeferredMatrixFamily  : cleanType_Real_107b6641a486642ad8e1 := @cleanNotation_read_binder_width_ae4c245de7ee9c897a9b (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNotation_make_binder_matrix_family_6b27239777aae395dffd (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)) (cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
 same_basic_target actualDeferredMatrixFamily expectedDeferredMatrixFamily
 theorem meaningDeferredMatrixFamily  : actualDeferredMatrixFamily = 0 := by simp [actualDeferredMatrixFamily, cleanNotation_read_binder_width_ae4c245de7ee9c897a9b, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+
+
+noncomputable def actualComputedWidthFamily (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (@_root_.cleanNotation_read_binder_width_ae4c245de7ee9c897a9b ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (n) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((@_root_.cleanNotation_make_padded_binder_family_856481efc8d3c08b9c16 (n) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n))))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedComputedWidthFamily (n : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 :=
+  @cleanNotation_read_binder_width_ae4c245de7ee9c897a9b (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))
+    (cleanNotation_make_padded_binder_family_856481efc8d3c08b9c16 n (cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualComputedWidthFamily expectedComputedWidthFamily
+theorem meaningComputedWidthFamily (n : cleanType_Natural_469c53b6dafb7a218246) : actualComputedWidthFamily n = (0 : Real) := by simp [actualComputedWidthFamily, cleanNotation_read_binder_width_ae4c245de7ee9c897a9b, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
 
 
 def actualQuantifiedZero (n : cleanType_Natural_469c53b6dafb7a218246) : Prop := (∀ (clean_bound_0 : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (n) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))), (_root_.cleanDefine_unequal_37c577a540f8692ae5c3 (clean_bound_0) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n)))))

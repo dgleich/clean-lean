@@ -1352,6 +1352,28 @@ class CleanRows(unittest.TestCase):
   with self.assertRaises(NoSolution):
    Builder(self.e,self.scope).materialize(expression_tree(parse('inspect matrix family(make matrix family(n,1),0)','expression')),use_default=False)
 
+ def padded_family_fixture(self):
+  notation('Notation make padded family(n: Natural,x: Vector(n,Complex)): Function(k: Natural,Matrix(k,(n+1),Complex)):',
+   ['Means: fun _ _ _ => (0 : Complex)','Render latex: family({n},{x})'],self.e)
+  notation('Notation inspect padded family(f,x):',
+   ['Let width: Natural','Let f: Function(k: Natural,Matrix(k,width,Complex))','Let x: Real','Returns: Real',
+    'Means: x','Render latex: inspect({f},{x})'],self.e)
+  return expression_tree(parse('inspect padded family(make padded family(n,0),0)','expression'))
+ def test_deferred_producer_supplies_computed_width_evidence(self):
+  tree=self.padded_family_fixture()
+  value=Builder(self.e,self.scope).materialize(tree,use_default=False)
+  self.assertEqual(dict(value.inferred_args)['width'],self.e.type('Vector((n+1),Complex)',self.scope).args[0])
+
+ def test_missing_recovered_parameter_evidence_remains_incomplete(self):
+  from unittest.mock import patch
+  tree=self.padded_family_fixture()
+  original=Builder.dependent_argument_constraints
+  def without_evidence(builder,*args,**kwargs):
+   result=original(builder,*args,**kwargs)
+   return (result[0],()) if kwargs.get('with_evidence') else result
+  with patch.object(Builder,'dependent_argument_constraints',without_evidence):
+   with self.assertRaises(Incomplete):Builder(self.e,self.scope).materialize(tree,use_default=False)
+
 if __name__=='__main__':unittest.main()
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -49,6 +49,7 @@ class CandidateValues:
         self.builder=builder;self.tree=tree;self.fragment=fragment
         self.bindings=unify(equations,limit=builder.limit)
         self.index_plans=tuple(p for p in fragment.deferred if isinstance(p,IndexPlan))
+        self.parameter_plans=tuple(p for p in fragment.deferred if isinstance(p,ParameterPlan))
         self.positions=dict(holes(tree))
         self.choices={(kind,path):key for kind,path,key in fragment.choices}
         self.functions={s['native_binding']:n for n,s in builder.env.data['functions'].items()}
@@ -134,6 +135,20 @@ class CandidateValues:
             return value if isinstance(plan,TypePlan) else reify(value,self.builder.env,self.builder.scope)
         except (CleanError,RecursionError) as error:
             raise Incomplete('Candidate formal-index checking unavailable: '+str(error)) from error
+
+    def parameter_value(self,plan,bindings,defaulted=()):
+        try:
+            representatives,_,_=self._context(bindings,defaulted)
+            return self._parameter_value(plan,representatives)
+        except (CleanError,RecursionError) as error:
+            raise Incomplete('Recovered parameter evidence unavailable: '+str(error)) from error
+
+    def _parameter_value(self,plan,representatives):
+        actual=self._index_value(TypePlan(plan.output,plan.actual_template,plan.actual_formals),representatives)
+        _,evidence=self.builder.dependent_argument_constraints(plan.template,actual,dict(plan.formals),plan.signature,with_evidence=True)
+        for variable,value in evidence:
+            if variable==plan.output:return value
+        raise Incomplete('Recovered parameter lacks checked type evidence')
 
     def _index_value(self,plan,representatives):
         from cleanlang.inferred_conversion import reify
@@ -223,6 +238,15 @@ class CandidateValues:
             if variables(output):continue
             plans.append(Plan(output,plan.requirements,
                 lambda _,plan=plan:self._index_value(plan,representatives),(3,i)))
+        for i,plan in enumerate(self.parameter_plans):
+            output=resolve(plan.output,bindings)
+            if variables(output):continue
+            # Nominal carriers already have structural assembly. Installing a
+            # speculative parameter witness there would mask a certified type
+            # mismatch with a witness-validation failure in rejected rows.
+            if isinstance(output,Carrier):continue
+            plans.append(Plan(output,plan.requirements,
+                lambda _,plan=plan:self._parameter_value(plan,representatives),(3,len(self.index_plans)+i)))
         for i,plan in enumerate(self.fragment.plans):
             output=resolve(plan.output,bindings)
             if variables(output):continue
