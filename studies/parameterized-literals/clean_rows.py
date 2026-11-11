@@ -769,12 +769,39 @@ class Builder:
             try:return self.materialize_binder(tree,expected,use_default)
             except RecursionError as error:raise Incomplete('Binder traversal recursion limit exceeded') from error
         selected=self.solve_with_trace(tree,expected,use_default=use_default)
+        return self.retain_selected(tree,selected,expected)
+
+    def retain_selected(self,tree,selected,expected=None):
+        """Reconstruct an externally selected row without selecting or defaulting.
+
+        The caller must establish exhaustive joint selection. This boundary checks
+        the supplied projection of that selection against fresh local rows and
+        rechecks operator applicability independently of expected result types.
+        """
         choices,actual_arguments=selected.result
         positions=holes(tree)
-        defaulted={positions[i][0] for i in selected.defaulted_positions}
-        row=next(row for row in self.rows(tree,expected) if row.choices==choices)
+        markers=selected.defaulted_positions
+        if (any(type(i) is not int or i<0 or i>=len(positions) for i in markers)
+            or len(set(markers))!=len(markers)):
+            raise Incomplete('Invalid selected default positions')
+        if markers and (selected.default_carrier is None or variables(selected.default_carrier)):
+            raise Incomplete('Selected defaults lack a determined carrier')
+        if any(variables(a) for a in actual_arguments):raise Incomplete('Selected arguments remain unresolved')
+        # Audit in separate state: unselected operator rows must not contribute
+        # retained witness priorities to this reconstruction.
+        audit=Builder(self.env,self.scope,self.limit,binder_ids=self.binder_ids,binder_path=self.binder_path)
+        audit_rows=[row for row in audit.rows(tree,expected) if row.choices==choices]
+        if len(audit_rows)!=1:raise Incomplete('Selected local row is unavailable or nonunique')
+        if len(actual_arguments)!=len(audit_rows[0].arguments):raise Incomplete('Selected argument arity changed')
+        audit.audit_operators(tree,selected.result)
+        matches=[row for row in self.rows(tree,expected) if row.choices==choices]
+        if len(matches)!=1:raise Incomplete('Selected local row is unavailable or nonunique')
+        row=matches[0]
+        if len(actual_arguments)!=len(row.arguments):raise Incomplete('Selected argument arity changed')
+        defaulted={positions[i][0] for i in markers}
+        default_equations=tuple((row.carriers[i],selected.default_carrier) for i in markers)
         bindings=saturate(Row(row.choices,row.carriers,row.arguments,
-            row.equations+tuple(zip(row.arguments,actual_arguments)),row.deferred),limit=self.limit)
+            row.equations+tuple(zip(row.arguments,actual_arguments))+default_equations,row.deferred),limit=self.limit)
         from cleanlang.annotations import Annotation,references
         from cleanlang.bound_calls import bind
         from cleanlang.inferred_conversion import reify

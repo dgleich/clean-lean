@@ -2374,3 +2374,19 @@ and the checked binder codec. See the
 These are experimental callable-type targets. Source lambda-body integration,
 whole-call native oracles and production inference remain pending. No grammar change.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental selected scoped-body reconstruction
+
+A joint selection can be projected into an opened source binder and reconstructed
+without another selection/default pass. Fresh local rows, selected arguments,
+default markers, witness retention and operator input ambiguity are rechecked;
+the complete binder is re-elaborated to bind retained annotations hygienically.
+Scoped bodies use explicit source-path lexical identities. An explicit adapter
+checks three complete calls containing lambda arguments with independent Lean
+oracles. See the [contract and scope](../studies/parameterized-literals/README.md#retaining-selected-scoped-bodies).
+This does not yet automate nested-lambda row construction in the source Builder.
+Contextual source integration, recursive body enumeration and production inference
+remain pending. No grammar change.
+:::

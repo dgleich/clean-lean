@@ -4263,6 +4263,42 @@
         "Whole-call canonical Lean targets",
         "Production integration and broad conformance"
       ]
+    },
+    {
+      "id": "selected_scoped_body_calls",
+      "status": "experimental-slice",
+      "environment": "Explicit fixture consumer notations and scoped body rows; one joint Cartesian candidate set with consumer signature constraints. No automatic nested-lambda Builder path.",
+      "source": "apply complex(function (z: Complex, 0),0)",
+      "expected_tree": [
+        "Call",
+        "apply complex",
+        [
+          [
+            "Lambda",
+            "z",
+            "Complex",
+            [
+              "Decimal",
+              "0"
+            ]
+          ],
+          [
+            "Decimal",
+            "0"
+          ]
+        ]
+      ],
+      "expected_lean": "Full application of the declared consumer to a lambda returning its jointly selected complex zero, and a complex-zero sibling argument. Dependent vector cases retain the bound dimension and natural-sum wrapper.",
+      "checks": [
+        "studies/parameterized-literals/test_scoped_bodies.py: eleven selected-body, scope, trace, operator and retention cases",
+        "studies/parameterized-literals/check_scoped_bodies.py: three exact full-call targets and three interpretation proofs",
+        "studies/parameterized-literals/check_clean_rows.py: existing ninety-seven experimental targets and proofs rechecked after reconstruction refactor"
+      ],
+      "pending": [
+        "Automatic enclosing-signature discovery and contextual source occurrences",
+        "Recursive nested-binder row enumeration",
+        "Production inference and full conformance"
+      ]
     }
   ]
 }

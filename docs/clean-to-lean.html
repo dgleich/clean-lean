@@ -1738,5 +1738,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <h2>Selected contextual callable types: experimental native checks</h2>
 <p>Contextual candidate selection checks every candidate before simultaneous defaults. A checked type-valued closure can then be reconstructed through the declared function type and binder codec. Four independent Lean targets cover one/two dependent dimensions, a computed dimension and a retained caller dimension, with four interpretation proofs. These are callable types, not complete lambda bodies or calls. See the <a href="../studies/parameterized-literals/README.md#contextual-candidate-selection-and-checked-callable-types">selection contract and examples</a>. Production inference remains pending.</p>
 </section></llm>
+
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="selected-scoped-bodies">
+<h2>Selected scoped bodies: experimental complete-call targets</h2>
+<p>An explicit scoped-row adapter selects lambda-body and sibling-argument alternatives together, then reconstructs the selected bodies without another defaulting pass. Three complete calls have independent exact Lean targets and interpretation proofs, including a complex lambda application and dependent vector families. Fresh row, witness, scope and operator checks remain mandatory. Automatic source Builder integration is still pending; see the <a href="../studies/parameterized-literals/README.md#retaining-selected-scoped-bodies">contract and examples</a>.</p>
+</section></llm>
 </body>
 </html>

@@ -8724,6 +8724,46 @@
       ],
       "model": "gpt-6",
       "date": "2026-11-11"
+    },
+    "studies/parameterized-literals/scoped_bodies.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "studies/parameterized-literals/test_scoped_bodies.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "studies/parameterized-literals/check_scoped_bodies.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "studies/parameterized-literals/ScopedBodyTargets.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
     }
   }
 }

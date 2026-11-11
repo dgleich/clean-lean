@@ -2557,3 +2557,74 @@ interpretation proofs pass. Reference HTML IDs/local links and provenance checks
 pass. No production compiler files changed; the existing full-discovery and
 active-label snapshot jobs remain live and pending separately.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Retaining selected scoped bodies
+
+`Builder.retain_selected` reconstructs a supplied selection without invoking the
+selector or applying defaults again. Its caller must already have established
+exhaustive joint selection; this method alone does not certify that choice. It
+validates marker positions and ground arguments, finds exactly one fresh local row
+with the supplied choices and argument arity, and independently audits operator
+input ambiguity. That audit uses a separate Builder so unselected alternatives
+cannot change retained-witness priority. It then rebuilds fresh local rows, checks
+selected argument/default equations and all deferred obligations, retains the
+selected witnesses, and rechecks the resulting expression and callable identities.
+Ordinary `materialize` now selects once and delegates to this boundary.
+
+`ScopedBody` opens one source Lambda/Forall/Exists with its explicit domain, a fresh
+checked local and a lexical identity derived from an explicit source path. It
+rebinds a known dependent expected codomain to this local. `rows()` exposes body
+alternatives without selection or defaults; `retain()` consumes the projected
+joint selection, reconstructs that body, and re-elaborates the complete binder so
+retained annotations refer to its final compiler binder. A nested binder cannot
+reuse an enclosing lexical identity. Caller/source paths must distinguish sibling
+scopes. Recursive source-binder enumeration is still a separate missing layer.
+
+Eleven Python tests cover absence of a second selection, externally imposed body
+constraints, retained-codec rebinding, sibling lexical identities, bad arity and
+default traces, unavailable rows, operator ambiguity, domain changes and stale
+scope. `retain_selected` deliberately permits external constraints to determine
+its body; rerunning a standalone selection would discard that joint information.
+
+The [scoped-body driver](check_scoped_bodies.py) supplies an explicit consumer
+signature, forms the Cartesian product of body and sibling-argument rows, combines
+all constraints, selects once, and projects that selection back to each child.
+Its [generated native targets](ScopedBodyTargets.lean) check these complete calls:
+
+```clean
+consume family(function (k: Natural, 0),0)
+apply complex(function (z: Complex, 0),0)
+consume shifted family(function (k: Natural, 0),0)
+```
+
+The consumers are explicitly declared fixture notations. The first expects
+`Function(k: Natural,Vector(k,Complex))`; the third expects a vector of dimension
+k+1. In the second, the complex result constraint is added to the joint row,
+rather than supplied to the child Builder in advance. The call actually applies
+the complex-valued lambda to its selected complex argument. All three bodies and
+sibling arguments retain the declaration selected by the shared constraints.
+Independent native oracles specify the full calls, literal wrappers, lambda binders
+and dimension expressions; separate Lean equalities check their meanings.
+
+Reproduce with:
+
+```sh
+LAKE=lake python3 studies/parameterized-literals/check_scoped_bodies.py
+LAKE=lake python3 studies/parameterized-literals/check_clean_rows.py
+python3 -m unittest discover -s studies/parameterized-literals -p 'test_*.py'
+```
+
+This is an explicit scoped-row adapter, not automatic nested-lambda inference in
+the source Builder. General enclosing-signature discovery, joint contextual
+occurrence construction, nested body enumeration and production integration remain
+pending. Existing conditional failures must still be reported as incomplete,
+not bypassed by choosing a simpler independently defaulted body.
+
+Validation: all 430 experimental tests pass. The three new full-call canonical
+targets and three interpretation proofs pass; the existing 97 native targets and
+97 supporting proofs pass after the reconstruction refactor. Reference HTML
+IDs/local links and provenance checks pass. Production compiler files are unchanged;
+the separately running full-discovery and active-label snapshots remain pending.
+:::
