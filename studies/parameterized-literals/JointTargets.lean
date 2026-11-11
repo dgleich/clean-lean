@@ -266,6 +266,18 @@ noncomputable def cleanDefine_commutator_7a2644a6d2b446ea132a {«n» : (_root_.c
 noncomputable def cleanDefine_matrix_square_f1a7bece54a54888d26a {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («A» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
   (@_root_.cleanNotation_complex_matrix_product_22b143895482c8d56a11 («n») («n») («n») («A») («A»))
 
+structure cleanStructure_ScalarCell_3bee75006b4648f59ffc  : Type where
+  «entry» : (_root_.cleanType_Real_107b6641a486642ad8e1)
+
+noncomputable def cleanConstructor_scalar_cell_e355c8cb262ce61f1e59 («entry» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : _root_.cleanStructure_ScalarCell_3bee75006b4648f59ffc :=
+  @_root_.cleanStructure_ScalarCell_3bee75006b4648f59ffc.mk «entry»
+
+structure cleanStructure_VectorCell_ea235d5395205122748e («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : Type where
+  «entry» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))
+
+noncomputable def cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («entry» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : _root_.cleanStructure_VectorCell_ea235d5395205122748e («n») :=
+  @_root_.cleanStructure_VectorCell_ea235d5395205122748e.mk «n» «entry»
+
 
 open scoped Matrix
 
@@ -342,5 +354,19 @@ same_basic_target actualDefault1 expectedDefault1
 theorem meaningDefault0 : actualDefault0 = (0 : Nat) := by rfl
 
 theorem meaningDefault1 : actualDefault1 := by rfl
+
+
+noncomputable def actualConstructor0 (m n : cleanType_Natural_469c53b6dafb7a218246) (x : cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) (A : cleanType_Matrix_4518cbfc13ff70fc0769 m n cleanType_Real_107b6641a486642ad8e1) (r : cleanType_Real_107b6641a486642ad8e1) : cleanStructure_ScalarCell_3bee75006b4648f59ffc := (@_root_.cleanConstructor_scalar_cell_e355c8cb262ce61f1e59 ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedConstructor0 (m n : cleanType_Natural_469c53b6dafb7a218246) (x : cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) (A : cleanType_Matrix_4518cbfc13ff70fc0769 m n cleanType_Real_107b6641a486642ad8e1) (r : cleanType_Real_107b6641a486642ad8e1) : cleanStructure_ScalarCell_3bee75006b4648f59ffc := @cleanConstructor_scalar_cell_e355c8cb262ce61f1e59 (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualConstructor0 expectedConstructor0
+theorem meaningConstructor0 (m n : cleanType_Natural_469c53b6dafb7a218246) (x : cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) (A : cleanType_Matrix_4518cbfc13ff70fc0769 m n cleanType_Real_107b6641a486642ad8e1) (r : cleanType_Real_107b6641a486642ad8e1) :
+  (actualConstructor0 m n x A r).entry = (0 : Real) := by simp [actualConstructor0, cleanConstructor_scalar_cell_e355c8cb262ce61f1e59, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+
+
+noncomputable def actualConstructor1 (m n : cleanType_Natural_469c53b6dafb7a218246) (x : cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) (A : cleanType_Matrix_4518cbfc13ff70fc0769 m n cleanType_Real_107b6641a486642ad8e1) (r : cleanType_Real_107b6641a486642ad8e1) : cleanStructure_VectorCell_ea235d5395205122748e n := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (n) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n))))
+noncomputable def expectedConstructor1 (m n : cleanType_Natural_469c53b6dafb7a218246) (x : cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) (A : cleanType_Matrix_4518cbfc13ff70fc0769 m n cleanType_Real_107b6641a486642ad8e1) (r : cleanType_Real_107b6641a486642ad8e1) : cleanStructure_VectorCell_ea235d5395205122748e n := @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 n (cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)
+same_basic_target actualConstructor1 expectedConstructor1
+theorem meaningConstructor1 (m n : cleanType_Natural_469c53b6dafb7a218246) (x : cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d) (A : cleanType_Matrix_4518cbfc13ff70fc0769 m n cleanType_Real_107b6641a486642ad8e1) (r : cleanType_Real_107b6641a486642ad8e1) :
+  (actualConstructor1 m n x A r).entry = (fun _ => (0 : Complex)) := by rfl
 
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

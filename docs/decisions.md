@@ -1707,3 +1707,17 @@ constraints, candidate validity checking and production integration. Constructor
 telescopes can now be inspected uniformly; general constructor row materialization
 is not claimed.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental constructor inference
+
+The joint-literal study now builds constructor rows from checked signatures and
+existing nominal structure identities. Known caller locals/retained numerals
+supply checked index comparison keys and representatives collected before
+candidate enumeration. This preserves local alias spelling without using spelling
+as semantic equality. The constructive rule, examples and unresolved dependent
+cases are recorded in the [study contract](../studies/parameterized-literals/README.md#constructor-rows-and-caller-index-values).
+There is no grammar or production elaboration change; general joint inference
+remains experimental.
+:::

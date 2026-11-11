@@ -55,8 +55,26 @@ same_basic_target actualDefault{i} expectedDefault{i}
 ''')
 checks.append('theorem meaningDefault0 : actualDefault0 = (0 : Nat) := by rfl\n')
 checks.append('theorem meaningDefault1 : actualDefault1 := by rfl\n')
+from cleanlang.structures import declare
+declare('Structure ScalarCell():',['Let entry: Real','Constructor: scalar cell'],env)
+declare('Structure VectorCell(n: Natural):',
+ ['Let entry: Vector(n,Complex)','Constructor: vector cell'],env)
+for i,(source,result,expected,meaning) in enumerate([
+ ('scalar cell(0)',env.structures['ScalarCell']['key'],
+  f"@{f('scalar cell')} ({nr} (nat_lit 0))",'(0 : Real)'),
+ ('vector cell(n,0)',env.structures['VectorCell']['key']+' n',
+  f"@{f('vector cell')} n ({zv})",'(fun _ => (0 : Complex))')]):
+ value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')))
+ proof=f"by simp [actualConstructor{i}, {f('scalar cell')}, {nr}]" if i==0 else 'by rfl'
+ checks.append(f"""
+noncomputable def actualConstructor{i} {binders} : {result} := {value.lean}
+noncomputable def expectedConstructor{i} {binders} : {result} := {expected}
+same_basic_target actualConstructor{i} expectedConstructor{i}
+theorem meaningConstructor{i} {binders} :
+  (actualConstructor{i} m n x A r).entry = {meaning} := {proof}
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Seven experimental joint-row targets and seven meaning proofs passed; production joint inference remains unimplemented.')
+print('Nine experimental joint-row targets and nine meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

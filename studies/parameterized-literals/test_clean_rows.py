@@ -28,6 +28,40 @@ class CleanRows(unittest.TestCase):
   declare('Structure Cell(T: Type):',['Let entry: T','Constructor: cell'],self.e)
   variables,_=Builder(self.e,{}).telescope(self.e.data['functions']['cell'],())
   self.assertEqual([(n,v.sort) for n,v in variables.items()],[('T','type'),('entry','index')])
+ def record(self):
+  from cleanlang.structures import declare
+  declare('Structure VectorCell(n: Natural):',
+   ['Let entry: Vector(n,Complex)','Constructor: vector cell'],self.e)
+ def test_scalar_constructor_constrains_zero(self):
+  from cleanlang.structures import declare
+  declare('Structure ScalarCell():',['Let entry: Real','Constructor: scalar cell'],self.e)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('scalar cell(0)','expression')))
+  self.assertEqual(value.type,self.e.type('ScalarCell'))
+  self.assertEqual(value.tree[2][0][2],'Real')
+ def test_constructor_recovers_dimension_without_vector_local(self):
+  self.record();scope={'n':self.scope['n']}
+  value=Builder(self.e,scope).materialize(expression_tree(parse('vector cell(n,0)','expression')))
+  self.assertEqual(value.type,self.e.type('VectorCell(n)',scope))
+  self.assertEqual(value.tree[2][1][5],[['n','explicit',['Local','n']]])
+ def test_constructor_compares_normalized_index_but_retains_spelling(self):
+  self.record()
+  self.scope['k']=Expr('k','k',self.e.type('Natural'),tree=['Local','k'],
+   local_normal=self.scope['n'],local_expand=True)
+  target=self.e.type('VectorCell(n)',self.scope)
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(k,0)','expression')),target)
+  self.assertEqual(value.type,target)
+  self.assertEqual(value.tree[2][1][5],[['n','explicit',['Local','k']]])
+ def test_constructor_rejects_different_expected_dimension(self):
+  self.record()
+  with self.assertRaises(NoSolution):
+   Builder(self.e,self.scope).solve(expression_tree(parse('vector cell(n,0)','expression')),
+    self.e.type('VectorCell(m)',self.scope))
+ def test_constructor_declaration_order_does_not_select_index_spelling(self):
+  self.record();tree=expression_tree(parse('vector cell(n,0)','expression'))
+  first=Builder(self.e,self.scope).materialize(tree)
+  self.e.data['functions']=dict(reversed(list(self.e.data['functions'].items())))
+  second=Builder(self.e,self.scope).materialize(tree)
+  self.assertEqual(first.lean,second.lean)
  def solve(self,source,**kw):
   return Builder(self.e,self.scope).solve(expression_tree(parse(source,'expression')),**kw)
  def literal(self,result):return [key for kind,_,key in result[0] if kind=='literal']

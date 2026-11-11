@@ -26,7 +26,21 @@ class Fragment:
 class Builder:
     def __init__(self,env,scope,limit=4096):
         if type(limit) is not int or limit<1:raise ValueError('Positive row limit required')
-        self.env=env;self.scope=scope;self.limit=limit;self.rigid={};self.known={}
+        self.env=env;self.scope=scope;self.limit=limit;self.rigid={};self.known={};self.known_values={}
+
+    def carrier_identity(self,name):
+        spec=self.env.data['types'].get(name,{})
+        key=spec.get('native_binding')
+        if key is None:key=self.env.structures.get(name,{}).get('key')
+        if key is None:raise Incomplete('Undeclared carrier identity')
+        return key
+
+    def known_index(self,value):
+        from cleanlang.indices import index_value
+        index=index_value(value,self.env,self.scope,_fresh=True)
+        atom=Atom(repr(index.comparison_key()),'index')
+        self.rigid.setdefault(atom,index)
+        return atom
 
     def typ(self,typ,formals=None):
         capture=formals is None
@@ -46,10 +60,9 @@ class Builder:
             if capture:self.rigid.setdefault(atom,typ)
             return atom
         if type(typ) is not Type:raise Incomplete('Unsupported carrier constructor: '+type(typ).__name__)
-        spec=self.env.data['types'].get(typ.name)
-        if spec is None or 'native_binding' not in spec:raise Incomplete('Undeclared carrier identity')
+        key=self.carrier_identity(typ.name)
         if self.env.sort_level(typ)!=1:raise Incomplete('Only Type-0 carriers in this adapter')
-        return Carrier(spec['native_binding'],tuple(self.typ(a,None if capture else formals) for a in typ.args))
+        return Carrier(key,tuple(self.typ(a,None if capture else formals) for a in typ.args))
 
     def signature(self,spec):
         try:return require(self.env,spec)
@@ -70,7 +83,7 @@ class Builder:
             if value is None:value=Expressions(self.env,self.scope).elaborate(tree)
             # Only plain locals and retained scalar numerals have direct rigid
             # value equations here. Other known values may still supply types.
-            atom=(Atom(repr(value.lean),'index') if tree[0] in ('Local','BoundNumeral')
+            atom=(self.known_values[path] if path in self.known_values
                   else Variable(repr((path,'deferred known value')),'index'))
             return [Fragment(self.typ(value.type),atom)]
         kind=tree[0]
@@ -130,11 +143,13 @@ class Builder:
         # Caller representatives are collected in source order before any
         # declaration enumeration, so candidate order cannot choose an index's
         # emitted spelling. The explicit expected type is visited afterward.
-        self.rigid={};self.known={}
+        self.rigid={};self.known={};self.known_values={}
         def prepare(node,path):
             if not holes(node):
                 value=Expressions(self.env,self.scope).elaborate(node)
-                self.known[path]=value;self.typ(value.type);return
+                self.known[path]=value;self.typ(value.type)
+                if node[0] in ('Local','BoundNumeral'):self.known_values[path]=self.known_index(value)
+                return
             if node[0]=='Call':
                 for i,arg in enumerate(node[2]):prepare(arg,path+(2,i))
             elif node[0] in ('Operator','Unary'):
@@ -199,7 +214,8 @@ class Builder:
         from cleanlang.inferred_conversion import reify
         from cleanlang.literal_binding import snapshot,elaborate as literal
         selected_literals={(kind,path):key for kind,path,key in choices if kind in ('literal','numeral')}
-        types={s['native_binding']:n for n,s in self.env.data['types'].items() if 'native_binding' in s}
+        types={self.carrier_identity(n):n for n,s in self.env.data['types'].items()
+               if 'native_binding' in s or n in self.env.structures}
         functions={s['native_binding']:n for n,s in self.env.data['functions'].items()}
         def actual(term):
             term=resolve(term,bindings)

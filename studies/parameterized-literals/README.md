@@ -284,3 +284,60 @@ and the regenerated 92-result proved corpus. The eight new signature tests were
 run separately in the focused suite; the integration runner now includes them
 for subsequent runs. Log: `/tmp/clean-checked-signatures-integration.log`.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Constructor rows and caller index values
+
+The experimental adapter now accepts nominal structure carriers using their
+existing declared native structure identities. Constructor call rows use the
+same checked signatures as other callables; there is no constructor-name or
+mathematical-type dispatch. For example:
+
+```clean
+Structure VectorCell(n: Natural):
+  Let entry: Vector(n,Complex)
+  Constructor: vector cell
+```
+
+With a caller parameter `n: Natural`, the expression `vector cell(n,0)` supplies
+the dimension through its first argument. Its second argument selects the declared
+complex-vector zero. It materializes to the wrapper call
+`@vectorCellConstructor n (@complexVectorZero n)` (native names abbreviated).
+`scalar cell(0)` for a record with one Real field similarly selects the Real
+numeral constructor. These use existing source grammar; production unannotated
+literal inference remains unchanged.
+
+Before row enumeration, known local values and retained scalar numerals are
+converted to checked indices. Their comparison keys provide rigid value equations;
+their checked indices provide representatives when reconstructing a selected
+literal's arguments. Collection follows source order, visiting a known operand's
+type before its value, then the expected type after all operands. First occurrence
+wins only the source spelling of an already equal index, never its meaning or
+constructor. Candidate enumeration cannot add these caller representatives.
+
+For a local definition `k = n`, `vector cell(k,0)` can meet expected type
+`VectorCell(n)` and still emit `k` as the zero constructor argument. Expected
+`VectorCell(m)` with unrelated m is rejected. Constructor order does not alter
+the selected spelling. A dimension supplied by an unresolved literal, general
+computed argument or projected argument still needs more work: this is not a
+complete dependent-application solver. Unsupported candidate constraints must
+remain incomplete rather than be dropped. The existing selected-row recheck
+still does not establish that every candidate was valid before selection.
+
+The native checker now contains nine exact target comparisons and nine supporting
+proofs, including the Real and dimensioned-vector constructor calls and their
+entry projections. These are constructor/literal specimens, not paper theorems.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Constructor-row validation: 73 experimental tests pass; nine exact native targets
+and nine supporting proofs pass (`/tmp/clean-constructor-rows-native.log`). The
+first scalar-entry proof attempt used `rfl`, which did not discharge the declared
+Real numeral conversion. Explicit simplification of the constructor and numeral
+wrapper proves the same statement; the independent canonical target was unchanged.
+This step changes only the experimental adapter and its documentation/checks.
+Production integration evidence remains the preceding checked-signature run;
+the still-running full discovery jobs are not counted as passes.
+:::

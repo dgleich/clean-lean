@@ -1260,5 +1260,16 @@ spelling after shadowing. Native declaration emission is unchanged; general
 joint inference remains experimental. See the
 <a href="spec.md#declaration-time-callable-signatures">capture contract</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="constructor-literal-rows">
+<h2>Experimental constructor literal inference</h2>
+<p>For a declared VectorCell(n) record with a complex-vector entry,
+<code>vector cell(n,0)</code> becomes
+<code>@vectorCellConstructor n (@complexVectorZero n)</code>, with native names
+abbreviated here. Constructor signatures constrain the same literal rows as
+ordinary functions. Checked caller indices preserve local-alias spelling while
+comparing normalized values. Nine exact targets and supporting proofs cover the
+study specimens; production joint inference is still pending. See the
+<a href="../studies/parameterized-literals/README.md#constructor-rows-and-caller-index-values">construction and limits</a>.</p>
+</section></llm>
 </body>
 </html>
