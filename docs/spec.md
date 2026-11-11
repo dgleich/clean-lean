@@ -1725,3 +1725,16 @@ Explicit annotated numerals also count as known index evidence. See the
 [construction and native mapping](../studies/parameterized-literals/README.md#literal-valued-dimensions).
 No grammar or production-inference change is implied.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental checked caller expressions
+
+Hole-free caller expressions now supply checked index equations and source
+representatives in the joint-literal experiment, including declared calls,
+operators and projections. Unsupported checked indices report incomplete analysis;
+known values no longer receive unconstrained placeholder variables. Existing
+conversion rules decide equality, and enumeration cannot choose representatives.
+See the [construction and unresolved-call boundary](../studies/parameterized-literals/README.md#checked-computed-arguments).
+Production parsing and inference are unchanged.
+:::

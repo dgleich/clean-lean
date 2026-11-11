@@ -85,8 +85,28 @@ same_basic_target actualLiteralDimension{i} expectedLiteralDimension{i}
 theorem meaningLiteralDimension{i} :
   actualLiteralDimension{i}.entry = (fun _ => (0 : Complex)) := by rfl
 """)
+from cleanlang.modules import notation
+notation('Notation successor(n: Natural): Natural:',
+ ['Means: Nat.succ n','Render latex: {n}+1'],env)
+declare('Structure Dimension():',['Let size: Natural','Constructor: dimension'],env)
+dim=env.structures['Dimension']['key']
+computed_scope={'n':scope['n'],'D':Expr('D','D',env.type('Dimension'),tree=['Local','D'])}
+computed_binders=f"(n : {t('Natural')}) (D : {dim})"
+for i,(source,index) in enumerate([
+ ('vector cell(successor(n),0)',f"{f('successor')} n"),
+ ('vector cell(D.size,0)',f"@{dim}.size D"),
+ ('vector cell(n+n,0)',f"{f('natural sum')} n n")]):
+ value=Builder(env,computed_scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ checks.append(f"""
+noncomputable def actualComputedDimension{i} {computed_binders} : {cell} ({index}) := {value.lean}
+noncomputable def expectedComputedDimension{i} {computed_binders} : {cell} ({index}) :=
+  @{f('vector cell')} ({index}) (@{f('complex vector zero')} ({index}))
+same_basic_target actualComputedDimension{i} expectedComputedDimension{i}
+theorem meaningComputedDimension{i} {computed_binders} :
+  (actualComputedDimension{i} n D).entry = (fun _ => (0 : Complex)) := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Eleven experimental joint-row targets and eleven meaning proofs passed; production joint inference remains unimplemented.')
+print('Fourteen experimental joint-row targets and fourteen meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

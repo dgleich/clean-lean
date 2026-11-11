@@ -388,3 +388,53 @@ replay after changing the visible numeral default to Real preserves the selected
 Natural argument. Production sources are unchanged in this step; running full
 discovery jobs remain separate, incomplete evidence.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Checked computed arguments
+
+A hole-free caller subtree is now elaborated once, then converted by the existing
+checked index machinery to its semantic comparison key and retained source
+representative. It supplies a rigid value equation, including when the subtree
+is a declared call, operator application or record projection. This extends
+caller evidence beyond locals and numerals; it does not normalize arbitrary Lean
+arithmetic or invert functions.
+
+With the same VectorCell declaration, these expressions work in the experiment:
+
+```clean
+vector cell(successor(n),0)
+vector cell(D.size,0)
+vector cell(n+n,0)
+```
+
+The generated zero call receives respectively the retained successor wrapper,
+Dimension field projection, or natural-addition wrapper. Explicit expected types
+compare these checked indices under existing Clean conversion rules. Distinct
+rigid expressions, such as successor(n) and successor(m) for unrelated locals,
+are not silently identified. Reordering declarations does not change the target.
+
+Known subtrees are visited in source order before any candidate rows. Their types
+are recorded before their values, preserving the established representative
+priority. A missing checked index is now incomplete analysis rather than an
+unconstrained stand-in for an already known value. Failure to represent a checked
+index is also incomplete, so binder/proof limitations are not converted into a
+successful inference.
+
+`vector cell(successor(2),0)` remains unresolved: the nested call contains a hole
+and is not yet a checked caller subtree. A deferred call-constraint evaluator is
+needed to check such applications after their input choices are resolved.
+Computed formal declaration indices and exhaustive dependent candidate validity
+also remain open. These are substantive obligations before production integration.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Checked-computed-argument validation: 85 experimental tests pass, with fourteen
+independent exact native targets and fourteen supporting proofs
+(`/tmp/clean-computed-dimension-native.log`). The new native checks cover a call,
+a projection and an operator as dimensions. A negative test retains the unresolved
+status of successor(2) while its literal is still a hole. This changes only the
+study adapter, tests and documentation; full production validation jobs remain
+separate and incomplete.
+:::

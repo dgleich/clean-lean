@@ -1280,5 +1280,14 @@ The constructor constrains both literals without a default. Selected numeral
 indices retain their native wrappers; general dependent inference remains open.
 See the <a href="../studies/parameterized-literals/README.md#literal-valued-dimensions">selection and reconstruction rules</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="checked-computed-arguments">
+<h2>Experimental checked computed arguments</h2>
+<p><code>vector cell(D.size,0)</code> generates a constructor call whose zero-vector
+argument receives the same declared field projection as its dimension argument.
+Already checked calls and operators work similarly. Equality uses existing Clean
+index conversion; it does not infer arithmetic identities. Nested calls containing
+unresolved literals still require deferred constraints. See the
+<a href="../studies/parameterized-literals/README.md#checked-computed-arguments">rules and limits</a>.</p>
+</section></llm>
 </body>
 </html>

@@ -100,6 +100,41 @@ class CleanRows(unittest.TestCase):
   self.e.data['types']=dict(reversed(list(self.e.data['types'].items())))
   self.e.data['functions']=dict(reversed(list(self.e.data['functions'].items())))
   self.assertEqual(first.lean,Builder(self.e,{}).materialize(tree).lean)
+ def successor(self):
+  notation('Notation successor(n: Natural): Natural:',
+   ['Means: Nat.succ n','Render latex: {n}+1'],self.e)
+ def test_checked_computed_dimension_supplies_rigid_value(self):
+  self.record();self.successor()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(successor(n),0)','expression')))
+  self.assertEqual(value.type,self.e.type('VectorCell((successor(n)))',self.scope))
+  self.assertEqual(value.tree[2][1][5][0][2][0],'ModuleCall')
+  self.assertIn(self.e.data['functions']['successor']['native_binding'],value.lean)
+ def test_checked_projected_dimension_supplies_rigid_value(self):
+  from cleanlang.structures import declare
+  self.record();declare('Structure Dimension():',['Let size: Natural','Constructor: dimension'],self.e)
+  self.scope['D']=Expr('D','D',self.e.type('Dimension'),tree=['Local','D'])
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(D.size,0)','expression')))
+  self.assertEqual(value.type,self.e.type('VectorCell((D.size))',self.scope))
+  self.assertEqual(value.tree[2][1][5][0][2],['Projection',['Local','D'],'size'])
+ def test_computed_dimension_keeps_operator_identity(self):
+  self.record()
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(n+n,0)','expression')))
+  self.assertEqual(value.type,self.e.type('VectorCell((n+n))',self.scope))
+  self.assertEqual(value.tree[2][1][5][0][2][0],'ModuleCall')
+ def test_computed_dimension_rejects_different_expected_expression(self):
+  self.record();self.successor()
+  with self.assertRaises(NoSolution):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(successor(n),0)','expression')),
+    self.e.type('VectorCell((successor(m)))',self.scope))
+ def test_computed_dimension_with_unresolved_literal_is_still_unresolved(self):
+  self.record();self.successor()
+  with self.assertRaises(Underdetermined):
+   Builder(self.e,self.scope).materialize(expression_tree(parse('vector cell(successor(2),0)','expression')))
+ def test_computed_dimension_declaration_order_is_irrelevant(self):
+  self.record();self.successor();tree=expression_tree(parse('vector cell(successor(n),0)','expression'))
+  first=Builder(self.e,self.scope).materialize(tree)
+  self.e.data['functions']=dict(reversed(list(self.e.data['functions'].items())))
+  self.assertEqual(first.lean,Builder(self.e,self.scope).materialize(tree).lean)
  def solve(self,source,**kw):
   return Builder(self.e,self.scope).solve(expression_tree(parse(source,'expression')),**kw)
  def literal(self,result):return [key for kind,_,key in result[0] if kind=='literal']

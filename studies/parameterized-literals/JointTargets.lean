@@ -278,6 +278,15 @@ structure cleanStructure_VectorCell_ea235d5395205122748e («n» : (_root_.cleanT
 noncomputable def cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («entry» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : _root_.cleanStructure_VectorCell_ea235d5395205122748e («n») :=
   @_root_.cleanStructure_VectorCell_ea235d5395205122748e.mk «n» «entry»
 
+noncomputable def cleanNotation_successor_04500991a57d12c49471  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  Nat.succ n
+
+structure cleanStructure_Dimension_6f5cbfe61b71a5fbfc06  : Type where
+  «size» : (_root_.cleanType_Natural_469c53b6dafb7a218246)
+
+noncomputable def cleanConstructor_dimension_a9662d2191fb8355b027 («size» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : _root_.cleanStructure_Dimension_6f5cbfe61b71a5fbfc06 :=
+  @_root_.cleanStructure_Dimension_6f5cbfe61b71a5fbfc06.mk «size»
+
 
 open scoped Matrix
 
@@ -384,5 +393,29 @@ noncomputable def expectedLiteralDimension1 : cleanStructure_VectorCell_ea235d53
 same_basic_target actualLiteralDimension1 expectedLiteralDimension1
 theorem meaningLiteralDimension1 :
   actualLiteralDimension1.entry = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualComputedDimension0 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) : cleanStructure_VectorCell_ea235d5395205122748e (cleanNotation_successor_04500991a57d12c49471 n) := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((_root_.cleanNotation_successor_04500991a57d12c49471 (n))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNotation_successor_04500991a57d12c49471 (n))))))
+noncomputable def expectedComputedDimension0 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) : cleanStructure_VectorCell_ea235d5395205122748e (cleanNotation_successor_04500991a57d12c49471 n) :=
+  @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (cleanNotation_successor_04500991a57d12c49471 n) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNotation_successor_04500991a57d12c49471 n))
+same_basic_target actualComputedDimension0 expectedComputedDimension0
+theorem meaningComputedDimension0 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) :
+  (actualComputedDimension0 n D).entry = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualComputedDimension1 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) : cleanStructure_VectorCell_ea235d5395205122748e (@cleanStructure_Dimension_6f5cbfe61b71a5fbfc06.size D) := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((@_root_.cleanStructure_Dimension_6f5cbfe61b71a5fbfc06.«size» (D))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((@_root_.cleanStructure_Dimension_6f5cbfe61b71a5fbfc06.«size» (D))))))
+noncomputable def expectedComputedDimension1 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) : cleanStructure_VectorCell_ea235d5395205122748e (@cleanStructure_Dimension_6f5cbfe61b71a5fbfc06.size D) :=
+  @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (@cleanStructure_Dimension_6f5cbfe61b71a5fbfc06.size D) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (@cleanStructure_Dimension_6f5cbfe61b71a5fbfc06.size D))
+same_basic_target actualComputedDimension1 expectedComputedDimension1
+theorem meaningComputedDimension1 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) :
+  (actualComputedDimension1 n D).entry = (fun _ => (0 : Complex)) := by rfl
+
+
+noncomputable def actualComputedDimension2 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) : cleanStructure_VectorCell_ea235d5395205122748e (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n n) := (@_root_.cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (n) (n))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (n) (n))))))
+noncomputable def expectedComputedDimension2 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) : cleanStructure_VectorCell_ea235d5395205122748e (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n n) :=
+  @cleanConstructor_vector_cell_151a6d80e8e69e4d0b80 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n n) (@cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n n))
+same_basic_target actualComputedDimension2 expectedComputedDimension2
+theorem meaningComputedDimension2 (n : cleanType_Natural_469c53b6dafb7a218246) (D : cleanStructure_Dimension_6f5cbfe61b71a5fbfc06) :
+  (actualComputedDimension2 n D).entry = (fun _ => (0 : Complex)) := by rfl
 
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

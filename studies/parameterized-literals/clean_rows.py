@@ -83,13 +83,9 @@ class Builder:
 
     def fragments(self,tree,path=()):
         if not holes(tree):
-            value=self.known.get(path)
-            if value is None:value=Expressions(self.env,self.scope).elaborate(tree)
-            # Locals, retained numerals and explicit numeral annotations supply
-            # rigid values. Other known values may still supply types.
-            atom=(self.known_values[path] if path in self.known_values
-                  else Variable(repr((path,'deferred known value')),'index'))
-            return [Fragment(self.typ(value.type),atom)]
+            if path not in self.known or path not in self.known_values:
+                raise Incomplete('Known argument lacks checked index evidence')
+            return [Fragment(self.typ(self.known[path].type),self.known_values[path])]
         kind=tree[0]
         if kind=='Decimal':
             text=digits(tree[1]);found=[]
@@ -152,7 +148,9 @@ class Builder:
             if not holes(node):
                 value=Expressions(self.env,self.scope).elaborate(node)
                 self.known[path]=value;self.typ(value.type)
-                if node[0] in ('Local','BoundNumeral','NumeralAnnotation'):self.known_values[path]=self.known_index(value)
+                try:self.known_values[path]=self.known_index(value)
+                except CleanError as error:
+                    raise Incomplete('Known argument index is unsupported: '+str(error)) from error
                 return
             if node[0]=='Call':
                 for i,arg in enumerate(node[2]):prepare(arg,path+(2,i))
