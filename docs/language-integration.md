@@ -100,6 +100,6 @@ and C verification obligations are also unchanged.
 
 The review browser now has a progressive build mode and a current 158-file source
 snapshot. Pending translations are explicit; 16 focused tests and Chromium
-source/navigation/notes/mobile checks pass. The full translation build remains
-running, and native Emacs startup remains unavailable. See [editor validation](../editors/README.md).
+source/navigation/notes/mobile checks pass. The full translation build exited with status 143 before completing the
+active-label module; the saved snapshot is partial. Native Emacs startup remains unavailable. See [editor validation](../editors/README.md).
 :::

@@ -170,7 +170,9 @@ inventory/highlighting/escaping checks passed. Native Chromium checks passed for
 pending status, exact source text, navigation, search, notes across reload and
 mobile layout; the mobile screenshot was inspected. Reproduce those partial-build
 UI checks with `python3 tools/check_review_progressive.py`. Full translated-snapshot
-validation remains pending while the active-label module is being translated.
+validation remains pending. The progressive build exited with status 143 while
+translating the active-label module; the saved snapshot remains explicitly partial.
+The page does not assert that a builder process is currently live.
 The full-browser checker remains `tools/check_review.py` for the completed build.
 
 A fresh Emacs runtime attempt supplied the extracted portable dump and both local
