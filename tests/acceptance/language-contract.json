@@ -4316,6 +4316,22 @@
         "Recursive scoped-body construction and local callable consumers",
         "Production integration and broad conformance"
       ]
+    },
+    {
+      "id": "recursive_scoped_consumers",
+      "status": "experimental-slice",
+      "environment": "Explicit module signatures and fixed callable expectations; experimental Builder.",
+      "source": "nested(function (a: Real,function (b: Real,0)),0)",
+      "expected_lean": "Declared nested consumer applied to two nested Real binders with selected Real zero and a Real zero sibling; one joint selection.",
+      "checks": [
+        "test_scoped_calls.py: nested lambdas, quantifiers, call arguments and bodies, serialization, no independent selection",
+        "check_scoped_calls.py: eleven independent complete-call targets and eleven interpretation proofs"
+      ],
+      "pending": [
+        "Implicit/contextual signature recovery",
+        "Unsupported enclosing operators and local callable consumers",
+        "Production integration"
+      ]
     }
   ]
 }

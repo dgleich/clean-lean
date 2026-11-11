@@ -2718,3 +2718,51 @@ HTML IDs/local links and provenance checks pass. Production compiler files are
 unchanged, and the separately running full-discovery/active-label snapshots remain
 live and pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Recursive scoped expression preparation (experimental)
+
+The scoped consumer experiment now recursively prepares module-call arguments and
+binder bodies. It supports nested lambdas when the enclosing explicit signature
+determines their callable types, nested quantifiers, a scoped call inside another
+call, and a scoped call inside a lambda body. For example:
+
+```clean
+nested(function (a: Real,function (b: Real,0)),0)
+wrapped(inner(function (a: Real,0),0))
+body(function (a: Real,inner(function (b: Real,0),0)),0)
+```
+
+The existing parser determines each syntax tree before inference. Preparation
+recurses on that tree: an ordinary expression exposes its checked rows; a binder
+opens one fresh source-path local and exposes its recursively prepared body rows;
+a module call forms the Cartesian product of its recursively prepared argument
+rows. Each call appends its checked result term and expected-type equation.
+Binder rows describe the body, not an inferred whole-function type; the whole
+binder expectation is already fixed by its consumer. No function-type inference
+is claimed at this boundary.
+
+Only the outer selector defaults and selects. Reconstruction projects the selected
+argument and default-marker slices into the same prepared child rows, retains
+literal witnesses, then re-elaborates each whole binder/call. A product ordinal
+associates a selected row with its children; it is never an ambiguity tie-breaker.
+Child budgets decrease on recursion, Cartesian products are bounded, and recursion
+exhaustion reports incomplete analysis. Scope identities and row-variable namespaces
+follow source paths, including nested body and argument positions.
+
+Implicit consumers, dependencies on unresolved earlier values, local callable
+consumers, scoped expressions under unsupported operators, and general contextual
+signature recovery still need integration. Production inference is unchanged.
+The focused tests forbid independent child selection and cover nested lambda,
+quantifier, call and retained-codec cases. The native driver includes three new
+independently written complete Lean targets and interpretation proofs.
+Validation: the full experimental suite passed 448 tests before the two additional
+negative cases; the final focused suite passes 31 tests, including resource
+exhaustion and ambiguity inside a nested call body. Eleven complete-call canonical
+Lean comparisons and eleven interpretation proofs pass. The existing 97-target/97-proof
+suite and three-target/three-proof scoped adapter suite also pass. Production full-discovery
+and active-label snapshot processes remain live; these results do not substitute
+for their pending completion.
+
+:::

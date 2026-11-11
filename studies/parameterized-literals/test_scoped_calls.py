@@ -81,6 +81,35 @@ class ScopedCalls(unittest.TestCase):
   self.scope['r']=Expr('r','r',self.env.type('Real'),tree=['Local','r'])
   with self.assertRaises(Ambiguous):self.solve('consume(function (k: Natural,0),r+0)')
 
+ def test_nested_lambda_body(self):
+  self.declare(function='Function(Real,Function(Real,Real))')
+  with patch.object(Builder,'solve_with_trace',side_effect=AssertionError('inner selection')):
+   value=self.solve('consume(function (a: Real,function (b: Real,0)),0)',use_default=False)
+  self.assertEqual(value.tree[2][0][3][3][2],'Real')
+ def test_nested_call_argument(self):
+  self.declare()
+  notation('Notation wrap(x: Real): Real:',['Means: x','Render latex: w({x})'],self.env)
+  value=self.solve('wrap(consume(function (k: Natural,0),0))',use_default=False)
+  self.assertEqual(value.tree[2][0][2][0][3][3],'complex vector zero')
+ def test_call_inside_lambda_body(self):
+  self.declare(function='Function(Real,Real)')
+  value=self.solve('consume(function (a: Real,consume(function (b: Real,0),0)),0)',use_default=False)
+  self.assertEqual(Expressions(self.env,self.scope).elaborate(loads(dumps(value.tree))).lean,value.lean)
+ def test_nested_quantifier(self):
+  notation('Notation accept(p: Proposition,x: Real): Real:', ['Means: x','Render latex: accept({p},{x})'],self.env)
+  value=self.solve('accept(for every (a: Real,for every (b: Real,b = 0)),0)',use_default=False)
+  self.assertEqual(value.tree[2][0][3][0],'Forall')
+
+ def test_nested_resource_exhaustion_is_incomplete(self):
+  self.declare(function='Function(Real,Function(Real,Real))')
+  tree=expression_tree(parse('consume(function (a: Real,function (b: Real,0)),0)','expression'))
+  with self.assertRaises(Incomplete):Builder(self.env,self.scope,limit=3).materialize(tree)
+ def test_nested_operator_ambiguity_is_not_hidden(self):
+  self.declare(function='Function(Real,Real)')
+  notation('Notation alternative(x: Real,y: Real): Complex:', ['Means: 0','Infix: +','Render latex: {x}+{y}'],self.env)
+  with self.assertRaises(Ambiguous):
+   self.solve('consume(function (a: Real,consume(function (b: Real,b+0),0)),0)')
+
 if __name__=='__main__':unittest.main()
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

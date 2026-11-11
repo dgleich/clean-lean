@@ -1,7 +1,7 @@
 # generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
 """Prepare scoped binder rows and retain a joint solver's selected body.
 
-This is an experimental boundary, not automatic nested-binder enumeration.
+This is an experimental boundary for recursively prepared scoped bodies.
 """
 from cleanlang.core import Expr,Expressions,texid
 from cleanlang.dependent_functions import fresh_bound,DependentFunctionType,substitute
@@ -35,11 +35,14 @@ class ScopedBody:
 
     def rows(self):
         """Expose checked body alternatives without defaulting or selecting."""
-        return self.builder.rows(self.tree[3],self.body_expected)
+        from scoped_calls import prepare_expression
+        self.prepared=prepare_expression(self.builder,self.tree[3],self.body_expected)
+        return self.prepared[0]
 
     def retain(self,selection):
         """Rebind the retained body by re-elaborating the complete source binder."""
-        body=self.builder.retain_selected(self.tree[3],selection,self.body_expected)
+        if not hasattr(self,'prepared'):self.rows()
+        body=self.prepared[1](selection)
         return Expressions(self.env,self.scope).elaborate([*self.tree[:3],body.tree],self.expected)
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

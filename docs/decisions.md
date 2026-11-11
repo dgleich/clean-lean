@@ -2406,3 +2406,18 @@ namespaces and rechecks the complete call and consumer identity. See the
 This is bounded experimental source integration. General contextual recovery,
 recursive scoped bodies and production inference remain pending. No grammar change.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Recursive preparation of experimental scoped consumers
+
+The direct scoped-call experiment now recursively prepares argument calls and
+binder bodies, preserving one outer selection/default pass. Whole lambda types
+must already be determined by checked explicit signatures; binder rows represent
+the body. Child row products retain source-path namespaces and are reconstructed
+only after uniqueness is established. Budgets decrease on recursion; exhaustion
+is incomplete analysis. The [constructive rule and examples](../studies/parameterized-literals/README.md#recursive-scoped-expression-preparation-experimental)
+specify the supported boundary. No grammar or production inference change.
+Implicit/contextual signature recovery and unsupported enclosing operators remain
+pending, as do mathematical topology proofs independently of this inference work.
+:::

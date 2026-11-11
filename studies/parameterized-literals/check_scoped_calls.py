@@ -16,7 +16,15 @@ f=lambda name:env.data['functions'][name]['native_binding']
 num=lambda name:env.data['types'][name]['numerals']['native_binding']
 zr=f'{num("Real")} (nat_lit 0)';zc=f'{num("Complex")} (nat_lit 0)';one=f'{num("Natural")} (nat_lit 1)'
 zv=f('complex vector zero')
+notation('Notation inner(f: Function(Real,Real),x: Real): Real:',
+ ['Means: x','Render latex: inner'],env)
 cases=[
+ ('nested','f: Function(Real,Function(Real,Real)),x: Real','Real','x',
+  'nested(function (a: Real,function (b: Real,0)),0)',f'(fun (a : {t("Real")}) => fun (b : {t("Real")}) => {zr}) ({zr})'),
+ ('wrapped','x: Real','Real','x',
+  'wrapped(inner(function (a: Real,0),0))',f'({f("inner")} (fun (a : {t("Real")}) => {zr}) ({zr}))'),
+ ('body','f: Function(Real,Real),x: Real','Real','x',
+  'body(function (a: Real,inner(function (b: Real,0),0)),0)',f'(fun (a : {t("Real")}) => {f("inner")} (fun (b : {t("Real")}) => {zr}) ({zr})) ({zr})'),
  ('consume family','f: Function(k: Natural,Vector(k,Complex)),x: Real','Real','x',
   'consume family(function (k: Natural,0),0)',f'(fun (k : {t("Natural")}) => {zv} k) ({zr})'),
  ('apply complex','f: Function(Complex,Complex),x: Complex','Complex','f x',
@@ -46,10 +54,10 @@ noncomputable def actualScopedCall{i} (n m : {t('Natural')}) : {t(result)} := {v
 noncomputable def expectedScopedCall{i} (n m : {t('Natural')}) : {t(result)} := {f(name)} {expected}
 same_basic_target actualScopedCall{i} expectedScopedCall{i}
 theorem scopedCallMeaning{i} (n m : {t('Natural')}) : actualScopedCall{i} n m = 0 := by
-  simp [actualScopedCall{i}, {f(name)}, {num(result)}]
+  simp [actualScopedCall{i}, {f(name)}, {f('inner')}, {num(result)}]
 ''')
 path=HERE/'ScopedCallTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Eight automatic scoped-call targets and eight interpretation proofs passed; implicit/contextually unresolved consumers and production integration remain pending.')
+print('Eleven automatic scoped-call targets and eleven interpretation proofs passed; implicit/contextually unresolved consumers and production integration remain pending.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

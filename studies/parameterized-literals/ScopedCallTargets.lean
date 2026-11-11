@@ -266,6 +266,18 @@ noncomputable def cleanDefine_commutator_7a2644a6d2b446ea132a {«n» : (_root_.c
 noncomputable def cleanDefine_matrix_square_f1a7bece54a54888d26a {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («A» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
   (@_root_.cleanNotation_complex_matrix_product_22b143895482c8d56a11 («n») («n») («n») («A») («A»))
 
+noncomputable def cleanNotation_inner_6ce71cef8970f1f6d0cf  («f» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  x
+
+noncomputable def cleanNotation_nested_1fc974510351832aa1d8  («f» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → (((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1)))) («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  x
+
+noncomputable def cleanNotation_wrapped_672c0466d321eedfc5ae  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  x
+
+noncomputable def cleanNotation_body_18f0843a26266fb0ed12  («f» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  x
+
 noncomputable def cleanNotation_consume_family_79ae0b9663201ba8f3ca  («f» : (clean_pi_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (clean_pi_bound_0) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))))) («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
   x
 
@@ -318,59 +330,80 @@ elab "same_basic_target " a:ident b:ident : command => do
       Expr.equal (canonical x.value) (canonical y.value) do
     throwError "Canonical type or value differs"
 
-noncomputable def actualScopedCall0 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (@_root_.cleanNotation_consume_family_79ae0b9663201ba8f3ca ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (clean_bound_0)))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
-noncomputable def expectedScopedCall0 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_consume_family_79ae0b9663201ba8f3ca (fun (k : cleanType_Natural_469c53b6dafb7a218246) => cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 k) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+noncomputable def actualScopedCall0 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (_root_.cleanNotation_nested_1fc974510351832aa1d8 ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (fun (clean_bound_1 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedScopedCall0 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_nested_1fc974510351832aa1d8 (fun (a : cleanType_Real_107b6641a486642ad8e1) => fun (b : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
 same_basic_target actualScopedCall0 expectedScopedCall0
 theorem scopedCallMeaning0 (n m : cleanType_Natural_469c53b6dafb7a218246) : actualScopedCall0 n m = 0 := by
-  simp [actualScopedCall0, cleanNotation_consume_family_79ae0b9663201ba8f3ca, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+  simp [actualScopedCall0, cleanNotation_nested_1fc974510351832aa1d8, cleanNotation_inner_6ce71cef8970f1f6d0cf, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
 
 
-noncomputable def actualScopedCall1 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Complex_2d7f06a08f8ab1e3f46d := (_root_.cleanNotation_apply_complex_a0de812c1bf6f5824036 ((fun (clean_bound_0 : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) => (_root_.cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0)))) ((_root_.cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0))))
-noncomputable def expectedScopedCall1 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Complex_2d7f06a08f8ab1e3f46d := cleanNotation_apply_complex_a0de812c1bf6f5824036 (fun (z : cleanType_Complex_2d7f06a08f8ab1e3f46d) => cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0)) (cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0))
+noncomputable def actualScopedCall1 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (_root_.cleanNotation_wrapped_672c0466d321eedfc5ae ((_root_.cleanNotation_inner_6ce71cef8970f1f6d0cf ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))))
+noncomputable def expectedScopedCall1 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_wrapped_672c0466d321eedfc5ae (cleanNotation_inner_6ce71cef8970f1f6d0cf (fun (a : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))
 same_basic_target actualScopedCall1 expectedScopedCall1
 theorem scopedCallMeaning1 (n m : cleanType_Natural_469c53b6dafb7a218246) : actualScopedCall1 n m = 0 := by
-  simp [actualScopedCall1, cleanNotation_apply_complex_a0de812c1bf6f5824036, cleanNumeral_Complex_311fd057b7f2e2b599a3]
+  simp [actualScopedCall1, cleanNotation_wrapped_672c0466d321eedfc5ae, cleanNotation_inner_6ce71cef8970f1f6d0cf, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
 
 
-noncomputable def actualScopedCall2 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (@_root_.cleanNotation_consume_shifted_4d23a02d1204b641c0a5 ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (clean_bound_0) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))))))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
-noncomputable def expectedScopedCall2 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_consume_shifted_4d23a02d1204b641c0a5 (fun (k : cleanType_Natural_469c53b6dafb7a218246) => cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 k (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+noncomputable def actualScopedCall2 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (_root_.cleanNotation_body_18f0843a26266fb0ed12 ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNotation_inner_6ce71cef8970f1f6d0cf ((fun (clean_bound_1 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedScopedCall2 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_body_18f0843a26266fb0ed12 (fun (a : cleanType_Real_107b6641a486642ad8e1) => cleanNotation_inner_6ce71cef8970f1f6d0cf (fun (b : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
 same_basic_target actualScopedCall2 expectedScopedCall2
 theorem scopedCallMeaning2 (n m : cleanType_Natural_469c53b6dafb7a218246) : actualScopedCall2 n m = 0 := by
-  simp [actualScopedCall2, cleanNotation_consume_shifted_4d23a02d1204b641c0a5, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+  simp [actualScopedCall2, cleanNotation_body_18f0843a26266fb0ed12, cleanNotation_inner_6ce71cef8970f1f6d0cf, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
 
 
-noncomputable def actualScopedCall3 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (@_root_.cleanNotation_sized_55feb190d45385dc4a7b (n) ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n)))))
-noncomputable def expectedScopedCall3 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_sized_55feb190d45385dc4a7b n (fun (z : cleanType_Real_107b6641a486642ad8e1) => cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)
+noncomputable def actualScopedCall3 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (@_root_.cleanNotation_consume_family_79ae0b9663201ba8f3ca ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (clean_bound_0)))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedScopedCall3 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_consume_family_79ae0b9663201ba8f3ca (fun (k : cleanType_Natural_469c53b6dafb7a218246) => cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 k) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
 same_basic_target actualScopedCall3 expectedScopedCall3
 theorem scopedCallMeaning3 (n m : cleanType_Natural_469c53b6dafb7a218246) : actualScopedCall3 n m = 0 := by
-  simp [actualScopedCall3, cleanNotation_sized_55feb190d45385dc4a7b, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+  simp [actualScopedCall3, cleanNotation_consume_family_79ae0b9663201ba8f3ca, cleanNotation_inner_6ce71cef8970f1f6d0cf, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
 
 
-noncomputable def actualScopedCall4 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (@_root_.cleanNotation_mixed_8a90872fbc5d858544fd (n) (m) ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (m))))
-noncomputable def expectedScopedCall4 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_mixed_8a90872fbc5d858544fd n m (fun (z : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) (cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n) (cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 m)
+noncomputable def actualScopedCall4 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Complex_2d7f06a08f8ab1e3f46d := (_root_.cleanNotation_apply_complex_a0de812c1bf6f5824036 ((fun (clean_bound_0 : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) => (_root_.cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0)))) ((_root_.cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0))))
+noncomputable def expectedScopedCall4 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Complex_2d7f06a08f8ab1e3f46d := cleanNotation_apply_complex_a0de812c1bf6f5824036 (fun (z : cleanType_Complex_2d7f06a08f8ab1e3f46d) => cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0)) (cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0))
 same_basic_target actualScopedCall4 expectedScopedCall4
 theorem scopedCallMeaning4 (n m : cleanType_Natural_469c53b6dafb7a218246) : actualScopedCall4 n m = 0 := by
-  simp [actualScopedCall4, cleanNotation_mixed_8a90872fbc5d858544fd, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+  simp [actualScopedCall4, cleanNotation_apply_complex_a0de812c1bf6f5824036, cleanNotation_inner_6ce71cef8970f1f6d0cf, cleanNumeral_Complex_311fd057b7f2e2b599a3]
 
 
-noncomputable def actualScopedCall5 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (_root_.cleanNotation_two_23a4f22cc019ffff8a65 ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) ((fun (clean_bound_1 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0)))))
-noncomputable def expectedScopedCall5 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_two_23a4f22cc019ffff8a65 (fun (a : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) (fun (b : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0))
+noncomputable def actualScopedCall5 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (@_root_.cleanNotation_consume_shifted_4d23a02d1204b641c0a5 ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (clean_bound_0) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))))))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedScopedCall5 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_consume_shifted_4d23a02d1204b641c0a5 (fun (k : cleanType_Natural_469c53b6dafb7a218246) => cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 k (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
 same_basic_target actualScopedCall5 expectedScopedCall5
 theorem scopedCallMeaning5 (n m : cleanType_Natural_469c53b6dafb7a218246) : actualScopedCall5 n m = 0 := by
-  simp [actualScopedCall5, cleanNotation_two_23a4f22cc019ffff8a65, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+  simp [actualScopedCall5, cleanNotation_consume_shifted_4d23a02d1204b641c0a5, cleanNotation_inner_6ce71cef8970f1f6d0cf, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
 
 
-noncomputable def actualScopedCall6 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (@_root_.cleanNotation_typed_c4aaf9ba1766ee426904 ((_root_.cleanType_Real_107b6641a486642ad8e1)) ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
-noncomputable def expectedScopedCall6 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_typed_c4aaf9ba1766ee426904 cleanType_Real_107b6641a486642ad8e1 (fun (z : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+noncomputable def actualScopedCall6 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (@_root_.cleanNotation_sized_55feb190d45385dc4a7b (n) ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n)))))
+noncomputable def expectedScopedCall6 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_sized_55feb190d45385dc4a7b n (fun (z : cleanType_Real_107b6641a486642ad8e1) => cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n)
 same_basic_target actualScopedCall6 expectedScopedCall6
 theorem scopedCallMeaning6 (n m : cleanType_Natural_469c53b6dafb7a218246) : actualScopedCall6 n m = 0 := by
-  simp [actualScopedCall6, cleanNotation_typed_c4aaf9ba1766ee426904, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+  simp [actualScopedCall6, cleanNotation_sized_55feb190d45385dc4a7b, cleanNotation_inner_6ce71cef8970f1f6d0cf, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
 
 
-noncomputable def actualScopedCall7 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (_root_.cleanNotation_accept_f31b97787ce83dcca886 ((∀ (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 (clean_bound_0) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
-noncomputable def expectedScopedCall7 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_accept_f31b97787ce83dcca886 (∀ (z : cleanType_Real_107b6641a486642ad8e1), @cleanDefine_equal_5fac732a65dd209a83f4 cleanType_Real_107b6641a486642ad8e1 z (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+noncomputable def actualScopedCall7 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (@_root_.cleanNotation_mixed_8a90872fbc5d858544fd (n) (m) ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n))) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (m))))
+noncomputable def expectedScopedCall7 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_mixed_8a90872fbc5d858544fd n m (fun (z : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) (cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 n) (cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 m)
 same_basic_target actualScopedCall7 expectedScopedCall7
 theorem scopedCallMeaning7 (n m : cleanType_Natural_469c53b6dafb7a218246) : actualScopedCall7 n m = 0 := by
-  simp [actualScopedCall7, cleanNotation_accept_f31b97787ce83dcca886, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+  simp [actualScopedCall7, cleanNotation_mixed_8a90872fbc5d858544fd, cleanNotation_inner_6ce71cef8970f1f6d0cf, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+
+
+noncomputable def actualScopedCall8 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (_root_.cleanNotation_two_23a4f22cc019ffff8a65 ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) ((fun (clean_bound_1 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0)))))
+noncomputable def expectedScopedCall8 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_two_23a4f22cc019ffff8a65 (fun (a : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) (fun (b : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Complex_311fd057b7f2e2b599a3 (nat_lit 0))
+same_basic_target actualScopedCall8 expectedScopedCall8
+theorem scopedCallMeaning8 (n m : cleanType_Natural_469c53b6dafb7a218246) : actualScopedCall8 n m = 0 := by
+  simp [actualScopedCall8, cleanNotation_two_23a4f22cc019ffff8a65, cleanNotation_inner_6ce71cef8970f1f6d0cf, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+
+
+noncomputable def actualScopedCall9 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (@_root_.cleanNotation_typed_c4aaf9ba1766ee426904 ((_root_.cleanType_Real_107b6641a486642ad8e1)) ((fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedScopedCall9 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_typed_c4aaf9ba1766ee426904 cleanType_Real_107b6641a486642ad8e1 (fun (z : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualScopedCall9 expectedScopedCall9
+theorem scopedCallMeaning9 (n m : cleanType_Natural_469c53b6dafb7a218246) : actualScopedCall9 n m = 0 := by
+  simp [actualScopedCall9, cleanNotation_typed_c4aaf9ba1766ee426904, cleanNotation_inner_6ce71cef8970f1f6d0cf, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
+
+
+noncomputable def actualScopedCall10 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := (_root_.cleanNotation_accept_f31b97787ce83dcca886 ((∀ (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 (clean_bound_0) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))))) ((_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedScopedCall10 (n m : cleanType_Natural_469c53b6dafb7a218246) : cleanType_Real_107b6641a486642ad8e1 := cleanNotation_accept_f31b97787ce83dcca886 (∀ (z : cleanType_Real_107b6641a486642ad8e1), @cleanDefine_equal_5fac732a65dd209a83f4 cleanType_Real_107b6641a486642ad8e1 z (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))) (cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualScopedCall10 expectedScopedCall10
+theorem scopedCallMeaning10 (n m : cleanType_Natural_469c53b6dafb7a218246) : actualScopedCall10 n m = 0 := by
+  simp [actualScopedCall10, cleanNotation_accept_f31b97787ce83dcca886, cleanNotation_inner_6ce71cef8970f1f6d0cf, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
 
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md
