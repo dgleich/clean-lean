@@ -4557,6 +4557,37 @@
         "Scoped proof-callable signatures",
         "Production routing and complete active-label validation"
       ]
+    },
+    {
+      "id": "joint_scoped_evidence_heads",
+      "status": "explicit-api-not-default",
+      "environment": "Checked universal or implication evidence in the caller scope; explicit real type and numeral bindings.",
+      "source": "h(function(x: Real,0)); h(function(x: Real,0))(q)",
+      "expected_parse": [
+        "Call",
+        "h",
+        [
+          [
+            "Lambda",
+            "x",
+            "Real",
+            [
+              "Decimal",
+              "0"
+            ]
+          ]
+        ]
+      ],
+      "expected_lean": "Apply the original proof h directly to the lambda with declared Real zero; optionally apply returned implication evidence to q. No replacement proof or cast.",
+      "checks": [
+        "tests/test_joint_completion.py: scoped evidence positive, returned implication, dependent-value incomplete and operator ambiguity",
+        "tools/check_joint_proof_targets.py: two independent canonical application targets and interpretation proofs"
+      ],
+      "pending": [
+        "Construction of lambdas against proof expectations",
+        "Result types depending on selected literal-bearing arguments",
+        "Production routing and complete active-label validation"
+      ]
     }
   ]
 }

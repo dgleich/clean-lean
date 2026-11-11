@@ -40,8 +40,26 @@ def expectedQuantifiedEvidence : Prop := ∀ (k : {t('Natural')}), {f('equal')} 
 same_basic_target actualQuantifiedEvidence expectedQuantifiedEvidence
 theorem quantifiedEvidenceMeaning : actualQuantifiedEvidence := by intro k; rfl
 ''')
+# Independent universal/implication targets retain the supplied proof head.
+eq=f'{f("equal")} n n'
+function=f'({t("Real")} → {t("Real")})'
+for suffix,condition,source,extra,expected_body in [
+ ('Scoped', 'for every(f: Function(Real,Real),n=n)', 'h(function(x: Real,0))', '', f'h (fun (x : {t("Real")}) => {realzero})'),
+ ('Implication', 'for every(f: Function(Real,Real),(n=n) → (n=n))', 'h(function(x: Real,0))(q)', f'(q : {eq})', f'h (fun (x : {t("Real")}) => {realzero}) q'),
+]:
+ scope['h']=Expr('h','h',env.type('Evidence(('+condition+'))',scope),tree=['Local','h'])
+ scope['q']=Expr('q','q',env.type('Evidence((n=n))',scope),tree=['Local','q'])
+ value=complete(expression_tree(parse(source,'expression')),env,scope,use_default=False)
+ proof_type=f'∀ (_ : {function}), '+(f'({eq}) → ({eq})' if suffix=='Implication' else eq)
+ args='n h q' if extra else 'n h'
+ checks.append(f'''
+noncomputable def actual{suffix} (n : {t('Natural')}) (h : {proof_type}) {extra} : {eq} := {value.lean}
+noncomputable def expected{suffix} (n : {t('Natural')}) (h : {proof_type}) {extra} : {eq} := {expected_body}
+same_basic_target actual{suffix} expected{suffix}
+theorem meaning{suffix} (n : {t('Natural')}) (h : {proof_type}) {extra} : actual{suffix} {args} = expected{suffix} {args} := by rfl
+''')
 path=ROOT/'studies/parameterized-literals/ProofTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Three exact evidence targets and three interpretation proofs passed; callable proof discovery and production integration remain pending.')
+print('Five exact evidence targets and five interpretation proofs passed; selected-value proof dependencies and production integration remain pending.')
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

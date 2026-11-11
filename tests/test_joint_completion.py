@@ -251,6 +251,37 @@ class JointCompletion(unittest.TestCase):
    with self.assertRaisesRegex(Incomplete,'Scoped implicit representative cannot be rechecked'):
     complete(expression_tree(parse('set of(function(x: Real,x=0))','expression')),self.env,self.scope,use_default=False)
 
+ def test_scoped_local_evidence_uses_callable_view_without_child_selection(self):
+  load_module(ROOT/'library/logic/evidence.clean',self.env)
+  self.scope['h']=Expr('h','h',self.env.type('Evidence((for every(f: Function(Real,Real),n=n)))',self.scope),tree=['Local','h'])
+  with patch('cleanlang.joint_inference.clean_rows.Builder.solve_with_trace',side_effect=AssertionError('independent child selection')):
+   value=complete(expression_tree(parse('h(function(x: Real,0))','expression')),self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.env.type('Evidence((n=n))',self.scope))
+  self.assertEqual(value.tree[2][0][3][2],'Real')
+  self.assertTrue(value.lean.startswith('(h '))
+
+ def test_scoped_evidence_application_head_can_return_an_implication(self):
+  load_module(ROOT/'library/logic/evidence.clean',self.env)
+  self.scope['h']=Expr('h','h',self.env.type('Evidence((for every(f: Function(Real,Real),(n=n) → (n=n))))',self.scope),tree=['Local','h'])
+  self.scope['q']=Expr('q','q',self.env.type('Evidence((n=n))',self.scope),tree=['Local','q'])
+  value=complete(expression_tree(parse('h(function(x: Real,0))(q)','expression')),self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.scope['q'].type)
+  self.assertTrue(value.lean.startswith('((h '))
+
+ def test_scoped_evidence_dependent_on_selected_lambda_remains_incomplete(self):
+  load_module(ROOT/'library/logic/evidence.clean',self.env)
+  self.scope['r']=Expr('r','r',self.env.type('Real'),tree=['Local','r'])
+  self.scope['h']=Expr('h','h',self.env.type('Evidence((for every(f: Function(Real,Real),f(r)=f(r))))',self.scope),tree=['Local','h'])
+  with self.assertRaisesRegex(Incomplete,'unresolved selected value'):
+   complete(expression_tree(parse('h(function(x: Real,0))','expression')),self.env,self.scope,use_default=False)
+
+ def test_scoped_evidence_does_not_hide_body_operator_ambiguity(self):
+  load_module(ROOT/'library/logic/evidence.clean',self.env)
+  self.scope['h']=Expr('h','h',self.env.type('Evidence((for every(f: Function(Real,Real),n=n)))',self.scope),tree=['Local','h'])
+  notation('Notation another sum(x: Real,y: Real): Real:', ['Means: x+y','Infix: +','Render latex: {x}+{y}'],self.env)
+  with self.assertRaises(Ambiguous):
+   complete(expression_tree(parse('h(function(x: Real,x+0))','expression')),self.env,self.scope,use_default=False)
+
 if __name__=='__main__':unittest.main()
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

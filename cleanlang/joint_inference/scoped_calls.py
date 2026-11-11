@@ -118,12 +118,12 @@ def prepare_typed_call(builder,tree,expected=None):
             else:raise Incomplete('Scoped application head needs contextual type recovery')
             head_part=(head_rows,head_retain)
         else:head_type=builder.check_candidate(head_tree).type
-        current=head_type
+        # Evidence carries its condition, not a two-slot function signature.
+        # Use the existing source-derived view while retaining the original head.
+        from cleanlang.proof_types import callable_view
+        current=callable_view(head_type,env)
         for source in tree[2]:
-            if not env.is_function_type(current):
-                from cleanlang.proof_types import callable_view
-                if callable_view(current,env) is not None:
-                    raise Incomplete('Local scoped consumer evidence requires joint proof-type integration')
+            if current is None or not env.is_function_type(current):
                 raise NoSolution('Local scoped consumer has too many arguments or is not callable')
             inputs.append((current.args[0],source))
             if isinstance(current,DependentFunctionType) and occurs(current.codomain,current.binder):

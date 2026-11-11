@@ -2617,3 +2617,17 @@ a discrepancy is incomplete reconstruction, not permission to choose another tar
 Signature identity checks and operator-input ambiguity audits remain mandatory.
 No syntax, parser or production-default change is introduced.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Use callable views for scoped proof applications
+
+Joint scoped calls now read a checked proof head through the same source-derived
+callable view as ordinary evidence application. A ProofType stores a condition,
+not a pair of function domain/codomain slots. Using its raw arguments as a function
+signature was incorrect. Keep the original head for revalidation and emission;
+only the domain/codomain analysis uses the view. The constructive rule is in
+[the spec](spec.md#scoped-application-of-existing-evidence). No syntax, proof search,
+or production inference default changes.
+:::

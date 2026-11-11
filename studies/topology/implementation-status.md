@@ -301,3 +301,20 @@ this focused implementation does not establish full active-label validation or t
 paper's basis-extension theorem. Broader contextual inference and production joint
 routing remain open.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Existing callable assumptions in joint scoped calls
+
+A checked universal assumption can now accept a lambda containing literal holes
+in the explicit joint path. The solver reads the assumption's source-derived
+callable view and emits the original proof applied to the checked argument.
+Returned implication evidence can be applied again. Two new independent native
+targets/proofs and API boundary tests cover this integration; all 462 solver,
+51 API/adapter/checker, 115 runtime tests and 92 corpus proofs pass. The
+[specification](../../docs/spec.md#scoped-application-of-existing-evidence) records
+the exact boundary: selected-value-dependent results and lambdas built against
+proof expectations remain separate gaps. The full active-label snapshot is still
+running; geometric basis-extension and Mayer–Vietoris obligations are unchanged.
+:::

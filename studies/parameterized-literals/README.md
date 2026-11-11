@@ -3374,3 +3374,54 @@ final normalization of unavailable-representative errors. No full-study pass or
 advance to a particular later source location is inferred from elapsed time. The
 existing legacy snapshot runs are preserved as well. Production routing is unchanged.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Scoped evidence heads
+
+For an explicit joint-inference local Call or expression Apply containing scoped
+literal holes, first obtain the head's checked type. Apply the existing
+source-derived `callable_view` rule to that type before reading its domain and
+codomain. Ordinary function types are unchanged. Evidence of a universal condition
+or implication supplies its determined function signature; evidence without a
+callable view is rejected as noncallable. This is classification of an already
+checked head, not proof search or inference of a missing condition.
+
+The original head type and expression are retained. Prepare the argument against
+the view's domain and combine all scoped rows in the enclosing solve. If the
+codomain depends on a literal-bearing argument whose selected value has not yet
+been reconstructed, report incomplete analysis under the existing dependent-call
+rule. Recheck the retained head and whole application using the ordinary evidence
+application rule. Emit the supplied proof applied directly to the retained
+argument, without a cast, new proof, or replacement by a definitionally equal term.
+A prepared application head can itself return implication evidence, which is
+viewed again when the outer Apply is prepared.
+
+For example, with `h: Evidence((for every(f: Function(Real,Real),n=n)))`,
+`h(function(x: Real,0))` targets schematically
+`h (fun (x : RealAdapter) => realZero)`. With an implication conclusion,
+`h(function(x: Real,0))(q)` additionally applies the returned proof to q.
+The real type and zero are the explicit module bindings. The existing Call,
+Apply and Lambda parses are unchanged; no parse is chosen by this type check.
+
+This does not add lambda construction against a proof-valued expected type,
+inference from unknown proof signatures, or recovery of result types depending
+on selected literal-bearing arguments. Production routing remains unchanged.
+:::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Scoped evidence-head validation passes: 462 solver tests, 51 API/adapter/checker
+tests, 115 runtime tests, and five evidence canonical targets with five
+interpretation proofs (two target/proof pairs are new). Four corpus documents
+produce identical legacy/joint text under matching stable fingerprints; all 92
+corpus proofs pass with joint routing. Reference HTML IDs and local paths pass.
+The corpus evidence is retained under `scoped_evidence_heads_corpus` in
+`compatibility.json`.
+
+The live active-label validation remains a different, earlier immutable snapshot.
+It has not completed, and this focused result does not establish its outcome or
+complete production integration. No paper theorem is added by this inference fix.
+:::

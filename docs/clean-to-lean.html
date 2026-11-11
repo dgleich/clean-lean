@@ -1814,5 +1814,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p><code>set of(function(x: Real,x=0))</code> recovers the declared set-builder's implicit element type from the lambda domain. Its schematic Lean target is <code>@setOfAdapter RealAdapter (fun x =&gt; equalAdapter x realZero)</code>, with explicit declared bindings supplying the actual names.</p>
 <p>Recovery collects checked argument-type and outer lambda-domain evidence before body preparation, without defaults or expected-result inference. Conflicts reject the call; unknown parameters remain incomplete. Checked sibling types and indexed domains can also supply parameters. All body alternatives still enter one solve, and retained implicit arguments are rechecked. See the <a href="../studies/parameterized-literals/README.md#scoped-implicit-recovery-from-checked-arguments">constructive rule and native checks</a>. This extends explicit joint inference only; production routing remains unchanged.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="joint-scoped-evidence-heads">
+<h2>Calling existing evidence with a scoped argument</h2>
+<p>For <code>h: Evidence((for every(f: Function(Real,Real),n=n)))</code>, explicit joint inference accepts <code>h(function(x: Real,0))</code>. The schematic target is <code>h (fun (x : RealAdapter) =&gt; realZero)</code>. The supplied proof is retained; its source-derived callable view determines the lambda domain and body expectation. Returned implication evidence can be applied again, as in <code>h(function(x: Real,0))(q)</code>.</p>
+<p>Argument alternatives still share one solve. Selected-value-dependent result types and construction of a lambda against a proof expectation remain separate gaps. See the <a href="spec.md#scoped-application-of-existing-evidence">translation rule</a> and <a href="../studies/parameterized-literals/ProofTargets.lean">independent native targets</a>. Production routing is unchanged.</p>
+</section></llm>
 </body>
 </html>

@@ -322,4 +322,16 @@ def expectedQuantifiedEvidence : Prop := ∀ (k : cleanType_Natural_469c53b6dafb
 same_basic_target actualQuantifiedEvidence expectedQuantifiedEvidence
 theorem quantifiedEvidenceMeaning : actualQuantifiedEvidence := by intro k; rfl
 
+
+noncomputable def actualScoped (n : cleanType_Natural_469c53b6dafb7a218246) (h : ∀ (_ : (cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1)), cleanDefine_equal_5fac732a65dd209a83f4 n n)  : cleanDefine_equal_5fac732a65dd209a83f4 n n := (h (fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))))
+noncomputable def expectedScoped (n : cleanType_Natural_469c53b6dafb7a218246) (h : ∀ (_ : (cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1)), cleanDefine_equal_5fac732a65dd209a83f4 n n)  : cleanDefine_equal_5fac732a65dd209a83f4 n n := h (fun (x : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0))
+same_basic_target actualScoped expectedScoped
+theorem meaningScoped (n : cleanType_Natural_469c53b6dafb7a218246) (h : ∀ (_ : (cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1)), cleanDefine_equal_5fac732a65dd209a83f4 n n)  : actualScoped n h = expectedScoped n h := by rfl
+
+
+noncomputable def actualImplication (n : cleanType_Natural_469c53b6dafb7a218246) (h : ∀ (_ : (cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1)), (cleanDefine_equal_5fac732a65dd209a83f4 n n) → (cleanDefine_equal_5fac732a65dd209a83f4 n n)) (q : cleanDefine_equal_5fac732a65dd209a83f4 n n) : cleanDefine_equal_5fac732a65dd209a83f4 n n := ((h (fun (clean_bound_0 : (_root_.cleanType_Real_107b6641a486642ad8e1)) => (_root_.cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)))) q)
+noncomputable def expectedImplication (n : cleanType_Natural_469c53b6dafb7a218246) (h : ∀ (_ : (cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1)), (cleanDefine_equal_5fac732a65dd209a83f4 n n) → (cleanDefine_equal_5fac732a65dd209a83f4 n n)) (q : cleanDefine_equal_5fac732a65dd209a83f4 n n) : cleanDefine_equal_5fac732a65dd209a83f4 n n := h (fun (x : cleanType_Real_107b6641a486642ad8e1) => cleanNumeral_Real_1f10813a9ce4dc61fe3e (nat_lit 0)) q
+same_basic_target actualImplication expectedImplication
+theorem meaningImplication (n : cleanType_Natural_469c53b6dafb7a218246) (h : ∀ (_ : (cleanType_Real_107b6641a486642ad8e1 → cleanType_Real_107b6641a486642ad8e1)), (cleanDefine_equal_5fac732a65dd209a83f4 n n) → (cleanDefine_equal_5fac732a65dd209a83f4 n n)) (q : cleanDefine_equal_5fac732a65dd209a83f4 n n) : actualImplication n h q = expectedImplication n h q := by rfl
+
 -- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
