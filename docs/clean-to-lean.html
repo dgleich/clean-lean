@@ -1677,5 +1677,15 @@ The analogous carrier case retains U from <code>Vector(k,U)</code>. See the
 <a href="../studies/parameterized-literals/README.md#caller-evidence-inside-dependent-function-types">reconstruction rule and scope limits</a>.
 Production joint inference remains pending.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="dependent-produced-arguments">
+<h2>Function-producing arguments (experimental rows)</h2>
+<p><code>read family(make family(0),0)</code> can infer a Real zero for the producer
+and a Complex zero for the consumer, from their declared signatures. The expanded
+Lean call has the shape <code>@read_family Complex (make_family (0 : Real)) (0 : Complex)</code>;
+exact targets retain the selected callable and numeral wrappers. Incompatible
+producer assignments reject only their certified candidate; unavailable checking
+remains incomplete. See the
+<a href="../studies/parameterized-literals/README.md#dependent-arguments-produced-by-candidate-calls">candidate-checking contract and limits</a>.</p>
+</section></llm>
 </body>
 </html>

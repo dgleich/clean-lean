@@ -558,10 +558,16 @@ class Builder:
                 type_witnesses=tuple(w for _,_,ws in converted for w in ws)+result_witnesses
                 equations=tuple(eq for a in actuals for eq in a.equations)
                 from cleanlang.dependent_functions import DependentFunctionType,occurs
+                rejected=False
                 for p,a in zip(explicit,actuals):
                     if isinstance(p.typ,DependentFunctionType) and a.syntax is not None and any(occurs(p.typ,n) for n in variables):
-                        actual=Expressions(self.env,self.scope).elaborate(a.syntax)
+                        try:actual=self.check_candidate(a.syntax)
+                        except NoSolution:
+                            rejected=True;break
+                        except CleanError as error:
+                            raise Incomplete('Dependent argument candidate checking unavailable: '+str(error)) from error
                         equations+=self.dependent_argument_constraints(p.typ,actual.type,variables,signature)
+                if rejected:continue
                 equations+=tuple(zip(parameters,(a.typ for a in actuals)))
                 equations+=tuple((variables[p.name],a.value) for p,a in zip(explicit,actuals))
                 output=self.variable(repr((path,spec['native_binding'],'value')),'index')

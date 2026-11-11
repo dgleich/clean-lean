@@ -1296,6 +1296,33 @@ class CleanRows(unittest.TestCase):
   for value in builder.rigid.values():
    self.assertTrue(references(value,self.scope).issubset(self.scope))
 
+ def family_producer_fixture(self):
+  notation('Notation make family(x: Real): Function(k: Natural,Vector(k,Complex)):',
+   ['Means: fun _ _ => (0 : Complex)','Render latex: family({x})'],self.e)
+  notation('Notation read family(f,x):',
+   ['Let T: Type','Let f: Function(k: Natural,Vector(k,T))','Let x: T','Returns: T',
+    'Means: x','Render latex: read({f},{x})'],self.e)
+  return expression_tree(parse('read family(make family(0),0)','expression'))
+ def test_dependent_argument_from_inferred_producer(self):
+  tree=self.family_producer_fixture()
+  value=Builder(self.e,self.scope).materialize(tree,use_default=False)
+  self.assertEqual(value.type,self.e.type('Complex'))
+  self.assertEqual(dict(value.inferred_args)['T'],self.e.type('Complex'))
+
+ def test_dependent_producer_unavailable_check_is_not_pruned(self):
+  from unittest.mock import patch
+  from cleanlang.core import CleanError
+  tree=self.family_producer_fixture()
+  with patch.object(Builder,'check_candidate',side_effect=CleanError('unavailable producer')):
+   with self.assertRaisesRegex(Incomplete,'candidate checking unavailable'):
+    Builder(self.e,self.scope).materialize(tree,use_default=False)
+ def test_dependent_producer_declaration_order_is_irrelevant(self):
+  tree=self.family_producer_fixture()
+  first=Builder(self.e,self.scope).materialize(tree,use_default=False)
+  self.e.data['functions']=dict(reversed(list(self.e.data['functions'].items())))
+  second=Builder(self.e,self.scope).materialize(tree,use_default=False)
+  self.assertEqual(first.lean,second.lean)
+
 if __name__=='__main__':unittest.main()
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

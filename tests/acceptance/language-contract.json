@@ -4091,6 +4091,21 @@
         "Contextual metavariables",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_dependent_producer_candidate_checking",
+      "status": "experimental-slice",
+      "source": "read family(make family(0),0)",
+      "checks": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Check available producer syntax under owned mismatch trial; retain parent constraints; unavailable checks remain incomplete; one independent whole-call native target",
+      "pending": [
+        "Producers requiring unresolved parameterized-literal reconstruction",
+        "Embedded lambda inference",
+        "Production integration"
+      ]
     }
   ]
 }

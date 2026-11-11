@@ -651,6 +651,16 @@ noncomputable def expected{name} {parameter} (family : {family_native}) : {t('Re
 same_basic_target actual{name} expected{name}
 theorem meaning{name} {parameter} (family : {family_native}) : actual{name} {argument} family = (0 : Real) := by simp [actual{name}, {f(call)}, {nr}]
 """)
+notation('Notation make binder family(x: Real): Function(k: Natural,Vector(k,Complex)):',
+ ['Means: fun _ _ => (0 : Complex)','Render latex: family({x})'],env)
+value=Builder(env,scope).materialize(expression_tree(parse('read binder family(make binder family(0),0)','expression')),use_default=False)
+checks.append(f"""
+noncomputable def actualProducedFamily : {t('Complex')} := {value.lean}
+noncomputable def expectedProducedFamily : {t('Complex')} := @{f('read binder family')} {t('Complex')}
+  ({f('make binder family')} ({nr} (nat_lit 0))) ({complex_numerals} (nat_lit 0))
+same_basic_target actualProducedFamily expectedProducedFamily
+theorem meaningProducedFamily : actualProducedFamily = (0 : Complex) := by simp [actualProducedFamily, {f('read binder family')}, {complex_numerals}]
+""")
 source='for every (z: Vector(n,Complex), z != 0)'
 value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
 checks.append(f"""
@@ -698,6 +708,6 @@ theorem meaningScopedCarrier : actualScopedCarrier := by
 """)
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Ninety-three experimental targets and ninety-three meaning proofs passed; production joint inference remains unimplemented.')
+print('Ninety-four experimental targets and ninety-four meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

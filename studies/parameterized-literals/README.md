@@ -2245,3 +2245,38 @@ Validation: 365 experimental Python tests, 93 exact native-target comparisons an
 93 supporting proofs pass. These checks cover the experimental caller-evidence path;
 they are not a completed production conformance run.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Dependent arguments produced by candidate calls
+
+The experimental row builder now checks available producer syntax through its
+owned candidate-validation path before deriving dependent argument constraints.
+For example, `read family(make family(0),0)` works without defaults when
+`make family` takes a Real and returns `Function(k: Natural,Vector(k,Complex))`,
+and `read family` has the generic signature above. The first zero is Real; the
+second is Complex, determined through the produced function type.
+
+Previously the bridge directly elaborated each candidate producer. An incompatible
+literal assignment, such as a Complex zero passed to the Real producer, raised a
+signature exception and aborted enumeration. It now invokes `check_candidate`,
+which associates a fresh owner with the checking trial. Only a compiler-certified
+signature mismatch belonging to that trial rejects the enclosing candidate row.
+Foreign mismatch ownership remains incomplete; other Clean checking errors are
+reported as unavailable analysis. No failed competitor is treated as absent merely
+because its check is unavailable. The trial restores the previous owner on exit.
+
+This does not independently solve a producer subexpression or apply a default.
+It checks the already-selected syntax of that candidate. All child equations,
+forward type obligations, and final implicit-argument checks remain in the parent
+row. Available producer syntax is supported; producers requiring unresolved
+parameterized-literal reconstruction, or embedded lambda inference, remain pending.
+
+The new complete-call native oracle retains both literal wrappers and the inferred
+Complex argument. Python regressions cover unavailable checking and reversed
+callable declaration order, in addition to the successful nested call. Production
+integration remains pending.
+
+Validation: 368 experimental Python tests, 94 exact native-target comparisons and
+94 supporting proofs pass. Full production validation remains separate.
+:::

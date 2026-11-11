@@ -2251,3 +2251,17 @@ representatives. See the
 [construction and limits](../studies/parameterized-literals/README.md#caller-evidence-inside-dependent-function-types).
 This extends experimental row reconstruction, not the production language or grammar.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental dependent producer candidate checking
+
+Before deriving dependent argument constraints, available producer syntax is checked
+under the existing owned candidate trial. Only that trial's certified signature
+mismatch rejects a row; foreign mismatches and unavailable checking remain incomplete.
+The candidate's child equations and full forward type checks are retained, and no
+subexpression default is applied. See the
+[example and precise boundary](../studies/parameterized-literals/README.md#dependent-arguments-produced-by-candidate-calls).
+Production integration and producers lacking reconstructible candidate syntax remain
+pending. The source grammar is unchanged.
+:::
