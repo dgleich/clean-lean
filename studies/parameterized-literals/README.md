@@ -626,3 +626,58 @@ targets and twenty supporting proofs (`/tmp/clean-projection-rows-native.log`).
 The latest Python run additionally includes the field-selection/operator-tie
 regression. Production sources are unchanged by this step.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Constructor field evidence for dependent projections
+
+Direct nominal constructor fragments now retain their field arguments in declared
+field order, after the structure parameters. This evidence is attached only when
+the chosen callable is that structure's declared constructor; a function returning
+the same carrier does not acquire constructor evidence from its name or native
+body. Each field retains its fragment, including symbolic value and nested
+constructor evidence.
+
+For a projected field, start with structure-parameter substitution, then supply
+only the preceding field values actually referenced by its checked type. Missing
+field evidence remains incomplete. A direct constructor projection has the same
+symbolic value as its selected field argument, following the existing checked
+constructor-reduction rule. Projecting a record-valued argument carries its own
+constructor evidence forward, enabling nested projections.
+
+For example, with a record declared as:
+
+```clean
+Structure Payload():
+  Let size: Natural
+  Let data: Vector(size,Complex)
+  Constructor: payload
+```
+
+`payload(2,0).data` determines the vector index from the size argument, without a
+default. `vector cell(payload(2,0).size,0)` and
+`box(payload(2,0)).value.data` also work for the corresponding declared constructors.
+Native output uses the existing projection reduction, retaining the selected
+numeral and vector-zero wrappers. A caller local also named size cannot supply
+or override this field evidence.
+
+When a concrete projection witness exists, its deferred type check receives both
+structure parameters and required field values. Otherwise the existing final
+reconstruction/checking path still applies; this does not close the general
+candidate-validity gap. Opaque producers remain incomplete for these dependent
+fields, even when their native bodies happen to call the constructor. Computed
+formal index expressions, general dependent applications and production integration
+remain open. This extends direct references to previous fields; it does not claim
+all possible field-dependent types are representable by the symbolic adapter.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Constructor-field validation: 120 experimental tests pass, with twenty-four
+independent exact native targets and twenty-four supporting proofs
+(`/tmp/clean-constructor-field-values-native.log`). New native cases cover literal
+and caller-variable sizes, a projected size used in another constructor, and nested
+record projections. Rejection tests cover conflicting expected sizes and opaque
+record producers. Production sources are unchanged in this step; no full-regression
+completion claim is added.
+:::

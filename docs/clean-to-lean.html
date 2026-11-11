@@ -1324,5 +1324,13 @@ audit inside the base. Field types depending on other field values remain
 unsupported in this experiment. See the
 <a href="../studies/parameterized-literals/README.md#projections-from-literal-bearing-records">construction and native expectations</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="constructor-field-evidence">
+<h2>Experimental dependent constructor projections</h2>
+<p>For Payload with a Natural size field and data of type Vector(size,Complex),
+<code>payload(2,0).data</code> selects the zero-vector wrapper at the declared
+Natural numeral 2. The constructor supplies the field evidence; an opaque producer
+of Payload does not. Nested direct constructors can pass this evidence through
+projections. See the <a href="../studies/parameterized-literals/README.md#constructor-field-evidence-for-dependent-projections">substitution and retention rules</a>.</p>
+</section></llm>
 </body>
 </html>

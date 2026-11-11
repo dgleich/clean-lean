@@ -1790,3 +1790,15 @@ cover source traversal and native reduction. Field-value-dependent result types
 and unresolved carriers remain incomplete. Parsing and production elaboration
 are unchanged.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental constructor field evidence
+
+The literal-inference adapter retains field fragments for direct nominal
+constructors and substitutes required preceding-field values into projection
+types. Projection values follow the checked constructor reduction rule; nested
+constructor evidence is preserved. Opaque record producers do not receive this
+evidence. The [construction and remaining bounds](../studies/parameterized-literals/README.md#constructor-field-evidence-for-dependent-projections)
+extend the experimental projection slice, with no grammar or production change.
+:::

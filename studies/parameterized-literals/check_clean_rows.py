@@ -133,8 +133,28 @@ noncomputable def expectedProjection{i} : {result} := {expected}
 same_basic_target actualProjection{i} expectedProjection{i}
 theorem meaningProjection{i} : {claim} := by rfl
 """)
+declare('Structure Payload():',
+ ['Let size: Natural','Let data: Vector(size,Complex)','Constructor: payload'],env)
+declare('Structure Box():',['Let value: Payload','Constructor: box'],env)
+for i,(source,result,expected,claim) in enumerate([
+ ('payload(2,0).data',f"{t('Vector')} ({ntwo}) {t('Complex')}",
+  f"@{f('complex vector zero')} ({ntwo})",'actualFieldValue0 n D = (fun _ => (0 : Complex))'),
+ ('payload(n,0).data',f"{t('Vector')} n {t('Complex')}",
+  f"@{f('complex vector zero')} n",'actualFieldValue1 n D = (fun _ => (0 : Complex))'),
+ ('vector cell(payload(2,0).size,0)',f"{cell} ({ntwo})",
+  f"@{f('vector cell')} ({ntwo}) (@{f('complex vector zero')} ({ntwo}))",
+  '(actualFieldValue2 n D).entry = (fun _ => (0 : Complex))'),
+ ('box(payload(2,0)).value.data',f"{t('Vector')} ({ntwo}) {t('Complex')}",
+  f"@{f('complex vector zero')} ({ntwo})",'actualFieldValue3 n D = (fun _ => (0 : Complex))')]):
+ value=Builder(env,computed_scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
+ checks.append(f"""
+noncomputable def actualFieldValue{i} {computed_binders} : {result} := {value.lean}
+noncomputable def expectedFieldValue{i} {computed_binders} : {result} := {expected}
+same_basic_target actualFieldValue{i} expectedFieldValue{i}
+theorem meaningFieldValue{i} {computed_binders} : {claim} := by rfl
+""")
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Twenty experimental joint-row targets and twenty meaning proofs passed; production joint inference remains unimplemented.')
+print('Twenty-four experimental joint-row targets and twenty-four meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

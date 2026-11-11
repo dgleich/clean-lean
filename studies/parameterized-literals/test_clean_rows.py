@@ -222,11 +222,37 @@ class CleanRows(unittest.TestCase):
   declare('Structure ScalarCell():',['Let entry: Real','Constructor: scalar cell'],self.e)
   with self.assertRaises(NoSolution):
    Builder(self.e,{}).materialize(expression_tree(parse('scalar cell(0).entry','expression')),self.e.type('Natural'))
- def test_projection_field_dependencies_are_explicitly_incomplete(self):
+ def payload(self):
   from cleanlang.structures import declare
   declare('Structure Payload():',['Let size: Natural','Let data: Vector(size,Complex)','Constructor: payload'],self.e)
-  with self.assertRaisesRegex(Incomplete,'depends on record field'):
-   Builder(self.e,{}).materialize(expression_tree(parse('payload(2,0).data','expression')))
+ def test_constructor_field_value_determines_dependent_projection(self):
+  self.payload()
+  value=Builder(self.e,{}).materialize(expression_tree(parse('payload(2,0).data','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(2,Complex)'))
+  self.assertEqual(value.tree[0],'BoundLiteral')
+ def test_constructor_field_value_can_supply_another_dimension(self):
+  self.payload();self.record()
+  value=Builder(self.e,{}).materialize(expression_tree(parse('vector cell(payload(2,0).size,0)','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('VectorCell(2)'))
+ def test_nested_constructor_projection_keeps_field_evidence(self):
+  from cleanlang.structures import declare
+  self.payload();declare('Structure Box():',['Let value: Payload','Constructor: box'],self.e)
+  value=Builder(self.e,{}).materialize(expression_tree(parse('box(payload(2,0)).value.data','expression')),use_default=False)
+  self.assertEqual(value.type,self.e.type('Vector(2,Complex)'))
+ def test_constructor_field_does_not_capture_same_named_caller(self):
+  self.payload();self.scope['size']=self.scope['m']
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('payload(2,0).data','expression')))
+  self.assertEqual(value.type,self.e.type('Vector(2,Complex)'))
+ def test_constructor_dependent_field_rejects_wrong_expected_size(self):
+  self.payload()
+  with self.assertRaises(NoSolution):
+   Builder(self.e,{}).materialize(expression_tree(parse('payload(2,0).data','expression')),self.e.type('Vector(3,Complex)'))
+ def test_opaque_producer_field_dependencies_remain_incomplete(self):
+  self.payload();key=self.e.data['functions']['payload']['native_binding']
+  notation('Notation make payload(size: Natural,data: Vector(size,Complex)): Payload:',
+   ['Means: _root_.'+key+' size data','Render latex: P({size},{data})'],self.e)
+  with self.assertRaisesRegex(Incomplete,'unavailable record field values'):
+   Builder(self.e,{}).materialize(expression_tree(parse('make payload(2,0).data','expression')))
  def test_projection_keeps_operator_ambiguity_audit(self):
   self.dimension()
   notation('Notation alternative(x: Natural,y: Natural): Natural:',

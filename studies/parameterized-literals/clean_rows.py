@@ -26,6 +26,7 @@ class Fragment:
     witnesses: tuple=()
     syntax: object=None
     origins: tuple=()
+    fields: tuple=()
 
 class Builder:
     def __init__(self,env,scope,limit=4096):
@@ -114,29 +115,36 @@ class Builder:
             spec=next((s for s in self.env.structures.values() if s['key']==base.typ.identity),None)
             if spec is None or tree[2] not in dict(spec['fields']):continue
             field_type=dict(spec['fields'])[tree[2]]
-            if any(occurs(field_type,n) for n,_ in spec['fields']):
-                raise Incomplete('Projection type depends on record field values')
             if len(spec['parameters'])!=len(base.typ.arguments):raise Incomplete('Projection parameter arity mismatch')
             formals=dict(zip(spec['parameters'],base.typ.arguments))
+            fields=dict(base.fields)
+            for name,_ in spec['fields']:
+                if name==tree[2]:break
+                if occurs(field_type,name):
+                    if name not in fields:raise Incomplete('Projection type depends on unavailable record field values')
+                    formals[name]=fields[name].value
             typ=self.typ(field_type,formals)
-            output=Variable(repr((path,spec['key'],tree[2])),'index')
+            selected_field=fields.get(tree[2])
+            output=(selected_field.value if selected_field is not None else
+                    Variable(repr((path,spec['key'],tree[2])),'index'))
             syntax=None;origins=();deferred=base.deferred;witnesses=base.witnesses
             if base.syntax is not None:
                 syntax=['Projection',base.syntax,tree[2]]
                 origins=tuple(((1,)+local,source) for local,source in base.origins)
                 witness=self.call_witness(None,None,syntax,origins)
-                def evaluate(inputs,witness=witness,field_type=field_type,names=tuple(spec['parameters'])):
+                def evaluate(inputs,witness=witness,field_type=field_type,names=tuple(formals)):
                     try:
                         value=witness()
                         expected=self.typ(field_type,dict(zip(names,inputs[1:])))
                         if self.typ(value.type,{})!=expected:raise NoSolution('Deferred projection type mismatch')
                         return self.index(value)[0]
                     except CleanError as error:raise Incomplete('Deferred projection checking is unavailable: '+str(error)) from error
-                deferred+=(Deferred(output,(base.value,)+base.typ.arguments,evaluate),)
+                deferred+=(Deferred(output,(base.value,)+tuple(formals.values()),evaluate),)
                 witnesses+=((output,witness),)
             results.append(Fragment(typ,output,
                 base.choices+(('projection',path,(spec['key'],tree[2])),),base.carriers,
-                base.arguments,base.equations,deferred,witnesses,syntax,origins))
+                base.arguments,base.equations,deferred,witnesses,syntax,origins,
+                selected_field.fields if selected_field is not None else ()))
         return results
 
     def fragments(self,tree,path=()):
@@ -218,11 +226,18 @@ class Builder:
                             raise Incomplete('Deferred checked index is unsupported: '+str(error)) from error
                     deferred+=(Deferred(output,tuple(a.value for a in actuals)+implicit,evaluate),)
                     witnesses+=((output,witness),)
+                fields=()
+                if isinstance(result,Carrier):
+                    record=next((s for s in self.env.structures.values() if s['key']==result.identity),None)
+                    if record is not None and record['constructor']==name:
+                        values=actuals[len(record['parameters']):]
+                        if len(values)!=len(record['fields']):raise Incomplete('Constructor field arity mismatch')
+                        fields=tuple((n,a) for (n,_),a in zip(record['fields'],values))
                 rows.append(Fragment(result,output,
                     tuple(c for a in actuals for c in a.choices)+(('call',path,spec['native_binding']),),
                     tuple(t for a in actuals for t in a.carriers),
                     tuple(t for a in actuals for t in a.arguments)+implicit,equations,
-                    deferred,witnesses,syntax,origins))
+                    deferred,witnesses,syntax,origins,fields))
         return rows
 
     def rows(self,tree,expected=None):
