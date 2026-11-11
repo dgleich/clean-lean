@@ -187,3 +187,16 @@ an injected comparison-pool allocation prevents reuse. All 88 selected dependent
 hygiene, scope and storage checks pass; the expanded dependent-call suite passes
 25 tests. Native integration and complete discovery remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Validation for per-call actual-index reuse completed strict parser reproduction
+and 456 selected Python tests (70.406 seconds). The native integration batch ended
+with `Failures: []`: 32 exact targets, 12 supporting proofs, and 92 corpus proof
+fixtures passed. The directly affected path study additionally passed 16 canonical
+type/wrapper/statement targets and four proofs, including constant paths, reversal
+and composition. Regenerated artifacts have unchanged content after provenance
+stamping. Full discovery runs from immutable commit 0fe361e; its result remains
+pending. The earlier active-label verifier is also still incomplete. These checks
+do not establish a whole-module speedup or discharge the missing paper mathematics.
+:::
