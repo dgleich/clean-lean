@@ -76,3 +76,45 @@ a shared depth-16 graph measured 0.09074 seconds before and 0.000033 after
 environment and eliminated repeated graph traversal; they are not whole-module
 or compiler throughput measurements.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Projection base reuse (2026-11-11)
+
+Comparison normalization now elaborates a projection base once, passes that
+fresh checked expression to producer inspection, then normalizes the same base
+with the internal fresh flag. Previously the second step elaborated the base
+again. The result is used only in this synchronous traversal under the same fixed
+environment and locals. No stored Expr payload becomes a cross-call cache.
+Public comparison still checks the base source in the current scope, and failed
+checking propagates. Producer-field selection, projection reduction and binder
+publication rules are unchanged; emitted Lean and LaTeX are not rewritten.
+
+A twenty-second whole active-label loading diagnostic before the change observed
+55,082,488 calls (46,377,898 primitive); producer-field inspection appeared 2,024
+times and accounted for 1.464 cumulative profiled seconds. Both before and after
+observation windows ended without completing translation. Their differing progress
+and concurrent jobs do not establish a whole-module speedup. The existing full
+production and active-label processes were confirmed live and were not restarted.
+
+A direct before/after comparison loaded the previous normalizer from Git and
+normalized an opaque producer projection. Checked tree, Lean, LaTeX and type were
+identical. The producer was checked twice before and once after per traversal.
+One run of 1,000 traversals took 0.054643 seconds before and 0.027880 after; this is
+a small diagnostic, not a compiler throughput claim.
+
+Three regressions check the single base elaboration, changed caller binding, and
+propagation of unavailable checking. The focused comparison/structure/payload
+suite passes 69 tests. Both comparison reuse suites are now included explicitly
+in the integration driver. The integration run completed: strict parser generation, 565 Python tests, all
+native integration checks and the 92-proof corpus recheck pass (`Failures: []`).
+The experimental inference recheck passes 200 tests and 52 exact native
+targets with 52 supporting proofs.
+
+Full discovery and active-label validation run from the immutable snapshot
+`/tmp/clean-projection-validation-kj6ncp2q`, based on `b769ef3` plus this patch.
+Its conversion module SHA-256 is
+`4c1c2982be995862cfb8590be41aab80015b93149d13fbfa02acc774dc9adde7`.
+Both are pending. The older fresh-operator snapshot jobs remain live baseline
+checks and do not validate this projection change.
+:::

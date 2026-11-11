@@ -3679,6 +3679,36 @@
         "Universal symbolic-family validity",
         "Production integration"
       ]
+    },
+    {
+      "id": "fresh_projection_base_reuse",
+      "status": "implemented-slice",
+      "environment": "Explicit Real/Box declarations and opaque box producer",
+      "source": "opaque box(x).value",
+      "expected_tree": [
+        "Projection",
+        [
+          "Call",
+          "opaque box",
+          [
+            [
+              "Local",
+              "x"
+            ]
+          ]
+        ],
+        "value"
+      ],
+      "expected_lean": "The declared Box.value projection of opaqueBox x, unchanged by comparison optimization",
+      "checks": [
+        "tests/test_bound_comparison_reuse.py",
+        "tools/check_language_integration.py"
+      ],
+      "obligation": "One synchronous checked base shared by producer inspection and normalization; public calls recheck changed locals and propagate unavailable checking",
+      "pending": [
+        "Full working-compiler discovery",
+        "Full active-label validation"
+      ]
     }
   ]
 }

@@ -123,10 +123,13 @@ def _normal_form(expression,environment,locals,*,fresh=False):
     if kind=='Projection':
         from .structures import project,projection_reduction
         from .beta_indices import has_binder
-        selected=_producer_field(elaborate(tree[1]),tree[2],env,locals)
+        # One synchronous check supplies both producer inspection and base
+        # normalization. Public entry still rechecks the stored source tree.
+        checked_base=elaborate(tree[1])
+        selected=_producer_field(checked_base,tree[2],env,locals)
         if selected is not None and selected.type==expression.type:
             return _normal_form(selected,env,locals)
-        base=normal(tree[1])
+        base=_normal_form(checked_base,env,locals,fresh=True)
         if has_binder(base.tree):
             selected=projection_reduction(env,base,tree[2],locals)
             # An opaque producer cannot publish its hidden binders as field indices.

@@ -1469,5 +1469,13 @@ mismatch. Local carrier operands and dependent constructor projections are cover
 by the <a href="../studies/parameterized-literals/README.md#explicit-carrier-operands-in-dependent-inference">same checked conversion rule</a>.
 Higher-universe and production integration limits remain.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="fresh-projection-base">
+<h2>Projection comparison checks</h2>
+<p>For <code>opaque box(x).value</code>, comparison checks the producer base in the
+current scope once and shares that fresh result within the traversal. Its emitted
+Lean projection is unchanged; the opaque native body is not unfolded by this
+optimization. Changed locals and unavailable checking still reach the checker.
+See the <a href="comparison-token-cache.md#projection-base-reuse-2026-11-11">reuse boundary and validation evidence</a>.</p>
+</section></llm>
 </body>
 </html>

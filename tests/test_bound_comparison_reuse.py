@@ -87,3 +87,34 @@ class BoundComparisonReuse(unittest.TestCase):
         self.assertNotIn('(z)',actual.lean)
 
 # generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+# generated: gpt-6 2026-11-11 role=assisted
+class ProjectionBaseReuse(unittest.TestCase):
+    def setUp(self):
+        from cleanlang.structures import declare
+        self.env=Environment();load_module(ROOT/'library/operators.clean',self.env)
+        declare('Structure Box():',['Let value: Real','Constructor: box'],self.env)
+        key=self.env.data['functions']['box']['native_binding']
+        notation('Notation opaque box(x: Real): Box:',
+                 ['Means: '+key+' x','Render latex: B({x})'],self.env)
+        self.local={'x':Expr('first','x',self.env.type('Real'),tree=['Local','x'])}
+        self.old=Expressions(self.env,self.local).parse('opaque box(x).value')
+
+    def test_projection_base_checked_once_per_internal_traversal(self):
+        with patch.object(self.env,'call',wraps=self.env.call) as calls:
+            result=comparison_normal_form(self.old,self.env,self.local)
+        checked=[c for c in calls.call_args_list if c.args[0]=='opaque box']
+        self.assertEqual(len(checked),1) # Fresh source check shared within this traversal.
+        self.assertEqual(result.tree,self.old.tree)
+        self.assertEqual(result.lean,self.old.lean)
+
+    def test_projection_public_entry_rechecks_changed_local(self):
+        self.local['x']=Expr('second','x',self.env.type('Real'),tree=['Local','x'])
+        result=comparison_normal_form(self.old,self.env,self.local)
+        expected=Expressions(self.env,self.local).parse('opaque box(x).value')
+        self.assertEqual((result.lean,result.type,result.tree),(expected.lean,expected.type,expected.tree))
+        self.assertNotIn('first',result.lean)
+
+    def test_projection_unavailable_base_check_propagates(self):
+        with patch.object(self.env,'call',side_effect=TimeoutError('Unavailable base check')):
+            with self.assertRaises(TimeoutError):comparison_normal_form(self.old,self.env,self.local)

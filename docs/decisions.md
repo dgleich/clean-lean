@@ -1995,3 +1995,14 @@ parameter evidence preserve checked carrier expressions. See the
 Higher classifiers and general symbolic validity remain open. The parser and
 production inference are unchanged.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Fresh projection-base comparison reuse
+
+A comparison traversal may reuse its freshly elaborated projection base for
+producer inspection and base normalization in the same fixed scope. It must not
+reuse stored payloads across public calls or suppress failed checking. The selected
+Lean expression and parsing rules do not change. See the
+[rule and measured validation scope](comparison-token-cache.md#projection-base-reuse-2026-11-11).
+:::
