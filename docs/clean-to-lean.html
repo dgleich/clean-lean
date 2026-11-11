@@ -1772,5 +1772,9 @@ disposable metadata cannot authorize reuse across calls. See the
 <h2>Closed nominal universes in joint inference</h2>
 <p>A declared <code>Universe: 1</code> carrier remains in Lean <code>Type 1</code> during joint inference. Thus <code>object(n+1)</code> works when the local function returns a declared module-object carrier. The solver retains declaration identities and closed levels; it does not infer universes. The three topology documents blocked in the previous comparison now agree with legacy output. Higher classifier inference and default routing remain pending. See the <a href="../studies/parameterized-literals/README.md#closed-higher-universe-nominal-carriers">precise scope and native checks</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="direct-lambda-heads">
+<h2>Direct lambda application in joint inference</h2>
+<p><code>(function(x: Natural,x+1))(2)</code> now jointly resolves the body and argument. The output retains the Lean lambda application rather than replacing it with its computed value. All viable body rows must first establish the same ground, binder-independent codomain without defaults or selection. General dependent or unresolved codomains remain incomplete. See the <a href="../studies/parameterized-literals/README.md#direct-lambda-application-with-a-common-determined-codomain">rule, exhaustive scalar comparison and native target</a>.</p>
+</section></llm>
 </body>
 </html>

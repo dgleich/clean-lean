@@ -2485,3 +2485,18 @@ local/dependent carrier boundaries remain separately incomplete. See the
 [rule, topology compatibility and independent native targets](../studies/parameterized-literals/README.md#closed-higher-universe-nominal-carriers).
 This removes the nominal Type-0 restriction, with no syntax or default-routing change.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Direct lambda heads with determined codomains
+
+Joint preparation may discover a common ordinary function type for a directly
+applied lambda only when every viable body row has the same ground checked
+codomain, with no retained reference to that lambda's own bound local. Saturation
+performs no defaulting or selection; incomplete rows block discovery. The original
+body alternatives then participate in the outer product and selection. Emission
+retains the lambda application and audits body operator ambiguity. See the
+[constructive rule and independent checks](../studies/parameterized-literals/README.md#direct-lambda-application-with-a-common-determined-codomain).
+Unknown/competing/dependent codomains remain incomplete. No syntax or default
+production-routing change.
+:::

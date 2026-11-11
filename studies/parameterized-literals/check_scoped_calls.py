@@ -89,8 +89,15 @@ noncomputable def expectedFactory : {t('Real')} := {f('factory')} (fun (a : {t('
 same_basic_target actualFactory expectedFactory
 theorem factoryMeaning : actualFactory = 0 := by simp [actualFactory, {f('factory')}, {num('Real')}]
 """)
+direct=complete(expression_tree(parse('(function(x: Natural,x+1))(2)','expression')),env,scope,use_default=False)
+checks.append(f"""
+noncomputable def actualDirectLambda : {t('Natural')} := {direct.lean}
+noncomputable def expectedDirectLambda : {t('Natural')} := (fun (x : {t('Natural')}) => {f('natural sum')} x ({one})) ({num('Natural')} (nat_lit 2))
+same_basic_target actualDirectLambda expectedDirectLambda
+theorem directLambdaMeaning : actualDirectLambda = 3 := by rfl
+""")
 path=HERE/'ScopedCallTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Seventeen automatic scoped-call targets and seventeen interpretation proofs passed; implicit/contextually unresolved consumers and production integration remain pending.')
+print('Eighteen automatic scoped-call targets and eighteen interpretation proofs passed; implicit/contextually unresolved consumers and production integration remain pending.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -4417,6 +4417,21 @@
         "General higher dependent binders",
         "Default routing and full compatibility"
       ]
+    },
+    {
+      "id": "joint_direct_lambda_application",
+      "status": "explicit-api-not-default",
+      "environment": "Explicit Natural domain, declared natural addition and numeral meanings, no child selection/defaulting.",
+      "source": "(function(x: Natural,x+1))(2)",
+      "expected_lean": "A retained Natural-domain lambda adding the declared natural one, applied to declared natural two; no beta-reduced replacement.",
+      "checks": [
+        "tests/test_joint_completion.py: direct lambda cases and 29-expression flat exhaustive oracle",
+        "studies/parameterized-literals/check_scoped_calls.py: exact direct-lambda target and proof; eighteen scoped checks total"
+      ],
+      "pending": [
+        "Dependent or unresolved direct-lambda codomain recovery",
+        "Default production routing"
+      ]
     }
   ]
 }

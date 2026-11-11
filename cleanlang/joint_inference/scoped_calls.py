@@ -7,10 +7,42 @@ be determined by checked hole-free arguments; general contextual discovery is pe
 from itertools import product
 from cleanlang.dependent_functions import occurs,substitute,DependentFunctionType
 from cleanlang.numeral_inference import holes,default_carrier
-from .constraint_model import Row,Selection,Incomplete,NoSolution
+from .constraint_model import Row,Selection,Incomplete,NoSolution,saturate,resolve,variables
 from .contextual_constraints import Candidate,select_contextual
 from .scoped_bodies import ScopedBody
 from .clean_rows import Builder
+
+
+def prepare_lambda_head(builder,tree):
+    """Discover a common checked codomain without selecting body alternatives."""
+    from cleanlang.core import Type
+    from .witness_model import Resolver,Seed
+    domain=builder.env.type(tree[2],builder.scope,phrases=False)
+    child=ScopedBody(builder.env,builder.scope,tree,path=builder.row_namespace,
+                     limit=builder.limit,binder_ids=builder.binder_ids)
+    rows=child.rows();types=[];viable=[];body=child.builder
+    names={body.carrier_identity(n):n for n,spec in builder.env.data['types'].items()
+           if 'native_binding' in spec or n in builder.env.structures}
+    def assemble(term,args):
+        if term.identity not in names:raise Incomplete('Direct lambda codomain has no declared carrier')
+        return Type(names[term.identity],args)
+    for row in rows:
+        try:bindings=saturate(row,limit=builder.limit)
+        except NoSolution:continue
+        result=resolve(row.arguments[-1],bindings)
+        if variables(result):raise Incomplete('Direct lambda codomain remains unresolved')
+        representatives=Resolver(bindings,
+            [Seed(term,value,(0,i)) for i,(term,value) in enumerate(body.rigid.items())],
+            validate=lambda term,value:body.typ(value,{})==term,
+            assemble=assemble,limit=builder.limit,
+            available=body.witness_available,allowed_binders=frozenset(body.binder_ids.values()))
+        codomain=representatives.get(result)
+        if ('binder',tuple(builder.row_namespace)) in body.dependencies(codomain,normalize=False):
+            raise Incomplete('Direct lambda codomain depends on its bound argument')
+        if types and codomain!=types[0]:raise Incomplete('Direct lambda alternatives need joint codomain recovery')
+        types.append(codomain);viable.append(row)
+    if not viable:raise NoSolution('Direct lambda has no viable body')
+    return tuple(viable),child.retain,builder.env.function_type(domain,types[0])
 
 
 def prepare_typed_call(builder,tree,expected=None):
@@ -21,11 +53,13 @@ def prepare_typed_call(builder,tree,expected=None):
         if len(tree[2])!=1:raise NoSolution('Local scoped application requires exactly one argument')
         head_tree=tree[1] if tree[0]=='Apply' else ['Local',name]
         if holes(head_tree):
-            if head_tree[0] not in ('Call','Apply'):
-                raise Incomplete('Scoped application head needs contextual type recovery')
             child=Builder(env,scope,builder.limit-1,binder_ids=builder.binder_ids,
                           binder_path=builder.binder_path,row_namespace=builder.row_namespace+(1,))
-            head_rows,head_retain,head_type=prepare_typed_call(child,head_tree)
+            if head_tree[0]=='Lambda':
+                head_rows,head_retain,head_type=prepare_lambda_head(child,head_tree)
+            elif head_tree[0] in ('Call','Apply'):
+                head_rows,head_retain,head_type=prepare_typed_call(child,head_tree)
+            else:raise Incomplete('Scoped application head needs contextual type recovery')
             head_part=(head_rows,head_retain)
         else:head_type=builder.check_candidate(head_tree).type
         current=head_type

@@ -3,10 +3,10 @@
 from pathlib import Path
 import unittest
 from unittest.mock import patch
-from cleanlang.core import Environment,Expr,Expressions
+from cleanlang.core import Environment,Expr,Expressions,CleanError
 from cleanlang.modules import load_module,type_declaration,notation
 from cleanlang.syntax import parse,expression_tree
-from cleanlang.joint_inference import complete,Incomplete,NoSolution
+from cleanlang.joint_inference import complete,Incomplete,NoSolution,Ambiguous
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -71,6 +71,41 @@ class JointCompletion(unittest.TestCase):
   notation('Notation take(T: Large,x: Natural): Natural:', ['Means: x','Render latex: t({T},{x})'],self.env)
   with self.assertRaises(Incomplete):
    complete(expression_tree(parse('take(type(High1),0)','expression')),self.env,self.scope)
+
+ def test_direct_lambda_application_without_inner_selection(self):
+  tree=expression_tree(parse('(function(x: Natural,x+1))(2)','expression'))
+  with patch('cleanlang.joint_inference.clean_rows.Builder.solve_with_trace',side_effect=AssertionError('inner selection')):
+   value=complete(tree,self.env,self.scope,use_default=False)
+  self.assertEqual(value.type,self.env.type('Natural'))
+  self.assertEqual(value.tree[1][0],'Lambda')
+  self.assertEqual(value.tree[2][0][2],'Natural')
+ def test_direct_lambda_application_domain_mismatch(self):
+  self.scope['r']=Expr('r','r',self.env.type('Real'),tree=['Local','r'])
+  with self.assertRaises(NoSolution):
+   complete(expression_tree(parse('(function(x: Natural,x+1))(r)','expression')),self.env,self.scope)
+ def test_direct_lambda_body_operator_ambiguity_survives(self):
+  notation('Notation other sum(x: Natural,y: Natural): Natural:', ['Means: x+y','Infix: +','Render latex: {x}+{y}'],self.env)
+  with self.assertRaises(Ambiguous):
+   complete(expression_tree(parse('(function(x: Natural,x+1))(2)','expression')),self.env,self.scope)
+ def test_direct_lambda_undetermined_codomain_remains_incomplete(self):
+  with self.assertRaises(Incomplete):
+   complete(expression_tree(parse('(function(x: Natural,0))(2)','expression')),self.env,self.scope)
+
+ def test_scalar_fragment_matches_independent_flat_exhaustive_oracle(self):
+  from test_numeral_pruning import exhaustive
+  from cleanlang.numeral_inference import holes
+  env=Environment();load_module(ROOT/'library/operators.clean',env);del env.numeral_default
+  scope={n:Expr(n,n,env.type(t),tree=['Local',n]) for n,t in [('n','Natural'),('r','Real')]}
+  sources=[f'({a})+({b})' for a in ['n','r','1','n+1','r+1'] for b in ['n','r','2','n+2','r+2']]
+  sources+=['-(r+1)','(function(x: Natural,x+1))(2)','for every(x: Natural,x+1=x+1)','there exists(x: Real,x=1)']
+  for source in sources:
+   with self.subTest(source=source):
+    tree=expression_tree(parse(source,'expression'));expected=exhaustive(tree,env,scope)
+    if len(expected)==1:
+     actual=complete(tree,env,scope,use_default=False)
+     self.assertEqual((actual.lean,actual.type),(expected[0].lean,expected[0].type))
+    else:
+     with self.assertRaises(Ambiguous if expected else NoSolution if holes(tree) else CleanError):complete(tree,env,scope,use_default=False)
 
 if __name__=='__main__':unittest.main()
 

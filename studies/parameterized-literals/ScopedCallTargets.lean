@@ -445,4 +445,10 @@ noncomputable def expectedFactory : cleanType_Real_107b6641a486642ad8e1 := clean
 same_basic_target actualFactory expectedFactory
 theorem factoryMeaning : actualFactory = 0 := by simp [actualFactory, cleanNotation_factory_a1e7ede9587e65e27fbb, cleanNumeral_Real_1f10813a9ce4dc61fe3e]
 
+
+noncomputable def actualDirectLambda : cleanType_Natural_469c53b6dafb7a218246 := ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 (clean_bound_0) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2)))
+noncomputable def expectedDirectLambda : cleanType_Natural_469c53b6dafb7a218246 := (fun (x : cleanType_Natural_469c53b6dafb7a218246) => cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 x (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 2))
+same_basic_target actualDirectLambda expectedDirectLambda
+theorem directLambdaMeaning : actualDirectLambda = 3 := by rfl
+
 -- generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

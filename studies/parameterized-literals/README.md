@@ -3033,3 +3033,48 @@ refreshes stale ExactSequences Lean fixtures to the existing quoted-identifier
 bindings; the paired legacy/joint document comparison remains identical.
 
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Direct lambda application with a common determined codomain
+
+A scalar compatibility probe exposed the formerly incomplete expression:
+
+```clean
+(function(x: Natural,x+1))(2)
+```
+
+The joint path now opens the lambda and prepares its body rows without selecting
+or defaulting them. Each row is saturated using its existing constraints; refuted
+rows are removed, while incomplete checks propagate. Every remaining body result
+type must be ground and reconstructible from checked caller representatives and
+nominal declarations. All those types must agree, and their retained source
+references must not depend on the lambda's own local binder. This establishes a
+common ordinary function type from the explicit domain and checked codomain.
+It does not select a body interpretation.
+
+The original body rows and reconstruction operation then enter the enclosing
+application product alongside its argument rows. Only the outer selector chooses
+literal interpretations and applies simultaneous defaults. Reconstruction retains
+the lambda, including its selected body syntax, and checks the whole application;
+it does not emit a beta-reduced replacement. Operator-input ambiguity in the body
+still blocks selection, even if every operator alternative returns the same type.
+
+Unknown or competing codomains, unresolved type representatives and codomains that
+retain the bound local remain incomplete. In particular, a bare-zero body with
+unresolved parameterized-zero alternatives is not defaulted independently to force
+a common codomain. General dependent/contextual lambda-result inference remains a
+separate integration obligation. No parser or default production routing change.
+
+The API tests cover the example with independent child selection forbidden,
+domain mismatch, preserved operator ambiguity and an unresolved-codomain boundary.
+An additional test compares 29 small scalar expressions against a flat exhaustive
+literal-assignment oracle, including negative and ambiguous cases. The native
+scoped driver adds an independently authored exact lambda-application target and a
+proof that this particular closed application equals three.
+Validation: all 462 solver tests and thirteen API tests pass, including the
+29-expression exhaustive comparison. All eighteen scoped canonical Lean targets
+and eighteen interpretation proofs pass. The broader topology compatibility sweep
+remains running; completed entries are observations only, not a completed suite.
+
+:::
