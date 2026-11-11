@@ -126,3 +126,23 @@ references. Nine independent native targets and five supporting proofs pass;
 These scoped results do not replace the failed historical broad run or establish
 full regression success. Vector-zero inference remains open.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Binder repair full-discovery checkpoint
+
+Full discovery now runs from immutable commit `9b44c0d`, archived into
+`/tmp/clean-binder-full-65m6jsq7` with the pinned dependency directory reused.
+Its log is `/tmp/clean-binder-immutable-full.log`; no final result is available
+at this checkpoint. The older live discovery processes for actual-index reuse,
+classified parameters and result-title escaping were explicitly retired as
+superseded, not counted as passes. Their PID/command/checkout records are in
+`/tmp/clean-binder-retired-discoveries.json`.
+
+The initial snapshot setup failed because this Python version does not support
+`TarFile.extractall(filter=...)`. A worktree run launched after that failed setup
+was also retired for incorrect isolation, not for exceeding an observation window.
+The corrected snapshot uses the trusted local Git archive. None of these retired
+runs supplies completed regression evidence. The separate active-label native
+verifier remains independent of this replacement discovery.
+:::
