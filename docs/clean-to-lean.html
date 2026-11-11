@@ -1201,5 +1201,14 @@ remain unchanged. Temporary binders and later calls recheck their indices. This
 preserves the same intended Lean term; it introduces no source syntax. See
 <a href="active-label-performance.md">validation and remaining limits</a>.</p>
 </llm>
+<llm model="gpt-6" date="2026-11-11">
+<section id="classified-parameters"><h2>Classifier-declared record parameters</h2>
+<p>A record header <code>Structure Package(A: LargeTypes):</code>, where LargeTypes
+classifies Type 1, emits a generic <code>(A : Type 1)</code> parameter. With
+<code>Universe: 1</code> and field <code>Let point: A</code>, it can store a
+TopologicalSpace. Wrong-level arguments reject. Type constructors and aliases
+use the same formal-classifier rule without searching other visible classifiers.
+See the <a href="classified-parameters.md">contract and validation limits</a>.</p>
+</section></llm>
 </body>
 </html>

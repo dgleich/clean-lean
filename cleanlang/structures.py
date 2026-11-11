@@ -134,8 +134,8 @@ def declare(header, fields, env):
         if spelling is None:raise CleanError('Structure parameters require explicit types')
         if n in local or n in env.data['types'] or n in env.data['aliases']:
             raise CleanError('Structure parameter must be fresh: '+n)
-        t=Type('Type') if spelling=='Type' else env.type(spelling,local)
-        kinds.append('type' if t==Type('Type') else 'dimension' if t==NAT else
+        t=env.type(spelling,local)
+        kinds.append('type' if env.classifier_info(t) is not None else 'dimension' if t==NAT else
                      {'value':substitute(str(t),list(local))})
         params.append((n,t));local[n]=Expr('«'+n+'»',texid(n),t)
     members=[];metadata=[]
@@ -166,7 +166,7 @@ def declare(header, fields, env):
     if constructor in env.data['functions'] or constructor in env.data['types'] or constructor in env.data['aliases'] or constructor==name:
         raise CleanError('Constructor must have a fresh callable name distinct from type names: '+constructor)
     pnames=[n for n,_ in params]
-    signature=' '.join('(«'+n+'» : '+('Type' if t==Type('Type') else env.render_type(t,'lean',local))+')' for n,t in params)
+    signature=' '.join('(«'+n+'» : '+(universe_sort(info[1]) if (info:=env.classifier_info(t)) is not None else env.render_type(t,'lean',local))+')' for n,t in params)
     body=signature+' : '+universe_sort(level)+' where\n'+''.join('  «'+n+'» : '+env.render_type(t,'lean',local)+'\n' for n,t in members)
     stem=''.join(c if c.isascii() and (c.isalnum() or c=='_') else f'_u{ord(c):x}_' for c in name)
     key='cleanStructure_'+stem+'_'+hashlib.sha256((name+body).encode()).hexdigest()[:20]
@@ -187,7 +187,7 @@ def declare(header, fields, env):
                                   [[n,str(t)] for n,t in members],constructor]}
     result=env.type(name+'('+','.join(pnames)+')' if pnames else name,local)
     allparams=params+members
-    csig=' '.join('(«'+n+'» : '+('Type' if t==Type('Type') else env.render_type(t,'lean',local))+')' for n,t in allparams)
+    csig=' '.join('(«'+n+'» : '+(universe_sort(info[1]) if n in pnames and (info:=env.classifier_info(t)) is not None else 'Type' if t==Type('Type') else env.render_type(t,'lean',local))+')' for n,t in allparams)
     cbody=csig+' : '+env.render_type(result,'lean',local)+' :=\n  @_root_.'+key+'.mk'+''.join(' «'+n+'»' for n,_ in allparams)
     ckey=add_definition(env,'cleanConstructor_',constructor,cbody)
     env.data['functions'][constructor]={'params':[str(t) for _,t in allparams], 'returns':str(result),

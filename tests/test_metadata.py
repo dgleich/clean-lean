@@ -46,6 +46,7 @@ class ClassifierMetadata(unittest.TestCase):
   for body in ('Type','Type 0','Type 2','Type 01','Sort 2','(Type 1)','Other'):
    self.reject(['Universe: 2','Classifies: 1','Means: '+body,'Render latex: C'],'primitive Type')
  def test_parameters_reject(self):
+  self.declare('Type',0,'Type')
   self.reject(['Universe: 2','Classifies: 1','Means: Type 1','Render latex: C'],
    'zero-parameter',header='Type Invalid(A: Type):')
  def test_numerals_reject(self):

@@ -116,9 +116,9 @@ def type_declaration(header, fields, env):
         kind=header[parameter.children[1].meta.start_pos:parameter.children[1].meta.end_pos].strip() if len(parameter.children)>1 else ''
         if not kind or p in names or p in env.data['types'] or p in env.data['aliases']:
             raise CleanError('Type parameters require distinct fresh names and explicit types')
-        t=Type('Type') if kind=='Type' else env.type(kind,local,phrases=False)
+        t=env.type(kind,local,phrases=False)
         parameter_types.append(t)
-        kinds.append('type' if t==Type('Type') else 'dimension' if t==NAT else
+        kinds.append('type' if env.classifier_info(t) is not None else 'dimension' if t==NAT else
                      {'value':substitute(str(t),names)})
         names.append(p);local[p]=Expr(p,p,t)
     values = fields_map(fields)
@@ -147,7 +147,7 @@ def type_declaration(header, fields, env):
     for src,dst in [('describe','prose'),('describe plural','prose_plural')]:
         if src in values: spec[dst] = template(values[src], names)
     env.data['types'][name] = spec
-    signature=' '.join(f'({n} : '+('Type' if t==Type('Type') else 'Nat' if t==NAT else env.render_type(t,'lean'))+')' for n,t in zip(names,parameter_types))
+    signature=' '.join(f'({n} : '+(universe_sort(info[1]) if (info:=env.classifier_info(t)) is not None else 'Nat' if t==NAT else env.render_type(t,'lean'))+')' for n,t in zip(names,parameter_types))
     sort=universe_sort(level) if level!=default_level else {'Prop':'Sort 1', 'Type':'Type 1'}.get(values['means'],'Type')
     key=add_definition(env, 'cleanType_', name, f'{signature} : {sort} :=\n  {values["means"]}')
     env.notation_definitions[key]=env.notation_definitions[key].replace('noncomputable def ', 'noncomputable abbrev ', 1)

@@ -267,7 +267,11 @@ class Environment:
         for a,k in zip(args,kinds):
             if k=='type':
                 value=self.type(a,env,trail=trail)
-                if not self.is_function_type(Type(name)):self.require_type_argument(value)
+                formals=self.data['types'][name].get('parameter_types',[])
+                info=self.classifier_info(formals[len(out)]) if len(out)<len(formals) else None
+                if info is None:raise CleanError('Type parameter requires a declared classifier')
+                if not self.is_function_type(Type(name)) or info[1]!=0:
+                    self.require_type_argument(value,info[1])
                 out.append(value);continue
             if isinstance(k,dict):
                 if not (a.startswith('(') or re.fullmatch(ID+r'(?:\.'+ID+r')*',a)):

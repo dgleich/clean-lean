@@ -1,0 +1,25 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "TypeValueCommon.clean"
+
+Structure Package(A: LargeTypes):
+  Universe: 1
+  Let point: A
+  Constructor: package
+
+Type Sequences(A: LargeTypes):
+  Universe: 1
+  Means: List A
+  Render latex: \operatorname{{Sequences}}({A})
+
+Type Packaged(A: LargeTypes):
+  Equals: Package(A)
+
+Define unpack(A: LargeTypes,P: Package(A)): A:
+  Equals: P.point
+
+Result packaged topology entry:
+  Attribution: local; parameterized record projection; original
+  Let P: Packaged(TopologicalSpace)
+  Conclude: equal large(unpack(type(TopologicalSpace : LargeTypes),P),P.point)
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

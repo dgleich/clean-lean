@@ -89,7 +89,7 @@ native checks; run the repository provenance tool afterward.
 Full-suite results, complete native-target acceptance beyond the selected cases,
 editor/browser regeneration,
 complete native dependency freshness and resource accounting remain obligations.
-General higher record/type-constructor parameter handling, unannotated joint
+General universe-polymorphic record/type-constructor parameters, unannotated joint
 operator/literal inference and other explicitly rejected forms retain their own
 gaps. Existing topology wrappers and proved supporting laws remain separate from
 the missing homology/excision/well-group research constructions; LAProof's IEEE
@@ -109,4 +109,13 @@ active-label module; the saved snapshot is partial. Native Emacs startup remains
 A [bounded active-label profile](active-label-performance.md) identifies repeated
 elaboration and contextual comparison as the dominant sampled work. It is not
 a completed module validation; full regression remains pending.
+:::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Closed higher-universe record/type-constructor parameters are now implemented via
+explicit classifier metadata, including aliases and renamed classifiers. See
+[classified-parameters.md](classified-parameters.md) for the constructive rule,
+example, native oracles and pending broad validation. This supersedes the earlier
+closed-parameter gap, not the general universe-polymorphism or native freshness gaps.
 :::

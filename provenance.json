@@ -8175,6 +8175,47 @@
       "origin": "llm-assisted",
       "mode": "markdown",
       "model": "gpt-6"
+    },
+    "tests/test_classified_parameters.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/check_parameter_targets.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/ParameterizedRecords.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/universe-classifiers/ParameterTargets.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "docs/classified-parameters.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "markdown"
     }
   }
 }

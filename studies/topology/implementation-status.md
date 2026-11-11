@@ -90,3 +90,14 @@ parser defect. Each new construction should first be attempted with the existing
 Clean definitions, conditions, structures and explicit foundation modules; a
 failure to express it must be recorded as a language gap with a concrete specimen.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The working compiler now supports classifier-declared parameters of records,
+native type constructors and aliases at closed higher universes. The
+[parameterized record specimen](../universe-classifiers/ParameterizedRecords.clean)
+stores a TopologicalSpace under a declared Type-1 carrier parameter. The
+[contract](../../docs/classified-parameters.md) records the exact mapping and
+validation boundary. This addresses the earlier closed generic-parameter gap;
+it does not supply missing topology constructions or general universe polymorphism.
+:::

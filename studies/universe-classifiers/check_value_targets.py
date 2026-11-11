@@ -43,6 +43,10 @@ noncomputable def tag {A : Type 1} (x : A) : INDEXED A := 0
 noncomputable def applied (X : SPACE) : INDEXED SPACE := @TAG SPACE X
 end TypeValueOracle
 '''
+# Historical study stacks retain their former classifier-wrapper binder.
+# Current production explicitly selects the new generic parameter contract.
+if '--classified-parameters' in sys.argv:
+ expected=expected.replace('def indexed (T : CLASSIFIER)', 'def indexed (T : Type 1)')
 mapping={'INDEXED':t('Indexed'),'TAG':f('tag'),'CARRIER':f('topology carrier'),'CLASSIFIER':t('LargeTypes'),'SPACE':t('TopologicalSpace'),'RETAIN':f('retain in'),'INFERRED':f('retain inferred'),'EQUAL':f('equal large'),'PROPOSITION':t('Proposition')}
 for k,v in mapping.items():expected=re.sub(r'\b'+k+r'\b',v,expected)
 comparison=next(ast.literal_eval(n.value) for n in ast.parse((ROOT/'tools/check_basic_targets.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPARISON' for t in n.targets))

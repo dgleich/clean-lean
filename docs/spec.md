@@ -1575,3 +1575,16 @@ is persisted or inferred from stored caches. Grammar, ambiguity rejection and
 intended Lean targets are unchanged. See [active-label-performance.md](active-label-performance.md)
 for focused and native validation status.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Classified record and type-constructor parameters
+
+Generic carrier parameters of records, native type constructors and aliases are
+selected by their declared classifier metadata, including higher closed levels
+and renamed classifiers. The formal slot fixes the level; visible-classifier
+search is not used. Generic binders emit Type k, and arguments and stored fields
+retain explicit universe checks. Existing grammar is unchanged. See the
+[classified-parameter contract](classified-parameters.md) for syntax trees,
+constructive translation, arrow compatibility boundary and validation limits.
+:::

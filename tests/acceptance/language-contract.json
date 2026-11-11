@@ -3089,6 +3089,39 @@
         "Active-label module and review-browser performance",
         "Broader native environment freshness"
       ]
+    },
+    {
+      "id": "classified_record_and_type_parameters",
+      "status": "implemented-slice",
+      "environment": "Explicit TypeValueCommon.clean imports; LargeTypes classifies Type 1; AlternativeTypes is simultaneously visible.",
+      "source": "Structure Package(A: LargeTypes):\n  Universe: 1\n  Let point: A\n  Constructor: package\n",
+      "expected_tree": [
+        "StructureHeader",
+        "Package",
+        [
+          [
+            "A",
+            "LargeTypes"
+          ]
+        ]
+      ],
+      "constructive_rule": "docs/classified-parameters.md",
+      "tests": [
+        "tests/test_classified_parameters.py",
+        "studies/universe-classifiers/check_parameter_targets.py"
+      ],
+      "native_oracles": "Four independent canonical targets and a projection proof in ParameterTargets.lean; fixed Type 1 binders.",
+      "negative_cases": [
+        "Wrong-level Real argument",
+        "Insufficient record Universe",
+        "Higher-arrow argument at Type 0",
+        "Unannotated type value with competing classifiers"
+      ],
+      "pending": [
+        "Full discovery",
+        "General universe polymorphism",
+        "Complete native-environment freshness"
+      ]
     }
   ]
 }

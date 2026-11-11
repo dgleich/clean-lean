@@ -330,10 +330,10 @@ noncomputable def cleanDefine_retain_inferred_5787951d13d834b9ec15 {A : Type 1} 
 noncomputable def cleanDefine_equal_large_a55b893a2f6758313499 {A : Type 1} (x : A) (y : A) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   x = y
 
-noncomputable abbrev cleanType_Indexed_d6b6a378907ce9150465 (T : (_root_.cleanType_LargeTypes_6e77ce5547484df6865c)) : Type :=
+noncomputable abbrev cleanType_Indexed_4b2cb552c44bf23f1e28 (T : Type 1) : Type :=
   Nat
 
-noncomputable def cleanNotation_tag_7c19d850697a7b3736f6 {A : Type 1} (x : A) : (_root_.cleanType_Indexed_d6b6a378907ce9150465 (A)) :=
+noncomputable def cleanNotation_tag_fa07880879255b0001e1 {A : Type 1} (x : A) : (_root_.cleanType_Indexed_4b2cb552c44bf23f1e28 (A)) :=
   0
 
 
@@ -373,7 +373,7 @@ def named_topology_carrier : Prop :=
 
 end CleanStatements
 
-noncomputable def TypeValueApplied (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) : (_root_.cleanType_Indexed_d6b6a378907ce9150465 ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b))) := (@_root_.cleanNotation_tag_7c19d850697a7b3736f6 ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (X))
+noncomputable def TypeValueApplied (X : (_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) : (_root_.cleanType_Indexed_4b2cb552c44bf23f1e28 ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b))) := (@_root_.cleanNotation_tag_fa07880879255b0001e1 ((_root_.cleanType_TopologicalSpace_d66be29262ccb5d89e3b)) (X))
 
 namespace TypeValueOracle
 noncomputable def carrier : cleanType_LargeTypes_6e77ce5547484df6865c := cleanType_TopologicalSpace_d66be29262ccb5d89e3b
@@ -383,9 +383,9 @@ noncomputable def equalLarge {A : Type 1} (x y : A) : cleanType_Proposition_ae4a
 noncomputable def explicitStatement : Prop := ∀ (X : cleanType_TopologicalSpace_d66be29262ccb5d89e3b), cleanDefine_equal_large_a55b893a2f6758313499 (cleanDefine_retain_in_6d72c1e1d3208fff7d7e cleanType_TopologicalSpace_d66be29262ccb5d89e3b X) X
 noncomputable def inferredStatement : Prop := ∀ (X : cleanType_TopologicalSpace_d66be29262ccb5d89e3b), cleanDefine_equal_large_a55b893a2f6758313499 (cleanDefine_retain_inferred_5787951d13d834b9ec15 X) X
 noncomputable def namedStatement : Prop := ∀ (X : cleanType_TopologicalSpace_d66be29262ccb5d89e3b), @cleanDefine_equal_large_a55b893a2f6758313499 cleanType_TopologicalSpace_d66be29262ccb5d89e3b (cleanDefine_retain_in_6d72c1e1d3208fff7d7e cleanDefine_topology_carrier_9a68fb8a4eaf687edd65 X) X
-def indexed (T : cleanType_LargeTypes_6e77ce5547484df6865c) : Type := Nat
-noncomputable def tag {A : Type 1} (x : A) : cleanType_Indexed_d6b6a378907ce9150465 A := 0
-noncomputable def applied (X : cleanType_TopologicalSpace_d66be29262ccb5d89e3b) : cleanType_Indexed_d6b6a378907ce9150465 cleanType_TopologicalSpace_d66be29262ccb5d89e3b := @cleanNotation_tag_7c19d850697a7b3736f6 cleanType_TopologicalSpace_d66be29262ccb5d89e3b X
+def indexed (T : Type 1) : Type := Nat
+noncomputable def tag {A : Type 1} (x : A) : cleanType_Indexed_4b2cb552c44bf23f1e28 A := 0
+noncomputable def applied (X : cleanType_TopologicalSpace_d66be29262ccb5d89e3b) : cleanType_Indexed_4b2cb552c44bf23f1e28 cleanType_TopologicalSpace_d66be29262ccb5d89e3b := @cleanNotation_tag_fa07880879255b0001e1 cleanType_TopologicalSpace_d66be29262ccb5d89e3b X
 end TypeValueOracle
 
 open Lean Elab Command
@@ -409,8 +409,8 @@ same_basic_target cleanDefine_topology_carrier_9a68fb8a4eaf687edd65 TypeValueOra
 same_basic_target cleanDefine_retain_in_6d72c1e1d3208fff7d7e TypeValueOracle.retainIn
 same_basic_target cleanDefine_retain_inferred_5787951d13d834b9ec15 TypeValueOracle.inferred
 same_basic_target cleanDefine_equal_large_a55b893a2f6758313499 TypeValueOracle.equalLarge
-same_basic_target cleanType_Indexed_d6b6a378907ce9150465 TypeValueOracle.indexed
-same_basic_target cleanNotation_tag_7c19d850697a7b3736f6 TypeValueOracle.tag
+same_basic_target cleanType_Indexed_4b2cb552c44bf23f1e28 TypeValueOracle.indexed
+same_basic_target cleanNotation_tag_fa07880879255b0001e1 TypeValueOracle.tag
 same_basic_target TypeValueApplied TypeValueOracle.applied
 same_basic_target CleanStatements.explicit_topology_carrier TypeValueOracle.explicitStatement
 same_basic_target CleanStatements.inferred_topology_carrier TypeValueOracle.inferredStatement

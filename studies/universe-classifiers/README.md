@@ -355,3 +355,14 @@ and dependent record fields, with explicit level/identity metadata and version-3
 storage. See [the contract](computed-carriers.md) and
 [the authored record example](CarrierRecords.clean).
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The working compiler now supports classifier-declared parameters of records,
+native type constructors and aliases at closed higher universes. The
+[parameterized record specimen](../universe-classifiers/ParameterizedRecords.clean)
+stores a TopologicalSpace under a declared Type-1 carrier parameter. The
+[contract](../../docs/classified-parameters.md) records the exact mapping and
+validation boundary. This addresses the earlier closed generic-parameter gap;
+it does not supply missing topology constructions or general universe polymorphism.
+:::
