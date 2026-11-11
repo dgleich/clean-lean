@@ -442,3 +442,18 @@ requested ordinary mathematical syntax. General parameterized numeral families
 beyond exact digits, universe/sort polymorphism and native import isolation remain
 separate obligations, not implicitly solved by zero constructors.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental source-to-row bridge
+
+The [Clean-signature adapter](../studies/parameterized-literals/README.md#rows-from-actual-clean-declarations)
+now generates joint rows from real parsed expressions and module declarations.
+It recovers caller dimensions independently of operand order and preserves input-
+signature operator ambiguity. Representative non-defaulted rows materialize into
+retained literals and pass five exact native targets and meaning proofs.
+This is experimental evidence, not integration: binder/dependent constraints,
+default provenance, declaration-bound telescope auditing and exhaustive candidate
+validation remain required. The linked study specifies the construction order,
+unsupported boundaries and 56 passing design/adapter tests.
+:::

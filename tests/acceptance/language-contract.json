@@ -3214,6 +3214,40 @@
         "Unannotated joint literal/operator inference",
         "Full regression"
       ]
+    },
+    {
+      "id": "experimental_joint_literal_rows_from_clean",
+      "status": "experimental-slice",
+      "environment": "Production parser and explicit linear algebra declarations; isolated source-to-row adapter and constraint model",
+      "source": [
+        "x != 0",
+        "0 != x",
+        "A = 0",
+        "0 = A",
+        "r + 0"
+      ],
+      "constructive_rule": "studies/parameterized-literals/README.md#rows-from-actual-clean-declarations",
+      "tests": [
+        "studies/parameterized-literals/test_clean_rows.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "native_oracles": "Five independent exact targets and five meaning proofs in studies/parameterized-literals/JointTargets.lean",
+      "negative_cases": [
+        "Duplicate zero constructors",
+        "Unresolved families are not discarded",
+        "Input-signature ties cannot be resolved by expected results",
+        "Computed formal competitors remain incomplete",
+        "Scalar and matrix meanings of 0*x remain ambiguous",
+        "Resource exhaustion remains incomplete"
+      ],
+      "pending": [
+        "Production integration",
+        "Binder and general dependent constraints",
+        "Default provenance in retained targets",
+        "Retained declaration telescope audit",
+        "Every candidate validated before selection",
+        "Full production regression"
+      ]
     }
   ]
 }

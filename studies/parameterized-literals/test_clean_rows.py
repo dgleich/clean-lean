@@ -1,0 +1,94 @@
+# generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+from pathlib import Path
+import unittest
+from cleanlang.core import Environment,Expr
+from cleanlang.modules import load_module,notation,type_declaration
+from cleanlang.syntax import expression_tree,parse
+from clean_rows import Builder
+from constraint_model import Atom,Carrier,Ambiguous,Underdetermined,Incomplete,NoSolution
+
+ROOT=Path(__file__).resolve().parents[2]
+class CleanRows(unittest.TestCase):
+ def setUp(self):
+  self.e=Environment();load_module(ROOT/'library/linear_algebra.clean',self.e)
+  self.scope={n:Expr(n,n,self.e.type('Natural'),tree=['Local',n]) for n in ('m','n')}
+  for n,t in [('x','Vector(n,Complex)'),('A','Matrix(m,n,Real)'),('r','Real')]:
+   self.scope[n]=Expr(n,n,self.e.type(t,self.scope),tree=['Local',n])
+ def solve(self,source,**kw):
+  return Builder(self.e,self.scope).solve(expression_tree(parse(source,'expression')),**kw)
+ def literal(self,result):return [key for kind,_,key in result[0] if kind=='literal']
+ def test_operand_order_recovers_same_caller_dimension(self):
+  left=self.solve('x != 0');right=self.solve('0 != x')
+  key=self.e.data['functions']['complex vector zero']['native_binding']
+  self.assertEqual(self.literal(left),[key]);self.assertEqual(self.literal(right),[key])
+  self.assertEqual(left[1],right[1])
+  expected=Carrier(self.e.data['types']['Vector']['native_binding'],
+   (Atom(repr('n'),'index'),Carrier(self.e.data['types']['Complex']['native_binding'])))
+  self.assertEqual(left[1][0],expected)
+ def test_rectangular_recovery_keeps_both_dimensions(self):
+  result=self.solve('A = 0')
+  self.assertEqual(self.literal(result),[self.e.data['functions']['real matrix zero']['native_binding']])
+  self.assertEqual(result[1][0].arguments[:2],(Atom(repr('m'),'index'),Atom(repr('n'),'index')))
+ def test_named_call_uses_the_same_signature_constraints(self):
+  self.assertEqual(self.solve('unequal(x,0)')[1],self.solve('x != 0')[1])
+ def test_expected_carrier_determines_bare_zero(self):
+  result=self.solve('0',expected=self.scope['x'].type)
+  self.assertEqual(self.literal(result),[self.e.data['functions']['complex vector zero']['native_binding']])
+ def test_unresolved_family_is_not_discarded(self):
+  with self.assertRaises(Underdetermined):self.solve('0',use_default=False)
+ def test_default_restricts_all_zeros_simultaneously(self):
+  result=self.solve('0 = 0');native=self.e.data['types']['Natural']['numerals']['native_binding']
+  self.assertEqual([key for kind,_,key in result[0] if kind=='numeral'],[native,native])
+ def test_wrong_digit_has_no_vector_interpretation(self):
+  with self.assertRaises(NoSolution):self.solve('x != 1')
+ def test_equivalent_constructor_bodies_remain_ambiguous(self):
+  notation('Notation another(n: Natural): Vector(n,Complex):',
+   ['Means: fun _ => (0 : Complex)','Literal: 0','Render latex: 0'],self.e)
+  with self.assertRaises(Ambiguous):self.solve('x != 0')
+ def test_candidate_enumeration_order_does_not_choose_meaning(self):
+  first=self.solve('x != 0')
+  self.e.data['functions']=dict(reversed(list(self.e.data['functions'].items())))
+  self.e.data['types']=dict(reversed(list(self.e.data['types'].items())))
+  self.assertEqual(self.solve('x != 0'),first)
+ def test_renamed_nominal_carrier_has_no_math_name_dispatch(self):
+  type_declaration('Type Parcel(k: Natural):',['Means: Fin k → Complex','Render latex: P({k})'],self.e)
+  notation('Notation blank(k: Natural): Parcel(k):',
+   ['Means: fun _ => (0 : Complex)','Literal: 0','Render latex: 0'],self.e)
+  self.scope['p']=Expr('p','p',self.e.type('Parcel(n)',self.scope),tree=['Local','p'])
+  self.assertEqual(self.literal(self.solve('p != 0')),[self.e.data['functions']['blank']['native_binding']])
+ def test_row_exhaustion_is_incomplete(self):
+  tree=expression_tree(parse('x != 0','expression'))
+  with self.assertRaises(Incomplete):Builder(self.e,self.scope,limit=1).solve(tree)
+ def test_binder_region_is_explicitly_incomplete(self):
+  with self.assertRaises(Incomplete):self.solve('function(t: Real,t+0)')
+ def test_computed_formal_competitor_is_not_dropped(self):
+  notation('Notation shifted(m: Natural): Matrix(m,(m+1),Complex):',
+   ['Means: fun _ _ => (0 : Complex)','Literal: 0','Render latex: 0'],self.e)
+  with self.assertRaises(Incomplete):self.solve('x != 0')
+ def test_expected_result_does_not_resolve_operator_input_tie(self):
+  notation('Notation alternative(x: Real,y: Real): Complex:',
+   ['Means: 0','Infix: +','Render latex: {x}+{y}'],self.e)
+  with self.assertRaises(Ambiguous):self.solve('r+0',expected=self.e.type('Real'))
+
+ def test_materialized_vector_literal_retains_constructor_and_dimension(self):
+  value=Builder(self.e,self.scope).materialize(expression_tree(parse('x != 0','expression')))
+  self.assertEqual(value.tree[3][0],'BoundLiteral')
+  self.assertEqual(value.tree[3][3],'complex vector zero')
+  self.assertEqual(value.tree[3][5][0][2],['Local','n'])
+  self.assertEqual(value.tree[3][7],'inferred')
+ def test_materialized_target_is_independent_of_candidate_order(self):
+  tree=expression_tree(parse('0 != x','expression'))
+  first=Builder(self.e,self.scope).materialize(tree)
+  self.e.data['functions']=dict(reversed(list(self.e.data['functions'].items())))
+  self.e.data['types']=dict(reversed(list(self.e.data['types'].items())))
+  second=Builder(self.e,self.scope).materialize(tree)
+  self.assertEqual(first.lean,second.lean)
+  self.assertEqual(first.tree,second.tree)
+ def test_materialization_does_not_hide_an_unresolved_default(self):
+  with self.assertRaises(Underdetermined):Builder(self.e,self.scope).materialize(expression_tree(parse('0','expression')))
+ def test_zero_times_vector_keeps_scalar_and_matrix_interpretations(self):
+  with self.assertRaises(Ambiguous):self.solve('0*x = x')
+
+if __name__=='__main__':unittest.main()
+
+# generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

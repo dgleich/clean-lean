@@ -1633,3 +1633,15 @@ them by the existing retained-literal rule; no type-name dispatch or new syntax
 is introduced. [Standard zeros](standard-zeros.md) records constructive targets,
 ambiguity checks and the still-open unannotated inference requirement.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Joint literal inference remains experimental
+
+The source-to-row adapter under `studies/parameterized-literals` now exercises
+real declarations and retained native targets. Production inference is unchanged.
+The experiment preserves the rule that expected results cannot resolve an
+operator input-signature tie and gathers caller representatives before enumerating
+candidate declarations. Its [construction and remaining obligations](../studies/parameterized-literals/README.md#rows-from-actual-clean-declarations)
+are a proposed extension, not an accepted full language rule.
+:::
