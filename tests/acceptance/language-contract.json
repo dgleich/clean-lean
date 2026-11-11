@@ -3175,6 +3175,26 @@
         "Full regression",
         "Opaque authored Lean code still requires native checking"
       ]
+    },
+    {
+      "id": "scoped_comparison_reuse",
+      "status": "implemented-slice",
+      "constructive_rule": "docs/comparison-reuse.md",
+      "tests": [
+        "tests/test_stable_arguments.py",
+        "tests/test_contextual_key_contract.py"
+      ],
+      "invariants": [
+        "No source parse or emitted native term change",
+        "Exact semantic local snapshots",
+        "No stored allocation effects or errors",
+        "No reuse across public comparisons"
+      ],
+      "pending": [
+        "Final integration",
+        "Whole active-label translation and native targets",
+        "Full regression"
+      ]
     }
   ]
 }

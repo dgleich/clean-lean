@@ -1619,3 +1619,15 @@ source trees, normalized names and LaTeX labels are unchanged. Opaque native
 payloads are not rewritten. See [binder-identifiers.md](binder-identifiers.md) for
 the constructive rule, identifier audit, native checks and hash migration note.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Comparison reuse within one synchronous scope
+
+Nested comparisons may reuse checked results within their shared binder pool,
+under fixed declarations, exact semantic source/type/local snapshots and unchanged
+owned identities. No allocation-producing comparison is stored. Cache eviction
+and the atomic-expression exclusion affect work only. Public comparisons retain
+fresh validation. See [comparison-reuse.md](comparison-reuse.md) for the precise
+preconditions, unchanged target rule, tests and pending performance evidence.
+:::

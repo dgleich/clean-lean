@@ -1225,5 +1225,12 @@ parameters follow the same rule; source names and LaTeX are unchanged. Opaque
 Lean bodies remain authored Lean code. See the
 <a href="binder-identifiers.md">binding contract and native checks</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="comparison-reuse">
+<h2>Comparison reuse within one scope</h2>
+<p>Nested comparisons can reuse successful results under the same source, type,
+local bindings and owned binder identities. The emitted Lean call is unchanged.
+Reuse ends with the outer comparison; new public comparisons recheck declarations.
+See the <a href="comparison-reuse.md">contract and validation limits</a>.</p>
+</section></llm>
 </body>
 </html>

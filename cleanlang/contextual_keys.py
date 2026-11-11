@@ -11,6 +11,20 @@ def comparison_key(expression,env,locals,*,fresh=False):
     previous=pool
     if pool is None:pool=Pool(env,locals,expression.tree)
     before=set(pool.owned);env._comparison_pool=pool
+    # A pool belongs to one synchronous comparison under fixed declarations.
+    # Snapshot semantic local values rather than trusting object identity or
+    # disposable checked-argument caches. Never persist this memo on Environment.
+    from .comparison_snapshot import snapshot,SnapshotUnavailable
+    memo=getattr(pool,'comparison_memo',None)
+    if memo is None:pool.comparison_memo={};memo=pool.comparison_memo
+    cache_key=None
+    if previous is not None and expression.tree[0] in ('Call','ModuleCall','Operator','Unary','Apply','Projection'):
+        try:
+            cache_key=(snapshot((expression.tree,expression.type,expression.lean,
+                              tuple(sorted(locals.items())))),frozenset(before))
+        except SnapshotUnavailable:
+            pass  # Optional reuse is not a semantic analysis or rejection gate.
+        if cache_key is not None and cache_key in memo:return memo[cache_key]
     def stable_opaque(value):
         # Only called on freshly normalized children, within this fixed traversal.
         tree=value.tree
@@ -74,7 +88,13 @@ def comparison_key(expression,env,locals,*,fresh=False):
         owned=pool.owned-before
         import re
         from .core import ID
-        return key(result,owned) if any(t in owned for t in re.findall(ID,result)) else result
+        result=key(result,owned) if any(t in owned for t in re.findall(ID,result)) else result
+        if cache_key is not None and pool.owned==before:
+            # Eviction affects work only. A comparison that allocates identities
+            # is never reusable, even when its emitted term hides those names.
+            if len(memo)>=256:memo.clear()
+            memo[cache_key]=result
+        return result
     finally:
         if previous is None:del env._comparison_pool
         else:env._comparison_pool=previous

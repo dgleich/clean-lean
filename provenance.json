@@ -8332,6 +8332,22 @@
       ],
       "model": "gpt-6",
       "date": "2026-11-11"
+    },
+    "docs/comparison-reuse.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "markdown"
+    },
+    "cleanlang/comparison_snapshot.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "date": "2026-11-11",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
     }
   }
 }

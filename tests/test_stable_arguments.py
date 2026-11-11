@@ -111,6 +111,100 @@ class FreshIndexArguments(StableArguments):
   self.env.data['functions']['retain']['lean']='changed'
   with self.assertRaises(CleanError):index_value(value,self.env,self.scope,_fresh=True)
 
+class ScopedComparisonReuse(StableArguments):
+ def test_snapshot_visits_shared_values_once_and_reads_mutations(self):
+  from cleanlang.comparison_snapshot import snapshot
+  value=['Local','x'];shared=[value]*100
+  before=snapshot(shared)
+  self.assertEqual(len(before[1]),2)
+  value[1]='y'
+  self.assertNotEqual(before,snapshot(shared))
+ def test_snapshot_distinguishes_boolean_and_integer(self):
+  from cleanlang.comparison_snapshot import snapshot
+  self.assertNotEqual(snapshot([True]),snapshot([1]))
+ def test_snapshot_rejects_cycles(self):
+  from cleanlang.comparison_snapshot import snapshot
+  value=[];value.append(value)
+  with self.assertRaises(CleanError):snapshot(value)
+ def test_optional_snapshot_exhaustion_falls_back_to_comparison(self):
+  from cleanlang.binder_keys import Pool
+  from cleanlang.comparison_snapshot import SnapshotUnavailable
+  value=self.expr('retain(x)');expected=index_comparison(value,self.env,self.scope)
+  self.env._comparison_pool=Pool(self.env,self.scope,value.tree)
+  try:
+   with patch('cleanlang.comparison_snapshot.snapshot',side_effect=SnapshotUnavailable('budget')):
+    self.assertEqual(index_comparison(value,self.env,self.scope),expected)
+  finally:del self.env._comparison_pool
+ def test_snapshot_budget_is_bounded(self):
+  from cleanlang.comparison_snapshot import snapshot,SnapshotUnavailable
+  with self.assertRaises(SnapshotUnavailable):snapshot(list(range(20)),limit=10)
+ def test_repeated_index_within_pool_normalizes_once(self):
+  from cleanlang.binder_keys import Pool
+  import cleanlang.conversion as conversion
+  value=self.expr('retain(x)')
+  self.env._comparison_pool=Pool(self.env,self.scope,value.tree)
+  original=conversion._normal_form;calls=[]
+  def counted(value,*args,**kwargs):
+   if value.tree[0]=='Call' and value.tree[1]=='retain':calls.append(value.tree)
+   return original(value,*args,**kwargs)
+  try:
+   with patch('cleanlang.conversion._normal_form',side_effect=counted):
+    first=index_comparison(value,self.env,self.scope)
+    second=index_comparison(value,self.env,self.scope)
+   self.assertEqual(first,second);self.assertEqual(len(calls),1)
+  finally:del self.env._comparison_pool
+ def test_in_place_local_change_invalidates_memo(self):
+  from cleanlang.binder_keys import Pool
+  value=self.expr('retain(x)');self.env._comparison_pool=Pool(self.env,self.scope,value.tree)
+  try:
+   before=index_comparison(value,self.env,self.scope)
+   self.scope['x'].lean='changed'
+   after=index_comparison(value,self.env,self.scope)
+   self.assertNotEqual(before,after);self.assertIn('changed',str(after))
+  finally:del self.env._comparison_pool
+ def test_pool_identity_growth_invalidates_memo(self):
+  from cleanlang.binder_keys import Pool
+  value=self.expr('retain(x)');pool=Pool(self.env,self.scope,value.tree)
+  self.env._comparison_pool=pool
+  try:
+   index_comparison(value,self.env,self.scope)
+   old=len(pool.comparison_memo)
+   pool.fresh(self.scope)
+   index_comparison(value,self.env,self.scope)
+   self.assertEqual(len(pool.comparison_memo),old+1)
+  finally:del self.env._comparison_pool
+ def test_allocation_during_comparison_prevents_storage(self):
+  from cleanlang.binder_keys import Pool
+  import cleanlang.conversion as conversion
+  value=self.expr('retain(x)');pool=Pool(self.env,self.scope,value.tree)
+  self.env._comparison_pool=pool;original=conversion._normal_form
+  def allocate(*args,**kwargs):
+   pool.fresh(self.scope)
+   return original(*args,**kwargs)
+  try:
+   with patch('cleanlang.conversion._normal_form',side_effect=allocate):
+    index_comparison(value,self.env,self.scope)
+   self.assertEqual(pool.comparison_memo,{})
+  finally:del self.env._comparison_pool
+ def test_failure_is_not_stored(self):
+  from cleanlang.binder_keys import Pool
+  value=self.expr('retain(x)');pool=Pool(self.env,self.scope,value.tree)
+  self.env._comparison_pool=pool
+  try:
+   with patch('cleanlang.conversion._normal_form',side_effect=CleanError('incomplete check')) as failed:
+    for _ in range(2):
+     with self.assertRaisesRegex(CleanError,'incomplete check'):
+      index_comparison(value,self.env,self.scope)
+    self.assertEqual(failed.call_count,2)
+   self.assertEqual(pool.comparison_memo,{})
+  finally:del self.env._comparison_pool
+ def test_public_comparisons_do_not_retain_memo(self):
+  value=self.expr('retain(x)');index_comparison(value,self.env,self.scope)
+  self.assertFalse(hasattr(self.env,'_comparison_pool'))
+  self.env.data['functions']['retain']['lean']='changed'
+  updated=index_comparison(value,self.env,self.scope)
+  self.assertIn('changed',str(updated))
+
 if __name__=='__main__':unittest.main()
 
 # generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
