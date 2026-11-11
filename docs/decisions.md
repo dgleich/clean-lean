@@ -2329,3 +2329,18 @@ retain their existing behavior. No parsing, target selection, emitted expression
 serialization or semantic snapshot rule changes. See the
 [boundary and validation](comparison-token-cache.md#nested-fresh-projection-bases).
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental contextual pattern inversion
+
+The inference study can now abstract and reapply a ground contextual pattern with
+an ordered dependent telescope and distinct explicit local arguments. Domain and
+sort checks, simultaneous capture-free renaming, structural abstraction and
+scope checks determine the result; opaque dependencies, unresolved terms,
+non-pattern arguments and exhausted resources remain incomplete. This is model
+infrastructure, not a source-language feature or an implemented lambda inference
+rule. See the [constructive contract and tests](../studies/parameterized-literals/README.md#contextual-pattern-inversion-groundwork).
+Joint-row integration, complete-expression Lean targets and production integration
+are required before claiming embedded lambda support. No grammar change.
+:::

@@ -1723,5 +1723,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <h2>Nested projection comparison</h2>
 <p>A freshly checked field projection retains its base only for reuse within the same synchronous comparison. Nested projections avoid repeated base checking. Public comparison rechecks the stored tree in the current scope and ignores saved child metadata. Lean targets and syntax are unchanged; see the <a href="comparison-token-cache.md#nested-fresh-projection-bases">validation boundary</a>.</p>
 </section></llm>
+
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="contextual-pattern-model">
+<h2>Contextual pattern experiment: no new Lean translation yet</h2>
+<p>The experimental model can recover a structural family depending on an explicit local and reapply it under a different local name, preserving dependent domains and avoiding capture. These model closures are not emitted Lean terms. Embedded lambda inference still requires joint constraint integration and independent whole-expression Lean targets; see the <a href="../studies/parameterized-literals/README.md#contextual-pattern-inversion-groundwork">contract and limitations</a>.</p>
+</section></llm>
 </body>
 </html>

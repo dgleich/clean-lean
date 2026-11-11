@@ -8664,6 +8664,26 @@
       "mode": "sidecar",
       "model": "gpt-6",
       "date": "2026-11-11"
+    },
+    "studies/parameterized-literals/contextual_terms.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
+    },
+    "studies/parameterized-literals/test_contextual_terms.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ],
+      "model": "gpt-6",
+      "date": "2026-11-11"
     }
   }
 }

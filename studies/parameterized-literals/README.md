@@ -2369,3 +2369,60 @@ Validation: 374 experimental Python tests, 97 exact native-target comparisons an
 97 supporting proofs pass. The new oracle checks the retained computed-width argument;
 these results do not establish production joint-inference conformance.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Contextual pattern inversion groundwork
+
+`contextual_terms.py` implements one ground contextual-pattern equation. It is not
+connected to `Builder`, the row unifier or production inference. In particular,
+embedded lambda arguments remain unsupported; their bodies must not be solved or
+defaulted independently of the surrounding call.
+
+The motivating equation is an unknown family applied to a fresh local k whose
+required value is Vector(k,Complex). A closed solution must represent dependency
+on its argument, so applying it later at j yields Vector(j,Complex), without
+retaining k. Ordinary metavariable substitution cannot express this operation.
+
+The interface takes an ordered formal telescope `(name, domain, sort)`, equally
+many typed actual locals, a ground structural right side and an explicit immutable
+set of allowed free locals. Actuals must be distinct explicit `Reference` nodes;
+they may not overlap the allowed-free set. Formal names are also distinct and
+fresh relative to that set. Domains may refer only to earlier formals and the
+allowed free scope. Repeated/nonlocal actuals are unsupported patterns, not proved
+inconsistencies. This is deliberately not general higher-order unification.
+
+For each formal in order, simultaneously substitute prior actual references into
+its domain and compare with the checked actual type using the existing ground
+unifier. Sort mismatches and incompatible domains reject the equation. Unresolved
+actual types and unequal computed indices remain incomplete. Then simultaneously
+rename the right side's actual locals to formal locals, checking reference sorts.
+Check the original right side against actual locals plus allowed-free scope before
+accepting the renamed result. A foreign local merely named like a formal must not
+be captured. Also check dependencies against the formal and permitted free scope.
+Close the formals
+in reverse telescope order using explicit de Bruijn abstraction. The resulting
+`Context` binders are model closures, not Clean syntax or emitted Lean binders.
+Their domains retain dependencies on preceding arguments.
+
+Applying a solution rechecks the telescope, checks each stored closure domain
+against the supplied actual type, and substitutes actual locals in order. It checks
+that the result is ground, well-scoped and contains no forbidden free dependency.
+Opaque atoms depending on a renamed local cannot be inspected or silently renamed:
+they report incomplete. Structural computed expressions are retained verbatim;
+no arithmetic inverse is used. Resource or recursion limits also report incomplete.
+
+Seventeen focused tests include explicit expected closed trees, alpha invariance,
+permuted names with dependent domains, inner-binder and foreign-formal-name
+capture avoidance, allowed
+free constants, foreign-local escape, duplicate actuals, opaque and unresolved
+right sides, domain/sort mismatches, malformed closure domains, computed expressions
+and resource limits. The expanded full experimental suite passes 391 tests, including all seventeen
+contextual-pattern cases. Reference HTML IDs/local links and provenance checks
+also pass.
+These model checks are not canonical Lean-target evidence. A next integration
+must represent contextual occurrences in the joint rows, solve all lambda/body
+and surrounding-call constraints together, and recheck the complete selected
+Clean expression against independently authored native targets. That work and
+production integration remain pending.
+:::

@@ -4216,6 +4216,21 @@
         "Full discovery and active-label regeneration remain separately running",
         "General native-adapter and joint-inference conformance remain open"
       ]
+    },
+    {
+      "id": "contextual_pattern_inversion_model",
+      "status": "experimental-model-only",
+      "environment": "Explicit ordered formal telescope, typed distinct actual Reference nodes, immutable allowed-free scope and ground structural right side; no production entry point.",
+      "source": "Model equation family[k] = Vector(k,Complex)",
+      "expected_model": "Context(Natural, Vector(Bound(0,index),Complex)); application at j yields Vector(Reference(j,index),Complex). Dependent domains are checked in telescope order and names are renamed simultaneously.",
+      "checks": [
+        "studies/parameterized-literals/test_contextual_terms.py: seventeen scope, domain, alpha, substitution, unsupported-pattern and resource cases"
+      ],
+      "pending": [
+        "Contextual occurrence representation and joint lambda/body/call constraints",
+        "Canonical whole-expression Lean target oracles",
+        "Production integration; no source syntax or Lean emission is added by this model"
+      ]
     }
   ]
 }
