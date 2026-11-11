@@ -4526,6 +4526,20 @@
         "Implicit scoped consumers in active-label study",
         "Default production routing"
       ]
+    },
+    {
+      "id": "subpath_binding_oracle_migration",
+      "status": "implemented-native-checked",
+      "environment": "Explicit subpaths and pullback-arrow modules; current declaration identities and wrapper bindings; independent Lean oracle expressions.",
+      "source": "Finite subpath inclusion, endpoint conditions, and restricted zigzag objects/arrows with retained local lets.",
+      "expected_lean": "Nineteen declaration bodies/types retain declared wrappers and source projections, including natural numerals, specialized module equality and endpoint proof terms.",
+      "checks": [
+        "studies/subpath-restrictions/verify.py: nineteen exact targets, six proofs, negative definitionally-equal offset alias guard"
+      ],
+      "pending": [
+        "Active-label scoped consumers with implicit signatures",
+        "Geometric interval-basis extension and pyramid theorem"
+      ]
     }
   ]
 }

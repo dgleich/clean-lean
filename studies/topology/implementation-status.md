@@ -258,3 +258,28 @@ canonical/proof verifier fails on unresolved target names, body comparisons and 
 proof goals. Its older nineteen-target/six-proof pass is historical evidence, not a
 current gate. Independent oracle/proof migration and revalidation remain required.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Subpath verifier repair
+
+The [subpath verifier](../subpath-restrictions/README.md#current-verifier-migration)
+now uses binding identities for declaration lookup and independent expected terms
+with the current explicit wrappers. Its endpoint proofs unfold those wrappers
+before finite-index arithmetic. The earlier failing probe is preserved as historical
+evidence. This repairs the verifier; no language rule or mathematical statement
+was changed. The active-label scoped-implicit inference gap remains separate.
+:::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Validation of the repaired verifier passes under both ordinary and isolated joint
+routing: the same nineteen exact targets, six proofs, and one rejection of a
+definitionally equal alias. These are overlapping checks, not 38 distinct targets.
+The regenerated one-page PDF compiled twice without overfull boxes or unresolved
+references and was visually inspected without clipped or overlapping text. The
+report is retained in `studies/parameterized-literals/compatibility.json` under
+`subpath_verifier_repaired`. The active-label implicit-signature gap remains open.
+:::

@@ -1804,5 +1804,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p>A checked <code>Evidence(condition)</code> keeps the condition itself as its Lean type. Joint constraints now retain its checked comparison identity and lexical dependencies, and forward-substitute determined arguments into dependent evidence types. Explicit proof arguments and proof-producing declarations remain in the target; no proof search is performed.</p>
 <p>For a declared reflexivity function, <code>self equality(n+1)</code> has evidence type <code>(n+1)=(n+1)</code>. Supplying it to a declared consumer is supported, including under a quantified binder. Callable proof discovery and scoped consumers with implicit parameters remain incomplete; production routing is unchanged. See the <a href="../studies/parameterized-literals/README.md#checked-proof-carriers-and-forward-substitution">rule, native targets and active-label probe</a>.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="subpath-verifier-bindings">
+<h2>Subpath target validation</h2>
+<p>The <a href="../studies/subpath-restrictions/README.md#current-verifier-migration">subpath verifier</a> uses declaration identities for lookup and explicitly authored expected terms retaining Clean's type, arithmetic, numeral and equality wrappers. Raw Lean operations may be definitionally equal without being the specified canonical target. A negative alias check enforces that distinction; the comparator does not unfold wrappers to make a comparison pass.</p>
+<p>The endpoint proofs unfold the wrappers before finite-index arithmetic. This is a validation repair for existing syntax and definitions, not a new inference rule or a proof of interval-basis extension.</p>
+</section></llm>
 </body>
 </html>

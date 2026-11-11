@@ -54,3 +54,43 @@ empty supports, reindex surviving basis vectors or prove the paper's pyramid
 extension theorem. See the [design notes](design.md) for the language work that
 made named endpoint evidence usable.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Current verifier migration
+
+A later joint-inference probe exposed that the old driver had not migrated its
+native expectations to the explicit binding architecture. It extracted display
+expressions beginning with `_root_` for declaration lookup and expected raw Lean
+arithmetic/equality in places where the specified target retains declared wrappers.
+Those failures were recorded, not counted as passes.
+
+The verifier now obtains declaration identities from `native_binding`. Its
+independent expected expressions explicitly use the declared Natural, Vertex,
+Boolean, field and proposition carriers; natural addition/order/numeral bindings;
+generic equality; and the specialized module equality. Local Lean notation keeps
+these hand-authored expressions readable and expands directly to the bindings,
+without adding aliases. The generated declaration bodies are never used to build
+the expected bodies. The canonical comparator still retains constants, implicit
+arguments, proof terms and local lets and does not unfold definitions to hide a
+mismatch. A negative guard rejects an offset alias whose meaning is definitionally
+equal but whose body calls the offset declaration instead of `Fin.natAdd`.
+
+Endpoint proofs now explicitly unfold the declared equality/arithmetic wrappers
+before applying the existing finite-index extensionality and associativity proof.
+The Clean statements and mathematical construction have not changed. Generated
+Lean and TeX have been refreshed with the current compiler.
+:::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+Validation of the repaired verifier passes under both ordinary and isolated joint
+routing: the same nineteen exact targets, six proofs, and one rejection of a
+definitionally equal alias. These are overlapping checks, not 38 distinct targets.
+The regenerated one-page PDF compiled twice without overfull boxes or unresolved
+references and was visually inspected without clipped or overlapping text. The
+report is retained in `studies/parameterized-literals/compatibility.json` under
+`subpath_verifier_repaired`. The active-label implicit-signature gap remains open.
+:::

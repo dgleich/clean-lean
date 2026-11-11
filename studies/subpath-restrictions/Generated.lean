@@ -26,287 +26,482 @@ Evidence is an ordinary transparent alias. A parenthesized condition used
    as a type denotes proofs of that condition. This module supplies no proofs.
 -/
 
-noncomputable def cleanType_Type_c1fed1af64ab6f12e0ed  : Type 1 :=
+noncomputable abbrev cleanType_Type_c1fed1af64ab6f12e0ed  : Type 1 :=
   Type
 
-noncomputable def cleanType_Natural_469c53b6dafb7a218246  : Type :=
+noncomputable abbrev cleanType_Natural_469c53b6dafb7a218246  : Type :=
   ℕ
 
-noncomputable def cleanType_Real_107b6641a486642ad8e1  : Type :=
+noncomputable def cleanNumeral_Natural_47460cb427d00c0cfbad (digits : Nat) : _root_.cleanType_Natural_469c53b6dafb7a218246 :=
+  (fun n : Nat => n) digits
+
+noncomputable abbrev cleanType_Real_107b6641a486642ad8e1  : Type :=
   ℝ
 
-noncomputable def cleanType_Complex_2d7f06a08f8ab1e3f46d  : Type :=
+noncomputable def cleanNumeral_Real_1f10813a9ce4dc61fe3e (digits : Nat) : _root_.cleanType_Real_107b6641a486642ad8e1 :=
+  (fun n : Nat => (n : Real)) digits
+
+noncomputable abbrev cleanType_Complex_2d7f06a08f8ab1e3f46d  : Type :=
   ℂ
 
-noncomputable def cleanType_Proposition_ae4a13d2f060407bce35  : Sort 1 :=
+noncomputable def cleanNumeral_Complex_311fd057b7f2e2b599a3 (digits : Nat) : _root_.cleanType_Complex_2d7f06a08f8ab1e3f46d :=
+  (fun n : Nat => (n : Complex)) digits
+
+noncomputable abbrev cleanType_Proposition_ae4a13d2f060407bce35  : Sort 1 :=
   Prop
 
-noncomputable def cleanType_Matrix_61d617e3f5143c327dd3 (p0 : Nat) (p1 : Nat) (p2 : Type) : Type :=
+noncomputable abbrev cleanType_Matrix_4518cbfc13ff70fc0769 («p0» : Nat) («p1» : Nat) («p2» : Type) : Type :=
   Matrix (Fin p0) (Fin p1) p2
 
-noncomputable def cleanType_Vector_b5a130b68abf7f0646e8 (p0 : Nat) (p1 : Type) : Type :=
+noncomputable abbrev cleanType_Vector_cce915f2d60cfd4f85a3 («p0» : Nat) («p1» : Type) : Type :=
   Fin p0 → p1
 
-noncomputable def cleanType_Vertex_460956e39f5b9ffca091 (p0 : Nat) : Type :=
+noncomputable abbrev cleanType_Vertex_456780e707fa756f8a5f («p0» : Nat) : Type :=
   Fin p0
 
-noncomputable def cleanType_Graph_7bde0ce024ce143f369b (p0 : Nat) : Type :=
+noncomputable abbrev cleanType_Graph_77c3210322e2c575cc5f («p0» : Nat) : Type :=
   SimpleGraph (Fin p0)
 
-noncomputable def cleanType_List_530f2b2df99696550311 (p0 : Type) : Type :=
+noncomputable abbrev cleanType_List_b7361ff4f5869f86d7f2 («p0» : Type) : Type :=
   List (p0)
 
-noncomputable def cleanType_Set_6e300741358eee425e81 (p0 : Type) : Type :=
+noncomputable abbrev cleanType_Set_182ba6b3273812add6f5 («p0» : Type) : Type :=
   Set (p0)
 
-noncomputable def cleanType_Function_9d746dbeb0e035328deb (p0 : Type) (p1 : Type) : Type :=
+noncomputable abbrev cleanType_Function_bb05fd158cbe096d7b2f («p0» : Type) («p1» : Type) : Type :=
   (p0) → (p1)
 
-noncomputable def cleanType_Topology_2eca621ea710e87cf174 (X : Type) : Type :=
+noncomputable def cleanDefine_equal_5fac732a65dd209a83f4 {«T» : Type} («x» : «T») («y» : «T») : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x=y
+
+noncomputable def cleanDefine_unequal_37c577a540f8692ae5c3 {«T» : Type} («x» : «T») («y» : «T») : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x≠y
+
+noncomputable def cleanDefine_conjunction_963f354411ee41f3dcd0  («x» : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) («y» : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x ∧ y
+
+noncomputable def cleanDefine_disjunction_f5515da12fb20ae4acc8  («x» : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) («y» : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x ∨ y
+
+noncomputable def cleanDefine_implication_9ee60e270a27b91f2307  («x» : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) («y» : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (∀ (clean_bound_0 : («x»)), «y»)
+
+noncomputable def cleanDefine_logical_equivalence_4c82a30225aa83f436b2  («x» : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) («y» : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x ↔ y
+
+noncomputable def cleanDefine_negation_9ec0af386428c726e6c3  («x» : (_root_.cleanType_Proposition_ae4a13d2f060407bce35)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  ¬x
+
+noncomputable def cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7  («x» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («y» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  x+y
+
+noncomputable def cleanNotation_natural_difference_6609b71b367dd02ce17a  («x» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («y» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  x-y
+
+noncomputable def cleanNotation_natural_product_a1e6180cd89df58f1622  («x» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («y» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  x*y
+
+noncomputable def cleanNotation_natural_quotient_694be9eb9e9cd0674757  («x» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («y» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  x/y
+
+noncomputable def cleanNotation_natural_power_1fd21d385ab090f72284  («x» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («y» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  x^y
+
+noncomputable def cleanDefine_natural_less_d52c2ea999690096a5ff  («x» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («y» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x < y
+
+noncomputable def cleanDefine_natural_greater_3d8d6817332e6eb602d9  («x» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («y» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x > y
+
+noncomputable def cleanDefine_natural_at_most_06515545afa0b9611d61  («x» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («y» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x ≤ y
+
+noncomputable def cleanDefine_natural_at_least_775c5d813822940a9178  («x» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («y» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x ≥ y
+
+noncomputable def cleanNotation_real_sum_713c2cdea73d301a76c4  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («y» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  x+y
+
+noncomputable def cleanNotation_real_difference_285267f55ec36308c915  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («y» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  x-y
+
+noncomputable def cleanNotation_real_product_b72eaff9286ea0417a4b  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («y» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  x*y
+
+noncomputable def cleanNotation_real_quotient_041fa3fe3b0d5c81fa8a  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («y» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  x/y
+
+noncomputable def cleanNotation_real_power_9499d8cf3f4010c81d2a  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («y» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  x^y
+
+noncomputable def cleanNotation_real_negative_94dbb7ead5371edbb1fe  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Real_107b6641a486642ad8e1) :=
+  -x
+
+noncomputable def cleanDefine_real_less_b1358919b40501b8c83a  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («y» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x < y
+
+noncomputable def cleanDefine_real_greater_b4d6b21f3416478ef02f  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («y» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x > y
+
+noncomputable def cleanDefine_real_at_most_436a151a896b113553d7  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («y» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x ≤ y
+
+noncomputable def cleanDefine_real_at_least_3b335915a25086862525  («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («y» : (_root_.cleanType_Real_107b6641a486642ad8e1)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x ≥ y
+
+noncomputable def cleanNotation_complex_sum_be56a0dd109c232b3c8b  («x» : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) («y» : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d) :=
+  x+y
+
+noncomputable def cleanNotation_complex_difference_9494621fedb3b37dc87a  («x» : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) («y» : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d) :=
+  x-y
+
+noncomputable def cleanNotation_complex_product_76eff2f5d2a989bd0941  («x» : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) («y» : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d) :=
+  x*y
+
+noncomputable def cleanNotation_complex_quotient_3b04d79e2cfd5b4d6706  («x» : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) («y» : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d) :=
+  x/y
+
+noncomputable def cleanNotation_complex_power_0f8c2c3c756709a7cd57  («x» : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) («y» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d) :=
+  x^y
+
+noncomputable def cleanNotation_complex_negative_a49334a08cf6022f59b6  («x» : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d) :=
+  -x
+
+noncomputable def cleanNotation_real_matrix_sum_839ae25a4d9a76476c1b {«m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) («y» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  x+y
+
+noncomputable def cleanNotation_real_matrix_difference_08d7768bc0daae9db072 {«m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) («y» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  x-y
+
+noncomputable def cleanNotation_real_matrix_product_4c62640b6fc73439c32b {«m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} {«p» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) («y» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») («p») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («p») ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  x*y
+
+noncomputable def cleanNotation_real_matrix_application_50d297e0049f97ad9e85 {«m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) («y» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («m») ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  Matrix.mulVec x y
+
+noncomputable def cleanNotation_real_scale_matrix_dee4533f77e5dbf0b762 {«m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («y» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  x • y
+
+noncomputable def cleanNotation_real_scale_vector_fdd277f0a8a88496ce0e {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Real_107b6641a486642ad8e1)) («y» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  x • y
+
+noncomputable def cleanNotation_complex_matrix_sum_9e93bdb148efbea7541e {«m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) («y» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  x+y
+
+noncomputable def cleanNotation_complex_matrix_difference_6dc3d80ad21ec6a84b06 {«m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) («y» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  x-y
+
+noncomputable def cleanNotation_complex_matrix_product_22b143895482c8d56a11 {«m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} {«p» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) («y» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») («p») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («p») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  x*y
+
+noncomputable def cleanNotation_complex_matrix_application_3142d359b435ac1d9893 {«m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) («y» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («m») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  Matrix.mulVec x y
+
+noncomputable def cleanNotation_complex_scale_matrix_7209f3d7140abd0bdb4b {«m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) («y» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  x • y
+
+noncomputable def cleanNotation_complex_scale_vector_479d4254614637bbce32 {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)) («y» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  x • y
+
+noncomputable def cleanDefine_natural_divides_4d6eaa87f34076546b83  («x» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («y» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x ∣ y
+
+noncomputable def cleanDefine_set_member_e64b7ad19acfc0b8910d {«T» : Type} («x» : «T») («A» : (_root_.cleanType_Set_182ba6b3273812add6f5 («T»))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x ∈ A
+
+noncomputable def cleanDefine_list_member_b882ad41d912d6fc7a56 {«T» : Type} («x» : «T») («A» : (_root_.cleanType_List_b7361ff4f5869f86d7f2 («T»))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  x ∈ A
+
+noncomputable def cleanDefine_set_subset_05919499ab956b009bbe {«T» : Type} («A» : (_root_.cleanType_Set_182ba6b3273812add6f5 («T»))) («B» : (_root_.cleanType_Set_182ba6b3273812add6f5 («T»))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  A ⊆ B
+
+noncomputable def cleanNotation_set_intersection_b049bcd777db8c8dca54 {«T» : Type} («A» : (_root_.cleanType_Set_182ba6b3273812add6f5 («T»))) («B» : (_root_.cleanType_Set_182ba6b3273812add6f5 («T»))) : (_root_.cleanType_Set_182ba6b3273812add6f5 («T»)) :=
+  A ∩ B
+
+noncomputable def cleanNotation_set_union_8ded6f8d80349ff9fd80 {«T» : Type} («A» : (_root_.cleanType_Set_182ba6b3273812add6f5 («T»))) («B» : (_root_.cleanType_Set_182ba6b3273812add6f5 («T»))) : (_root_.cleanType_Set_182ba6b3273812add6f5 («T»)) :=
+  A ∪ B
+
+noncomputable def cleanNotation_real_matrix_power_1f885251434bb95aa94b {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) («y» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  x^y
+
+noncomputable def cleanNotation_real_vector_sum_c82d48cb5cb40ee116ca {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) («y» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  x+y
+
+noncomputable def cleanNotation_real_vector_difference_fa3abe6d0d3984ccb81b {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) («y» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  x-y
+
+noncomputable def cleanNotation_complex_matrix_power_e192f7e7127c0722b4b4 {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) («y» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («n») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  x^y
+
+noncomputable def cleanNotation_complex_vector_sum_597fd175be1c65441219 {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) («y» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  x+y
+
+noncomputable def cleanNotation_complex_vector_difference_06fb8a11b79c0e4c1ce1 {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) («y» : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  x-y
+
+noncomputable def cleanNotation_pointwise_real_sum_d1526a0a0a62a5b93cbc  («x» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) («y» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1)) :=
+  x+y
+
+noncomputable def cleanNotation_pointwise_real_product_09ee7e3b795f01cef7db  («x» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) («y» : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1))) : ((_root_.cleanType_Real_107b6641a486642ad8e1)) → ((_root_.cleanType_Real_107b6641a486642ad8e1)) :=
+  x*y
+
+noncomputable def cleanNotation_real_matrix_negative_ad56705bece2f7bcef1d {«m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1)))) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Real_107b6641a486642ad8e1))) :=
+  -x
+
+noncomputable def cleanNotation_complex_matrix_negative_a1268997fb0b7e320e1f {«m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («x» : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))) : (_root_.cleanType_Matrix_4518cbfc13ff70fc0769 («m») («n») ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))) :=
+  -x
+
+noncomputable abbrev cleanType_Topology_9cd8010cbc491576d39e («X» : Type) : Type :=
   TopologicalSpace X
 
-noncomputable def cleanNotation_set_of_25534029a1fdae044ce8 {X : Type} (condition : (X) → (Prop)) : Set (X) :=
+noncomputable def cleanNotation_set_of_8cabccf85aa2fb91712d {«X» : Type} («condition» : («X») → ((_root_.cleanType_Proposition_ae4a13d2f060407bce35))) : (_root_.cleanType_Set_182ba6b3273812add6f5 («X»)) :=
   setOf condition
 
-noncomputable def cleanDefine_open_in_04a39275b76e933d604a {X : Type} (S : Set (X)) (t : TopologicalSpace X) : Prop :=
+noncomputable def cleanDefine_open_in_8cd98278fdc255a021ab {«X» : Type} («S» : (_root_.cleanType_Set_182ba6b3273812add6f5 («X»))) («t» : (_root_.cleanType_Topology_9cd8010cbc491576d39e («X»))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
   @IsOpen X t S
 
-noncomputable def cleanDefine_inverse_image_b2385c49c1629ae08495 {X : Type} {Y : Type} (f : (X) → (Y)) (S : Set (Y)) : Set (X) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : X) => ((f clean_bound_0) ∈ S))))
+noncomputable def cleanDefine_inverse_image_31011f72ff8e2a9ce261 {«X» : Type} {«Y» : Type} («f» : («X») → («Y»)) («S» : (_root_.cleanType_Set_182ba6b3273812add6f5 («Y»))) : (_root_.cleanType_Set_182ba6b3273812add6f5 («X»)) :=
+  (_root_.cleanNotation_set_of_8cabccf85aa2fb91712d ((fun (clean_bound_0 : «X») => (_root_.cleanDefine_set_member_e64b7ad19acfc0b8910d ((«f» clean_bound_0)) («S»)))))
 
-noncomputable def cleanDefine_image_3f2870b8ed865dc98807 {X : Type} {Y : Type} (f : (X) → (Y)) (S : Set (X)) : Set (Y) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : Y) => (@Exists (X) (fun (clean_bound_1 : X) => ((clean_bound_1 ∈ S) ∧ ((f clean_bound_1) = clean_bound_0)))))))
+noncomputable def cleanDefine_image_878fa9ab87138e755ce8 {«X» : Type} {«Y» : Type} («f» : («X») → («Y»)) («S» : (_root_.cleanType_Set_182ba6b3273812add6f5 («X»))) : (_root_.cleanType_Set_182ba6b3273812add6f5 («Y»)) :=
+  (_root_.cleanNotation_set_of_8cabccf85aa2fb91712d ((fun (clean_bound_0 : «Y») => (@Exists («X») (fun (clean_bound_1 : «X») => (_root_.cleanDefine_conjunction_963f354411ee41f3dcd0 ((_root_.cleanDefine_set_member_e64b7ad19acfc0b8910d (clean_bound_1) («S»))) ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((«f» clean_bound_1)) (clean_bound_0)))))))))
 
-noncomputable def cleanDefine_compose_maps_b7e7219a131a4bb5245c {X : Type} {Y : Type} {Z : Type} (g : (Y) → (Z)) (f : (X) → (Y)) : (X) → (Z) :=
-  (fun (clean_bound_0 : X) => (g (f clean_bound_0)))
+noncomputable def cleanDefine_compose_maps_845d87c3fbf105362035 {«X» : Type} {«Y» : Type} {«Z» : Type} («g» : («Y») → («Z»)) («f» : («X») → («Y»)) : («X») → («Z») :=
+  (fun (clean_bound_0 : «X») => («g» («f» clean_bound_0)))
 
-noncomputable def cleanDefine_continuous_between_fee422b0843f4b1d9573 {X : Type} {Y : Type} (f : (X) → (Y)) (t : TopologicalSpace X) (u : TopologicalSpace Y) : Prop :=
-  (∀ (clean_bound_0 : Set (Y)), ((cleanDefine_open_in_04a39275b76e933d604a (clean_bound_0) (u)) → (cleanDefine_open_in_04a39275b76e933d604a ((cleanDefine_inverse_image_b2385c49c1629ae08495 (f) (clean_bound_0))) (t))))
+noncomputable def cleanDefine_continuous_between_80ea5c38df54a0974c20 {«X» : Type} {«Y» : Type} («f» : («X») → («Y»)) («t» : (_root_.cleanType_Topology_9cd8010cbc491576d39e («X»))) («u» : (_root_.cleanType_Topology_9cd8010cbc491576d39e («Y»))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (∀ (clean_bound_0 : (_root_.cleanType_Set_182ba6b3273812add6f5 («Y»))), (_root_.cleanDefine_implication_9ee60e270a27b91f2307 ((_root_.cleanDefine_open_in_8cd98278fdc255a021ab (clean_bound_0) («u»))) ((_root_.cleanDefine_open_in_8cd98278fdc255a021ab ((_root_.cleanDefine_inverse_image_31011f72ff8e2a9ce261 («f») (clean_bound_0))) («t»)))))
 
-noncomputable def cleanDefine_selected_elements_be59cb3b891978bdf75e {X : Type} (S : Set (X)) (condition : (X) → (Prop)) : Set (X) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : X) => ((clean_bound_0 ∈ S) ∧ (condition clean_bound_0)))))
+noncomputable def cleanDefine_selected_elements_9755d64246c0fb9fcd0a {«X» : Type} («S» : (_root_.cleanType_Set_182ba6b3273812add6f5 («X»))) («condition» : («X») → ((_root_.cleanType_Proposition_ae4a13d2f060407bce35))) : (_root_.cleanType_Set_182ba6b3273812add6f5 («X»)) :=
+  (_root_.cleanNotation_set_of_8cabccf85aa2fb91712d ((fun (clean_bound_0 : «X») => (_root_.cleanDefine_conjunction_963f354411ee41f3dcd0 ((_root_.cleanDefine_set_member_e64b7ad19acfc0b8910d (clean_bound_0) («S»))) ((«condition» clean_bound_0))))))
 
-noncomputable def cleanDefine_intersection_family_21668a57bd46a5fc2395 {I : Type} {X : Type} (sets : (I) → (Set (X))) : Set (X) :=
-  (cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : X) => (∀ (clean_bound_1 : I), (clean_bound_0 ∈ (sets clean_bound_1))))))
+noncomputable def cleanDefine_intersection_family_ddeb64a0babf7d131f46 {«I» : Type} {«X» : Type} («sets» : («I») → ((_root_.cleanType_Set_182ba6b3273812add6f5 («X»)))) : (_root_.cleanType_Set_182ba6b3273812add6f5 («X»)) :=
+  (_root_.cleanNotation_set_of_8cabccf85aa2fb91712d ((fun (clean_bound_0 : «X») => (∀ (clean_bound_1 : «I»), (_root_.cleanDefine_set_member_e64b7ad19acfc0b8910d (clean_bound_0) ((«sets» clean_bound_1)))))))
 
-noncomputable def cleanType_FieldStructure_473fae039b953a4e35cf (K : Type) : Type :=
+noncomputable abbrev cleanType_FieldStructure_6c5b3bc7a67ff898144f («K» : Type) : Type :=
   Field K
 
-noncomputable def cleanType_AdditiveGroup_666602168ae423a21d05 (V : Type) : Type :=
+noncomputable abbrev cleanType_AdditiveGroup_1556409a530614ea0933 («V» : Type) : Type :=
   AddCommGroup V
 
-noncomputable def cleanType_ModuleStructure_820ec14dd63d4f0c4588 (K : Type) (f : Field K) (V : Type) (a : AddCommGroup V) : Type :=
+noncomputable abbrev cleanType_ModuleStructure_a454a0d138c91455b552 («K» : Type) («f» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («V» : Type) («a» : (_root_.cleanType_AdditiveGroup_1556409a530614ea0933 («V»))) : Type :=
   @Module K V f.toSemiring a.toAddCommMonoid
 
-structure cleanStructure_LinearSpace_5642406e6e2374eb8d06 («K» : Type) («f» : Field «K») («V» : Type) : Type where
-  «addition» : AddCommGroup «V»
-  «action» : @Module «K» «V» «f».toSemiring «addition».toAddCommMonoid
+structure cleanStructure_LinearSpace_145d2e6b958d77aca9b3 («K» : Type) («f» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («V» : Type) : Type where
+  «addition» : (_root_.cleanType_AdditiveGroup_1556409a530614ea0933 («V»))
+  «action» : (_root_.cleanType_ModuleStructure_a454a0d138c91455b552 («K») («f») («V») («addition»))
 
-noncomputable def cleanConstructor_linear_space_b20108f764cf57d518bf («K» : Type) («f» : Field «K») («V» : Type) («addition» : AddCommGroup «V») («action» : @Module «K» «V» «f».toSemiring «addition».toAddCommMonoid) : cleanStructure_LinearSpace_5642406e6e2374eb8d06 («K») («f») («V») :=
-  @cleanStructure_LinearSpace_5642406e6e2374eb8d06.mk «K» «f» «V» «addition» «action»
+noncomputable def cleanConstructor_linear_space_455c6502dabcaa361a4c («K» : Type) («f» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («V» : Type) («addition» : (_root_.cleanType_AdditiveGroup_1556409a530614ea0933 («V»))) («action» : (_root_.cleanType_ModuleStructure_a454a0d138c91455b552 («K») («f») («V») («addition»))) : _root_.cleanStructure_LinearSpace_145d2e6b958d77aca9b3 («K») («f») («V») :=
+  @_root_.cleanStructure_LinearSpace_145d2e6b958d77aca9b3.mk «K» «f» «V» «addition» «action»
 
-noncomputable def cleanType_Subspace_8486bbfd1e163b11a16f (K : Type) (f : Field K) (V : Type) (L : cleanStructure_LinearSpace_5642406e6e2374eb8d06 (K) (f) (V)) : Type :=
+noncomputable abbrev cleanType_Subspace_de9f5f97abff1220ced1 («K» : Type) («f» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («V» : Type) («L» : _root_.cleanStructure_LinearSpace_145d2e6b958d77aca9b3 («K») («f») («V»)) : Type :=
   @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action
 
-noncomputable def cleanNotation_subspace_carrier_f070e04df90854f81887 {K : Type} {V : Type} (f : Field K) (L : cleanStructure_LinearSpace_5642406e6e2374eb8d06 (K) (f) (V)) (U : @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) : Set (V) :=
+noncomputable def cleanNotation_subspace_carrier_852cee879d6fd417de92 {«K» : Type} {«V» : Type} («f» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («L» : _root_.cleanStructure_LinearSpace_145d2e6b958d77aca9b3 («K») («f») («V»)) («U» : (_root_.cleanType_Subspace_de9f5f97abff1220ced1 («K») («f») («V») («L»))) : (_root_.cleanType_Set_182ba6b3273812add6f5 («V»)) :=
   @SetLike.coe (@Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) V (@Submodule.setLike K V f.toSemiring L.addition.toAddCommMonoid L.action) U
 
-noncomputable def cleanDefine_belongs_to_subspace_ec8790b9b2bf97dae6d9 {K : Type} {V : Type} (f : Field K) (L : cleanStructure_LinearSpace_5642406e6e2374eb8d06 (K) (f) (V)) (x : V) (U : @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) : Prop :=
-  (x ∈ (@cleanNotation_subspace_carrier_f070e04df90854f81887 (K) (V) (f) (L) (U)))
+noncomputable def cleanDefine_belongs_to_subspace_87cbfb6be245657c79ec {«K» : Type} {«V» : Type} («f» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («L» : _root_.cleanStructure_LinearSpace_145d2e6b958d77aca9b3 («K») («f») («V»)) («x» : «V») («U» : (_root_.cleanType_Subspace_de9f5f97abff1220ced1 («K») («f») («V») («L»))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (_root_.cleanDefine_set_member_e64b7ad19acfc0b8910d («x») ((@_root_.cleanNotation_subspace_carrier_852cee879d6fd417de92 («K») («V») («f») («L») («U»))))
 
-noncomputable def cleanDefine_subspace_included_in_d5798f9beb1245834242 {K : Type} {V : Type} (f : Field K) (L : cleanStructure_LinearSpace_5642406e6e2374eb8d06 (K) (f) (V)) (U : @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) (W : @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) : Prop :=
-  (∀ (clean_bound_0 : V), ((@cleanDefine_belongs_to_subspace_ec8790b9b2bf97dae6d9 (K) (V) (f) (L) (clean_bound_0) (U)) → (@cleanDefine_belongs_to_subspace_ec8790b9b2bf97dae6d9 (K) (V) (f) (L) (clean_bound_0) (W))))
+noncomputable def cleanDefine_subspace_included_in_5db35c497bfe5b8c7a2f {«K» : Type} {«V» : Type} («f» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («L» : _root_.cleanStructure_LinearSpace_145d2e6b958d77aca9b3 («K») («f») («V»)) («U» : (_root_.cleanType_Subspace_de9f5f97abff1220ced1 («K») («f») («V») («L»))) («W» : (_root_.cleanType_Subspace_de9f5f97abff1220ced1 («K») («f») («V») («L»))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (∀ (clean_bound_0 : «V»), (_root_.cleanDefine_implication_9ee60e270a27b91f2307 ((@_root_.cleanDefine_belongs_to_subspace_87cbfb6be245657c79ec («K») («V») («f») («L») (clean_bound_0) («U»))) ((@_root_.cleanDefine_belongs_to_subspace_87cbfb6be245657c79ec («K») («V») («f») («L») (clean_bound_0) («W»)))))
 
-noncomputable def cleanNotation_subspace_infimum_5fa957304ce3d9bcc086 {K : Type} {V : Type} (f : Field K) (L : cleanStructure_LinearSpace_5642406e6e2374eb8d06 (K) (f) (V)) (spaces : Set (@Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action)) : @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action :=
+noncomputable def cleanNotation_subspace_infimum_aad75e0f1149093c07a8 {«K» : Type} {«V» : Type} («f» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («L» : _root_.cleanStructure_LinearSpace_145d2e6b958d77aca9b3 («K») («f») («V»)) («spaces» : (_root_.cleanType_Set_182ba6b3273812add6f5 ((_root_.cleanType_Subspace_de9f5f97abff1220ced1 («K») («f») («V») («L»))))) : (_root_.cleanType_Subspace_de9f5f97abff1220ced1 («K») («f») («V») («L»)) :=
   @sInf (@Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) (@Submodule.instInfSet K V f.toSemiring L.addition.toAddCommMonoid L.action) spaces
 
-noncomputable def cleanDefine_intersection_of_subspaces_639a4229345a029542f3 {K : Type} {V : Type} {I : Type} (f : Field K) (L : cleanStructure_LinearSpace_5642406e6e2374eb8d06 (K) (f) (V)) (A : Set (I)) (spaces : (I) → (@Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action)) : @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action :=
-  (@cleanNotation_subspace_infimum_5fa957304ce3d9bcc086 (K) (V) (f) (L) ((cleanNotation_set_of_25534029a1fdae044ce8 ((fun (clean_bound_0 : @Submodule K V f.toSemiring L.addition.toAddCommMonoid L.action) => (@Exists (I) (fun (clean_bound_1 : I) => ((clean_bound_1 ∈ A) ∧ (clean_bound_0 = (spaces clean_bound_1))))))))))
+noncomputable def cleanDefine_intersection_of_subspaces_3a8e085ac9d23c354bab {«K» : Type} {«V» : Type} {«I» : Type} («f» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («L» : _root_.cleanStructure_LinearSpace_145d2e6b958d77aca9b3 («K») («f») («V»)) («A» : (_root_.cleanType_Set_182ba6b3273812add6f5 («I»))) («spaces» : («I») → ((_root_.cleanType_Subspace_de9f5f97abff1220ced1 («K») («f») («V») («L»)))) : (_root_.cleanType_Subspace_de9f5f97abff1220ced1 («K») («f») («V») («L»)) :=
+  (@_root_.cleanNotation_subspace_infimum_aad75e0f1149093c07a8 («K») («V») («f») («L») ((_root_.cleanNotation_set_of_8cabccf85aa2fb91712d ((fun (clean_bound_0 : (_root_.cleanType_Subspace_de9f5f97abff1220ced1 («K») («f») («V») («L»))) => (@Exists («I») (fun (clean_bound_1 : «I») => (_root_.cleanDefine_conjunction_963f354411ee41f3dcd0 ((_root_.cleanDefine_set_member_e64b7ad19acfc0b8910d (clean_bound_1) («A»))) ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 (clean_bound_0) ((«spaces» clean_bound_1))))))))))))
 
-noncomputable def cleanType_CoefficientModule_51152214c957ecc84ea1 (K : Type) (field : Field K) : Type 1 :=
+noncomputable abbrev cleanType_CoefficientModule_cb06282c8e98b088950e («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) : Type 1 :=
   (@ModuleCat.{0,0} K field.toRing)
 
-noncomputable def cleanType_ModuleElement_b836832e231addafdcde (K : Type) (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) : Type :=
+noncomputable abbrev cleanType_ModuleElement_8de1da3233066bdec3ce («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) : Type :=
   (@ModuleCat.carrier K field.toRing M)
 
-noncomputable def cleanNotation_coefficient_module_1a0755937bb2a62d769c  (K : Type) (field : Field K) (V : Type) (L : cleanStructure_LinearSpace_5642406e6e2374eb8d06 (K) (field) (V)) : (@ModuleCat.{0,0} K field.toRing) :=
+noncomputable def cleanNotation_coefficient_module_1e5d64f05b3a2ed1bd1d  («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («V» : Type) («L» : _root_.cleanStructure_LinearSpace_145d2e6b958d77aca9b3 («K») («field») («V»)) : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)) :=
   @ModuleCat.of K field.toRing V L.addition L.action
 
-noncomputable def cleanType_ModuleMap_5397c112671d325e4f70 (K : Type) (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) (N : (@ModuleCat.{0,0} K field.toRing)) : Type :=
+noncomputable abbrev cleanType_ModuleMap_cf75ef13ca99ba60b566 («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) («N» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) : Type :=
   (@ModuleCat.Hom K field.toRing M N)
 
-noncomputable def cleanType_ModuleSubspace_1d5cec6119106efdc1bf (K : Type) (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) : Type :=
+noncomputable abbrev cleanType_ModuleSubspace_b5c41d22ad632b2592f6 («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) : Type :=
   (@Submodule K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule)
 
-noncomputable def cleanNotation_module_map_value_f0835c4f7a36db98a213 {K : Type} (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) (N : (@ModuleCat.{0,0} K field.toRing)) (f : (@ModuleCat.Hom K field.toRing M N)) (x : (@ModuleCat.carrier K field.toRing M)) : (@ModuleCat.carrier K field.toRing N) :=
+noncomputable def cleanNotation_module_map_value_708bb3c249e5e9e655eb {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) («N» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) («f» : (_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») («M») («N»))) («x» : (_root_.cleanType_ModuleElement_8de1da3233066bdec3ce («K») («field») («M»))) : (_root_.cleanType_ModuleElement_8de1da3233066bdec3ce («K») («field») («N»)) :=
   (@ModuleCat.Hom.hom K field.toRing M N f) x
 
-noncomputable def cleanNotation_module_map_range_3ddb83929271b74045bc {K : Type} (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) (N : (@ModuleCat.{0,0} K field.toRing)) (f : (@ModuleCat.Hom K field.toRing M N)) : (@Submodule K N.carrier field.toSemiring N.isAddCommGroup.toAddCommMonoid N.isModule) :=
+noncomputable def cleanNotation_module_map_range_fb14abc0eef46c0da96d {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) («N» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) («f» : (_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») («M») («N»))) : (_root_.cleanType_ModuleSubspace_b5c41d22ad632b2592f6 («K») («field») («N»)) :=
   LinearMap.range (@ModuleCat.Hom.hom K field.toRing M N f)
 
-noncomputable def cleanNotation_module_subspace_carrier_dfe8594175e35b27e6cd {K : Type} (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) (U : (@Submodule K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule)) : Set ((@ModuleCat.carrier K field.toRing M)) :=
+noncomputable def cleanNotation_module_subspace_carrier_5966a70e2bb7bb7e2b14 {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) («U» : (_root_.cleanType_ModuleSubspace_b5c41d22ad632b2592f6 («K») («field») («M»))) : (_root_.cleanType_Set_182ba6b3273812add6f5 ((_root_.cleanType_ModuleElement_8de1da3233066bdec3ce («K») («field») («M»)))) :=
   U.carrier
 
-noncomputable def cleanDefine_belongs_to_module_subspace_678dcb75741602fad2b5 {K : Type} (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) (x : (@ModuleCat.carrier K field.toRing M)) (U : (@Submodule K M.carrier field.toSemiring M.isAddCommGroup.toAddCommMonoid M.isModule)) : Prop :=
-  (x ∈ (@cleanNotation_module_subspace_carrier_dfe8594175e35b27e6cd (K) (field) (M) (U)))
+noncomputable def cleanDefine_belongs_to_module_subspace_08d4e7398c239036491b {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) («x» : (_root_.cleanType_ModuleElement_8de1da3233066bdec3ce («K») («field») («M»))) («U» : (_root_.cleanType_ModuleSubspace_b5c41d22ad632b2592f6 («K») («field») («M»))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (_root_.cleanDefine_set_member_e64b7ad19acfc0b8910d («x») ((@_root_.cleanNotation_module_subspace_carrier_5966a70e2bb7bb7e2b14 («K») («field») («M») («U»))))
 
-structure cleanStructure_GradedModule_db830affbb1da28ca3aa («K» : Type) («field» : Field «K») : Type 1 where
-  «component» : (ℕ) → ((@ModuleCat.{0,0} «K» «field».toRing))
+noncomputable def cleanDefine_same_module_8e91cf6e9e2f13232742 {«K» : Type} {«field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))} («M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) («N» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  M = N
 
-noncomputable def cleanConstructor_graded_module_50ded2c434f81d68c40c («K» : Type) («field» : Field «K») («component» : (ℕ) → ((@ModuleCat.{0,0} «K» «field».toRing))) : cleanStructure_GradedModule_db830affbb1da28ca3aa («K») («field») :=
-  @cleanStructure_GradedModule_db830affbb1da28ca3aa.mk «K» «field» «component»
+structure cleanStructure_GradedModule_76cc13b50fb929593cfb («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) : Type 1 where
+  «component» : ((_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)))
 
-noncomputable def cleanDefine_component_module_16aff9d37d3cf0c1675c {K : Type} (field : Field K) (M : cleanStructure_GradedModule_db830affbb1da28ca3aa (K) (field)) (p : ℕ) : (@ModuleCat.{0,0} K field.toRing) :=
-  ((@cleanStructure_GradedModule_db830affbb1da28ca3aa.«component» (K) (field) (M)) p)
+noncomputable def cleanConstructor_graded_module_66419f2272b65d4d8843 («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («component» : ((_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)))) : _root_.cleanStructure_GradedModule_76cc13b50fb929593cfb («K») («field») :=
+  @_root_.cleanStructure_GradedModule_76cc13b50fb929593cfb.mk «K» «field» «component»
 
-structure cleanStructure_GradedMap_7d0b6981486ea03cb162 («K» : Type) («field» : Field «K») («M» : cleanStructure_GradedModule_db830affbb1da28ca3aa («K») («field»)) («N» : cleanStructure_GradedModule_db830affbb1da28ca3aa («K») («field»)) : Type where
-  «component» : (clean_pi_bound_0 : ℕ) → ((@ModuleCat.Hom «K» «field».toRing ((@cleanStructure_GradedModule_db830affbb1da28ca3aa.«component» («K») («field») («M»)) clean_pi_bound_0) ((@cleanStructure_GradedModule_db830affbb1da28ca3aa.«component» («K») («field») («N»)) clean_pi_bound_0)))
+noncomputable def cleanDefine_component_module_cbc7c7dbd7330b329add {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : _root_.cleanStructure_GradedModule_76cc13b50fb929593cfb («K») («field»)) («p» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)) :=
+  ((@_root_.cleanStructure_GradedModule_76cc13b50fb929593cfb.«component» («K») («field») («M»)) «p»)
 
-noncomputable def cleanConstructor_graded_map_515c03a014bbe0523c07 («K» : Type) («field» : Field «K») («M» : cleanStructure_GradedModule_db830affbb1da28ca3aa («K») («field»)) («N» : cleanStructure_GradedModule_db830affbb1da28ca3aa («K») («field»)) («component» : (clean_pi_bound_0 : ℕ) → ((@ModuleCat.Hom «K» «field».toRing ((@cleanStructure_GradedModule_db830affbb1da28ca3aa.«component» («K») («field») («M»)) clean_pi_bound_0) ((@cleanStructure_GradedModule_db830affbb1da28ca3aa.«component» («K») («field») («N»)) clean_pi_bound_0)))) : cleanStructure_GradedMap_7d0b6981486ea03cb162 («K») («field») («M») («N») :=
-  @cleanStructure_GradedMap_7d0b6981486ea03cb162.mk «K» «field» «M» «N» «component»
+structure cleanStructure_GradedMap_fa003d7326d860423bd3 («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : _root_.cleanStructure_GradedModule_76cc13b50fb929593cfb («K») («field»)) («N» : _root_.cleanStructure_GradedModule_76cc13b50fb929593cfb («K») («field»)) : Type where
+  «component» : (clean_pi_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») (((@_root_.cleanStructure_GradedModule_76cc13b50fb929593cfb.«component» («K») («field») («M»)) clean_pi_bound_0)) (((@_root_.cleanStructure_GradedModule_76cc13b50fb929593cfb.«component» («K») («field») («N»)) clean_pi_bound_0))))
 
-noncomputable def cleanNotation_module_identity_584a18e3c6f6747bc76f {K : Type} (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) : (@ModuleCat.Hom K field.toRing M M) :=
+noncomputable def cleanConstructor_graded_map_2b412279c2662521f367 («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : _root_.cleanStructure_GradedModule_76cc13b50fb929593cfb («K») («field»)) («N» : _root_.cleanStructure_GradedModule_76cc13b50fb929593cfb («K») («field»)) («component» : (clean_pi_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») (((@_root_.cleanStructure_GradedModule_76cc13b50fb929593cfb.«component» («K») («field») («M»)) clean_pi_bound_0)) (((@_root_.cleanStructure_GradedModule_76cc13b50fb929593cfb.«component» («K») («field») («N»)) clean_pi_bound_0))))) : _root_.cleanStructure_GradedMap_fa003d7326d860423bd3 («K») («field») («M») («N») :=
+  @_root_.cleanStructure_GradedMap_fa003d7326d860423bd3.mk «K» «field» «M» «N» «component»
+
+noncomputable def cleanNotation_module_identity_3cffa414133766d157c3 {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) : (_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») («M») («M»)) :=
   @CategoryTheory.CategoryStruct.id (@ModuleCat.{0,0} K field.toRing) (@ModuleCat.moduleCategory.{0,0} K field.toRing).toCategoryStruct M
 
-noncomputable def cleanNotation_module_composition_115d9963c374fb45e52e {K : Type} (field : Field K) (M : (@ModuleCat.{0,0} K field.toRing)) (N : (@ModuleCat.{0,0} K field.toRing)) (P : (@ModuleCat.{0,0} K field.toRing)) (f : (@ModuleCat.Hom K field.toRing M N)) (g : (@ModuleCat.Hom K field.toRing N P)) : (@ModuleCat.Hom K field.toRing M P) :=
+noncomputable def cleanNotation_module_composition_622cd851b0bc174c8369 {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) («N» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) («P» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) («f» : (_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») («M») («N»))) («g» : (_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») («N») («P»))) : (_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») («M») («P»)) :=
   @CategoryTheory.CategoryStruct.comp (@ModuleCat.{0,0} K field.toRing) (@ModuleCat.moduleCategory.{0,0} K field.toRing).toCategoryStruct M N P f g
 
-noncomputable def cleanDefine_graded_identity_c616d4bdb0b54c49a1e2 {K : Type} (field : Field K) (M : cleanStructure_GradedModule_db830affbb1da28ca3aa (K) (field)) : cleanStructure_GradedMap_7d0b6981486ea03cb162 (K) (field) (M) (M) :=
-  (@cleanConstructor_graded_map_515c03a014bbe0523c07 (K) (field) (M) (M) ((fun (clean_bound_0 : ℕ) => (@cleanNotation_module_identity_584a18e3c6f6747bc76f (K) (field) (((@cleanStructure_GradedModule_db830affbb1da28ca3aa.«component» (K) (field) (M)) clean_bound_0))))))
+noncomputable def cleanDefine_graded_identity_14ecf57c9f9ff78f1900 {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : _root_.cleanStructure_GradedModule_76cc13b50fb929593cfb («K») («field»)) : _root_.cleanStructure_GradedMap_fa003d7326d860423bd3 («K») («field») («M») («M») :=
+  (@_root_.cleanConstructor_graded_map_2b412279c2662521f367 («K») («field») («M») («M») ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_module_identity_3cffa414133766d157c3 («K») («field») (((@_root_.cleanStructure_GradedModule_76cc13b50fb929593cfb.«component» («K») («field») («M»)) clean_bound_0))))))
 
-noncomputable def cleanDefine_graded_composition_6e387c2cd5de8784f643 {K : Type} (field : Field K) (M : cleanStructure_GradedModule_db830affbb1da28ca3aa (K) (field)) (N : cleanStructure_GradedModule_db830affbb1da28ca3aa (K) (field)) (P : cleanStructure_GradedModule_db830affbb1da28ca3aa (K) (field)) (f : cleanStructure_GradedMap_7d0b6981486ea03cb162 (K) (field) (M) (N)) (g : cleanStructure_GradedMap_7d0b6981486ea03cb162 (K) (field) (N) (P)) : cleanStructure_GradedMap_7d0b6981486ea03cb162 (K) (field) (M) (P) :=
-  (@cleanConstructor_graded_map_515c03a014bbe0523c07 (K) (field) (M) (P) ((fun (clean_bound_0 : ℕ) => (@cleanNotation_module_composition_115d9963c374fb45e52e (K) (field) (((@cleanStructure_GradedModule_db830affbb1da28ca3aa.«component» (K) (field) (M)) clean_bound_0)) (((@cleanStructure_GradedModule_db830affbb1da28ca3aa.«component» (K) (field) (N)) clean_bound_0)) (((@cleanStructure_GradedModule_db830affbb1da28ca3aa.«component» (K) (field) (P)) clean_bound_0)) (((@cleanStructure_GradedMap_7d0b6981486ea03cb162.«component» (K) (field) (M) (N) (f)) clean_bound_0)) (((@cleanStructure_GradedMap_7d0b6981486ea03cb162.«component» (K) (field) (N) (P) (g)) clean_bound_0))))))
+noncomputable def cleanDefine_graded_composition_e88df3d17a39ed63586f {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : _root_.cleanStructure_GradedModule_76cc13b50fb929593cfb («K») («field»)) («N» : _root_.cleanStructure_GradedModule_76cc13b50fb929593cfb («K») («field»)) («P» : _root_.cleanStructure_GradedModule_76cc13b50fb929593cfb («K») («field»)) («f» : _root_.cleanStructure_GradedMap_fa003d7326d860423bd3 («K») («field») («M») («N»)) («g» : _root_.cleanStructure_GradedMap_fa003d7326d860423bd3 («K») («field») («N») («P»)) : _root_.cleanStructure_GradedMap_fa003d7326d860423bd3 («K») («field») («M») («P») :=
+  (@_root_.cleanConstructor_graded_map_2b412279c2662521f367 («K») («field») («M») («P») ((fun (clean_bound_0 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) => (@_root_.cleanNotation_module_composition_622cd851b0bc174c8369 («K») («field») (((@_root_.cleanStructure_GradedModule_76cc13b50fb929593cfb.«component» («K») («field») («M»)) clean_bound_0)) (((@_root_.cleanStructure_GradedModule_76cc13b50fb929593cfb.«component» («K») («field») («N»)) clean_bound_0)) (((@_root_.cleanStructure_GradedModule_76cc13b50fb929593cfb.«component» («K») («field») («P»)) clean_bound_0)) (((@_root_.cleanStructure_GradedMap_fa003d7326d860423bd3.«component» («K») («field») («M») («N») («f»)) clean_bound_0)) (((@_root_.cleanStructure_GradedMap_fa003d7326d860423bd3.«component» («K») («field») («N») («P») («g»)) clean_bound_0))))))
 
 structure cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V» : Type) («E» : Type) : Type where
   «source» : («E») → («V»)
   «target» : («E») → («V»)
 
-noncomputable def cleanConstructor_diagram_shape_b5c9edb90b3d54e4cc06 («V» : Type) («E» : Type) («source» : («E») → («V»)) («target» : («E») → («V»)) : cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E») :=
-  @cleanStructure_DiagramShape_02ab4e571d9987d4a63c.mk «V» «E» «source» «target»
+noncomputable def cleanConstructor_diagram_shape_dc77cc33f7da32166efd («V» : Type) («E» : Type) («source» : («E») → («V»)) («target» : («E») → («V»)) : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E») :=
+  @_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.mk «V» «E» «source» «target»
 
-noncomputable def cleanDefine_shape_ab2900d9a72e571d2eb8 {V : Type} {E : Type} (source : (E) → (V)) (target : (E) → (V)) : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (V) (E) :=
-  (@cleanConstructor_diagram_shape_b5c9edb90b3d54e4cc06 (V) (E) (source) (target))
+noncomputable def cleanDefine_shape_0b41b890275d7892f7d8 {«V» : Type} {«E» : Type} («source» : («E») → («V»)) («target» : («E») → («V»)) : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E») :=
+  (@_root_.cleanConstructor_diagram_shape_dc77cc33f7da32166efd («V») («E») («source») («target»))
 
-structure cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 («K» : Type) («field» : Field «K») («V» : Type) («E» : Type) («Q» : cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) : Type 1 where
-  «object» : («V») → ((@ModuleCat.{0,0} «K» «field».toRing))
-  «arrow» : (clean_pi_bound_1 : «E») → ((@ModuleCat.Hom «K» «field».toRing («object» ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) clean_pi_bound_1)) («object» ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) clean_pi_bound_1))))
+structure cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833 («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («V» : Type) («E» : Type) («Q» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) : Type 1 where
+  «object» : («V») → ((_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)))
+  «arrow» : (clean_pi_bound_1 : «E») → ((_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») ((«object» ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) clean_pi_bound_1))) ((«object» ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) clean_pi_bound_1)))))
 
-noncomputable def cleanConstructor_module_diagram_d34ad79f6914baaf649a («K» : Type) («field» : Field «K») («V» : Type) («E» : Type) («Q» : cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) («object» : («V») → ((@ModuleCat.{0,0} «K» «field».toRing))) («arrow» : (clean_pi_bound_1 : «E») → ((@ModuleCat.Hom «K» «field».toRing («object» ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) clean_pi_bound_1)) («object» ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) clean_pi_bound_1))))) : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 («K») («field») («V») («E») («Q») :=
-  @cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.mk «K» «field» «V» «E» «Q» «object» «arrow»
+noncomputable def cleanConstructor_module_diagram_79c27305d3f3eb01cae0 («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («V» : Type) («E» : Type) («Q» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) («object» : («V») → ((_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)))) («arrow» : (clean_pi_bound_1 : «E») → ((_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») ((«object» ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) clean_pi_bound_1))) ((«object» ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) clean_pi_bound_1)))))) : _root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833 («K») («field») («V») («E») («Q») :=
+  @_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.mk «K» «field» «V» «E» «Q» «object» «arrow»
 
-noncomputable def cleanDefine_constant_module_diagram_97d37ecd434f2512260b  (K : Type) (field : Field K) (V : Type) (E : Type) (Q : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (V) (E)) (M : (@ModuleCat.{0,0} K field.toRing)) : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 (K) (field) (V) (E) (Q) :=
-  (@cleanConstructor_module_diagram_d34ad79f6914baaf649a (K) (field) (V) (E) (Q) ((fun (clean_bound_0 : V) => M)) ((fun (clean_bound_1 : E) => (@cleanNotation_module_identity_584a18e3c6f6747bc76f (K) (field) (M)))))
+noncomputable def cleanDefine_constant_module_diagram_3940e33a19d878b0aec2  («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («V» : Type) («E» : Type) («Q» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) («M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) : _root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833 («K») («field») («V») («E») («Q») :=
+  (@_root_.cleanConstructor_module_diagram_79c27305d3f3eb01cae0 («K») («field») («V») («E») («Q») ((fun (clean_bound_0 : «V») => «M»)) ((fun (clean_bound_1 : «E») => (@_root_.cleanNotation_module_identity_3cffa414133766d157c3 («K») («field») («M»)))))
 
-noncomputable def cleanDefine_constant_diagram_e9c37c47e521ce184399 {K : Type} {V : Type} {E : Type} (field : Field K) (Q : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (V) (E)) (M : (@ModuleCat.{0,0} K field.toRing)) : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 (K) (field) (V) (E) (Q) :=
-  (@cleanDefine_constant_module_diagram_97d37ecd434f2512260b (K) (field) (V) (E) (Q) (M))
+noncomputable def cleanDefine_constant_diagram_2c087930397803dcd5c1 {«K» : Type} {«V» : Type} {«E» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («Q» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) («M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) : _root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833 («K») («field») («V») («E») («Q») :=
+  (@_root_.cleanDefine_constant_module_diagram_3940e33a19d878b0aec2 («K») («field») («V») («E») («Q») («M»))
 
-noncomputable def cleanType_Boolean_b98a4c98fcdb0f46359e  : Type :=
+noncomputable abbrev cleanType_Boolean_b98a4c98fcdb0f46359e  : Type :=
   Bool
 
-noncomputable def cleanNotation_true_value_2fd5fc223c8905693b89   : Bool :=
+noncomputable def cleanNotation_true_value_9ca9e49e1312ca23ac23   : (_root_.cleanType_Boolean_b98a4c98fcdb0f46359e) :=
   true
 
-noncomputable def cleanNotation_false_value_d4e3155033dd79d1d53f   : Bool :=
+noncomputable def cleanNotation_false_value_30a63b75654d87153a83   : (_root_.cleanType_Boolean_b98a4c98fcdb0f46359e) :=
   false
 
-noncomputable def cleanNotation_select_value_c11801da606ce7eb1515 {T : Type} (b : Bool) (x : T) (y : T) : T :=
+noncomputable def cleanNotation_select_value_8a640b6e245f4488f290 {«T» : Type} («b» : (_root_.cleanType_Boolean_b98a4c98fcdb0f46359e)) («x» : «T») («y» : «T») : «T» :=
   if b then x else y
 
-noncomputable def cleanNotation_left_vertex_11cc62d804acf6603303  (n : ℕ) (e : Fin n) : Fin (n + 1) :=
+noncomputable def cleanNotation_left_vertex_2c3bcfeca89ad9785954  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («e» : (_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) : (_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))))) :=
   e.castSucc
 
-noncomputable def cleanNotation_right_vertex_5c0c0fa990cf02dd2676  (n : ℕ) (e : Fin n) : Fin (n + 1) :=
+noncomputable def cleanNotation_right_vertex_e1c406b71a0859981fa9  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («e» : (_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) : (_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))))) :=
   e.succ
 
-noncomputable def cleanNotation_vertex_number_64138f6f46dd27172356  (n : ℕ) (v : Fin n) : ℕ :=
+noncomputable def cleanNotation_vertex_number_029cd579ab1ac8807e43  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («v» : (_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
   v.val
 
-noncomputable def cleanDefine_zigzag_shape_aabf9ce777651ce61e96  (n : ℕ) (d : (Fin n) → (Bool)) : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (Fin (n + 1)) (Fin n) :=
-  (cleanDefine_shape_ab2900d9a72e571d2eb8 ((fun (clean_bound_0 : Fin n) => (cleanNotation_select_value_c11801da606ce7eb1515 ((d clean_bound_0)) ((@cleanNotation_left_vertex_11cc62d804acf6603303 (n) (clean_bound_0))) ((@cleanNotation_right_vertex_5c0c0fa990cf02dd2676 (n) (clean_bound_0)))))) ((fun (clean_bound_1 : Fin n) => (cleanNotation_select_value_c11801da606ce7eb1515 ((d clean_bound_1)) ((@cleanNotation_right_vertex_5c0c0fa990cf02dd2676 (n) (clean_bound_1))) ((@cleanNotation_left_vertex_11cc62d804acf6603303 (n) (clean_bound_1)))))))
+noncomputable def cleanDefine_vertex_at_most_87a498339a71c04d7d9e {«n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)} («u» : (_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) («v» : (_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((@_root_.cleanNotation_vertex_number_029cd579ab1ac8807e43 («n») («u»))) ((@_root_.cleanNotation_vertex_number_029cd579ab1ac8807e43 («n») («v»))))
 
-noncomputable def cleanDefine_constant_zigzag_f3f91c9bf3b9b0272da1  (K : Type) (field : Field K) (n : ℕ) (d : (Fin n) → (Bool)) (M : (@ModuleCat.{0,0} K field.toRing)) : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 (K) (field) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d))) :=
-  (@cleanDefine_constant_diagram_e9c37c47e521ce184399 (K) (Fin (n + 1)) (Fin n) (field) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d))) (M))
+noncomputable def cleanDefine_zigzag_shape_ab152addaaa720b9dd1e  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («d» : ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) → ((_root_.cleanType_Boolean_b98a4c98fcdb0f46359e))) : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) :=
+  (_root_.cleanDefine_shape_0b41b890275d7892f7d8 ((fun (clean_bound_0 : (_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) => (_root_.cleanNotation_select_value_8a640b6e245f4488f290 ((«d» clean_bound_0)) ((@_root_.cleanNotation_left_vertex_2c3bcfeca89ad9785954 («n») (clean_bound_0))) ((@_root_.cleanNotation_right_vertex_e1c406b71a0859981fa9 («n») (clean_bound_0)))))) ((fun (clean_bound_1 : (_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) => (_root_.cleanNotation_select_value_8a640b6e245f4488f290 ((«d» clean_bound_1)) ((@_root_.cleanNotation_right_vertex_e1c406b71a0859981fa9 («n») (clean_bound_1))) ((@_root_.cleanNotation_left_vertex_2c3bcfeca89ad9785954 («n») (clean_bound_1)))))))
 
-noncomputable def cleanNotation_equality_congruence_3e3f32efa32223213c0e {X : Type} {Y : Type} (f : (X) → (Y)) (x : X) (y : X) (h : ((x = y))) : (((f x) = (f y))) :=
+noncomputable def cleanDefine_constant_zigzag_408b5749a22d155ed91d  («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («d» : ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) → ((_root_.cleanType_Boolean_b98a4c98fcdb0f46359e))) («M» : (_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»))) : _root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833 («K») («field») ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»))) :=
+  (@_root_.cleanDefine_constant_diagram_2c087930397803dcd5c1 («K») ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) («field») ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»))) («M»))
+
+noncomputable def cleanNotation_equality_congruence_92c32a6c27b09d106bb2 {«X» : Type} {«Y» : Type} («f» : («X») → («Y»)) («x» : «X») («y» : «X») («h» : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 («x») («y»)))) : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((«f» «x»)) ((«f» «y»)))) :=
   congrArg f h
 
-noncomputable def cleanNotation_equality_reflexivity_72bfc1f43c6e40a818db {X : Type} (x : X) : ((x = x)) :=
+noncomputable def cleanNotation_equality_reflexivity_4612249bc195d677e048 {«X» : Type} («x» : «X») : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 («x») («x»))) :=
   Eq.refl x
 
-noncomputable def cleanNotation_equality_symmetry_9c171431d92e37157b4c {T : Type} (x : T) (y : T) (h : ((x = y))) : ((y = x)) :=
+noncomputable def cleanNotation_equality_symmetry_6be3544bc0038c4817cd {«T» : Type} («x» : «T») («y» : «T») («h» : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 («x») («y»)))) : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 («y») («x»))) :=
   Eq.symm h
 
-noncomputable def cleanNotation_equality_transitivity_6a3ecc1273cd16127fa3 {T : Type} (x : T) (y : T) (z : T) (h : ((x = y))) (k : ((y = z))) : ((x = z)) :=
+noncomputable def cleanNotation_equality_transitivity_1b078188b4cab85aa4b6 {«T» : Type} («x» : «T») («y» : «T») («z» : «T») («h» : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 («x») («y»)))) («k» : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 («y») («z»)))) : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 («x») («z»))) :=
   Eq.trans h k
 
-structure cleanStructure_DiagramShapeMap_226c818652aee71d710f («V» : Type) («E» : Type) («W» : Type) («F» : Type) («Q» : cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) («R» : cleanStructure_DiagramShape_02ab4e571d9987d4a63c («W») («F»)) : Type where
+structure cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a («V» : Type) («E» : Type) («W» : Type) («F» : Type) («Q» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) («R» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («W») («F»)) : Type where
   «vertices» : («V») → («W»)
   «edges» : («E») → («F»)
-  «sources» : (clean_pi_bound_2 : «E») → ((((«vertices» ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) clean_pi_bound_2)) = ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («W») («F») («R»)) («edges» clean_pi_bound_2)))))
-  «targets» : (clean_pi_bound_3 : «E») → ((((«vertices» ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) clean_pi_bound_3)) = ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («W») («F») («R»)) («edges» clean_pi_bound_3)))))
+  «sources» : (clean_pi_bound_2 : «E») → (((_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((«vertices» ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) clean_pi_bound_2))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («W») («F») («R»)) («edges» clean_pi_bound_2))))))
+  «targets» : (clean_pi_bound_3 : «E») → (((_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((«vertices» ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) clean_pi_bound_3))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («W») («F») («R»)) («edges» clean_pi_bound_3))))))
 
-noncomputable def cleanConstructor_shape_map_c0afd85485a15384aa81 («V» : Type) («E» : Type) («W» : Type) («F» : Type) («Q» : cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) («R» : cleanStructure_DiagramShape_02ab4e571d9987d4a63c («W») («F»)) («vertices» : («V») → («W»)) («edges» : («E») → («F»)) («sources» : (clean_pi_bound_2 : «E») → ((((«vertices» ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) clean_pi_bound_2)) = ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («W») («F») («R»)) («edges» clean_pi_bound_2)))))) («targets» : (clean_pi_bound_3 : «E») → ((((«vertices» ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) clean_pi_bound_3)) = ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («W») («F») («R»)) («edges» clean_pi_bound_3)))))) : cleanStructure_DiagramShapeMap_226c818652aee71d710f («V») («E») («W») («F») («Q») («R») :=
-  @cleanStructure_DiagramShapeMap_226c818652aee71d710f.mk «V» «E» «W» «F» «Q» «R» «vertices» «edges» «sources» «targets»
+noncomputable def cleanConstructor_shape_map_7b2b46ca69d481a7fad4 («V» : Type) («E» : Type) («W» : Type) («F» : Type) («Q» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) («R» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («W») («F»)) («vertices» : («V») → («W»)) («edges» : («E») → («F»)) («sources» : (clean_pi_bound_2 : «E») → (((_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((«vertices» ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) clean_pi_bound_2))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («W») («F») («R»)) («edges» clean_pi_bound_2))))))) («targets» : (clean_pi_bound_3 : «E») → (((_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((«vertices» ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) clean_pi_bound_3))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («W») («F») («R»)) («edges» clean_pi_bound_3))))))) : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a («V») («E») («W») («F») («Q») («R») :=
+  @_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.mk «V» «E» «W» «F» «Q» «R» «vertices» «edges» «sources» «targets»
 
-noncomputable def cleanDefine_identity_shape_map_579d101c3f56b37cff06  (V : Type) (E : Type) (Q : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (V) (E)) : cleanStructure_DiagramShapeMap_226c818652aee71d710f (V) (E) (V) (E) (Q) (Q) :=
-  (@cleanConstructor_shape_map_c0afd85485a15384aa81 (V) (E) (V) (E) (Q) (Q) ((fun (clean_bound_0 : V) => clean_bound_0)) ((fun (clean_bound_1 : E) => clean_bound_1)) ((fun (clean_bound_2 : E) => (@cleanNotation_equality_reflexivity_72bfc1f43c6e40a818db (V) (((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (V) (E) (Q)) clean_bound_2))))) ((fun (clean_bound_3 : E) => (@cleanNotation_equality_reflexivity_72bfc1f43c6e40a818db (V) (((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (V) (E) (Q)) clean_bound_3))))))
+noncomputable def cleanDefine_identity_shape_map_9bd5f9f0ce03186b144c  («V» : Type) («E» : Type) («Q» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a («V») («E») («V») («E») («Q») («Q») :=
+  (@_root_.cleanConstructor_shape_map_7b2b46ca69d481a7fad4 («V») («E») («V») («E») («Q») («Q») ((fun (clean_bound_0 : «V») => clean_bound_0)) ((fun (clean_bound_1 : «E») => clean_bound_1)) ((fun (clean_bound_2 : «E») => (@_root_.cleanNotation_equality_reflexivity_4612249bc195d677e048 («V») (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) clean_bound_2))))) ((fun (clean_bound_3 : «E») => (@_root_.cleanNotation_equality_reflexivity_4612249bc195d677e048 («V») (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) clean_bound_3))))))
 
-noncomputable def cleanDefine_composite_shape_map_18c19026cee62e20dbac  (V : Type) (E : Type) (W : Type) (F : Type) (U : Type) (J : Type) (Q : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (V) (E)) (R : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (W) (F)) (S : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (U) (J)) (f : cleanStructure_DiagramShapeMap_226c818652aee71d710f (V) (E) (W) (F) (Q) (R)) (g : cleanStructure_DiagramShapeMap_226c818652aee71d710f (W) (F) (U) (J) (R) (S)) : cleanStructure_DiagramShapeMap_226c818652aee71d710f (V) (E) (U) (J) (Q) (S) :=
-  (@cleanConstructor_shape_map_c0afd85485a15384aa81 (V) (E) (U) (J) (Q) (S) ((fun (clean_bound_0 : V) => ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (W) (F) (U) (J) (R) (S) (g)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_0)))) ((fun (clean_bound_1 : E) => ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (W) (F) (U) (J) (R) (S) (g)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_1)))) ((fun (clean_bound_2 : E) => (@cleanNotation_equality_transitivity_6a3ecc1273cd16127fa3 (U) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (W) (F) (U) (J) (R) (S) (g)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (V) (E) (Q)) clean_bound_2)))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (W) (F) (U) (J) (R) (S) (g)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_2)))) (((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (U) (J) (S)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (W) (F) (U) (J) (R) (S) (g)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_2)))) ((@cleanNotation_equality_congruence_3e3f32efa32223213c0e (W) (U) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (W) (F) (U) (J) (R) (S) (g))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (V) (E) (Q)) clean_bound_2))) (((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_2))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«sources» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_2)))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«sources» (W) (F) (U) (J) (R) (S) (g)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_2)))))) ((fun (clean_bound_3 : E) => (@cleanNotation_equality_transitivity_6a3ecc1273cd16127fa3 (U) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (W) (F) (U) (J) (R) (S) (g)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (V) (E) (Q)) clean_bound_3)))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (W) (F) (U) (J) (R) (S) (g)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_3)))) (((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (U) (J) (S)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (W) (F) (U) (J) (R) (S) (g)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_3)))) ((@cleanNotation_equality_congruence_3e3f32efa32223213c0e (W) (U) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (W) (F) (U) (J) (R) (S) (g))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (V) (E) (Q)) clean_bound_3))) (((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_3))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«targets» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_3)))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«targets» (W) (F) (U) (J) (R) (S) (g)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_3)))))))
+noncomputable def cleanDefine_composite_shape_map_3a1fda41863a20f98513  («V» : Type) («E» : Type) («W» : Type) («F» : Type) («U» : Type) («J» : Type) («Q» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) («R» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («W») («F»)) («S» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («U») («J»)) («f» : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a («V») («E») («W») («F») («Q») («R»)) («g» : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a («W») («F») («U») («J») («R») («S»)) : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a («V») («E») («U») («J») («Q») («S») :=
+  (@_root_.cleanConstructor_shape_map_7b2b46ca69d481a7fad4 («V») («E») («U») («J») («Q») («S») ((fun (clean_bound_0 : «V») => ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («W») («F») («U») («J») («R») («S») («g»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_0)))) ((fun (clean_bound_1 : «E») => ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («W») («F») («U») («J») («R») («S») («g»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_1)))) ((fun (clean_bound_2 : «E») => (@_root_.cleanNotation_equality_transitivity_1b078188b4cab85aa4b6 («U») (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («W») («F») («U») («J») («R») («S») («g»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) clean_bound_2)))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («W») («F») («U») («J») («R») («S») («g»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_2)))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («U») («J») («S»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («W») («F») («U») («J») («R») («S») («g»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_2)))) ((@_root_.cleanNotation_equality_congruence_92c32a6c27b09d106bb2 («W») («U») ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («W») («F») («U») («J») («R») («S») («g»))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) clean_bound_2))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_2))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«sources» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_2)))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«sources» («W») («F») («U») («J») («R») («S») («g»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_2)))))) ((fun (clean_bound_3 : «E») => (@_root_.cleanNotation_equality_transitivity_1b078188b4cab85aa4b6 («U») (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («W») («F») («U») («J») («R») («S») («g»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) clean_bound_3)))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («W») («F») («U») («J») («R») («S») («g»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_3)))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («U») («J») («S»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («W») («F») («U») («J») («R») («S») («g»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_3)))) ((@_root_.cleanNotation_equality_congruence_92c32a6c27b09d106bb2 («W») («U») ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («W») («F») («U») («J») («R») («S») («g»))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) clean_bound_3))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_3))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«targets» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_3)))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«targets» («W») («F») («U») («J») («R») («S») («g»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_3)))))))
 
-noncomputable def cleanDefine_shape_identity_bc05e2fda3553da1c168 {V : Type} {E : Type} (Q : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (V) (E)) : cleanStructure_DiagramShapeMap_226c818652aee71d710f (V) (E) (V) (E) (Q) (Q) :=
-  (@cleanDefine_identity_shape_map_579d101c3f56b37cff06 (V) (E) (Q))
+noncomputable def cleanDefine_shape_identity_bf9387c25803fcd967e5 {«V» : Type} {«E» : Type} («Q» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a («V») («E») («V») («E») («Q») («Q») :=
+  (@_root_.cleanDefine_identity_shape_map_9bd5f9f0ce03186b144c («V») («E») («Q»))
 
-noncomputable def cleanDefine_compose_shapes_a95a4ea8e6676884745a {V : Type} {E : Type} {W : Type} {F : Type} {U : Type} {J : Type} (Q : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (V) (E)) (R : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (W) (F)) (S : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (U) (J)) (f : cleanStructure_DiagramShapeMap_226c818652aee71d710f (V) (E) (W) (F) (Q) (R)) (g : cleanStructure_DiagramShapeMap_226c818652aee71d710f (W) (F) (U) (J) (R) (S)) : cleanStructure_DiagramShapeMap_226c818652aee71d710f (V) (E) (U) (J) (Q) (S) :=
-  (@cleanDefine_composite_shape_map_18c19026cee62e20dbac (V) (E) (W) (F) (U) (J) (Q) (R) (S) (f) (g))
+noncomputable def cleanDefine_compose_shapes_9b40d319eb29525ed7e1 {«V» : Type} {«E» : Type} {«W» : Type} {«F» : Type} {«U» : Type} {«J» : Type} («Q» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) («R» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («W») («F»)) («S» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («U») («J»)) («f» : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a («V») («E») («W») («F») («Q») («R»)) («g» : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a («W») («F») («U») («J») («R») («S»)) : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a («V») («E») («U») («J») («Q») («S») :=
+  (@_root_.cleanDefine_composite_shape_map_3a1fda41863a20f98513 («V») («E») («W») («F») («U») («J») («Q») («R») («S») («f») («g»))
 
-noncomputable def cleanNotation_module_family_transport_d6b9d443d0d35715792a {K : Type} {T : Type} (field : Field K) (M : (T) → ((@ModuleCat.{0,0} K field.toRing))) (x : T) (y : T) (h : ((x = y))) : (@ModuleCat.Hom K field.toRing (M x) (M y)) :=
+noncomputable def cleanNotation_module_family_transport_3ad07f81e9d6f64a9dd1 {«K» : Type} {«T» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («M» : («T») → ((_root_.cleanType_CoefficientModule_cb06282c8e98b088950e («K») («field»)))) («x» : «T») («y» : «T») («h» : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 («x») («y»)))) : (_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») ((«M» «x»)) ((«M» «y»))) :=
   @CategoryTheory.eqToHom (@ModuleCat.{0,0} K field.toRing) (@ModuleCat.moduleCategory.{0,0} K field.toRing).toCategoryStruct (M x) (M y) (congrArg M h)
 
-noncomputable def cleanDefine_diagram_pullback_1d312eae3edad3487f4a  (K : Type) (field : Field K) (V : Type) (E : Type) (W : Type) (F : Type) (Q : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (V) (E)) (R : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (W) (F)) (f : cleanStructure_DiagramShapeMap_226c818652aee71d710f (V) (E) (W) (F) (Q) (R)) (M : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 (K) (field) (W) (F) (R)) : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 (K) (field) (V) (E) (Q) :=
-  (@cleanConstructor_module_diagram_d34ad79f6914baaf649a (K) (field) (V) (E) (Q) ((fun (clean_bound_0 : V) => ((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_0)))) ((fun (clean_bound_1 : E) => (@cleanNotation_module_composition_115d9963c374fb45e52e (K) (field) (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (V) (E) (Q)) clean_bound_1)))) (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_1)))) (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (V) (E) (Q)) clean_bound_1)))) ((@cleanNotation_module_composition_115d9963c374fb45e52e (K) (field) (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (V) (E) (Q)) clean_bound_1)))) (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_1)))) (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_1)))) ((@cleanNotation_module_family_transport_d6b9d443d0d35715792a (K) (W) (field) ((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (V) (E) (Q)) clean_bound_1))) (((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_1))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«sources» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_1)))) (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«arrow» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_1))))) ((@cleanNotation_module_family_transport_d6b9d443d0d35715792a (K) (W) (field) ((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M))) (((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_1))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (V) (E) (Q)) clean_bound_1))) ((@cleanNotation_equality_symmetry_9c171431d92e37157b4c (W) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (V) (E) (Q)) clean_bound_1))) (((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_1))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«targets» (V) (E) (W) (F) (Q) (R) (f)) clean_bound_1))))))))))
+noncomputable def cleanDefine_diagram_pullback_597a8987c2c17930ead2  («K» : Type) («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («V» : Type) («E» : Type) («W» : Type) («F» : Type) («Q» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) («R» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («W») («F»)) («f» : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a («V») («E») («W») («F») («Q») («R»)) («M» : _root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833 («K») («field») («W») («F») («R»)) : _root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833 («K») («field») («V») («E») («Q») :=
+  (@_root_.cleanConstructor_module_diagram_79c27305d3f3eb01cae0 («K») («field») («V») («E») («Q») ((fun (clean_bound_0 : «V») => ((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_0)))) ((fun (clean_bound_1 : «E») => (@_root_.cleanNotation_module_composition_622cd851b0bc174c8369 («K») («field») (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) clean_bound_1)))) (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_1)))) (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) clean_bound_1)))) ((@_root_.cleanNotation_module_composition_622cd851b0bc174c8369 («K») («field») (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) clean_bound_1)))) (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_1)))) (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_1)))) ((@_root_.cleanNotation_module_family_transport_3ad07f81e9d6f64a9dd1 («K») («W») («field») ((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) clean_bound_1))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_1))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«sources» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_1)))) (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«arrow» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_1))))) ((@_root_.cleanNotation_module_family_transport_3ad07f81e9d6f64a9dd1 («K») («W») («field») ((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_1))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) clean_bound_1))) ((@_root_.cleanNotation_equality_symmetry_6be3544bc0038c4817cd («W») (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) clean_bound_1))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_1))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«targets» («V») («E») («W») («F») («Q») («R») («f»)) clean_bound_1))))))))))
 
-noncomputable def cleanDefine_pull_back_diagram_9fb46e4c113301c0a120 {K : Type} {V : Type} {E : Type} {W : Type} {F : Type} (field : Field K) (Q : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (V) (E)) (R : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (W) (F)) (f : cleanStructure_DiagramShapeMap_226c818652aee71d710f (V) (E) (W) (F) (Q) (R)) (M : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 (K) (field) (W) (F) (R)) : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 (K) (field) (V) (E) (Q) :=
-  (@cleanDefine_diagram_pullback_1d312eae3edad3487f4a (K) (field) (V) (E) (W) (F) (Q) (R) (f) (M))
+noncomputable def cleanDefine_pull_back_diagram_a5651518f3994164c15d {«K» : Type} {«V» : Type} {«E» : Type} {«W» : Type} {«F» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («Q» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) («R» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («W») («F»)) («f» : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a («V») («E») («W») («F») («Q») («R»)) («M» : _root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833 («K») («field») («W») («F») («R»)) : _root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833 («K») («field») («V») («E») («Q») :=
+  (@_root_.cleanDefine_diagram_pullback_597a8987c2c17930ead2 («K») («field») («V») («E») («W») («F») («Q») («R») («f») («M»))
 
-noncomputable def cleanDefine_pull_back_arrow_fd6a08b7b2a589b70e82 {K : Type} {V : Type} {E : Type} {W : Type} {F : Type} (field : Field K) (Q : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (V) (E)) (R : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (W) (F)) (f : cleanStructure_DiagramShapeMap_226c818652aee71d710f (V) (E) (W) (F) (Q) (R)) (M : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 (K) (field) (W) (F) (R)) (e : E) : (@ModuleCat.Hom K field.toRing ((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (V) (E) (Q)) e))) ((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (V) (E) (Q)) e)))) :=
-  (@cleanNotation_module_composition_115d9963c374fb45e52e (K) (field) (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (V) (E) (Q)) e)))) (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) e)))) (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (V) (E) (Q)) e)))) ((@cleanNotation_module_composition_115d9963c374fb45e52e (K) (field) (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (V) (E) (Q)) e)))) (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) e)))) (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) e)))) ((@cleanNotation_module_family_transport_d6b9d443d0d35715792a (K) (W) (field) ((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (V) (E) (Q)) e))) (((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) e))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«sources» (V) (E) (W) (F) (Q) (R) (f)) e)))) (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«arrow» (K) (field) (W) (F) (R) (M)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) e))))) ((@cleanNotation_module_family_transport_d6b9d443d0d35715792a (K) (W) (field) ((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (W) (F) (R) (M))) (((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) e))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (V) (E) (Q)) e))) ((@cleanNotation_equality_symmetry_9c171431d92e37157b4c (W) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (V) (E) (W) (F) (Q) (R) (f)) ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (V) (E) (Q)) e))) (((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (W) (F) (R)) ((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«edges» (V) (E) (W) (F) (Q) (R) (f)) e))) (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«targets» (V) (E) (W) (F) (Q) (R) (f)) e)))))))
+noncomputable def cleanDefine_pull_back_arrow_5fd1169dbcd71a2adf8c {«K» : Type} {«V» : Type} {«E» : Type} {«W» : Type} {«F» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («Q» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («V») («E»)) («R» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c («W») («F»)) («f» : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a («V») («E») («W») («F») («Q») («R»)) («M» : _root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833 («K») («field») («W») («F») («R»)) («e» : «E») : (_root_.cleanType_ModuleMap_cf75ef13ca99ba60b566 («K») («field») (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) «e»)))) (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) «e»))))) :=
+  (@_root_.cleanNotation_module_composition_622cd851b0bc174c8369 («K») («field») (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) «e»)))) (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) «e»)))) (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) «e»)))) ((@_root_.cleanNotation_module_composition_622cd851b0bc174c8369 («K») («field») (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) «e»)))) (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) «e»)))) (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) «e»)))) ((@_root_.cleanNotation_module_family_transport_3ad07f81e9d6f64a9dd1 («K») («W») («field») ((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («V») («E») («Q»)) «e»))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) «e»))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«sources» («V») («E») («W») («F») («Q») («R») («f»)) «e»)))) (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«arrow» («K») («field») («W») («F») («R») («M»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) «e»))))) ((@_root_.cleanNotation_module_family_transport_3ad07f81e9d6f64a9dd1 («K») («W») («field») ((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») («W») («F») («R») («M»))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) «e»))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) «e»))) ((@_root_.cleanNotation_equality_symmetry_6be3544bc0038c4817cd («W») (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» («V») («E») («W») («F») («Q») («R») («f»)) ((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («V») («E») («Q»)) «e»))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» («W») («F») («R»)) ((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«edges» («V») («E») («W») («F») («Q») («R») («f»)) «e»))) (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«targets» («V») («E») («W») («F») («Q») («R») («f»)) «e»)))))))
 
-noncomputable def cleanNotation_offset_vertex_8893e544ed839c8e4060  (a : ℕ) (m : ℕ) (v : Fin m) : Fin (a + m) :=
+noncomputable def cleanNotation_offset_vertex_d08ac0cb9d9adbb1ba4a  («a» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («v» : (_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) : (_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»)))) :=
   Fin.natAdd a v
 
-noncomputable def cleanNotation_widen_vertex_69bf9fc558a039a86f3c  (n : ℕ) (m : ℕ) (h : ((m ≤ n))) (v : Fin m) : Fin n :=
+noncomputable def cleanNotation_widen_vertex_9c96ffed68848330fc97  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 («m») («n»)))) («v» : (_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) : (_root_.cleanType_Vertex_456780e707fa756f8a5f («n»)) :=
   Fin.castLE h v
 
-noncomputable def cleanNotation_transport_vertex_ae30515c2c6ff2e395df  (n : ℕ) (m : ℕ) (h : ((n = m))) (v : Fin n) : Fin m :=
+noncomputable def cleanNotation_transport_vertex_a8741742b5638e8ffaea  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («h» : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 («n») («m»)))) («v» : (_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) : (_root_.cleanType_Vertex_456780e707fa756f8a5f («m»)) :=
   Fin.cast h v
 
-noncomputable def cleanNotation_natural_sum_association_ca0c9d3847291ec5e4ab  (a : ℕ) (b : ℕ) (c : ℕ) : ((((a + b) + c) = (a + (b + c)))) :=
+noncomputable def cleanNotation_natural_sum_association_a7294d006931d0ebf741  («a» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («b» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («c» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : ((_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («b»))) («c»))) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («b») («c»))))))) :=
   Nat.add_assoc a b c
 
-noncomputable def cleanNotation_advance_bound_e7bb421f6f0d9f619543  (a : ℕ) (b : ℕ) (c : ℕ) (h : ((a ≤ b))) : (((a + c) ≤ (b + c))) :=
+noncomputable def cleanNotation_advance_bound_ed55ecaee712ebd51258  («a» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («b» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («c» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 («a») («b»)))) : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («c»))) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («b») («c»))))) :=
   Nat.add_le_add_right h c
 
-noncomputable def cleanDefine_subpath_edge_c6bc2388be5e8cd17cf2  (n : ℕ) (a : ℕ) (m : ℕ) (h : (((a + m) ≤ n))) (e : Fin m) : Fin n :=
-  (@cleanNotation_widen_vertex_69bf9fc558a039a86f3c (n) ((a + m)) (h) ((@cleanNotation_offset_vertex_8893e544ed839c8e4060 (a) (m) (e))))
+noncomputable def cleanDefine_subpath_edge_a85fcabb6496482b669a  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («a» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («n»)))) («e» : (_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) : (_root_.cleanType_Vertex_456780e707fa756f8a5f («n»)) :=
+  (@_root_.cleanNotation_widen_vertex_9c96ffed68848330fc97 («n») ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («h») ((@_root_.cleanNotation_offset_vertex_d08ac0cb9d9adbb1ba4a («a») («m») («e»))))
 
-noncomputable def cleanDefine_subpath_vertex_ed24b88b5532567c119f  (n : ℕ) (a : ℕ) (m : ℕ) (h : (((a + m) ≤ n))) (v : Fin (m + 1)) : Fin (n + 1) :=
-  (@cleanNotation_widen_vertex_69bf9fc558a039a86f3c ((n + 1)) (((a + m) + 1)) ((@cleanNotation_advance_bound_e7bb421f6f0d9f619543 ((a + m)) (n) (1) (h))) ((@cleanNotation_transport_vertex_ae30515c2c6ff2e395df ((a + (m + 1))) (((a + m) + 1)) ((@cleanNotation_equality_symmetry_9c171431d92e37157b4c (ℕ) (((a + m) + 1)) ((a + (m + 1))) ((@cleanNotation_natural_sum_association_ca0c9d3847291ec5e4ab (a) (m) (1))))) ((@cleanNotation_offset_vertex_8893e544ed839c8e4060 (a) ((m + 1)) (v))))))
+noncomputable def cleanDefine_subpath_vertex_127c0e2ce89a96b0005f  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («a» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («n»)))) («v» : (_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) : (_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1)))))) :=
+  (@_root_.cleanNotation_widen_vertex_9c96ffed68848330fc97 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((@_root_.cleanNotation_advance_bound_ed55ecaee712ebd51258 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) («h»))) ((@_root_.cleanNotation_transport_vertex_a8741742b5638e8ffaea ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((@_root_.cleanNotation_equality_symmetry_6be3544bc0038c4817cd ((_root_.cleanType_Natural_469c53b6dafb7a218246)) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((@_root_.cleanNotation_natural_sum_association_a7294d006931d0ebf741 («a») («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((@_root_.cleanNotation_offset_vertex_d08ac0cb9d9adbb1ba4a («a») ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))) («v»))))))
 
-noncomputable def cleanDefine_subpath_directions_d5b179a212a0b19f9880  (n : ℕ) (a : ℕ) (m : ℕ) (h : (((a + m) ≤ n))) (d : (Fin n) → (Bool)) : (Fin m) → (Bool) :=
-  (fun (clean_bound_0 : Fin m) => (d (@cleanDefine_subpath_edge_c6bc2388be5e8cd17cf2 (n) (a) (m) (h) (clean_bound_0))))
+noncomputable def cleanDefine_subpath_directions_8ab5598bab208d3d2be9  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («a» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («n»)))) («d» : ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) → ((_root_.cleanType_Boolean_b98a4c98fcdb0f46359e))) : ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) → ((_root_.cleanType_Boolean_b98a4c98fcdb0f46359e)) :=
+  (fun (clean_bound_0 : (_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) => («d» (@_root_.cleanDefine_subpath_edge_a85fcabb6496482b669a («n») («a») («m») («h») (clean_bound_0))))
 
-noncomputable def cleanDefine_subpath_sources_preserved_46191249bc7c5cd92929  (n : ℕ) (a : ℕ) (m : ℕ) (h : (((a + m) ≤ n))) (d : (Fin n) → (Bool)) : Prop :=
-  (∀ (clean_bound_0 : Fin m), ((@cleanDefine_subpath_vertex_ed24b88b5532567c119f (n) (a) (m) (h) (((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (Fin (m + 1)) (Fin m) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d)))))) clean_bound_0))) = ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d)))) (@cleanDefine_subpath_edge_c6bc2388be5e8cd17cf2 (n) (a) (m) (h) (clean_bound_0)))))
+noncomputable def cleanDefine_subpath_sources_preserved_242ca7a6cf0501ee8574  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («a» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («n»)))) («d» : ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) → ((_root_.cleanType_Boolean_b98a4c98fcdb0f46359e))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (∀ (clean_bound_0 : (_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((@_root_.cleanDefine_subpath_vertex_127c0e2ce89a96b0005f («n») («a») («m») («h») (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»)))))) clean_bound_0)))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«source» ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»)))) (@_root_.cleanDefine_subpath_edge_a85fcabb6496482b669a («n») («a») («m») («h») (clean_bound_0))))))
 
-noncomputable def cleanDefine_subpath_targets_preserved_21dad01a350642fb797c  (n : ℕ) (a : ℕ) (m : ℕ) (h : (((a + m) ≤ n))) (d : (Fin n) → (Bool)) : Prop :=
-  (∀ (clean_bound_0 : Fin m), ((@cleanDefine_subpath_vertex_ed24b88b5532567c119f (n) (a) (m) (h) (((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (Fin (m + 1)) (Fin m) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d)))))) clean_bound_0))) = ((@cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d)))) (@cleanDefine_subpath_edge_c6bc2388be5e8cd17cf2 (n) (a) (m) (h) (clean_bound_0)))))
+noncomputable def cleanDefine_subpath_targets_preserved_f279749beaad42a496ed  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («a» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («n»)))) («d» : ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) → ((_root_.cleanType_Boolean_b98a4c98fcdb0f46359e))) : (_root_.cleanType_Proposition_ae4a13d2f060407bce35) :=
+  (∀ (clean_bound_0 : (_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 ((@_root_.cleanDefine_subpath_vertex_127c0e2ce89a96b0005f («n») («a») («m») («h») (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»)))))) clean_bound_0)))) (((@_root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c.«target» ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»)))) (@_root_.cleanDefine_subpath_edge_a85fcabb6496482b669a («n») («a») («m») («h») (clean_bound_0))))))
 
-noncomputable def cleanDefine_subpath_shape_map_677e37e7cd8450b27b3e  (n : ℕ) (a : ℕ) (m : ℕ) (h : (((a + m) ≤ n))) (d : (Fin n) → (Bool)) (hs : ((@cleanDefine_subpath_sources_preserved_46191249bc7c5cd92929 (n) (a) (m) (h) (d)))) (ht : ((@cleanDefine_subpath_targets_preserved_21dad01a350642fb797c (n) (a) (m) (h) (d)))) : cleanStructure_DiagramShapeMap_226c818652aee71d710f (Fin (m + 1)) (Fin m) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d))))) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d))) :=
-  (@cleanConstructor_shape_map_c0afd85485a15384aa81 (Fin (m + 1)) (Fin m) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d))))) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d))) ((fun (clean_bound_0 : Fin (m + 1)) => (@cleanDefine_subpath_vertex_ed24b88b5532567c119f (n) (a) (m) (h) (clean_bound_0)))) ((fun (clean_bound_1 : Fin m) => (@cleanDefine_subpath_edge_c6bc2388be5e8cd17cf2 (n) (a) (m) (h) (clean_bound_1)))) (hs) (ht))
+noncomputable def cleanDefine_subpath_shape_map_e43a1eedf81b4089f8b5  («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («a» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («n»)))) («d» : ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) → ((_root_.cleanType_Boolean_b98a4c98fcdb0f46359e))) («hs» : ((@_root_.cleanDefine_subpath_sources_preserved_242ca7a6cf0501ee8574 («n») («a») («m») («h») («d»)))) («ht» : ((@_root_.cleanDefine_subpath_targets_preserved_f279749beaad42a496ed («n») («a») («m») («h») («d»)))) : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»))))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»))) :=
+  (@_root_.cleanConstructor_shape_map_7b2b46ca69d481a7fad4 ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»))))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»))) ((fun (clean_bound_0 : (_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) => (@_root_.cleanDefine_subpath_vertex_127c0e2ce89a96b0005f («n») («a») («m») («h») (clean_bound_0)))) ((fun (clean_bound_1 : (_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) => (@_root_.cleanDefine_subpath_edge_a85fcabb6496482b669a («n») («a») («m») («h») (clean_bound_1)))) («hs») («ht»))
 
-noncomputable def cleanDefine_restricted_zigzag_26a915e47b266fc490b1 {K : Type} (field : Field K) (n : ℕ) (a : ℕ) (m : ℕ) (h : (((a + m) ≤ n))) (d : (Fin n) → (Bool)) (hs : ((@cleanDefine_subpath_sources_preserved_46191249bc7c5cd92929 (n) (a) (m) (h) (d)))) (ht : ((@cleanDefine_subpath_targets_preserved_21dad01a350642fb797c (n) (a) (m) (h) (d)))) (Z : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 (K) (field) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d)))) : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 (K) (field) (Fin (m + 1)) (Fin m) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d))))) :=
-  (@cleanDefine_pull_back_diagram_9fb46e4c113301c0a120 (K) (Fin (m + 1)) (Fin m) (Fin (n + 1)) (Fin n) (field) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d))))) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d))) ((@cleanDefine_subpath_shape_map_677e37e7cd8450b27b3e (n) (a) (m) (h) (d) (hs) (ht))) (Z))
+noncomputable def cleanDefine_restricted_zigzag_4f48a6077cabcdb9cc78 {«K» : Type} («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))) («n» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («a» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («n»)))) («d» : ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) → ((_root_.cleanType_Boolean_b98a4c98fcdb0f46359e))) («hs» : ((@_root_.cleanDefine_subpath_sources_preserved_242ca7a6cf0501ee8574 («n») («a») («m») («h») («d»)))) («ht» : ((@_root_.cleanDefine_subpath_targets_preserved_f279749beaad42a496ed («n») («a») («m») («h») («d»)))) («Z» : _root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833 («K») («field») ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»)))) : _root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833 («K») («field») ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»))))) :=
+  (@_root_.cleanDefine_pull_back_diagram_a5651518f3994164c15d («K») ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) («field») ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»))))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»))) ((@_root_.cleanDefine_subpath_shape_map_e43a1eedf81b4089f8b5 («n») («a») («m») («h») («d») («hs») («ht»))) («Z»))
 
 
 open scoped Matrix
@@ -321,83 +516,83 @@ source: subpaths
 reference: inclusion from named universal assumptions
 relationship: original
 -/
-def assumed_subpath_inclusion : Prop :=
-  ∀ (n a m : ℕ),
-  ∀ (h : (((a + m) ≤ n))),
-  ∀ (d : (Fin n) → (Bool)),
-  ∀ («hs» : (@cleanDefine_subpath_sources_preserved_46191249bc7c5cd92929 (n) (a) (m) (h) (d))),
-  ∀ («ht» : (@cleanDefine_subpath_targets_preserved_21dad01a350642fb797c (n) (a) (m) (h) (d))),
-  (@Exists (cleanStructure_DiagramShapeMap_226c818652aee71d710f (Fin (m + 1)) (Fin m) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d))))) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d)))) (fun (clean_bound_0 : cleanStructure_DiagramShapeMap_226c818652aee71d710f (Fin (m + 1)) (Fin m) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d))))) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d)))) => (∀ (clean_bound_1 : Fin (m + 1)), (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (Fin (m + 1)) (Fin m) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d))))) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d))) (clean_bound_0)) clean_bound_1) = (@cleanDefine_subpath_vertex_ed24b88b5532567c119f (n) (a) (m) (h) (clean_bound_1))))))
+def «assumed_subpath_inclusion» : Prop :=
+  ∀ («n» «a» «m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
+  ∀ («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («n»)))),
+  ∀ («d» : ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) → ((_root_.cleanType_Boolean_b98a4c98fcdb0f46359e))),
+  ∀ («hs» : (@_root_.cleanDefine_subpath_sources_preserved_242ca7a6cf0501ee8574 («n») («a») («m») («h») («d»))),
+  ∀ («ht» : (@_root_.cleanDefine_subpath_targets_preserved_f279749beaad42a496ed («n») («a») («m») («h») («d»))),
+  (@Exists (_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»))))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»)))) (fun (clean_bound_0 : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»))))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»)))) => (∀ (clean_bound_1 : (_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»))))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»))) (clean_bound_0)) clean_bound_1)) ((@_root_.cleanDefine_subpath_vertex_127c0e2ce89a96b0005f («n») («a») («m») («h») (clean_bound_1)))))))
 
 /--
 source: subpaths
 reference: endpoint preservation
 relationship: original
 -/
-def subpath_sources : Prop :=
-  ∀ (n a m : ℕ),
-  ∀ (h : (((a + m) ≤ n))),
-  ∀ (d : (Fin n) → (Bool)),
-  (@cleanDefine_subpath_sources_preserved_46191249bc7c5cd92929 (n) (a) (m) (h) (d))
+def «subpath_sources» : Prop :=
+  ∀ («n» «a» «m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
+  ∀ («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («n»)))),
+  ∀ («d» : ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) → ((_root_.cleanType_Boolean_b98a4c98fcdb0f46359e))),
+  (@_root_.cleanDefine_subpath_sources_preserved_242ca7a6cf0501ee8574 («n») («a») («m») («h») («d»))
 
 /--
 source: subpaths
 reference: endpoint preservation
 relationship: original
 -/
-def subpath_targets : Prop :=
-  ∀ (n a m : ℕ),
-  ∀ (h : (((a + m) ≤ n))),
-  ∀ (d : (Fin n) → (Bool)),
-  (@cleanDefine_subpath_targets_preserved_21dad01a350642fb797c (n) (a) (m) (h) (d))
+def «subpath_targets» : Prop :=
+  ∀ («n» «a» «m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
+  ∀ («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («n»)))),
+  ∀ («d» : ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) → ((_root_.cleanType_Boolean_b98a4c98fcdb0f46359e))),
+  (@_root_.cleanDefine_subpath_targets_preserved_f279749beaad42a496ed («n») («a») («m») («h») («d»))
 
 /--
 source: subpaths
 reference: unconditional finite subpath inclusion
 relationship: original
 -/
-def subpath_inclusion_exists : Prop :=
-  ∀ (n a m : ℕ),
-  ∀ (h : (((a + m) ≤ n))),
-  ∀ (d : (Fin n) → (Bool)),
-  (@Exists (cleanStructure_DiagramShapeMap_226c818652aee71d710f (Fin (m + 1)) (Fin m) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d))))) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d)))) (fun (clean_bound_0 : cleanStructure_DiagramShapeMap_226c818652aee71d710f (Fin (m + 1)) (Fin m) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d))))) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d)))) => (∀ (clean_bound_1 : Fin (m + 1)), (((@cleanStructure_DiagramShapeMap_226c818652aee71d710f.«vertices» (Fin (m + 1)) (Fin m) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d))))) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d))) (clean_bound_0)) clean_bound_1) = (@cleanDefine_subpath_vertex_ed24b88b5532567c119f (n) (a) (m) (h) (clean_bound_1))))))
+def «subpath_inclusion_exists» : Prop :=
+  ∀ («n» «a» «m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
+  ∀ («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («n»)))),
+  ∀ («d» : ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) → ((_root_.cleanType_Boolean_b98a4c98fcdb0f46359e))),
+  (@Exists (_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»))))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»)))) (fun (clean_bound_0 : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»))))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»)))) => (∀ (clean_bound_1 : (_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))), (_root_.cleanDefine_equal_5fac732a65dd209a83f4 (((@_root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a.«vertices» ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»))))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»))) (clean_bound_0)) clean_bound_1)) ((@_root_.cleanDefine_subpath_vertex_127c0e2ce89a96b0005f («n») («a») («m») («h») (clean_bound_1)))))))
 
 /--
 source: subpaths
 reference: restriction objects
 relationship: original
 -/
-def restricted_zigzag_object : Prop :=
-  ∀ (K : Type),
-  ∀ (field : Field K),
-  ∀ (n a m : ℕ),
-  ∀ (h : (((a + m) ≤ n))),
-  ∀ (d : (Fin n) → (Bool)),
-  ∀ («hs» : (@cleanDefine_subpath_sources_preserved_46191249bc7c5cd92929 (n) (a) (m) (h) (d))),
-  ∀ («ht» : (@cleanDefine_subpath_targets_preserved_21dad01a350642fb797c (n) (a) (m) (h) (d))),
-  ∀ (Z : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 (K) (field) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d)))),
-  ∀ (v : Fin (m + 1)),
-  (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (Fin (m + 1)) (Fin m) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d))))) ((@cleanDefine_restricted_zigzag_26a915e47b266fc490b1 (K) (field) (n) (a) (m) (h) (d) («hs») («ht») (Z)))) v) = ((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«object» (K) (field) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d))) (Z)) (@cleanDefine_subpath_vertex_ed24b88b5532567c119f (n) (a) (m) (h) (v))))
+def «restricted_zigzag_object» : Prop :=
+  ∀ («K» : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))),
+  ∀ («n» «a» «m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
+  ∀ («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («n»)))),
+  ∀ («d» : ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) → ((_root_.cleanType_Boolean_b98a4c98fcdb0f46359e))),
+  ∀ («hs» : (@_root_.cleanDefine_subpath_sources_preserved_242ca7a6cf0501ee8574 («n») («a») («m») («h») («d»))),
+  ∀ («ht» : (@_root_.cleanDefine_subpath_targets_preserved_f279749beaad42a496ed («n») («a») («m») («h») («d»))),
+  ∀ («Z» : _root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833 («K») («field») ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»)))),
+  ∀ («v» : (_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))),
+  (@_root_.cleanDefine_same_module_8e91cf6e9e2f13232742 («K») («field») (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»))))) ((@_root_.cleanDefine_restricted_zigzag_4f48a6077cabcdb9cc78 («K») («field») («n») («a») («m») («h») («d») («hs») («ht») («Z»)))) «v»)) (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«object» («K») («field») ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»))) («Z»)) (@_root_.cleanDefine_subpath_vertex_127c0e2ce89a96b0005f («n») («a») («m») («h») («v»)))))
 
 /--
 source: subpaths
 reference: restriction arrows with endpoint transports
 relationship: original
 -/
-def restricted_zigzag_arrow : Prop :=
-  ∀ (K : Type),
-  ∀ (field : Field K),
-  ∀ (n a m : ℕ),
-  ∀ (h : (((a + m) ≤ n))),
-  ∀ (d : (Fin n) → (Bool)),
-  ∀ («hs» : (@cleanDefine_subpath_sources_preserved_46191249bc7c5cd92929 (n) (a) (m) (h) (d))),
-  ∀ («ht» : (@cleanDefine_subpath_targets_preserved_21dad01a350642fb797c (n) (a) (m) (h) (d))),
-  ∀ (Z : cleanStructure_ModuleDiagram_dce40a415c66aa5652c4 (K) (field) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d)))),
-  ∀ (e : Fin m),
-  let Q : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (Fin (m + 1)) (Fin m) := (@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d))));
-  let R : cleanStructure_DiagramShape_02ab4e571d9987d4a63c (Fin (n + 1)) (Fin n) := (@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d));
-  let i : cleanStructure_DiagramShapeMap_226c818652aee71d710f (Fin (m + 1)) (Fin m) (Fin (n + 1)) (Fin n) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d))))) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (n) (d))) := (@cleanDefine_subpath_shape_map_677e37e7cd8450b27b3e (n) (a) (m) (h) (d) («hs») («ht»));
-  (((@cleanStructure_ModuleDiagram_dce40a415c66aa5652c4.«arrow» (K) (field) (Fin (m + 1)) (Fin m) ((@cleanDefine_zigzag_shape_aabf9ce777651ce61e96 (m) ((@cleanDefine_subpath_directions_d5b179a212a0b19f9880 (n) (a) (m) (h) (d))))) ((@cleanDefine_restricted_zigzag_26a915e47b266fc490b1 (K) (field) (n) (a) (m) (h) (d) («hs») («ht») (Z)))) e) = (@cleanDefine_pull_back_arrow_fd6a08b7b2a589b70e82 (K) (Fin (m + 1)) (Fin m) (Fin (n + 1)) (Fin n) (field) (Q) (R) (i) (Z) (e)))
+def «restricted_zigzag_arrow» : Prop :=
+  ∀ («K» : (_root_.cleanType_Type_c1fed1af64ab6f12e0ed)),
+  ∀ («field» : (_root_.cleanType_FieldStructure_6c5b3bc7a67ff898144f («K»))),
+  ∀ («n» «a» «m» : (_root_.cleanType_Natural_469c53b6dafb7a218246)),
+  ∀ («h» : ((_root_.cleanDefine_natural_at_most_06515545afa0b9611d61 ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («a») («m»))) («n»)))),
+  ∀ («d» : ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) → ((_root_.cleanType_Boolean_b98a4c98fcdb0f46359e))),
+  ∀ («hs» : (@_root_.cleanDefine_subpath_sources_preserved_242ca7a6cf0501ee8574 («n») («a») («m») («h») («d»))),
+  ∀ («ht» : (@_root_.cleanDefine_subpath_targets_preserved_f279749beaad42a496ed («n») («a») («m») («h») («d»))),
+  ∀ («Z» : _root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833 («K») («field») ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»)))),
+  ∀ («e» : (_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))),
+  let «Q» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) := (@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»))));
+  let «R» : _root_.cleanStructure_DiagramShape_02ab4e571d9987d4a63c ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) := (@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»));
+  let «i» : _root_.cleanStructure_DiagramShapeMap_9934c9a8554cb4bad58a ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»))))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («n») («d»))) := (@_root_.cleanDefine_subpath_shape_map_e43a1eedf81b4089f8b5 («n») («a») («m») («h») («d») («hs») («ht»));
+  (_root_.cleanDefine_equal_5fac732a65dd209a83f4 (((@_root_.cleanStructure_ModuleDiagram_16f95cfa5ac13bacc833.«arrow» («K») («field») ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((@_root_.cleanDefine_zigzag_shape_ab152addaaa720b9dd1e («m») ((@_root_.cleanDefine_subpath_directions_8ab5598bab208d3d2be9 («n») («a») («m») («h») («d»))))) ((@_root_.cleanDefine_restricted_zigzag_4f48a6077cabcdb9cc78 («K») («field») («n») («a») («m») («h») («d») («hs») («ht») («Z»)))) «e»)) ((@_root_.cleanDefine_pull_back_arrow_5fd1169dbcd71a2adf8c («K») ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («m») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («m»))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f ((_root_.cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 («n») ((_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))))))) ((_root_.cleanType_Vertex_456780e707fa756f8a5f («n»))) («field») («Q») («R») («i») («Z») («e»))))
 
 end CleanStatements
 

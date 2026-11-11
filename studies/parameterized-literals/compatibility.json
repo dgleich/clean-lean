@@ -1358,5 +1358,30 @@
         "comparison": "same-generated-text"
       }
     ]
+  },
+  "subpath_verifier_repaired": {
+    "compiler_revision": "57978ff",
+    "verifier_sha256": "12986b3fca67a412e3c06d69612cb9405a20b428eada4936b0171b9f1fbcb2df",
+    "scope": "Independent canonical/proof verifier migrated to explicit bindings; same nineteen targets and six proofs checked under each route, not disjoint counts.",
+    "legacy": {
+      "status": "passed",
+      "canonical_targets": 19,
+      "proofs": 6,
+      "definitionally_equal_alias_rejections": 1
+    },
+    "joint": {
+      "status": "passed",
+      "canonical_targets": 19,
+      "proofs": 6,
+      "definitionally_equal_alias_rejections": 1
+    },
+    "latex": {
+      "compilations": 2,
+      "pages": 1,
+      "visual_inspection": "no clipped or overlapping text",
+      "overfull_boxes": 0,
+      "unresolved_references": 0
+    },
+    "remaining": "Active-label scoped implicit signature recovery and mathematical extension/pyramid obligations are unchanged."
   }
 }

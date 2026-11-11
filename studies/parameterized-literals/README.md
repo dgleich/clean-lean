@@ -3311,3 +3311,15 @@ nineteen-target/six-proof milestone is not a current pass; repairing and rerunni
 that independent verifier remains an acceptance obligation. These failures do not
 justify changing expected targets to whatever the compiler happens to emit.
 :::
+
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The pending subpath-verifier repair recorded above is now complete. Its independent
+expectations use the declared wrappers and its proof scripts unfold them explicitly.
+Both ordinary and joint routing pass the same nineteen canonical targets, six
+proofs, and one negative alias guard. See the
+[migration report](../subpath-restrictions/README.md#current-verifier-migration).
+The active-label scoped-implicit failure is still outstanding; no full active-label
+pass follows from the subpath result.
+:::
