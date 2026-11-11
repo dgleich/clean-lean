@@ -1504,5 +1504,13 @@ Whole-binder rechecking rebinds retained annotations. See the
 <a href="../studies/parameterized-literals/README.md#outermost-quantifier-and-lambda-inference">scope construction and outer-chain-only boundary</a>.
 Embedded binder candidates and production inference remain unfinished.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="symbolic-binder-scope">
+<h2>Experimental symbolic binder scopes</h2>
+<p>A dimension unknown created outside a binder cannot be solved by that binder's
+local variable, even through another unknown. The constraint model now checks
+explicit allowed/free binder sets at each unification boundary. This is supporting
+model infrastructure: embedded Clean binder lowering and Lean abstraction are
+still pending. See the <a href="../studies/parameterized-literals/README.md#scope-admissibility-in-the-symbolic-constraint-model">precise rule and evidence boundary</a>.</p>
+</section></llm>
 </body>
 </html>

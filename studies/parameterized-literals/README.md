@@ -1498,3 +1498,52 @@ Validation: 224 experimental tests, 61 exact native targets and 61 supporting
 proofs pass. Provenance checks pass. The projection-reuse full discovery and
 active-label jobs remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Scope admissibility in the symbolic constraint model
+
+Before embedded binder regions can share candidate constraints, a metavariable
+must retain which lexical binder identities its solution is allowed to mention.
+The independent constraint model now records `allowed_binders` on each Variable
+and `free_binders` on rigid Atoms. These are immutable sets of semantic binder
+identities, not source spellings. Carrier dependencies are the union of their
+arguments' dependencies. Existing unscoped fixtures use empty sets.
+
+At every unification return boundary, inspect every retained substitution. Traverse
+its carrier arguments and follow all bound metavariable aliases; each reachable
+rigid atom's free binders must be a subset of the substituted variable's allowed
+binders. A violation is a conclusive mismatch. Alias equations must remain in the
+binding map: an unresolved alias is not permission to forget the outer variable's
+scope restriction. Later unification repeats the check and can expose a previously
+unknown forbidden dependency. Tracking visited aliases avoids repeated traversal
+within one substitution. A shared visit budget bounds the whole scope scan;
+exhaustion is incomplete analysis.
+
+For example, an inner dimension metavariable allowed to mention binder k can be
+solved by k. An outer dimension metavariable cannot. Equating the outer variable
+with the inner one does not bypass this rule: a later assignment of k to the inner
+variable rejects the combined solution in either equation order. A closed solution
+can satisfy aliases with different allowed binder sets. Forward-check outputs go
+through unification and obey the same rule. Sibling binders named k have distinct
+semantic identities and cannot be substituted for one another by spelling.
+
+This is model infrastructure, not completed scoped Clean inference. The adapter
+still constructs its current atoms/variables with empty metadata; existing outer
+binder materialization uses separate checked scopes. Embedded-expression lowering
+must attach verified dependencies, introduce binder identities by lexical position,
+and explicitly abstract/discharge bound dependencies when forming dependent
+function types. None of that is inferred from Lean strings or demonstrated merely
+by this model's tests. Universal symbolic-family validity remains a separate gap.
+
+Ten independent tests cover immutable metadata, permitted inner references, forbidden outer capture,
+nested carriers, alias orientation and equation order, later unification, sibling
+identity, closed alias solutions, deferred output escape and resource exhaustion.
+The scope rule is integrated into the experimental unifier only; no production or
+grammar change is made.
+
+Validation: all 234 experimental tests pass. The existing 61 exact native targets
+and 61 supporting proofs pass with the scope checker; these do not establish
+embedded-binder lowering. Provenance checks pass. Full production and active-label
+validation remain pending in the projection-reuse snapshot.
+:::

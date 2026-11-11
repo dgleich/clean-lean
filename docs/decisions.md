@@ -2044,3 +2044,15 @@ the final Lean binder. See the [scope rule and precise coverage boundary](../stu
 Embedded binders in joint candidate regions and production integration remain
 open. This uses the existing grammar without adding syntax.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental symbolic scope admissibility
+
+The constraint model records allowed binder identities on metavariables and free
+binder dependencies on rigid atoms. Every unification boundary checks all retained
+substitutions, including aliases, for escaping dependencies. Failure is a mismatch;
+resource exhaustion is incomplete. See the [constructive model rule and missing lowering work](../studies/parameterized-literals/README.md#scope-admissibility-in-the-symbolic-constraint-model).
+The Clean adapter does not yet assign this metadata to embedded binder regions or
+abstract dependent function scopes. No syntax or production change is claimed.
+:::

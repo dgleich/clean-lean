@@ -143,3 +143,55 @@ class DefaultTrace(unittest.TestCase):
 if __name__=='__main__':unittest.main()
 
 # generated: gpt-6 2026-11-10 role=assisted; LLM-authored portions; see PROVENANCE.md
+
+# generated: gpt-6 2026-11-11 role=assisted
+class ScopedConstraints(unittest.TestCase):
+    def test_inner_variable_may_depend_on_its_binder(self):
+        x=V('inner/n','index',frozenset({'binder/0'}))
+        k=A('bound k','index',frozenset({'binder/0'}))
+        self.assertEqual(unify([(x,k)])[x],k)
+
+    def test_outer_variable_cannot_capture_inner_binder(self):
+        x=V('outer/n','index');k=A('bound k','index',frozenset({'binder/0'}))
+        with self.assertRaises(NoSolution):unify([(x,k)])
+
+    def test_nested_carrier_dependency_cannot_escape(self):
+        x=V('outer/T','type');k=A('k','index',frozenset({'binder/0'}))
+        with self.assertRaises(NoSolution):unify([(x,vector(k))])
+
+    def test_alias_dependency_checked_in_both_equation_orders(self):
+        outer=V('outer','index');inner=V('inner','index',frozenset({'binder/0'}))
+        k=A('k','index',frozenset({'binder/0'}))
+        for eqs in [[(outer,inner),(inner,k)],[(inner,k),(outer,inner)],[(inner,outer),(inner,k)]]:
+            with self.subTest(equations=eqs),self.assertRaises(NoSolution):unify(eqs)
+
+    def test_later_unification_preserves_outer_scope_restriction(self):
+        outer=V('outer','index');inner=V('inner','index',frozenset({'binder/0'}))
+        bindings=unify([(outer,inner)])
+        with self.assertRaises(NoSolution):unify([(inner,A('k','index',frozenset({'binder/0'})))],bindings)
+
+    def test_sibling_binders_are_distinct_despite_same_spelling(self):
+        x=V('left/n','index',frozenset({'binder/left'}))
+        k=A('k','index',frozenset({'binder/right'}))
+        with self.assertRaises(NoSolution):unify([(x,k)])
+
+    def test_closed_solution_satisfies_intersecting_alias_scopes(self):
+        left=V('left','index',frozenset({'left'}));right=V('right','index',frozenset({'right'}))
+        bindings=unify([(left,right),(right,N)])
+        from constraint_model import resolve
+        self.assertEqual(resolve(left,bindings),N)
+
+    def test_forward_check_cannot_introduce_escaping_binder(self):
+        outer=V('outer','index');k=A('k','index',frozenset({'binder/0'}))
+        row=Row(('bad',),(),(outer,),(),(Deferred(outer,(),lambda _:k),))
+        with self.assertRaises(NoSolution):saturate(row)
+
+    def test_scope_dependency_resource_exhaustion_is_incomplete(self):
+        from constraint_model import check_scopes
+        x=V('x','type')
+        with self.assertRaises(Incomplete):check_scopes({x:C('Pair',(REAL,REAL))},limit=1)
+
+    def test_scope_metadata_is_immutable(self):
+        for constructor in (V,A):
+            with self.subTest(constructor=constructor),self.assertRaises(TypeError):
+                constructor('x','index',{'binder/0'})

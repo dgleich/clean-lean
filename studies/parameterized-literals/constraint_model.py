@@ -16,11 +16,19 @@ class Incomplete(RuntimeError): pass
 class Variable:
     identity: str
     sort: str
+    allowed_binders: frozenset=frozenset()
+
+    def __post_init__(self):
+        if not isinstance(self.allowed_binders,frozenset):raise TypeError('Binder permissions must be immutable')
 
 @dataclass(frozen=True)
 class Atom:
     identity: str
     sort: str
+    free_binders: frozenset=frozenset()
+
+    def __post_init__(self):
+        if not isinstance(self.free_binders,frozenset):raise TypeError('Binder dependencies must be immutable')
 
 @dataclass(frozen=True)
 class Carrier:
@@ -57,6 +65,30 @@ def variables(term):
     return set()
 
 
+def check_scopes(bindings,*,limit=4096):
+    """Every solved metavariable may depend only on its declared binder scope.
+
+    Revisit aliases on every unification boundary: a later substitution can expose
+    a forbidden dependency through a previously unresolved inner variable.
+    """
+    visits=0
+    for variable,value in bindings.items():
+        pending=[value];seen=set()
+        while pending:
+            visits+=1
+            if visits>limit:raise Incomplete('Scope dependency analysis limit exceeded')
+            term=pending.pop()
+            if isinstance(term,Variable):
+                if term in seen:continue
+                seen.add(term)
+                if term in bindings:pending.append(bindings[term])
+            elif isinstance(term,Carrier):pending.extend(term.arguments)
+            elif isinstance(term,Atom):
+                if not term.free_binders.issubset(variable.allowed_binders):
+                    raise NoSolution('Metavariable solution escapes its binder scope')
+            else:raise Incomplete('Unknown scoped constraint term')
+
+
 def unify(equations,bindings=None,*,limit=4096):
     bindings=dict(bindings or {});pending=list(equations);steps=0
     while pending:
@@ -74,6 +106,7 @@ def unify(equations,bindings=None,*,limit=4096):
                 raise NoSolution('Different carrier constructors')
             pending[0:0]=list(zip(left.arguments,right.arguments));continue
         raise NoSolution('Unequal rigid terms')
+    check_scopes(bindings,limit=limit)
     return bindings
 
 

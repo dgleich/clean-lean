@@ -3811,6 +3811,23 @@
         "Universal symbolic-family validity",
         "Production integration"
       ]
+    },
+    {
+      "id": "experimental_symbolic_scope_admissibility",
+      "status": "model-only",
+      "environment": "Independent symbolic constraints with explicit lexical binder identities",
+      "source": "outer = inner; inner = bound k; outer permits no binders; inner permits k",
+      "expected_outcome": "NoSolution in either alias orientation/equation order, including a later unification call with retained bindings",
+      "checks": [
+        "studies/parameterized-literals/test_constraint_model.py"
+      ],
+      "obligation": "Every solved variable may mention only its allowed binders; follow retained aliases and carrier arguments; deferred outputs obey the same rule; exhaustion is incomplete",
+      "pending": [
+        "Checked dependency annotation from Clean expressions",
+        "Binder abstraction and dependent function scope discharge",
+        "Embedded binder region integration",
+        "Production integration"
+      ]
     }
   ]
 }
