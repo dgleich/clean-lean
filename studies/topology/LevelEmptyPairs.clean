@@ -1,0 +1,46 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "../../library/topology/level_sets.clean"
+Import "../../library/topology/empty_pair_data.clean"
+
+Source level_empty:
+  Kind: other
+  Label: Empty relative parts of level pairs
+  Title: Level specialization with no selected endpoints
+
+Result expanded level pair has empty relative data:
+  Attribution: level_empty; expanded pair; original
+  Let X: TopologicalSpace
+  Let f: ContinuousRealMap(X)
+  Let a,r: Real
+  Conclude: empty relative data(X,expanded pair(level problem(X,f,a),r))
+
+Result perturbed level pair has empty relative data:
+  Attribution: level_empty; perturbed pair; original
+  Let X: TopologicalSpace
+  Let f,g: ContinuousRealMap(X)
+  Let a: Real
+  Conclude: empty relative data(X,perturbed pair(level problem(X,f,a),g))
+
+Result shifted level pair has empty relative data:
+  Attribution: level_empty; shifted pair; original
+  Let X: TopologicalSpace
+  Let f: ContinuousRealMap(X)
+  Let a,t: Real
+  Conclude: empty relative data(X,shifted pair(level problem(X,f,a),t))
+
+Result empty relative data are nested:
+  Attribution: level_empty; empty subset; original
+  Let X: TopologicalSpace
+  Let Q: SpacePairData(X)
+  Assume empty: empty relative data(X,Q)
+  Conclude: nested pair(X,Q)
+
+Result certification preserves empty relative data:
+  Attribution: level_empty; certification; original
+  Let X: TopologicalSpace
+  Let Q: SpacePairData(X)
+  Assume empty: empty relative data(X,Q)
+  Assume nesting: nested pair(X,Q)
+  Conclude: empty relative part(X,certify pair data(X,Q,nesting))
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

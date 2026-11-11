@@ -9160,6 +9160,50 @@
     "studies/topology/cokernel-transport.md": {
       "origin": "llm-assisted",
       "mode": "markdown"
+    },
+    "library/topology/empty_pair_data.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/LevelEmptyPairs.clean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/LevelEmptyPairs.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/LevelEmptyPairsVerified.lean": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/topology/verify_level_empty_pairs.py": {
+      "origin": "llm-assisted",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/topology/level-empty-pairs.md": {
+      "origin": "llm-assisted",
+      "mode": "markdown"
     }
   }
 }

@@ -385,3 +385,14 @@ proofs. This addresses the algebraic equality-transport step; level-set empty-pa
 certificates, naturality and ordinary-homology identification remain separate
 obligations. It adds no syntax or implicit proof synthesis.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+[Level empty-pair certificates](level-empty-pairs.md) now bridge the set-level
+identities to the empty-relative-part premise used by singular chains. Six exact
+targets and five proofs cover expanded, perturbed and shifted pair data,
+nesting from emptiness, and preservation under explicit certification. This uses
+the existing distinction between pair data and certified topological pairs; it
+does not add an implicit conversion. Ordinary/relative homology comparison and
+naturality still need assembly; the well-group formulas remain unproved.
+:::

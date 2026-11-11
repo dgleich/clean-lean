@@ -1,0 +1,11 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "certified_interlevel.clean"
+Import "empty_chains.clean"
+
+Condition empty relative data(X,Q):
+  Let X: TopologicalSpace
+  Let Q: SpacePairData(X)
+  Holds when: empty space(subspace(X,Q.relative))
+  Render: {Q} has empty relative data
+
+-- generated: 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

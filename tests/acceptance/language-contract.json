@@ -4652,7 +4652,7 @@
       ],
       "pending": [
         "Naturality of cokernel equality transport",
-        "Level-set empty-part certificates and ordinary-homology identification",
+        "Assembly of ordinary/relative homology identification",
         "Well-group formula and closed-cover/excision audit"
       ]
     },
@@ -4665,8 +4665,20 @@
         "studies/topology/verify_cokernel_transport.py: five definition and seven statement targets; seven inverse/projection proofs"
       ],
       "pending": [
-        "Level-set empty-part certificates",
         "Naturality and ordinary-homology identification",
+        "Well-group formula and closed-cover/excision audit"
+      ]
+    },
+    {
+      "id": "level_empty_pair_certificates",
+      "status": "checked-mathematical-module-no-new-syntax",
+      "source": "library/topology/empty_pair_data.clean; studies/topology/LevelEmptyPairs.clean",
+      "expected_lean": "Declared empty-space condition on the relative subspace; explicit level constructors; certification retains the supplied nesting proof.",
+      "checks": [
+        "studies/topology/verify_level_empty_pairs.py: six canonical targets and five proofs"
+      ],
+      "pending": [
+        "Assembly of ordinary/relative homology maps and naturality",
         "Well-group formula and closed-cover/excision audit"
       ]
     }

@@ -1844,5 +1844,10 @@ disposable metadata cannot authorize reuse across calls. See the
 <p><code>chain cokernel transport(field,C,D,f,g,h)</code> maps to <code>(CategoryTheory.Limits.cokernelIsoOfEq h).hom</code> with the supplied field instance. The evidence argument <code>h : Evidence(f = g)</code> remains explicit. Reverse transport is Clean-authored using equality symmetry; vanishing quotient reduction composes transport to the zero cokernel with its existing reduction.</p>
 <p>The <a href="../studies/topology/cokernel-transport.md">study</a> specifies twelve canonical targets and seven inverse/projection proofs. No new syntax is introduced. The construction is generic; the full ordinary/relative homology identification and its naturality remain pending.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="level-empty-pairs">
+<h2>Empty pair data and explicit certification</h2>
+<p><code>empty relative data(X,Q)</code> is authored as <code>empty space(subspace(X,Q.relative))</code> for <code>Q : SpacePairData(X)</code>. It describes the empty subtype carrier without requiring a nesting proof. <code>empty relative part</code> instead accepts a certified <code>TopologicalPair(X)</code>.</p>
+<p>The <a href="../studies/topology/level-empty-pairs.md">level-pair study</a> checks six canonical targets and five proofs: expanded, perturbed and shifted level data are empty; emptiness implies nesting; certification with a supplied nesting proof preserves emptiness. These are existing syntax and declared bindings, with no inferred conversion or replacement proof. The complete natural homology identification remains pending.</p>
+</section></llm>
 </body>
 </html>
