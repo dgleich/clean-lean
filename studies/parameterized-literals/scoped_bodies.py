@@ -31,7 +31,7 @@ class ScopedBody:
         identity=('binder',tuple(path))
         if identity in (binder_ids or {}).values():raise Incomplete('Scoped binder identity must be fresh')
         ids={**(binder_ids or {}),name:identity}
-        self.builder=Builder(env,inner,limit-1,binder_ids=ids,binder_path=tuple(path)+(3,))
+        self.builder=Builder(env,inner,limit-1,binder_ids=ids,binder_path=tuple(path)+(3,),row_namespace=tuple(path)+(3,))
 
     def rows(self):
         """Expose checked body alternatives without defaulting or selecting."""

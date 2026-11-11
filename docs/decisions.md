@@ -2390,3 +2390,19 @@ This does not yet automate nested-lambda row construction in the source Builder.
 Contextual source integration, recursive body enumeration and production inference
 remain pending. No grammar change.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental automatic direct scoped consumers
+
+The experimental Builder reads a direct module consumer's checked explicit
+signature, opens literal-bearing scoped arguments, and selects the Cartesian
+product of child rows once. Earlier hole-free checked values may specialize later
+parameter/return types. Unknown dependencies, implicit consumers, local callable
+consumers and unsupported evidence views remain incomplete. Child row namespaces
+prevent accidental sharing of inference variables; reconstruction preserves those
+namespaces and rechecks the complete call and consumer identity. See the
+[constructive rule, examples and native checks](../studies/parameterized-literals/README.md#automatic-direct-scoped-consumers-in-the-experimental-builder).
+This is bounded experimental source integration. General contextual recovery,
+recursive scoped bodies and production inference remain pending. No grammar change.
+:::

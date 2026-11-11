@@ -4299,6 +4299,23 @@
         "Recursive nested-binder row enumeration",
         "Production inference and full conformance"
       ]
+    },
+    {
+      "id": "automatic_direct_scoped_consumers",
+      "status": "experimental-slice",
+      "environment": "Explicit captured module signatures, literal-bearing direct scoped arguments, checked hole-free earlier values and source-path child namespaces. Experimental Builder entry point only.",
+      "source": "typed(type(Real),function (z: Real,0),0)",
+      "expected_lean": "The declared typed consumer applied to the Real carrier, a Real-to-Real lambda with the jointly selected Real zero, and a Real zero argument. All children are selected together; no independent defaults.",
+      "checks": [
+        "studies/parameterized-literals/test_scoped_calls.py: fourteen scoped consumer, namespace, dependency, mismatch, serialization and ambiguity cases",
+        "studies/parameterized-literals/check_scoped_calls.py: eight exact full-call targets and eight interpretation proofs",
+        "Existing 97-target and three scoped-adapter native suites rechecked after row namespaces"
+      ],
+      "pending": [
+        "Implicit/contextual consumer parameter recovery and dependencies on unresolved earlier values",
+        "Recursive scoped-body construction and local callable consumers",
+        "Production integration and broad conformance"
+      ]
     }
   ]
 }

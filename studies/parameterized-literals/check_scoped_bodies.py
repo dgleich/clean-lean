@@ -68,6 +68,6 @@ theorem scopedMeaning{i} : actualScoped{i} = 0 := by
 ''')
 path=HERE/'ScopedBodyTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Three complete scoped-lambda call targets and three interpretation proofs passed; automatic source integration remains pending.')
+print('Three complete scoped-lambda call targets and three interpretation proofs passed; general nested-source integration remains pending.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

@@ -2628,3 +2628,93 @@ targets and three interpretation proofs pass; the existing 97 native targets and
 IDs/local links and provenance checks pass. Production compiler files are unchanged;
 the separately running full-discovery and active-label snapshots remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Automatic direct scoped consumers in the experimental Builder
+
+`Builder.materialize` now recognizes a direct module call with a Lambda/Forall/
+Exists argument containing literal holes and invokes `scoped_calls.py`. It reads
+the checked declaration signature; fixture code no longer has to provide the
+consumer constraints. This is an experimental source path, not production
+inference or general contextual signature discovery.
+
+The implemented boundary requires explicit consumer parameters. Their types and
+the return type may depend on earlier arguments only when those arguments have
+already been checked without literal holes. Thus a known caller dimension or
+explicit carrier can specialize a later function type. An inferred earlier number,
+implicit consumer parameters, local-function consumers, callable-evidence views,
+or a return type depending on an unresolved chosen value remain incomplete. The
+path does not independently select an earlier literal to make these dependencies
+appear known. Recursive nested-binder construction is also still pending.
+
+Within that boundary the constructive rule is:
+
+1. Validate the module callable's captured signature and arity. Traverse explicit
+   parameters in declaration order. Substitute checked earlier values into each
+   parameter type; unresolved required dependencies stop with incomplete analysis.
+2. Open scoped arguments using that expected type and their source path. Build
+   ordinary sibling rows under their expected parameter types. No child invokes a
+   selector or defaults. Check and record each hole-free argument for later
+   signature substitution; arguments with holes remain unresolved at this stage.
+3. Resolve the return type and impose the caller's expected type as an equation.
+   Form the bounded Cartesian product of all child alternatives, preserving their
+   equations, deferred checks, literal carriers and emitted arguments. Saturate
+   every candidate and apply simultaneous defaults only to this combined set.
+4. Project the unique selected argument/default trace to each child. Retain scoped
+   bodies and siblings through the checked reconstruction boundary. Revalidate the
+   consumer declaration, check the complete rebuilt call, and compare its result
+   with the selected return type.
+
+Each child Builder has an explicit source-path row namespace. Its unknowns include
+that namespace as well as their existing local identity and binder permissions.
+This separates sibling literal dimensions even when both use the same declaration
+and the same local hole path. Namespaces are also preserved in reconstruction
+operator audits and nested materialization. They do not affect emitted Lean names,
+source grammar, or the native target. Lexical binder identity and row-variable
+identity remain separate concepts.
+
+For example, these now go through `Builder.materialize` directly:
+
+```clean
+consume family(function (k: Natural,0),0)
+sized(n,function (z: Real,0))
+mixed(n,m,function (z: Real,0),0,0)
+typed(type(Real),function (z: Real,0),0)
+accept(for every (z: Real,z = 0),0)
+```
+
+Their consumer declarations are explicit fixtures in
+[check_scoped_calls.py](check_scoped_calls.py). The mixed consumer expects vector
+arguments of dimensions n and m; its two zeros must not share an inference
+variable. The typed consumer takes an explicit carrier followed by a function and
+value of that carrier. `sized(2,function (z: Real,0))` remains incomplete because
+its earlier numeric argument is not yet a checked hole-free signature input;
+this is a tracked inference gap, not a declaration that the call is ill-typed.
+
+Fourteen focused tests cover automatic dependent/computed lambda types, sibling
+namespaces and distinct vector dimensions, independent lambda result carriers,
+known dimension/carrier substitution, unresolved or implicit inputs, signature
+mismatches, retained serialization, absence of child selection, operator ambiguity
+and quantified arguments. The [native driver](check_scoped_calls.py) generates
+[ScopedCallTargets.lean](ScopedCallTargets.lean), with eight independent complete-call
+oracles and eight interpretation proofs. Reproduce with:
+
+```sh
+LAKE=lake python3 studies/parameterized-literals/check_scoped_calls.py
+python3 -m unittest discover -s studies/parameterized-literals -p 'test_*.py'
+```
+
+General implicit/contextual signature recovery must connect the contextual family
+model to source-derived occurrences. That work, recursively nested scoped bodies,
+local callable consumers and production integration remain outstanding. None may
+be replaced by silently solving/defaulting children first.
+
+Validation: all 444 experimental tests pass, including fourteen automatic scoped
+consumer cases. Eight new complete-call canonical targets and eight interpretation
+proofs pass. The existing 97-target/97-proof suite and three-target/three-proof
+explicit scoped-adapter suite also pass after the namespace changes. Reference
+HTML IDs/local links and provenance checks pass. Production compiler files are
+unchanged, and the separately running full-discovery/active-label snapshots remain
+live and pending.
+:::

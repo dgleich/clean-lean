@@ -39,14 +39,15 @@ class Fragment:
     callable_signature: object=None
 
 class Builder:
-    def __init__(self,env,scope,limit=4096,*,binder_ids=None,binder_path=()):
+    def __init__(self,env,scope,limit=4096,*,binder_ids=None,binder_path=(),row_namespace=()):
         if type(limit) is not int or limit<1:raise ValueError('Positive row limit required')
-        self.binder_ids=dict(binder_ids or {});self.binder_path=tuple(binder_path)
+        self.binder_ids=dict(binder_ids or {});self.binder_path=tuple(binder_path);self.row_namespace=tuple(row_namespace)
         if not set(self.binder_ids).issubset(scope):raise ValueError('Binder identities require checked locals')
         self.env=env;self.scope=scope;self.limit=limit;self.rigid={};self.known={};self.known_values={};self.formal_classifiers={}
 
     def variable(self,identity,sort):
-        return Variable(identity,sort,frozenset(self.binder_ids.values()))
+        key=identity if not self.row_namespace else repr(('row namespace',self.row_namespace,identity))
+        return Variable(key,sort,frozenset(self.binder_ids.values()))
 
     def dependencies(self,value,*,normalize=True):
         if not self.binder_ids:return frozenset()
@@ -74,7 +75,7 @@ class Builder:
                 scope={**self.scope,name:local}
                 try:
                     codomain=substitute(current.codomain,{current.binder:local},self.env,scope)
-                    child=Builder(self.env,scope,self.limit-visits,binder_ids=self.binder_ids)
+                    child=Builder(self.env,scope,self.limit-visits,binder_ids=self.binder_ids,row_namespace=self.row_namespace)
                     bound_dependencies.update(child.dependencies(codomain,normalize=normalize))
                 except (CleanError,RecursionError) as error:
                     raise Incomplete('Dependent binder dependency checking unavailable: '+str(error)) from error
@@ -753,7 +754,7 @@ class Builder:
                            if isinstance(expected,DependentFunctionType) else expected.args[1])
         if self.limit<=1:raise Incomplete('Binder traversal resource limit exceeded')
         binder_ids={**self.binder_ids,name:('binder',self.binder_path)}
-        body=Builder(self.env,scope,self.limit-1,binder_ids=binder_ids,binder_path=self.binder_path+(3,)).materialize(
+        body=Builder(self.env,scope,self.limit-1,binder_ids=binder_ids,binder_path=self.binder_path+(3,),row_namespace=self.row_namespace+(3,)).materialize(
             body_tree,body_expected,use_default=use_default)
         # Re-elaborate the whole binder: annotations rebind their captured source
         # references to the compiler's final binder, not the temporary check name.
@@ -768,6 +769,9 @@ class Builder:
         if tree[0] in ('Forall','Exists','Lambda'):
             try:return self.materialize_binder(tree,expected,use_default)
             except RecursionError as error:raise Incomplete('Binder traversal recursion limit exceeded') from error
+        if tree[0]=='Call' and any(a[0] in ('Lambda','Forall','Exists') and holes(a) for a in tree[2]):
+            from scoped_calls import materialize_call
+            return materialize_call(self,tree,expected,use_default=use_default)
         selected=self.solve_with_trace(tree,expected,use_default=use_default)
         return self.retain_selected(tree,selected,expected)
 
@@ -789,7 +793,7 @@ class Builder:
         if any(variables(a) for a in actual_arguments):raise Incomplete('Selected arguments remain unresolved')
         # Audit in separate state: unselected operator rows must not contribute
         # retained witness priorities to this reconstruction.
-        audit=Builder(self.env,self.scope,self.limit,binder_ids=self.binder_ids,binder_path=self.binder_path)
+        audit=Builder(self.env,self.scope,self.limit,binder_ids=self.binder_ids,binder_path=self.binder_path,row_namespace=self.row_namespace)
         audit_rows=[row for row in audit.rows(tree,expected) if row.choices==choices]
         if len(audit_rows)!=1:raise Incomplete('Selected local row is unavailable or nonunique')
         if len(actual_arguments)!=len(audit_rows[0].arguments):raise Incomplete('Selected argument arity changed')
