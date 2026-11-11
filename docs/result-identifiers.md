@@ -60,3 +60,13 @@ compiles with a reflexivity proof. Generated artifacts change only result-name
 quoting after provenance stamping. These are scoped results: complete discovery,
 local/declaration-binder escaping and vector-literal inference remain open.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The [binder/reference quoting repair](binder-identifiers.md) now covers the
+keyword local-object defect, declaration parameters, local definitions and their
+references. Nine independent native targets and five supporting proofs pass;
+475 integration tests and a further 69 binding/module/universe tests pass.
+These scoped results do not replace the failed historical broad run or establish
+full regression success. Vector-zero inference remains open.
+:::

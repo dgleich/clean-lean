@@ -1,0 +1,50 @@
+-- generated: gpt-6 2026-11-11 role=assisted; see PROVENANCE.md
+Import "../../library/operators.clean"
+Source local:
+  Kind: other
+  Label: Local
+  Title: Native identifier quoting
+
+Define identity keyword(example: Real): Real:
+  Equals: example
+
+Condition reflexive keyword(example: Real):
+  Holds when: example = example
+
+Type Items(example: Type):
+  Means: List «example»
+  Render latex: Items({example})
+
+Structure Holder(example: Type):
+  Let match: example
+  Constructor: hold keyword
+
+Result keyword object:
+  Attribution: local; binder; original
+  Let example: Real
+  Conclude: reflexive keyword(example)
+
+Result keyword local:
+  Attribution: local; local definition; original
+  Let example: Real
+  Let match = identity keyword(example)
+  Conclude: match = example
+
+Result keyword carrier:
+  Attribution: local; dependent binder; original
+  Let example: Type
+  Let match: example
+  Conclude: match = match
+
+Result keyword constructor:
+  Attribution: local; record projection; original
+  Let example: Real
+  Conclude: hold keyword(type(Real),example).match = example
+
+Result keyword dimension:
+  Attribution: local; indexed binder; original
+  Let example: Natural
+  Let match: Vector(example,Real)
+  Conclude: match = match
+
+-- generated: gpt-6 2026-10-23 role=assisted; LLM-authored portions; see PROVENANCE.md

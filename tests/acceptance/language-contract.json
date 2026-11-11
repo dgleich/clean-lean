@@ -3147,6 +3147,34 @@
         "Full regression",
         "Other user-derived binder escaping"
       ]
+    },
+    {
+      "id": "quoted_source_binders_and_references",
+      "status": "implemented-slice",
+      "environment": "Explicit operator module and identifier-quoting specimen under pinned Lean/Mathlib",
+      "source": "Let example: Real\nLet match = identity keyword(example)\nConclude: match = example\n",
+      "constructive_rule": "docs/binder-identifiers.md",
+      "expected_source_names": [
+        "example",
+        "match"
+      ],
+      "expected_native_spellings": [
+        "«example»",
+        "«match»"
+      ],
+      "tests": [
+        "tests/test_binder_names.py",
+        "studies/identifier-quoting/verify.py"
+      ],
+      "native_oracles": "Nine independent canonical declaration/statement targets and five proofs in studies/identifier-quoting/Verified.lean",
+      "negative_cases": [
+        "invalid quote delimiters",
+        "existing scope and normalized-name collision tests"
+      ],
+      "pending": [
+        "Full regression",
+        "Opaque authored Lean code still requires native checking"
+      ]
     }
   ]
 }

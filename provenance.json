@@ -8263,6 +8263,56 @@
       "model": "gpt-6",
       "mode": "markdown"
     },
+    "cleanlang/lean_identifiers.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "tests/test_binder_names.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/identifier-quoting/Keywords.clean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "studies/identifier-quoting/verify.py": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "comment",
+      "comment": [
+        "# ",
+        ""
+      ]
+    },
+    "studies/identifier-quoting/Verified.lean": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "comment",
+      "comment": [
+        "-- ",
+        ""
+      ]
+    },
+    "docs/binder-identifiers.md": {
+      "origin": "llm-assisted",
+      "model": "gpt-6",
+      "mode": "markdown"
+    },
     "studies/laproof/build_reading.py": {
       "origin": "llm-assisted",
       "mode": "comment",

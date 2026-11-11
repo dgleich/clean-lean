@@ -1599,3 +1599,14 @@ such as `Result example`. Title parsing, normalization/collision rejection and
 LaTeX display remain unchanged. See [result-identifiers.md](result-identifiers.md)
 for the constructive lexical rule, native oracles and remaining binder audit.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Quoted source binders and references
+
+User-written statement binders, local definitions and declaration parameters now
+emit the same quoted Lean identifier at binding and reference sites. Scope keys,
+source trees, normalized names and LaTeX labels are unchanged. Opaque native
+payloads are not rewritten. See [binder-identifiers.md](binder-identifiers.md) for
+the constructive rule, identifier audit, native checks and hash migration note.
+:::

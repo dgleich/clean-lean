@@ -1,4 +1,5 @@
 """Explicit Clean modules: all mathematical names originate in declarations."""
+from .lean_identifiers import quoted
 import hashlib
 import re
 import string
@@ -120,7 +121,7 @@ def type_declaration(header, fields, env):
         parameter_types.append(t)
         kinds.append('type' if env.classifier_info(t) is not None else 'dimension' if t==NAT else
                      {'value':substitute(str(t),names)})
-        names.append(p);local[p]=Expr(p,p,t)
+        names.append(p);local[p]=Expr(quoted(p),p,t)
     values = fields_map(fields)
     if 'equals' in values:
         if values.keys()-{'equals','describe','describe plural'}:
@@ -147,7 +148,7 @@ def type_declaration(header, fields, env):
     for src,dst in [('describe','prose'),('describe plural','prose_plural')]:
         if src in values: spec[dst] = template(values[src], names)
     env.data['types'][name] = spec
-    signature=' '.join(f'({n} : '+(universe_sort(info[1]) if (info:=env.classifier_info(t)) is not None else 'Nat' if t==NAT else env.render_type(t,'lean'))+')' for n,t in zip(names,parameter_types))
+    signature=' '.join(f'({quoted(n)} : '+(universe_sort(info[1]) if (info:=env.classifier_info(t)) is not None else 'Nat' if t==NAT else env.render_type(t,'lean'))+')' for n,t in zip(names,parameter_types))
     sort=universe_sort(level) if level!=default_level else {'Prop':'Sort 1', 'Type':'Type 1'}.get(values['means'],'Type')
     key=add_definition(env, 'cleanType_', name, f'{signature} : {sort} :=\n  {values["means"]}')
     env.notation_definitions[key]=env.notation_definitions[key].replace('noncomputable def ', 'noncomputable abbrev ', 1)
@@ -198,7 +199,7 @@ def notation(header, fields, env, *, authored=False):
                 if types: raise CleanError('Implicit parameters must precede arguments')
                 implicit[n] = t
             else: types[n] = t
-            local[n] = Expr(n,n,t)
+            local[n] = Expr(quoted(n),n,t)
     values = fields_map(other)
     if list(types)!=params or 'returns' not in values:
         raise CleanError('Declare parameters in header order and provide Returns')
@@ -241,8 +242,8 @@ def notation(header, fields, env, *, authored=False):
     def parameter_sort(t):
         info=env.classifier_info(t)
         return universe_sort(info[1]) if info is not None else env.render_type(t,'lean')
-    signature=' '.join('{'+n+' : '+parameter_sort(t)+'}' for n,t in implicit.items())
-    signature+=' '+ ' '.join('('+p+' : '+parameter_sort(types[p])+')' for p in params)
+    signature=' '.join('{'+quoted(n)+' : '+parameter_sort(t)+'}' for n,t in implicit.items())
+    signature+=' '+ ' '.join('('+quoted(p)+' : '+parameter_sort(types[p])+')' for p in params)
     body=f'{signature} : {env.render_type(result,"lean")} :=\n  {meaning}'
     # Install the name only after its body is resolved: no recursion/forward references.
     def pattern(t):

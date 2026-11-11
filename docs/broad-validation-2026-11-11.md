@@ -116,3 +116,13 @@ probe confirms that keyword local-object names still require binder/reference
 repair. The vector-zero inference failure is unchanged; the historical failing
 supplementary summary above is not relabelled as passing.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+The [binder/reference quoting repair](binder-identifiers.md) now covers the
+keyword local-object defect, declaration parameters, local definitions and their
+references. Nine independent native targets and five supporting proofs pass;
+475 integration tests and a further 69 binding/module/universe tests pass.
+These scoped results do not replace the failed historical broad run or establish
+full regression success. Vector-zero inference remains open.
+:::

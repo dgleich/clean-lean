@@ -793,7 +793,8 @@ def _parse_flat(text,reg):
                 t=reg.type(payload,env,presentation=descriptions)
                 for name in names:
                     if name in env or name in labels:raise CleanError('Invalid or duplicate name: '+name)
-                    env[name]=Expr(name,texid(name),t)
+                    from .lean_identifiers import quoted
+                    env[name]=Expr(quoted(name),texid(name),t)
                 r.clauses.append(Clause('let',names,t,num,descriptions=descriptions))
             else:
                 name=names[0]
@@ -807,6 +808,8 @@ def _parse_flat(text,reg):
                 if value.type==PROP:raise CleanError('Local condition abbreviations are not implemented; use a top-level Condition declaration')
                 from .conversion import local_definition
                 env[name]=local_definition(name,value,reg,env)
+                from .lean_identifiers import quoted
+                env[name].lean=quoted(name)
                 r.clauses.append(Clause('define',[name],value,num))
         except CleanError as e: raise CleanError(f'line {num}: {e}') from e
     finish()
@@ -924,13 +927,14 @@ def lean(results,reg,imports):
         if isinstance(r,Prose):
             if not r.attached: out.append(lean_documentation(r))
             continue
+        from .lean_identifiers import quoted
         statement_reg=r.environment or reg
         doc=r.documentation.body.replace('/-','/ -').replace('-/','- /') if r.documentation else ''
-        out+=['/--']+([doc,''] if doc else [])+[k+': '+v.replace('/-','/ -').replace('-/','- /') for k,v in r.attribution.items()]+['-/',f'def «{r.name}» : Prop :=']
+        out+=['/--']+([doc,''] if doc else [])+[k+': '+v.replace('/-','/ -').replace('-/','- /') for k,v in r.attribution.items()]+['-/',f'def {quoted(r.name)} : Prop :=']
         for c in r.clauses:
-            if c.kind=='let': out+=['  ∀ ('+' '.join(c.names)+' : '+statement_reg.render_type(c.value,'lean')+'),']
+            if c.kind=='let': out+=['  ∀ ('+' '.join(quoted(n) for n in c.names)+' : '+statement_reg.render_type(c.value,'lean')+'),']
             elif c.kind=='assume': out+=[f'  ∀ («{c.names[0]}» : {c.value.lean}),']
-            else: out+=[f'  let {c.names[0]} : {statement_reg.render_type(c.value.type,"lean")} := {c.value.lean};']
+            else: out+=[f'  let {quoted(c.names[0])} : {statement_reg.render_type(c.value.type,"lean")} := {c.value.lean};']
         out+=['  '+r.conclusion.lean,'']
     return '\n'.join(out+['end CleanStatements',''])
 
