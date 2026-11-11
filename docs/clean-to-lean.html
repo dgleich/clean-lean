@@ -1625,5 +1625,15 @@ justify solving their operands by injectivity. See the
 <a href="../studies/parameterized-literals/README.md#retained-computed-expressions-under-type-binders">representation and reconstruction contract</a>.
 This bridge remains separate from joint and production inference.</p>
 </section></llm>
+<llm model="gpt-6" date="2026-11-11" role="assisted"><section id="bound-carrier-annotations">
+<h2>Carrier annotations under binders (experimental bridge)</h2>
+<p>A computed index may contain <code>type(Vector(k,Complex): Type)</code>.
+The bridge traverses the carrier so k remains a bound reference, and preserves the
+selected classifier. Its expanded Lean operand is <code>Fin k → Complex</code>;
+exact targets retain the declared vector wrapper. Reconstruction rechecks the
+classifier and universe. See the
+<a href="../studies/parameterized-literals/README.md#type-values-containing-bound-indices">mapping and remaining limits</a>.
+This is not yet the production joint-inference path.</p>
+</section></llm>
 </body>
 </html>

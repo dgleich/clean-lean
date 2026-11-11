@@ -67,6 +67,13 @@ class CheckedBinderTypes:
         tree=_bind_checked(value,self.env,scope,binders=True)
         checked=Expressions(self.env,scope).elaborate(tree)
         kind=tree[0]
+        if kind=='BoundTypeValue':
+            carrier=self.env.type(tree[1],scope,phrases=False)
+            skeleton=[kind,None,*tree[2:]]
+            key=dumps((skeleton,1,()))
+            self.templates.setdefault(key,(skeleton,1,()))
+            return IndexExpression(key,(self._encode(carrier,scope,locals,path+('carrier',)),
+                                        self._encode(checked.type,scope,locals,path+('result',))))
         if kind=='ModuleCall':
             operands=checked.checked_args
             if operands is None:raise Incomplete('Computed call lacks checked operands')
@@ -92,9 +99,15 @@ class CheckedBinderTypes:
         skeleton,count,names=self.templates[term.identity]
         if len(term.arguments)!=count+len(names)+1:raise Incomplete('Malformed index-expression operand count')
         values=tuple(self._decode(t,scope,locals,path+(i,)) for i,t in enumerate(term.arguments))
-        operands=[reify(v,self.env,scope).tree for v in values[:count]]
         tree=list(skeleton)
-        if tree[0]=='ModuleCall':tree[2]=operands
+        if tree[0]=='BoundTypeValue':
+            from cleanlang.annotations import Annotation,references
+            carrier=values[0]
+            tree[1]=Annotation(str(carrier),carrier,references(carrier,scope))
+            operands=[]
+        else:operands=[reify(v,self.env,scope).tree for v in values[:count]]
+        if tree[0]=='BoundTypeValue':pass
+        elif tree[0]=='ModuleCall':tree[2]=operands
         elif tree[0]=='Projection':tree[1]=operands[0]
         elif tree[0]=='Apply':tree[1]=operands[0];tree[2]=operands[1:]
         else:raise Incomplete('Unknown checked index-expression template')

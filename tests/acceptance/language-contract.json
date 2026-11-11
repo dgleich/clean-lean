@@ -4011,6 +4011,22 @@
         "Embedded lambda inference",
         "Joint and production integration"
       ]
+    },
+    {
+      "id": "experimental_bound_carrier_annotation_bridge",
+      "status": "experimental-slice",
+      "source": "Function(k: Natural,Vector((count carrier(type(Vector(k,Complex):Type))),Complex))",
+      "checks": [
+        "studies/parameterized-literals/test_binder_types.py",
+        "studies/parameterized-literals/check_clean_rows.py"
+      ],
+      "obligation": "Structurally abstract annotated carrier dependencies; preserve classifier snapshot and presentation; two independent native targets",
+      "pending": [
+        "Bound literal payloads",
+        "Contextual metavariables",
+        "Embedded lambda inference",
+        "Joint and production integration"
+      ]
     }
   ]
 }

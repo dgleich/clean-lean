@@ -105,10 +105,11 @@ class CheckedBinderTypeBridge(unittest.TestCase):
   typ=self.env.type('Function(k: Natural,Vector((k+1),Complex))',self.scope)
   codec=self.codec();result=codec.apply(codec.encode(typ),self.scope['n'])
   self.assertEqual(result,self.env.type('Vector((n+1),Complex)',self.scope))
- def test_bound_type_value_in_index_still_incomplete(self):
+ def test_bound_type_value_in_index_round_trip(self):
   notation('Notation count carrier(T: Type): Natural:', ['Means: 0','Render latex: count({T})'],self.env)
   typ=self.env.type('Function(k: Natural,Vector((count carrier(type(Vector(k,Complex):Type))),Complex))',self.scope)
-  with self.assertRaisesRegex(Incomplete,'constructor remains unsupported'):self.codec().encode(typ)
+  codec=self.codec();result=codec.decode(codec.encode(typ))
+  self.assertEqual(self.env.render_type(result,'lean',self.scope),self.env.render_type(typ,'lean',self.scope))
 
  def test_computed_bound_expression_is_alpha_stable(self):
   codec=self.codec()
@@ -133,3 +134,20 @@ class CheckedBinderTypeBridge(unittest.TestCase):
   wrong=IndexExpression(expression.identity,(expression.arguments[0],codec.encode(self.env.type('Real')),expression.arguments[2]))
   body=Carrier(term.body.identity,(term.body.arguments[0],wrong,term.body.arguments[2]))
   with self.assertRaisesRegex(Incomplete,'implicit argument differs'):codec.decode(Binder(term.identity,term.domain,body))
+
+ def test_bound_type_value_alpha_stability_and_instantiation(self):
+  notation('Notation count carrier(T: Type): Natural:', ['Means: 0','Render latex: count({T})'],self.env)
+  codec=self.codec()
+  source=lambda k:f'Function({k}: Natural,Vector((count carrier(type(Vector({k},Complex):Type))),Complex))'
+  term=codec.encode(self.env.type(source('k'),self.scope))
+  self.assertEqual(term,codec.encode(self.env.type(source('j'),self.scope)))
+  actual=codec.apply(term,self.scope['n'])
+  expected=self.env.type('Vector((count carrier(type(Vector(n,Complex):Type))),Complex)',self.scope)
+  self.assertEqual(self.env.render_type(actual,'lean',self.scope),self.env.render_type(expected,'lean',self.scope))
+
+ def test_bound_type_value_classifier_snapshot_is_rechecked(self):
+  notation('Notation count carrier(T: Type): Natural:', ['Means: 0','Render latex: count({T})'],self.env)
+  codec=self.codec()
+  term=codec.encode(self.env.type('Function(k: Natural,Vector((count carrier(type(Vector(k,Complex):Type))),Complex))',self.scope))
+  self.env.data['types']['Type']['native_declaration']='changed classifier declaration'
+  with self.assertRaises(Incomplete):codec.decode(term)

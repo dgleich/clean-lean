@@ -2025,3 +2025,41 @@ native target comparisons and 84 supporting proofs. These include the seven new
 computed-index cases above. Production full discovery and active-label regeneration
 were confirmed running on 2026-11-11; neither is counted as a completed check.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Type values containing bound indices
+
+The experimental bridge now lowers a checked `BoundTypeValue` inside a computed
+index. For example, a declared `count carrier(T: Type): Natural` can occur in
+`Function(k: Natural,Vector((count carrier(type(Vector(k,Complex):Type))),Complex))`.
+The carrier annotation is traversed structurally, so its reference to k is closed
+by the same binder rule as an ordinary index. It is not retained as opaque source
+text containing a temporary local name.
+
+Construction uses an IndexExpression with two children: the annotated carrier and
+the expression's classifier type. Its private template retains the closed classifier
+annotation, classifier snapshot, and explicit/implicit presentation flag. The
+carrier annotation is absent from template identity, making bound renaming irrelevant.
+Reconstruction decodes the carrier in the fresh binder scope, constructs an Annotation
+with exactly its free references, and invokes the existing checked type-value
+elaborator. That elaborator verifies the saved classifier snapshot and carrier
+universe. The bridge also checks the reconstructed result classifier. No classifier
+is reselected by searching the available declarations.
+
+The two independent Lean oracles check the dependent function and its instantiation
+at a caller index. They retain the declared carrier-count, vector and scalar wrappers;
+the carrier's selected Type classifier is checked during elaboration rather than
+emitted as a separate native argument. Python cases check alpha stability, source
+preservation, substitution and rejection of a changed classifier declaration.
+
+This extends the preceding computed-index slice; bound literal payloads, contextual
+metavariables, embedded lambda inference, higher-universe binder domains and
+production/joint integration remain pending. It adds no grammar rule and makes no
+claim that arbitrary carrier expressions are supported by the codec.
+
+Validation: 348 experimental Python tests, 86 exact native-target comparisons and
+86 supporting proofs pass. The two new native targets check the bound carrier value
+and its typed instantiation. Full production discovery and active-label regeneration
+remain separate pending checks.
+:::

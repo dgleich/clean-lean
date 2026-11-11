@@ -576,6 +576,18 @@ def expectedComputedInstantiation (n : {t('Natural')}) : Type := {t('Vector')} (
 same_basic_target actualComputedInstantiation expectedComputedInstantiation
 theorem meaningComputedInstantiation (n : {t('Natural')}) : actualComputedInstantiation n = expectedComputedInstantiation n := by rfl
 """)
+notation('Notation binder carrier count(T: Type): Natural:', ['Means: 0','Render latex: count({T})'],env)
+codec=CheckedBinderTypes(env,scope)
+encoded=codec.encode(env.type('Function(k: Natural,Vector((binder carrier count(type(Vector(k,Complex):Type))),Complex))',scope))
+for name,parameters,actual,expected in [
+ ('BoundCarrierValue','',codec.decode(encoded),f"(k : {t('Natural')}) → {t('Vector')} (@{f('binder carrier count')} ({t('Vector')} k {t('Complex')})) {t('Complex')}"),
+ ('InstantiatedCarrierValue',f"(n : {t('Natural')})",codec.apply(encoded,scope['n']),f"{t('Vector')} (@{f('binder carrier count')} ({t('Vector')} n {t('Complex')})) {t('Complex')}")]:
+ checks.append(f"""
+def actual{name} {parameters} : Type := {env.render_type(actual,'lean',scope)}
+def expected{name} {parameters} : Type := {expected}
+same_basic_target actual{name} expected{name}
+theorem meaning{name} {parameters} : actual{name}{' n' if parameters else ''} = expected{name}{' n' if parameters else ''} := by rfl
+""")
 source='for every (z: Vector(n,Complex), z != 0)'
 value=Builder(env,scope).materialize(expression_tree(parse(source,'expression')),use_default=False)
 checks.append(f"""
@@ -623,6 +635,6 @@ theorem meaningScopedCarrier : actualScopedCarrier := by
 """)
 path=HERE/'JointTargets.lean';path.write_text(lean([],env,['Lean'])+comparison+'\n'.join(checks))
 subprocess.run([os.environ.get('LAKE','lake'),'env','lean',str(path)],cwd=ROOT,check=True)
-print('Eighty-four experimental targets and eighty-four meaning proofs passed; production joint inference remains unimplemented.')
+print('Eighty-six experimental targets and eighty-six meaning proofs passed; production joint inference remains unimplemented.')
 
 # generated: gpt-6 2026-11-11 role=assisted; LLM-authored portions; see PROVENANCE.md

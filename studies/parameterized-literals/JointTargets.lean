@@ -449,6 +449,9 @@ noncomputable def cleanNotation_binder_count_b24ccec6a3272bfdad35 {«T» : Type}
 noncomputable def cleanDefine_binder_ignore_5a1355d131d97817361d  («k» : (_root_.cleanType_Natural_469c53b6dafb7a218246)) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
   (_root_.cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 0))
 
+noncomputable def cleanNotation_binder_carrier_count_76967213fc5873409005  («T» : Type) : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
+  0
+
 noncomputable def cleanNotation_opaque_count_4efa8df9a3534f27979e {«T» : Type} («item» : «T») : (_root_.cleanType_Natural_469c53b6dafb7a218246) :=
   0
 
@@ -1017,6 +1020,18 @@ def actualComputedInstantiation (n : cleanType_Natural_469c53b6dafb7a218246) : T
 def expectedComputedInstantiation (n : cleanType_Natural_469c53b6dafb7a218246) : Type := cleanType_Vector_cce915f2d60cfd4f85a3 (cleanNotation_natural_sum_ea5ce9ac6c2481b8c1d7 n (cleanNumeral_Natural_47460cb427d00c0cfbad (nat_lit 1))) cleanType_Complex_2d7f06a08f8ab1e3f46d
 same_basic_target actualComputedInstantiation expectedComputedInstantiation
 theorem meaningComputedInstantiation (n : cleanType_Natural_469c53b6dafb7a218246) : actualComputedInstantiation n = expectedComputedInstantiation n := by rfl
+
+
+def actualBoundCarrierValue  : Type := (clean_pi_bound_8 : (_root_.cleanType_Natural_469c53b6dafb7a218246)) → ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanNotation_binder_carrier_count_76967213fc5873409005 ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (clean_pi_bound_8) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d))))
+def expectedBoundCarrierValue  : Type := (k : cleanType_Natural_469c53b6dafb7a218246) → cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanNotation_binder_carrier_count_76967213fc5873409005 (cleanType_Vector_cce915f2d60cfd4f85a3 k cleanType_Complex_2d7f06a08f8ab1e3f46d)) cleanType_Complex_2d7f06a08f8ab1e3f46d
+same_basic_target actualBoundCarrierValue expectedBoundCarrierValue
+theorem meaningBoundCarrierValue  : actualBoundCarrierValue = expectedBoundCarrierValue := by rfl
+
+
+def actualInstantiatedCarrierValue (n : cleanType_Natural_469c53b6dafb7a218246) : Type := (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 ((@_root_.cleanNotation_binder_carrier_count_76967213fc5873409005 ((_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (n) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))))) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))
+def expectedInstantiatedCarrierValue (n : cleanType_Natural_469c53b6dafb7a218246) : Type := cleanType_Vector_cce915f2d60cfd4f85a3 (@cleanNotation_binder_carrier_count_76967213fc5873409005 (cleanType_Vector_cce915f2d60cfd4f85a3 n cleanType_Complex_2d7f06a08f8ab1e3f46d)) cleanType_Complex_2d7f06a08f8ab1e3f46d
+same_basic_target actualInstantiatedCarrierValue expectedInstantiatedCarrierValue
+theorem meaningInstantiatedCarrierValue (n : cleanType_Natural_469c53b6dafb7a218246) : actualInstantiatedCarrierValue n = expectedInstantiatedCarrierValue n := by rfl
 
 
 def actualQuantifiedZero (n : cleanType_Natural_469c53b6dafb7a218246) : Prop := (∀ (clean_bound_0 : (_root_.cleanType_Vector_cce915f2d60cfd4f85a3 (n) ((_root_.cleanType_Complex_2d7f06a08f8ab1e3f46d)))), (_root_.cleanDefine_unequal_37c577a540f8692ae5c3 (clean_bound_0) ((@_root_.cleanNotation_complex_vector_zero_638089e4cd5dbb1b07b5 (n)))))

@@ -2192,3 +2192,16 @@ conversion and remain incomplete in the standalone model. See the
 No production or grammar change is claimed. Embedded lambda inference and broader
 bound annotation/literal lowering remain pending.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Experimental bound carrier annotations
+
+The binder-type bridge structurally traverses carrier annotations in checked type
+values. It retains the selected closed classifier and presentation, reconstructs
+free-reference metadata in the destination binder scope, and rechecks the classifier
+snapshot and carrier universe. See the
+[constructive mapping and limits](../studies/parameterized-literals/README.md#type-values-containing-bound-indices).
+The existing source grammar is unchanged. This extends the experimental computed
+index representation; it does not integrate joint inference into production.
+:::
