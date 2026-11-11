@@ -200,3 +200,26 @@ stamping. Full discovery runs from immutable commit 0fe361e; its result remains
 pending. The earlier active-label verifier is also still incomplete. These checks
 do not establish a whole-module speedup or discharge the missing paper mathematics.
 :::
+
+:::llm gpt-6 2026-11-11 role=assisted
+
+## Current binder-repair diagnostic
+
+A fresh 30-second observation of `active label equivalence` under the `9b44c0d`
+compiler reached the selected declaration and ended with diagnostic exit 2;
+translation did not finish. The profile records 57,909,984 calls, including
+350,683 expression elaborations, 234,286 normalization invocations, 32,476
+comparison-key invocations and 32,016 index constructions. Recursive elaboration
+and comparison still dominate; codec JSON encoding accounts for 0.316 seconds
+of internal time in this sample. These are sampled call counts, not a complete
+work estimate or a speedup measurement.
+
+The artifacts are `/tmp/clean-binder-active-profile.log` and
+`/tmp/clean-binder-active-profile.pstats`. The next performance investigation should
+trace repeated checked argument/index construction across nested dependent calls.
+Any reuse must retain scope, binding identity and comparison-pool ownership;
+a cache keyed only by source spelling or a retained `resolved` field would not
+meet the language contract. The full immutable regression and the earlier direct
+active-label verifier are separate running jobs; this bounded diagnostic neither
+replaces them nor supplies native target evidence.
+:::
